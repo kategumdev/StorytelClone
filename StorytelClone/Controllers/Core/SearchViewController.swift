@@ -12,7 +12,6 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemYellow
-        
         configureNavBar()
 
     }
@@ -20,10 +19,7 @@ class SearchViewController: UIViewController {
     private func configureNavBar() {
         navigationItem.title = "Explore"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .done, target: self, action: nil)
-        navigationController?.navigationBar.tintColor = .label
-//        navigationController?.navigationBar.isTranslucent = true
-        
+        navigationController?.navigationBar.tintColor = .label        
     }
     
-
 }

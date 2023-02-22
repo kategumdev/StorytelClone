@@ -7,21 +7,42 @@
 
 import UIKit
 
+enum Sections: Int {
+    case SoloParaTi = 0
+    case CrecimientoPersonalRecomendados = 1
+    case CrecimientoPersonalPopulares = 2
+    case PorqueTeInteresa = 3
+    case NovelaRecomendados = 4
+    case SeriesImageButton = 5
+    case TodasLasCategoriasImageButton = 6
+}
+
 class HomeViewController: UIViewController {
     
-    var tableViewInitialOffsetY: Double = 0
-    var initialOffsetYIsSet = false
+    private let sectionTitles = ["Solo para ti", "Crecimiento personal: Recomendados para ti", "Crecimiento personal: Los más populares", "Porque te interesa", "Novela: Recomendados para ti", "", ""]
+    
+    private var tableViewInitialOffsetY: Double = 0
+    private var isInitialOffsetYSet = false
     
     private var tableHeaderView: FeedTableHeaderView?
     
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-//        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+        table.register(WideImageTableViewCell.self, forCellReuseIdentifier: WideImageTableViewCell.identifier)
+        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+        
         table.backgroundColor = .systemBackground
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
-//        table.contentInset = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 18)
+        
+        // Avoid gaps between sections and custom section headers
+        table.sectionFooterHeight = 0
+        
+        // Avoid gap at the very bottom of the table view
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
+        table.contentInset = inset
+        
         return table
     }()
 
@@ -38,22 +59,21 @@ class HomeViewController: UIViewController {
 
         tableHeaderView = FeedTableHeaderView(frame: .zero)
         feedTable.tableHeaderView = tableHeaderView
-        applyConstraintsForTableHeaderView()
-        print("viewDidLoad")
-    }
+        feedTable.showsHorizontalScrollIndicator = false
     
+        configureHeader()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(didChangeContentSizeCategory), name: UIContentSizeCategory.didChangeNotification, object: nil)
+    }
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableHeaderView?.updateGreetingsLabel()
-        print("viewWillAppear")
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         feedTable.frame = view.bounds
-        
-        sizeHeaderToFit()
-        print("viewDidLayoutSubviews")
     }
 
 }
@@ -61,7 +81,7 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 7
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,36 +89,53 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        cell.backgroundColor = .green
-        return cell
+        if indexPath.section == 5 || indexPath.section == 6 {
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: WideImageTableViewCell.identifier, for: indexPath) as? WideImageTableViewCell else { return UITableViewCell()}
+            return cell
+        } else {
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        if indexPath.section == tableView.numberOfSections - 1 || indexPath.section == tableView.numberOfSections - 2 {
+            return WideImageTableViewCell.heightForRow
+        }
+        return Constants.heightForRowWithSquareCoversCv
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        if section == tableView.numberOfSections - 2 {
+            return Constants.gapBetweenSectionsOfTablesWithSquareCovers
+        } else if section == feedTable.numberOfSections - 1 {
+            return 0
+        } else {
+            let sectionHeight = SectionHeaderView.calculateSectionLabelHeightWith(title: sectionTitles[section])
+            return sectionHeight
+        }
     }
     
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//    }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "title"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return nil }
+        
+        guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
+        
+        sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
+        
+        return sectionHeaderView
     }
+
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("didScroll")
+        let font = Utils.navBarTitleFont
         
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
-        
-        if !initialOffsetYIsSet {
+        if !isInitialOffsetYSet {
             tableViewInitialOffsetY = scrollView.contentOffset.y
-            initialOffsetYIsSet = true
+            isInitialOffsetYSet = true
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
         } else {
             let currentOffsetY = scrollView.contentOffset.y
@@ -111,6 +148,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - Helper methods
 extension HomeViewController {
+    
+    @objc private func didChangeContentSizeCategory() {
+        print("notification, table header configured, reloadData")
+        configureHeader()
+        feedTable.reloadData()
+    }
+    
     private func configureNavBar() {
         title = "Home"
 //        navigationItem.title = "Home"
@@ -118,34 +162,29 @@ extension HomeViewController {
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationController?.navigationBar.tintColor = .label
-//        navigationController?.navigationBar.isTranslucent = true
-        
     }
     
-    func sizeHeaderToFit() {
-        guard let tableHeaderView = tableHeaderView else { return }
+    func configureHeader() {
+        tableHeaderView?.updateGreetingsLabel()
 
-        tableHeaderView.setNeedsLayout()
-        tableHeaderView.layoutIfNeeded()
+        guard let tableHeader = tableHeaderView,
+              let greetingsLabel = tableHeaderView?.greetingsLabel else { return }
 
-        let height = tableHeaderView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        var frame = tableHeaderView.frame
-        frame.size.height = height
-        tableHeaderView.frame = frame
+        let currentText = greetingsLabel.text
 
-        feedTable.tableHeaderView = tableHeaderView
-    }
-    
-    private func applyConstraintsForTableHeaderView() {
-        guard let headerView = tableHeaderView else { return }
-        headerView.translatesAutoresizingMaskIntoConstraints = false
+        // Create greetingsLabel to get actual scaled font size
+        let label = FeedTableHeaderView.createGreetingsLabel()
+        label.text = currentText
 
-        let constraints = [
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.bottomAnchor.constraint(equalTo: headerView.greetingsLabel.bottomAnchor, constant: 15)
-        ]
-        NSLayoutConstraint.activate(constraints)
+        // Calculate the label's size to fit its content
+        let size = label.sizeThatFits(CGSize(width: label.preferredMaxLayoutWidth, height: .greatestFiniteMagnitude))
+
+        // Get the calculated height of the label
+        let labelHeight = size.height
+
+        let headerHeight = labelHeight + FeedTableHeaderView.greetingsLabelTopAnchorConstant + FeedTableHeaderView.greetingsLabelBottomAnchorConstant
+
+        tableHeader.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: headerHeight)
     }
     
 }

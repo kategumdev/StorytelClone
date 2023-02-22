@@ -8,6 +8,8 @@
 import UIKit
 
 class BadgeView: UIView {
+    
+    static let topAnchorPoints: CGFloat = 12
 
     private let borderView: UIView = {
         let view = UIView()

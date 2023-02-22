@@ -9,25 +9,29 @@ import UIKit
 
 class FeedTableHeaderView: UIView {
     
-    var viewHeight: CGFloat = 0
+    static let greetingsLabelBottomAnchorConstant: CGFloat = 4
+    static let greetingsLabelTopAnchorConstant: CGFloat = 15
 
-    let greetingsLabel: UILabel = {
-        
+    private static func getScaledFontForGreetingsLabel() -> UIFont {
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 52)
+        return scaledFont
+    }
+    
+    static func createGreetingsLabel() -> UILabel {
         let label = UILabel()
-        // these two lines and setting preferredMaxLayoutWidth in layoutSubviews() enable changing label to a multilined one
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        
-        label.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
-        
-        // these two lines enable dynamic sizing
+        label.preferredMaxLayoutWidth = UIScreen.main.bounds.size.width - 50
         label.adjustsFontForContentSizeCategory = true
-        label.font = UIFontMetrics.default.scaledFont(for: label.font)
-        
-        label.text = "Good"
+        label.font = FeedTableHeaderView.getScaledFontForGreetingsLabel()
+        label.text = ""
         return label
-    }()
+    }
     
+    let greetingsLabel = createGreetingsLabel()
+    
+    //MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(greetingsLabel)
@@ -38,27 +42,22 @@ class FeedTableHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    // MARK: - View life cycle
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        greetingsLabel.preferredMaxLayoutWidth = self.bounds.width - 50
-    }
-    
     // MARK: - Helper methods
     private func applyConstraints() {
         greetingsLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         let greetingsLabelConstraints = [
             greetingsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 19),
-            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.greetingsLabelTopAnchorConstant),
+            greetingsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.greetingsLabelBottomAnchorConstant),
+            
+//            greetingsLabel.widthAnchor.constraint(equalToConstant: greetingsLabel.preferredMaxLayoutWidth)
+            greetingsLabel.widthAnchor.constraint(lessThanOrEqualToConstant: greetingsLabel.preferredMaxLayoutWidth)
+            
         ]
-        
         NSLayoutConstraint.activate(greetingsLabelConstraints)
     }
     
-    func updateGreetingsLabel() {
+     func updateGreetingsLabel() {
         let date = Date()
         let dateFormatter = DateFormatter()
         // this line garanties that time will always be formatted the same for correct calculations
@@ -80,12 +79,6 @@ class FeedTableHeaderView: UIView {
             greetingsLabel.text = "Good evening"
         }
         
-//        switch time {
-//        case 5..<12: greetingsLabel.text = "Good morning"
-//        case 12..<17: greetingsLabel.text = "Good afternoon"
-//        case 17..<5: greetingsLabel.text = "Good evening"
-//        default:
-//            fatalError("current date doesn't match any range")
-//        }
     }
+
 }

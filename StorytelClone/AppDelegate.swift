@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Appearance proxy for nav bar titles throughout the app
         let attrs = [
-            NSAttributedString.Key.font: UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+            NSAttributedString.Key.font: Utils.navBarTitleFont
         ]
         UINavigationBar.appearance().titleTextAttributes = attrs
         
