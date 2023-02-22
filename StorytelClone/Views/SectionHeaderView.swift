@@ -45,7 +45,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         }
         
         // Calculate width of section title label
-        let sectionLabelWidth = UIScreen.main.bounds.width - (Constants.cvLeftRightPadding * 2) - seeAllButtonWidth - paddingBetweenLabelAndButton
+        let sectionLabelWidth = UIScreen.main.bounds.width - (Constants.cvPadding * 2) - seeAllButtonWidth - paddingBetweenLabelAndButton
         return sectionLabelWidth
     }
     
@@ -94,7 +94,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
 
         sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         let sectionTitleLabelConstraints = [
-            sectionTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvLeftRightPadding),
+            sectionTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
             sectionTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SectionHeaderView.sectionTitleLabelBottomAnchorConstant),
         ]
         NSLayoutConstraint.activate(sectionTitleLabelConstraints)
@@ -102,7 +102,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         seeAllButton.translatesAutoresizingMaskIntoConstraints = false
         guard let widthConstant = seeAllButton.titleLabel?.preferredMaxLayoutWidth else { return }
         let seeAllButtonConstraints = [
-            seeAllButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvLeftRightPadding),
+            seeAllButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
             seeAllButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             seeAllButton.widthAnchor.constraint(lessThanOrEqualToConstant: widthConstant)
         ]

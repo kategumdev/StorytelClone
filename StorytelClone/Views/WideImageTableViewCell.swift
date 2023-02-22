@@ -47,13 +47,13 @@ class WideImageTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        let width = UIScreen.main.bounds.width - Constants.cvLeftRightPadding * 2
+        let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
         
         gradientView.translatesAutoresizingMaskIntoConstraints = false
 
         let constraints = [
            gradientView.topAnchor.constraint(equalTo: contentView.topAnchor),
-           gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvLeftRightPadding),
+           gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
            gradientView.widthAnchor.constraint(equalToConstant: width),
            gradientView.heightAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.width)
         ]

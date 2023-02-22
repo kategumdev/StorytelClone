@@ -18,27 +18,4 @@ struct Utils {
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 42)
         return scaledFont
     }
-    
-//    static let calculatedSquareCoverSize: CGSize = {
-//        let contentViewWidth = UIScreen.main.bounds.width
-//        let width = (contentViewWidth - Constants.cvLeftRightPadding * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
-//        
-//        let fullWidth = contentViewWidth + (width / 2)
-//        let itemWidth = (fullWidth - Constants.cvLeftRightPadding
-//                         * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
-//    
-//        let size = CGSize(width: round(itemWidth), height: round(itemWidth))
-//        return size
-//    }()
-//    
-//    static let calculatedSquareCvItemSize: CGSize = {
-//        let width = calculatedSquareCoverSize.width + Constants.cvLeftRightPadding
-//        let height = calculatedSquareCoverSize.height + BadgeView.topAnchorPoints
-//        let size = CGSize(width: width, height: height)
-//        return size
-//    }()
-//    
-//    static let heightForRowWithSquareCoversCv: CGFloat = {
-//        return calculatedSquareCvItemSize.height
-//    }()
 }

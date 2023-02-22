@@ -15,7 +15,7 @@ class TableViewCellWithCollection: UITableViewCell {
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 160, height: 160)
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = Constants.cvPadding  
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
@@ -48,23 +48,11 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
         return 10
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
         
-        // HARDCODED IMAGES
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                cell.configure(withImageNumber: 1)
-            }
-            
-            if indexPath.row == 1 {
-                cell.configure(withImageNumber: 2)
-            }
-            
-            if indexPath.row == 2 {
-                cell.configure(withImageNumber: 3)
-            }
-        }
+        cell.configure(withImageNumber: indexPath.row + 1)
         return cell
     }
     
@@ -72,16 +60,11 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
 
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        Constants.calculatedSquareCvItemSize
+        Constants.calculatedCvItemSizeSquareCovers
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        Constants.cvLeftRightPadding
-//    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: Constants.cvLeftRightPadding)
+        UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
     }
- 
-    
+     
 }

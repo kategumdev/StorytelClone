@@ -31,6 +31,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(coverImageView)
         contentView.addSubview(badge)
         applyConstraints()
+//        contentView.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
