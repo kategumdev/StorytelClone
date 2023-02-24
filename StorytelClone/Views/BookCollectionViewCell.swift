@@ -113,12 +113,10 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        coverImageContainerView.frame = contentView.bounds
         castViewForButtonAnimation.frame = contentView.bounds
     }
     
     // MARK: - Helper methods
-
     func configure(withCoverNumber number: Int, forItemKind itemKind: ItemKind) {
         coverImageView.image = UIImage(named: "image\(number)")
 
@@ -134,15 +132,16 @@ class BookCollectionViewCell: UICollectionViewCell {
             badgeTwo.isHidden = false
             badgeTwo.badgeImageView.image = UIImage(named: "glasses")
         }
-        
     }
     
-
     private func applyConstraints() {
+        
+        coverImageContainerView.fillSuperview()
         
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: BadgeView.badgeTopAnchorPoints),
+            coverImageView.leadingAnchor.constraint(equalTo: coverImageContainerView.leadingAnchor),
             coverImageView.bottomAnchor.constraint(equalTo: coverImageContainerView.bottomAnchor),
             coverImageView.widthAnchor.constraint(equalTo: coverImageContainerView.widthAnchor)
 

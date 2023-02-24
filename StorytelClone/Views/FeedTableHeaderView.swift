@@ -14,7 +14,7 @@ class FeedTableHeaderView: UIView {
 
     private static func getScaledFontForGreetingsLabel() -> UIFont {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 52)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
         return scaledFont
     }
     
@@ -22,10 +22,9 @@ class FeedTableHeaderView: UIView {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.preferredMaxLayoutWidth = UIScreen.main.bounds.size.width - 50
+        label.preferredMaxLayoutWidth = UIScreen.main.bounds.size.width - 46
         label.adjustsFontForContentSizeCategory = true
         label.font = FeedTableHeaderView.getScaledFontForGreetingsLabel()
-        label.text = ""
         return label
     }
     
@@ -49,8 +48,6 @@ class FeedTableHeaderView: UIView {
             greetingsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 19),
             greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.greetingsLabelTopAnchorConstant),
             greetingsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.greetingsLabelBottomAnchorConstant),
-            
-//            greetingsLabel.widthAnchor.constraint(equalToConstant: greetingsLabel.preferredMaxLayoutWidth)
             greetingsLabel.widthAnchor.constraint(lessThanOrEqualToConstant: greetingsLabel.preferredMaxLayoutWidth)
             
         ]
@@ -69,13 +66,13 @@ class FeedTableHeaderView: UIView {
         
         let morningRange: [Int] = [5, 6, 7, 8, 9, 10, 11]
         let afternoonRange: [Int] = [12, 13, 14, 15, 16]
-        let eveningRange: [Int] = [17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4]
+//        let eveningRange: [Int] = [17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4]
         
         if morningRange.contains(time) {
             greetingsLabel.text = "Good morning"
         } else if afternoonRange.contains(time) {
             greetingsLabel.text = "Good afternoon"
-        } else if eveningRange.contains(time) {
+        } else {
             greetingsLabel.text = "Good evening"
         }
         

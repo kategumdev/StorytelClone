@@ -20,9 +20,8 @@ enum Sections: Int {
 class HomeViewController: UIViewController {
     
     private let sectionTitles = ["Solo para ti", "Crecimiento personal: Recomendados para ti", "Crecimiento personal: Los más populares", "Porque te interesa", "Novela: Recomendados para ti", "", ""]
-    
-    private var isFirstTime = true
-    
+    private let sectionSubtitles = ["", "", "", "Alice's Adventures in Wonderland", "", "", ""]
+        
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
     
@@ -110,12 +109,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
         if section == tableView.numberOfSections - 2 {
             return Constants.gapBetweenSectionsOfTablesWithSquareCovers
         } else if section == feedTable.numberOfSections - 1 {
             return 0
         } else {
-            let sectionHeight = SectionHeaderView.calculateSectionLabelHeightWith(title: sectionTitles[section])
+            let sectionHeight = SectionHeaderView.calculateSectionHeightWith(title: sectionTitles[section], subtitle: sectionSubtitles[section])
             return sectionHeight
         }
     }
@@ -123,10 +123,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return nil }
-        
         guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
         sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
+        sectionHeaderView.sectionSubtitleLabel.text = sectionSubtitles[section]
+        
+        if sectionSubtitles[section].isEmpty {
+            sectionHeaderView.hasSubtitle = false
+        }
         
         return sectionHeaderView
     }
@@ -153,12 +157,8 @@ extension HomeViewController {
     
     @objc private func didChangeContentSizeCategory() {
         print("notification, table header configured, reloadData")
-        if !isFirstTime {
-            configureHeader()
-            feedTable.reloadData()
-        } else {
-            isFirstTime = false
-        }
+        configureHeader()
+        feedTable.reloadData()
     }
     
     private func configureNavBar() {

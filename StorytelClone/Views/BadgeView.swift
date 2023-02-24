@@ -13,17 +13,8 @@ class BadgeView: UIView {
     static let paddingBetweenBadges: CGFloat = 5
     static let badgeTopAnchorPoints: CGFloat = 12
 
-    private let borderView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "badgeBorder")
-        return view
-    }()
-    
-    private let badgeBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "badgeBackground")
-        return view
-    }()
+    private let borderView = UIView()
+    private let badgeBackgroundView = UIView()
     
     let badgeImageView = UIImageView()
     
@@ -33,6 +24,8 @@ class BadgeView: UIView {
         addSubview(borderView)
         addSubview(badgeBackgroundView)
         addSubview(badgeImageView)
+        borderView.backgroundColor = UIColor(named: "badgeBorder")
+        badgeBackgroundView.backgroundColor = UIColor(named: "badgeBackground")
         applyConstraints()
     }
     
@@ -56,25 +49,8 @@ class BadgeView: UIView {
     }
 
     private func applyConstraints() {
-        badgeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let badgeBackgroundViewConstraints = [
-            badgeBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            badgeBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            badgeBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-            badgeBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2)
-        ]
-        
-        let badgeImageViewConstraints = [
-            badgeImageView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            badgeImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            badgeImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            badgeImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
-        ]
-        
-        NSLayoutConstraint.activate(badgeBackgroundViewConstraints)
-        NSLayoutConstraint.activate(badgeImageViewConstraints)
+        badgeBackgroundView.fillSuperview(withConstant: 2)
+        badgeImageView.fillSuperview(withConstant: 5)
     }
     
 }
