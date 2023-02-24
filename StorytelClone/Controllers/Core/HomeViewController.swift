@@ -21,6 +21,8 @@ class HomeViewController: UIViewController {
     
     private let sectionTitles = ["Solo para ti", "Crecimiento personal: Recomendados para ti", "Crecimiento personal: Los más populares", "Porque te interesa", "Novela: Recomendados para ti", "", ""]
     
+    private var isFirstTime = true
+    
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
     
@@ -151,8 +153,12 @@ extension HomeViewController {
     
     @objc private func didChangeContentSizeCategory() {
         print("notification, table header configured, reloadData")
-        configureHeader()
-        feedTable.reloadData()
+        if !isFirstTime {
+            configureHeader()
+            feedTable.reloadData()
+        } else {
+            isFirstTime = false
+        }
     }
     
     private func configureNavBar() {

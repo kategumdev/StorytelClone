@@ -12,7 +12,6 @@ class TableViewCellWithCollection: UITableViewCell {
     static let identifier = "TableViewCellWithCollection"
     
     private let collectionView: UICollectionView = {
-        
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 160, height: 160)
         layout.minimumLineSpacing = Constants.cvPadding  
@@ -52,7 +51,14 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
         
-        cell.configure(withImageNumber: indexPath.row + 1)
+        // Randomly configure items with different badges
+        if indexPath.row < 5 && indexPath.row % 2 == 0 {
+            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .audioBookAndEbook)
+        } else if indexPath.row % 2 == 0 {
+            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .ebook)
+        } else {
+            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .audiobook)
+        }
         return cell
     }
     

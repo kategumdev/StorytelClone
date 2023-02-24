@@ -8,8 +8,10 @@
 import UIKit
 
 class BadgeView: UIView {
-    
-    static let topAnchorPoints: CGFloat = 12
+
+    static let badgeWidthAndHeight: CGFloat = 30
+    static let paddingBetweenBadges: CGFloat = 5
+    static let badgeTopAnchorPoints: CGFloat = 12
 
     private let borderView: UIView = {
         let view = UIView()
@@ -23,15 +25,7 @@ class BadgeView: UIView {
         return view
     }()
     
-    
-    private let badgeImageView: UIImageView = {
-        let imageView = UIImageView()
-        var image = UIImage(systemName: "headphones")
-//        image = image?.withRenderingMode(.alwaysOriginal)
-        imageView.image = image
-        return imageView
-    }()
-    
+    let badgeImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,7 +46,6 @@ class BadgeView: UIView {
         configure()
     }
     
-    
     // MARK: - Helper methods
     private func configure() {
         borderView.layer.cornerRadius = borderView.bounds.width / 2
@@ -60,8 +53,6 @@ class BadgeView: UIView {
         
         badgeBackgroundView.layer.cornerRadius = badgeBackgroundView.bounds.width / 2
         badgeBackgroundView.clipsToBounds = true
-        
-        
     }
 
     private func applyConstraints() {
@@ -85,4 +76,5 @@ class BadgeView: UIView {
         NSLayoutConstraint.activate(badgeBackgroundViewConstraints)
         NSLayoutConstraint.activate(badgeImageViewConstraints)
     }
+    
 }

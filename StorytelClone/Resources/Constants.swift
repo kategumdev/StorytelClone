@@ -30,7 +30,7 @@ struct Constants {
     
     static let calculatedCvItemSizeSquareCovers: CGSize = {
         let width = calculatedSquareCoverSize.width
-        let height = calculatedSquareCoverSize.height + BadgeView.topAnchorPoints
+        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints
         let size = CGSize(width: width, height: height)
         return size
     }()

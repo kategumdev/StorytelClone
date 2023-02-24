@@ -10,63 +10,145 @@ import UIKit
 class BookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "BookCollectionViewCell"
-    private let calculatedSquareCoverSize = Constants.calculatedSquareCoverSize
     
-    private let coverImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    enum ItemKind {
+        case audiobook
+        case ebook
+        case audioBookAndEbook
+    }
     
-    private let badge: BadgeView = {
-        let view = BadgeView(frame: .zero)
+    private let badgeOne = BadgeView()
+    private let badgeTwo = BadgeView()
+    
+    private var buttonTimer: Timer?
+    private var isButtonTooLongInHighlightedState = false
+    
+    private lazy var castViewForButtonAnimation: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground.withAlphaComponent(0.3)
         return view
     }()
     
+    private lazy var coverImageButton: UIButton = {
+        let button = UIButton()
+        button.addSubview(badgeOne)
+        button.addSubview(badgeTwo)
+        
+        button.addAction(UIAction(handler: { [weak self] action in
+            guard let self = self else { return }
+
+            if self.isButtonTooLongInHighlightedState {
+                print("do nothing on touchUpInside")
+                self.isButtonTooLongInHighlightedState = false
+
+            } else {
+                // Invalidate the timer and perform the touchUpInside action
+                self.buttonTimer?.invalidate()
+//                self.buttonTimer = nil
+                print("DO smth on touchUpInside")
+            }
+
+        }), for: .touchUpInside)
+        
+        var config = UIButton.Configuration.plain()
+        button.configuration = config
+        config.background.imageContentMode = .scaleAspectFill
+        config.background.cornerRadius = Constants.bookCoverCornerRadius
+        config.cornerStyle = .fixed
+
+        button.configurationUpdateHandler = { [weak self] theButton in
+            if theButton.isHighlighted {
+                print("button is highlighted")
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    
+                    self?.coverImageButton.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self?.castViewForButtonAnimation.alpha = 0.4
+                    
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if button.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self?.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self?.buttonTimer = timer
+                
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self?.coverImageButton.transform = .identity
+                    self?.castViewForButtonAnimation.alpha = 0
+                })
+            }
+            
+        }
+        
+        return button
+    }()
+        
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(coverImageView)
-        contentView.addSubview(badge)
+        contentView.addSubview(coverImageButton)
+        contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
-//        contentView.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Helper methods
-
-    // HARDCODED IMAGES
-    func configure(withImageNumber imageNumber: Int) {
-        let imageName = "image\(imageNumber)"
-        let image = UIImage(named: imageName)
-        coverImageView.image = image
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        castViewForButtonAnimation.frame = contentView.bounds
     }
     
-    func applyConstraints() {
+    // MARK: - Helper methods
+
+    func configure(withCoverNumber number: Int, forItemKind itemKind: ItemKind) {
+        let imageName = "image\(number)"
+        let image = UIImage(named: imageName)
+        coverImageButton.configuration?.background.image = image
+
+        switch itemKind {
+        case .audiobook:
+            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
+            badgeTwo.isHidden = true
+        case .ebook:
+            badgeOne.badgeImageView.image = UIImage(named: "glassesLightDark")
+            badgeTwo.isHidden = true
+        case .audioBookAndEbook:
+            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
+            badgeTwo.isHidden = false
+            badgeTwo.badgeImageView.image = UIImage(named: "glassesLightDark")
+        }
+    }
+    
+
+    private func applyConstraints() {
+        coverImageButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            coverImageButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            coverImageButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            coverImageButton.widthAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.width),
+            coverImageButton.heightAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.height)
+        ])
         
-        badge.translatesAutoresizingMaskIntoConstraints = false
-        let badgeConstraints = [
-            badge.trailingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
-            badge.topAnchor.constraint(equalTo: coverImageView.topAnchor, constant: -BadgeView.topAnchorPoints),
-            badge.widthAnchor.constraint(equalToConstant: 30),
-            badge.heightAnchor.constraint(equalToConstant: 30)
-        ]
-        NSLayoutConstraint.activate(badgeConstraints)
+        badgeOne.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            badgeOne.trailingAnchor.constraint(equalTo: coverImageButton.trailingAnchor),
+            badgeOne.topAnchor.constraint(equalTo: coverImageButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeOne.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
+            badgeOne.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
+        ])
         
-        coverImageView.translatesAutoresizingMaskIntoConstraints = false
-        let coverImageConstraints = [
-            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            coverImageView.widthAnchor.constraint(equalToConstant: calculatedSquareCoverSize.width),
-            coverImageView.heightAnchor.constraint(equalToConstant: calculatedSquareCoverSize.height)
-        ]
-        
-        NSLayoutConstraint.activate(coverImageConstraints)
+        badgeTwo.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            badgeTwo.trailingAnchor.constraint(equalTo: badgeOne.leadingAnchor, constant: -BadgeView.paddingBetweenBadges),
+            badgeTwo.topAnchor.constraint(equalTo: coverImageButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeTwo.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
+            badgeTwo.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
+        ])
     }
     
 }
