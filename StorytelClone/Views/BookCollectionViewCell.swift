@@ -16,7 +16,24 @@ class BookCollectionViewCell: UICollectionViewCell {
         case ebook
         case audioBookAndEbook
     }
+     
+    // Created to have custom cornerRadius, because button with UIButton.Configuration doesn't allow it
+    private lazy var coverImageContainerView: UIView = {
+        let view = UIView()
+        view.addSubview(coverImageView)
+        view.addSubview(badgeOne)
+        view.addSubview(badgeTwo)
+        return view
+    }()
     
+    private let coverImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+        
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
     
@@ -31,8 +48,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     private lazy var coverImageButton: UIButton = {
         let button = UIButton()
-        button.addSubview(badgeOne)
-        button.addSubview(badgeTwo)
+        button.backgroundColor = UIColor.clear
         
         button.addAction(UIAction(handler: { [weak self] action in
             guard let self = self else { return }
@@ -44,7 +60,6 @@ class BookCollectionViewCell: UICollectionViewCell {
             } else {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
-//                self.buttonTimer = nil
                 print("DO smth on touchUpInside")
             }
 
@@ -52,9 +67,6 @@ class BookCollectionViewCell: UICollectionViewCell {
         
         var config = UIButton.Configuration.plain()
         button.configuration = config
-        config.background.imageContentMode = .scaleAspectFill
-        config.background.cornerRadius = Constants.bookCoverCornerRadius
-        config.cornerStyle = .fixed
 
         button.configurationUpdateHandler = { [weak self] theButton in
             if theButton.isHighlighted {
@@ -62,7 +74,7 @@ class BookCollectionViewCell: UICollectionViewCell {
                 
                 UIView.animate(withDuration: 0.1, animations: {
                     
-                    self?.coverImageButton.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self?.coverImageContainerView.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
                     self?.castViewForButtonAnimation.alpha = 0.4
                     
                 })
@@ -76,7 +88,7 @@ class BookCollectionViewCell: UICollectionViewCell {
                 
             } else {
                 UIView.animate(withDuration: 0.1, animations: {
-                    self?.coverImageButton.transform = .identity
+                    self?.coverImageContainerView.transform = .identity
                     self?.castViewForButtonAnimation.alpha = 0
                 })
             }
@@ -89,6 +101,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubview(coverImageContainerView)
         contentView.addSubview(coverImageButton)
         contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
@@ -100,32 +113,41 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        coverImageContainerView.frame = contentView.bounds
         castViewForButtonAnimation.frame = contentView.bounds
     }
     
     // MARK: - Helper methods
 
     func configure(withCoverNumber number: Int, forItemKind itemKind: ItemKind) {
-        let imageName = "image\(number)"
-        let image = UIImage(named: imageName)
-        coverImageButton.configuration?.background.image = image
+        coverImageView.image = UIImage(named: "image\(number)")
 
         switch itemKind {
         case .audiobook:
             badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
             badgeTwo.isHidden = true
         case .ebook:
-            badgeOne.badgeImageView.image = UIImage(named: "glassesLightDark")
+            badgeOne.badgeImageView.image = UIImage(named: "glasses")
             badgeTwo.isHidden = true
         case .audioBookAndEbook:
             badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
             badgeTwo.isHidden = false
-            badgeTwo.badgeImageView.image = UIImage(named: "glassesLightDark")
+            badgeTwo.badgeImageView.image = UIImage(named: "glasses")
         }
+        
     }
     
 
     private func applyConstraints() {
+        
+        coverImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: BadgeView.badgeTopAnchorPoints),
+            coverImageView.bottomAnchor.constraint(equalTo: coverImageContainerView.bottomAnchor),
+            coverImageView.widthAnchor.constraint(equalTo: coverImageContainerView.widthAnchor)
+
+        ])
+        
         coverImageButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             coverImageButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
