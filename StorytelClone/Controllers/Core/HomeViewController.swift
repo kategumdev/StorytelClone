@@ -40,6 +40,8 @@ class HomeViewController: UIViewController {
         // Avoid gaps between sections and custom section headers
         table.sectionFooterHeight = 0
         
+        table.estimatedSectionHeaderHeight = 60
+        
         // Avoid gap at the very bottom of the table view
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
         table.contentInset = inset
@@ -59,6 +61,8 @@ class HomeViewController: UIViewController {
         feedTable.dataSource = self
 
         tableHeaderView = FeedTableHeaderView(frame: .zero)
+//        tableHeaderView = FeedTableHeaderView(frame: CGRect(x: 0, y: 0, width: UITableView.automaticDimension, height: UITableView.automaticDimension))
+
         feedTable.tableHeaderView = tableHeaderView
         feedTable.showsHorizontalScrollIndicator = false
     
@@ -115,32 +119,24 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-
         if section == tableView.numberOfSections - 2 {
             return Constants.gapBetweenSectionsOfTablesWithSquareCovers
         } else if section == feedTable.numberOfSections - 1 {
             return 0
         } else {
-            let sectionHeight = SectionHeaderView.calculateSectionHeightWith(title: sectionTitles[section], subtitle: sectionSubtitles[section])
-            return sectionHeight
+            return UITableView.automaticDimension
         }
     }
     
-    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return nil }
+        guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return UIView() }
         guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
         sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
         sectionHeaderView.sectionSubtitleLabel.text = sectionSubtitles[section]
-        
-        if sectionSubtitles[section].isEmpty {
-            sectionHeaderView.hasSubtitle = false
-        }
-        
+ 
         return sectionHeaderView
     }
-
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let font = Utils.navBarTitleFont
@@ -164,6 +160,13 @@ extension HomeViewController {
     @objc private func didChangeContentSizeCategory() {
         print("notification, table header configured, reloadData")
         configureHeader()
+        
+//        feedTable.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        
+//        let contentHeight = feedTable.contentSize.height
+//        let tableViewHeight = feedTable.frame.size.height
+//        let offset = CGPoint(x: 0, y: contentHeight - tableViewHeight)
+//        feedTable.setContentOffset(offset, animated: true)
         feedTable.reloadData()
     }
     
