@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
-        table.register(WideImageTableViewCell.self, forCellReuseIdentifier: WideImageTableViewCell.identifier)
+        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         table.backgroundColor = .systemBackground
@@ -92,7 +92,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 5 || indexPath.section == 6 {
             
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: WideImageTableViewCell.identifier, for: indexPath) as? WideImageTableViewCell else { return UITableViewCell()}
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
+            // Using hardcoded data
+            if indexPath.section == 5 {
+                cell.wideButtonLabel.text = "Series"
+            } else {
+                cell.wideButtonLabel.text = "Todas las categorías"
+            }
             return cell
         } else {
             
@@ -103,7 +109,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == tableView.numberOfSections - 1 || indexPath.section == tableView.numberOfSections - 2 {
-            return WideImageTableViewCell.heightForRow
+            return WideButtonTableViewCell.heightForRow
         }
         return Constants.heightForRowWithSquareCoversCv
     }

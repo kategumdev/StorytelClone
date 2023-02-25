@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A0A426429A583340000EE64 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0A426329A583340000EE64 /* Utils.swift */; };
-		5A5AE402299FB3D100FA4EDB /* WideImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideImageTableViewCell.swift */; };
+		5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */; };
 		5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE405299FBA7E00FA4EDB /* Constants.swift */; };
 		5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */; };
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
@@ -50,7 +50,7 @@
 
 /* Begin PBXFileReference section */
 		5A0A426329A583340000EE64 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		5A5AE401299FB3D100FA4EDB /* WideImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideImageTableViewCell.swift; sourceTree = "<group>"; };
+		5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButtonTableViewCell.swift; sourceTree = "<group>"; };
 		5A5AE405299FBA7E00FA4EDB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithCollection.swift; sourceTree = "<group>"; };
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 				5AF93322299D689F00DF17C7 /* FeedTableHeaderView.swift */,
 				5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */,
 				5A8380B6299E818800611543 /* BookCollectionViewCell.swift */,
-				5A5AE401299FB3D100FA4EDB /* WideImageTableViewCell.swift */,
+				5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */,
 				5A8380BA299ED7E200611543 /* BadgeView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 			);
@@ -348,7 +348,7 @@
 				5AF93323299D689F00DF17C7 /* FeedTableHeaderView.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
 				5ABBA38F299C09A700D0E0F4 /* HomeViewController.swift in Sources */,
-				5A5AE402299FB3D100FA4EDB /* WideImageTableViewCell.swift in Sources */,
+				5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */,
 				5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */,
 				5ABBA395299C09A700D0E0F4 /* StorytelClone.xcdatamodeld in Sources */,
 				5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */,

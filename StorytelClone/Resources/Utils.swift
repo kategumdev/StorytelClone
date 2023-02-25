@@ -13,6 +13,7 @@ struct Utils {
     
     static let tableViewSectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
+    static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
     
     static func getScaledFontForSectionTitle() -> UIFont {
         let font = tableViewSectionTitleFont
@@ -25,4 +26,11 @@ struct Utils {
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
         return scaledFont
     }
+    
+    static func getScaledFontWideButtonLabel() -> UIFont {
+        let font = wideButtonLabelFont
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 24)
+        return scaledFont
+    }
+
 }
