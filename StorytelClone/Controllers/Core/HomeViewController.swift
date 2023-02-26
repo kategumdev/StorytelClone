@@ -24,7 +24,10 @@ class HomeViewController: UIViewController {
         
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-    
+    private var allSectionHeaderHeight = [Int : CGFloat]()
+    private var isFirstTime = true
+    private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
+ 
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.backgroundColor = .systemBackground
@@ -42,7 +45,7 @@ class HomeViewController: UIViewController {
         // Avoid gaps between sections and custom section headers
         table.sectionFooterHeight = 0
         
-        // Enable self-sizing of section headers according to their subviews auto layout
+        // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
         table.estimatedSectionHeaderHeight = 60
         
         table.tableHeaderView = FeedTableHeaderView()
@@ -63,17 +66,22 @@ class HomeViewController: UIViewController {
         feedTable.dataSource = self
         
         configureNavBar()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(didChangeContentSizeCategory), name: UIContentSizeCategory.didChangeNotification, object: nil)
+
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let tableHeader = feedTable.tableHeaderView as? FeedTableHeaderView else { return }
         tableHeader.updateGreetingsLabel()
-        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+//        print("viewDidLayoutSubviews")
         feedTable.frame = view.bounds
         layoutHeaderView()
     }
@@ -115,6 +123,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         return Constants.heightForRowWithSquareCoversCv
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return UIView() }
+        guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
+        
+        sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
+        sectionHeaderView.sectionSubtitleLabel.text = sectionSubtitles[section]
+        return sectionHeaderView
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == tableView.numberOfSections - 2 {
             return Constants.gapBetweenSectionsOfTablesWithSquareCovers
@@ -123,16 +140,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             return UITableView.automaticDimension
         }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section != tableView.numberOfSections - 1, section != tableView.numberOfSections - 2 else { return UIView() }
-        guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
-        
-        sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
-        sectionHeaderView.sectionSubtitleLabel.text = sectionSubtitles[section]
- 
-        return sectionHeaderView
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -154,6 +161,18 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Helper methods
 extension HomeViewController {
     
+//    @objc private func didChangeContentSizeCategory() {
+//        print("notification")
+//        feedTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//        feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
+//    }
+    
+    @objc func appWillResignActive() {
+        // Do something when the app is about to move to the background
+        lastVisibleRowIndexPath = feedTable.indexPathsForVisibleRows?.last ?? IndexPath(row: 0, section: 0)
+//        print("last visible row before background: \(lastVisibleRowIndexPath)")
+    }
+    
     private func configureNavBar() {
         title = "Home"
         let configuration = UIImage.SymbolConfiguration(weight: .semibold)
@@ -163,17 +182,30 @@ extension HomeViewController {
     }
     
     private func layoutHeaderView() {
+//        print("layoutHeaderView")
         guard let headerView = feedTable.tableHeaderView else { return }
         (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
         if headerView.translatesAutoresizingMaskIntoConstraints != true {
-            print("translatesAutoresizingMask set to true")
+//            print("translatesAutoresizingMask set to true")
             headerView.translatesAutoresizingMaskIntoConstraints = true
         }
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
-            print("header frame adjusted")
+//            print("header frame adjusted")
             headerView.frame.size.height = size.height
             feedTable.tableHeaderView = headerView
+            
+            // Avoid glitch while scrolling up after dynamic font size change
+            guard isFirstTime == true else {
+                
+                // Avoid scrolling up and back if table view offset is as initial
+                if tableViewInitialOffsetY != feedTable.contentOffset.y {
+                    feedTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                    feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
+                }
+                return
+            }
+            isFirstTime = false
         }
     }
     
