@@ -9,8 +9,10 @@ import UIKit
 
 class FeedTableHeaderView: UIView {
     
-    static let greetingsLabelBottomAnchorConstant: CGFloat = 4
-    static let greetingsLabelTopAnchorConstant: CGFloat = 15
+    static let labelBottomAnchor: CGFloat = 4
+    static let labelTopAnchor: CGFloat = 15
+    static let labelLeadingAnchor = Constants.cvPadding
+    static let labelTrailingAnchor: CGFloat = 46
 
     private static func getScaledFontForGreetingsLabel() -> UIFont {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
@@ -18,17 +20,14 @@ class FeedTableHeaderView: UIView {
         return scaledFont
     }
     
-    static func createGreetingsLabel() -> UILabel {
+    private let greetingsLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.preferredMaxLayoutWidth = UIScreen.main.bounds.size.width - 46
         label.adjustsFontForContentSizeCategory = true
         label.font = FeedTableHeaderView.getScaledFontForGreetingsLabel()
         return label
-    }
-    
-    let greetingsLabel = createGreetingsLabel()
+    }()
     
     //MARK: - View life cycle
     override init(frame: CGRect) {
@@ -44,20 +43,18 @@ class FeedTableHeaderView: UIView {
     // MARK: - Helper methods
     private func applyConstraints() {
         greetingsLabel.translatesAutoresizingMaskIntoConstraints = false
-        let greetingsLabelConstraints = [
-            greetingsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 19),
-            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.greetingsLabelTopAnchorConstant),
-            greetingsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.greetingsLabelBottomAnchorConstant),
-            greetingsLabel.widthAnchor.constraint(lessThanOrEqualToConstant: greetingsLabel.preferredMaxLayoutWidth)
-            
-        ]
-        NSLayoutConstraint.activate(greetingsLabelConstraints)
+        NSLayoutConstraint.activate([
+            greetingsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FeedTableHeaderView.labelLeadingAnchor),
+            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.labelTopAnchor),
+            greetingsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.labelBottomAnchor),
+            greetingsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FeedTableHeaderView.labelTrailingAnchor)
+        ])
     }
     
      func updateGreetingsLabel() {
         let date = Date()
         let dateFormatter = DateFormatter()
-        // this line garanties that time will always be formatted the same for correct calculations
+        // This line garanties that time will always be formatted the same for correct calculations
         dateFormatter.locale = Locale(identifier: "en_ES")
         dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = "HH"
@@ -66,7 +63,6 @@ class FeedTableHeaderView: UIView {
         
         let morningRange: [Int] = [5, 6, 7, 8, 9, 10, 11]
         let afternoonRange: [Int] = [12, 13, 14, 15, 16]
-//        let eveningRange: [Int] = [17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4]
         
         if morningRange.contains(time) {
             greetingsLabel.text = "Good morning"
@@ -75,7 +71,6 @@ class FeedTableHeaderView: UIView {
         } else {
             greetingsLabel.text = "Good evening"
         }
-        
     }
 
 }

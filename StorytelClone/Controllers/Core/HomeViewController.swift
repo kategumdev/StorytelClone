@@ -25,26 +25,30 @@ class HomeViewController: UIViewController {
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
     
-    private var tableHeaderView: FeedTableHeaderView?
-    
     private let feedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-        table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
-        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
-        
         table.backgroundColor = .systemBackground
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         
-        // Avoid gaps between sections and custom section headers
-        table.sectionFooterHeight = 0
-        
-        table.estimatedSectionHeaderHeight = 60
-        
         // Avoid gap at the very bottom of the table view
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
         table.contentInset = inset
+        
+        table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
+        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+        
+        // Avoid gaps between sections and custom section headers
+        table.sectionFooterHeight = 0
+        
+        // Enable self-sizing of section headers according to their subviews auto layout
+        table.estimatedSectionHeaderHeight = 60
+        
+        table.tableHeaderView = FeedTableHeaderView()
+        // These two lines avoid constraints' conflict of header and its label when view just loaded
+        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        table.tableHeaderView?.fillSuperview()
         
         return table
     }()
@@ -54,31 +58,24 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        configureNavBar()
-        
         view.addSubview(feedTable)
         feedTable.delegate = self
         feedTable.dataSource = self
-
-        tableHeaderView = FeedTableHeaderView(frame: .zero)
-//        tableHeaderView = FeedTableHeaderView(frame: CGRect(x: 0, y: 0, width: UITableView.automaticDimension, height: UITableView.automaticDimension))
-
-        feedTable.tableHeaderView = tableHeaderView
-        feedTable.showsHorizontalScrollIndicator = false
-    
-        configureHeader()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(didChangeContentSizeCategory), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        
+        configureNavBar()
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableHeaderView?.updateGreetingsLabel()
+        guard let tableHeader = feedTable.tableHeaderView as? FeedTableHeaderView else { return }
+        tableHeader.updateGreetingsLabel()
+        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         feedTable.frame = view.bounds
+        layoutHeaderView()
     }
 
 }
@@ -157,49 +154,27 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Helper methods
 extension HomeViewController {
     
-    @objc private func didChangeContentSizeCategory() {
-        print("notification, table header configured, reloadData")
-        configureHeader()
-        
-//        feedTable.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        
-//        let contentHeight = feedTable.contentSize.height
-//        let tableViewHeight = feedTable.frame.size.height
-//        let offset = CGPoint(x: 0, y: contentHeight - tableViewHeight)
-//        feedTable.setContentOffset(offset, animated: true)
-        feedTable.reloadData()
-    }
-    
     private func configureNavBar() {
         title = "Home"
-//        navigationItem.title = "Home"
         let configuration = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationController?.navigationBar.tintColor = .label
     }
     
-    func configureHeader() {
-        tableHeaderView?.updateGreetingsLabel()
-
-        guard let tableHeader = tableHeaderView,
-              let greetingsLabel = tableHeaderView?.greetingsLabel else { return }
-
-        let currentText = greetingsLabel.text
-
-        // Create greetingsLabel to get actual scaled font size
-        let label = FeedTableHeaderView.createGreetingsLabel()
-        label.text = currentText
-
-        // Calculate the label's size to fit its content
-        let size = label.sizeThatFits(CGSize(width: label.preferredMaxLayoutWidth, height: .greatestFiniteMagnitude))
-
-        // Get the calculated height of the label
-        let labelHeight = size.height
-
-        let headerHeight = labelHeight + FeedTableHeaderView.greetingsLabelTopAnchorConstant + FeedTableHeaderView.greetingsLabelBottomAnchorConstant
-
-        tableHeader.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: headerHeight)
+    private func layoutHeaderView() {
+        guard let headerView = feedTable.tableHeaderView else { return }
+        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
+        if headerView.translatesAutoresizingMaskIntoConstraints != true {
+            print("translatesAutoresizingMask set to true")
+            headerView.translatesAutoresizingMaskIntoConstraints = true
+        }
+        let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        if headerView.frame.size.height != size.height {
+            print("header frame adjusted")
+            headerView.frame.size.height = size.height
+            feedTable.tableHeaderView = headerView
+        }
     }
     
 }

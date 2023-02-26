@@ -37,7 +37,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
         label.font = Utils.getScaledFontForSectionTitle()
-        label.backgroundColor = .green
         return label
     }()
     
@@ -47,7 +46,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
         label.font = Utils.getScaledFontForSectionSubtitle()
-        label.backgroundColor = .magenta
         return label
     }()
 
