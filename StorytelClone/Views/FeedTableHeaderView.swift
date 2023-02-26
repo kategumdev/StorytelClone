@@ -13,19 +13,15 @@ class FeedTableHeaderView: UIView {
     static let labelTopAnchor: CGFloat = 15
     static let labelLeadingAnchor = Constants.cvPadding
     static let labelTrailingAnchor: CGFloat = 46
-
-    private static func getScaledFontForGreetingsLabel() -> UIFont {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
-        return scaledFont
-    }
     
     private let greetingsLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
-        label.font = FeedTableHeaderView.getScaledFontForGreetingsLabel()
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
+        label.font = scaledFont
         return label
     }()
     

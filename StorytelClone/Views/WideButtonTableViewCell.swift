@@ -80,7 +80,9 @@ class WideButtonTableViewCell: UITableViewCell {
     let wideButtonLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = Utils.getScaledFontWideButtonLabel()
+        let font = Utils.wideButtonLabelFont
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 24)
+        label.font = scaledFont
         label.layer.shadowColor = UIColor.black.cgColor
         label.layer.shadowOffset = CGSize(width: 0, height: 1)
         label.layer.shadowOpacity = 0.6// Increase opacity for a stronger shadow effect

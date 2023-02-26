@@ -36,7 +36,9 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
-        label.font = Utils.getScaledFontForSectionTitle()
+        let font = Utils.tableViewSectionTitleFont
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        label.font = scaledFont
         return label
     }()
     
@@ -45,7 +47,9 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
-        label.font = Utils.getScaledFontForSectionSubtitle()
+        let font = Utils.tableViewSectionSubtitleFont
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
+        label.font = scaledFont
         return label
     }()
 
@@ -65,8 +69,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Helper methods
     func applyConstraints() {
         
-        let seeAllButtonMaxWidth = round(UIScreen.main.bounds.size.width / 3)
-        
         sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             sectionTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
@@ -82,11 +84,12 @@ class SectionHeaderView: UITableViewHeaderFooterView {
             sectionSubtitleLabel.trailingAnchor.constraint(equalTo: seeAllButton.leadingAnchor, constant: -SectionHeaderView.paddingBetweenLabelAndButton)
         ])
         
+        let seeAllButtonMaxWidth = round(UIScreen.main.bounds.size.width / 3)
         seeAllButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             seeAllButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
             seeAllButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SectionHeaderView.sectionTitleLabelBottomAnchorConstant),
-            seeAllButton.widthAnchor.constraint(lessThanOrEqualToConstant: seeAllButtonMaxWidth)
+            seeAllButton.widthAnchor.constraint(equalToConstant: seeAllButtonMaxWidth)
         ])
     }
 
