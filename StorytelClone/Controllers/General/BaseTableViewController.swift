@@ -14,7 +14,6 @@ class BaseTableViewController: UIViewController {
         
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-//    private var allSectionHeaderHeight = [Int : CGFloat]()
     private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
  
@@ -29,7 +28,6 @@ class BaseTableViewController: UIViewController {
         table.contentInset = inset
         
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
-//        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         // Avoid gaps between sections and custom section headers
@@ -53,26 +51,18 @@ class BaseTableViewController: UIViewController {
         bookTable.delegate = self
         bookTable.dataSource = self
         
-//        configureNavBar()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         layoutHeaderView()
     }
     
     func configureNavBar() {
-//        title = "Home"
-//        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
-//        let image = UIImage(systemName: "bell", withConfiguration: configuration)
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationController?.navigationBar.tintColor = .label
     }
-    
 
 }
 
@@ -126,11 +116,11 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 extension BaseTableViewController {
     
     
-    //    @objc private func didChangeContentSizeCategory() {
-    //        print("notification")
-    //        feedTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-    //        feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
-    //    }
+//    @objc private func didChangeContentSizeCategory() {
+//        print("notification")
+//        feedTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//        feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
+//    }
     
     @objc func appWillResignActive() {
         // Do something when the app is about to move to the background
@@ -138,16 +128,7 @@ extension BaseTableViewController {
         //        print("last visible row before background: \(lastVisibleRowIndexPath)")
     }
     
-//    func configureNavBar() {
-////        title = "Home"
-////        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
-////        let image = UIImage(systemName: "bell", withConfiguration: configuration)
-////        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-//        navigationItem.backButtonTitle = ""
-//        navigationController?.navigationBar.tintColor = .label
-//    }
-    
-    private func layoutHeaderView() {
+    func layoutHeaderView() {
         //        print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
 //        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
@@ -160,10 +141,10 @@ extension BaseTableViewController {
             //            print("header frame adjusted")
             headerView.frame.size.height = size.height
             bookTable.tableHeaderView = headerView
-            
+
             // Avoid glitch while scrolling up after dynamic font size change
             guard isFirstTime == true else {
-                
+
                 // Avoid scrolling up and back if table view offset is as initial
                 if tableViewInitialOffsetY != bookTable.contentOffset.y {
                     bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
