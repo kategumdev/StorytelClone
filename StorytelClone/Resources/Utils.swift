@@ -9,10 +9,56 @@ import UIKit
 
 struct Utils {
     
+    //MARK: - Fonts
     static let navBarTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
-    
     static let tableViewSectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+    static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+    
     static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
+    
+    //MARK: - Colors
+    static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
+    static let coralCategoryColor = UIColor(red: 234/255, green: 114/255, blue: 95/255, alpha: 1)
+    static let orangeCategoryColor = UIColor(red: 234/255, green: 156/255, blue: 80/255, alpha: 1)
+    static let darkBlueCategoryColor = UIColor(red: 76/255, green: 96/255, blue: 168/255, alpha: 1)
+    static let lightBlueCategoryColor = UIColor(red: 199/255, green: 219/255, blue: 231/255, alpha: 1)
+    static let yellowCategoryColor = UIColor(red: 237/255, green: 209/255, blue: 106/255, alpha: 1)
+    static let peachCategoryColor = UIColor(red: 245/255, green: 202/255, blue: 191/255, alpha: 1)
+    static let greenCategoryColor = UIColor(red: 189/255, green: 210/255, blue: 163/255, alpha: 1)
+    
+    //MARK: - Calculated Values
+    static let calculatedSquareCoverSize: CGSize = {
+        let contentViewWidth = UIScreen.main.bounds.width
+        let width = (contentViewWidth - Constants.cvPadding * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
+        
+        let fullWidth = contentViewWidth + (width / 2)
+        let itemWidth = (fullWidth - Constants.cvPadding
+                         * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
+    
+        let size = CGSize(width: round(itemWidth), height: round(itemWidth))
+        return size
+    }()
+    
+    static let calculatedCvItemSizeSquareCovers: CGSize = {
+        let width = calculatedSquareCoverSize.width
+        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints
+        let size = CGSize(width: width, height: height)
+        return size
+    }()
+    
+    static let heightForRowWithSquareCoversCv: CGFloat = {
+        return calculatedCvItemSizeSquareCovers.height
+    }()
+    
+    static let calculatedCvItemSizeCategory: CGSize = {
+        let height = Constants.categoryCvItemHeight
+        
+        let contentViewWidth = UIScreen.main.bounds.size.width
+        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
 
+        let size = CGSize(width: width, height: height)
+        return size
+    }()
+    
 }
