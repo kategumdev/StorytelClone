@@ -10,11 +10,15 @@ import UIKit
 class FeedTableHeaderView: UIView {
     
     static let labelBottomAnchor: CGFloat = 4
-    static let labelTopAnchor: CGFloat = 15
+//    static let labelTopAnchor: CGFloat = 15
+    static let labelTopAnchorForGreeting: CGFloat = 15
+    static let labelTopAnchorForCategory: CGFloat = 19
     static let labelLeadingAnchor = Constants.cvPadding
     static let labelTrailingAnchor: CGFloat = 46
     
-    private let greetingsLabel: UILabel = {
+    lazy var topAnchorConstraint = headerLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.labelTopAnchorForGreeting)
+    
+    let headerLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -28,7 +32,7 @@ class FeedTableHeaderView: UIView {
     //MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(greetingsLabel)
+        addSubview(headerLabel)
         applyConstraints()
     }
     
@@ -38,13 +42,14 @@ class FeedTableHeaderView: UIView {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        greetingsLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            greetingsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FeedTableHeaderView.labelLeadingAnchor),
-            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.labelTopAnchor),
-            greetingsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.labelBottomAnchor),
-            greetingsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FeedTableHeaderView.labelTrailingAnchor)
+            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FeedTableHeaderView.labelLeadingAnchor),
+//            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.labelTopAnchorForGreeting),
+            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.labelBottomAnchor),
+            headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FeedTableHeaderView.labelTrailingAnchor)
         ])
+        topAnchorConstraint.isActive = true
     }
     
      func updateGreetingsLabel() {
@@ -61,11 +66,11 @@ class FeedTableHeaderView: UIView {
         let afternoonRange: [Int] = [12, 13, 14, 15, 16]
         
         if morningRange.contains(time) {
-            greetingsLabel.text = "Good morning"
+            headerLabel.text = "Good morning"
         } else if afternoonRange.contains(time) {
-            greetingsLabel.text = "Good afternoon"
+            headerLabel.text = "Good afternoon"
         } else {
-            greetingsLabel.text = "Good evening"
+            headerLabel.text = "Good evening"
         }
     }
 

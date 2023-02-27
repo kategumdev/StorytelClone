@@ -7,10 +7,21 @@
 
 import UIKit
 
+protocol WideButtonTableViewCellDelegate: AnyObject {
+  func wideButtonTableViewCellDidTapButton(
+    _ cell: WideButtonTableViewCell)
+//  func addItemViewController(
+//    _ controller: AddItemViewController,
+//    didFinishAdding item: ChecklistItem
+//  )
+}
+
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
     static let heightForRow: CGFloat = Constants.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
+    
+    weak var delegate: WideButtonTableViewCellDelegate?
     
     private var timeLayoutSubviewsIsBeingCalled = 0
     
@@ -40,6 +51,10 @@ class WideButtonTableViewCell: UITableViewCell {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
                 print("DO smth on touchUpInside")
+                
+                // Notify the delegate that the button was tapped
+                self.delegate?.wideButtonTableViewCellDidTapButton(self)
+                
             }
 
         }), for: .touchUpInside)

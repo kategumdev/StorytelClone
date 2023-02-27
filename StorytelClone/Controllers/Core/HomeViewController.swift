@@ -24,7 +24,7 @@ class HomeViewController: UIViewController {
         
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-    private var allSectionHeaderHeight = [Int : CGFloat]()
+//    private var allSectionHeaderHeight = [Int : CGFloat]()
     private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
  
@@ -108,6 +108,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.wideButtonLabel.text = "Todas las categorías"
             }
+            
+            cell.delegate = self
             return cell
         } else {
             
@@ -179,6 +181,7 @@ extension HomeViewController {
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationController?.navigationBar.tintColor = .label
+        navigationItem.backButtonTitle = ""
     }
     
     private func layoutHeaderView() {
@@ -208,6 +211,17 @@ extension HomeViewController {
             isFirstTime = false
         }
     }
+    
+}
+
+
+extension HomeViewController: WideButtonTableViewCellDelegate {
+    
+    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell) {
+        let controller = SeriesViewController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     
 }
 

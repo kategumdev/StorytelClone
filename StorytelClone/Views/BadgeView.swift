@@ -10,14 +10,18 @@ import UIKit
 class BadgeView: UIView {
 
     static let badgeWidthAndHeight: CGFloat = 30
-    static let paddingBetweenBadges: CGFloat = 5
+    static let paddingBetweenBadges: CGFloat = 4
     static let badgeTopAnchorPoints: CGFloat = 12
 
     private let borderView = UIView()
     private let badgeBackgroundView = UIView()
     
-    let badgeImageView = UIImageView()
-    
+    let badgeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         tintColor = UIColor.label
