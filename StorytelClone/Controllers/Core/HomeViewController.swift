@@ -19,6 +19,9 @@ enum Sections: Int {
 
 
 class HomeViewController: BaseTableViewController {
+    
+//    var shadow: Any?
+    
 
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -51,6 +54,15 @@ class HomeViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
+        
+//        print("standardAppearance \(String(describing: navigationController?.navigationBar.standardAppearance))")
+//        
+//        shadow = navigationController?.navigationBar.standardAppearance.shadowColor
+//        print("shadowColorL \(String(describing: shadow))")
+//        navigationController?.navigationBar.standardAppearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+//        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        
+        
         title = "Home"
         let configuration = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "bell", withConfiguration: configuration)

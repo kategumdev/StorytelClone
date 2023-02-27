@@ -32,8 +32,8 @@ class TabBarViewController: UITabBarController {
         
         tabBar.standardAppearance.backgroundEffect = nil
         
-//        tabBar.scrollEdgeAppearance = tabBar.standardAppearance
-        
+        tabBar.standardAppearance.shadowColor = .tertiaryLabel
+                
         setTabBarItemColors([tabBar.standardAppearance.stackedLayoutAppearance, tabBar.standardAppearance.inlineLayoutAppearance, tabBar.standardAppearance.compactInlineLayoutAppearance])
         
         tabBar.scrollEdgeAppearance = tabBar.standardAppearance

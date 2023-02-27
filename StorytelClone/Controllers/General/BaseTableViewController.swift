@@ -12,8 +12,8 @@ class BaseTableViewController: UIViewController {
     var sectionTitles = [String]()
     var sectionSubtitles = [String]()
         
-    private var tableViewInitialOffsetY: Double = 0
-    private var isInitialOffsetYSet = false
+    var tableViewInitialOffsetY: Double = 0
+    var isInitialOffsetYSet = false
     private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
  
@@ -62,6 +62,7 @@ class BaseTableViewController: UIViewController {
     
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
+//        navigationController?.navigationBar.standardAppearance.shadowColor = .tertiaryLabel
     }
 
 }
@@ -98,16 +99,39 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let font = Utils.navBarTitleFont
+//        let font = Utils.navBarTitleFont
+//
+//        if !isInitialOffsetYSet {
+//            tableViewInitialOffsetY = scrollView.contentOffset.y
+//            isInitialOffsetYSet = true
+//            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
+//        } else {
+//            let currentOffsetY = scrollView.contentOffset.y
+//            navigationController?.navigationBar.titleTextAttributes = currentOffsetY > tableViewInitialOffsetY ? [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : font] : [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
+//        }
+        
         
         if !isInitialOffsetYSet {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
+            navigationController?.makeTransparent()
         } else {
             let currentOffsetY = scrollView.contentOffset.y
-            navigationController?.navigationBar.titleTextAttributes = currentOffsetY > tableViewInitialOffsetY ? [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : font] : [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
+            
+            if currentOffsetY > tableViewInitialOffsetY {
+                navigationController?.makeVisible()
+            } else {
+                navigationController?.makeTransparent()
+            }
         }
+        
+        
+        
+        
+        
+        
+
+        
     }
     
 }

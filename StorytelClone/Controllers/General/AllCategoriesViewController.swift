@@ -31,6 +31,9 @@ class AllCategoriesViewController: BaseTableViewController {
     override func configureNavBar() {
         super.configureNavBar()
         title = vcTitle
+        // Disable the automatic showing of the navigation bar during scrolling
+//        navigationController?.hidesBarsOnSwipe = false
+                
 //        navigationController?.navigationBar.isTranslucent = false
     }
     
@@ -57,6 +60,33 @@ class AllCategoriesViewController: BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 41
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        if !isInitialOffsetYSet {
+            tableViewInitialOffsetY = scrollView.contentOffset.y
+            isInitialOffsetYSet = true
+            print("hide navbar background, offsetY = \(scrollView.contentOffset.y)")
+            navigationController?.makeTransparent()
+        } else {
+            let currentOffsetY = scrollView.contentOffset.y
+            guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+            
+            if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 {
+                print("hide navbar background, offsetY = \(scrollView.contentOffset.y)")
+                navigationController?.makeTransparent()
+            } else {
+                print("SHOW NAVBAR background, offsetY = \(scrollView.contentOffset.y)")
+                navigationController?.makeVisible()
+            }
+        }
+        
+        
+        
+        
+        
+    
     }
 
 }

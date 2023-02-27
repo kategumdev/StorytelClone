@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSAttributedString.Key.font: Utils.navBarTitleFont
         ]
         UINavigationBar.appearance().titleTextAttributes = attrs
+//        UINavigationBar.appearance().standardAppearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
         
         return true
     }
