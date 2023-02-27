@@ -151,8 +151,8 @@ class BookCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             coverImageButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             coverImageButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            coverImageButton.widthAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.width),
-            coverImageButton.heightAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.height)
+            coverImageButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
+            coverImageButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
         
         badgeOne.translatesAutoresizingMaskIntoConstraints = false

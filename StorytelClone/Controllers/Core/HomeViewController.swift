@@ -66,8 +66,10 @@ class HomeViewController: BaseTableViewController {
             // Using hardcoded data
             if indexPath.section == 5 {
                 cell.wideButtonLabel.text = "Series"
+                cell.buttonKind = .series
             } else {
                 cell.wideButtonLabel.text = "Todas las categorías"
+                cell.buttonKind = .allCategories
             }
 
             cell.delegate = self
@@ -83,7 +85,7 @@ class HomeViewController: BaseTableViewController {
         if indexPath.section == tableView.numberOfSections - 1 || indexPath.section == tableView.numberOfSections - 2 {
             return WideButtonTableViewCell.heightForRow
         }
-        return Constants.heightForRowWithSquareCoversCv
+        return Utils.heightForRowWithSquareCoversCv
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -108,9 +110,14 @@ class HomeViewController: BaseTableViewController {
 }
 
 extension HomeViewController: WideButtonTableViewCellDelegate {
-    
-    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell) {
-        let controller = SeriesViewController()
-        navigationController?.pushViewController(controller, animated: true)
+    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, withButtonKind buttonKind: WideButtonTableViewCell.ButtonKind) {
+        if buttonKind == .series {
+            let controller = SeriesViewController()
+            navigationController?.pushViewController(controller, animated: true)
+        } else {
+            let controller = AllCategoriesViewController()
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
+
 }

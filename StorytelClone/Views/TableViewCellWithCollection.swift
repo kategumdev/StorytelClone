@@ -13,8 +13,7 @@ class TableViewCellWithCollection: UITableViewCell {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 160, height: 160)
-        layout.minimumLineSpacing = Constants.cvPadding  
+        layout.minimumLineSpacing = Constants.cvPadding
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
@@ -66,7 +65,7 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
 
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        Constants.calculatedCvItemSizeSquareCovers
+        return Utils.calculatedCvItemSizeSquareCovers
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

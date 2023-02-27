@@ -9,17 +9,21 @@ import UIKit
 
 protocol WideButtonTableViewCellDelegate: AnyObject {
   func wideButtonTableViewCellDidTapButton(
-    _ cell: WideButtonTableViewCell)
-//  func addItemViewController(
-//    _ controller: AddItemViewController,
-//    didFinishAdding item: ChecklistItem
-//  )
+    _ cell: WideButtonTableViewCell, withButtonKind buttonKind: WideButtonTableViewCell.ButtonKind)
 }
 
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
-    static let heightForRow: CGFloat = Constants.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
+    
+    enum ButtonKind {
+        case series
+        case allCategories
+    }
+    
+    var buttonKind = ButtonKind.series
+    
+    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
     
     weak var delegate: WideButtonTableViewCellDelegate?
     
@@ -53,8 +57,7 @@ class WideButtonTableViewCell: UITableViewCell {
                 print("DO smth on touchUpInside")
                 
                 // Notify the delegate that the button was tapped
-                self.delegate?.wideButtonTableViewCellDidTapButton(self)
-                
+                self.delegate?.wideButtonTableViewCellDidTapButton(self, withButtonKind: self.buttonKind)
             }
 
         }), for: .touchUpInside)
@@ -138,27 +141,16 @@ class WideButtonTableViewCell: UITableViewCell {
             wideButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             wideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
             wideButton.widthAnchor.constraint(equalToConstant: width),
-            wideButton.heightAnchor.constraint(equalToConstant: Constants.calculatedSquareCoverSize.width)
+            wideButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
         ])
         
         wideButtonLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            wideButtonLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: 18),
-            wideButtonLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -18),
+            wideButtonLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.cvPadding),
+            wideButtonLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.cvPadding),
         ])
 
     }
-
-//    private func addGradient() {
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.colors = [
-//            UIColor.clear.cgColor,
-//            UIColor.black.withAlphaComponent(0.3).cgColor
-//        ]
-//        gradientLayer.locations = [0.4, 1]
-//        gradientLayer.frame = wideButton.bounds
-//        wideButton.layer.addSublayer(gradientLayer)
-//    }
     
     private func addGradient() {
         let gradientLayer = CAGradientLayer()
