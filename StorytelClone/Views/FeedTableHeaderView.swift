@@ -10,7 +10,6 @@ import UIKit
 class FeedTableHeaderView: UIView {
     
     static let labelBottomAnchor: CGFloat = 4
-//    static let labelTopAnchor: CGFloat = 15
     static let labelTopAnchorForGreeting: CGFloat = 15
     static let labelTopAnchorForCategory: CGFloat = 19
     static let labelLeadingAnchor = Constants.cvPadding
@@ -29,10 +28,18 @@ class FeedTableHeaderView: UIView {
         return label
     }()
     
+    let dimView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Utils.customBackgroundColor
+        view.alpha = 0
+        return view
+    }()
+    
     //MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(headerLabel)
+        addSubview(dimView)
         applyConstraints()
     }
     
@@ -45,11 +52,13 @@ class FeedTableHeaderView: UIView {
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FeedTableHeaderView.labelLeadingAnchor),
-//            greetingsLabel.topAnchor.constraint(equalTo: topAnchor, constant: FeedTableHeaderView.labelTopAnchorForGreeting),
             headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FeedTableHeaderView.labelBottomAnchor),
             headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FeedTableHeaderView.labelTrailingAnchor)
         ])
         topAnchorConstraint.isActive = true
+        
+        dimView.translatesAutoresizingMaskIntoConstraints = false
+        dimView.fillSuperview()
     }
     
      func updateGreetingsLabel() {

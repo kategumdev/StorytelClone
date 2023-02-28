@@ -116,7 +116,10 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
+    // Override in subclasses of this vc if no dimming behavior for table header is needed
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffsetY = scrollView.contentOffset.y
+
         guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
@@ -125,8 +128,9 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         // Toggle navbar from transparent to visible at calculated contentOffset
-        let currentOffsetY = scrollView.contentOffset.y
         guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+        
+        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
         
         if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != visibleAppearance {
             navigationController?.navigationBar.standardAppearance = visibleAppearance
@@ -186,6 +190,22 @@ extension BaseTableViewController {
             // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
             view.setNeedsLayout()
             view.layoutIfNeeded()
+        }
+    }
+    
+    private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
+        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+        
+        let height = tableHeader.bounds.size.height + 10
+        let maxOffset = tableViewInitialOffsetY + height
+        
+        if offsetY <= tableViewInitialOffsetY && tableHeader.dimView.alpha != 0 {
+            tableHeader.dimView.alpha = 0
+        } else if offsetY >= maxOffset && tableHeader.dimView.alpha != 1 {
+            tableHeader.dimView.alpha = 1
+        } else if offsetY > tableViewInitialOffsetY && offsetY < maxOffset {
+            let alpha = (offsetY + abs(tableViewInitialOffsetY)) / height
+            tableHeader.dimView.alpha = alpha
         }
     }
 }
