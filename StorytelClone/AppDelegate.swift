@@ -20,11 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print(documentsDirectory as Any)
         
         // Appearance proxy for nav bar titles throughout the app
-        let attrs = [
-            NSAttributedString.Key.font: Utils.navBarTitleFont
-        ]
-        UINavigationBar.appearance().titleTextAttributes = attrs
-//        UINavigationBar.appearance().standardAppearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+//        let attrs = [
+//            NSAttributedString.Key.font: Utils.navBarTitleFont
+//        ]
+//        UINavigationBar.appearance().titleTextAttributes = attrs
         
         return true
     }

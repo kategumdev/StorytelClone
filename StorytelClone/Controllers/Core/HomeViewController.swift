@@ -20,9 +20,6 @@ enum Sections: Int {
 
 class HomeViewController: BaseTableViewController {
     
-//    var shadow: Any?
-    
-
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,15 +51,6 @@ class HomeViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
-        
-//        print("standardAppearance \(String(describing: navigationController?.navigationBar.standardAppearance))")
-//        
-//        shadow = navigationController?.navigationBar.standardAppearance.shadowColor
-//        print("shadowColorL \(String(describing: shadow))")
-//        navigationController?.navigationBar.standardAppearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-//        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-        
-        
         title = "Home"
         let configuration = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
@@ -116,6 +104,27 @@ class HomeViewController: BaseTableViewController {
             return 0
         } else {
             return UITableView.automaticDimension
+        }
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isInitialOffsetYSet else {
+            tableViewInitialOffsetY = scrollView.contentOffset.y
+            isInitialOffsetYSet = true
+            print("initialOffsetY is SET")
+            return
+        }
+
+        // Toggle navbar from transparent to visible as it does by default, but add another blur
+        let currentOffsetY = scrollView.contentOffset.y
+        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != visibleAppearance {
+            navigationController?.navigationBar.standardAppearance = visibleAppearance
+            print("to visible")
+        }
+        
+        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != transparentAppearance {
+            navigationController?.navigationBar.standardAppearance = transparentAppearance
+            print("to transparent")
         }
     }
 

@@ -34,7 +34,7 @@ class WideButtonTableViewCell: UITableViewCell {
     
     private lazy var castViewForButtonAnimation: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemBackground.withAlphaComponent(0.3)
+        view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
     
@@ -115,7 +115,7 @@ class WideButtonTableViewCell: UITableViewCell {
         contentView.addSubview(wideButtonLabel)
         contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = Utils.customBackgroundColor
     }
     
     required init?(coder: NSCoder) {

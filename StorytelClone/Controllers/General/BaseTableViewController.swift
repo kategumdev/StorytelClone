@@ -11,6 +11,22 @@ class BaseTableViewController: UIViewController {
     
     var sectionTitles = [String]()
     var sectionSubtitles = [String]()
+    
+    let transparentAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        appearance.configureWithTransparentBackground()
+        return appearance
+    }()
+    
+    let visibleAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.shadowColor = .tertiaryLabel
+        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        return appearance
+    }()
         
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
@@ -19,7 +35,8 @@ class BaseTableViewController: UIViewController {
  
     let bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-        table.backgroundColor = .systemBackground
+//        table.backgroundColor = .systemBackground
+        table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         
@@ -46,7 +63,7 @@ class BaseTableViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Utils.customBackgroundColor
         view.addSubview(bookTable)
         bookTable.delegate = self
         bookTable.dataSource = self
@@ -62,7 +79,7 @@ class BaseTableViewController: UIViewController {
     
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
-//        navigationController?.navigationBar.standardAppearance.shadowColor = .tertiaryLabel
+        navigationController?.navigationBar.standardAppearance = transparentAppearance
     }
 
 }
@@ -99,39 +116,26 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let font = Utils.navBarTitleFont
-//
-//        if !isInitialOffsetYSet {
-//            tableViewInitialOffsetY = scrollView.contentOffset.y
-//            isInitialOffsetYSet = true
-//            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
-//        } else {
-//            let currentOffsetY = scrollView.contentOffset.y
-//            navigationController?.navigationBar.titleTextAttributes = currentOffsetY > tableViewInitialOffsetY ? [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : font] : [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : font]
-//        }
-        
-        
-        if !isInitialOffsetYSet {
+        guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
-            navigationController?.makeTransparent()
-        } else {
-            let currentOffsetY = scrollView.contentOffset.y
-            
-            if currentOffsetY > tableViewInitialOffsetY {
-                navigationController?.makeVisible()
-            } else {
-                navigationController?.makeTransparent()
-            }
+            print("initialOffsetY is SET")
+            return
+        }
+
+        // Toggle navbar from transparent to visible at calculated contentOffset
+        let currentOffsetY = scrollView.contentOffset.y
+        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+        
+        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != visibleAppearance {
+            navigationController?.navigationBar.standardAppearance = visibleAppearance
+            print("to visible")
         }
         
-        
-        
-        
-        
-        
-
-        
+        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != transparentAppearance {
+            navigationController?.navigationBar.standardAppearance = transparentAppearance
+            print("to transparent")
+        }
     }
     
 }

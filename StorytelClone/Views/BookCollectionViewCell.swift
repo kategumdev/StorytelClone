@@ -42,7 +42,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     private lazy var castViewForButtonAnimation: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemBackground.withAlphaComponent(0.3)
+        view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
     

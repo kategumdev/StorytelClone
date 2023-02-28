@@ -11,11 +11,14 @@ struct Utils {
     
     //MARK: - Fonts
     static let navBarTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+    static let navBarTitleFontScaled = UIFontMetrics.default.scaledFont(for: navBarTitleFont, maximumPointSize: 18)
     static let tableViewSectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     
     static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
+    
+    static let customBackgroundColor = UIColor(named: "customBackground")
     
     //MARK: - Colors
     static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
