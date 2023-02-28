@@ -111,7 +111,7 @@ class HomeViewController: BaseTableViewController {
         guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
-            print("initialOffsetY is SET")
+//            print("initialOffsetY is SET")
             return
         }
 
@@ -119,12 +119,12 @@ class HomeViewController: BaseTableViewController {
         let currentOffsetY = scrollView.contentOffset.y
         if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != visibleAppearance {
             navigationController?.navigationBar.standardAppearance = visibleAppearance
-            print("to visible")
+//            print("to visible")
         }
         
         if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != transparentAppearance {
             navigationController?.navigationBar.standardAppearance = transparentAppearance
-            print("to transparent")
+//            print("to transparent")
         }
     }
 

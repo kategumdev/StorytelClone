@@ -73,6 +73,7 @@ class BaseTableViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         layoutHeaderView()
     }
@@ -119,7 +120,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
-            print("initialOffsetY is SET")
+//            print("initialOffsetY is SET")
             return
         }
 
@@ -129,12 +130,12 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != visibleAppearance {
             navigationController?.navigationBar.standardAppearance = visibleAppearance
-            print("to visible")
+//            print("to visible")
         }
         
         if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != transparentAppearance {
             navigationController?.navigationBar.standardAppearance = transparentAppearance
-            print("to transparent")
+//            print("to transparent")
         }
     }
     
@@ -157,16 +158,17 @@ extension BaseTableViewController {
     }
     
     func layoutHeaderView() {
-        //        print("layoutHeaderView")
+//                print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
 //        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
         if headerView.translatesAutoresizingMaskIntoConstraints != true {
-            //            print("translatesAutoresizingMask set to true")
+//                        print("translatesAutoresizingMask set to true")
             headerView.translatesAutoresizingMaskIntoConstraints = true
         }
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
-            //            print("header frame adjusted")
+//            print("previous frame: \(headerView.frame.size.height), new: \(size.height)")
+//                        print("header frame adjusted")
             headerView.frame.size.height = size.height
             bookTable.tableHeaderView = headerView
 
@@ -181,6 +183,9 @@ extension BaseTableViewController {
                 return
             }
             isFirstTime = false
+            // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         }
     }
 }
