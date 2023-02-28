@@ -50,7 +50,7 @@ struct Utils {
         return size
     }()
     
-    static let heightForRowWithSquareCoversCv: CGFloat = {
+    static let heightForRowWithHorizontalCv: CGFloat = {
         return calculatedCvItemSizeSquareCovers.height
     }()
     

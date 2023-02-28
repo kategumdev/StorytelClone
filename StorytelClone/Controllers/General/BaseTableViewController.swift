@@ -101,7 +101,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Utils.heightForRowWithSquareCoversCv
+        return Utils.heightForRowWithHorizontalCv
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

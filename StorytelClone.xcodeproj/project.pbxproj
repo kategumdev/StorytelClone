@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A041BDA29AE70D3002539CF /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A041BD929AE70D3002539CF /* Category.swift */; };
 		5A0A426429A583340000EE64 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0A426329A583340000EE64 /* Utils.swift */; };
 		5A52321629AC24F30058DD73 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* SeriesViewController.swift */; };
 		5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseTableViewController.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A041BD929AE70D3002539CF /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		5A0A426329A583340000EE64 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5A52321529AC24F30058DD73 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		5A52321729AC30B30058DD73 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		5ABBA3FD299C0F0600D0E0F4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5A041BD929AE70D3002539CF /* Category.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */,
 				5ABBA402299C0FD000D0E0F4 /* TabBarViewController.swift in Sources */,
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,
+				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
 				5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */,

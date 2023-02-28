@@ -85,7 +85,7 @@ class HomeViewController: BaseTableViewController {
         if indexPath.section == tableView.numberOfSections - 1 || indexPath.section == tableView.numberOfSections - 2 {
             return WideButtonTableViewCell.heightForRow
         }
-        return Utils.heightForRowWithSquareCoversCv
+        return Utils.heightForRowWithHorizontalCv
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
