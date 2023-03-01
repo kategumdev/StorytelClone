@@ -11,6 +11,8 @@ class TableViewCellWithCollection: UITableViewCell {
 
     static let identifier = "TableViewCellWithCollection"
     
+//    var model: Category?
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = Constants.cvPadding

@@ -7,23 +7,31 @@
 
 import UIKit
 
+//protocol WideButtonTableViewCellDelegate: AnyObject {
+//  func wideButtonTableViewCellDidTapButton(
+//    _ cell: WideButtonTableViewCell, withButtonKind buttonKind: WideButtonTableViewCell.ButtonKind)
+//}
+
 protocol WideButtonTableViewCellDelegate: AnyObject {
   func wideButtonTableViewCellDidTapButton(
-    _ cell: WideButtonTableViewCell, withButtonKind buttonKind: WideButtonTableViewCell.ButtonKind)
+    _ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind)
 }
 
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
+//
+//    enum ButtonKind {
+//        case series
+//        case allCategories
+//    }
+//
+//    var buttonKind = ButtonKind.series
     
-    enum ButtonKind {
-        case series
-        case allCategories
-    }
+    private var sectionKind: SectionKind = .seriesCategoryButton
     
-    var buttonKind = ButtonKind.series
-    
-    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
+//    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
+    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height
     
     weak var delegate: WideButtonTableViewCellDelegate?
     
@@ -57,7 +65,8 @@ class WideButtonTableViewCell: UITableViewCell {
                 print("DO smth on touchUpInside")
                 
                 // Notify the delegate that the button was tapped
-                self.delegate?.wideButtonTableViewCellDidTapButton(self, withButtonKind: self.buttonKind)
+//                self.delegate?.wideButtonTableViewCellDidTapButton(self, withButtonKind: self.buttonKind)
+                self.delegate?.wideButtonTableViewCellDidTapButton(self, forSectionKind: self.sectionKind)
             }
 
         }), for: .touchUpInside)
@@ -133,6 +142,16 @@ class WideButtonTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
+    
+    func configureFor(sectionKind: SectionKind) {
+        self.sectionKind = sectionKind
+        if sectionKind == .seriesCategoryButton {
+            wideButtonLabel.text = "Series"
+        } else {
+            wideButtonLabel.text = "Todas las categorías"
+        }
+    }
+    
     private func applyConstraints() {
         let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
         

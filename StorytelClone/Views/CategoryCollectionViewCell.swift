@@ -7,12 +7,21 @@
 
 import UIKit
 
+protocol CategoryCollectionViewCellDelegate: AnyObject {
+  func categoryCollectionViewCellDidTapButton(
+    _ cell: CategoryCollectionViewCell, withCategory category: Category)
+}
+
 class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
     
     private var buttonTimer: Timer?
     private var isButtonTooLongInHighlightedState = false
+    
+    private var category: Category?
+    
+    weak var delegate: CategoryCollectionViewCellDelegate?
     
     private lazy var castViewForButtonAnimation: UIView = {
         let view = UIView()
@@ -51,6 +60,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
                 print("DO smth on touchUpInside")
+                
+                guard let category = self.category else { return }
+                self.delegate?.categoryCollectionViewCellDidTapButton(self, withCategory: category)
             }
 
         }), for: .touchUpInside)
@@ -107,9 +119,11 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func configure(withColor color: UIColor, andTitle title: String) {
+    func configure(withColor color: UIColor, andCategory category: Category) {
         categoryButton.backgroundColor = color
-        buttonTitleLabel.text = title
+//        let text = title.replacingOccurrences(of: "\n", with: " ")
+        self.category = category
+        buttonTitleLabel.text = category.title
     }
     
     private func applyConstraints() {

@@ -9,8 +9,10 @@ import UIKit
 
 class BaseTableViewController: UIViewController {
     
-    var sectionTitles = [String]()
-    var sectionSubtitles = [String]()
+    let vcCategory: Category
+    
+//    var sectionTitles = [String]()
+//    var sectionSubtitles = [String]()
     
     let transparentAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
@@ -45,6 +47,9 @@ class BaseTableViewController: UIViewController {
         table.contentInset = inset
         
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+//        table.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
+//        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
+        
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         // Avoid gaps between sections and custom section headers
@@ -61,12 +66,24 @@ class BaseTableViewController: UIViewController {
         return table
     }()
 
+    
+    init(model: Category) {
+        self.vcCategory = model
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         view.addSubview(bookTable)
         bookTable.delegate = self
         bookTable.dataSource = self
+        
+        configureNavBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
     }
@@ -79,9 +96,12 @@ class BaseTableViewController: UIViewController {
     }
     
     func configureNavBar() {
+//        title = vcCategory.title
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.standardAppearance = transparentAppearance
     }
+    
+
 
 }
 
@@ -92,7 +112,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionTitles.count
+        return vcCategory.tableSections.count
+//        return sectionTitles.count
     }
     
     // This has to be overriden by subclass
@@ -107,13 +128,21 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
-        sectionHeaderView.sectionTitleLabel.text = sectionTitles[section]
-        sectionHeaderView.sectionSubtitleLabel.text = sectionSubtitles[section]
+        sectionHeaderView.sectionTitleLabel.text = vcCategory.tableSections[section].sectionTitle
+        sectionHeaderView.sectionSubtitleLabel.text = vcCategory.tableSections[section].sectionSubtitle
         return sectionHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == vcCategory.tableSections.count - 1 {
+            return Constants.gapBetweenSectionsOfCategoryTable
+        } else {
+            return 0
+        }
     }
     
     // Override in subclasses of this vc if no dimming behavior for table header is needed
@@ -148,6 +177,44 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Helper methods
 extension BaseTableViewController {
     
+//    private func configureCv() {
+//        guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+//
+//        switch vcCategory?.vcKind {
+//        case .todasLasCategorias:
+//            bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
+//
+//            bookTable.estimatedSectionHeaderHeight = 0
+//
+//            headerView.headerLabel.text = vcCategory?.vcTitle
+//            headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
+//        case .particularCategory:
+//            headerView.headerLabel.text = vcCategory?.vcTitle
+//            headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
+//        case .home:
+//            bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
+//        default:
+//            fatalError("No case exist for this vcKind")
+//        }
+//
+//    }
+    
+//    private func configureNavBar() {
+//        navigationController?.navigationBar.tintColor = .label
+//        navigationController?.navigationBar.standardAppearance = transparentAppearance
+//        title = vcCategory?.vcTitle
+//
+//        if vcCategory?.vcKind == .home {
+//            let configuration = UIImage.SymbolConfiguration(weight: .semibold)
+//            let image = UIImage(systemName: "bell", withConfiguration: configuration)
+//            navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+//            navigationItem.backButtonTitle = ""
+//        }
+//    }
+    
+    
+    
+    
     
 //    @objc private func didChangeContentSizeCategory() {
 //        print("notification")
@@ -155,6 +222,13 @@ extension BaseTableViewController {
 //        feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
 //    }
     
+    
+//    func configureNavBar() {
+////        title = vcCategory.title
+//        navigationController?.navigationBar.tintColor = .label
+//        navigationController?.navigationBar.standardAppearance = transparentAppearance
+//    }
+//
     @objc func appWillResignActive() {
         // Do something when the app is about to move to the background
         lastVisibleRowIndexPath = bookTable.indexPathsForVisibleRows?.last ?? IndexPath(row: 0, section: 0)
@@ -181,7 +255,9 @@ extension BaseTableViewController {
 
                 // Avoid scrolling up and back if table view offset is as initial
                 if tableViewInitialOffsetY != bookTable.contentOffset.y {
+                    print("adjust table view after dynamic font size change")
                     bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//                    bookTable.scrollToRow(at: IndexPath(row: 0, section: vcCategory.tableSections.count - 1), at: .bottom, animated: false)
                     bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
                 }
                 return

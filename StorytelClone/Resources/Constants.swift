@@ -11,7 +11,7 @@ import UIKit
 struct Constants {
     
     static let cvPadding: CGFloat = 16
-    static let gapBetweenSectionsOfTablesWithSquareCovers: CGFloat = 31
+    static let gapBetweenSectionsOfCategoryTable: CGFloat = 31
     static let visibleSquareCvItemsInRow: CGFloat = 3 // the 3rd one is only half visible
     static let bookCoverCornerRadius: CGFloat = 4
     static let categoryCvItemHeight: CGFloat = 120

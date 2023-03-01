@@ -67,12 +67,17 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Helper methods
+    func configureFor(section: TableSection) {
+        sectionTitleLabel.text = section.sectionTitle
+        sectionSubtitleLabel.text = section.sectionSubtitle
+    }
+    
     func applyConstraints() {
         
         sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             sectionTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            sectionTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.gapBetweenSectionsOfTablesWithSquareCovers),
+            sectionTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.gapBetweenSectionsOfCategoryTable),
             sectionTitleLabel.trailingAnchor.constraint(equalTo: seeAllButton.leadingAnchor, constant: -SectionHeaderView.paddingBetweenLabelAndButton),
             sectionTitleLabel.bottomAnchor.constraint(equalTo: sectionSubtitleLabel.topAnchor, constant: -5)
         ])
