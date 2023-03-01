@@ -13,6 +13,7 @@ class BaseTableViewController: UIViewController {
     
 //    var sectionTitles = [String]()
 //    var sectionSubtitles = [String]()
+    private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     
     let transparentAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
@@ -57,6 +58,7 @@ class BaseTableViewController: UIViewController {
         
         // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
         table.estimatedSectionHeaderHeight = 60
+//        table.estimatedSectionHeaderHeight = UITableView.automaticDimension
         
         table.tableHeaderView = FeedTableHeaderView()
         // These two lines avoid constraints' conflict of header and its label when view just loaded
@@ -86,6 +88,7 @@ class BaseTableViewController: UIViewController {
         configureNavBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -100,8 +103,6 @@ class BaseTableViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.standardAppearance = transparentAppearance
     }
-    
-
 
 }
 
@@ -177,58 +178,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Helper methods
 extension BaseTableViewController {
     
-//    private func configureCv() {
-//        guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-//
-//        switch vcCategory?.vcKind {
-//        case .todasLasCategorias:
-//            bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
-//
-//            bookTable.estimatedSectionHeaderHeight = 0
-//
-//            headerView.headerLabel.text = vcCategory?.vcTitle
-//            headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
-//        case .particularCategory:
-//            headerView.headerLabel.text = vcCategory?.vcTitle
-//            headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
-//        case .home:
-//            bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-//        default:
-//            fatalError("No case exist for this vcKind")
-//        }
-//
-//    }
-    
-//    private func configureNavBar() {
-//        navigationController?.navigationBar.tintColor = .label
-//        navigationController?.navigationBar.standardAppearance = transparentAppearance
-//        title = vcCategory?.vcTitle
-//
-//        if vcCategory?.vcKind == .home {
-//            let configuration = UIImage.SymbolConfiguration(weight: .semibold)
-//            let image = UIImage(systemName: "bell", withConfiguration: configuration)
-//            navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-//            navigationItem.backButtonTitle = ""
-//        }
-//    }
-    
-    
-    
-    
-    
-//    @objc private func didChangeContentSizeCategory() {
-//        print("notification")
-//        feedTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-//        feedTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
-//    }
-    
-    
-//    func configureNavBar() {
-////        title = vcCategory.title
-//        navigationController?.navigationBar.tintColor = .label
-//        navigationController?.navigationBar.standardAppearance = transparentAppearance
-//    }
-//
     @objc func appWillResignActive() {
         // Do something when the app is about to move to the background
         lastVisibleRowIndexPath = bookTable.indexPathsForVisibleRows?.last ?? IndexPath(row: 0, section: 0)
@@ -236,17 +185,18 @@ extension BaseTableViewController {
     }
     
     func layoutHeaderView() {
-//                print("layoutHeaderView")
+                print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
 //        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
         if headerView.translatesAutoresizingMaskIntoConstraints != true {
 //                        print("translatesAutoresizingMask set to true")
             headerView.translatesAutoresizingMaskIntoConstraints = true
         }
+        
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
 //            print("previous frame: \(headerView.frame.size.height), new: \(size.height)")
-//                        print("header frame adjusted")
+                        print("header frame adjusted")
             headerView.frame.size.height = size.height
             bookTable.tableHeaderView = headerView
 
@@ -255,11 +205,10 @@ extension BaseTableViewController {
 
                 // Avoid scrolling up and back if table view offset is as initial
                 if tableViewInitialOffsetY != bookTable.contentOffset.y {
-                    print("adjust table view after dynamic font size change")
                     bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-//                    bookTable.scrollToRow(at: IndexPath(row: 0, section: vcCategory.tableSections.count - 1), at: .bottom, animated: false)
-                    bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: false)
+                    bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: true)
                 }
+                
                 return
             }
             isFirstTime = false
@@ -267,6 +216,7 @@ extension BaseTableViewController {
             view.setNeedsLayout()
             view.layoutIfNeeded()
         }
+        
     }
     
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
