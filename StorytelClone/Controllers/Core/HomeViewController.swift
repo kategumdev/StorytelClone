@@ -97,6 +97,19 @@ class HomeViewController: BaseTableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        let sectionKind = vcCategory.tableSections[section].sectionKind
+        
+        if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
+            return Constants.gapBetweenSectionsOfCategoryTable
+        } else {
+            let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: vcCategory.tableSections[section])
+            print("calculated height for section \(section): \(calculatedHeight)")
+            return calculatedHeight
+        }
+
+    }
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y

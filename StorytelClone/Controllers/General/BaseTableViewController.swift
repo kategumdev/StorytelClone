@@ -57,8 +57,7 @@ class BaseTableViewController: UIViewController {
         table.sectionFooterHeight = 0
         
         // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
-        table.estimatedSectionHeaderHeight = 60
-//        table.estimatedSectionHeaderHeight = UITableView.automaticDimension
+//        table.estimatedSectionHeaderHeight = 60
         
         table.tableHeaderView = FeedTableHeaderView()
         // These two lines avoid constraints' conflict of header and its label when view just loaded
@@ -129,13 +128,25 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
-        sectionHeaderView.sectionTitleLabel.text = vcCategory.tableSections[section].sectionTitle
-        sectionHeaderView.sectionSubtitleLabel.text = vcCategory.tableSections[section].sectionSubtitle
+        sectionHeaderView.configureFor(section: vcCategory.tableSections[section])
+        
+//        sectionHeaderView.containerWithSubviews.sectionTitleLabel.text = vcCategory.tableSections[section].sectionTitle
+//        sectionHeaderView.containerWithSubviews.sectionSubtitleLabel.text = vcCategory.tableSections[section].sectionSubtitle
         return sectionHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: vcCategory.tableSections[section])
+        print("calculated height for section \(section): \(calculatedHeight)")
+        return calculatedHeight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        print("height for section \(section): \(view.bounds.size.height)")
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -202,13 +213,13 @@ extension BaseTableViewController {
 
             // Avoid glitch while scrolling up after dynamic font size change
             guard isFirstTime == true else {
-
-                // Avoid scrolling up and back if table view offset is as initial
-                if tableViewInitialOffsetY != bookTable.contentOffset.y {
-                    bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                    bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: true)
-                }
-                
+//
+//                // Avoid scrolling up and back if table view offset is as initial
+//                if tableViewInitialOffsetY != bookTable.contentOffset.y {
+//                    bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//                    bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: true)
+//                }
+//
                 return
             }
             isFirstTime = false
