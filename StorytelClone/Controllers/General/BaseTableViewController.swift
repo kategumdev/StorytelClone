@@ -212,18 +212,10 @@ extension BaseTableViewController {
             bookTable.tableHeaderView = headerView
 
             // Avoid glitch while scrolling up after dynamic font size change
-            guard isFirstTime == true else {
-//
-//                // Avoid scrolling up and back if table view offset is as initial
-//                if tableViewInitialOffsetY != bookTable.contentOffset.y {
-//                    bookTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-//                    bookTable.scrollToRow(at: lastVisibleRowIndexPath, at: .none, animated: true)
-//                }
-//
-                return
-            }
+            guard isFirstTime == true else { return }
             isFirstTime = false
             // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+            print("HEADER VIEW LAYOUT CALLS TO LAYOUT SECOND TIME")
             view.setNeedsLayout()
             view.layoutIfNeeded()
         }

@@ -11,22 +11,25 @@ import UIKit
 class SectionHeaderSubviewsContainer: UIView {
     
     // MARK: Static properties and methods
-    
     private static let sectionTitleLabelBottomAnchorConstant: CGFloat = 8
     private static let paddingBetweenLabelAndButton: CGFloat = 20
     private static let seeAllButtonTitle = "See all"
     private static let paddingBetweenLabels: CGFloat = 1
     
-    static func calculateHeaderHeightFor(section: TableSection) -> CGFloat {
-        let header = SectionHeaderSubviewsContainer()
-        header.sectionTitleLabel.text = section.sectionTitle
-        header.sectionSubtitleLabel.text = section.sectionSubtitle
-        let height = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        return height
-    }
+//    static let seeAllButton: UIButton = {
+//        let button = UIButton()
+//        button.setTitle(seeAllButtonTitle, for: .normal)
+//        button.titleLabel?.lineBreakMode = .byTruncatingTail
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
+//        button.titleLabel?.font = scaledFont
+//        button.contentHorizontalAlignment = .right
+//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
+//        button.titleLabel?.adjustsFontForContentSizeCategory = true
+//        return button
+//    }()
     
-    // MARK: - Instance properties
-    private let seeAllButton: UIButton = {
+    private static func createSeeAllButton() -> UIButton {
         let button = UIButton()
         button.setTitle(seeAllButtonTitle, for: .normal)
         button.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -37,7 +40,44 @@ class SectionHeaderSubviewsContainer: UIView {
         button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
-    }()
+    }
+    
+    static func calculateHeaderHeightFor(section: TableSection) -> CGFloat {
+        let header = SectionHeaderSubviewsContainer()
+        header.sectionTitleLabel.text = section.sectionTitle
+        header.sectionSubtitleLabel.text = section.sectionSubtitle
+        let height = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        return height
+    }
+    
+    private static func calculateSeeAllButtonWidth() -> CGFloat {
+//        let button = UIButton()
+//        button.setTitle(seeAllButtonTitle, for: .normal)
+//        button.titleLabel?.lineBreakMode = .byTruncatingTail
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
+//        button.titleLabel?.font = scaledFont
+//        button.contentHorizontalAlignment = .right
+        let button = createSeeAllButton()
+        button.sizeToFit()
+        return button.bounds.size.width
+    }
+    
+    // MARK: - Instance properties
+//    let seeAllButton: UIButton = {
+//        let button = UIButton()
+//        button.setTitle(seeAllButtonTitle, for: .normal)
+//        button.titleLabel?.lineBreakMode = .byTruncatingTail
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
+//        button.titleLabel?.font = scaledFont
+//        button.contentHorizontalAlignment = .right
+//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
+//        button.titleLabel?.adjustsFontForContentSizeCategory = true
+//        return button
+//    }()
+    
+    private let seeAllButton = SectionHeaderSubviewsContainer.createSeeAllButton()
     
     let sectionTitleLabel: UILabel = {
         let label = UILabel()
@@ -75,7 +115,7 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Helper methods
-    func applyConstraints() {
+    private func applyConstraints() {
         
         translatesAutoresizingMaskIntoConstraints = false
         widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
@@ -95,12 +135,13 @@ class SectionHeaderSubviewsContainer: UIView {
             sectionSubtitleLabel.trailingAnchor.constraint(equalTo: seeAllButton.leadingAnchor, constant: -SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
         ])
         
-        let seeAllButtonMaxWidth = round(UIScreen.main.bounds.size.width / 3)
+//        let seeAllButtonMaxWidth = round(UIScreen.main.bounds.size.width / 3)
         seeAllButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
             seeAllButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SectionHeaderSubviewsContainer.sectionTitleLabelBottomAnchorConstant),
-            seeAllButton.widthAnchor.constraint(equalToConstant: seeAllButtonMaxWidth)
+//            seeAllButton.widthAnchor.constraint(equalToConstant: seeAllButtonMaxWidth)
+            seeAllButton.widthAnchor.constraint(equalToConstant: SectionHeaderSubviewsContainer.calculateSeeAllButtonWidth())
         ])
     }
 

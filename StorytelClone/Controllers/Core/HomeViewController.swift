@@ -107,7 +107,6 @@ class HomeViewController: BaseTableViewController {
             print("calculated height for section \(section): \(calculatedHeight)")
             return calculatedHeight
         }
-
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
