@@ -24,7 +24,6 @@ class HomeViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-//        configureNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,7 +135,7 @@ extension HomeViewController: WideButtonTableViewCellDelegate {
 
     func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind) {
         if sectionKind == .seriesCategoryButton {
-            let controller = SeriesViewController(model: Category.series)
+            let controller = CategoryViewController(model: Category.series)
             navigationController?.pushViewController(controller, animated: true)
         } else {
             let controller = AllCategoriesViewController(categories: Category.allCategories)

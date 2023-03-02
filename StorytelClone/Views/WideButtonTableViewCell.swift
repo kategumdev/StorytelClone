@@ -7,11 +7,6 @@
 
 import UIKit
 
-//protocol WideButtonTableViewCellDelegate: AnyObject {
-//  func wideButtonTableViewCellDidTapButton(
-//    _ cell: WideButtonTableViewCell, withButtonKind buttonKind: WideButtonTableViewCell.ButtonKind)
-//}
-
 protocol WideButtonTableViewCellDelegate: AnyObject {
   func wideButtonTableViewCellDidTapButton(
     _ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind)
@@ -20,17 +15,9 @@ protocol WideButtonTableViewCellDelegate: AnyObject {
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
-//
-//    enum ButtonKind {
-//        case series
-//        case allCategories
-//    }
-//
-//    var buttonKind = ButtonKind.series
-    
+
     private var sectionKind: SectionKind = .seriesCategoryButton
     
-//    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height + Constants.gapBetweenSectionsOfTablesWithSquareCovers
     static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height
     
     weak var delegate: WideButtonTableViewCellDelegate?
@@ -65,7 +52,6 @@ class WideButtonTableViewCell: UITableViewCell {
                 print("DO smth on touchUpInside")
                 
                 // Notify the delegate that the button was tapped
-//                self.delegate?.wideButtonTableViewCellDidTapButton(self, withButtonKind: self.buttonKind)
                 self.delegate?.wideButtonTableViewCellDidTapButton(self, forSectionKind: self.sectionKind)
             }
 

@@ -13,7 +13,8 @@ class AllCategoriesViewController: BaseTableViewController {
     
     init(categories: [Category]) {
         self.categories = categories
-        super.init(model: Category.todasLasCategorias) // Change this
+        super.init(model: Category.todasLasCategorias)
+        #warning("Maybe the model has to be changed")
     }
     
     required init?(coder: NSCoder) {
@@ -44,7 +45,13 @@ class AllCategoriesViewController: BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
-        cell.delegate = self
+        
+        // Respond to button tap in CategoryCollectionViewCell
+        cell.callbackClosure = { [weak self] category in
+            let controller = CategoryViewController(model: category)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+ 
         cell.categories = self.categories
         return cell
     }
@@ -66,14 +73,3 @@ class AllCategoriesViewController: BaseTableViewController {
     }
 
 }
-
-
-extension AllCategoriesViewController: CategoriesTableViewCellWithCollectionDelegate {
-    func cellInCategoriesTableViewCellDidTapButton(_ cell: CategoriesTableViewCellWithCollection, withCategory category: Category) {
-        let controller = SeriesViewController(model: category)
-        navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    
-}
-

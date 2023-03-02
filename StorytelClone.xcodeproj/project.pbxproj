@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		5A041BDA29AE70D3002539CF /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A041BD929AE70D3002539CF /* Category.swift */; };
 		5A0A426429A583340000EE64 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0A426329A583340000EE64 /* Utils.swift */; };
-		5A52321629AC24F30058DD73 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* SeriesViewController.swift */; };
+		5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* CategoryViewController.swift */; };
 		5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseTableViewController.swift */; };
 		5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */; };
 		5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE405299FBA7E00FA4EDB /* Constants.swift */; };
@@ -58,7 +58,7 @@
 /* Begin PBXFileReference section */
 		5A041BD929AE70D3002539CF /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		5A0A426329A583340000EE64 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		5A52321529AC24F30058DD73 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
+		5A52321529AC24F30058DD73 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5A52321729AC30B30058DD73 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButtonTableViewCell.swift; sourceTree = "<group>"; };
 		5A5AE405299FBA7E00FA4EDB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -219,7 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				5A52321729AC30B30058DD73 /* BaseTableViewController.swift */,
-				5A52321529AC24F30058DD73 /* SeriesViewController.swift */,
+				5A52321529AC24F30058DD73 /* CategoryViewController.swift */,
 				5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */,
 			);
 			path = General;
@@ -376,7 +376,7 @@
 				5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */,
 				5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */,
 				5AF93326299D722100DF17C7 /* Extensions.swift in Sources */,
-				5A52321629AC24F30058DD73 /* SeriesViewController.swift in Sources */,
+				5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */,
 				5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */,
 				5ABBA402299C0FD000D0E0F4 /* TabBarViewController.swift in Sources */,
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,

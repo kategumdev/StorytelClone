@@ -7,21 +7,18 @@
 
 import UIKit
 
-protocol CategoryCollectionViewCellDelegate: AnyObject {
-  func categoryCollectionViewCellDidTapButton(
-    _ cell: CategoryCollectionViewCell, withCategory category: Category)
-}
-
 class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
+    
+    // Closure to tell AllCategoriesViewController to push new vc
+    typealias ButtonCallbackClosure = (_ category: Category) -> ()
+    var callbackClosure: ButtonCallbackClosure = {_ in}
     
     private var buttonTimer: Timer?
     private var isButtonTooLongInHighlightedState = false
     
     private var category: Category?
-    
-    weak var delegate: CategoryCollectionViewCellDelegate?
     
     private lazy var castViewForButtonAnimation: UIView = {
         let view = UIView()
@@ -62,7 +59,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
                 print("DO smth on touchUpInside")
                 
                 guard let category = self.category else { return }
-                self.delegate?.categoryCollectionViewCellDidTapButton(self, withCategory: category)
+                
+                // Closure passed to this cell from CategoriesTableViewCellWithCollection which got closure from AllCategoriesViewController
+                self.callbackClosure(category)
             }
 
         }), for: .touchUpInside)
@@ -110,6 +109,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("CategoryCollectionViewCell is not configured to be instantiated from storyboard")
+    }
+    
+    deinit {
+        print("\(self) is being deallocated")
     }
     
     override func layoutSubviews() {

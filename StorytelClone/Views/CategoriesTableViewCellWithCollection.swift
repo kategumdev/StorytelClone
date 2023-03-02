@@ -7,19 +7,11 @@
 
 import UIKit
 
-protocol CategoriesTableViewCellWithCollectionDelegate: AnyObject {
-    func cellInCategoriesTableViewCellDidTapButton(
-        _ cell: CategoriesTableViewCellWithCollection, withCategory category: Category)
-}
-
 class CategoriesTableViewCellWithCollection: UITableViewCell {
     
-//    private let categoryTitles = ["Novela", "Zona Podcast", "Novela negra", "Romántica", "Thriller y Horror", "Fantasía y\nCiencia ficción", "Crecimiento\nPersonal y Lifestyle", "Infantil",
-//    "Clásicos", "Juvenil y\nYoung Adult", "Erótica", "No ficción", "Economía y negocios", "Relatos cortos", "Historia", "Espiritualidad\ny Religión", "Biografías", "Poesía y teatro", "Aprender idiomas", "In English"]
-    
     var categories = [Category]()
-
-    weak var delegate: CategoriesTableViewCellWithCollectionDelegate?
+    
+    var callbackClosure: CategoryCollectionViewCell.ButtonCallbackClosure = {_ in}
     
     private let categoryColors = [Utils.pinkCategoryColor, Utils.orangeCategoryColor, Utils.orangeCategoryColor, Utils.coralCategoryColor, Utils.darkBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.yellowCategoryColor, Utils.peachCategoryColor, Utils.lightBlueCategoryColor, Utils.pinkCategoryColor, Utils.greenCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor, Utils.orangeCategoryColor, Utils.yellowCategoryColor, Utils.greenCategoryColor, Utils.lightBlueCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor]
     
@@ -70,9 +62,11 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else { return UICollectionViewCell()}
-        cell.delegate = self
-        cell.configure(withColor: categoryColors[indexPath.row], andCategory: categories[indexPath.row])
         
+        // Closure passed by AllCategoriesViewController. Pass it to CategoryCollectionViewCell
+        cell.callbackClosure = callbackClosure
+        
+        cell.configure(withColor: categoryColors[indexPath.row], andCategory: categories[indexPath.row])
         return cell
     }
 
@@ -87,10 +81,4 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegateFlowLay
         UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: Constants.gapBetweenSectionsOfCategoryTable, right: Constants.cvPadding)
     }
      
-}
-
-extension CategoriesTableViewCellWithCollection: CategoryCollectionViewCellDelegate {
-    func categoryCollectionViewCellDidTapButton(_ cell: CategoryCollectionViewCell, withCategory category: Category) {
-        delegate?.cellInCategoriesTableViewCellDidTapButton(self, withCategory: category)
-    }
 }

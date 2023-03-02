@@ -11,8 +11,6 @@ class BaseTableViewController: UIViewController {
     
     let vcCategory: Category
     
-//    var sectionTitles = [String]()
-//    var sectionSubtitles = [String]()
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     
     let transparentAppearance: UINavigationBarAppearance = {
@@ -85,9 +83,6 @@ class BaseTableViewController: UIViewController {
         bookTable.dataSource = self
         
         configureNavBar()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -113,10 +108,9 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return vcCategory.tableSections.count
-//        return sectionTitles.count
     }
     
-    // This has to be overriden by subclass
+    // This has to be overriden by subclasses
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return UITableViewCell()
     }
@@ -129,9 +123,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
         sectionHeaderView.configureFor(section: vcCategory.tableSections[section])
-        
-//        sectionHeaderView.containerWithSubviews.sectionTitleLabel.text = vcCategory.tableSections[section].sectionTitle
-//        sectionHeaderView.containerWithSubviews.sectionSubtitleLabel.text = vcCategory.tableSections[section].sectionSubtitle
         return sectionHeaderView
     }
     
@@ -188,13 +179,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - Helper methods
 extension BaseTableViewController {
-    
-    @objc func appWillResignActive() {
-        // Do something when the app is about to move to the background
-        lastVisibleRowIndexPath = bookTable.indexPathsForVisibleRows?.last ?? IndexPath(row: 0, section: 0)
-        //        print("last visible row before background: \(lastVisibleRowIndexPath)")
-    }
-    
+
     func layoutHeaderView() {
                 print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
@@ -206,16 +191,13 @@ extension BaseTableViewController {
         
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
-//            print("previous frame: \(headerView.frame.size.height), new: \(size.height)")
                         print("header frame adjusted")
             headerView.frame.size.height = size.height
             bookTable.tableHeaderView = headerView
 
-            // Avoid glitch while scrolling up after dynamic font size change
             guard isFirstTime == true else { return }
             isFirstTime = false
             // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
-            print("HEADER VIEW LAYOUT CALLS TO LAYOUT SECOND TIME")
             view.setNeedsLayout()
             view.layoutIfNeeded()
         }

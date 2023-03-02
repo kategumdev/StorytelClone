@@ -7,7 +7,8 @@
 
 import UIKit
 
-class SeriesViewController: BaseTableViewController {
+// Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
+class CategoryViewController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
