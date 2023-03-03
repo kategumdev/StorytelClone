@@ -109,6 +109,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(coverImageButton)
         contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
+//        contentView.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
@@ -143,13 +144,22 @@ class BookCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         coverImageContainerView.fillSuperview()
         
+//        coverImageView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+////            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: BadgeView.badgeTopAnchorPoints),
+//            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: Utils.topPaddingForCvItemWithSquareCovers),
+//            coverImageView.leadingAnchor.constraint(equalTo: coverImageContainerView.leadingAnchor),
+//            coverImageView.bottomAnchor.constraint(equalTo: coverImageContainerView.bottomAnchor),
+//            coverImageView.widthAnchor.constraint(equalTo: coverImageContainerView.widthAnchor)
+//
+//        ])
+        
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: BadgeView.badgeTopAnchorPoints),
-            coverImageView.leadingAnchor.constraint(equalTo: coverImageContainerView.leadingAnchor),
-            coverImageView.bottomAnchor.constraint(equalTo: coverImageContainerView.bottomAnchor),
-            coverImageView.widthAnchor.constraint(equalTo: coverImageContainerView.widthAnchor)
-
+            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            coverImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
+            coverImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
         
         coverImageButton.translatesAutoresizingMaskIntoConstraints = false

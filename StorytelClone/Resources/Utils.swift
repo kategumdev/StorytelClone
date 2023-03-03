@@ -59,9 +59,19 @@ struct Utils {
         return size
     }()
     
+//    static let calculatedCvItemSizeSquareCovers: CGSize = {
+//        let width = calculatedSquareCoverSize.width
+//        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints
+//        let size = CGSize(width: width, height: height)
+//        return size
+//    }()
+    
+    static let topPaddingForCvItemWithSquareCovers = BadgeView.badgeTopAnchorPoints + 3
+    
     static let calculatedCvItemSizeSquareCovers: CGSize = {
         let width = calculatedSquareCoverSize.width
-        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints
+        let height = calculatedSquareCoverSize.height + topPaddingForCvItemWithSquareCovers
+//        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints + 8
         let size = CGSize(width: width, height: height)
         return size
     }()

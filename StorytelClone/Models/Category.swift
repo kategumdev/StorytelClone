@@ -10,8 +10,9 @@ import Foundation
 enum SectionKind {
     case horizontalCv
     case verticalCv
-    case storytelOriginal
+    case oneBookWithOverview
     case poster
+    case largeCoversHorizontalCv
     case seriesCategoryButton
     case allCategoriesButton
 }
@@ -129,7 +130,7 @@ struct Category {
         title: CategoryButton.series.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Series Top esta semana"),
-            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Los crímenes de Fjällbacka -\nCamilla Läckberg"),
             TableSection(sectionTitle: "Series que son tendencia"),
             TableSection(sectionTitle: "Series exclusivas", sectionKind: .verticalCv),
@@ -141,11 +142,11 @@ struct Category {
             TableSection(sectionTitle: "La Rueda del Tiempo de\nRobert Jordan"),
             TableSection(sectionTitle: "Serie Sektion M de\nChristina Larsson"),
             TableSection(sectionTitle: "Serie Kim Stone -\nAngela Marsons"),
-            TableSection(sectionTitle: "Susana Martín Gijón para Storytel Original", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Susana Martín Gijón para Storytel Original", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Serie Bad Ash -\nAlina Not"),
-            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Storyside - Las historias de/nSherlock Holmes"),
-            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusivo para Stirytel", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusivo para Stirytel", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
             TableSection(sectionTitle: "Storytel Original - Todas las series")
         ])
@@ -166,23 +167,23 @@ struct Category {
     static let soloEnStorytel = Category(
         title: CategoryButton.soloEnStorytel.rawValue,
         tableSections: [
-            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original - Sonido binaural", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original - Sonido binaural", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "En exclusiva - Los más escuchados esta semana"),
             TableSection(sectionTitle: "Solo en Storytel"),
             TableSection(sectionTitle: "Nuestros bestsellers"),
             TableSection(sectionTitle: "Seríу Сrímenes del norte de\nMario Escobar"),
             TableSection(sectionTitle: "La Rueda del Tiempo de\nRobert Jordan"),
             TableSection(sectionTitle: "Storytel Original - Los más escuchados esta semana"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Serie Los Crímenes del faro de Ibon Martín"),
             TableSection(sectionTitle: "Novedades en exclusiva: Romántica"),
             TableSection(sectionTitle: "Solo en Storytel: Novelas"),
-            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusiva para Storytel", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusiva para Storytel", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Solo en Storytel: Novela negra y Thriller"),
             TableSection(sectionTitle: "¿Te los has perdido?"),
             TableSection(sectionTitle: "Muy pronto en exclusiva"),
             TableSection(sectionTitle: "En exclusiva - Tendencias"),
-            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Serie Vientos aliosos de\nChristina Courtenay"),
             TableSection(sectionTitle: "Solo en Storytel: fantasía y Ciencia ficción"),
             TableSection(sectionTitle: "Solo en Storytel - Clásicos"),
@@ -190,7 +191,7 @@ struct Category {
             TableSection(sectionTitle: "Los más esperados en exclusiva"),
             TableSection(sectionTitle: "Narrados en acento ibérico"),
             TableSection(sectionTitle: "Narrados en acento neutro"),
-            TableSection(sectionTitle: "", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Solo en Storytel: Economía y negocios"),
             TableSection(sectionTitle: "Solo en Storytel: Historia"),
             TableSection(sectionTitle: "Solo en Storytel: Juvenil"),
@@ -346,20 +347,22 @@ struct Category {
             TableSection(sectionTitle: "Solo para ti"),
             TableSection(sectionTitle: "Los títulos del momento"),
             TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
+            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv),
             TableSection(sectionTitle: "Top 50 hoy"),
             TableSection(sectionTitle: "Nuevos audiolibros"),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
             TableSection(sectionTitle: "Solo en Storytel"),
             TableSection(sectionTitle: "Novela: Recomendados para ti"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Tendecia en Storytel"),
             TableSection(sectionTitle: "Pronto en audiolibro"),
             TableSection(sectionTitle: "Historias de pelicula (y serie)"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Novela: Los más populares"),
+            TableSection(sectionTitle: "Porque te interesa", sectionSubtitle: "Brick Lane"),
             TableSection(sectionTitle: "Novela negra: Recomendados para ti"),
             TableSection(sectionTitle: "", sectionKind: .seriesCategoryButton),
-            TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .storytelOriginal),
+            TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "Series Top esta semana"),
             TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
         ])
