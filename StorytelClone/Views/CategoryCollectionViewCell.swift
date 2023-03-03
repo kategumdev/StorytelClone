@@ -12,13 +12,15 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     static let identifier = "CategoryCollectionViewCell"
     
     // Closure to tell AllCategoriesViewController to push new vc
-    typealias ButtonCallbackClosure = (_ category: Category) -> ()
+    typealias ButtonCallbackClosure = (_ category: CategoryButton) -> ()
     var callbackClosure: ButtonCallbackClosure = {_ in}
     
     private var buttonTimer: Timer?
     private var isButtonTooLongInHighlightedState = false
     
-    private var category: Category?
+//    private var category: Category?
+    
+    private var categoryOfButton: CategoryButton?
     
     private lazy var castViewForButtonAnimation: UIView = {
         let view = UIView()
@@ -40,7 +42,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var categoryButton: UIButton = {
+    private lazy var cellButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = Constants.bookCoverCornerRadius
         button.clipsToBounds = true
@@ -58,7 +60,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
                 self.buttonTimer?.invalidate()
                 print("DO smth on touchUpInside")
                 
-                guard let category = self.category else { return }
+                guard let category = self.categoryOfButton else { return }
                 
                 // Closure passed to this cell from CategoriesTableViewCellWithCollection which got closure from AllCategoriesViewController
                 self.callbackClosure(category)
@@ -102,7 +104,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(categoryButton)
+        contentView.addSubview(cellButton)
         contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
     }
@@ -118,24 +120,24 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         castViewForButtonAnimation.frame = contentView.bounds
-        categoryButton.frame = contentView.bounds
+        cellButton.frame = contentView.bounds
     }
     
     // MARK: - Helper methods
-    func configure(withColor color: UIColor, andCategory category: Category) {
-        categoryButton.backgroundColor = color
+    func configure(withColor color: UIColor, andCategoryOfButton category: CategoryButton) {
+        cellButton.backgroundColor = color
 //        let text = title.replacingOccurrences(of: "\n", with: " ")
-        self.category = category
-        buttonTitleLabel.text = category.title
+        self.categoryOfButton = category
+        buttonTitleLabel.text = category.rawValue
     }
     
     private func applyConstraints() {
         
         buttonTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonTitleLabel.leadingAnchor.constraint(equalTo: categoryButton.leadingAnchor, constant: Constants.cvPadding),
-            buttonTitleLabel.bottomAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: -(Constants.cvPadding - 4)),
-            buttonTitleLabel.trailingAnchor.constraint(equalTo: categoryButton.trailingAnchor, constant: -Constants.cvPadding)
+            buttonTitleLabel.leadingAnchor.constraint(equalTo: cellButton.leadingAnchor, constant: Constants.cvPadding),
+            buttonTitleLabel.bottomAnchor.constraint(equalTo: cellButton.bottomAnchor, constant: -(Constants.cvPadding - 4)),
+            buttonTitleLabel.trailingAnchor.constraint(equalTo: cellButton.trailingAnchor, constant: -Constants.cvPadding)
         ])
     }
     

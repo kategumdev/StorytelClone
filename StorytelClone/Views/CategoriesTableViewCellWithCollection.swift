@@ -9,7 +9,7 @@ import UIKit
 
 class CategoriesTableViewCellWithCollection: UITableViewCell {
     
-    var categories = [Category]()
+    var categoryButtons = [CategoryButton]()
     
     var callbackClosure: CategoryCollectionViewCell.ButtonCallbackClosure = {_ in}
     
@@ -48,15 +48,15 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
-    func configureWith(categories: [Category]) {
-        self.categories = categories
+    func configureWith(categoryButtons: [CategoryButton]) {
+        self.categoryButtons = categoryButtons
     }
 
 }
 
 extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories.count
+        return categoryButtons.count
     }
     
     
@@ -66,7 +66,7 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
         // Closure passed by AllCategoriesViewController. Pass it to CategoryCollectionViewCell
         cell.callbackClosure = callbackClosure
         
-        cell.configure(withColor: categoryColors[indexPath.row], andCategory: categories[indexPath.row])
+        cell.configure(withColor: categoryColors[indexPath.row], andCategoryOfButton: categoryButtons[indexPath.row])
         return cell
     }
 

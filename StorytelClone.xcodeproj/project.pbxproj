@@ -17,6 +17,7 @@
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
 		5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380BA299ED7E200611543 /* BadgeView.swift */; };
 		5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */; };
+		5AB86E6129B1723B005122A6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB86E6029B1723B005122A6 /* Book.swift */; };
 		5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */; };
 		5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38C299C09A700D0E0F4 /* SceneDelegate.swift */; };
 		5ABBA38F299C09A700D0E0F4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38E299C09A700D0E0F4 /* HomeViewController.swift */; };
@@ -66,6 +67,7 @@
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A8380BA299ED7E200611543 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		5AB86E6029B1723B005122A6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		5ABBA387299C09A700D0E0F4 /* StorytelClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorytelClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5ABBA38C299C09A700D0E0F4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				5A041BD929AE70D3002539CF /* Category.swift */,
+				5AB86E6029B1723B005122A6 /* Book.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -383,6 +386,7 @@
 				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
+				5AB86E6129B1723B005122A6 /* Book.swift in Sources */,
 				5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */,
 				5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,

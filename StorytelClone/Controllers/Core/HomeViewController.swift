@@ -138,7 +138,8 @@ extension HomeViewController: WideButtonTableViewCellDelegate {
             let controller = CategoryViewController(model: Category.series)
             navigationController?.pushViewController(controller, animated: true)
         } else {
-            let controller = AllCategoriesViewController(categories: Category.allCategories)
+//            let controller = AllCategoriesViewController(categories: Category.allCategories)
+            let controller = AllCategoriesViewController(model: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
             navigationController?.pushViewController(controller, animated: true)
         }
     }

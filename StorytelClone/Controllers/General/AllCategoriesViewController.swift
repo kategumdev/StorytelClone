@@ -9,18 +9,21 @@ import UIKit
 
 class AllCategoriesViewController: BaseTableViewController {
     
-    private let categories: [Category]
+//    private let categories: [Category]
+    private let model: Category
+    private let categoryButtons: [CategoryButton]
     
-    init(categories: [Category]) {
-        self.categories = categories
-        super.init(model: Category.todasLasCategorias)
-        #warning("Maybe the model has to be changed")
+    init(model: Category, categoryButtons: [CategoryButton]) {
+        self.model = model
+        self.categoryButtons = categoryButtons
+        super.init(model: model)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
@@ -35,24 +38,36 @@ class AllCategoriesViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+    //MARK: - Helper methods
+    private func getModelFor(categoryButton: CategoryButton) -> Category {
+        return CategoryButton.createModelFor(categoryButton: categoryButton)
     }
+
+}
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension AllCategoriesViewController {
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return 1
+//    }
+    
+//    override func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
         // Respond to button tap in CategoryCollectionViewCell
-        cell.callbackClosure = { [weak self] category in
+        cell.callbackClosure = { [weak self] buttonCategory in
+            guard let self = self else { return }
+            let category = self.getModelFor(categoryButton: buttonCategory)
             let controller = CategoryViewController(model: category)
-            self?.navigationController?.pushViewController(controller, animated: true)
+            self.navigationController?.pushViewController(controller, animated: true)
         }
  
-        cell.categories = self.categories
+        cell.categoryButtons = self.categoryButtons
         return cell
     }
     
@@ -71,5 +86,4 @@ class AllCategoriesViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
     }
-
 }
