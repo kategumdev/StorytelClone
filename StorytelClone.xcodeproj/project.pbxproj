@@ -17,6 +17,8 @@
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
 		5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380BA299ED7E200611543 /* BadgeView.swift */; };
 		5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */; };
+		5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC629B21C090048A4FB /* BookViewController.swift */; };
+		5AB2CCC929B21F180048A4FB /* SeeAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC829B21F180048A4FB /* SeeAllViewController.swift */; };
 		5AB86E6129B1723B005122A6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB86E6029B1723B005122A6 /* Book.swift */; };
 		5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */; };
 		5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38C299C09A700D0E0F4 /* SceneDelegate.swift */; };
@@ -67,6 +69,8 @@
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A8380BA299ED7E200611543 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		5AB2CCC629B21C090048A4FB /* BookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
+		5AB2CCC829B21F180048A4FB /* SeeAllViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllViewController.swift; sourceTree = "<group>"; };
 		5AB86E6029B1723B005122A6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		5ABBA387299C09A700D0E0F4 /* StorytelClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorytelClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 				5A52321729AC30B30058DD73 /* BaseTableViewController.swift */,
 				5A52321529AC24F30058DD73 /* CategoryViewController.swift */,
 				5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */,
+				5AB2CCC629B21C090048A4FB /* BookViewController.swift */,
+				5AB2CCC829B21F180048A4FB /* SeeAllViewController.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -377,6 +383,7 @@
 				5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */,
 				5ABBA395299C09A700D0E0F4 /* StorytelClone.xcdatamodeld in Sources */,
 				5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */,
+				5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */,
 				5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */,
 				5AF93326299D722100DF17C7 /* Extensions.swift in Sources */,
 				5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */,
@@ -391,6 +398,7 @@
 				5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,
 				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,
+				5AB2CCC929B21F180048A4FB /* SeeAllViewController.swift in Sources */,
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 			);

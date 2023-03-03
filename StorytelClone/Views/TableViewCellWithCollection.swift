@@ -11,7 +11,10 @@ class TableViewCellWithCollection: UITableViewCell {
 
     static let identifier = "TableViewCellWithCollection"
     
-//    var model: Category?
+    // Actual value injected when cell is being configured in cellForRowAt
+    var books: [Book] = [Book]() // It will contain only 10 random books from 
+    
+    var callbackClosure: BookCollectionViewCell.ButtonCallbackClosure = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -44,28 +47,27 @@ class TableViewCellWithCollection: UITableViewCell {
 
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
+
+        guard let book = books.randomElement() else { return UICollectionViewCell()}
+        cell.configureFor(book: book)
+//        cell.configureFor(book: books[indexPath.row])
         
-        // Randomly configure items with different badges
-        if indexPath.row < 5 && indexPath.row % 2 == 0 {
-            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .audioBookAndEbook)
-        } else if indexPath.row % 2 == 0 {
-            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .ebook)
-        } else {
-            cell.configure(withCoverNumber: indexPath.row + 1, forItemKind: .audiobook)
-        }
+        // Closure passed by owning controller (it can be HomeViewController,  CategoryViewController, SeeAllViewController, maybe other). Pass it to BookCollectionViewCell
+        cell.callbackClosure = callbackClosure
         return cell
     }
     
 }
 
+//MARK: - UICollectionViewDelegateFlowLayout
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return Utils.calculatedCvItemSizeSquareCovers

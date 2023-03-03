@@ -30,6 +30,22 @@ struct Utils {
     static let peachCategoryColor = UIColor(red: 245/255, green: 202/255, blue: 191/255, alpha: 1)
     static let greenCategoryColor = UIColor(red: 189/255, green: 210/255, blue: 163/255, alpha: 1)
     
+    static let transparentNavBarAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        appearance.configureWithTransparentBackground()
+        return appearance
+    }()
+    
+    static let visibleNavBarAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.shadowColor = .tertiaryLabel
+        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        return appearance
+    }()
+    
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width

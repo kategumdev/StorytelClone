@@ -48,12 +48,15 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
+    
+    // MARK: - Helper methods
     func configureWith(categoryButtons: [CategoryButton]) {
         self.categoryButtons = categoryButtons
     }
 
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categoryButtons.count

@@ -20,11 +20,14 @@ struct TableSection {
     let sectionTitle: String
     let sectionSubtitle: String
     let sectionKind: SectionKind
+    let books: [Book]
     
-    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv) {
+    #warning("Add more than 10 books to books array. For showing vcs, TableSection will randomly fetch from general model only 10 books that belong to this section. But for showing SeeAllVC it will fetch all books that belong to this section")
+    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books) {
         self.sectionTitle = sectionTitle
         self.sectionSubtitle = sectionSubtitle
         self.sectionKind = sectionKind
+        self.books = books
     }
 }
 
@@ -112,67 +115,6 @@ enum CategoryButton: String {
         }
     }
 }
-
-//struct HomeVcModel {
-//    let tableSections: [TableSection]
-//
-//    init(tableSections: [TableSection]) {
-//        self.tableSections = tableSections
-//    }
-//
-//    static let model = HomeVcModel(tableSections: [
-//        TableSection(sectionTitle: "Solo para ti"),
-//        TableSection(sectionTitle: "Los títulos del momento"),
-//        TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
-//        TableSection(sectionTitle: "Top 50 hoy"),
-//        TableSection(sectionTitle: "Nuevos audiolibros"),
-//        TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
-//        TableSection(sectionTitle: "Solo en Storytel"),
-//        TableSection(sectionTitle: "Novela: Recomendados para ti"),
-//        TableSection(sectionTitle: "Solo en Storytel", sectionKind: .storytelOriginal),
-//        TableSection(sectionTitle: "Tendecia en Storytel"),
-//        TableSection(sectionTitle: "Pronto en audiolibro"),
-//        TableSection(sectionTitle: "Historias de pelicula (y serie)"),
-//        TableSection(sectionTitle: "Solo en Storytel", sectionKind: .storytelOriginal),
-//        TableSection(sectionTitle: "Novela: Los más populares"),
-//        TableSection(sectionTitle: "Novela negra: Recomendados para ti"),
-//        TableSection(sectionTitle: "", sectionKind: .seriesCategoryButton),
-//        TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .storytelOriginal),
-//        TableSection(sectionTitle: "Series Top esta semana"),
-//        TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
-//    ])
-//}
-
-//struct AllCategoriesVcModel {
-//    let title: String
-//    let tableSections: [TableSection]
-//    let categoryButtons: [CategoryButton]
-//
-//    init(title: String, tableSections: [TableSection], categoryButtons: [CategoryButton]) {
-//        self.title = title
-//        self.tableSections = tableSections
-//        self.categoryButtons = categoryButtons
-//    }
-//
-//    static let allCategoriesModel = AllCategoriesVcModel(
-//        title: "Todas las categorías",
-//        tableSections: [TableSection(sectionTitle: "", sectionKind: .verticalCv)],
-//        categoryButtons: CategoryButton.categoriesForAllCategories
-//    )
-//}
-//
-//struct SearchVcModel {
-//    let tableSections: [TableSection]
-//
-//    init(tableSections: [TableSection]) {
-//        self.tableSections = tableSections
-//    }
-//
-//    static let model = SearchVcModel(tableSections: [
-//        TableSection(sectionTitle: "", sectionKind: .verticalCv),
-//        TableSection(sectionTitle: "Todas las categorías", sectionKind: .verticalCv)
-//    ])
-//}
 
 struct Category {
     let title: String

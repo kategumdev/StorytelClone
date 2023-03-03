@@ -113,9 +113,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         fatalError("CategoryCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    deinit {
-        print("\(self) is being deallocated")
-    }
+//    deinit {
+//        print("\(self) is being deallocated")
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()

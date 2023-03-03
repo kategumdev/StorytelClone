@@ -15,20 +15,7 @@ class SectionHeaderSubviewsContainer: UIView {
     private static let paddingBetweenLabelAndButton: CGFloat = 20
     private static let seeAllButtonTitle = "See all"
     private static let paddingBetweenLabels: CGFloat = 1
-    
-//    static let seeAllButton: UIButton = {
-//        let button = UIButton()
-//        button.setTitle(seeAllButtonTitle, for: .normal)
-//        button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
-//        button.titleLabel?.font = scaledFont
-//        button.contentHorizontalAlignment = .right
-//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        return button
-//    }()
-    
+
     private static func createSeeAllButton() -> UIButton {
         let button = UIButton()
         button.setTitle(seeAllButtonTitle, for: .normal)
@@ -51,33 +38,19 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     private static func calculateSeeAllButtonWidth() -> CGFloat {
-//        let button = UIButton()
-//        button.setTitle(seeAllButtonTitle, for: .normal)
-//        button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
-//        button.titleLabel?.font = scaledFont
-//        button.contentHorizontalAlignment = .right
         let button = createSeeAllButton()
         button.sizeToFit()
         return button.bounds.size.width
     }
     
     // MARK: - Instance properties
-//    let seeAllButton: UIButton = {
-//        let button = UIButton()
-//        button.setTitle(seeAllButtonTitle, for: .normal)
-//        button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
-//        button.titleLabel?.font = scaledFont
-//        button.contentHorizontalAlignment = .right
-//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        return button
-//    }()
+    var tableSection: TableSection?
     
     private let seeAllButton = SectionHeaderSubviewsContainer.createSeeAllButton()
+    
+    // Closure to tell owning controller to push new vc
+    typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
+    var callbackClosure: SeeAllButtonCallbackClosure = {_ in}
     
     let sectionTitleLabel: UILabel = {
         let label = UILabel()
@@ -107,6 +80,7 @@ class SectionHeaderSubviewsContainer: UIView {
         addSubview(sectionTitleLabel)
         addSubview(sectionSubtitleLabel)
         addSubview(seeAllButton)
+        configureButtonWithAction()
         applyConstraints()
     }
     
@@ -115,6 +89,17 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Helper methods
+    
+    private func configureButtonWithAction() {
+        seeAllButton.addAction(UIAction(handler: { [weak self] action in
+            guard let self = self, let tableSection = self.tableSection else { return }
+
+            // Notify owning vc that the button was tapped
+            self.callbackClosure(tableSection)
+
+        }), for: .touchUpInside)
+    }
+    
     private func applyConstraints() {
         
         translatesAutoresizingMaskIntoConstraints = false

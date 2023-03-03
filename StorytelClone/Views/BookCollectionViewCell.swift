@@ -10,12 +10,12 @@ import UIKit
 class BookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "BookCollectionViewCell"
+ 
+    private var book: Book?
     
-    enum ItemKind {
-        case audiobook
-        case ebook
-        case audioBookAndEbook
-    }
+    // Closure to tell owning controller to push new vc
+    typealias ButtonCallbackClosure = (_ book: Book) -> ()
+    var callbackClosure: ButtonCallbackClosure = {_ in}
      
     // Created to have custom cornerRadius, because button with UIButton.Configuration doesn't allow it
     private lazy var coverImageContainerView: UIView = {
@@ -61,6 +61,10 @@ class BookCollectionViewCell: UICollectionViewCell {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
                 print("DO smth on touchUpInside")
+                
+                // Closure passed to this cell from TableViewCellWithCollection which got closure from owning controller
+                guard let book = self.book else { return }
+                self.callbackClosure(book)
             }
 
         }), for: .touchUpInside)
@@ -117,10 +121,12 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func configure(withCoverNumber number: Int, forItemKind itemKind: ItemKind) {
-        coverImageView.image = UIImage(named: "image\(number)")
-
-        switch itemKind {
+    func configureFor(book: Book) {
+        self.book = book
+        coverImageView.image = book.coverImage
+        
+        let bookKind  = book.bookKind
+        switch bookKind {
         case .audiobook:
             badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
             badgeTwo.isHidden = true
@@ -135,7 +141,6 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     private func applyConstraints() {
-        
         coverImageContainerView.fillSuperview()
         
         coverImageView.translatesAutoresizingMaskIntoConstraints = false

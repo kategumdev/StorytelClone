@@ -52,21 +52,32 @@ class HomeViewController: BaseTableViewController {
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let sectionKind = vcCategory.tableSections[indexPath.section].sectionKind
+        let sectionKind = category.tableSections[indexPath.section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
             cell.delegate = self
-            cell.configureFor(sectionKind: vcCategory.tableSections[indexPath.section].sectionKind)
+            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+            
+            // Dependency injection
+            cell.books = category.tableSections[indexPath.row].books
+            
+            // Respond to button tap in BookCollectionViewCell
+            cell.callbackClosure = { [weak self] book in
+                guard let self = self else { return }
+                let controller = BookViewController(book: book)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+            
             return cell
         }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let sectionKind = vcCategory.tableSections[indexPath.section].sectionKind
+        let sectionKind = category.tableSections[indexPath.section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
             return WideButtonTableViewCell.heightForRow
@@ -76,18 +87,26 @@ class HomeViewController: BaseTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionKind = vcCategory.tableSections[section].sectionKind
+        let sectionKind = category.tableSections[section].sectionKind
         
         guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView()}
         
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
         
-        sectionHeader.configureFor(section: vcCategory.tableSections[section])
+        sectionHeader.configureFor(section: category.tableSections[section])
+        
+        // Closure for seeAllButton to notify this vc when tapped
+        sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
+            guard let self = self else { return }
+            let controller = SeeAllViewController(tableSection: tableSection)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
         return sectionHeader
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let sectionKind = vcCategory.tableSections[section].sectionKind
+        let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
             return Constants.gapBetweenSectionsOfCategoryTable
@@ -97,13 +116,13 @@ class HomeViewController: BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let sectionKind = vcCategory.tableSections[section].sectionKind
+        let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
             return Constants.gapBetweenSectionsOfCategoryTable
         } else {
-            let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: vcCategory.tableSections[section])
-            print("calculated height for section \(section): \(calculatedHeight)")
+            let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: category.tableSections[section])
+//            print("calculated height for section \(section): \(calculatedHeight)")
             return calculatedHeight
         }
     }
@@ -118,13 +137,13 @@ class HomeViewController: BaseTableViewController {
 
         // Toggle navbar from transparent to visible as it does by default, but add another blur
         let currentOffsetY = scrollView.contentOffset.y
-        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != visibleAppearance {
-            navigationController?.navigationBar.standardAppearance = visibleAppearance
+        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
 //            print("to visible")
         }
         
-        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != transparentAppearance {
-            navigationController?.navigationBar.standardAppearance = transparentAppearance
+        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
 //            print("to transparent")
         }
     }
@@ -138,7 +157,6 @@ extension HomeViewController: WideButtonTableViewCellDelegate {
             let controller = CategoryViewController(model: Category.series)
             navigationController?.pushViewController(controller, animated: true)
         } else {
-//            let controller = AllCategoriesViewController(categories: Category.allCategories)
             let controller = AllCategoriesViewController(model: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
             navigationController?.pushViewController(controller, animated: true)
         }

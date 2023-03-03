@@ -16,6 +16,7 @@ class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
 
+    // Actual value is injected when cell is being configured in cellForRowAt
     private var sectionKind: SectionKind = .seriesCategoryButton
     
     static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height
@@ -51,7 +52,7 @@ class WideButtonTableViewCell: UITableViewCell {
                 self.buttonTimer?.invalidate()
                 print("DO smth on touchUpInside")
                 
-                // Notify the delegate that the button was tapped
+                // Notify the delegate (HomeViewController) that the button was tapped
                 self.delegate?.wideButtonTableViewCellDidTapButton(self, forSectionKind: self.sectionKind)
             }
 

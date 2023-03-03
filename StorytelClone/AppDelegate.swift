@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
 //        print(documentsDirectory as Any)
         
-        // Appearance proxy for nav bar titles throughout the app
-//        let attrs = [
-//            NSAttributedString.Key.font: Utils.navBarTitleFont
-//        ]
-//        UINavigationBar.appearance().titleTextAttributes = attrs
+//         Appearance proxy for nav bar titles throughout the app
+        let attrs = [
+            NSAttributedString.Key.font: Utils.navBarTitleFont
+        ]
+        UINavigationBar.appearance().titleTextAttributes = attrs
         
         return true
     }

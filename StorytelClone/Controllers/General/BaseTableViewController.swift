@@ -9,26 +9,10 @@ import UIKit
 
 class BaseTableViewController: UIViewController {
     
-    let vcCategory: Category
+    let category: Category
     
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     
-    let transparentAppearance: UINavigationBarAppearance = {
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-        appearance.configureWithTransparentBackground()
-        return appearance
-    }()
-    
-    let visibleAppearance: UINavigationBarAppearance = {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.shadowColor = .tertiaryLabel
-        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-        return appearance
-    }()
-        
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
     private var isFirstTime = true
@@ -36,7 +20,6 @@ class BaseTableViewController: UIViewController {
  
     let bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-//        table.backgroundColor = .systemBackground
         table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
@@ -46,9 +29,6 @@ class BaseTableViewController: UIViewController {
         table.contentInset = inset
         
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
-//        table.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
-//        table.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-        
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         // Avoid gaps between sections and custom section headers
@@ -67,7 +47,7 @@ class BaseTableViewController: UIViewController {
 
     
     init(model: Category) {
-        self.vcCategory = model
+        self.category = model
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -87,19 +67,19 @@ class BaseTableViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("viewDidLayoutSubviews")
+//        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         layoutHeaderView()
     }
     
     func configureNavBar() {
-//        title = vcCategory.title
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.navigationBar.standardAppearance = transparentAppearance
+        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
     }
 
 }
 
+//MARK: - UITableViewDelegate, UITableViewDataSource
 extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,7 +87,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return vcCategory.tableSections.count
+        return category.tableSections.count
     }
     
     // This has to be overriden by subclasses
@@ -120,10 +100,17 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
         
-        sectionHeaderView.configureFor(section: vcCategory.tableSections[section])
-        return sectionHeaderView
+        sectionHeader.configureFor(section: category.tableSections[section])
+
+        // Closure for seeAllButton to notify this vc when tapped
+        sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
+            guard let self = self else { return }
+            let controller = SeeAllViewController(tableSection: tableSection)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        return sectionHeader
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -131,17 +118,17 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: vcCategory.tableSections[section])
-        print("calculated height for section \(section): \(calculatedHeight)")
+        let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: category.tableSections[section])
+//        print("calculated height for section \(section): \(calculatedHeight)")
         return calculatedHeight
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        print("height for section \(section): \(view.bounds.size.height)")
+//        print("height for section \(section): \(view.bounds.size.height)")
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == vcCategory.tableSections.count - 1 {
+        if section == category.tableSections.count - 1 {
             return Constants.gapBetweenSectionsOfCategoryTable
         } else {
             return 0
@@ -164,13 +151,13 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
         
-        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != visibleAppearance {
-            navigationController?.navigationBar.standardAppearance = visibleAppearance
+        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
 //            print("to visible")
         }
         
-        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != transparentAppearance {
-            navigationController?.navigationBar.standardAppearance = transparentAppearance
+        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
 //            print("to transparent")
         }
     }
@@ -181,7 +168,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 extension BaseTableViewController {
 
     func layoutHeaderView() {
-                print("layoutHeaderView")
+//                print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
 //        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
         if headerView.translatesAutoresizingMaskIntoConstraints != true {
@@ -191,7 +178,7 @@ extension BaseTableViewController {
         
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
-                        print("header frame adjusted")
+//            print("header frame adjusted")
             headerView.frame.size.height = size.height
             bookTable.tableHeaderView = headerView
 

@@ -9,7 +9,6 @@ import UIKit
 
 class AllCategoriesViewController: BaseTableViewController {
     
-//    private let categories: [Category]
     private let model: Category
     private let categoryButtons: [CategoryButton]
     
@@ -31,10 +30,10 @@ class AllCategoriesViewController: BaseTableViewController {
         bookTable.estimatedSectionHeaderHeight = 0
         
         guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-        headerView.headerLabel.text = vcCategory.title
+        headerView.headerLabel.text = category.title
         headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
         
-        title = vcCategory.title
+        title = category.title
         navigationItem.backButtonTitle = ""
     }
     
@@ -47,14 +46,6 @@ class AllCategoriesViewController: BaseTableViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension AllCategoriesViewController {
-    
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 1
-//    }
-    
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
