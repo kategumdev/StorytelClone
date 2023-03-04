@@ -16,23 +16,6 @@ class BookCollectionViewCell: UICollectionViewCell {
     // Closure to tell owning controller to push new vc
     typealias ButtonCallbackClosure = (_ book: Book) -> ()
     var callbackClosure: ButtonCallbackClosure = {_ in}
-     
-    // Created to have custom cornerRadius, because button with UIButton.Configuration doesn't allow it
-    private lazy var coverImageContainerView: UIView = {
-        let view = UIView()
-        view.addSubview(coverImageView)
-        view.addSubview(badgeOne)
-        view.addSubview(badgeTwo)
-        return view
-    }()
-    
-    private let coverImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
         
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
@@ -48,7 +31,8 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     private lazy var coverImageButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.clear
+        button.layer.cornerRadius = Constants.bookCoverCornerRadius
+        button.clipsToBounds = true
         
         button.addAction(UIAction(handler: { [weak self] action in
             guard let self = self else { return }
@@ -70,6 +54,11 @@ class BookCollectionViewCell: UICollectionViewCell {
         }), for: .touchUpInside)
         
         var config = UIButton.Configuration.plain()
+        config.background.imageContentMode = .scaleAspectFill
+        
+        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
+        config.background.cornerRadius = 0
+        
         button.configuration = config
 
         button.configurationUpdateHandler = { [weak self] theButton in
@@ -78,7 +67,7 @@ class BookCollectionViewCell: UICollectionViewCell {
                 
                 UIView.animate(withDuration: 0.1, animations: {
                     
-                    self?.coverImageContainerView.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
                     self?.castViewForButtonAnimation.alpha = 0.4
                     
                 })
@@ -92,8 +81,10 @@ class BookCollectionViewCell: UICollectionViewCell {
                 
             } else {
                 UIView.animate(withDuration: 0.1, animations: {
-                    self?.coverImageContainerView.transform = .identity
+                    
+                    self?.transform = .identity
                     self?.castViewForButtonAnimation.alpha = 0
+                    
                 })
             }
             
@@ -105,11 +96,11 @@ class BookCollectionViewCell: UICollectionViewCell {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(coverImageContainerView)
         contentView.addSubview(coverImageButton)
+        contentView.addSubview(badgeOne)
+        contentView.addSubview(badgeTwo)
         contentView.addSubview(castViewForButtonAnimation)
         applyConstraints()
-//        contentView.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
@@ -124,8 +115,8 @@ class BookCollectionViewCell: UICollectionViewCell {
     // MARK: - Helper methods
     func configureFor(book: Book) {
         self.book = book
-        coverImageView.image = book.coverImage
-        
+        coverImageButton.configuration?.background.image = book.coverImage
+  
         let bookKind  = book.bookKind
         switch bookKind {
         case .audiobook:
@@ -142,26 +133,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     private func applyConstraints() {
-        coverImageContainerView.fillSuperview()
-        
-//        coverImageView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-////            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: BadgeView.badgeTopAnchorPoints),
-//            coverImageView.topAnchor.constraint(equalTo: coverImageContainerView.topAnchor, constant: Utils.topPaddingForCvItemWithSquareCovers),
-//            coverImageView.leadingAnchor.constraint(equalTo: coverImageContainerView.leadingAnchor),
-//            coverImageView.bottomAnchor.constraint(equalTo: coverImageContainerView.bottomAnchor),
-//            coverImageView.widthAnchor.constraint(equalTo: coverImageContainerView.widthAnchor)
-//
-//        ])
-        
-        coverImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            coverImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
-            coverImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
-        ])
-        
+
         coverImageButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             coverImageButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
