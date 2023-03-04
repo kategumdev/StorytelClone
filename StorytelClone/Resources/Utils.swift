@@ -12,6 +12,7 @@ struct Utils {
     //MARK: - Fonts
     static let navBarTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     static let navBarTitleFontScaled = UIFontMetrics.default.scaledFont(for: navBarTitleFont, maximumPointSize: 18)
+    
     static let tableViewSectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     
@@ -34,6 +35,12 @@ struct Utils {
         let appearance = UINavigationBarAppearance()
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
         appearance.configureWithTransparentBackground()
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
         return appearance
     }()
     
@@ -43,6 +50,12 @@ struct Utils {
         appearance.shadowColor = .tertiaryLabel
         appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
         return appearance
     }()
     

@@ -44,7 +44,9 @@ class HomeViewController: BaseTableViewController {
     override func configureNavBar() {
         super.configureNavBar()
         title = "Home"
-        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
+//        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
+        let configuration = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationItem.backButtonTitle = ""
