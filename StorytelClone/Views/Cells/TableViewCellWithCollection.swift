@@ -44,6 +44,11 @@ class TableViewCellWithCollection: UITableViewCell {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
     }
+    
+    func configureWith(books: [Book], callbackForButtons: @escaping BookButtonCallbackClosure) {
+        self.books = books
+        self.callbackClosure = callbackForButtons
+    }
 
 }
 
@@ -57,11 +62,12 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
 
         guard let book = books.randomElement() else { return UICollectionViewCell()}
-        cell.configureFor(book: book)
+        cell.configureFor(book: book, withCallbackForButton: callbackClosure)
 //        cell.configureFor(book: books[indexPath.row])
         
         // Closure passed by owning controller (it can be HomeViewController,  CategoryViewController, SeeAllViewController, maybe other). Pass it to BookCollectionViewCell
-        cell.callbackClosure = callbackClosure
+        
+//        cell.callbackClosure = callbackClosure
         return cell
     }
     

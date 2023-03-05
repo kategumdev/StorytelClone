@@ -65,8 +65,20 @@ class HomeViewController: BaseTableViewController {
     
     private func wideButtonCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
-        cell.delegate = self
-        cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind)
+//        cell.delegate = self
+        
+        // For respond to button tap in WideButtonTableViewCell
+        let callbackClosure: WideButtonCallbackClosure = { [weak self] sectionKind in
+            guard let self = self else { return }
+            if sectionKind == .seriesCategoryButton {
+                let controller = CategoryViewController(categoryModel: Category.series)
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+        cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
         return cell
     }
     
@@ -75,7 +87,7 @@ class HomeViewController: BaseTableViewController {
         
         // For respond to button tap in PosterTableViewCell
         let callbackClosure: BookButtonCallbackClosure = { [weak self] book in
-            let controller = BookViewController(book: self?.posterBook)
+            let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
@@ -88,14 +100,16 @@ class HomeViewController: BaseTableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         
         // Dependency injection
-        cell.books = category.tableSections[indexPath.row].books
+        let books = category.tableSections[indexPath.row].books
         
-        // Respond to button tap in BookCollectionViewCell
-        cell.callbackClosure = { [weak self] book in
-            guard let self = self else { return }
+        // For respond to button tap in TableViewCellWithCollection
+        let callbackClosure: BookButtonCallbackClosure = { [weak self] book in
             let controller = BookViewController(book: book)
-            self.navigationController?.pushViewController(controller, animated: true)
+            self?.navigationController?.pushViewController(controller, animated: true)
         }
+        
+        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+ 
         return cell
     }
     
@@ -177,16 +191,16 @@ class HomeViewController: BaseTableViewController {
 
 }
 
-extension HomeViewController: WideButtonTableViewCellDelegate {
-
-    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind) {
-        if sectionKind == .seriesCategoryButton {
-            let controller = CategoryViewController(categoryModel: Category.series)
-            navigationController?.pushViewController(controller, animated: true)
-        } else {
-            let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
-            navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-
-}
+//extension HomeViewController: WideButtonTableViewCellDelegate {
+//
+//    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind) {
+//        if sectionKind == .seriesCategoryButton {
+//            let controller = CategoryViewController(categoryModel: Category.series)
+//            navigationController?.pushViewController(controller, animated: true)
+//        } else {
+//            let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
+//            navigationController?.pushViewController(controller, animated: true)
+//        }
+//    }
+//
+//}

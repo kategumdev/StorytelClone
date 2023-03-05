@@ -10,23 +10,16 @@ import UIKit
 class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
-    
-    // Closure to tell AllCategoriesViewController to push new vc
-    typealias ButtonCallbackClosure = (_ category: CategoryButton) -> ()
-    var callbackClosure: ButtonCallbackClosure = {_ in}
-    
-    private var buttonTimer: Timer?
-    private var isButtonTooLongInHighlightedState = false
         
     private var categoryOfButton: CategoryButton?
     
-    private lazy var castViewForButtonAnimation: UIView = {
+    private lazy var dimViewForButtonAnimation: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
     
-    private lazy var buttonTitleLabel: UILabel = {
+    private lazy var categoryTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.numberOfLines = 0
@@ -40,62 +33,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var cellButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = Constants.bookCoverCornerRadius
-        button.clipsToBounds = true
-        button.addSubview(buttonTitleLabel)
-        
-        button.addAction(UIAction(handler: { [weak self] action in
-            guard let self = self else { return }
-
-            if self.isButtonTooLongInHighlightedState {
-                print("do nothing on touchUpInside")
-                self.isButtonTooLongInHighlightedState = false
-
-            } else {
-                // Invalidate the timer and perform the touchUpInside action
-                self.buttonTimer?.invalidate()
-                print("DO smth on touchUpInside")
-                
-                guard let category = self.categoryOfButton else { return }
-                
-                // Closure passed to this cell from CategoriesTableViewCellWithCollection which got closure from AllCategoriesViewController
-                self.callbackClosure(category)
-            }
-
-        }), for: .touchUpInside)
-        
-        var config = UIButton.Configuration.plain()
-        button.configuration = config
-
-        button.configurationUpdateHandler = { [weak self] theButton in
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    
-                    self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self?.castViewForButtonAnimation.alpha = 0.1
-                    
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if button.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self?.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self?.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self?.transform = .identity
-                    self?.castViewForButtonAnimation.alpha = 0
-                })
-            }
-            
-        }
-        
+    private lazy var cellButton: CellButton = {
+        let button = CellButton()
+        button.addSubview(categoryTitleLabel)
         return button
     }()
     
@@ -103,7 +43,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(cellButton)
-        contentView.addSubview(castViewForButtonAnimation)
+        contentView.addSubview(dimViewForButtonAnimation)
+        addButtonUpdateHandler()
         applyConstraints()
     }
     
@@ -115,27 +56,59 @@ class CategoryCollectionViewCell: UICollectionViewCell {
 //        print("\(self) is being deallocated")
 //    }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        castViewForButtonAnimation.frame = contentView.bounds
-        cellButton.frame = contentView.bounds
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        dimViewForButtonAnimation.frame = contentView.bounds
+//        cellButton.frame = contentView.bounds
+//    }
     
     // MARK: - Helper methods
-    func configure(withColor color: UIColor, andCategoryOfButton category: CategoryButton) {
+    func configure(withColor color: UIColor, categoryOfButton category: CategoryButton, callback: @escaping CategoryButtonCallbackClosure ) {
         cellButton.backgroundColor = color
-//        let text = title.replacingOccurrences(of: "\n", with: " ")
-        self.categoryOfButton = category
-        buttonTitleLabel.text = category.rawValue
+        cellButton.categoryButton = category
+        cellButton.categoryButtonCallbackClosure = callback
+        categoryTitleLabel.text = category.rawValue
+    }
+    
+    private func addButtonUpdateHandler() {
+        cellButton.configurationUpdateHandler = { [weak self] theButton in
+            guard let self = self else { return }
+            if theButton.isHighlighted {
+                print("button is highlighted")
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self.dimViewForButtonAnimation.alpha = 0.1
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if self.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self.cellButton.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self.cellButton.buttonTimer = timer
+                
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = .identity
+                    self.dimViewForButtonAnimation.alpha = 0
+                })
+            }
+        }
     }
     
     private func applyConstraints() {
+        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+        dimViewForButtonAnimation.fillSuperview()
+
+        cellButton.translatesAutoresizingMaskIntoConstraints = false
+        cellButton.fillSuperview()
         
-        buttonTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonTitleLabel.leadingAnchor.constraint(equalTo: cellButton.leadingAnchor, constant: Constants.cvPadding),
-            buttonTitleLabel.bottomAnchor.constraint(equalTo: cellButton.bottomAnchor, constant: -(Constants.cvPadding - 4)),
-            buttonTitleLabel.trailingAnchor.constraint(equalTo: cellButton.trailingAnchor, constant: -Constants.cvPadding)
+            categoryTitleLabel.leadingAnchor.constraint(equalTo: cellButton.leadingAnchor, constant: Constants.cvPadding),
+            categoryTitleLabel.bottomAnchor.constraint(equalTo: cellButton.bottomAnchor, constant: -(Constants.cvPadding - 4)),
+            categoryTitleLabel.trailingAnchor.constraint(equalTo: cellButton.trailingAnchor, constant: -Constants.cvPadding)
         ])
     }
     

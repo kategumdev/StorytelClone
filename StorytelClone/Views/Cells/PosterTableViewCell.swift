@@ -23,15 +23,20 @@ class PosterTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Instance properties
-    lazy var posterButton: DimViewAnimationButton = {
-        let button = DimViewAnimationButton(scaleForTransform: 0.98)
-        return button
+    private let posterButton = CellButton()
+    
+    private lazy var dimViewForButtonAnimation: UIView = {
+        let view = UIView()
+        view.backgroundColor = Utils.customBackgroundColor
+        return view
     }()
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(posterButton)
+        contentView.addSubview(dimViewForButtonAnimation)
+        addButtonUpdateHandler()
         applyConstraints()
     }
     
@@ -45,7 +50,37 @@ class PosterTableViewCell: UITableViewCell {
         posterButton.callbackClosure = callback
     }
     
+    private func addButtonUpdateHandler() {
+        posterButton.configurationUpdateHandler = { [weak self] theButton in
+            guard let self = self else { return }
+            if theButton.isHighlighted {
+                print("button is highlighted")
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+                    self.dimViewForButtonAnimation.alpha = 0.1
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if self.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self.posterButton.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self.posterButton.buttonTimer = timer
+                
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = .identity
+                    self.dimViewForButtonAnimation.alpha = 0
+                })
+            }
+        }
+    }
+    
     private func applyConstraints() {
+        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+        dimViewForButtonAnimation.fillSuperview()
+        
         posterButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([

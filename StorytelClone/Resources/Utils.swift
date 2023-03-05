@@ -8,6 +8,8 @@
 import UIKit
 
 typealias BookButtonCallbackClosure = (_ book: Book) -> ()
+typealias WideButtonCallbackClosure = (_ sectionKind: SectionKind) -> ()
+typealias CategoryButtonCallbackClosure = (_ categoryButton: CategoryButton) -> ()
 
 struct Utils {
     

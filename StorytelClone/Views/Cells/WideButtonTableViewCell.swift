@@ -7,87 +7,30 @@
 
 import UIKit
 
-protocol WideButtonTableViewCellDelegate: AnyObject {
-  func wideButtonTableViewCellDidTapButton(
-    _ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind)
-}
+//protocol WideButtonTableViewCellDelegate: AnyObject {
+//  func wideButtonTableViewCellDidTapButton(
+//    _ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind)
+//}
 
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
 
-    // Actual value is injected when cell is being configured in cellForRowAt
-    private var sectionKind: SectionKind = .seriesCategoryButton
-    
     static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height
     
-    weak var delegate: WideButtonTableViewCellDelegate?
+//    weak var delegate: WideButtonTableViewCellDelegate?
     
     private var timeLayoutSubviewsIsBeingCalled = 0
-    
-    private var buttonTimer: Timer?
-    private var isButtonTooLongInHighlightedState = false
-    
-    private lazy var castViewForButtonAnimation: UIView = {
+
+    private lazy var dimViewForButtonAnimation: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
     
-    private lazy var wideButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = Constants.bookCoverCornerRadius
-        button.clipsToBounds = true
+    private lazy var wideButton: CellButton = {
+        let button = CellButton()
         button.backgroundColor = UIColor(red: 200/255, green: 217/255, blue: 228/255, alpha: 1)
-        
-        button.addAction(UIAction(handler: { [weak self] action in
-            guard let self = self else { return }
-
-            if self.isButtonTooLongInHighlightedState {
-                print("do nothing on touchUpInside")
-                self.isButtonTooLongInHighlightedState = false
-
-            } else {
-                // Invalidate the timer and perform the touchUpInside action
-                self.buttonTimer?.invalidate()
-                print("DO smth on touchUpInside")
-                
-                // Notify the delegate (HomeViewController) that the button was tapped
-                self.delegate?.wideButtonTableViewCellDidTapButton(self, forSectionKind: self.sectionKind)
-            }
-
-        }), for: .touchUpInside)
-        
-        var config = UIButton.Configuration.plain()
-        button.configuration = config
-
-        button.configurationUpdateHandler = { [weak self] theButton in
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    
-                    self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self?.castViewForButtonAnimation.alpha = 0.1
-                    
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if button.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self?.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self?.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self?.transform = .identity
-                    self?.castViewForButtonAnimation.alpha = 0
-                })
-            }
-            
-        }
-        
         return button
     }()
     
@@ -107,11 +50,13 @@ class WideButtonTableViewCell: UITableViewCell {
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(wideButton)
         contentView.addSubview(wideButtonLabel)
-        contentView.addSubview(castViewForButtonAnimation)
+        contentView.addSubview(dimViewForButtonAnimation)
+        addButtonUpdateHandler()
+        
         applyConstraints()
-        contentView.backgroundColor = Utils.customBackgroundColor
     }
     
     required init?(coder: NSCoder) {
@@ -120,7 +65,6 @@ class WideButtonTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        castViewForButtonAnimation.frame = contentView.bounds
         
         timeLayoutSubviewsIsBeingCalled += 1
         if timeLayoutSubviewsIsBeingCalled == 2 {
@@ -130,8 +74,10 @@ class WideButtonTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     
-    func configureFor(sectionKind: SectionKind) {
-        self.sectionKind = sectionKind
+    func configureFor(sectionKind: SectionKind, withCallbackForButton callback: @escaping WideButtonCallbackClosure) {
+        wideButton.sectionKind = sectionKind
+        wideButton.wideButtonCallbackClosure = callback
+//        self.sectionKind = sectionKind
         if sectionKind == .seriesCategoryButton {
             wideButtonLabel.text = "Series"
         } else {
@@ -139,9 +85,38 @@ class WideButtonTableViewCell: UITableViewCell {
         }
     }
     
+    private func addButtonUpdateHandler() {
+        wideButton.configurationUpdateHandler = { [weak self] theButton in
+            guard let self = self else { return }
+            if theButton.isHighlighted {
+                print("button is highlighted")
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self.dimViewForButtonAnimation.alpha = 0.1
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if self.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self.wideButton.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self.wideButton.buttonTimer = timer
+                
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = .identity
+                    self.dimViewForButtonAnimation.alpha = 0
+                })
+            }
+        }
+    }
+    
     private func applyConstraints() {
-        let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
+        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+        dimViewForButtonAnimation.fillSuperview()
         
+        let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
         wideButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wideButton.topAnchor.constraint(equalTo: contentView.topAnchor),

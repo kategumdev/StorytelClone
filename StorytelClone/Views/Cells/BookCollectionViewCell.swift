@@ -10,95 +10,26 @@ import UIKit
 class BookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "BookCollectionViewCell"
- 
-    private var book: Book?
-    
-    // Closure to tell owning controller to push new vc
-    var callbackClosure: BookButtonCallbackClosure = {_ in}
         
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
     
-    private var buttonTimer: Timer?
-    private var isButtonTooLongInHighlightedState = false
+    private let bookButton = CellButton()
     
-    private lazy var castViewForButtonAnimation: UIView = {
+    private lazy var dimViewForButtonAnimation: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
         return view
-    }()
-    
-    private lazy var coverImageButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = Constants.bookCoverCornerRadius
-        button.clipsToBounds = true
-        
-        button.addAction(UIAction(handler: { [weak self] action in
-            guard let self = self else { return }
-
-            if self.isButtonTooLongInHighlightedState {
-                print("do nothing on touchUpInside")
-                self.isButtonTooLongInHighlightedState = false
-
-            } else {
-                // Invalidate the timer and perform the touchUpInside action
-                self.buttonTimer?.invalidate()
-                print("DO smth on touchUpInside")
-                
-                // Closure passed to this cell from TableViewCellWithCollection which got closure from owning controller
-                guard let book = self.book else { return }
-                self.callbackClosure(book)
-            }
-
-        }), for: .touchUpInside)
-        
-        var config = UIButton.Configuration.plain()
-        config.background.imageContentMode = .scaleAspectFill
-        
-        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
-        config.background.cornerRadius = 0
-        
-        button.configuration = config
-
-        button.configurationUpdateHandler = { [weak self] theButton in
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    
-                    self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self?.castViewForButtonAnimation.alpha = 0.1
-                    
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if button.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self?.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self?.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    
-                    self?.transform = .identity
-                    self?.castViewForButtonAnimation.alpha = 0
-                    
-                })
-            }
-            
-        }
-        
-        return button
     }()
         
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(coverImageButton)
+        contentView.addSubview(bookButton)
         contentView.addSubview(badgeOne)
         contentView.addSubview(badgeTwo)
-        contentView.addSubview(castViewForButtonAnimation)
+        contentView.addSubview(dimViewForButtonAnimation)
+        addButtonUpdateHandler()
         applyConstraints()
     }
     
@@ -106,15 +37,13 @@ class BookCollectionViewCell: UICollectionViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        castViewForButtonAnimation.frame = contentView.bounds
-    }
-    
     // MARK: - Helper methods
-    func configureFor(book: Book) {
-        self.book = book
-        coverImageButton.configuration?.background.image = book.coverImage
+    func configureFor(book: Book, withCallbackForButton callback: @escaping BookButtonCallbackClosure) {
+        bookButton.book = book
+        bookButton.callbackClosure = callback
+        
+        // For badges to transform, self has to be transformed instead of default DimViewAnimationButton behaviour
+//        bookButton.viewToTransform = self
   
         let bookKind  = book.bookKind
         switch bookKind {
@@ -131,20 +60,49 @@ class BookCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    private func addButtonUpdateHandler() {
+        bookButton.configurationUpdateHandler = { [weak self] theButton in
+            guard let self = self else { return }
+            if theButton.isHighlighted {
+                print("button is highlighted")
+                
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    self.dimViewForButtonAnimation.alpha = 0.1
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if self.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self.bookButton.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self.bookButton.buttonTimer = timer
+                
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.transform = .identity
+                    self.dimViewForButtonAnimation.alpha = 0
+                })
+            }
+        }
+    }
+    
     private func applyConstraints() {
+        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+        dimViewForButtonAnimation.fillSuperview()
 
-        coverImageButton.translatesAutoresizingMaskIntoConstraints = false
+        bookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            coverImageButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            coverImageButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            coverImageButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
-            coverImageButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
+            bookButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            bookButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            bookButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
+            bookButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
         
         badgeOne.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            badgeOne.trailingAnchor.constraint(equalTo: coverImageButton.trailingAnchor),
-            badgeOne.topAnchor.constraint(equalTo: coverImageButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeOne.trailingAnchor.constraint(equalTo: bookButton.trailingAnchor),
+            badgeOne.topAnchor.constraint(equalTo: bookButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
             badgeOne.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
             badgeOne.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
         ])
@@ -152,7 +110,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         badgeTwo.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             badgeTwo.trailingAnchor.constraint(equalTo: badgeOne.leadingAnchor, constant: -BadgeView.paddingBetweenBadges),
-            badgeTwo.topAnchor.constraint(equalTo: coverImageButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeTwo.topAnchor.constraint(equalTo: bookButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
             badgeTwo.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
             badgeTwo.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
         ])
