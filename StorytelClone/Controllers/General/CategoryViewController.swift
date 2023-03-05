@@ -25,10 +25,10 @@ class CategoryViewController: BaseTableViewController {
         // Dependency injection
         cell.books = category.tableSections[indexPath.row].books
         
-        // Respond to button tap in BookCollectionViewCell
+        // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
         cell.callbackClosure = { [weak self] book in
             guard let self = self else { return }
-            let controller = BookViewController(book: book)
+            let controller = BookViewController(book: book as? Book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         

@@ -11,7 +11,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
         
-    private var categoryOfButton: CategoryButton?
+    private var categoryOfButton: ButtonCategory?
     
     private lazy var dimViewForButtonAnimation: UIView = {
         let view = UIView()
@@ -63,10 +63,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
 //    }
     
     // MARK: - Helper methods
-    func configure(withColor color: UIColor, categoryOfButton category: CategoryButton, callback: @escaping CategoryButtonCallbackClosure ) {
+    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallbackClosure ) {
         cellButton.backgroundColor = color
         cellButton.categoryButton = category
-        cellButton.categoryButtonCallbackClosure = callback
+        cellButton.callback = callback
         categoryTitleLabel.text = category.rawValue
     }
     

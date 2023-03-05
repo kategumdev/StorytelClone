@@ -32,9 +32,9 @@ struct TableSection {
     }
 }
 
-enum CategoryButton: String {
+enum ButtonCategory: String {
     
-    static let categoriesForAllCategories: [CategoryButton] = [
+    static let categoriesForAllCategories: [ButtonCategory] = [
         novela, zonaPodcast, novelaNegra, romantica,
         thrillerYHorror, fantasiaYCienciaFiccion,
         crecimientoPersonalYLifestyle, infantil,
@@ -44,7 +44,7 @@ enum CategoryButton: String {
         aprenderIdiomas, inEnglish
     ]
     
-    static let categoriesForSearchVc: [CategoryButton] = [
+    static let categoriesForSearchVc: [ButtonCategory] = [
         series, zonaPodcast, soloEnStorytel, losMasPopulares,
         soloParaTi, ebooks, novela, novelaNegra, romantica,
         thrillerYHorror, fantasiaYCienciaFiccion, infantil,
@@ -83,7 +83,7 @@ enum CategoryButton: String {
     case aprenderIdiomas = "Aprender idiomas"
     case inEnglish = "In English"
     
-    static func createModelFor(categoryButton: CategoryButton) -> Category {
+    static func createModelFor(categoryButton: ButtonCategory) -> Category {
         
         switch categoryButton {
         case series: return Category.series
@@ -127,7 +127,7 @@ struct Category {
     }
     
     static let series = Category(
-        title: CategoryButton.series.rawValue,
+        title: ButtonCategory.series.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Series Top esta semana"),
             TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original", sectionKind: .oneBookWithOverview),
@@ -154,7 +154,7 @@ struct Category {
 
     
     static let zonaPodcast = Category(
-        title: CategoryButton.zonaPodcast.rawValue,
+        title: ButtonCategory.zonaPodcast.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Los más escuchados esta semana"),
             TableSection(sectionTitle: "Nuevos podcast"),
@@ -165,7 +165,7 @@ struct Category {
         ])
     
     static let soloEnStorytel = Category(
-        title: CategoryButton.soloEnStorytel.rawValue,
+        title: ButtonCategory.soloEnStorytel.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original - Sonido binaural", sectionKind: .oneBookWithOverview),
             TableSection(sectionTitle: "En exclusiva - Los más escuchados esta semana"),
@@ -203,7 +203,7 @@ struct Category {
         ])
     
     static let losMasPopulares = Category(
-        title: CategoryButton.losMasPopulares.rawValue,
+        title: ButtonCategory.losMasPopulares.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Los más populares - Novela"),
             TableSection(sectionTitle: "Los más populares - Novela negra"),
@@ -222,122 +222,122 @@ struct Category {
         ])
     
     static let soloParaTi = Category(
-        title: CategoryButton.soloParaTi.rawValue,
+        title: ButtonCategory.soloParaTi.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Recomendados para ti"),
             TableSection(sectionTitle: "Novedades para ti")
         ])
     
     static let eBooks = Category(
-        title: CategoryButton.ebooks.rawValue,
+        title: ButtonCategory.ebooks.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Novela - Los más leidos"),
             TableSection(sectionTitle: "Novela negra y Thriller - Los más leidos")
         ])
     
     static let novela = Category(
-        title: CategoryButton.novela.rawValue,
+        title: ButtonCategory.novela.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Los más populares - Novela"),
             TableSection(sectionTitle: "Nuevas novelas")
         ])
     
     static let novelaNegra = Category(
-        title: CategoryButton.novelaNegra.rawValue,
+        title: ButtonCategory.novelaNegra.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Solo en Storytel"),
             TableSection(sectionTitle: "Los más populares - Novela negra")
         ])
     
     static let romantica = Category(
-        title: CategoryButton.romantica.rawValue,
+        title: ButtonCategory.romantica.rawValue,
         tableSections: [
             TableSection(sectionTitle: "Los más populares - Romántica"),
             TableSection(sectionTitle: "Nuevas histotias de amor")
         ])
     
     static let thrillerYHorror = Category(
-        title: CategoryButton.thrillerYHorror.rawValue,
+        title: ButtonCategory.thrillerYHorror.rawValue,
         tableSections: [TableSection]()
     )
     
     static let fantasiaYCienciaFiccion = Category(
-        title: CategoryButton.fantasiaYCienciaFiccion.rawValue,
+        title: ButtonCategory.fantasiaYCienciaFiccion.rawValue,
         tableSections: [TableSection]()
     )
     
     static let infantil = Category(
-        title: CategoryButton.infantil.rawValue,
+        title: ButtonCategory.infantil.rawValue,
         tableSections: [TableSection]()
     )
     
     static let crecimientoPersonalYLifestyle = Category(
-        title: CategoryButton.crecimientoPersonalYLifestyle.rawValue,
+        title: ButtonCategory.crecimientoPersonalYLifestyle.rawValue,
         tableSections: [TableSection]()
     )
     
     static let clasicos = Category(
-        title: CategoryButton.clasicos.rawValue,
+        title: ButtonCategory.clasicos.rawValue,
         tableSections: [TableSection]()
     )
     
     static let juvenilYYoungAdult = Category(
-        title: CategoryButton.juvenilYYoungAdult.rawValue,
+        title: ButtonCategory.juvenilYYoungAdult.rawValue,
         tableSections: [TableSection]()
     )
     
     static let erotica = Category(
-        title: CategoryButton.erotica.rawValue,
+        title: ButtonCategory.erotica.rawValue,
         tableSections: [TableSection]()
     )
     
     static let noFiccion = Category(
-        title: CategoryButton.noFiccion.rawValue,
+        title: ButtonCategory.noFiccion.rawValue,
         tableSections: [TableSection]()
     )
     
     static let economiaYNegocios = Category(
-        title: CategoryButton.economiaYNegocios.rawValue,
+        title: ButtonCategory.economiaYNegocios.rawValue,
         tableSections: [TableSection]()
     )
     
     static let relatosCortos = Category(
-        title: CategoryButton.relatosCortos.rawValue,
+        title: ButtonCategory.relatosCortos.rawValue,
         tableSections: [TableSection]()
     )
     
     static let historia = Category(
-        title: CategoryButton.historia.rawValue,
+        title: ButtonCategory.historia.rawValue,
         tableSections: [TableSection]()
     )
     
     static let espiritualidadYReligion = Category(
-        title: CategoryButton.espiritualidadYReligion.rawValue,
+        title: ButtonCategory.espiritualidadYReligion.rawValue,
         tableSections: [TableSection]()
     )
     
     static let biografias = Category(
-        title: CategoryButton.biografias.rawValue,
+        title: ButtonCategory.biografias.rawValue,
         tableSections: [TableSection]()
     )
     
     static let poesiaYTeatro = Category(
-        title: CategoryButton.poesiaYTeatro.rawValue,
+        title: ButtonCategory.poesiaYTeatro.rawValue,
         tableSections: [TableSection]()
     )
     
     static let aprenderIdiomas = Category(
-        title: CategoryButton.aprenderIdiomas.rawValue,
+        title: ButtonCategory.aprenderIdiomas.rawValue,
         tableSections: [TableSection]()
     )
     
     static let inEnglish = Category(
-        title: CategoryButton.inEnglish.rawValue,
+        title: ButtonCategory.inEnglish.rawValue,
         tableSections: [TableSection]()
     )
     
     static let historiasParaCadaEmocion = Category(
-        title: CategoryButton.historiasParaCadaEmocion.rawValue,
+        title: ButtonCategory.historiasParaCadaEmocion.rawValue,
         tableSections: [TableSection]()
     )
     

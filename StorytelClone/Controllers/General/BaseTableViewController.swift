@@ -7,19 +7,10 @@
 
 import UIKit
 
-//typealias BookButtonCallbackClosure = (_ book: Book) -> ()
-
 class BaseTableViewController: UIViewController {
     
     let category: Category
-    
-    // For use in HomeVC and CategoryVC
-//    let bookButtonCallback: BookButtonCallbackClosure = { [weak self] book in
-//        guard let self = self else { return }
-//        let controller = BookViewController(book: book)
-//        self.navigationController?.pushViewController(controller, animated: true)
-//    }
-    
+
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     
     var tableViewInitialOffsetY: Double = 0
@@ -125,8 +116,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 
             sectionHeader.configureFor(section: category.tableSections[section])
 
-            // Closure for seeAllButton to notify this vc when tapped
-            sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
+            // Respond to seeAllButton in section header
+            sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
                 guard let self = self else { return }
                 let controller = SeeAllViewController(tableSection: tableSection)
                 self.navigationController?.pushViewController(controller, animated: true)

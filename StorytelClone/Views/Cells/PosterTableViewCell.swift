@@ -45,9 +45,9 @@ class PosterTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping BookButtonCallbackClosure) {
+    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
         posterButton.book = book
-        posterButton.callbackClosure = callback
+        posterButton.callback = callback
     }
     
     private func addButtonUpdateHandler() {

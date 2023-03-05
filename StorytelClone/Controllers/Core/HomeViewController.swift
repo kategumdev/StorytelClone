@@ -67,14 +67,14 @@ class HomeViewController: BaseTableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
 //        cell.delegate = self
         
-        // For respond to button tap in WideButtonTableViewCell
-        let callbackClosure: WideButtonCallbackClosure = { [weak self] sectionKind in
+        // To respond to button tap in WideButtonTableViewCell
+        let callbackClosure: ButtonCallbackClosure = { [weak self] sectionKind in
             guard let self = self else { return }
-            if sectionKind == .seriesCategoryButton {
+            if sectionKind as? SectionKind == .seriesCategoryButton {
                 let controller = CategoryViewController(categoryModel: Category.series)
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
-                let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
+                let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: ButtonCategory.categoriesForAllCategories)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -85,12 +85,11 @@ class HomeViewController: BaseTableViewController {
     private func posterCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
         
-        // For respond to button tap in PosterTableViewCell
-        let callbackClosure: BookButtonCallbackClosure = { [weak self] book in
-            let controller = BookViewController(book: book)
+        // To respond to button tap in PosterTableViewCell
+        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+            let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        
         cell.configureFor(book: posterBook, withCallbackForButton: callbackClosure)
  
         return cell
@@ -99,12 +98,11 @@ class HomeViewController: BaseTableViewController {
     private func cellWithHorizontalCv(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         
-        // Dependency injection
         let books = category.tableSections[indexPath.row].books
         
-        // For respond to button tap in TableViewCellWithCollection
-        let callbackClosure: BookButtonCallbackClosure = { [weak self] book in
-            let controller = BookViewController(book: book)
+        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
+        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+            let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         

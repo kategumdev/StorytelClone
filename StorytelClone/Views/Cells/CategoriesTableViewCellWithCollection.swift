@@ -9,9 +9,9 @@ import UIKit
 
 class CategoriesTableViewCellWithCollection: UITableViewCell {
     
-    var categoryButtons = [CategoryButton]()
+    var categoryButtons = [ButtonCategory]()
     
-    var callbackClosure: CategoryButtonCallbackClosure = {_ in}
+    var callbackClosure: ButtonCallbackClosure = {_ in}
     
     private let categoryColors = [Utils.pinkCategoryColor, Utils.orangeCategoryColor, Utils.orangeCategoryColor, Utils.coralCategoryColor, Utils.darkBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.yellowCategoryColor, Utils.peachCategoryColor, Utils.lightBlueCategoryColor, Utils.pinkCategoryColor, Utils.greenCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor, Utils.orangeCategoryColor, Utils.yellowCategoryColor, Utils.greenCategoryColor, Utils.lightBlueCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor]
     
@@ -50,7 +50,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     
     
     // MARK: - Helper methods
-    func configureWith(categoryButtons: [CategoryButton]) {
+    func configureWith(categoryButtons: [ButtonCategory]) {
         self.categoryButtons = categoryButtons
     }
 
@@ -67,10 +67,8 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else { return UICollectionViewCell()}
         
         // Closure passed by AllCategoriesViewController. Pass it to CategoryCollectionViewCell
-        
-//        cell.callbackClosure = callbackClosure
-        
         cell.configure(withColor: categoryColors[indexPath.row], categoryOfButton: categoryButtons[indexPath.row], callback: callbackClosure)
+        
         return cell
     }
 

@@ -9,9 +9,9 @@ import UIKit
 
 class AllCategoriesViewController: BaseTableViewController {
     
-    private let categoryButtons: [CategoryButton]
+    private let categoryButtons: [ButtonCategory]
     
-    init(categoryModel: Category, categoryButtons: [CategoryButton]) {
+    init(categoryModel: Category, categoryButtons: [ButtonCategory]) {
         self.categoryButtons = categoryButtons
         super.init(categoryModel: categoryModel)
     }
@@ -36,8 +36,8 @@ class AllCategoriesViewController: BaseTableViewController {
     }
     
     //MARK: - Helper methods
-    private func getModelFor(categoryButton: CategoryButton) -> Category {
-        return CategoryButton.createModelFor(categoryButton: categoryButton)
+    private func getModelFor(buttonCategory: ButtonCategory) -> Category {
+        return ButtonCategory.createModelFor(categoryButton: buttonCategory)
     }
 
 }
@@ -50,13 +50,14 @@ extension AllCategoriesViewController {
         
         // Respond to button tap in CategoryCollectionViewCell
         cell.callbackClosure = { [weak self] buttonCategory in
-            guard let self = self else { return }
-            let category = self.getModelFor(categoryButton: buttonCategory)
-            let controller = CategoryViewController(categoryModel: category)
+            guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
+            
+            let categoryModel = self.getModelFor(buttonCategory: category)
+            let controller = CategoryViewController(categoryModel: categoryModel)
             self.navigationController?.pushViewController(controller, animated: true)
         }
- 
         cell.categoryButtons = self.categoryButtons
+        
         return cell
     }
     

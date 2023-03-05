@@ -38,13 +38,10 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping BookButtonCallbackClosure) {
+    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
         bookButton.book = book
-        bookButton.callbackClosure = callback
-        
-        // For badges to transform, self has to be transformed instead of default DimViewAnimationButton behaviour
-//        bookButton.viewToTransform = self
-  
+        bookButton.callback = callback
+
         let bookKind  = book.bookKind
         switch bookKind {
         case .audiobook:

@@ -217,10 +217,10 @@
 			isa = PBXGroup;
 			children = (
 				5AF93322299D689F00DF17C7 /* FeedTableHeaderView.swift */,
-				5A8380BA299ED7E200611543 /* BadgeView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
+				5A8380BA299ED7E200611543 /* BadgeView.swift */,
 				5AB1A29B29B3E32A001CC50A /* CellButton.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);

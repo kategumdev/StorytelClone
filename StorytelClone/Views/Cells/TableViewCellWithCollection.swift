@@ -12,9 +12,9 @@ class TableViewCellWithCollection: UITableViewCell {
     static let identifier = "TableViewCellWithCollection"
     
     // Actual value injected when cell is being configured in cellForRowAt
-    var books: [Book] = [Book]() // It will contain only 10 random books from 
+    var books: [Book] = [Book]() // It will contain only 10 random books
     
-    var callbackClosure: BookButtonCallbackClosure = {_ in}
+    var callbackClosure: ButtonCallbackClosure = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -45,7 +45,7 @@ class TableViewCellWithCollection: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
-    func configureWith(books: [Book], callbackForButtons: @escaping BookButtonCallbackClosure) {
+    func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallbackClosure) {
         self.books = books
         self.callbackClosure = callbackForButtons
     }
@@ -62,12 +62,10 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
 
         guard let book = books.randomElement() else { return UICollectionViewCell()}
+        
+        // Pass callback closure this TableViewCellWithCollection got from owning controller to BookCollectionViewCell
         cell.configureFor(book: book, withCallbackForButton: callbackClosure)
-//        cell.configureFor(book: books[indexPath.row])
-        
-        // Closure passed by owning controller (it can be HomeViewController,  CategoryViewController, SeeAllViewController, maybe other). Pass it to BookCollectionViewCell
-        
-//        cell.callbackClosure = callbackClosure
+
         return cell
     }
     
