@@ -7,9 +7,18 @@
 
 import UIKit
 
+//typealias BookButtonCallbackClosure = (_ book: Book) -> ()
+
 class BaseTableViewController: UIViewController {
     
     let category: Category
+    
+    // For use in HomeVC and CategoryVC
+//    let bookButtonCallback: BookButtonCallbackClosure = { [weak self] book in
+//        guard let self = self else { return }
+//        let controller = BookViewController(book: book)
+//        self.navigationController?.pushViewController(controller, animated: true)
+//    }
     
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     
@@ -23,6 +32,7 @@ class BaseTableViewController: UIViewController {
         table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
+        table.allowsSelection = false
         
         // Avoid gap at the very bottom of the table view
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
@@ -47,8 +57,8 @@ class BaseTableViewController: UIViewController {
     }()
 
     
-    init(model: Category) {
-        self.category = model
+    init(categoryModel: Category) {
+        self.category = categoryModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -100,8 +110,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         return Utils.heightForRowWithHorizontalCv
     }
     
-    
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionKind = category.tableSections[section].sectionKind
 
@@ -125,50 +133,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return sectionHeader
         }
-
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//
-//        sectionHeader.configureFor(section: category.tableSections[section])
-//
-//        // Closure for seeAllButton to notify this vc when tapped
-//        sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
-//            guard let self = self else { return }
-//            let controller = SeeAllViewController(tableSection: tableSection)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-
-
-//        else {
-//
-//            let seeAllButton = sectionHeader.containerWithSubviews.seeAllButton
-//            let headerSubviews = sectionHeader.containerWithSubviews.subviews
-//            if headerSubviews.firstIndex(where: { $0 === seeAllButton }) == nil {
-//                sectionHeader.containerWithSubviews.addButtonAndReconfigure()
-//                sectionHeader.layoutSubviews()
-//            }
-//
-//        }
-
-//        return sectionHeader
     }
-    
-    
-    
-    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UITableViewHeaderFooterView() }
-//
-//        sectionHeader.configureFor(section: category.tableSections[section])
-//
-//        // Closure for seeAllButton to notify this vc when tapped
-//        sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
-//            guard let self = self else { return }
-//            let controller = SeeAllViewController(tableSection: tableSection)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//        return sectionHeader
-//    }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
@@ -181,7 +147,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 
             // Get height for headers with no button
             let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-//            let calculatedHeigh = SectionHeaderSubviewsContainer.calculateNoButtonHeaderHeightFor(section: category.tableSections[section])
             
 //            print("calculated height for section \(section): \(height)")
             return calculatedHeight
@@ -191,18 +156,9 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     //        print("calculated height for section \(section): \(calculatedHeight)")
             return calculatedHeight
         }
-        
-//        let calculatedHeight = SectionHeaderSubviewsContainer.calculateHeaderHeightFor(section: category.tableSections[section])
-////        print("calculated height for section \(section): \(calculatedHeight)")
-//        return calculatedHeight
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if section == 2 || section == 13 {
-            print("height for section \(section): \(view.bounds.size.height)")
-
-        }
-        
 //        print("height for section \(section): \(view.bounds.size.height)")
     }
     
@@ -212,14 +168,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             return 0
         }
-    }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: false)
-//    }
-    
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        return nil
     }
     
     // Override in subclasses of this vc if no dimming behavior for table header is needed

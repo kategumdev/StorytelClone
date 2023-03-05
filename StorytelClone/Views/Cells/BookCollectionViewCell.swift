@@ -14,8 +14,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     private var book: Book?
     
     // Closure to tell owning controller to push new vc
-    typealias ButtonCallbackClosure = (_ book: Book) -> ()
-    var callbackClosure: ButtonCallbackClosure = {_ in}
+    var callbackClosure: BookButtonCallbackClosure = {_ in}
         
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
@@ -68,7 +67,7 @@ class BookCollectionViewCell: UICollectionViewCell {
                 UIView.animate(withDuration: 0.1, animations: {
                     
                     self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self?.castViewForButtonAnimation.alpha = 0.4
+                    self?.castViewForButtonAnimation.alpha = 0.1
                     
                 })
                 let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in

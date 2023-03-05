@@ -68,7 +68,7 @@ class WideButtonTableViewCell: UITableViewCell {
                 UIView.animate(withDuration: 0.1, animations: {
                     
                     self?.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self?.castViewForButtonAnimation.alpha = 0.4
+                    self?.castViewForButtonAnimation.alpha = 0.1
                     
                 })
                 let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in

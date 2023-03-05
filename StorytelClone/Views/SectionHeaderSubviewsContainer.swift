@@ -101,10 +101,9 @@ class SectionHeaderSubviewsContainer: UIView {
 //        applyConstraints()
 //    }
     
-    init(frame: CGRect, withButton: Bool = true) {
-//        self.withButton = withButton
-        super.init(frame: frame)
-        self.withButton = withButton
+    init(withButton button: Bool = true) {
+        super.init(frame: .zero)
+        self.withButton = button
         
         addSubview(sectionTitleLabel)
         addSubview(sectionSubtitleLabel)

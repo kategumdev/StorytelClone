@@ -9,13 +9,11 @@ import UIKit
 
 class AllCategoriesViewController: BaseTableViewController {
     
-    private let model: Category
     private let categoryButtons: [CategoryButton]
     
-    init(model: Category, categoryButtons: [CategoryButton]) {
-        self.model = model
+    init(categoryModel: Category, categoryButtons: [CategoryButton]) {
         self.categoryButtons = categoryButtons
-        super.init(model: model)
+        super.init(categoryModel: categoryModel)
     }
     
     required init?(coder: NSCoder) {
@@ -54,7 +52,7 @@ extension AllCategoriesViewController {
         cell.callbackClosure = { [weak self] buttonCategory in
             guard let self = self else { return }
             let category = self.getModelFor(categoryButton: buttonCategory)
-            let controller = CategoryViewController(model: category)
+            let controller = CategoryViewController(categoryModel: category)
             self.navigationController?.pushViewController(controller, animated: true)
         }
  

@@ -8,6 +8,7 @@
 import UIKit
 
 class PosterTableViewCell: UITableViewCell {
+    
     static let identifier = "PosterTableViewCell"
     
     static let topPadding: CGFloat = 10
@@ -21,18 +22,16 @@ class PosterTableViewCell: UITableViewCell {
         return height
     }()
     
-    let posterImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "image1")
-        return imageView
+    // MARK: - Instance properties
+    lazy var posterButton: DimViewAnimationButton = {
+        let button = DimViewAnimationButton(scaleForTransform: 0.98)
+        return button
     }()
     
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(posterImageView)
+        contentView.addSubview(posterButton)
         applyConstraints()
     }
     
@@ -40,21 +39,20 @@ class PosterTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helper methods
+    func configureFor(book: Book, withCallbackForButton callback: @escaping BookButtonCallbackClosure) {
+        posterButton.book = book
+        posterButton.callbackClosure = callback
+    }
     
     private func applyConstraints() {
-        posterImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-//        let width = contentView.bounds.width - (Constants.cvPadding * 2)
-//        let height = round(width + (width / 6))
-        
+        posterButton.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
-            posterImageView.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedWidth),
-            posterImageView.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedHeight),
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: PosterTableViewCell.topPadding),
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-//            posterImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-//            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-//            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding)
+            posterButton.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedWidth),
+            posterButton.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedHeight),
+            posterButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: PosterTableViewCell.topPadding),
+            posterButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])
     }
 }

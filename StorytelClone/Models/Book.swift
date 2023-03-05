@@ -28,6 +28,8 @@ struct Book {
     
     static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
     
+    static let posterBook =  Book(title: "Modo Noche", author: "Bruno Teixidor López, Pablo Lara Toledo", coverImage: UIImage(named: "modoNoche"), bookKind: .audiobook)
+    
     static let book1 = Book(title: "The city of brass", author: "Shannon Chakraborty", coverImage: UIImage(named: "image1"), bookKind: .audiobook)
     
     static let book2 = Book(title: "The simple wild", author: "K.A. Tucker", coverImage: UIImage(named: "image2"), bookKind: .audioBookAndEbook)

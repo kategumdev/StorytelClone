@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias BookButtonCallbackClosure = (_ book: Book) -> ()
+
 struct Utils {
     
     //MARK: - Fonts

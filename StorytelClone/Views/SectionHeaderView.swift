@@ -12,14 +12,14 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     static let identifier = "SectionHeaderView"
     
     static func calculateHeaderHeightFor(section: TableSection) -> CGFloat {
-        let header = SectionHeaderSubviewsContainer(frame: .zero)
+        let header = SectionHeaderSubviewsContainer()
         header.sectionTitleLabel.text = section.sectionTitle
         header.sectionSubtitleLabel.text = section.sectionSubtitle
         let height = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
     
-    let containerWithSubviews = SectionHeaderSubviewsContainer(frame: .zero)
+    let containerWithSubviews = SectionHeaderSubviewsContainer()
 
     // MARK: - View life cycle
     override init(reuseIdentifier: String?) {

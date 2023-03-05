@@ -17,6 +17,7 @@
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
 		5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380BA299ED7E200611543 /* BadgeView.swift */; };
 		5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */; };
+		5AB1A29C29B3E32A001CC50A /* DimViewAnimationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB1A29B29B3E32A001CC50A /* DimViewAnimationButton.swift */; };
 		5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC629B21C090048A4FB /* BookViewController.swift */; };
 		5AB2CCC929B21F180048A4FB /* SeeAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC829B21F180048A4FB /* SeeAllViewController.swift */; };
 		5AB2CCCE29B2437D0048A4FB /* PosterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */; };
@@ -71,6 +72,7 @@
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A8380BA299ED7E200611543 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		5AB1A29B29B3E32A001CC50A /* DimViewAnimationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimViewAnimationButton.swift; sourceTree = "<group>"; };
 		5AB2CCC629B21C090048A4FB /* BookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		5AB2CCC829B21F180048A4FB /* SeeAllViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllViewController.swift; sourceTree = "<group>"; };
 		5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterTableViewCell.swift; sourceTree = "<group>"; };
@@ -132,9 +134,9 @@
 				5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */,
 				5A8380B6299E818800611543 /* BookCollectionViewCell.swift */,
 				5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */,
+				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
 				5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */,
 				5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */,
-				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -219,6 +221,7 @@
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
+				5AB1A29B29B3E32A001CC50A /* DimViewAnimationButton.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
 			path = Views;
@@ -416,6 +419,7 @@
 				5AB2CCC929B21F180048A4FB /* SeeAllViewController.swift in Sources */,
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
+				5AB1A29C29B3E32A001CC50A /* DimViewAnimationButton.swift in Sources */,
 				5AB2CCD029B275DA0048A4FB /* NoButtonSectionHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

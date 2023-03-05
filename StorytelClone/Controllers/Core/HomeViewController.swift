@@ -19,6 +19,17 @@ import UIKit
 
 class HomeViewController: BaseTableViewController {
     
+    private let posterBook: Book
+    
+    init(categoryModel: Category, posterBook: Book) {
+        self.posterBook = posterBook
+        super.init(categoryModel: categoryModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,16 +73,13 @@ class HomeViewController: BaseTableViewController {
     private func posterCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
         
-        // Get all books from Top 50 hoy section
-        let books = category.tableSections[indexPath.row + 2].books
-        let audiobooks = books.filter({ $0.bookKind == .audiobook })
-        if !audiobooks.isEmpty {
-            // Get random audiobook
-            let randomAudiobook = audiobooks.randomElement()
-            cell.posterImageView.image = randomAudiobook!.coverImage
-        } else {
-            print("No audiobooks in the array")
+        // For respond to button tap in PosterTableViewCell
+        let callbackClosure: BookButtonCallbackClosure = { [weak self] book in
+            let controller = BookViewController(book: self?.posterBook)
+            self?.navigationController?.pushViewController(controller, animated: true)
         }
+        
+        cell.configureFor(book: posterBook, withCallbackForButton: callbackClosure)
  
         return cell
     }
@@ -88,7 +96,6 @@ class HomeViewController: BaseTableViewController {
             let controller = BookViewController(book: book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
-        
         return cell
     }
     
@@ -116,29 +123,6 @@ class HomeViewController: BaseTableViewController {
             return Utils.heightForRowWithHorizontalCv
         }
     }
-
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let sectionKind = category.tableSections[section].sectionKind
-//
-//        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView()}
-//
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//
-//        sectionHeader.configureFor(section: category.tableSections[section])
-//
-//        // Closure for seeAllButton to notify this vc when tapped
-//        sectionHeader.containerWithSubviews.callbackClosure = { [weak self] tableSection in
-//            guard let self = self else { return }
-//            let controller = SeeAllViewController(tableSection: tableSection)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-//            sectionHeader.containerWithSubviews.removeButtonAndReconfigure()
-//        }
-//
-//        return sectionHeader
-//    }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionKind = category.tableSections[section].sectionKind
@@ -197,10 +181,10 @@ extension HomeViewController: WideButtonTableViewCellDelegate {
 
     func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind) {
         if sectionKind == .seriesCategoryButton {
-            let controller = CategoryViewController(model: Category.series)
+            let controller = CategoryViewController(categoryModel: Category.series)
             navigationController?.pushViewController(controller, animated: true)
         } else {
-            let controller = AllCategoriesViewController(model: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
+            let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
             navigationController?.pushViewController(controller, animated: true)
         }
     }

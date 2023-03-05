@@ -12,7 +12,7 @@ class NoButtonSectionHeaderView: UITableViewHeaderFooterView {
     static let identifier = "NoButtonSectionHeaderView"
     
     static func calculateHeaderHeightFor(section: TableSection) -> CGFloat {
-        let header = SectionHeaderSubviewsContainer(frame: .zero, withButton: false)
+        let header = SectionHeaderSubviewsContainer(withButton: false)
 //        header.removeButtonAndReconfigure()
         header.sectionTitleLabel.text = section.sectionTitle
         header.sectionSubtitleLabel.text = section.sectionSubtitle
@@ -21,7 +21,7 @@ class NoButtonSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     let containerWithSubviews: SectionHeaderSubviewsContainer = {
-        let container = SectionHeaderSubviewsContainer(frame: .zero, withButton: false)
+        let container = SectionHeaderSubviewsContainer(withButton: false)
 //        container.removeButtonAndReconfigure()
         return container
     }()

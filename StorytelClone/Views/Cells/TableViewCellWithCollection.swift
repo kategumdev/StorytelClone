@@ -14,7 +14,7 @@ class TableViewCellWithCollection: UITableViewCell {
     // Actual value injected when cell is being configured in cellForRowAt
     var books: [Book] = [Book]() // It will contain only 10 random books from 
     
-    var callbackClosure: BookCollectionViewCell.ButtonCallbackClosure = {_ in}
+    var callbackClosure: BookButtonCallbackClosure = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
