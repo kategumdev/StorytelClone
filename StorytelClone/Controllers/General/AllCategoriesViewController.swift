@@ -35,6 +35,18 @@ class AllCategoriesViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("viewDidDisappear")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let currentOffsetY = bookTable.contentOffset.y
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+    }
+    
     //MARK: - Helper methods
     private func getModelFor(buttonCategory: ButtonCategory) -> Category {
         return ButtonCategory.createModelFor(categoryButton: buttonCategory)

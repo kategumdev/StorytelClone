@@ -67,35 +67,46 @@ struct Utils {
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width
-        let width = (contentViewWidth - Constants.cvPadding * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
+        let width = (contentViewWidth - Constants.cvPadding * Constants.visibleHorzCvItemsInRow) / Constants.visibleHorzCvItemsInRow
         
         let fullWidth = contentViewWidth + (width / 2)
         let itemWidth = (fullWidth - Constants.cvPadding
-                         * Constants.visibleSquareCvItemsInRow) / Constants.visibleSquareCvItemsInRow
+                         * Constants.visibleHorzCvItemsInRow) / Constants.visibleHorzCvItemsInRow
     
         let size = CGSize(width: round(itemWidth), height: round(itemWidth))
         return size
     }()
-    
-//    static let calculatedCvItemSizeSquareCovers: CGSize = {
-//        let width = calculatedSquareCoverSize.width
-//        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints
-//        let size = CGSize(width: width, height: height)
-//        return size
-//    }()
-    
+
     static let topPaddingForCvItemWithSquareCovers = BadgeView.badgeTopAnchorPoints + 3
     
     static let calculatedCvItemSizeSquareCovers: CGSize = {
         let width = calculatedSquareCoverSize.width
         let height = calculatedSquareCoverSize.height + topPaddingForCvItemWithSquareCovers
-//        let height = calculatedSquareCoverSize.height + BadgeView.badgeTopAnchorPoints + 8
         let size = CGSize(width: width, height: height)
         return size
     }()
-    
+
     static let heightForRowWithHorizontalCv: CGFloat = {
         return calculatedCvItemSizeSquareCovers.height
+    }()
+    
+    static let calculatedHorzCvItemSizeLargeCovers: CGSize = {
+        let contentViewWidth = UIScreen.main.bounds.width
+        let visiblePartOfThirdCover = 14
+        
+        let widthForContent = contentViewWidth - ((Constants.paddingForHorzCvLargeCovers * 2) + Constants.cvPadding + Constants.visiblePartOfThirdLargeCover)
+        let itemWidth = widthForContent / (Constants.visibleHorzCvItemsInRow - 1)
+ 
+        let roundedItemWidth = round(itemWidth)
+
+        // Get height for 2:3 aspect ratio
+        let height = ((3/2) * roundedItemWidth) + Constants.posterAndLargeCoversCellTopPadding
+        let size = CGSize(width: roundedItemWidth, height: height)
+        return size
+    }()
+    
+    static let heightForRowWithHorzCvLargeCovers: CGFloat = {
+        return calculatedHorzCvItemSizeLargeCovers.height
     }()
     
     static let calculatedCvItemSizeCategory: CGSize = {

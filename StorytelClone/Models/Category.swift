@@ -347,7 +347,7 @@ struct Category {
             TableSection(sectionTitle: "Solo para ti"),
             TableSection(sectionTitle: "Los títulos del momento"),
             TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
-            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv),
+            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
             TableSection(sectionTitle: "Top 50 hoy"),
             TableSection(sectionTitle: "Nuevos audiolibros"),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
@@ -366,6 +366,12 @@ struct Category {
             TableSection(sectionTitle: "Series Top esta semana"),
             TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
         ])
+    
+//    static let home = Category(
+//        title: "",
+//        tableSections: [
+//            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
+//        ])
     
     
     static let todasLasCategorias = Category(

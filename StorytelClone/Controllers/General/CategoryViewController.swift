@@ -19,6 +19,13 @@ class CategoryViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let currentOffsetY = bookTable.contentOffset.y
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         

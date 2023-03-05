@@ -74,6 +74,11 @@ class BaseTableViewController: UIViewController {
         layoutHeaderView()
     }
     
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//    }
+    
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
@@ -173,6 +178,16 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         // Toggle navbar from transparent to visible at calculated contentOffset
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+    }
+    
+}
+
+// MARK: - Helper methods
+extension BaseTableViewController {
+    
+    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+        
         guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
         
         changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
@@ -187,11 +202,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 //            print("to transparent")
         }
     }
-    
-}
-
-// MARK: - Helper methods
-extension BaseTableViewController {
 
     func layoutHeaderView() {
 //                print("layoutHeaderView")
