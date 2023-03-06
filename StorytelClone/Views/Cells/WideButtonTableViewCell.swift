@@ -7,19 +7,10 @@
 
 import UIKit
 
-//protocol WideButtonTableViewCellDelegate: AnyObject {
-//  func wideButtonTableViewCellDidTapButton(
-//    _ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind)
-//}
-
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
-
-    static let heightForRow: CGFloat = Utils.calculatedSquareCoverSize.height
-    
-//    weak var delegate: WideButtonTableViewCellDelegate?
-    
+        
     private var timeLayoutSubviewsIsBeingCalled = 0
 
     private lazy var dimViewForButtonAnimation: UIView = {

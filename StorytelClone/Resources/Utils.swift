@@ -23,10 +23,15 @@ struct Utils {
     
     static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
-    
+
+    //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")
     
-    //MARK: - Colors
+//    static let badgeBorderColor = UIColor(named: "badgeBorder")
+//    
+//    static let badgeBackgroundColor = UIColor(named: "badgeBackground")
+    
+    
     static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
     static let coralCategoryColor = UIColor(red: 234/255, green: 114/255, blue: 95/255, alpha: 1)
     static let orangeCategoryColor = UIColor(red: 234/255, green: 156/255, blue: 80/255, alpha: 1)
@@ -36,6 +41,7 @@ struct Utils {
     static let peachCategoryColor = UIColor(red: 245/255, green: 202/255, blue: 191/255, alpha: 1)
     static let greenCategoryColor = UIColor(red: 189/255, green: 210/255, blue: 163/255, alpha: 1)
     
+    // MARK: - Constructors
     static let transparentNavBarAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
@@ -119,4 +125,13 @@ struct Utils {
         return size
     }()
     
+    static let heightForRowWithWideButton: CGFloat = Utils.calculatedSquareCoverSize.height
+
+    static let calculatedSmallSquareImageCoverSize: CGSize = {
+        let width = round(4/5 * calculatedSquareCoverSize.width)
+        let height = width
+        return CGSize(width: width, height: height)
+    }()
+    
+//    static let heightForRowWithOneBookOverview: CGFloat = Utils.calc
 }

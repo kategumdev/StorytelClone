@@ -30,6 +30,9 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isTranslucent = false
         
+        // This line avoid tab bar blinking gray when next vc is being pushed
+        tabBar.backgroundColor = Utils.customBackgroundColor
+        
         tabBar.standardAppearance.backgroundEffect = nil
         
         tabBar.standardAppearance.shadowColor = .tertiaryLabel

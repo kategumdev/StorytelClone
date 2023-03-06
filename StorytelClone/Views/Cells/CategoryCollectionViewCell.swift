@@ -52,16 +52,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         fatalError("CategoryCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-//    deinit {
-//        print("\(self) is being deallocated")
-//    }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        dimViewForButtonAnimation.frame = contentView.bounds
-//        cellButton.frame = contentView.bounds
-//    }
-    
     // MARK: - Helper methods
     func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallbackClosure ) {
         cellButton.backgroundColor = color

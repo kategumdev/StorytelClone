@@ -12,25 +12,13 @@ class CellButton: UIButton {
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
 
-    // Owning view injects this dependency as needed
-    var book: Book? {
-        didSet {
-            configuration?.background.image = book?.coverImage
-        }
-    }
-    // Owning view injects this dependency as needed
+    // Owning view injects one of these 3 dependencies as needed
+    var book: Book?
     var sectionKind: SectionKind?
-    
-    // Owning view injects this dependency as needed
     var categoryButton: ButtonCategory?
     
-    // Owning view injects this dependency as needed
 //    var callbackClosure: BookButtonCallbackClosure = {_ in}
-//
-//    // Owning view injects this dependency as needed
 //    var wideButtonCallbackClosure: WideButtonCallbackClosure = {_ in}
-//
-//    // Owning view injects this dependency as needed
 //    var categoryButtonCallbackClosure: CategoryButtonCallbackClosure = {_ in}
 
     var callback: ButtonCallbackClosure = {_ in}
@@ -47,7 +35,7 @@ class CellButton: UIButton {
     private func configureButton() {
         layer.cornerRadius = Constants.bookCoverCornerRadius
         clipsToBounds = true
- 
+
         var config = UIButton.Configuration.plain()
         config.background.imageContentMode = .scaleAspectFill
         
@@ -60,13 +48,13 @@ class CellButton: UIButton {
             guard let self = self else { return }
 
             if self.isButtonTooLongInHighlightedState {
-                print("do nothing on touchUpInside")
+//                print("do nothing on touchUpInside")
                 self.isButtonTooLongInHighlightedState = false
 
             } else {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
-                print("DO smth on touchUpInside")
+//                print("DO smth on touchUpInside")
                 
                 if let book = self.book {
                     self.callback(book)

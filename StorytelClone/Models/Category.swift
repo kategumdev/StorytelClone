@@ -15,6 +15,7 @@ enum SectionKind {
     case largeCoversHorizontalCv
     case seriesCategoryButton
     case allCategoriesButton
+    case top50
 }
 
 struct TableSection {
@@ -348,31 +349,24 @@ struct Category {
             TableSection(sectionTitle: "Los títulos del momento"),
             TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
             TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
-            TableSection(sectionTitle: "Top 50 hoy"),
+            TableSection(sectionTitle: "Top 50 hoy", sectionKind: .top50),
             TableSection(sectionTitle: "Nuevos audiolibros"),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
             TableSection(sectionTitle: "Solo en Storytel"),
             TableSection(sectionTitle: "Novela: Recomendados para ti"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
+            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview1]),
             TableSection(sectionTitle: "Tendecia en Storytel"),
             TableSection(sectionTitle: "Pronto en audiolibro"),
             TableSection(sectionTitle: "Historias de pelicula (y serie)"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
+            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview2]),
             TableSection(sectionTitle: "Novela: Los más populares"),
             TableSection(sectionTitle: "Porque te interesa", sectionSubtitle: "Brick Lane"),
             TableSection(sectionTitle: "Novela negra: Recomendados para ti"),
             TableSection(sectionTitle: "", sectionKind: .seriesCategoryButton),
-            TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .oneBookWithOverview),
+            TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview]),
             TableSection(sectionTitle: "Series Top esta semana"),
             TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
         ])
-    
-//    static let home = Category(
-//        title: "",
-//        tableSections: [
-//            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
-//        ])
-    
     
     static let todasLasCategorias = Category(
         title: "Todas las categorías",

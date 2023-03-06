@@ -19,8 +19,9 @@ class FeedTableHeaderView: UIView {
     
     let headerLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
+        label.numberOfLines = 4
         label.lineBreakMode = .byWordWrapping
+        
         label.adjustsFontForContentSizeCategory = true
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)

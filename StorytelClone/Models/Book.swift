@@ -19,13 +19,15 @@ struct Book {
     let coverImage: UIImage?
     let largeCoverImage: UIImage?
     let bookKind: BookKind
+    let overview: String
     
-    init(title: String, author: String, coverImage: UIImage?, largeCoverImage: UIImage? = nil, bookKind: BookKind) {
+    init(title: String, author: String, coverImage: UIImage?, largeCoverImage: UIImage? = nil, bookKind: BookKind, overview: String = "") {
         self.title = title
         self.author = author
         self.coverImage = coverImage
         self.largeCoverImage = largeCoverImage
         self.bookKind = bookKind
+        self.overview = overview
     }
     
     static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
@@ -75,4 +77,15 @@ struct Book {
     
     static let book19 = Book(title: "La suelta", author: "Juan Gómez-Jurado", coverImage: UIImage(named: "laSuelta"), largeCoverImage: UIImage(named: "laSueltaLarge"), bookKind: .audiobook)
     
+    
+    
+    static let bookWithOverview = Book(
+        title: "La cuenta atrás para el verano: La vida son recuerdos y los míos tienen nombres de persona",
+        author: "La Vecina Rubia", coverImage: UIImage(named: "bookWithOverview"), bookKind: .audiobook, overview: "¿Sabrías decir cuántas personas han formado parte de tu vida y cuántas han sido capaces de cambiarla? Las últimas son las que realmente importan.\nLauri, la primera y más responsable amiga de la infancia y Nacho, mi primer amor de la adolescencia. La malhumorada y siempre sincera Lucía, la calmada Sara y el sarcástico Pol. También Álex, el que siempre vuelve, y la única mujer capaz de susurrar gritando, Laura. Y por supuesto, MI PADRE, en mayúsculas.")
+    
+    static let bookWithOverview1 = Book(title: "La mujer que quería más", author: "Vicky Zimmerman", coverImage: UIImage(named: "bookWithOverview1"), bookKind: .audioBookAndEbook, overview: "Una historia entrañable para aprender la mejor lección que la vida te puede dar: nunca debe darte vergüenza pedir más…\n\nKate rompe con su novio justo cuando estaban a punto de irse a vivir juntos y, después de pasarse algunos días comiendo ganchitos debajo del edredón, decide volver a casa de su madre, al filo de los cuarenta. Para despejar su mente empieza a colaborar con la Residencia Lauderdale para damas excepcionales. Allí conoce a Cecily Finn, una mujer de noventa y seis años, punzante como una aguja y con una vida fascinante. Cecily le recomienda un manual de autoayuda diferente, un libro de recetas de 1957, con menús para cualquier situación y que promete respuestas a preguntas esenciales.\n\n¿Podrá encontrar Kate el menú ideal para su corazón roto?\n\nAsí comienza una entrañable relación entre dos almas solitarias y obstinadas, que deben demostrarse la una a la otra que la comida es un placer al que no debemos renunciar, que la vida es para vivirla y que el camino al corazón de un hombre resulta… irrelevante.")
+    
+    static let bookWithOverview2 = Book(title: "Mariposas heladas", author: "Katarzyna Puzyńska", coverImage: UIImage(named: "bookWithOverview2"), bookKind: .audiobook, overview: "Una gélida mañana de invierno, el cuerpo sin vida de una monja, que aparentemente ha sido atropellada por un coche, aparece en las afueras de Lipowo, una localidad situada al norte de Varsovia. Pero pronto queda fuera de duda que primero fue asesinada y luego simularon un accidente. Unos días después, cuando aparece el cadáver de otra mujer, sin que entre ellas hubiera un vínculo aparente, la Policía debe darse prisa antes de que el asesino actúe de nuevo.\nLas sospechas recaerán sobre algunos de los habitantes del pueblo: la propietaria de una tienda, el heredero de una familia adinerada o el hijo de uno de los oficiales de la Policía. La comisaria Klementyna Kopp y el comisario Daniel Podgórski tendrán que ponerse manos a la obra, investigar la verdadera identidad de la monja, su pasado y los motivos que la llevaron a Lipowo. Esta vez, además de con su equipo, Daniel contará con la ayuda de una recién llegada, Veronika —psicóloga que viene de Varsovia, acaba de divorciarse y busca un nuevo comienzo lejos de la ciudad—, por la que se siente irresistiblemente atraído.")
+    
+
 }

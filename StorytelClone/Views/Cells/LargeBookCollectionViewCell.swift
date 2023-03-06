@@ -10,8 +10,13 @@ import UIKit
 class LargeBookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "LargeBookCollectionViewCell"
-    
-    private let bookButton = CellButton()
+        
+    private let bookButton: CellButton = {
+        let button = CellButton()
+        button.layer.borderColor = UIColor.tertiaryLabel.cgColor
+        button.layer.borderWidth = 0.26
+        return button
+    }()
     
     private lazy var dimViewForButtonAnimation: UIView = {
         let view = UIView()
@@ -33,11 +38,19 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            bookButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
+        }
+    }
+    
     // MARK: - Helper methods
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
         bookButton.book = book
         bookButton.callback = callback
-        // Override default behavior of CellButton
+        
         bookButton.configuration?.background.image = book.largeCoverImage
     }
     

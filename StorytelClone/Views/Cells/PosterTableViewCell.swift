@@ -10,9 +10,7 @@ import UIKit
 class PosterTableViewCell: UITableViewCell {
     
     static let identifier = "PosterTableViewCell"
-    
-//    static let topPadding: CGFloat = 10
-    
+        
     static let calculatedWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.cvPadding * 2)
     
     static let calculatedHeightForRow: CGFloat = calculatedHeight + Constants.posterAndLargeCoversCellTopPadding
@@ -34,6 +32,7 @@ class PosterTableViewCell: UITableViewCell {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(posterButton)
         contentView.addSubview(dimViewForButtonAnimation)
         addButtonUpdateHandler()
@@ -48,6 +47,8 @@ class PosterTableViewCell: UITableViewCell {
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
         posterButton.book = book
         posterButton.callback = callback
+        
+        posterButton.configuration?.background.image = book.coverImage
     }
     
     private func addButtonUpdateHandler() {

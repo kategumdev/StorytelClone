@@ -36,20 +36,21 @@ class HomeViewController: BaseTableViewController {
         bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
         bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
         bookTable.register(TableViewCellWithHorzCvLargeCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeCovers.identifier)
+        bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear")
-        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-        tableHeader.updateGreetingsLabel()
-        
+//        print("viewWillAppear")
         let currentOffsetY = bookTable.contentOffset.y
         adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
+        
+        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+        tableHeader.updateGreetingsLabel()
     }
     
     override func viewDidLayoutSubviews() {
-        print("viewDidLayoutSubviews")
+//        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
         tableHeader.updateGreetingsLabel()
@@ -81,10 +82,11 @@ class HomeViewController: BaseTableViewController {
             return cellWithLargeCoversHorizontalCv(from: tableView, for: indexPath)
         } else if sectionKind == .horizontalCv {
             return cellWithHorizontalCv(from: tableView, for: indexPath)
-
+        } else if sectionKind == .oneBookWithOverview {
+            return bookWithOverviewCell(from: tableView, for: indexPath)
         } else {
-            print("This sectionKind isn't handled in cellForRowAt yet")
-            return UITableViewCell()
+//            print("SectionKind \(sectionKind) isn't handled in cellForRowAt yet")
+            return cellWithHorizontalCv(from: tableView, for: indexPath)
         }
     }
 
@@ -92,13 +94,16 @@ class HomeViewController: BaseTableViewController {
         let sectionKind = category.tableSections[indexPath.section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
-            return WideButtonTableViewCell.heightForRow
+            return Utils.heightForRowWithWideButton
         } else if sectionKind == .poster {
             return PosterTableViewCell.calculatedHeightForRow
-        } else if sectionKind == .horizontalCv {
+        } else if sectionKind == .horizontalCv || sectionKind == .top50 {
             return Utils.heightForRowWithHorizontalCv
         } else if sectionKind == .largeCoversHorizontalCv {
             return Utils.heightForRowWithHorzCvLargeCovers
+        } else if sectionKind == .oneBookWithOverview {
+            let book = category.tableSections[indexPath.section].books[0]
+            return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
         } else {
             print("This sectionKind isn't handled in heightForRowAt yet")
             return 0
@@ -226,6 +231,22 @@ extension HomeViewController {
         cell.configureWith(books: books, callbackForButtons: callbackClosure)
  
         return cell
+    }
+    
+    private func bookWithOverviewCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell else { return UITableViewCell() }
+
+        let book = category.tableSections[indexPath.section].books[0]
+        
+        // To respond to button tap in BookWithOverviewTableViewCell
+        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+            let controller = BookViewController(book: book as? Book)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        cell.configureFor(book: book, withCallbackForButton: callbackClosure)
+ 
+        return cell
+        
     }
 
 }
