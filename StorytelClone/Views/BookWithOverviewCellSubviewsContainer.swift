@@ -52,21 +52,111 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    lazy var stackView: UIStackView = {
+    let starView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.widthAnchor.constraint(equalToConstant: 18).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "star.fill")
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
+       
+        view.addSubview(imageView)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2).isActive = true
+        
+        return view
+    }()
+    
+    let starImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .white
+        imageView.image = UIImage(systemName: "star.fill")
+        imageView.contentMode = .scaleAspectFit
+//        imageView.contentMode = .center
+        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.widthAnchor.constraint(equalToConstant: 17).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        return imageView
+    }()
+    
+    let ratingLabel: UILabel = {
+       let label = UILabel()
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
+        label.font = scaledFont
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = UIColor.secondaryLabel
+        label.sizeToFit()
+        return label
+    }()
+    
+    let vertBarLabel: UILabel = {
+        let label = UILabel()
+        let font = UIFont.systemFont(ofSize: 19, weight: .ultraLight)
+        label.textAlignment = .center
+        let text = "|"
+        let attributedString = NSAttributedString(string: text).withLineHeightMultiple(0.8)
+        label.attributedText = attributedString
+        label.font = font
+        label.textColor = .tertiaryLabel
+        label.sizeToFit()
+        return label
+    }()
+    
+    let categoryLabel: UILabel = {
+        let label = UILabel()
+        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
+        label.font = scaledFont
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = UIColor.label.withAlphaComponent(0.7)
+        label.sizeToFit()
+        return label
+    }()
+
+    let spacerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return view
+    }()
+    
+    lazy var horzStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.isUserInteractionEnabled = false
+        stack.axis = .horizontal
+        stack.alignment = .center
+        [starView, ratingLabel, vertBarLabel, categoryLabel, spacerView].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(4, after: starView)
+        stack.setCustomSpacing(6, after: ratingLabel)
+        stack.setCustomSpacing(6, after: vertBarLabel)
+        return stack
+    }()
+    
+    lazy var vertStackView: UIStackView = {
         let stack = UIStackView()
         stack.isUserInteractionEnabled = false
         stack.axis = .vertical
         stack.alignment = .fill
         stack.distribution = .equalCentering
-        [self.bookTitleLabel, self.overviewLabel].forEach { stack.addArrangedSubview($0) }
-        stack.setCustomSpacing(12.0, after: self.bookTitleLabel)
+        [bookTitleLabel, overviewLabel, horzStackView].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(12.0, after: bookTitleLabel)
+        stack.setCustomSpacing(15, after: overviewLabel)
         return stack
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bookOverviewButton)
-        bookOverviewButton.addSubview(stackView)
+        bookOverviewButton.addSubview(vertStackView)
         addSubview(squareImageView)
         addSubview(dimViewForButtonAnimation)
         addButtonUpdateHandler()
@@ -114,9 +204,26 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         }
     }
     
-    func configureTextWith(bookTitle: String, overview: String) {
-        bookTitleLabel.attributedText = NSAttributedString(string: bookTitle).withLineHeightMultiple(0.8)
-        overviewLabel.attributedText = NSAttributedString(string: overview).withLineHeightMultiple(0.9)
+//    func configureTextWith(bookTitle: String, overview: String) {
+//        bookTitleLabel.attributedText = NSAttributedString(string: bookTitle).withLineHeightMultiple(0.8)
+//        overviewLabel.attributedText = NSAttributedString(string: overview).withLineHeightMultiple(0.9)
+//    }
+    
+    func configureFor(book: Book) {
+        let titleString = book.title
+        bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
+        let overviewString = book.overview
+        overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
+        
+//        let ratingString = String(book.rating).replacingOccurrences(of: ".", with: ",")
+//        ratingLabel.attributedText = NSAttributedString(string: ratingString).withLineHeightMultiple(0.9)
+        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+        categoryLabel.text = book.category.rawValue
+        squareImageView.image = book.coverImage
+        
+        bookOverviewButton.book = book
+        
+        
     }
     
     private func applyConstraints() {
@@ -132,12 +239,12 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let imageTopConstant: CGFloat = 8
         let paddingBetweenImageAndStack: CGFloat = 17
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        vertStackView.translatesAutoresizingMaskIntoConstraints = false
         let topAnchorConstant: CGFloat = (Utils.calculatedSmallSquareImageCoverSize.height - imageTopConstant) + paddingBetweenImageAndStack
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: bookOverviewButton.topAnchor, constant: topAnchorConstant),
-            stackView.leadingAnchor.constraint(equalTo: bookOverviewButton.leadingAnchor, constant: leadingConstant),
-            stackView.widthAnchor.constraint(equalTo: bookOverviewButton.widthAnchor, constant: -(leadingConstant * 2))
+            vertStackView.topAnchor.constraint(equalTo: bookOverviewButton.topAnchor, constant: topAnchorConstant),
+            vertStackView.leadingAnchor.constraint(equalTo: bookOverviewButton.leadingAnchor, constant: leadingConstant),
+            vertStackView.widthAnchor.constraint(equalTo: bookOverviewButton.widthAnchor, constant: -(leadingConstant * 2))
         ])
  
         let buttonTopConstant: CGFloat = 15 // Creates padding between section header label and this button
@@ -146,7 +253,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
             bookOverviewButton.topAnchor.constraint(equalTo: topAnchor, constant: buttonTopConstant),
             bookOverviewButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
             bookOverviewButton.widthAnchor.constraint(equalTo: widthAnchor, constant: -(Constants.cvPadding * 2)),
-            bookOverviewButton.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20)
+            bookOverviewButton.bottomAnchor.constraint(equalTo: vertStackView.bottomAnchor, constant: 14)
         ])
         
         squareImageView.translatesAutoresizingMaskIntoConstraints = false
