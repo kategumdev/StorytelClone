@@ -110,7 +110,7 @@ class SectionHeaderSubviewsContainer: UIView {
         
         NSLayoutConstraint.activate([
             sectionTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
-            sectionTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constants.gapBetweenSectionsOfCategoryTable),
+            sectionTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constants.generalTopPaddingSectionHeader),
             sectionTitleLabel.bottomAnchor.constraint(equalTo: sectionSubtitleLabel.topAnchor, constant: -5)
         ])
         

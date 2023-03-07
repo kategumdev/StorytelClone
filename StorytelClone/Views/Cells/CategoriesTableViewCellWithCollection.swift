@@ -9,6 +9,24 @@ import UIKit
 
 class CategoriesTableViewCellWithCollection: UITableViewCell {
     
+    static let gapBetweenHeaderAndCell: CGFloat = 9
+    
+    static let calculatedCvItemSizeCategory: CGSize = {
+        let height = Constants.categoryCvItemHeight
+        
+        let contentViewWidth = UIScreen.main.bounds.size.width
+        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
+
+        let size = CGSize(width: width, height: height)
+        return size
+    }()
+    
+    static func calculateCellHeightFor(numberOfRows: CGFloat) -> CGFloat {
+        let paddings = (Constants.cvPadding * (numberOfRows - 1)) + gapBetweenHeaderAndCell
+        let height = (calculatedCvItemSizeCategory.height * numberOfRows) + paddings
+        return height
+    }
+    
     var categoryButtons = [ButtonCategory]()
     
     var callbackClosure: ButtonCallbackClosure = {_ in}
@@ -75,11 +93,14 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
 
 extension CategoriesTableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return Utils.calculatedCvItemSizeCategory
+        return CategoriesTableViewCellWithCollection.calculatedCvItemSizeCategory
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: Constants.gapBetweenSectionsOfCategoryTable, right: Constants.cvPadding)
+        
+        // This top inset is for cell in last section of SearchViewController
+        // Add gapBetweenHeaderAndCell when calculating heightForRow for all CategoriesTableViewCellWithCollection cells
+        UIEdgeInsets(top: CategoriesTableViewCellWithCollection.gapBetweenHeaderAndCell, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
     }
      
 }

@@ -74,7 +74,13 @@ extension AllCategoriesViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (Utils.calculatedCvItemSizeCategory.height * 10) + (Constants.cvPadding * 9) + Constants.gapBetweenSectionsOfCategoryTable
+        
+        let numberOfButtons = categoryButtons.count
+        let numberOfRowsInCell: CGFloat = ceil(CGFloat(numberOfButtons) / 2.0)
+
+        let height = CategoriesTableViewCellWithCollection.calculateCellHeightFor(numberOfRows: numberOfRowsInCell)
+        
+        return height
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -82,10 +88,10 @@ extension AllCategoriesViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 41
+        return 32
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        return Constants.generalTopPaddingSectionHeader
     }
 }

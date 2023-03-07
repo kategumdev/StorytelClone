@@ -160,7 +160,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == category.tableSections.count - 1 {
-            return Constants.gapBetweenSectionsOfCategoryTable
+            return Constants.generalTopPaddingSectionHeader
         } else {
             return 0
         }

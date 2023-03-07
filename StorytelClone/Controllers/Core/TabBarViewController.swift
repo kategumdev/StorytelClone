@@ -14,7 +14,7 @@ class TabBarViewController: UITabBarController {
         view.backgroundColor = Utils.customBackgroundColor
         
         let vc1 = UINavigationController(rootViewController: HomeViewController(categoryModel: Category.home, posterBook: Book.posterBook))
-        let vc2 = UINavigationController(rootViewController: SearchViewController())
+        let vc2 = UINavigationController(rootViewController: SearchViewController(categoryModel: Category.searchVc, categoryButtons: ButtonCategory.categoriesForSearchVc))
         let vc3 = UINavigationController(rootViewController: BookshelfViewController())
         let vc4 = UINavigationController(rootViewController: ProfileViewController())
         
@@ -48,7 +48,8 @@ class TabBarViewController: UITabBarController {
     // MARK: - Helper methods
     private func setTabBarItemColors(_ itemAppearances: [UITabBarItemAppearance]) {
         let normalColor = UIColor.label
-        let selectedColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
+//        let selectedColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
+        let selectedColor = Utils.tintColor
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 11)
         
         for appearance in itemAppearances {

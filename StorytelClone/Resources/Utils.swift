@@ -27,6 +27,8 @@ struct Utils {
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")
     
+    static let tintColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
+    
 //    static let badgeBorderColor = UIColor(named: "badgeBorder")
 //    
 //    static let badgeBackgroundColor = UIColor(named: "badgeBackground")
@@ -115,15 +117,15 @@ struct Utils {
         return calculatedHorzCvItemSizeLargeCovers.height
     }()
     
-    static let calculatedCvItemSizeCategory: CGSize = {
-        let height = Constants.categoryCvItemHeight
-        
-        let contentViewWidth = UIScreen.main.bounds.size.width
-        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
-
-        let size = CGSize(width: width, height: height)
-        return size
-    }()
+//    static let calculatedCvItemSizeCategory: CGSize = {
+//        let height = Constants.categoryCvItemHeight
+//        
+//        let contentViewWidth = UIScreen.main.bounds.size.width
+//        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
+//
+//        let size = CGSize(width: width, height: height)
+//        return size
+//    }()
     
     static let heightForRowWithWideButton: CGFloat = Utils.calculatedSquareCoverSize.height
 

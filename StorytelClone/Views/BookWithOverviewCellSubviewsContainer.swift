@@ -106,7 +106,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let attributedString = NSAttributedString(string: text).withLineHeightMultiple(0.8)
         label.attributedText = attributedString
         label.font = font
-        label.textColor = .tertiaryLabel
+        label.textColor = .secondaryLabel
         label.sizeToFit()
         return label
     }()

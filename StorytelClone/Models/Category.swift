@@ -15,7 +15,6 @@ enum SectionKind {
     case largeCoversHorizontalCv
     case seriesCategoryButton
     case allCategoriesButton
-    case top50
 }
 
 struct TableSection {
@@ -349,7 +348,7 @@ struct Category {
             TableSection(sectionTitle: "Los títulos del momento"),
             TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
             TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
-            TableSection(sectionTitle: "Top 50 hoy", sectionKind: .top50),
+            TableSection(sectionTitle: "Top 50 hoy"),
             TableSection(sectionTitle: "Nuevos audiolibros"),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
             TableSection(sectionTitle: "Solo en Storytel"),
@@ -372,6 +371,13 @@ struct Category {
         title: "Todas las categorías",
         tableSections: [
             TableSection(sectionTitle: "", sectionKind: .verticalCv),
+        ])
+    
+    static let searchVc = Category(
+        title: "",
+        tableSections: [
+            TableSection(sectionTitle: ""),
+            TableSection(sectionTitle: "Todas las categorías")
         ])
     
 }

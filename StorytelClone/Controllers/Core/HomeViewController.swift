@@ -97,7 +97,7 @@ class HomeViewController: BaseTableViewController {
             return Utils.heightForRowWithWideButton
         } else if sectionKind == .poster {
             return PosterTableViewCell.calculatedHeightForRow
-        } else if sectionKind == .horizontalCv || sectionKind == .top50 {
+        } else if sectionKind == .horizontalCv {
             return Utils.heightForRowWithHorizontalCv
         } else if sectionKind == .largeCoversHorizontalCv {
             return Utils.heightForRowWithHorzCvLargeCovers
@@ -114,7 +114,7 @@ class HomeViewController: BaseTableViewController {
         let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
-            return Constants.gapBetweenSectionsOfCategoryTable
+            return Constants.generalTopPaddingSectionHeader
         } else {
             return UITableView.automaticDimension
         }
@@ -125,7 +125,7 @@ class HomeViewController: BaseTableViewController {
         let sectionKind = category.tableSections[section].sectionKind
 
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
-            return Constants.gapBetweenSectionsOfCategoryTable
+            return Constants.generalTopPaddingSectionHeader
         } else if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
 
             // Get height for headers with no button
