@@ -72,6 +72,21 @@ struct Utils {
         return appearance
     }()
     
+    static let visibleNavBarAppearance2: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.shadowColor = .tertiaryLabel
+        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
+        return appearance
+    }()
+    
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width

@@ -50,16 +50,28 @@ class ScopeButtonsViewSearchResults: UIScrollView {
         return stack
     }()
     
+//    lazy var separatorLine: CALayer = {
+//        let separatorLine = CALayer()
+//        separatorLine.frame = CGRect(x: 0, y: bounds.size.height - 1, width: bounds.size.width, height: 3)
+//        separatorLine.backgroundColor = UIColor.black.cgColor
+//
+//
+//
+//        return separatorLine
+//    }()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
         showsHorizontalScrollIndicator = false
         
         contentInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
-//        scopeButtons.forEach { stackView.addArrangedSubview($0) }
         applyConstraints()
-//        backgroundColor = .purple
-//        print("stackview: \(stackView.subviews)")
+        
+
+//        layer.addSublayer(separatorLine)
+
     }
     
     required init?(coder: NSCoder) {

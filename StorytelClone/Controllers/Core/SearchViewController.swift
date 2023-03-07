@@ -39,9 +39,12 @@ class SearchViewController: UIViewController {
         let controller = UISearchController(searchResultsController: SearchResultsViewController())
 //        controller.searchBar.placeholder = "Search"
         controller.searchBar.searchBarStyle = .minimal
+//        controller.searchBar.barTintColor = Utils.tintColor
         controller.hidesNavigationBarDuringPresentation = false
         // Show results controller when user taps into the search bar
         controller.showsSearchResultsController = true
+        // To set color of the prompt
+        controller.searchBar.tintColor = Utils.tintColor
         
 //        controller.searchBar.scopeButtonTitles = ["Top", "Books", "Authors", "Narrators", "Series", "Tags"]
 //        controller.scopeBarActivation = .onSearchActivation
@@ -51,7 +54,7 @@ class SearchViewController: UIViewController {
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
 
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 17)
+                .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16), .foregroundColor: UIColor.gray
             ]
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
             textField.attributedPlaceholder = attributedPlaceholder
@@ -86,7 +89,8 @@ class SearchViewController: UIViewController {
         
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
-//        searchController.searchBar.delegate = self
+        searchController.searchBar.delegate = self
+//        definesPresentationContext = true
 
         configureNavBar()
     }
@@ -110,6 +114,7 @@ class SearchViewController: UIViewController {
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     
     private func getModelFor(buttonCategory: ButtonCategory) -> Category {
@@ -118,12 +123,16 @@ class SearchViewController: UIViewController {
     
 }
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate{
      
     func updateSearchResults(for searchController: UISearchController) {
-        
         print("updateSearchResults triggered")
         let searchBar = searchController.searchBar
+        if searchBar.isFirstResponder == false {
+            // To revert back to the original appearance of the navigation bar when cancel button was tapped
+            navigationController?.navigationBar.scrollEdgeAppearance = nil
+        }
+        
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         
@@ -147,6 +156,14 @@ extension SearchViewController: UISearchResultsUpdating {
 //        }
     }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        // Change the navigation bar appearance when the search bar begins editing
+        // Make navbar not translucent and keep separator line present
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+       }
+    
+    
+    
 //    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 //        print("New scope index is now \(selectedScope)")
 //    }
@@ -158,6 +175,7 @@ extension SearchViewController: UISearchResultsUpdating {
 //            vc.configure(with: viewModel)
 //            self?.navigationController?.pushViewController(vc, animated: true)
 //        }
+
 //
 //    }
 }
