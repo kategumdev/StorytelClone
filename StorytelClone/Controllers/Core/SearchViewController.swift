@@ -126,7 +126,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate{
      
     func updateSearchResults(for searchController: UISearchController) {
-        print("updateSearchResults triggered")
+//        print("updateSearchResults triggered")
         let searchBar = searchController.searchBar
         if searchBar.isFirstResponder == false {
             // To revert back to the original appearance of the navigation bar when cancel button was tapped

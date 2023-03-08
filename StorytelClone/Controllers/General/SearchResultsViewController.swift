@@ -9,27 +9,21 @@ import UIKit
 
 class SearchResultsViewController: UIViewController {
 
-    let buttonsScrollView = ScopeButtonsViewSearchResults()
+    let buttonsView = SearchResultsButtonsView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
-        view.addSubview(buttonsScrollView)
+        view.addSubview(buttonsView)
         
-        buttonsScrollView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        // Constant 1 added to hide border on those sidesa and show only at bottom
         NSLayoutConstraint.activate([
-            buttonsScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            buttonsScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonsScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            buttonsScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
-//            buttonsScrollView.heightAnchor.constraint(equalToConstant: 50)
+            buttonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -1),
+            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -1),
+            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 1),
+            buttonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 46)
         ])
-        
-
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
 
 }

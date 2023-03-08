@@ -11,6 +11,7 @@
 		5A0A426429A583340000EE64 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0A426329A583340000EE64 /* Utils.swift */; };
 		5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */; };
 		5A36E03E29B7B3FD0096A032 /* ScopeButtonsViewSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03D29B7B3FD0096A032 /* ScopeButtonsViewSearchResults.swift */; };
+		5A36E04029B804430096A032 /* SearchResultsButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03F29B804430096A032 /* SearchResultsButtonsView.swift */; };
 		5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* CategoryViewController.swift */; };
 		5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseTableViewController.swift */; };
 		5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */; };
@@ -72,6 +73,7 @@
 		5A0A426329A583340000EE64 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		5A36E03D29B7B3FD0096A032 /* ScopeButtonsViewSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeButtonsViewSearchResults.swift; sourceTree = "<group>"; };
+		5A36E03F29B804430096A032 /* SearchResultsButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsButtonsView.swift; sourceTree = "<group>"; };
 		5A52321529AC24F30058DD73 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5A52321729AC30B30058DD73 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButtonTableViewCell.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				5AB1A29B29B3E32A001CC50A /* CellButton.swift */,
 				5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */,
 				5A36E03D29B7B3FD0096A032 /* ScopeButtonsViewSearchResults.swift */,
+				5A36E03F29B804430096A032 /* SearchResultsButtonsView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
 			path = Views;
@@ -432,6 +435,7 @@
 				5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */,
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,
 				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,
+				5A36E04029B804430096A032 /* SearchResultsButtonsView.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
 				5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */,
