@@ -8,10 +8,11 @@
 import UIKit
 
 class SearchResultsButtonsView: UIView {
-
-    private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
     
-    private static let spacingBetweenButtons: CGFloat = 32
+    static let viewHeight: CGFloat = 46
+    
+    private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+    private static let slidingLineHeight: CGFloat = 2
     
     enum ButtonKind: String {
         case top = "Top"
@@ -23,74 +24,69 @@ class SearchResultsButtonsView: UIView {
     }
     
     private var firstTime = true
-    
-    private var currentButton: UIButton?
-    
     private let scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
        
         for kind in buttonKinds {
             let button = UIButton()
             var config = UIButton.Configuration.plain()
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
+            
+            // Top inset makes visual x-position of button text in stackView as if it's centered
+            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
-            if kind == .top {
-                config.attributedTitle?.foregroundColor = Utils.tintColor
-            } else {
-                config.attributedTitle?.foregroundColor = UIColor.label
-            }
             button.configuration = config
-            
-//            button.addAction(UIAction(handler: {_ in
-//
-//                print("Button \(kind.rawValue) tapped")
-//
-//            }), for: .touchUpInside)
-            
             buttons.append(button)
         }
         return buttons
     }()
     
-    private lazy var stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.distribution = .fillProportionally
-        scopeButtons.forEach { stack.addArrangedSubview($0) }
-        return stack
-    }()
-    
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsHorizontalScrollIndicator = false
-//        scrollView.contentInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
-        scrollView.addSubview(stackView)
-        return scrollView
-    }()
-    
-    let slidingLine: UIView = {
+    private let slidingLine: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.tintColor
         return view
     }()
     
-    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: leadingAnchor)
-    lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
-//    lazy var slidingLineTrailingAnchor = slidingLine.trailingAnchor.constraint(equalTo: leadingAnchor)
+    private lazy var stackView: UIStackView = {
+        let horzStackButtons = UIStackView()
+        horzStackButtons.axis = .horizontal
+        horzStackButtons.alignment = .center
+        horzStackButtons.distribution = .fillProportionally
+        scopeButtons.forEach { horzStackButtons.addArrangedSubview($0) }
+        
+        let horzStackSlidingLine = UIStackView()
+        horzStackSlidingLine.axis = .horizontal
+        horzStackSlidingLine.alignment = .center
+        [UIView(), slidingLine, UIView()].forEach { horzStackSlidingLine.addArrangedSubview($0)}
+        
+        let vertStack = UIStackView()
+        vertStack.axis = .vertical
+        vertStack.alignment = .center
+        [horzStackButtons, horzStackSlidingLine].forEach { vertStack.addArrangedSubview($0)}
+                
+        vertStack.backgroundColor = Utils.customBackgroundColor
+        return vertStack
+    }()
 
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.addSubview(stackView)
+        return scrollView
+    }()
+
+    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
+    lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(scrollView)
-        
-        addSubview(slidingLine)
-//        scrollView.addSubview(slidingLine)
         layer.borderColor = UIColor.label.cgColor
         layer.borderWidth = 0.25
-        currentButton = scopeButtons[0]
         addButtonActions()
         applyConstraints()
+        // Set initial color of buttons' text
+        toggleButtonsColors(currentButton: scopeButtons[0])
     }
     
     required init?(coder: NSCoder) {
@@ -99,27 +95,12 @@ class SearchResultsButtonsView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         guard firstTime == false else {
             firstTime = false
             return
         }
-        
-        adjustSlidingLinePosition()
-        
-//        if let currentButton = currentButton {
-//            let leadingConstant: CGFloat = currentButton.frame.origin.x
-//            let trailingConstant: CGFloat = leadingConstant + currentButton.bounds.size.width
-//
-//            slidingLineLeadingAnchor.constant = leadingConstant
-//            slidingLineTrailingAnchor.constant = trailingConstant
-//        }
-        
-        print("in view buttonsView size: \(bounds.size)")
-        print("in view scrollView size: \(scrollView.bounds.size)")
-        print("in view stackView size: \(stackView.bounds.size)")
-        print("in view button size: \(scopeButtons[0].bounds.size)")
-        
+        // Set initial position and size of slidingLine
+        adjustSlidingLinePosition(currentButton: scopeButtons[0])  
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -135,91 +116,77 @@ class SearchResultsButtonsView: UIView {
         for button in scopeButtons {
             button.addAction(UIAction(handler: { [weak self] _ in
                 guard let self = self else { return }
-                
-                self.currentButton = button
-                
-                UIView.animate(withDuration: 0.2) {
-                    self.setScrollViewOffsetX()
-                    
-                    self.adjustSlidingLinePosition()
 
+                UIView.animate(withDuration: 0.2) {
+                    self.toggleButtonsColors(currentButton: button)
+                    self.setScrollViewOffsetX(currentButton: button)
+                    self.adjustSlidingLinePosition(currentButton: button)
                     // It won't animate without this line
                     self.layoutIfNeeded()
                 }
-                
-                print("Button \(String(describing: button.titleLabel?.text)) tapped")
-
             }), for: .touchUpInside)
         }
     }
     
-    private func adjustSlidingLinePosition() {
-        if let currentButton = currentButton {
-            let leadingConstant: CGFloat = currentButton.frame.origin.x
-            let width: CGFloat = currentButton.bounds.size.width
-//            let trailingConstant: CGFloat = leadingConstant + currentButton.bounds.size.width
+    private func adjustSlidingLinePosition(currentButton: UIButton) {
+        let leadingConstant: CGFloat = currentButton.frame.origin.x
+        let width: CGFloat = currentButton.bounds.size.width
 
-            slidingLineLeadingAnchor.constant = leadingConstant
-            slidingLineWidthAnchor.constant = width
-            
-//            slidingLineTrailingAnchor.constant = trailingConstant
-        }
+        slidingLineLeadingAnchor.constant = leadingConstant
+        slidingLineWidthAnchor.constant = width
     }
     
-    private func setScrollViewOffsetX() {
-        
-//        guard let scrollViewContentWidth = scrollView.contentSize.width, let currentButton = currentButton else { return }
+    private func setScrollViewOffsetX(currentButton: UIButton) {
         let scrollViewContentWidth = scrollView.contentSize.width
         let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-        print("unvisible part: \(unvisiblePartOfScrollView)")
         
-        let oneButtonOffsetX: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+
+        guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
+        let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
         
-        guard let currentButton = currentButton, let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
-        
-        let currentButtonPositionNumber: CGFloat = CGFloat(currentButtonIndex + 0)
-        
-//        let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) + 1
-        if currentButtonIndex != 0 {
-            let currentOffsetX = scrollView.contentOffset.x
-            let newOffsetX = currentOffsetX + (oneButtonOffsetX * currentButtonPositionNumber)
-            scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
-            print("setContentOffset")
+        // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
+        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
+        scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
+    }
+    
+    private func toggleButtonsColors(currentButton: UIButton) {
+        for button in scopeButtons {
+            button.configuration?.attributedTitle?.foregroundColor = UIColor.label
         }
-        
+        currentButton.configuration?.attributedTitle?.foregroundColor = Utils.tintColor
+    }
+    
+    func revertToOriginalAppearance() {
+        let firstButton = scopeButtons[0]
+        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        self.toggleButtonsColors(currentButton: firstButton)
+        self.adjustSlidingLinePosition(currentButton: firstButton)
     }
     
     private func applyConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-//            scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
         ])
-        
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-//            stackView.heightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.heightAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            
-//
-//            stackView.widthAnchor.constraint(equalTo: frameLayoutGuide.widthAnchor),
-            stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
+            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
         ])
         
         slidingLine.translatesAutoresizingMaskIntoConstraints = false
         slidingLineLeadingAnchor.isActive = true
-        
         slidingLineWidthAnchor.isActive = true
-
-//        slidingLineTrailingAnchor.isActive = true
-        slidingLine.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        slidingLine.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
         // To force layoutSubviews() apply correct slidingLine anchors' constants
         layoutIfNeeded()
     }

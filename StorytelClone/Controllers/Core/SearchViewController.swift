@@ -15,6 +15,9 @@ class SearchViewController: UIViewController {
     private let numberOfButtonsSection0 = 6
     private let numberOfButtonsSection1 = 19
     
+    private var initialTableOffsetY: CGFloat = 0
+    private var firstTime = true
+        
     let categoriesTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.backgroundColor = Utils.customBackgroundColor
@@ -37,18 +40,12 @@ class SearchViewController: UIViewController {
     
     private let searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: SearchResultsViewController())
-//        controller.searchBar.placeholder = "Search"
         controller.searchBar.searchBarStyle = .minimal
-//        controller.searchBar.barTintColor = Utils.tintColor
         controller.hidesNavigationBarDuringPresentation = false
-        // Show results controller when user taps into the search bar
+//        controller.obscuresBackgroundDuringPresentation = false
         controller.showsSearchResultsController = true
         // To set color of the prompt
         controller.searchBar.tintColor = Utils.tintColor
-        
-//        controller.searchBar.scopeButtonTitles = ["Top", "Books", "Authors", "Narrators", "Series", "Tags"]
-//        controller.scopeBarActivation = .onSearchActivation
-
         
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
@@ -90,21 +87,34 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
+        searchController.delegate = self
 //        definesPresentationContext = true
 
         configureNavBar()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews")
+        print("viewDidLayoutSubviews")
         categoriesTable.frame = view.bounds
+        
+        print("INITIAL OFFSET: \(categoriesTable.contentOffset.y)")
+        
+        if firstTime {
+            initialTableOffsetY = categoriesTable.contentOffset.y
+            print("initialOffsetY set, \(initialTableOffsetY)")
+            firstTime = false
+        } else {
+            // After searchResultsController was presented, actual initial contentOffset.y changes to 0
+            initialTableOffsetY = 0
+        }
     }
     
     //MARK: - Helper methods
@@ -123,61 +133,49 @@ class SearchViewController: UIViewController {
     
 }
 
-extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate{
+// MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
+extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
      
+    // Called when searchResultsController becomes visible and unvisible (after tapping Cancel)
     func updateSearchResults(for searchController: UISearchController) {
-//        print("updateSearchResults triggered")
+        
         let searchBar = searchController.searchBar
         if searchBar.isFirstResponder == false {
-            // To revert back to the original appearance of the navigation bar when cancel button was tapped
-            navigationController?.navigationBar.scrollEdgeAppearance = nil
+            // When cancel button was tapped
         }
+        
+        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+            // Make some changes when the search bar begins editing
+        }
+
+    }
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        print("willPresentSearchController")
+        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
+        navigationController?.navigationBar.isTranslucent = false
         
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
+        resultsController.buttonsView.revertToOriginalAppearance()
         
-//        guard let query = searchBar.text,
-//              !query.trimmingCharacters(in: .whitespaces).isEmpty,
-//              query.trimmingCharacters(in: .whitespaces).count >= 3,
-//              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-        
-//        resultsController.delegate = self
-        
-//        APICaller.shared.search(with: query) { result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let titles):
-//                    resultsController.titles = titles
-//                    resultsController.searchResultsCollectionView.reloadData()
-//                case .failure(let error):
-//                    print(error.localizedDescription )
-//                }
-//            }
-//        }
+        // Change navbar appearance if currentOffset.y != initialTableOffsetY
+        let currentTableOffsetY = categoriesTable.contentOffset.y
+        if currentTableOffsetY != initialTableOffsetY {
+            // While table view bounces and user taps into the search bar, currentOffset.y checked here can differ a bit from inital value. This check difference > 5 avoids changing navbar appearance in such cases
+            let difference = (currentTableOffsetY - initialTableOffsetY)
+            guard difference > 5 else { return }
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
     }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        // Change the navigation bar appearance when the search bar begins editing
-        // Make navbar not translucent and keep separator line present
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-       }
-    
-    
-    
-//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        print("New scope index is now \(selectedScope)")
-//    }
-    
-//    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewViewModel) {
-//
-//        DispatchQueue.main.async { [weak self] in
-//            let vc = TitlePreviewViewController()
-//            vc.configure(with: viewModel)
-//            self?.navigationController?.pushViewController(vc, animated: true)
-//        }
-
-//
-//    }
+    func willDismissSearchController(_ searchController: UISearchController) {
+        print("willDismissSearchController")
+        // Revert back to the original appearance of the navigation bar
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.scrollEdgeAppearance = nil
+    }
+ 
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -272,7 +270,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             return 0
         }
     }
-
+    
 }
 
 
