@@ -102,14 +102,14 @@ class SearchViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("viewDidLayoutSubviews")
+//        print("viewDidLayoutSubviews")
         categoriesTable.frame = view.bounds
         
-        print("INITIAL OFFSET: \(categoriesTable.contentOffset.y)")
+//        print("INITIAL OFFSET: \(categoriesTable.contentOffset.y)")
         
         if firstTime {
             initialTableOffsetY = categoriesTable.contentOffset.y
-            print("initialOffsetY set, \(initialTableOffsetY)")
+//            print("initialOffsetY set, \(initialTableOffsetY)")
             firstTime = false
         } else {
             // After searchResultsController was presented, actual initial contentOffset.y changes to 0
@@ -152,12 +152,12 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     
     func willPresentSearchController(_ searchController: UISearchController) {
         print("willPresentSearchController")
+                
         // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
         
-        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-        
-        resultsController.buttonsView.revertToOriginalAppearance()
+//        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+//        resultsController.revertToInitialAppearance()
         
         // Change navbar appearance if currentOffset.y != initialTableOffsetY
         let currentTableOffsetY = categoriesTable.contentOffset.y
@@ -174,6 +174,14 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         // Revert back to the original appearance of the navigation bar
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.scrollEdgeAppearance = nil
+        
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        print("didDismissSearchController")
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        resultsController.revertToInitialAppearance()
     }
  
 }

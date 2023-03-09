@@ -24,7 +24,11 @@ class SearchResultsButtonsView: UIView {
     }
     
     private var firstTime = true
-    private let scopeButtons: [UIButton] = {
+    
+    typealias SearchResultsButtonCallback = (_ buttonIndex: Int) -> ()
+    var callBack: SearchResultsButtonCallback = {_ in}
+    
+    let scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
        
         for kind in buttonKinds {
@@ -40,6 +44,11 @@ class SearchResultsButtonsView: UIView {
         }
         return buttons
     }()
+    
+//    lazy var numberOfButtons: Int = {
+//        let number = scopeButtons.count
+//        return number
+//    }()
     
     private let slidingLine: UIView = {
         let view = UIView()
@@ -116,11 +125,18 @@ class SearchResultsButtonsView: UIView {
         for button in scopeButtons {
             button.addAction(UIAction(handler: { [weak self] _ in
                 guard let self = self else { return }
+                
+                let buttonIndex = self.scopeButtons.firstIndex(of: button)
+                guard let buttonIndex = buttonIndex else { return }
+                let buttonIndexInt = buttonIndex + 0
 
                 UIView.animate(withDuration: 0.2) {
                     self.toggleButtonsColors(currentButton: button)
                     self.setScrollViewOffsetX(currentButton: button)
                     self.adjustSlidingLinePosition(currentButton: button)
+
+                    self.callBack(buttonIndexInt)
+                    
                     // It won't animate without this line
                     self.layoutIfNeeded()
                 }
@@ -158,7 +174,7 @@ class SearchResultsButtonsView: UIView {
         currentButton.configuration?.attributedTitle?.foregroundColor = Utils.tintColor
     }
     
-    func revertToOriginalAppearance() {
+    func revertToInitialAppearance() {
         let firstButton = scopeButtons[0]
         scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         self.toggleButtonsColors(currentButton: firstButton)
