@@ -27,6 +27,9 @@ class SearchResultsViewController: UIViewController {
 //    private var currentIndex: Int = 0
     
     private var currentPageIndex: Int  = 0
+    private var isButtonTriggeredScroll = false
+    
+    var buttonsScrollOffsetX: CGFloat = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,8 +56,9 @@ extension SearchResultsViewController: UIPageViewControllerDataSource, UIPageVie
         guard let currentViewController = viewController as? PageContentViewController else { return nil }
         guard let currentIndex = pages.firstIndex(of: currentViewController) else { return nil }
         
+        // Needed for calculations in didScroll to synchronize moving of scrollView and slidingLine
         currentPageIndex = currentIndex
-        print("currentPageIndex set: \(currentPageIndex)")
+//        print("currentPageIndex in before: \(currentPageIndex)")
         
         if currentIndex == 0 {
             return nil
@@ -70,8 +74,9 @@ extension SearchResultsViewController: UIPageViewControllerDataSource, UIPageVie
         guard let currentViewController = viewController as? PageContentViewController else { return nil }
         guard let currentIndex = pages.firstIndex(of: currentViewController) else { return nil }
         
+        // Needed for calculations in didScroll to synchronize moving of scrollView and slidingLine
         currentPageIndex = currentIndex
-        print("currentPageIndex set: \(currentPageIndex)")
+//        print("currentPageIndex in after: \(currentPageIndex)")
         
         if currentIndex < pages.count - 1 {
             return pages[currentIndex + 1]
@@ -82,19 +87,24 @@ extension SearchResultsViewController: UIPageViewControllerDataSource, UIPageVie
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        guard let nextVC = pendingViewControllers.first as? PageContentViewController else { return }
-    
-//        guard let nextVCIndex = pages.firstIndex(of: nextVC) else { return }
-//        let nextVCIndexInt = nextVCIndex + 0
-//        currentPageIndex = nextVCIndexInt
-//        print("pageViewController willTransitionTo cv \(String(describing: nextVC.textLabel.text))")
+//        guard let nextVC = pendingViewControllers.first as? PageContentViewController else { return }
     }
     
-//    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-//
-//        guard let previousPage = previousViewControllers.last as? PageContentViewController, let previousPageIndex = pages.firstIndex(of: previousPage) else { return }
-//        currentPageIndex = previousPageIndex
-//    }
+    
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+//        print("didFinishAnimating")
+        isButtonTriggeredScroll = false
+
+        
+        // If page scroll was triggered by button tap, toggle isButtonTriggeredScroll and if next scroll will be triggered but user's swiping, logic in didScroll will perform to synchronize moving of scrollView and slidingLine
+//        if isButtonTriggeredScroll == true {
+//            isButtonTriggeredScroll = false
+//            print("set to FALSE")
+//        }
+
+    }
+    
 //
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return pages.count
@@ -110,15 +120,43 @@ extension SearchResultsViewController: UIPageViewControllerDataSource, UIPageVie
 }
 
 extension SearchResultsViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        print("scrollViewWillBeginDragging")
+//        if isButtonTriggeredScroll == true {
+//            isButtonTriggeredScroll = false
+//        }
+        
+        isButtonTriggeredScroll = false
+
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        print("scrollViewDidEndDecelerating")
+        // If page scroll was triggered by button tap, toggle isButtonTriggeredScroll and if next scroll will be triggered but user's swiping, logic in didScroll will perform to synchronize moving of scrollView and slidingLine
+        if isButtonTriggeredScroll == true {
+            isButtonTriggeredScroll = false
+        }
+        
+        buttonsScrollOffsetX = buttonsView.scrollView.contentOffset.x
+        print("set buttonsScrollOffsetX in scrollViewDidEndDecelerating: \(buttonsScrollOffsetX)")
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("contentOffset: \(scrollView.contentOffset.x)")
+//        print("scrollViewDidScroll")
+//        print("contentOffset: \(scrollView.contentOffset.x)")
+        
+        
+        guard !isButtonTriggeredScroll else { return }
+//        print("LOGIC IS PERFORMING with currentPageIndex \(currentPageIndex), contentOffset: \(scrollView.contentOffset.x)")
+//        print("isButtonTriggeredScroll is \(isButtonTriggeredScroll)")
         
         let currentOffsetX = scrollView.contentOffset.x
         
         let pageWidth = view.bounds.size.width
         
         let isScrollingForward = currentOffsetX > pageWidth
-        print("isScrollingForward: \(isScrollingForward)")
+//        print("isScrollingForward: \(isScrollingForward)")
         
         let difference = currentOffsetX - pageWidth
         
@@ -130,81 +168,63 @@ extension SearchResultsViewController: UIScrollViewDelegate {
         
         if isScrollingForward {
             buttonWidth = currentButton.bounds.size.width
-        } else if currentPageIndex == 0 {
-            buttonWidth = -(buttonsView.scopeButtons[0].bounds.size.width)
         } else {
-            let previousButton = buttonsView.scopeButtons[currentPageIndex - 1]
-            buttonWidth = previousButton.bounds.size.width
+            if currentPageIndex == 0 {
+                buttonWidth = buttonsView.scopeButtons[0].bounds.size.width
+            } else {
+                let previousButton = buttonsView.scopeButtons[currentPageIndex - 1]
+                buttonWidth = previousButton.bounds.size.width
+            }
         }
         
         
         
-//        let currentButtonWidth = currentButton.bounds.size.width
+ 
         
         
-        
-        
-        
-//        if currentButtonIndex
-        
-//        if isScrollingForward {
-//            locationToMoveTo = currentButton.frame.origin.x
-//        } else if currentPageIndex == 0 {
-//            locationToMoveTo = -(scopeButtons[0].bounds.size.width)
-//        } else {
-//            let previousButton = buttonsView.scopeButtons[currentPageIndex - 1]
-//            locationToMoveTo = previousButton.frame.origin.x
-//        }
-        
-        
-//        let slidingLineX = difference / pageWidth * currentButtonWidth
-        let slidingLineX = difference / pageWidth * buttonWidth
+        let scrollViewWidthToMove = buttonsView.partOfUnvisiblePart
+        var newOffset = difference / pageWidth * scrollViewWidthToMove
 
-    
+        print("part: \(newOffset)")
+        
+        let initialOffset = buttonsScrollOffsetX
+        var calculatedNewOffset = initialOffset + newOffset
+        
+        if calculatedNewOffset < 0 {
+            calculatedNewOffset = 0
+        }
+        
+        if calculatedNewOffset > buttonsView.scrollView.contentSize.width {
+            calculatedNewOffset = buttonsView.scrollView.contentSize.width
+        }
+
+        
+        buttonsView.scrollView.setContentOffset(CGPoint(x: calculatedNewOffset, y: 0), animated: false)
+        print("offset set to \(calculatedNewOffset)")
+
         
         
+        
+        
+        
+
+        var slidingLineX = difference / pageWidth * buttonWidth
+        
+        if currentPageIndex == 0 && isScrollingForward == false {
+            slidingLineX = -slidingLineX
+        }
+
         let currentButtonInitialConstant = currentButton.frame.origin.x
         
-        
-//        let slidingLineCurrentConstant = buttonsView.slidingLineLeadingAnchor.constant
 //        buttonsView.slidingLineLeadingAnchor.constant = slidingLineX
-        buttonsView.slidingLineLeadingAnchor.constant = slidingLineX
-//        print("slidingLineX: \(slidingLineX)")
         
-        
-        
-        buttonsView.slidingLineLeadingAnchor.constant = currentButtonInitialConstant + slidingLineX
-        
-        
-        
+        if currentPageIndex == 0 && !isScrollingForward {
+            buttonsView.slidingLineLeadingAnchor.constant = -(currentButtonInitialConstant + slidingLineX)
+        } else {
+            buttonsView.slidingLineLeadingAnchor.constant = currentButtonInitialConstant + slidingLineX
+        }
 //        print("CONSTANT: \(buttonsView.slidingLineLeadingAnchor.constant)")
-//        slidingLine.frame.origin.x = slidingLineX
-        
-        
-        
-        
-        
-//        let movePercentage = (difference * 100) / pageWidth
-//        print("movePercentage: \(movePercentage)")
-//
-//        // Index of page in array equals index of button in array
-//        let currentButton = buttonsView.scopeButtons[currentPageIndex]
-//        let currentButtonWidth = currentButton.bounds.size.width
-//        print("currentButtonWidth: \(currentButtonWidth)")
-//
-//        let pointsToMoveSlidingLine = (movePercentage / 100) * currentButtonWidth
-//
-//        print("BEFORE slidingLineLeadingAnchor: \(buttonsView.slidingLineLeadingAnchor.constant)")
-//
-//        let currentConstant = buttonsView.slidingLineLeadingAnchor.constant
-////        buttonsView.slidingLineLeadingAnchor.constant = buttonsView.slidingLineLeadingAnchor.constant + pointsToMoveSlidingLine
-//        buttonsView.slidingLineLeadingAnchor.constant = currentConstant + pointsToMoveSlidingLine
-//        print("AFTER slidingLineLeadingAnchor: \(buttonsView.slidingLineLeadingAnchor.constant)")
-
-        
-        
-        
-        
+ 
     }
 }
 
@@ -254,7 +274,14 @@ extension SearchResultsViewController {
     private func configureButtonsView() {
         // Respond to button actions in buttonsView
         buttonsView.callBack = { [weak self] buttonIndex in
-            self?.goToSpecificPage(index: buttonIndex)
+            guard let self = self else { return }
+            
+            // To avoid logic in didScroll to perform if page scroll is triggered by button tap
+            self.currentPageIndex = buttonIndex
+            self.buttonsScrollOffsetX = self.buttonsView.scrollView.contentOffset.x
+//            print("CURRENT buttonIndex IS \(self?.currentPageIndex)")
+            self.isButtonTriggeredScroll = true
+            self.goToSpecificPage(index: buttonIndex)
         }
         
         // Hide top border of buttonsView

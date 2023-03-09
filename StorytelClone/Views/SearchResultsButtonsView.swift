@@ -9,6 +9,15 @@ import UIKit
 
 class SearchResultsButtonsView: UIView {
     
+    lazy var partOfUnvisiblePart: CGFloat = {
+        let scrollViewContentWidth = scrollView.contentSize.width
+        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+        
+        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+        return partOfUnvisiblePart
+    }()
+    
     static let viewHeight: CGFloat = 46
     
     private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
@@ -77,7 +86,7 @@ class SearchResultsButtonsView: UIView {
         return vertStack
     }()
 
-    private lazy var scrollView: UIScrollView = {
+    lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.addSubview(stackView)
