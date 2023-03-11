@@ -11,25 +11,39 @@ class SearchResultsViewController: UIViewController {
 
     let buttonsView = SearchResultsButtonsView()
     
-    private var pageController: UIPageViewController?
-    
-    private lazy var pages: [PageContentViewController] = {
-        var array = [PageContentViewController]()
-        
-        for button in buttonsView.scopeButtons {
-            let page = PageContentViewController()
-            page.textLabel.text = button.titleLabel?.text
-            array.append(page)
-        }
-        
-        return array
+    lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(SearchResultsCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultsCollectionViewCell.identifier)
+        collectionView.showsHorizontalScrollIndicator = false
+//        collectionView.backgroundColor = UIColor.systemPink
+//        collectionView.backgroundColor = Utils.customBackgroundColor
+        collectionView.isPagingEnabled = true
+        return collectionView
     }()
+    
 //    private var currentIndex: Int = 0
+    
+    private var currentButtonIndex: Int = 0
+//    private var currentButtonIndex: Int? = 0
+    
+    private var destinationButtonIndex: Int = 1
+    
+    private lazy var originXOfAllButtons = buttonsView.getOriginXOfAllButtons()
+
     
     private var currentPageIndex: Int  = 0
     private var isButtonTriggeredScroll = false
     
     var buttonsScrollOffsetX: CGFloat = 0.0
+    
+    var willEndDraggingAtOffsetX: CGFloat = 0.0
+    var didEndDecelerated = false
+//    var decelerate = true
+    
+    var previousOffsetX: CGFloat = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +51,11 @@ class SearchResultsViewController: UIViewController {
         view.addSubview(buttonsView)
         configureButtonsView()
         
-        setupPageController()
+        view.addSubview(collectionView)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        
         applyConstraints()
     }
     
@@ -49,227 +67,234 @@ class SearchResultsViewController: UIViewController {
     
 }
 
-// MARK: - UIPageViewControllerDataSource, UIPageViewControllerDelegate
-extension SearchResultsViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        
-        guard let currentViewController = viewController as? PageContentViewController else { return nil }
-        guard let currentIndex = pages.firstIndex(of: currentViewController) else { return nil }
-        
-        // Needed for calculations in didScroll to synchronize moving of scrollView and slidingLine
-        currentPageIndex = currentIndex
-//        print("currentPageIndex in before: \(currentPageIndex)")
-        
-        if currentIndex == 0 {
-            return nil
-        } else {
-            return pages[currentIndex - 1]
-        }
-        
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+extension SearchResultsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // Hardcoded data
+        return 6
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-//        print("viewControllerAfter")
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
-        guard let currentViewController = viewController as? PageContentViewController else { return nil }
-        guard let currentIndex = pages.firstIndex(of: currentViewController) else { return nil }
+        cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
         
-        // Needed for calculations in didScroll to synchronize moving of scrollView and slidingLine
-        currentPageIndex = currentIndex
-//        print("currentPageIndex in after: \(currentPageIndex)")
-        
-        if currentIndex < pages.count - 1 {
-            return pages[currentIndex + 1]
-        } else {
-            return nil
-        }
+        return cell
+    }
+    
+    
+}
 
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-//        guard let nextVC = pendingViewControllers.first as? PageContentViewController else { return }
-    }
-    
-    
-    
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-//        print("didFinishAnimating")
-        isButtonTriggeredScroll = false
 
-        
-        // If page scroll was triggered by button tap, toggle isButtonTriggeredScroll and if next scroll will be triggered but user's swiping, logic in didScroll will perform to synchronize moving of scrollView and slidingLine
-//        if isButtonTriggeredScroll == true {
-//            isButtonTriggeredScroll = false
-//            print("set to FALSE")
-//        }
-
+extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return collectionView.bounds.size
     }
     
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 //
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return pages.count
-//        return buttonsView.numberOfButtons
-    }
-    
-//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-//        return self.currentIndex
+//        // This top inset is for cell in last section of SearchViewController
+//        // Add gapBetweenHeaderAndCell when calculating heightForRow for all CategoriesTableViewCellWithCollection cells
+//        UIEdgeInsets(top: CategoriesTableViewCellWithCollection.gapBetweenHeaderAndCell, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
 //    }
-    
-    
-    
+     
 }
 
 extension SearchResultsViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        print("scrollViewWillBeginDragging")
-//        if isButtonTriggeredScroll == true {
-//            isButtonTriggeredScroll = false
-//        }
+        print("scrollViewWillBeginDragging")
+        currentButtonIndex = buttonsView.getCurrentButtonIndex()
+        print("   currentButtonIndex: \(currentButtonIndex)")
         
         isButtonTriggeredScroll = false
 
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        print("scrollViewWillEndDragging at \(targetContentOffset.pointee.x)")
+        willEndDraggingAtOffsetX = targetContentOffset.pointee.x
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        print("scrollViewDidEndDragging, decelerate = \(decelerate)")
+//        self.decelerate = decelerate
+        
+    }
+    
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        print("scrollViewDidEndDecelerating")
+        didEndDecelerated = true
         // If page scroll was triggered by button tap, toggle isButtonTriggeredScroll and if next scroll will be triggered but user's swiping, logic in didScroll will perform to synchronize moving of scrollView and slidingLine
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
         }
         
         buttonsScrollOffsetX = buttonsView.scrollView.contentOffset.x
-        print("set buttonsScrollOffsetX in scrollViewDidEndDecelerating: \(buttonsScrollOffsetX)")
+//        print("set buttonsScrollOffsetX in scrollViewDidEndDecelerating: \(buttonsScrollOffsetX)")
     }
     
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("scrollViewDidScroll")
-//        print("contentOffset: \(scrollView.contentOffset.x)")
-        
-        
-        guard !isButtonTriggeredScroll else { return }
-//        print("LOGIC IS PERFORMING with currentPageIndex \(currentPageIndex), contentOffset: \(scrollView.contentOffset.x)")
-//        print("isButtonTriggeredScroll is \(isButtonTriggeredScroll)")
-        
-        let currentOffsetX = scrollView.contentOffset.x
-        
-        let pageWidth = view.bounds.size.width
-        
-        let isScrollingForward = currentOffsetX > pageWidth
-//        print("isScrollingForward: \(isScrollingForward)")
-        
-        let difference = currentOffsetX - pageWidth
-        
-        guard difference != 0 else { return }
-        
-        let currentButton = buttonsView.scopeButtons[currentPageIndex]
-        
-        var buttonWidth: CGFloat
-        
-        if isScrollingForward {
-            buttonWidth = currentButton.bounds.size.width
-        } else {
-            if currentPageIndex == 0 {
-                buttonWidth = buttonsView.scopeButtons[0].bounds.size.width
-            } else {
-                let previousButton = buttonsView.scopeButtons[currentPageIndex - 1]
-                buttonWidth = previousButton.bounds.size.width
-            }
-        }
-        
-        
-        
- 
-        
-        
-        let scrollViewWidthToMove = buttonsView.partOfUnvisiblePart
-        var newOffset = difference / pageWidth * scrollViewWidthToMove
-
-        print("part: \(newOffset)")
-        
-        let initialOffset = buttonsScrollOffsetX
-        var calculatedNewOffset = initialOffset + newOffset
-        
-        if calculatedNewOffset < 0 {
-            calculatedNewOffset = 0
-        }
-        
-        if calculatedNewOffset > buttonsView.scrollView.contentSize.width {
-            calculatedNewOffset = buttonsView.scrollView.contentSize.width
-        }
-
-        
-        buttonsView.scrollView.setContentOffset(CGPoint(x: calculatedNewOffset, y: 0), animated: false)
-        print("offset set to \(calculatedNewOffset)")
-
-        
-        
-        
-        
-        
-
-        var slidingLineX = difference / pageWidth * buttonWidth
-        
-        if currentPageIndex == 0 && isScrollingForward == false {
-            slidingLineX = -slidingLineX
-        }
-
-        let currentButtonInitialConstant = currentButton.frame.origin.x
-        
-//        buttonsView.slidingLineLeadingAnchor.constant = slidingLineX
-        
-        if currentPageIndex == 0 && !isScrollingForward {
-            buttonsView.slidingLineLeadingAnchor.constant = -(currentButtonInitialConstant + slidingLineX)
-        } else {
-            buttonsView.slidingLineLeadingAnchor.constant = currentButtonInitialConstant + slidingLineX
-        }
-//        print("CONSTANT: \(buttonsView.slidingLineLeadingAnchor.constant)")
- 
+        print("current contentOffset.x: \(scrollView.contentOffset.x)")
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+////        print("scrollViewDidScroll")
+////
+////        let currentButtonIndex = buttonsView.getCurrentButtonIndex()
+//        print("   currentButtonIndex: \(currentButtonIndex)")
+//        print("contentOffset: \(scrollView.contentOffset.x)")
+//
+//
+//        guard !isButtonTriggeredScroll else { return }
+//
+////        previousOffsetX = scrollView.contentOffset.x
+//        print("previous: \(previousOffsetX), current: \(scrollView.contentOffset.x)")
+//
+//
+//        let currentOffsetX = scrollView.contentOffset.x
+//        let pageWidth = view.bounds.size.width
+////        let isScrollingForward = currentOffsetX > pageWidth
+//        let isScrollingForward = currentOffsetX > previousOffsetX
+//        previousOffsetX = scrollView.contentOffset.x
+//        var difference = currentOffsetX - pageWidth
+//        print("difference: \(difference)")
+//
+//
+//        // For cases when contentOffset is counting from 0 to 414 after quick scroll back and forward
+//        if isScrollingForward && currentOffsetX < pageWidth {
+//            difference = currentOffsetX
+////            difference = pageWidth - currentOffsetX
+//            print("difference set to \(difference)")
+//        }
+//
+//
+//        if !isScrollingForward && currentOffsetX < 0 {
+//            print("              !isScrollingForward && currentOffsetX < 0")
+//        }
+//
+//
+////        if difference < 0 {
+////            difference = pageWidth - currentOffsetX
+////            difference = abs(difference)
+//////            isScrollingForward =
+////        }
+//
+//
+//
+//        guard difference != 0 else {
+////            print("difference 0, button is \(currentButtonIndex)")
+//            return }
+//
+//
+////        if isScrollingForward {
+////            if destinationButtonIndex + 1 != pages.count - 1 {
+////                destinationButtonIndex += 1
+////            }
+////        } else {
+////            if destinationButtonIndex - 1 >= 0 {
+////                destinationButtonIndex -= 1
+////            }
+////        }
+////
+////        let destinationButton = buttonsView.scopeButtons[destinationButtonIndex]
+////
+////        let buttonWidth = destinationButton.bounds.size.width
+//
+//
+//        var currentButton = buttonsView.scopeButtons[currentButtonIndex]
+//        if currentOffsetX < 0 {
+//            currentButton = buttonsView.scopeButtons[currentButtonIndex + 1]
+//        }
+//
+//
+////        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+//
+//        var buttonWidth: CGFloat
+//        if isScrollingForward {
+//            buttonWidth = currentButton.bounds.size.width
+//            print("     FORWARD")
+//        } else {
+//            print("     BACK")
+//            if currentButtonIndex == 0 {
+//                buttonWidth = buttonsView.scopeButtons[0].bounds.size.width
+//            } else {
+//                let previousButton = buttonsView.scopeButtons[currentButtonIndex - 1]
+//                buttonWidth = previousButton.bounds.size.width
+//            }
+//        }
+//
+//
+//
+//  // LOGIC FOR MOVING CONTENTOFFSETX OF SCROLL VIEW OF BUTTONSVIEW
+//
+////        let scrollViewWidthToMove = buttonsView.partOfUnvisiblePart
+////        let newOffset = difference / pageWidth * scrollViewWidthToMove
+////
+////        print("part: \(newOffset)")
+////
+////        let initialOffset = buttonsScrollOffsetX
+////        var calculatedNewOffset = initialOffset + newOffset
+////
+////        if calculatedNewOffset < 0 {
+////            calculatedNewOffset = 0
+////        }
+////
+////        if calculatedNewOffset > buttonsView.scrollView.contentSize.width {
+////            calculatedNewOffset = buttonsView.scrollView.contentSize.width
+////        }
+////
+////
+////        buttonsView.scrollView.setContentOffset(CGPoint(x: calculatedNewOffset, y: 0), animated: false)
+////        print("offset set to \(calculatedNewOffset)")
+//
+//
+//
+//        var slidingLineX = difference / pageWidth * buttonWidth
+//
+//        if currentButtonIndex == 0 && isScrollingForward == false {
+//            slidingLineX = -slidingLineX
+//        }
+//
+//        let currentButtonInitialConstant = currentButton.frame.origin.x
+//
+////        buttonsView.slidingLineLeadingAnchor.constant = slidingLineX
+//        if currentButtonIndex == 0 && !isScrollingForward {
+//            var constant: CGFloat = -(currentButtonInitialConstant + slidingLineX)
+//            if constant < 0 {
+//                constant = 0
+//            }
+//            buttonsView.slidingLineLeadingAnchor.constant = constant
+//
+//
+////            buttonsView.slidingLineLeadingAnchor.constant = -(currentButtonInitialConstant + slidingLineX)
+//            print("currentButtonIndex == 0 && !isScrollingForward, constant: \(-(currentButtonInitialConstant + slidingLineX))")
+//        } else {
+//            buttonsView.slidingLineLeadingAnchor.constant = currentButtonInitialConstant + slidingLineX
+//            print("CONSTANT: \(buttonsView.slidingLineLeadingAnchor.constant)")
+//
+//        }
+////        print("CONSTANT: \(buttonsView.slidingLineLeadingAnchor.constant)")
+//    }
 }
+
+
+
+
 
 
 // MARK: - Helper methods
 extension SearchResultsViewController {
     
-//    func goToSpecificPage(index: Int, ofViewControllers pages: [PageContentViewController]) {
-//        pageController?.setViewControllers([pages[index]], direction: .forward, animated: true)
-//    }
-    
-    private func goToSpecificPage(index: Int) {
-        pageController?.setViewControllers([pages[index]], direction: .forward, animated: true)
-    }
+
     
     func revertToInitialAppearance() {
-        goToSpecificPage(index: 0)
         buttonsView.revertToInitialAppearance()
     }
     
-    private func setupPageController() {
-        self.pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-        
-        self.pageController?.dataSource = self
-        self.pageController?.delegate = self
-        
-        guard let pageVCSubviews = self.pageController?.view.subviews else { return }
-        for view in pageVCSubviews {
-            if let scrollView = view as? UIScrollView {
-                scrollView.delegate = self
-            }
-        }
-        
-        self.pageController?.view.backgroundColor = Utils.customBackgroundColor
- 
-        let initialVC = pages[0]
-        
-        self.pageController?.setViewControllers([initialVC], direction: .forward, animated: true)
-        
-        guard let pageController = pageController else { return }
-        self.view.addSubview(pageController.view)
-        self.addChild(pageController)
-        pageController.didMove(toParent: self)
-        
-    }
     
     private func configureButtonsView() {
         // Respond to button actions in buttonsView
@@ -277,11 +302,9 @@ extension SearchResultsViewController {
             guard let self = self else { return }
             
             // To avoid logic in didScroll to perform if page scroll is triggered by button tap
-            self.currentPageIndex = buttonIndex
-            self.buttonsScrollOffsetX = self.buttonsView.scrollView.contentOffset.x
-//            print("CURRENT buttonIndex IS \(self?.currentPageIndex)")
             self.isButtonTriggeredScroll = true
-            self.goToSpecificPage(index: buttonIndex)
+            
+            self.scrollToCell(buttonIndex)
         }
         
         // Hide top border of buttonsView
@@ -298,6 +321,13 @@ extension SearchResultsViewController {
         ])
     }
     
+    private func scrollToCell(_ cellIndex: Int) {
+        let indexPath = IndexPath(item: cellIndex, section: 0) // index path of third cell
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        #warning("Check if button is adjacent one, call scrollToItem with animated set to true, otherwise call it with animated set to false")
+        
+    }
+    
     private func applyConstraints() {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         // Constant 1 added to hide border of buttonsView on sides
@@ -308,13 +338,13 @@ extension SearchResultsViewController {
             buttonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SearchResultsButtonsView.viewHeight)
         ])
         
-        guard let pageVCView = self.pageController?.view else { return }
-        pageVCView.translatesAutoresizingMaskIntoConstraints = false
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            pageVCView.topAnchor.constraint(equalTo: buttonsView.bottomAnchor),
-            pageVCView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageVCView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pageVCView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: buttonsView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     

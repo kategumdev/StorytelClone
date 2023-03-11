@@ -190,6 +190,55 @@ class SearchResultsButtonsView: UIView {
         self.adjustSlidingLinePosition(currentButton: firstButton)
     }
     
+    func getCurrentButtonIndex() -> Int {
+        
+        var buttonsPositionsRanges = [Range<CGFloat>]()
+
+        for (index, button) in scopeButtons.enumerated() {
+            var range: Range<CGFloat>
+            if index == 0 {
+                range = 0..<button.bounds.size.width
+            } else if index == scopeButtons.count - 1 {
+                range = bounds.size.width - button.bounds.size.width..<bounds.size.width
+            } else {
+                range = button.frame.origin.x..<(button.frame.origin.x + button.bounds.size.width)
+            }
+
+            buttonsPositionsRanges.append(range)
+        }
+        
+        print("ranges: \(buttonsPositionsRanges)")
+
+        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
+        print("slidingLineLeadingConstant: \(slidingLineConstant)")
+
+        var currentButtonIndex: Int = 0
+        for (index, range) in buttonsPositionsRanges.enumerated() {
+            if range.contains(slidingLineConstant)  {
+                currentButtonIndex = index
+                print("slidingLineLeadingConstant is in range \(index)")
+            } else {
+
+                print("slidingLineLeadingConstant out of all ranges")
+            }
+        }
+
+//        print("     CURRENT BUTTON INDEX: \(currentButtonIndex)")
+        return currentButtonIndex
+    }
+    
+    func getOriginXOfAllButtons() -> [CGFloat] {
+        var array = [CGFloat]()
+        
+        for button in scopeButtons {
+            let originX = button.frame.origin.x
+            array.append(originX)
+        }
+        
+        return array
+    }
+    
+        
     private func applyConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
