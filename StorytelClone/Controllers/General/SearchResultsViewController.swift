@@ -26,33 +26,24 @@ class SearchResultsViewController: UIViewController {
     // It must be set to button when it is tapped before scrollToItem and set to nil when scrollToItem finished animation. Check this property in cellForRowAt to hide content of other cells while scrollToItem animation to imitate behavior of UIPageViewController.
     private var tappedButtonIndex: Int? = nil
     
-    
     enum ScrollDirection {
         case forward
         case back
     }
     
+    private var previousOffsetX: CGFloat = 0
+    private var isButtonTriggeredScroll = false
+    private var offsetXWhenDragBegins: CGFloat = 0
+    private var previousScrollDirection: ScrollDirection = .forward
+//    private var leadingConstantWhenDragBegins: CGFloat = 0
+    
+    private var buttonIndexWhenDragBegins: CGFloat = 0
     
     private var currentButtonIndex: Int = 0
-    
-    private var destinationButtonIndex: Int = 1
-    
-    private lazy var originXOfAllButtons = buttonsView.getOriginXOfAllButtons()
-
-    private var currentPageIndex: Int  = 0
-    private var isButtonTriggeredScroll = false
-    
-    var buttonsScrollOffsetX: CGFloat = 0.0
-    
-    var willEndDraggingAtOffsetX: CGFloat = 0.0
-    var didEndDecelerated = false
-//    var decelerate = true
-    
-    var previousOffsetX: CGFloat = 0
-    
-    
+    private var lastButtonCompressedWidth: CGFloat = 0
     
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -123,44 +114,120 @@ extension SearchResultsViewController: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("scrollViewWillBeginDragging")
-//        currentButtonIndex = buttonsView.getCurrentButtonIndex()
-//        print("   currentButtonIndex: \(currentButtonIndex)")
+        print("\n\nscrollViewWillBeginDragging")
+        
+//        buttonsView.getRangesForButtons()
+
+//        leadingConstantWhenDragBegins = buttonsView.slidingLineLeadingAnchor.constant
+        offsetXWhenDragBegins = collectionView.contentOffset.x
+//        print("\n\noffsetXWhenDragBegins = \(offsetXWhenDragBegins)")
+        
+        currentButtonIndex = buttonsView.getCurrentButtonIndex()
+
         
         isButtonTriggeredScroll = false
-
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        print("scrollViewWillEndDragging at \(targetContentOffset.pointee.x)")
-        willEndDraggingAtOffsetX = targetContentOffset.pointee.x
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 //        print("scrollViewDidEndDragging, decelerate = \(decelerate)")
-//        self.decelerate = decelerate
-        
     }
-    
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        print("scrollViewDidEndDecelerating")
-        didEndDecelerated = true
         // If page scroll was triggered by button tap, toggle isButtonTriggeredScroll and if next scroll will be triggered but user's swiping, logic in didScroll will perform to synchronize moving of scrollView and slidingLine
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
         }
-        
-        buttonsScrollOffsetX = buttonsView.scrollView.contentOffset.x
-//        print("set buttonsScrollOffsetX in scrollViewDidEndDecelerating: \(buttonsScrollOffsetX)")
     }
     
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("\n CURRENT OFFSET: \(scrollView.contentOffset.x)")
+//        buttonsView.slidingLineLeadingAnchor.constant = scrollView.contentOffset.x / CGFloat(6)
+//        print("leadingAnchor: \(buttonsView.slidingLineLeadingAnchor.constant)")
+//
+//    }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("\n CURRENT OFFSET: \(scrollView.contentOffset.x)")
+//
+////        let index = Int(scrollView.contentOffset.x / scrollView.frame.width)
+////        let button = buttonsView.scopeButtons[index]
+//
+////        let currentButtonIndex = buttonsView.getCurrentButtonIndex()
+////        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+//
+//        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+//
+//        let leadingConstant = currentButton.frame.minX + scrollView.contentOffset.x * currentButton.frame.width / scrollView.frame.width
+//
+//        guard scrollView.contentOffset.x / scrollView.frame.width != 0 else { return }
+//
+//        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+//        print("leadingConstant \(leadingConstant)")
+//
+////        horizontalSlidingBar.leadingAnchor.constraint(equalTo: myStack.leadingAnchor, constant: leadingConstant).isActive = true
+////        horizontalSlidingBar.widthAnchor.constraint(equalToConstant: button.frame.width).isActive = true
+//    }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        let index = Int(scrollView.contentOffset.x / scrollView.frame.width)
+//        let button = buttonsView.scopeButtons[index]
+//        let minX = button.frame.minX
+////        let width = button.frame.width
+//
+//
+//        buttonsView.slidingLineLeadingAnchor.constant = minX
+////        horizontalSlidingBar.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 0).isActive = true
+////        horizontalSlidingBar.widthAnchor.constraint(equalToConstant: width).isActive = true
+//    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("current contentOffset.x: \(scrollView.contentOffset.x)")
         
+        guard !isButtonTriggeredScroll else { return }
+        print("current contentOffset.x: \(scrollView.contentOffset.x)")
+
         let currentOffsetX = scrollView.contentOffset.x
         let pageWidth = collectionView.bounds.size.width
+        
+        let currentButtonIndex = buttonsView.getCurrentButtonIndex()
+        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+        let currentButtonWidth = currentButton.bounds.width
+        print("currentButtonWidth \(currentButtonWidth)")
+        
+        // Adjust sliding line leading anchor constant
+        var previousButtonUpperBound: CGFloat = 0
+        let ranges = buttonsView.getRangesForButtons()
+        if currentButtonIndex != 0 {
+            let previousButtonIndex = currentButtonIndex - 1
+            let previousButtonRange = ranges[previousButtonIndex]
+            previousButtonUpperBound = previousButtonRange.upperBound
+        }
+        
+        var offsetXInCurrentButtonRange: CGFloat = 0
+        if currentButtonIndex != 0 {
+            offsetXInCurrentButtonRange = currentOffsetX - (CGFloat(currentButtonIndex) * pageWidth)
+        }
+        print("offsetXInCurrentButtonRange: \(offsetXInCurrentButtonRange)")
+        
+        var slidingLineX: CGFloat = 0
+        if currentButtonIndex == 0 {
+            slidingLineX = currentOffsetX / pageWidth * currentButtonWidth
+        } else {
+            slidingLineX = offsetXInCurrentButtonRange / pageWidth * currentButtonWidth
+        }
+//        print("slidingLineX: \(slidingLineX)")
+//        print("previousButtonUpperBound: \(previousButtonUpperBound)")
+        let leadingConstant = previousButtonUpperBound + slidingLineX
+//        print("leadingConstant: \(leadingConstant)\n")
+        
+        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+
+        
+        // Adjust sliding line width
         var currentScrollDirection: ScrollDirection = .forward // value must be changed in next if-else
         if currentOffsetX > previousOffsetX {
             currentScrollDirection = .forward
@@ -172,14 +239,221 @@ extension SearchResultsViewController: UIScrollViewDelegate {
         
         previousOffsetX = currentOffsetX
         
-        let currentLeadingConstant = buttonsView.slidingLineLeadingAnchor.constant
+        if currentScrollDirection == .forward {
+            
+            // if currentButton is the last button
+            if currentButtonIndex == buttonsView.scopeButtons.count - 1 {
+                let slidingLineWidthConstant = currentButtonWidth - abs(slidingLineX)
+                print("slidingLineWidthConstant LAST BUTTON: \(slidingLineWidthConstant)\n")
+
+                buttonsView.slidingLineWidthAnchor.constant = slidingLineWidthConstant
+                // Use this for calculations when scrolling back and current button is the last one
+                lastButtonCompressedWidth = slidingLineWidthConstant
+                return
+            }
+
+            var nextButtonWidth: CGFloat = 0 // value must be changed in next if-else
+            if currentScrollDirection == .forward {
+                let nextButtonIndex = currentButtonIndex + 1
+                nextButtonWidth = buttonsView.scopeButtons[nextButtonIndex].bounds.size.width
+            } else {
+                let nextButtonIndex = currentButtonIndex - 1
+                nextButtonWidth = buttonsView.scopeButtons[nextButtonIndex].bounds.size.width
+            }
+            print("nextButtonWidth: \(nextButtonWidth)")
+            
+            let widthToAddOrSubstract = currentButtonWidth - nextButtonWidth
+            
+            var slidingLineWidthParticle: CGFloat = 0 // value must be changed in next if-else
+            if currentButtonIndex == 0 {
+                slidingLineWidthParticle = abs(currentOffsetX / pageWidth * widthToAddOrSubstract)
+            } else {
+                slidingLineWidthParticle = abs(offsetXInCurrentButtonRange / pageWidth * widthToAddOrSubstract)
+            }
+            
+            var slidingLineWidthConstant: CGFloat = 0 // value must be changed in next if-else
+            if nextButtonWidth > currentButtonWidth {
+                slidingLineWidthConstant = currentButtonWidth + slidingLineWidthParticle
+            } else {
+                slidingLineWidthConstant = currentButtonWidth - slidingLineWidthParticle
+            }
+            
+            print("slidingLineWidthConstant FORWARD: \(slidingLineWidthConstant)\n")
+            
+            buttonsView.slidingLineWidthAnchor.constant = slidingLineWidthConstant
+        } else {
+            
+//            // if currentButton is the last button
+//            if currentButtonIndex == buttonsView.scopeButtons.count - 1 {
+//                print("lastButtonCompressedWidth: \(lastButtonCompressedWidth), slidingLineX: \(slidingLineX)")
+//                let slidingLineWidthConstant = lastButtonCompressedWidth + abs(slidingLineX)
+//                print("slidingLineWidthConstant LAST BUTTON: \(slidingLineWidthConstant)\n")
+//
+//                buttonsView.slidingLineWidthAnchor.constant = slidingLineWidthConstant
+//                return
+//            }
+            
+            var previousButtonWidth: CGFloat = 0 // value must be changed in next if-else
+            
+            if currentButtonIndex == buttonsView.scopeButtons.count - 1 {
+                // if currentButton is the last button
+                previousButtonWidth = lastButtonCompressedWidth
+            } else {
+                let previousButtonIndex = currentButtonIndex + 1
+                previousButtonWidth =  buttonsView.scopeButtons[previousButtonIndex].bounds.width
+            }
+            
+//            let previousButtonIndex = currentButtonIndex + 1
+//            let previousButtonWidth =  buttonsView.scopeButtons[previousButtonIndex].bounds.width
+            
+            let widthToAddOrSubstract = previousButtonWidth - currentButtonWidth
+            
+            var slidingLineWidthParticle: CGFloat = 0 // value must be changed in next if-else
+            if currentButtonIndex == 0 {
+                let difference = collectionView.bounds.width - currentOffsetX
+                slidingLineWidthParticle = abs(difference / pageWidth * widthToAddOrSubstract)
+//                slidingLineWidthParticle = abs(currentOffsetX / pageWidth * widthToAddOrSubstract)
+            } else {
+                let difference = collectionView.bounds.width - offsetXInCurrentButtonRange
+                slidingLineWidthParticle = abs(difference / pageWidth * widthToAddOrSubstract)
+
+//                slidingLineWidthParticle = abs(offsetXInCurrentButtonRange / pageWidth * widthToAddOrSubstract)
+            }
+            print("slidingLineWidthParticle BACK: \(slidingLineWidthParticle)")
+            
+            var slidingLineWidthConstant: CGFloat = 0 // value must be changed in next if-else
+            if previousButtonWidth > currentButtonWidth {
+                slidingLineWidthConstant = previousButtonWidth - slidingLineWidthParticle
+            } else {
+                slidingLineWidthConstant = previousButtonWidth + slidingLineWidthParticle
+            }
+            
+
+//            var slidingLineWidthConstant: CGFloat = 0 // value must be changed in next if-else
+//            if nextButtonWidth > currentButtonWidth {
+//                let difference = widthToAddOrSubstract - slidingLineWidthConstant
+//                slidingLineWidthConstant = currentButtonWidth + difference
+//            } else {
+//                let difference = widthToAddOrSubstract - slidingLineWidthConstant
+//                slidingLineWidthConstant = currentButtonWidth - difference
+//            }
+            
+            print("slidingLineWidthConstant BACK: \(slidingLineWidthConstant)\n")
+            
+            buttonsView.slidingLineWidthAnchor.constant = slidingLineWidthConstant
+        }
         
         
         
         
+//        var widthToAdd: CGFloat = 0 // value must be changed in next if-else
+//        if nextButtonWidth > currentButtonWidth {
+//            widthToAdd = nextButtonWidth - currentButtonWidth
+//        }
+//
+//        var widthToSubstract: CGFloat = 0 // value must be changed in next if-else
+//        if nextButtonWidth < currentButtonWidth {
+//            widthToSubstract = currentButtonWidth - nextButtonWidth
+//        }
         
+        
+
+//        var slidingLineWidthConstant: CGFloat = 0 // value must be changed in next if-else
+//
+//        if currentButtonIndex == 0 {
+//            slidingLineWidthConstant = currentOffsetX / pageWidth * nextButtonWidth
+//        } else {
+//            slidingLineWidthConstant = offsetXInCurrentButtonRange / pageWidth * nextButtonWidth
+//        }
+        
+//
+//        print("slidingLineWidthConstant: \(slidingLineWidthConstant)")
+//
+//        buttonsView.slidingLineWidthAnchor.constant = slidingLineWidthConstant
+        
+    
         
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("current contentOffset.x: \(scrollView.contentOffset.x)")
+//
+//        let currentOffsetX = scrollView.contentOffset.x
+//        let pageWidth = collectionView.bounds.size.width
+//        var currentScrollDirection: ScrollDirection = .forward // value must be changed in next if-else
+//        if currentOffsetX > previousOffsetX {
+//            currentScrollDirection = .forward
+//            print("FORWARD")
+//        } else {
+//            currentScrollDirection = .back
+//            print("BACK")
+//        }
+//
+//        // Define buttonWidth to find proportion of pageWidth for. Define constant to start counting from when setting new leading constant
+//        let currentLeadingConstant = buttonsView.slidingLineLeadingAnchor.constant
+//        let currentButtonIndex = buttonsView.getCurrentButtonIndex()
+//        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+//
+//        var buttonWidthForCalculation: CGFloat = 0 // value must be chaned in next if-else
+//        var constantToCountFrom: CGFloat = 0 // value must be chaned in next if-else
+//        if currentScrollDirection == .forward {
+//            // current button width
+//            buttonWidthForCalculation = currentButton.frame.size.width
+//            constantToCountFrom = currentButton.frame.minX
+//        } else {
+//            if currentLeadingConstant == currentButton.frame.minX {
+//                if currentButtonIndex == 0 {
+//                    // if current button is the first one
+//                    buttonWidthForCalculation = currentButton.frame.size.width
+//                    constantToCountFrom = currentButton.frame.minX
+//                } else {
+//                    let previousButtonIndex = currentButtonIndex - 1
+//                    let previousButton = buttonsView.scopeButtons[previousButtonIndex]
+//                    buttonWidthForCalculation = previousButton.frame.size.width
+//                    constantToCountFrom = currentButton.frame.minX
+//                }
+//            } else {
+//                constantToCountFrom = currentButton.frame.maxX
+//                buttonWidthForCalculation = currentButton.frame.size.width
+//            }
+//        }
+//
+//        print("buttonWidthForCalculation: \(buttonWidthForCalculation)")
+//        print("constantToCountFrom: \(constantToCountFrom)")
+//
+//
+//        // If scroll direction changed, set offsetXWhenDragBegins to currentOffsetOfOnePage for correct currentOffsetOfOnePage calculation
+//        if previousScrollDirection != currentScrollDirection {
+//            print("\n DIRECTION CHANGED")
+//            offsetXWhenDragBegins = previousOffsetX
+//            print("offsetXWhenDragBegins set to \(offsetXWhenDragBegins)")
+//        }
+//
+//        // Get offset in range of one page width
+//        let currentOffsetOfOnePage = currentOffsetX - offsetXWhenDragBegins
+//        print("currentOffsetOfOnePage: \(currentOffsetOfOnePage)")
+//
+//
+//        let slidingLineX = currentOffsetOfOnePage / pageWidth * buttonWidthForCalculation
+//        print("buttonWidthForCalculation: \(buttonWidthForCalculation)")
+//        print("slidingLineX: \(slidingLineX)")
+//
+////        buttonsView.slidingLineLeadingAnchor.constant = constantToCountFrom + slidingLineX
+//
+////
+//        buttonsView.slidingLineLeadingAnchor.constant = slidingLineX
+//
+//        if currentScrollDirection == .back {
+//            buttonsView.slidingLineLeadingAnchor.constant = constantToCountFrom - abs(slidingLineX)
+//        } else {
+//            buttonsView.slidingLineLeadingAnchor.constant = constantToCountFrom + abs(slidingLineX)
+//        }
+//
+//        print("CONSTANT: \(buttonsView.slidingLineLeadingAnchor.constant)\n")
+//
+//        previousScrollDirection = currentScrollDirection
+//        previousOffsetX = currentOffsetX
+//    }
     
 //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 ////        print("scrollViewDidScroll")

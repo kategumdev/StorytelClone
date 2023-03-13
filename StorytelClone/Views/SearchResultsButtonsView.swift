@@ -192,34 +192,27 @@ class SearchResultsButtonsView: UIView {
     
     func getCurrentButtonIndex() -> Int {
         
-        var buttonsPositionsRanges = [Range<CGFloat>]()
+        var ranges = [Range<CGFloat>]()
 
-        for (index, button) in scopeButtons.enumerated() {
-            var range: Range<CGFloat>
-            if index == 0 {
-                range = 0..<button.bounds.size.width
-            } else if index == scopeButtons.count - 1 {
-                range = bounds.size.width - button.bounds.size.width..<bounds.size.width
-            } else {
-                range = button.frame.origin.x..<(button.frame.origin.x + button.bounds.size.width)
-            }
-
-            buttonsPositionsRanges.append(range)
+        for button in scopeButtons {
+            let range = button.frame.minX..<button.frame.maxX
+            ranges.append(range)
         }
         
-        print("ranges: \(buttonsPositionsRanges)")
+//        print("ranges: \(ranges)")
 
-        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
-        print("slidingLineLeadingConstant: \(slidingLineConstant)")
+        let slidingLineConstant = slidingLineLeadingAnchor.constant
+//        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
+//        print("slidingLineLeadingConstant: \(slidingLineConstant)")
 
         var currentButtonIndex: Int = 0
-        for (index, range) in buttonsPositionsRanges.enumerated() {
+        for (index, range) in ranges.enumerated() {
             if range.contains(slidingLineConstant)  {
                 currentButtonIndex = index
                 print("slidingLineLeadingConstant is in range \(index)")
             } else {
 
-                print("slidingLineLeadingConstant out of all ranges")
+//                print("slidingLineLeadingConstant out of all ranges")
             }
         }
 
@@ -227,15 +220,64 @@ class SearchResultsButtonsView: UIView {
         return currentButtonIndex
     }
     
-    func getOriginXOfAllButtons() -> [CGFloat] {
-        var array = [CGFloat]()
-        
-        for button in scopeButtons {
-            let originX = button.frame.origin.x
-            array.append(originX)
+//    func getCurrentButtonIndex() -> Int {
+//
+//        var buttonsPositionsRanges = [Range<CGFloat>]()
+//
+//        for (index, button) in scopeButtons.enumerated() {
+//            var range: Range<CGFloat>
+//            if index == 0 {
+//                range = 0..<button.bounds.size.width
+//            } else if index == scopeButtons.count - 1 {
+//                range = bounds.size.width - button.bounds.size.width..<bounds.size.width
+//            } else {
+//                range = button.frame.origin.x..<(button.frame.origin.x + button.bounds.size.width)
+//            }
+//
+//            buttonsPositionsRanges.append(range)
+//        }
+//
+////        print("ranges: \(buttonsPositionsRanges)")
+//
+//        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
+////        print("slidingLineLeadingConstant: \(slidingLineConstant)")
+//
+//        var currentButtonIndex: Int = 0
+//        for (index, range) in buttonsPositionsRanges.enumerated() {
+//            if range.contains(slidingLineConstant)  {
+//                currentButtonIndex = index
+//                print("slidingLineLeadingConstant is in range \(index)")
+//            } else {
+////                print("slidingLineLeadingConstant out of all ranges")
+//            }
+//        }
+//
+////        print("     CURRENT BUTTON INDEX: \(currentButtonIndex)")
+//        return currentButtonIndex
+//    }
+//
+//    func getOriginXOfAllButtons() -> [CGFloat] {
+//        var array = [CGFloat]()
+//
+//        for button in scopeButtons {
+//            let originX = button.frame.origin.x
+//            array.append(originX)
+//        }
+//
+//        return array
+//    }
+    
+    func getRangesForButtons() -> [Range<CGFloat>] {
+        var buttonsPositionsRanges = [Range<CGFloat>]()
+
+        for (index, button) in scopeButtons.enumerated() {
+            var range: Range<CGFloat>
+            range = button.frame.minX..<button.frame.maxX
+            buttonsPositionsRanges.append(range)
         }
         
-        return array
+//        print("ranges: \(buttonsPositionsRanges)")
+        return buttonsPositionsRanges
     }
     
         
