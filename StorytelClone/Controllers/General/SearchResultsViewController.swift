@@ -32,6 +32,8 @@ class SearchResultsViewController: UIViewController {
     private var destinationButtonIndex: Int = 1
     
     private lazy var originXOfAllButtons = buttonsView.getOriginXOfAllButtons()
+    
+    private var buttonTapped = false
 
     
     private var currentPageIndex: Int  = 0
@@ -78,10 +80,36 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+        // Hide content of cells that are scrolled through while scrollToItem after button tap. This imitates behavior of UIPageViewContoller
+        if buttonTapped {
+            if indexPath.row == 0 || indexPath.row == 4 {
+                cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+                print("cell \(indexPath.row) with text returned")
+            } else {
+                cell.textLabel.text = ""
+                print("cell \(indexPath.row) with NO text returned")
+            }
+        } else {
+            cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+            print("NO TAPPING cell \(indexPath.row) with text returned")
+//            return cell
+        }
         
+
+//        cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+//        print("no tapping cell \(indexPath.row) returned")
         return cell
     }
+        
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if indexPath.row == 3 {
+//            print("will display cell 3")
+//            (cell as? SearchResultsCollectionViewCell)?.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+//            collectionView.reloadItems(at: [indexPath])
+//        }
+    }
+    
+    
     
     
 }
@@ -103,10 +131,19 @@ extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
 
 extension SearchResultsViewController: UIScrollViewDelegate {
     
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        print("buttonTapped = false")
+        guard buttonTapped else { return }
+        buttonTapped = false
+        // Force-reload cell which is previous to the one to which scrollToItem was called. Otherwise it won't reload and may show no content as if is scrolled through while scrollToItem
+        collectionView.reloadItems(at: [IndexPath(item: 3, section: 0)])
+
+    }
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         print("scrollViewWillBeginDragging")
-        currentButtonIndex = buttonsView.getCurrentButtonIndex()
-        print("   currentButtonIndex: \(currentButtonIndex)")
+//        currentButtonIndex = buttonsView.getCurrentButtonIndex()
+//        print("   currentButtonIndex: \(currentButtonIndex)")
         
         isButtonTriggeredScroll = false
 
@@ -138,7 +175,7 @@ extension SearchResultsViewController: UIScrollViewDelegate {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("current contentOffset.x: \(scrollView.contentOffset.x)")
+//        print("current contentOffset.x: \(scrollView.contentOffset.x)")
     }
     
 //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -323,7 +360,15 @@ extension SearchResultsViewController {
     
     private func scrollToCell(_ cellIndex: Int) {
         let indexPath = IndexPath(item: cellIndex, section: 0) // index path of third cell
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        
+        buttonTapped = true
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        
+//        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+//            self?.collectionView.setContentOffset(CGPoint(x: CGFloat(cellIndex * 414), y: 0), animated: false)
+//        }, completion: { [weak self] _ in
+//            self?.buttonTapped = false
+//        })
         #warning("Check if button is adjacent one, call scrollToItem with animated set to true, otherwise call it with animated set to false")
         
     }
