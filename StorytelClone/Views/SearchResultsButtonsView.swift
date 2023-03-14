@@ -9,21 +9,7 @@ import UIKit
 
 class SearchResultsButtonsView: UIView {
     
-    lazy var partOfUnvisiblePart: CGFloat = {
-        let scrollViewContentWidth = scrollView.contentSize.width
-        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-        
-        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-        return partOfUnvisiblePart
-    }()
-    
-    static let viewHeight: CGFloat = 46
-    
-    private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
-    private static let slidingLineHeight: CGFloat = 2
-    
-    enum ButtonKind: String {
+    enum ButtonKind: String, CaseIterable {
         case top = "Top"
         case books = "Books"
         case authors = "Authors"
@@ -32,6 +18,21 @@ class SearchResultsButtonsView: UIView {
         case tags = "Tags"
     }
     
+    static let viewHeight: CGFloat = 46
+    
+//    private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+    private static let buttonKinds: [ButtonKind] = ButtonKind.allCases
+    private static let slidingLineHeight: CGFloat = 2
+    
+    lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
+        let scrollViewContentWidth = scrollView.contentSize.width
+        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+        
+        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+        return partOfUnvisiblePart
+    }()
+    
     private var firstTime = true
     
     typealias SearchResultsButtonCallback = (_ buttonIndex: Int) -> ()
@@ -39,7 +40,6 @@ class SearchResultsButtonsView: UIView {
     
     let scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
-       
         for kind in buttonKinds {
             let button = UIButton()
             var config = UIButton.Configuration.plain()
@@ -54,16 +54,24 @@ class SearchResultsButtonsView: UIView {
         return buttons
     }()
     
-//    lazy var numberOfButtons: Int = {
-//        let number = scopeButtons.count
-//        return number
-//    }()
+    // Ranges of buttons' bounds (excluding maxX, otherwise maxX of previous button and minX of next buttons will be the same and it doesn't let to correctly determine currentButton)
+    lazy var rangesOfButtons: [Range<CGFloat>] = {
+        var ranges = [Range<CGFloat>]()
+        for button in scopeButtons {
+            let range = button.frame.minX..<button.frame.maxX
+            ranges.append(range)
+        }
+        return ranges
+    }()
     
     private let slidingLine: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.tintColor
         return view
     }()
+    
+    private var lastSlidingLineCompressedWidth: CGFloat = 0
+    private var previousSlidingLineLeadingConstant: CGFloat = 0
     
     private lazy var stackView: UIStackView = {
         let horzStackButtons = UIStackView()
@@ -86,7 +94,7 @@ class SearchResultsButtonsView: UIView {
         return vertStack
     }()
 
-    lazy var scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.addSubview(stackView)
@@ -94,7 +102,7 @@ class SearchResultsButtonsView: UIView {
     }()
 
     lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
-    lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
+    private lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -130,7 +138,6 @@ class SearchResultsButtonsView: UIView {
     }
     
     private func addButtonActions() {
-        
         for button in scopeButtons {
             button.addAction(UIAction(handler: { [weak self] _ in
                 guard let self = self else { return }
@@ -176,7 +183,93 @@ class SearchResultsButtonsView: UIView {
         scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
     }
     
-    private func toggleButtonsColors(currentButton: UIButton) {
+    func getCurrentButtonIndex() -> Int {
+        let slidingLineConstant = slidingLineLeadingAnchor.constant
+        var currentButtonIndex: Int = 0
+        for (index, range) in rangesOfButtons.enumerated() {
+            if range.contains(slidingLineConstant)  {
+                currentButtonIndex = index
+                print("slidingLineLeadingConstant is in range \(index)")
+                break
+            }
+        }
+        return currentButtonIndex
+    }
+    
+    // Use it in SearchResultsViewController in didScroll
+    func adjustScrollViewOffsetX(currentOffsetXOfCollectionView: CGFloat, withPageWidth pageWidth: CGFloat) {
+        let scrollViewWidthToMove = partOfUnvisiblePartOfScrollView
+        let newOffset = currentOffsetXOfCollectionView / pageWidth * scrollViewWidthToMove
+        scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: false)
+    }
+    
+    // Use it in SearchResultsViewController in didScroll
+    func adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: ScrollDirection, currentButtonIndex: Int, slidingLineXProportionalPart: CGFloat, currentOffsetXOfCvInRangeOfOnePageWidth: CGFloat, pageWidthOfCv pageWidth: CGFloat) {
+        
+        let currentButton = scopeButtons[currentButtonIndex]
+        let currentButtonWidth = currentButton.bounds.size.width
+        
+    // Logic for adjusting sliding line width when current button is the last one
+        if currentScrollDirectionOfCv == .forward && currentButtonIndex == scopeButtons.count - 1 {
+            // Width should decrease for number of points the sliding line leading anchor constant is changing
+            let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
+            slidingLineWidthAnchor.constant = widthConstant
+
+            // Use these two values later for calculations when scroll direction is .back and current button is the last one
+            lastSlidingLineCompressedWidth = widthConstant
+            previousSlidingLineLeadingConstant = slidingLineLeadingAnchor.constant
+            return
+        }
+        
+        // Save lastSlidingLineCompressedWidth and lastSlidingLineLeadingConstant, because there are cases when previous if-block doesn't do this
+        if currentButtonIndex == scopeButtons.count - 2 {
+//            let ranges = rangesOfButtons
+            let upperBoundOfCurrentButton = rangesOfButtons[currentButtonIndex].upperBound
+            if slidingLineLeadingAnchor.constant == upperBoundOfCurrentButton {
+                let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
+                // Use these two values later for calculations when scroll direction is .back and current button is the last one
+                lastSlidingLineCompressedWidth = widthConstant
+                previousSlidingLineLeadingConstant = slidingLineLeadingAnchor.constant
+            }
+        }
+        
+        if currentScrollDirectionOfCv == .back && currentButtonIndex == scopeButtons.count - 1 {
+            let pointsToAdd = previousSlidingLineLeadingConstant - slidingLineLeadingAnchor.constant
+            let widthConstant = lastSlidingLineCompressedWidth + abs(pointsToAdd)
+            slidingLineWidthAnchor.constant = widthConstant
+            return
+        }
+
+    // Logic for adjusting sliding line width when current button is not the last one
+        
+        // Determine width the sliding line should gradually change to
+        var previousWidth: CGFloat
+        var nextWidth: CGFloat
+        if currentScrollDirectionOfCv == .forward {
+            previousWidth = currentButtonWidth
+            nextWidth = scopeButtons[currentButtonIndex + 1].bounds.size.width
+        } else {
+            previousWidth = scopeButtons[currentButtonIndex + 1].bounds.width
+            nextWidth = currentButtonWidth
+        }
+
+        // Determine for how many points previous sliding line width should change to obtain the next width
+        let widthToAddOrSubstract = previousWidth - nextWidth
+
+        var widthProportionalPart: CGFloat
+        if currentScrollDirectionOfCv == .forward {
+            widthProportionalPart = abs(currentOffsetXOfCvInRangeOfOnePageWidth / pageWidth * widthToAddOrSubstract)
+        } else {
+            let difference = pageWidth - currentOffsetXOfCvInRangeOfOnePageWidth
+            widthProportionalPart = abs(difference / pageWidth * widthToAddOrSubstract)
+        }
+        
+        let widthConstant = nextWidth > previousWidth ? previousWidth + widthProportionalPart : previousWidth - widthProportionalPart
+
+        slidingLineWidthAnchor.constant = widthConstant
+    }
+    
+    func toggleButtonsColors(currentButton: UIButton) {
         for button in scopeButtons {
             button.configuration?.attributedTitle?.foregroundColor = UIColor.label
         }
@@ -190,100 +283,8 @@ class SearchResultsButtonsView: UIView {
         self.adjustSlidingLinePosition(currentButton: firstButton)
     }
     
-    func getCurrentButtonIndex() -> Int {
-        
-        var ranges = [Range<CGFloat>]()
-
-        for button in scopeButtons {
-            let range = button.frame.minX..<button.frame.maxX
-            ranges.append(range)
-        }
-        
-//        print("ranges: \(ranges)")
-
-        let slidingLineConstant = slidingLineLeadingAnchor.constant
-//        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
-//        print("slidingLineLeadingConstant: \(slidingLineConstant)")
-
-        var currentButtonIndex: Int = 0
-        for (index, range) in ranges.enumerated() {
-            if range.contains(slidingLineConstant)  {
-                currentButtonIndex = index
-                print("slidingLineLeadingConstant is in range \(index)")
-            } else {
-
-//                print("slidingLineLeadingConstant out of all ranges")
-            }
-        }
-
-//        print("     CURRENT BUTTON INDEX: \(currentButtonIndex)")
-        return currentButtonIndex
-    }
-    
-//    func getCurrentButtonIndex() -> Int {
-//
-//        var buttonsPositionsRanges = [Range<CGFloat>]()
-//
-//        for (index, button) in scopeButtons.enumerated() {
-//            var range: Range<CGFloat>
-//            if index == 0 {
-//                range = 0..<button.bounds.size.width
-//            } else if index == scopeButtons.count - 1 {
-//                range = bounds.size.width - button.bounds.size.width..<bounds.size.width
-//            } else {
-//                range = button.frame.origin.x..<(button.frame.origin.x + button.bounds.size.width)
-//            }
-//
-//            buttonsPositionsRanges.append(range)
-//        }
-//
-////        print("ranges: \(buttonsPositionsRanges)")
-//
-//        let slidingLineConstant = ceil(slidingLineLeadingAnchor.constant)
-////        print("slidingLineLeadingConstant: \(slidingLineConstant)")
-//
-//        var currentButtonIndex: Int = 0
-//        for (index, range) in buttonsPositionsRanges.enumerated() {
-//            if range.contains(slidingLineConstant)  {
-//                currentButtonIndex = index
-//                print("slidingLineLeadingConstant is in range \(index)")
-//            } else {
-////                print("slidingLineLeadingConstant out of all ranges")
-//            }
-//        }
-//
-////        print("     CURRENT BUTTON INDEX: \(currentButtonIndex)")
-//        return currentButtonIndex
-//    }
-//
-//    func getOriginXOfAllButtons() -> [CGFloat] {
-//        var array = [CGFloat]()
-//
-//        for button in scopeButtons {
-//            let originX = button.frame.origin.x
-//            array.append(originX)
-//        }
-//
-//        return array
-//    }
-    
-    func getRangesForButtons() -> [Range<CGFloat>] {
-        var buttonsPositionsRanges = [Range<CGFloat>]()
-
-        for (index, button) in scopeButtons.enumerated() {
-            var range: Range<CGFloat>
-            range = button.frame.minX..<button.frame.maxX
-            buttonsPositionsRanges.append(range)
-        }
-        
-//        print("ranges: \(buttonsPositionsRanges)")
-        return buttonsPositionsRanges
-    }
-    
-        
     private func applyConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -303,7 +304,7 @@ class SearchResultsButtonsView: UIView {
         slidingLineLeadingAnchor.isActive = true
         slidingLineWidthAnchor.isActive = true
         slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
-        // To force layoutSubviews() apply correct slidingLine anchors' constants
+        // To force layoutSubviews() to apply correct slidingLine anchors' constants
         layoutIfNeeded()
     }
 }

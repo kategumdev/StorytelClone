@@ -91,7 +91,6 @@ class SearchViewController: UIViewController {
 //        definesPresentationContext = true
 
         configureNavBar()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,14 +101,10 @@ class SearchViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews")
         categoriesTable.frame = view.bounds
-        
-//        print("INITIAL OFFSET: \(categoriesTable.contentOffset.y)")
         
         if firstTime {
             initialTableOffsetY = categoriesTable.contentOffset.y
-//            print("initialOffsetY set, \(initialTableOffsetY)")
             firstTime = false
         } else {
             // After searchResultsController was presented, actual initial contentOffset.y changes to 0
@@ -156,9 +151,6 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
         
-//        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-//        resultsController.revertToInitialAppearance()
-        
         // Change navbar appearance if currentOffset.y != initialTableOffsetY
         let currentTableOffsetY = categoriesTable.contentOffset.y
         if currentTableOffsetY != initialTableOffsetY {
@@ -182,6 +174,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         resultsController.revertToInitialAppearance()
+        #warning("This revert must be done only after cancel button is tapped, but now it also executes if app goes to background and then back to foreground")
     }
  
 }
