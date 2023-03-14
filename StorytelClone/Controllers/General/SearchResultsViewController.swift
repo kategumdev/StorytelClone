@@ -40,7 +40,8 @@ class SearchResultsViewController: UIViewController {
     private var buttonIndexWhenDragBegins: CGFloat = 0
     
     private var currentButtonIndex: Int = 0
-    private var lastButtonCompressedWidth: CGFloat = 0
+    private var lastSlidingLineCompressedWidth: CGFloat = 0
+    private var lastSlidingLineLeadingConstant: CGFloat = 0
     
 
     
@@ -178,7 +179,7 @@ extension SearchResultsViewController: UIScrollViewDelegate {
         
         let leadingConstant = previousButtonUpperBound + slidingLineXProportionalPart
         buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
-//        print("slidingLineXProportionalPart: \(slidingLineXProportionalPart)")
+        print("slidingLineXProportionalPart: \(slidingLineXProportionalPart)")
 //        print("previousButtonUpperBound: \(previousButtonUpperBound)")
 //        print("leadingConstant: \(leadingConstant)\n")
 
@@ -188,19 +189,29 @@ extension SearchResultsViewController: UIScrollViewDelegate {
         previousOffsetX = currentOffsetX
         print("currentScrollDirection: \(currentScrollDirection)")
         
-        // This case needs its own logic for adjusting width, therefore done separately (and before to return early)
+        // LOGIC IF LAST BUTTON IS THE CURRENT ONE. This cases for last button need their own logic for adjusting width, therefore done separately (and before logic for other cases to return early)
         if currentScrollDirection == .forward && currentButtonIndex == buttonsView.scopeButtons.count - 1 {
             // Width should decrease for the same number of points sliding line leading anchor constant is changing
+
             let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
             buttonsView.slidingLineWidthAnchor.constant = widthConstant
 
-            // Use this later for calculations when scroll direction is .back and current button is the last one
-            lastButtonCompressedWidth = widthConstant
-            print("slidingLineWidthConstant LAST BUTTON: \(widthConstant)\n")
+            // Use these two values later for calculations when scroll direction is .back and current button is the last one
+            lastSlidingLineCompressedWidth = widthConstant
+            lastSlidingLineLeadingConstant = buttonsView.slidingLineLeadingAnchor.constant
+//            print("slidingLineWidthConstant SEPARATE FORWARD LAST BUTTON: \(widthConstant)\n")
+            return
+        }
+        
+        if currentScrollDirection == .back && currentButtonIndex == buttonsView.scopeButtons.count - 1 {
+            let pointsToAdd = lastSlidingLineLeadingConstant - buttonsView.slidingLineLeadingAnchor.constant
+            let widthConstant = lastSlidingLineCompressedWidth + abs(pointsToAdd)
+            buttonsView.slidingLineWidthAnchor.constant = widthConstant
+//            print("slidingLineWidthConstant SEPARATE BACK LAST BUTTON: \(widthConstant)")
             return
         }
 
-        // Width adjusting logic for other cases
+        // LOGIC FOR OTHER CASES (when current button is not the last one)
         // Determine width the sliding line should gradually change to
         var previousWidth: CGFloat
         var nextWidth: CGFloat
@@ -208,12 +219,9 @@ extension SearchResultsViewController: UIScrollViewDelegate {
             previousWidth = currentButtonWidth
             let nextButtonIndex = currentButtonIndex + 1
             nextWidth = buttonsView.scopeButtons[nextButtonIndex].bounds.size.width
-        } else if currentScrollDirection == .back && currentButtonIndex == buttonsView.scopeButtons.count - 1 {
-            previousWidth = lastButtonCompressedWidth
-            nextWidth = currentButtonWidth
         } else {
             let previousButtonIndex = currentButtonIndex + 1
-            previousWidth =  buttonsView.scopeButtons[previousButtonIndex].bounds.width
+            previousWidth = buttonsView.scopeButtons[previousButtonIndex].bounds.width
             nextWidth = currentButtonWidth
         }
 
@@ -223,14 +231,14 @@ extension SearchResultsViewController: UIScrollViewDelegate {
         var widthProportionalPart: CGFloat
         if currentScrollDirection == .forward {
             widthProportionalPart = abs(currentOffsetXInRangeOfOnePageWidth / pageWidth * widthToAddOrSubstract)
+            print("widthProportionalPart: \(widthProportionalPart)")
         } else {
             // Since scroll direction is back, this difference is needed
             let difference = collectionView.bounds.width - currentOffsetXInRangeOfOnePageWidth
             widthProportionalPart = abs(difference / pageWidth * widthToAddOrSubstract)
+            print("widthProportionalPart: \(widthProportionalPart)")
         }
         
-//        let widthProportionalPart = abs(currentOffsetXInRangeOfOnePageWidth / pageWidth * widthToAddOrSubstract)
-
         let widthConstant = nextWidth > previousWidth ? previousWidth + widthProportionalPart : previousWidth - widthProportionalPart
 
         buttonsView.slidingLineWidthAnchor.constant = widthConstant
