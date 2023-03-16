@@ -33,9 +33,6 @@ class SearchResultsViewController: UIViewController {
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     
-    
-//    private lazy var buttonsViewTopAnchor =
-    
 //    private var previousContentSize: UIContentSizeCategory?
 
     override func viewDidLoad() {
@@ -84,19 +81,62 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
-        // Hide content of cells that are scrolled through while scrollToItem after button tap. This imitates behavior of UIPageViewContoller. If tappedButtonIndex is not nil, button was tapped and content of other cells must be hidden.
-        if let tappedButtonIndex = tappedButtonIndex {
-            if indexPath.row == tappedButtonIndex {
-                cell.textLabel.text = buttonsView.scopeButtons[tappedButtonIndex].titleLabel?.text
-            } else {
-                cell.textLabel.text = ""
-            }
-        } else {
-            cell.textLabel.text = buttonsView.scopeButtons[indexPath.row].titleLabel?.text
+        print("\ndequeue cell \(buttonsView.buttonKinds[indexPath.row].rawValue)")
+        
+        cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
+        
+        if cell.isBeingReused == true {
+            cell.resultsTable.reloadData()
         }
+        
+        
+//        // Set the text for the titleLabel of table view section header when cell is actually reused (not created). Otherwise the text may not be set correctly.
+//        if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
+//            headerView.configureFor(buttonKind: buttonsView.buttonKinds[indexPath.row])
+//            print("header title \(String(describing: headerView.titleLabel.text))")
+//            cell.resultsTable.reloadData()
+//        }
 
         return cell
     }
+    
+    
+    
+    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+//
+//        // Hide content of cells that are scrolled through while scrollToItem after button tap. This imitates behavior of UIPageViewContoller. If tappedButtonIndex is not nil, button was tapped and content of other cells must be hidden.
+//        if let tappedButtonIndex = tappedButtonIndex {
+//            if indexPath.row == tappedButtonIndex {
+//                cell.resultsTable.isHidden = false
+//                cell.buttonKind = buttonsView.buttonKinds[tappedButtonIndex]
+//                cell.sectionHeader.configureFor(buttonKind: buttonsView.buttonKinds[tappedButtonIndex])
+//
+//                // Set the text for the titleLabel in the table view header view
+//                if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
+//                    headerView.titleLabel.text = buttonsView.buttonKinds[tappedButtonIndex].rawValue
+//                }
+//
+//                print("cell is reconfigured for \(buttonsView.buttonKinds[tappedButtonIndex].rawValue), header title: \(String(describing: cell.sectionHeader.titleLabel.text))")
+//            } else {
+//                cell.resultsTable.isHidden = true
+//                }
+//        } else {
+//            cell.resultsTable.isHidden = false
+//            cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
+//            cell.sectionHeader.configureFor(buttonKind: buttonsView.buttonKinds[indexPath.row])
+//
+//            // Set the text for the titleLabel in the table view header view
+//            if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
+//                headerView.titleLabel.text = buttonsView.buttonKinds[indexPath.row].rawValue
+//            }
+//
+//            print("cell is reconfigured for \(buttonsView.buttonKinds[indexPath.row].rawValue), header title: \(String(describing: cell.sectionHeader.titleLabel.text))")
+//        }
+//
+//        return cell
+//    }
 
 }
 
@@ -107,10 +147,14 @@ extension SearchResultsViewController {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         guard let tappedButtonIndex = tappedButtonIndex else { return }
         // Force-reload cell which is previous to the one to which scrollToItem was called. Otherwise it won't reload and may show no content as if it's scrolled through while scrollToItem
-        if tappedButtonIndex != 0 {
-            let previousButtonIndex = tappedButtonIndex - 1
-            collectionView.reloadItems(at: [IndexPath(item: previousButtonIndex, section: 0)])
-        }
+//        if tappedButtonIndex != 0 {
+//            let previousButtonIndex = tappedButtonIndex - 1
+//            collectionView.reloadItems(at: [IndexPath(item: previousButtonIndex, section: 0)])
+//
+//        }
+        
+//        collectionView.reloadData()
+        
         self.tappedButtonIndex = nil
     }
     

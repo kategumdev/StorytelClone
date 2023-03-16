@@ -7,21 +7,20 @@
 
 import UIKit
 
+enum ButtonKind: String, CaseIterable {
+    case top = "Top"
+    case books = "Books"
+    case authors = "Authors"
+    case narrators = "Narrators"
+    case series = "Series"
+    case tags = "Tags"
+}
+
 class SearchResultsButtonsView: UIView {
-    
-    enum ButtonKind: String, CaseIterable {
-        case top = "Top"
-        case books = "Books"
-        case authors = "Authors"
-        case narrators = "Narrators"
-        case series = "Series"
-        case tags = "Tags"
-    }
     
     static let viewHeight: CGFloat = 46
     
-//    private static let buttonKinds: [ButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
-    private static let buttonKinds: [ButtonKind] = ButtonKind.allCases
+    let buttonKinds: [ButtonKind] = ButtonKind.allCases
     private static let slidingLineHeight: CGFloat = 2
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
@@ -38,7 +37,7 @@ class SearchResultsButtonsView: UIView {
     typealias SearchResultsButtonCallback = (_ buttonIndex: Int) -> ()
     var callBack: SearchResultsButtonCallback = {_ in}
     
-    let scopeButtons: [UIButton] = {
+    lazy var scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
         for kind in buttonKinds {
             let button = UIButton()
@@ -49,6 +48,9 @@ class SearchResultsButtonsView: UIView {
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config
+            
+//            button.sizeToFit()
+            
             buttons.append(button)
         }
         return buttons
@@ -89,6 +91,8 @@ class SearchResultsButtonsView: UIView {
         vertStack.axis = .vertical
         vertStack.alignment = .center
         [horzStackButtons, horzStackSlidingLine].forEach { vertStack.addArrangedSubview($0)}
+        
+        print("vertStack size: \(vertStack.bounds.size)")
                 
         vertStack.backgroundColor = Utils.customBackgroundColor
         return vertStack
@@ -121,6 +125,8 @@ class SearchResultsButtonsView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        print("vertStack size in layoutSubviews(): \(stackView.bounds.size)")
         guard firstTime == false else {
             firstTime = false
             return
