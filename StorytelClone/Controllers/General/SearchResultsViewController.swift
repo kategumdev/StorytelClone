@@ -88,14 +88,6 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         if cell.isBeingReused == true {
             cell.resultsTable.reloadData()
         }
-        
-        
-//        // Set the text for the titleLabel of table view section header when cell is actually reused (not created). Otherwise the text may not be set correctly.
-//        if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
-//            headerView.configureFor(buttonKind: buttonsView.buttonKinds[indexPath.row])
-//            print("header title \(String(describing: headerView.titleLabel.text))")
-//            cell.resultsTable.reloadData()
-//        }
 
         return cell
     }
@@ -164,8 +156,6 @@ extension SearchResultsViewController {
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
         }
-        
-//        print("initial leading anchor: \(buttonsView.slidingLineLeadingAnchor.constant)")
     }
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -194,9 +184,7 @@ extension SearchResultsViewController {
         } else {
             buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
         }
-//        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
-//        print("leading anchor \(buttonsView.slidingLineLeadingAnchor.constant)")
-        
+                
         // Adjust contentOffset.x of scroll of buttonsView
         buttonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)
         
@@ -259,15 +247,13 @@ extension SearchResultsViewController {
     
     private func applyConstraints() {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        // Constant 1 added to hide borders of buttonsView on leading and trailing sides
+        // Constants added to hide borders of buttonsView on leading and trailing sides
         NSLayoutConstraint.activate([
-//            buttonsView.topAnchor.constraint(equalTo: view.topAnchor),
             buttonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -1),
             buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 1),
             buttonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SearchResultsButtonsView.viewHeight)
         ])
-        
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

@@ -45,7 +45,6 @@ class SearchResultsButtonsView: UIView {
        var buttons = [UIButton]()
         for kind in buttonKinds {
             let button = UIButton()
-//            button.backgroundColor = .green
             var config = UIButton.Configuration.plain()
 
             // Top inset makes visual x-position of button text in stackView as if it's centered
@@ -86,7 +85,6 @@ class SearchResultsButtonsView: UIView {
         scopeButtons.forEach { horzStackButtons.addArrangedSubview($0) }
         horzStackButtons.translatesAutoresizingMaskIntoConstraints = false
         horzStackButtons.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithButtons).isActive = true
-//        horzStackButtons.backgroundColor = .magenta
         
         let horzStackSlidingLine = UIStackView()
         horzStackSlidingLine.axis = .horizontal
@@ -100,8 +98,6 @@ class SearchResultsButtonsView: UIView {
         vertStack.alignment = .center
         [horzStackButtons, horzStackSlidingLine].forEach { vertStack.addArrangedSubview($0)}
         
-        print("vertStack size: \(vertStack.bounds.size)")
-                
         vertStack.backgroundColor = Utils.customBackgroundColor
         return vertStack
     }()
@@ -114,7 +110,7 @@ class SearchResultsButtonsView: UIView {
     }()
 
     lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
-    private lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
+    lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -219,7 +215,7 @@ class SearchResultsButtonsView: UIView {
     
     // Use it in SearchResultsViewController in didScroll
     func adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: ScrollDirection, currentButtonIndex: Int, slidingLineXProportionalPart: CGFloat, currentOffsetXOfCvInRangeOfOnePageWidth: CGFloat, pageWidthOfCv pageWidth: CGFloat) {
-        
+
         let currentButton = scopeButtons[currentButtonIndex]
         let currentButtonWidth = currentButton.bounds.size.width
         
@@ -235,7 +231,7 @@ class SearchResultsButtonsView: UIView {
             return
         }
         
-        // Save lastSlidingLineCompressedWidth and lastSlidingLineLeadingConstant, because there are cases when previous if-block doesn't do this
+        // Save lastSlidingLineCompressedWidth and previousSlidingLineLeadingConstant, because there are cases when previous if-block doesn't do this
         if currentButtonIndex == scopeButtons.count - 2 {
 //            let ranges = rangesOfButtons
             let upperBoundOfCurrentButton = rangesOfButtons[currentButtonIndex].upperBound
@@ -253,8 +249,29 @@ class SearchResultsButtonsView: UIView {
             slidingLineWidthAnchor.constant = widthConstant
             return
         }
-
-    // Logic for adjusting sliding line width when current button is not the last one
+        
+        
+    // Logic for adjusting sliding line width when current button is the first one and currentOffseX of collection view < 0
+        if currentScrollDirectionOfCv == .back && currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
+            // Width should decrease for number of points the sliding line leading anchor constant WOULD change (because actually it's set to 0 in didScroll of SearchResultsViewController)
+            let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
+            slidingLineWidthAnchor.constant = widthConstant
+            
+            // Use these two values later for calculations when scroll direction is .forward and currentOffseX of collection view < 0
+            lastSlidingLineCompressedWidth = widthConstant
+            previousSlidingLineLeadingConstant = slidingLineXProportionalPart
+            return
+        }
+        
+        if currentScrollDirectionOfCv == .forward && currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
+            let pointsToAdd = previousSlidingLineLeadingConstant - slidingLineXProportionalPart
+            let widthConstant = lastSlidingLineCompressedWidth + abs(pointsToAdd)
+            slidingLineWidthAnchor.constant = widthConstant
+            return
+        }
+        
+        
+    // Logic for adjusting sliding line width for other cases
         
         // Determine width the sliding line should gradually change to
         var previousWidth: CGFloat
@@ -298,8 +315,6 @@ class SearchResultsButtonsView: UIView {
     }
     
     private func applyConstraints() {
-        
-        // scrollView Content and Frame Layout Guides
         let contentG = scrollView.contentLayoutGuide
         let frameG = scrollView.frameLayoutGuide
         
@@ -326,65 +341,7 @@ class SearchResultsButtonsView: UIView {
         slidingLineWidthAnchor.isActive = true
         slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
         // To force layoutSubviews() to apply correct slidingLine anchors' constants
-//        layoutIfNeeded()
+        layoutIfNeeded()
     }
     
-//    private func applyConstraints() {
-//
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-//            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-//            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-//            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-//            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
-//        ])
-//
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            scrollView.topAnchor.constraint(equalTo: topAnchor)
-////            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
-////            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
-//        ])
-//
-//        // Set the content size of the scroll view
-//        scrollView.contentSize = CGSize(width: bounds.width, height: stackView.frame.height)
-//
-//        slidingLine.translatesAutoresizingMaskIntoConstraints = false
-//        slidingLineLeadingAnchor.isActive = true
-//        slidingLineWidthAnchor.isActive = true
-//        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
-//        // To force layoutSubviews() to apply correct slidingLine anchors' constants
-//        layoutIfNeeded()
-//    }
-//
-    
-
-//    private func applyConstraints() {
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
-//            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
-//        ])
-//
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-//            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-//            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-//            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
-//        ])
-//
-//        slidingLine.translatesAutoresizingMaskIntoConstraints = false
-//        slidingLineLeadingAnchor.isActive = true
-//        slidingLineWidthAnchor.isActive = true
-//        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
-//        // To force layoutSubviews() to apply correct slidingLine anchors' constants
-//        layoutIfNeeded()
-//    }
 }
