@@ -46,7 +46,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let label = UILabel()
         label.numberOfLines = 5
         label.adjustsFontForContentSizeCategory = true
-        let font = Utils.tableViewSectionSubtitleFont
+        let font = Utils.sectionSubtitleFont
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 21)
         label.font = scaledFont
         return label

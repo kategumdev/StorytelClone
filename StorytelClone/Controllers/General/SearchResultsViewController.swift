@@ -32,6 +32,11 @@ class SearchResultsViewController: UIViewController {
     
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
+    
+    
+//    private lazy var buttonsViewTopAnchor =
+    
+//    private var previousContentSize: UIContentSizeCategory?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,12 +49,21 @@ class SearchResultsViewController: UIViewController {
         collectionView.delegate = self
         
         applyConstraints()
+        
+//        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("SearchResultsViewController viewWillAppear")
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        let currentContentSize = traitCollection.preferredContentSizeCategory
+//
+//        if previousContentSize != currentContentSize {
+//            print("view minY AFTER: \(view.bounds.minY)")
+//
+//            previousContentSize = currentContentSize
+//        }
+//    }
     
 }
 
@@ -101,7 +115,7 @@ extension SearchResultsViewController {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("\n\nscrollViewWillBeginDragging")
+//        print("\n\nscrollViewWillBeginDragging")
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
@@ -111,7 +125,7 @@ extension SearchResultsViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         guard !isButtonTriggeredScroll else { return }
-        print("current contentOffset.x: \(scrollView.contentOffset.x)")
+//        print("current contentOffset.x: \(scrollView.contentOffset.x)")
         let currentOffsetX = scrollView.contentOffset.x
         let pageWidth = collectionView.bounds.size.width
         let currentButtonIndex = buttonsView.getCurrentButtonIndex()
@@ -193,6 +207,7 @@ extension SearchResultsViewController {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         // Constant 1 added to hide borders of buttonsView on leading and trailing sides
         NSLayoutConstraint.activate([
+//            buttonsView.topAnchor.constraint(equalTo: view.topAnchor),
             buttonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -1),
             buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 1),

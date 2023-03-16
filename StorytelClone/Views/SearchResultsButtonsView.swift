@@ -189,7 +189,7 @@ class SearchResultsButtonsView: UIView {
         for (index, range) in rangesOfButtons.enumerated() {
             if range.contains(slidingLineConstant)  {
                 currentButtonIndex = index
-                print("slidingLineLeadingConstant is in range \(index)")
+//                print("slidingLineLeadingConstant is in range \(index)")
                 break
             }
         }

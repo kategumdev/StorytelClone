@@ -48,7 +48,7 @@ class SectionHeaderSubviewsContainer: UIView {
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
-        let font = Utils.tableViewSectionTitleFont
+        let font = Utils.sectionTitleFont
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
         label.font = scaledFont
         return label
@@ -59,7 +59,7 @@ class SectionHeaderSubviewsContainer: UIView {
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
-        let font = Utils.tableViewSectionSubtitleFont
+        let font = Utils.sectionSubtitleFont
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
         label.font = scaledFont
         return label

@@ -14,7 +14,6 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     static func calculateHeightForRow(withBook book: Book) -> CGFloat {
         let container = BookWithOverviewCellSubviewsContainer()
         container.configureFor(book: book)
-//        container.configureTextWith(bookTitle: book.title, overview: book.overview)
         let height = container.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
@@ -38,13 +37,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
         
         containerWithSubviews.configureFor(book: book)
         containerWithSubviews.bookOverviewButton.callback = callback
-//
-//
-//        containerWithSubviews.configureTextWith(bookTitle: book.title, overview: book.overview)
-//        containerWithSubviews.ratingLabel.text = String(book.rating)
-//        containerWithSubviews.categoryLabel.text = book.category.rawValue
-//        containerWithSubviews.squareImageView.image = book.coverImage
-//        containerWithSubviews.bookOverviewButton.book = book
+
     }
     
 }

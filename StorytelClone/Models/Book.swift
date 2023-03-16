@@ -7,10 +7,10 @@
 
 import UIKit
 
-enum BookKind {
-    case audiobook
-    case ebook
-    case audioBookAndEbook
+enum BookKind: String {
+    case audiobook = "Audiobook"
+    case ebook = "Ebook"
+    case audioBookAndEbook = "Audiobook & Ebook"
 }
 
 struct Book {
@@ -24,8 +24,9 @@ struct Book {
     let rating: Double
     let duration: String
     let language: String
+    let narrators: String?
     
-    init(title: String, author: String, coverImage: UIImage?, largeCoverImage: UIImage? = nil, bookKind: BookKind, overview: String = "", category: ButtonCategory, rating: Double = 4.5, duration: String = "5h 5m", language: String = "Spanish") {
+    init(title: String, author: String, coverImage: UIImage?, largeCoverImage: UIImage? = nil, bookKind: BookKind, overview: String = "", category: ButtonCategory, rating: Double = 4.5, duration: String = "5h 5m", language: String = "Spanish", narrators: String? = nil) {
         self.title = title
         self.author = author
         self.coverImage = coverImage
@@ -36,6 +37,7 @@ struct Book {
         self.rating = rating
         self.duration = duration
         self.language = language
+        self.narrators = narrators
     }
     
     static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
@@ -48,7 +50,7 @@ struct Book {
     
     static let book2 = Book(title: "The simple wild", author: "K.A. Tucker", coverImage: UIImage(named: "image2"), bookKind: .audioBookAndEbook, category: .novela)
     
-    static let book3 = Book(title: "The masterpiece", author: "Francine Rivers", coverImage: UIImage(named: "image3"), bookKind: .audiobook, category: .novela)
+    static let book3 = Book(title: "The masterpiece", author: "Francine Rivers", coverImage: UIImage(named: "image3"), bookKind: .audiobook, category: .novela, rating: 4.5, language: "English", narrators: "Susan Bennett")
     
     static let book4 = Book(title: "The bullet journal method", author: "Ryder Carrol", coverImage: UIImage(named: "image4"), bookKind: .audiobook, category: .crecimientoPersonalYLifestyle)
     
@@ -84,6 +86,14 @@ struct Book {
     static let book18 = Book(title: "Desajuste de cuentas", author: "Benito Olmo", coverImage: UIImage(named: "desajusteDeCuentas"), largeCoverImage: UIImage(named: "desajusteDeCuentasLarge"), bookKind: .audioBookAndEbook, category: .novelaNegra)
     
     static let book19 = Book(title: "La suelta", author: "Juan Gómez-Jurado", coverImage: UIImage(named: "laSuelta"), largeCoverImage: UIImage(named: "laSueltaLarge"), bookKind: .audiobook, category: .thrillerYHorror)
+    
+    static let book20 = Book(title: "Sixteenth Summer", author: "Michelle Dalton", coverImage: UIImage(named: "sixteenthSummer"), bookKind: .ebook, overview: "Anna is dreading another tourist-filled summer on Dune Island that follows the same routine: beach, ice cream, friends, repeat. That is, until she locks eyes with Will, the gorgeous and sweet guy visiting from New York. Soon, her summer is filled with flirtatious fun as Anna falls head over heels in love.\nBut with every perfect afternoon, sweet kiss, and walk on the beach, Anna can’t ignore that the days are quickly growing shorter, and Will has to leave at the end of August. Anna’s never felt anything like this before, but when forever isn’t even a possibility, one summer doesn’t feel worth the promise of her heart breaking…", category: .juvenilYYoungAdult, rating: 3.0, language: "English")
+    
+    static let book21 = Book(title: "Todos quieren a Daisy Jones", author: "Taylor Jenkins Jones", coverImage: UIImage(named: "image21"), bookKind: .ebook, category: .novela, rating: 4.3, language: "Spanish")
+    
+    static let book22 = Book(title: "La travesía final", author: "José Calvo Poyato", coverImage: UIImage(named: "image22"), bookKind: .ebook, category: .novela, rating: 4.7, language: "Spanish")
+    
+    static let book23 = Book(title: "El hombre nacido en Danzig", author: "Guillermo Fadanelli", coverImage: UIImage(named: "image23"), bookKind: .ebook, category: .novela, rating: 0.0, language: "Spanish")
     
     
     

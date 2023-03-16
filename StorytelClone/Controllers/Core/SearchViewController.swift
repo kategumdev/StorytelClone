@@ -17,6 +17,8 @@ class SearchViewController: UIViewController {
     
     private var initialTableOffsetY: CGFloat = 0
     private var firstTime = true
+    
+//    private var previousSize: UIContentSizeCategory?
         
     let categoriesTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -91,6 +93,11 @@ class SearchViewController: UIViewController {
 //        definesPresentationContext = true
 
         configureNavBar()
+        
+        
+//        previousSize = traitCollection.preferredContentSizeCategory
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
