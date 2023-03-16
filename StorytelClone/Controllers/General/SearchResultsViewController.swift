@@ -164,6 +164,8 @@ extension SearchResultsViewController {
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
         }
+        
+//        print("initial leading anchor: \(buttonsView.slidingLineLeadingAnchor.constant)")
     }
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -185,7 +187,15 @@ extension SearchResultsViewController {
         let slidingLineXProportionalPart = currentOffsetXInRangeOfPageWidth / pageWidth * currentButtonWidth
         
         let leadingConstant = previousButtonUpperBound + slidingLineXProportionalPart
-        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+        
+        // Avoid setting leading anchor outside the stackView, because it causes constraints conflict on scroll back when current button is 0
+        if leadingConstant < 0 {
+            buttonsView.slidingLineLeadingAnchor.constant = 0.0
+        } else {
+            buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+        }
+//        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+//        print("leading anchor \(buttonsView.slidingLineLeadingAnchor.constant)")
         
         // Adjust contentOffset.x of scroll of buttonsView
         buttonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)

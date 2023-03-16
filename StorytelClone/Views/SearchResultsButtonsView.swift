@@ -18,10 +18,14 @@ enum ButtonKind: String, CaseIterable {
 
 class SearchResultsButtonsView: UIView {
     
-    static let viewHeight: CGFloat = 46
+    private static let slidingLineHeight: CGFloat = 2
+    
+    private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
+    
+    private static let heightForStackWithSlidingLine = slidingLineHeight
+    static let viewHeight = heightForStackWithButtons + heightForStackWithSlidingLine
     
     let buttonKinds: [ButtonKind] = ButtonKind.allCases
-    private static let slidingLineHeight: CGFloat = 2
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -41,16 +45,15 @@ class SearchResultsButtonsView: UIView {
        var buttons = [UIButton]()
         for kind in buttonKinds {
             let button = UIButton()
+//            button.backgroundColor = .green
             var config = UIButton.Configuration.plain()
-            
+
             // Top inset makes visual x-position of button text in stackView as if it's centered
             config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config
-            
-//            button.sizeToFit()
-            
+                    
             buttons.append(button)
         }
         return buttons
@@ -81,11 +84,16 @@ class SearchResultsButtonsView: UIView {
         horzStackButtons.alignment = .center
         horzStackButtons.distribution = .fillProportionally
         scopeButtons.forEach { horzStackButtons.addArrangedSubview($0) }
+        horzStackButtons.translatesAutoresizingMaskIntoConstraints = false
+        horzStackButtons.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithButtons).isActive = true
+//        horzStackButtons.backgroundColor = .magenta
         
         let horzStackSlidingLine = UIStackView()
         horzStackSlidingLine.axis = .horizontal
         horzStackSlidingLine.alignment = .center
         [UIView(), slidingLine, UIView()].forEach { horzStackSlidingLine.addArrangedSubview($0)}
+        horzStackSlidingLine.translatesAutoresizingMaskIntoConstraints = false
+        horzStackSlidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithSlidingLine).isActive = true
         
         let vertStack = UIStackView()
         vertStack.axis = .vertical
@@ -290,27 +298,93 @@ class SearchResultsButtonsView: UIView {
     }
     
     private func applyConstraints() {
+        
+        // scrollView Content and Frame Layout Guides
+        let contentG = scrollView.contentLayoutGuide
+        let frameG = scrollView.frameLayoutGuide
+        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
         ])
-        
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
+            stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
+            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor)
         ])
-        
+
         slidingLine.translatesAutoresizingMaskIntoConstraints = false
         slidingLineLeadingAnchor.isActive = true
         slidingLineWidthAnchor.isActive = true
         slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
         // To force layoutSubviews() to apply correct slidingLine anchors' constants
-        layoutIfNeeded()
+//        layoutIfNeeded()
     }
+    
+//    private func applyConstraints() {
+//
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+//            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+//            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+//            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
+//        ])
+//
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            scrollView.topAnchor.constraint(equalTo: topAnchor)
+////            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
+////            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
+//        ])
+//
+//        // Set the content size of the scroll view
+//        scrollView.contentSize = CGSize(width: bounds.width, height: stackView.frame.height)
+//
+//        slidingLine.translatesAutoresizingMaskIntoConstraints = false
+//        slidingLineLeadingAnchor.isActive = true
+//        slidingLineWidthAnchor.isActive = true
+//        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
+//        // To force layoutSubviews() to apply correct slidingLine anchors' constants
+//        layoutIfNeeded()
+//    }
+//
+    
+
+//    private func applyConstraints() {
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: stackView.heightAnchor)
+//        ])
+//
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+//            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+//            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+//            stackView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
+//        ])
+//
+//        slidingLine.translatesAutoresizingMaskIntoConstraints = false
+//        slidingLineLeadingAnchor.isActive = true
+//        slidingLineWidthAnchor.isActive = true
+//        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
+//        // To force layoutSubviews() to apply correct slidingLine anchors' constants
+//        layoutIfNeeded()
+//    }
 }
