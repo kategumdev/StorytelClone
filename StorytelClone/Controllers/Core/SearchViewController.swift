@@ -94,6 +94,8 @@ class SearchViewController: UIViewController {
 
         configureNavBar()
         
+        createAndPassItemSelectedCallback()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: tableDidRequestKeyboardDismiss, object: nil)
         
 //        previousSize = traitCollection.preferredContentSizeCategory
@@ -121,8 +123,21 @@ class SearchViewController: UIViewController {
     }
     
     //MARK: - Helper methods
+    
+    private func createAndPassItemSelectedCallback() {
+        let callbackClosure: ItemSelectedCallback = { [weak self] item in
+            
+            guard let item = item as? Book else { return }
+            print("SearchViewController hadles item selected \(item.title)")
+        }
+        
+        guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        print("searchResultsController is not nil")
+        searchResultsController.itemSelectedCallback = callbackClosure
+    }
+    
     @objc func handleKeyboardDismissNotification(_ notification: Notification) {
-//        print("notification \(notification.name) received")
         if searchController.searchBar.isFirstResponder {
             searchController.searchBar.endEditing(true)
         }
@@ -289,4 +304,15 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     
 }
 
+//extension SearchViewController: SearchResultsCollectionViewCellDelegate {
+//    func searchResultsCollectionViewCellDidRequestKeyboardDismiss(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell) {
+//        if searchController.searchBar.isFirstResponder {
+//            searchController.searchBar.endEditing(true)
+//        }
+//    }
+//
+//    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, didSelectItem: Book) {
+//        print("SearchViewController knows that item was selected")
+//    }
+//}
 

@@ -21,7 +21,7 @@ class CellButton: UIButton {
 //    var wideButtonCallbackClosure: WideButtonCallbackClosure = {_ in}
 //    var categoryButtonCallbackClosure: CategoryButtonCallbackClosure = {_ in}
 
-    var callback: ButtonCallbackClosure = {_ in}
+    var callback: ButtonCallback = {_ in}
 
     override init(frame: CGRect) {
         super.init(frame: frame)

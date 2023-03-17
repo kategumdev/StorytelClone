@@ -175,7 +175,7 @@ extension HomeViewController {
 //        cell.delegate = self
         
         // To respond to button tap in WideButtonTableViewCell
-        let callbackClosure: ButtonCallbackClosure = { [weak self] sectionKind in
+        let callbackClosure: ButtonCallback = { [weak self] sectionKind in
             guard let self = self else { return }
             if sectionKind as? SectionKind == .seriesCategoryButton {
                 let controller = CategoryViewController(categoryModel: Category.series)
@@ -193,7 +193,7 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
         
         // To respond to button tap in PosterTableViewCell
-        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+        let callbackClosure: ButtonCallback = { [weak self] book in
             let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
@@ -208,7 +208,7 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
         
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+        let callbackClosure: ButtonCallback = { [weak self] book in
             let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
@@ -224,7 +224,7 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
 
         // To respond to button tap in LargeBookCollectionViewCell of TableViewCellWithHorzCvLargeCovers
-        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+        let callbackClosure: ButtonCallback = { [weak self] book in
             let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
@@ -239,7 +239,7 @@ extension HomeViewController {
         let book = category.tableSections[indexPath.section].books[0]
         
         // To respond to button tap in BookWithOverviewTableViewCell
-        let callbackClosure: ButtonCallbackClosure = { [weak self] book in
+        let callbackClosure: ButtonCallback = { [weak self] book in
             let controller = BookViewController(book: book as? Book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }

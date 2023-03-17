@@ -14,7 +14,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     // Actual value injected when cell is being configured in cellForRowAt
     var books: [Book] = [Book]() // It will contain 42 random audiobooks
     
-    var callbackClosure: ButtonCallbackClosure = {_ in}
+    var callbackClosure: ButtonCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -45,7 +45,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
-    func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallbackClosure) {
+    func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallback) {
         self.books = books
         self.callbackClosure = callbackForButtons
     }

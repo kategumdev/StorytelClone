@@ -51,7 +51,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
+    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         bookButton.book = book
         bookButton.callback = callback
         

@@ -65,7 +65,7 @@ class WideButtonTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     
-    func configureFor(sectionKind: SectionKind, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
+    func configureFor(sectionKind: SectionKind, withCallbackForButton callback: @escaping ButtonCallback) {
         wideButton.sectionKind = sectionKind
         wideButton.callback = callback
         if sectionKind == .seriesCategoryButton {

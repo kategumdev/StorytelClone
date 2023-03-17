@@ -33,7 +33,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallbackClosure) {
+    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         
         containerWithSubviews.configureFor(book: book)
         containerWithSubviews.bookOverviewButton.callback = callback

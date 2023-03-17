@@ -16,7 +16,9 @@ class SearchResultsViewController: UIViewController {
 
     private let buttonsView = SearchResultsButtonsView()
     
-    private lazy var collectionView: UICollectionView = {
+    var itemSelectedCallback: ItemSelectedCallback = {_ in}
+    
+    lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
@@ -33,7 +35,6 @@ class SearchResultsViewController: UIViewController {
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     
-//    private var cellsToHideContent: [Int]?
     private var cellsToHideContent = [Int]()
     private var indexPathsToUnhide = [IndexPath]()
         
@@ -87,6 +88,7 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         print("\ndequeue cell \(buttonsView.buttonKinds[indexPath.row].rawValue)")
         
         cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
+        cell.itemSelectedCallback = itemSelectedCallback
         
         if isButtonTriggeredScroll {
             if cellsToHideContent.contains(indexPath.row) == true {

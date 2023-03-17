@@ -53,7 +53,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallbackClosure ) {
+    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallback ) {
         cellButton.backgroundColor = color
         cellButton.categoryButton = category
         cellButton.callback = callback

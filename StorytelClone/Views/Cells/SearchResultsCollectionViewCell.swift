@@ -14,6 +14,8 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
     
+    var itemSelectedCallback: ItemSelectedCallback = {_ in}
+        
     private var isFirstTime = true
     
     var buttonKind: ButtonKind?
@@ -80,7 +82,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         tapGesture.cancelsTouchesInView = false
         resultsTable.addGestureRecognizer(tapGesture)
     }
-    
+
     @objc func handleTapGesure() {
         NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
     }
@@ -136,6 +138,8 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("didSelectRowAt \(indexPath.row)")
+        itemSelectedCallback(Book.book1)
+        #warning("Change argument value to real one")
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
