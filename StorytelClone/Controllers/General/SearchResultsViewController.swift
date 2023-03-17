@@ -30,6 +30,8 @@ class SearchResultsViewController: UIViewController {
         return collectionView
     }()
     
+    private var rememberedOffsetsOfTablesInCells = [ButtonKind : CGPoint]()
+    
     private var tappedButtonIndex: Int? = nil
     
     private var previousOffsetX: CGFloat = 0
@@ -51,7 +53,16 @@ class SearchResultsViewController: UIViewController {
         collectionView.delegate = self
         
         applyConstraints()
+        
+        setInitialOffsetsOfTablesInCells()
 //        previousContentSize = traitCollection.preferredContentSizeCategory
+    }
+    
+    private func setInitialOffsetsOfTablesInCells() {
+        let buttonKinds = buttonsView.buttonKinds
+        for kind in buttonKinds {
+            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
+        }
     }
     
 //    override func viewDidLayoutSubviews() {
@@ -85,40 +96,34 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
-        print("\ndequeue cell \(buttonsView.buttonKinds[indexPath.row].rawValue)")
-        
-        cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
+        let buttonKind = buttonsView.buttonKinds[indexPath.row]
+        cell.buttonKind = buttonKind
         cell.itemSelectedCallback = itemSelectedCallback
+        cell.delegate = self
         
-        if isButtonTriggeredScroll {
-            if cellsToHideContent.contains(indexPath.row) == true {
-                cell.resultsTable.isHidden = true
-                return cell
-            } else {
-                cell.resultsTable.isHidden = false
-                cell.resultsTable.reloadData()
-                return cell
-            }
+        if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
+            cell.rememberedOffset = offset
+        }
+        
+        if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
+            cell.resultsTable.isHidden = true
+            return cell
         }
         
         cell.resultsTable.isHidden = false
         cell.resultsTable.reloadData()
         return cell
-        
     }
     
 }
 
-
 // MARK: - UIScrollViewDelegate
 extension SearchResultsViewController {
-    
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         toggleIsButtonTriggeredScrollAndUnhideCells()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        print("\n\nscrollViewWillBeginDragging")
         toggleIsButtonTriggeredScrollAndUnhideCells()
     }
  
@@ -173,7 +178,6 @@ extension SearchResultsViewController {
 
 // MARK: - Helper methods
 extension SearchResultsViewController {
-    
     private func toggleIsButtonTriggeredScrollAndUnhideCells() {
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
@@ -191,8 +195,6 @@ extension SearchResultsViewController {
         toggleIsButtonTriggeredScrollAndUnhideCells()
         
         collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
-        
-//        scrollToCell(0)
         
         let firstButton = buttonsView.scopeButtons[0]
         buttonsView.toggleButtonsColors(currentButton: firstButton)
@@ -223,19 +225,16 @@ extension SearchResultsViewController {
     }
     
     private func scrollToCell(_ cellIndex: Int) {
-//        let indexPath = IndexPath(item: cellIndex, section: 0)
         let tappedButtonIndex = cellIndex
         let currentButtonIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
         
         guard tappedButtonIndex != currentButtonIndex else {
-            print("          same indices")
-            
+//            print("same indices")
             // To avoid behavior when it is set to true, because code below in this method won't be triggered and therefore no cells need to be hidden
             isButtonTriggeredScroll = false
             return
         }
 
-        
         // Get array of indices of buttons between current and tapped one (excl current and tapped)
         let range: Range<Int> = currentButtonIndex < tappedButtonIndex ? currentButtonIndex + 1..<tappedButtonIndex : tappedButtonIndex + 1..<currentButtonIndex
         
@@ -279,6 +278,13 @@ extension SearchResultsViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+}
+
+extension SearchResultsViewController: SearchResultsCollectionViewCellDelegate {
+    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint) {
+        rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }
     
 }

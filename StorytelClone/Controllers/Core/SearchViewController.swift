@@ -160,7 +160,6 @@ class SearchViewController: UIViewController {
 
 // MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
-     
     // Called when searchResultsController becomes visible and unvisible (after tapping Cancel)
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -205,6 +204,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         
         resultsController.revertToInitialAppearance()
         #warning("This revert must be done only after cancel button is tapped, but now it also executes if app goes to background and then back to foreground")
+        #warning("Fully reset table views content to be as if user didn't search for anything AND set contentOffset of tables to 0")
     }
  
 }

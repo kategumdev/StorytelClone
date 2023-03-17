@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol SearchResultsCollectionViewCellDelegate: AnyObject {
+    
+    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint)
+}
+
 let tableDidRequestKeyboardDismiss = Notification.Name(
     rawValue: "tableDidRequestKeyboardDismiss")
 
@@ -14,9 +19,13 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
     
+    weak var delegate: SearchResultsCollectionViewCellDelegate?
+    
     var itemSelectedCallback: ItemSelectedCallback = {_ in}
         
     private var isFirstTime = true
+    
+    var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     
     var buttonKind: ButtonKind?
     
@@ -62,6 +71,10 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if resultsTable.contentOffset != rememberedOffset {
+            resultsTable.contentOffset = rememberedOffset
+//            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
+        }
     }
     
     private func applyConstraints() {
@@ -71,10 +84,9 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print("prepareForReuse")
+//        print("prepareForReuse")
         isBeingReused = true
     }
-    
     
     // MARK: - Helper methods
     func setupTapGesture() {
@@ -114,9 +126,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         case .tags: cell.configureFor(book: Book.book1)
         }
         
-        
-        
-        
 //        if indexPath.row == 2 {
 //            cell.configureFor(book: Book.book20)
 //        } else if indexPath.row == 4 {
@@ -154,11 +163,23 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
     }
-    
+
+}
+
+// MARK: - UIScrollViewDelegate
+extension SearchResultsCollectionViewCell {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
     }
-
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.isDragging || scrollView.isDecelerating {
+//            print("cell \(buttonKind) scrollView.isDragging || scrollView.isDecelerating ")
+            guard let buttonKind = buttonKind else { return }
+            delegate?.searchResultsCollectionViewCell(self, withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
+        }
+    }
+    
 }
 
 
