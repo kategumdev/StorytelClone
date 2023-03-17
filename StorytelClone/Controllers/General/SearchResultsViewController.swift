@@ -33,6 +33,10 @@ class SearchResultsViewController: UIViewController {
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     
+//    private var cellsToHideContent: [Int]?
+    private var cellsToHideContent = [Int]()
+    private var indexPathsToUnhide = [IndexPath]()
+    
 //    private var previousContentSize: UIContentSizeCategory?
 
     override func viewDidLoad() {
@@ -85,51 +89,23 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         
         cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
         
-        if cell.isBeingReused == true {
-            cell.resultsTable.reloadData()
+        if isButtonTriggeredScroll {
+            if cellsToHideContent.contains(indexPath.row) == true {
+                cell.resultsTable.isHidden = true
+                return cell
+            } else {
+                cell.resultsTable.isHidden = false
+                cell.resultsTable.reloadData()
+                return cell
+            }
         }
-
+        
+        cell.resultsTable.isHidden = false
+        cell.resultsTable.reloadData()
         return cell
+        
     }
     
-    
-    
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
-//
-//        // Hide content of cells that are scrolled through while scrollToItem after button tap. This imitates behavior of UIPageViewContoller. If tappedButtonIndex is not nil, button was tapped and content of other cells must be hidden.
-//        if let tappedButtonIndex = tappedButtonIndex {
-//            if indexPath.row == tappedButtonIndex {
-//                cell.resultsTable.isHidden = false
-//                cell.buttonKind = buttonsView.buttonKinds[tappedButtonIndex]
-//                cell.sectionHeader.configureFor(buttonKind: buttonsView.buttonKinds[tappedButtonIndex])
-//
-//                // Set the text for the titleLabel in the table view header view
-//                if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
-//                    headerView.titleLabel.text = buttonsView.buttonKinds[tappedButtonIndex].rawValue
-//                }
-//
-//                print("cell is reconfigured for \(buttonsView.buttonKinds[tappedButtonIndex].rawValue), header title: \(String(describing: cell.sectionHeader.titleLabel.text))")
-//            } else {
-//                cell.resultsTable.isHidden = true
-//                }
-//        } else {
-//            cell.resultsTable.isHidden = false
-//            cell.buttonKind = buttonsView.buttonKinds[indexPath.row]
-//            cell.sectionHeader.configureFor(buttonKind: buttonsView.buttonKinds[indexPath.row])
-//
-//            // Set the text for the titleLabel in the table view header view
-//            if let headerView = cell.resultsTable.headerView(forSection: 0) as? SearchResultsSectionHeaderView {
-//                headerView.titleLabel.text = buttonsView.buttonKinds[indexPath.row].rawValue
-//            }
-//
-//            print("cell is reconfigured for \(buttonsView.buttonKinds[indexPath.row].rawValue), header title: \(String(describing: cell.sectionHeader.titleLabel.text))")
-//        }
-//
-//        return cell
-//    }
-
 }
 
 
@@ -137,25 +113,12 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
 extension SearchResultsViewController {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        guard let tappedButtonIndex = tappedButtonIndex else { return }
-        // Force-reload cell which is previous to the one to which scrollToItem was called. Otherwise it won't reload and may show no content as if it's scrolled through while scrollToItem
-//        if tappedButtonIndex != 0 {
-//            let previousButtonIndex = tappedButtonIndex - 1
-//            collectionView.reloadItems(at: [IndexPath(item: previousButtonIndex, section: 0)])
-//
-//        }
-        
-//        collectionView.reloadData()
-        
-        self.tappedButtonIndex = nil
+        toggleIsButtonTriggeredScrollAndUnhideCells()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 //        print("\n\nscrollViewWillBeginDragging")
-        // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
-        if isButtonTriggeredScroll == true {
-            isButtonTriggeredScroll = false
-        }
+        toggleIsButtonTriggeredScrollAndUnhideCells()
     }
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -209,10 +172,29 @@ extension SearchResultsViewController {
 
 // MARK: - Helper methods
 extension SearchResultsViewController {
+    
+    private func toggleIsButtonTriggeredScrollAndUnhideCells() {
+        // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
+        if isButtonTriggeredScroll == true {
+            isButtonTriggeredScroll = false
+            
+            // Unhide those cells that are hidden and ready to become visible
+            collectionView.reloadItems(at: indexPathsToUnhide)
+        }
+    }
 
     func revertToInitialAppearance() {
         buttonsView.revertToInitialAppearance()
-        scrollToCell(0)
+        
+        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
+        toggleIsButtonTriggeredScrollAndUnhideCells()
+        
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
+        
+//        scrollToCell(0)
+        
+        let firstButton = buttonsView.scopeButtons[0]
+        buttonsView.toggleButtonsColors(currentButton: firstButton)
     }
     
     private func configureButtonsView() {
@@ -240,8 +222,42 @@ extension SearchResultsViewController {
     }
     
     private func scrollToCell(_ cellIndex: Int) {
-        let indexPath = IndexPath(item: cellIndex, section: 0)
-        tappedButtonIndex = cellIndex
+//        let indexPath = IndexPath(item: cellIndex, section: 0)
+        let tappedButtonIndex = cellIndex
+        let currentButtonIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
+        
+        guard tappedButtonIndex != currentButtonIndex else {
+            print("          same indices")
+            
+            // To avoid behavior when it is set to true, because code below in this method won't be triggered and therefore no cells need to be hidden
+            isButtonTriggeredScroll = false
+            return
+        }
+
+        
+        // Get array of indices of buttons between current and tapped one (excl current and tapped)
+        let range: Range<Int> = currentButtonIndex < tappedButtonIndex ? currentButtonIndex + 1..<tappedButtonIndex : tappedButtonIndex + 1..<currentButtonIndex
+        
+        var buttonsIndicesBetween = [Int]()
+        for index in range {
+            buttonsIndicesBetween.append(index)
+        }
+        
+        // Save to hide content when cells in between will be reused while scrollToItem performs to imitate UIPageViewController behavior
+        cellsToHideContent = buttonsIndicesBetween
+        
+        // Reload cells in between that are already reused and ready to become visible
+        var indexPaths = [IndexPath]()
+        for index in buttonsIndicesBetween {
+            let indexPath = IndexPath(item: index, section: 0)
+            indexPaths.append(indexPath)
+        }
+        
+        collectionView.reloadItems(at: indexPaths)
+        
+        indexPathsToUnhide = indexPaths
+    
+        let indexPath = IndexPath(item: tappedButtonIndex, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
     

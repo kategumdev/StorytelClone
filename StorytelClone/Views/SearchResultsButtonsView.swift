@@ -130,7 +130,6 @@ class SearchResultsButtonsView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        print("vertStack size in layoutSubviews(): \(stackView.bounds.size)")
         guard firstTime == false else {
             firstTime = false
             return
@@ -233,7 +232,6 @@ class SearchResultsButtonsView: UIView {
         
         // Save lastSlidingLineCompressedWidth and previousSlidingLineLeadingConstant, because there are cases when previous if-block doesn't do this
         if currentButtonIndex == scopeButtons.count - 2 {
-//            let ranges = rangesOfButtons
             let upperBoundOfCurrentButton = rangesOfButtons[currentButtonIndex].upperBound
             if slidingLineLeadingAnchor.constant == upperBoundOfCurrentButton {
                 let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
