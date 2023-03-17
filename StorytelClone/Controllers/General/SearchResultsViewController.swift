@@ -36,7 +36,7 @@ class SearchResultsViewController: UIViewController {
 //    private var cellsToHideContent: [Int]?
     private var cellsToHideContent = [Int]()
     private var indexPathsToUnhide = [IndexPath]()
-    
+        
 //    private var previousContentSize: UIContentSizeCategory?
 
     override func viewDidLoad() {
@@ -50,7 +50,6 @@ class SearchResultsViewController: UIViewController {
         collectionView.delegate = self
         
         applyConstraints()
-        
 //        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     

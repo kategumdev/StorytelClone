@@ -94,6 +94,7 @@ class SearchViewController: UIViewController {
 
         configureNavBar()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: tableDidRequestKeyboardDismiss, object: nil)
         
 //        previousSize = traitCollection.preferredContentSizeCategory
         
@@ -120,6 +121,13 @@ class SearchViewController: UIViewController {
     }
     
     //MARK: - Helper methods
+    @objc func handleKeyboardDismissNotification(_ notification: Notification) {
+//        print("notification \(notification.name) received")
+        if searchController.searchBar.isFirstResponder {
+            searchController.searchBar.endEditing(true)
+        }
+    }
+    
     private func configureNavBar() {
         navigationItem.title = "Explore"
         navigationController?.navigationBar.tintColor = .label

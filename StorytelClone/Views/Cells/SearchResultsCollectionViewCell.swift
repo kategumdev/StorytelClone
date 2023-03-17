@@ -7,6 +7,9 @@
 
 import UIKit
 
+let tableDidRequestKeyboardDismiss = Notification.Name(
+    rawValue: "tableDidRequestKeyboardDismiss")
+
 class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
@@ -47,8 +50,8 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(resultsTable)
         resultsTable.dataSource = self
         resultsTable.delegate = self
-                
         applyConstraints()
+        setupTapGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -69,8 +72,19 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         print("prepareForReuse")
         isBeingReused = true
     }
+    
+    
+    // MARK: - Helper methods
+    func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        tapGesture.cancelsTouchesInView = false
+        resultsTable.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleTapGesure() {
+        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
+    }
 
-        
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -137,4 +151,10 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
+    }
+
 }
+
+
