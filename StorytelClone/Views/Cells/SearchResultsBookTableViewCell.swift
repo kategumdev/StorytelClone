@@ -12,18 +12,10 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     static let identifier = "ResultsTableViewCell"
     
     static let topAndBottomPadding: CGFloat = 15
+//    static let contentViewWidthFraction: CGFloat = 4
+    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
+//    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width / 5)
 
-//    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat) -> UILabel {
-//        let label = UILabel()
-//        label.numberOfLines = 1
-//        label.lineBreakMode = .byTruncatingTail
-//        label.adjustsFontForContentSizeCategory = true
-//        let font = font
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-//        label.font = scaledFont
-//        return label
-//    }
-    
     static func getEstimatedHeightForRow() -> CGFloat {
         let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
         let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
@@ -38,7 +30,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         return rowHeight
     }
 
-    private lazy var imageHeight: CGFloat = ceil(contentView.bounds.width / 4)
+//    private lazy var imageHeight: CGFloat = ceil(contentView.bounds.width / SearchResultsBookTableViewCell.contentViewWidthFraction)
     
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
@@ -92,7 +84,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         applyConstraints()
     }
     
-    private lazy var customImageViewWidthAnchor =             customImageView.widthAnchor.constraint(equalToConstant: imageHeight)
+    private lazy var customImageViewWidthAnchor =             customImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight)
 
     
     required init?(coder: NSCoder) {
@@ -124,7 +116,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         if let image = book.coverImage {
 //            print("image size before: \(image.size)")
             let imageRatio = image.size.width / image.size.height
-            let targetHeight = imageHeight
+            let targetHeight = SearchResultsBookTableViewCell.imageHeight
             let targetWidth = targetHeight * imageRatio
             let targetSize = CGSize(width: targetWidth, height: targetHeight)
             
@@ -148,8 +140,8 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         viewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             viewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            viewWithImageView.widthAnchor.constraint(equalToConstant: imageHeight),
-            viewWithImageView.heightAnchor.constraint(equalToConstant: imageHeight),
+            viewWithImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight),
+            viewWithImageView.heightAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight),
             viewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         

@@ -196,13 +196,18 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         
     }
     
-    func didDismissSearchController(_ searchController: UISearchController) {
-//        print("didDismissSearchController")
+//    func didDismissSearchController(_ searchController: UISearchController) {
+////        print("didDismissSearchController")
+//        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+//    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
-        resultsController.revertToInitialAppearance()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            resultsController.revertToInitialAppearance()
+        }
         #warning("This revert must be done only after cancel button is tapped, but now it also executes if app goes to background and then back to foreground")
-        #warning("Fully reset table views content to be as if user didn't search for anything AND set contentOffset of tables to 0")
     }
  
 }

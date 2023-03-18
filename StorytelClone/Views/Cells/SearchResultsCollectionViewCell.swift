@@ -41,6 +41,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 //        table.contentInset = inset
         
         table.register(SearchResultsBookTableViewCell.self, forCellReuseIdentifier: SearchResultsBookTableViewCell.identifier)
+        table.register(SearchResultsNoImageTableViewCell.self, forCellReuseIdentifier: SearchResultsNoImageTableViewCell.identifier)
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
@@ -112,10 +113,27 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let buttonKind = buttonKind else { return UITableViewCell() }
+        
+        if buttonKind == .authors || buttonKind == .narrators || buttonKind == .tags {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsNoImageTableViewCell.identifier, for: indexPath) as? SearchResultsNoImageTableViewCell else { return UITableViewCell() }
+            
+            if buttonKind == .authors {
+                cell.configureFor(storyteller: Storyteller.author2)
+            } else if buttonKind == .narrators {
+                cell.configureFor(storyteller: Storyteller.narrator1)
+            } else {
+                cell.configureFor(tag: Tag.tag10)
+            }
+//            cell.configureFor(storyteller: Storyteller.author1)
+            return cell
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
         
 //        print("tvcell for \(String(describing: buttonKind?.rawValue)) configured")
-        guard let buttonKind = buttonKind else { return UITableViewCell() }
+//        guard let buttonKind = buttonKind else { return UITableViewCell() }
         
         switch buttonKind {
         case .top: cell.configureFor(book: Book.book20)
@@ -125,23 +143,13 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         case .series: cell.configureFor(book: Book.book3)
         case .tags: cell.configureFor(book: Book.book1)
         }
-        
-//        if indexPath.row == 2 {
-//            cell.configureFor(book: Book.book20)
-//        } else if indexPath.row == 4 {
-//            cell.configureFor(book: Book.book22)
-//        } else if indexPath.row == 5 {
-//            cell.configureFor(book: Book.book23)
-//        } else if indexPath.row == 7 {
-//            cell.configureFor(book: Book.book21)
-//        } else {
-//            cell.configureFor(book: Book.book3)
-//        }
-                
         return cell
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if buttonKind == .authors || buttonKind == .narrators || buttonKind == .tags {
+            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
+        }
         return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
     }
     

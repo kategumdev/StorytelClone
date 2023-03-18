@@ -20,5 +20,4 @@ struct Constants {
     static let largeCoverCornerRadius: CGFloat = 7
     static let categoryCvItemHeight: CGFloat = 120
     
-    // gapBetweenSectionsOfCategoryTable
 }

@@ -195,6 +195,8 @@ extension SearchResultsViewController {
         toggleIsButtonTriggeredScrollAndUnhideCells()
         
         collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
+        setInitialOffsetsOfTablesInCells()
+        collectionView.reloadData()
         
         let firstButton = buttonsView.scopeButtons[0]
         buttonsView.toggleButtonsColors(currentButton: firstButton)

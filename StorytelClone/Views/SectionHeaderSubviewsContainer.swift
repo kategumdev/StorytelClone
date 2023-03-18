@@ -47,28 +47,6 @@ class SectionHeaderSubviewsContainer: UIView {
     
     let sectionSubtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
     
-//    let sectionTitleLabel: UILabel = {
-//        let label = UILabel()
-//        label.numberOfLines = 2
-//        label.lineBreakMode = .byTruncatingTail
-//        label.adjustsFontForContentSizeCategory = true
-//        let font = Utils.sectionTitleFont
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
-//        label.font = scaledFont
-//        return label
-//    }()
-    
-//    let sectionSubtitleLabel: UILabel = {
-//        let label = UILabel()
-//        label.numberOfLines = 2
-//        label.lineBreakMode = .byTruncatingTail
-//        label.adjustsFontForContentSizeCategory = true
-//        let font = Utils.sectionSubtitleFont
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
-//        label.font = scaledFont
-//        return label
-//    }()
-    
     var withButton = true
     
     // MARK: - View life cycle
