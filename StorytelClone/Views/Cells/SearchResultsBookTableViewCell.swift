@@ -13,20 +13,20 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     
     static let topAndBottomPadding: CGFloat = 15
 
-    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontForContentSizeCategory = true
-        let font = font
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-        label.font = scaledFont
-        return label
-    }
+//    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat) -> UILabel {
+//        let label = UILabel()
+//        label.numberOfLines = 1
+//        label.lineBreakMode = .byTruncatingTail
+//        label.adjustsFontForContentSizeCategory = true
+//        let font = font
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+//        label.font = scaledFont
+//        return label
+//    }
     
     static func getEstimatedHeightForRow() -> CGFloat {
-        let titleLabel = createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-        let subtitleLabel = createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
+        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
     
         titleLabel.text = "This is title"
         subtitleLabel.text = "This is subtitle"
@@ -77,10 +77,10 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         return button
     }()
     
-    private let bookTitleLabel = createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-    private let bookKindLabel = createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-    private let authorLabel = createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-    private let narratorLabel = createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+    private let bookTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
+    private let bookKindLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+    private let authorLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+    private let narratorLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

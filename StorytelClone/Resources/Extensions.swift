@@ -54,9 +54,9 @@ extension NSAttributedString {
 
 extension UILabel {
     
-    static func createOneLineLabel(withFont font: UIFont, maximumPointSize: CGFloat) -> UILabel {
+    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat, numberOfLines: Int = 1) -> UILabel {
         let label = UILabel()
-        label.numberOfLines = 1
+        label.numberOfLines = numberOfLines
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
         let font = font
@@ -64,7 +64,6 @@ extension UILabel {
         label.font = scaledFont
         return label
     }
-    
     
 }
 

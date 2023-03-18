@@ -17,10 +17,6 @@ class CellButton: UIButton {
     var sectionKind: SectionKind?
     var categoryButton: ButtonCategory?
     
-//    var callbackClosure: BookButtonCallbackClosure = {_ in}
-//    var wideButtonCallbackClosure: WideButtonCallbackClosure = {_ in}
-//    var categoryButtonCallbackClosure: CategoryButtonCallbackClosure = {_ in}
-
     var callback: ButtonCallback = {_ in}
 
     override init(frame: CGRect) {

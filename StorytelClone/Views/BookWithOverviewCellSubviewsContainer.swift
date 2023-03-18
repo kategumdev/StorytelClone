@@ -42,15 +42,17 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    let overviewLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 5
-        label.adjustsFontForContentSizeCategory = true
-        let font = Utils.sectionSubtitleFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 21)
-        label.font = scaledFont
-        return label
-    }()
+    let overviewLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
+    
+//    let overviewLabel: UILabel = {
+//        let label = UILabel()
+//        label.numberOfLines = 5
+//        label.adjustsFontForContentSizeCategory = true
+//        let font = Utils.sectionSubtitleFont
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 21)
+//        label.font = scaledFont
+//        return label
+//    }()
     
     let starView: UIView = {
         let view = UIView()
@@ -88,15 +90,23 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }()
     
     let ratingLabel: UILabel = {
-       let label = UILabel()
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
-        label.font = scaledFont
-        label.adjustsFontForContentSizeCategory = true
+        let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
         label.textColor = UIColor.secondaryLabel
         label.sizeToFit()
         return label
     }()
+    
+//    let ratingLabel: UILabel = {
+//       let label = UILabel()
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
+//        label.font = scaledFont
+//        label.adjustsFontForContentSizeCategory = true
+//        label.textColor = UIColor.secondaryLabel
+//        label.sizeToFit()
+//        return label
+//    }()
     
     let vertBarLabel: UILabel = {
         let label = UILabel()
@@ -112,29 +122,37 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }()
     
     let categoryLabel: UILabel = {
-        let label = UILabel()
         let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
-        label.font = scaledFont
-        label.adjustsFontForContentSizeCategory = true
+        let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
         label.textColor = UIColor.label.withAlphaComponent(0.7)
         label.sizeToFit()
         return label
     }()
+    
+//    let categoryLabel: UILabel = {
+//        let label = UILabel()
+//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 16)
+//        label.font = scaledFont
+//        label.adjustsFontForContentSizeCategory = true
+//        label.textColor = UIColor.label.withAlphaComponent(0.7)
+//        label.sizeToFit()
+//        return label
+//    }()
 
-    let spacerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        return view
-    }()
+//    let spacerView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .clear
+//        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        return view
+//    }()
     
     lazy var horzStackView: UIStackView = {
         let stack = UIStackView()
         stack.isUserInteractionEnabled = false
         stack.axis = .horizontal
         stack.alignment = .center
-        [starView, ratingLabel, vertBarLabel, categoryLabel, spacerView].forEach { stack.addArrangedSubview($0) }
+        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { stack.addArrangedSubview($0) }
         stack.setCustomSpacing(4, after: starView)
         stack.setCustomSpacing(6, after: ratingLabel)
         stack.setCustomSpacing(6, after: vertBarLabel)
