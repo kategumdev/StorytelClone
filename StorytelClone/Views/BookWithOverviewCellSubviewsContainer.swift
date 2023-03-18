@@ -204,19 +204,12 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         }
     }
     
-//    func configureTextWith(bookTitle: String, overview: String) {
-//        bookTitleLabel.attributedText = NSAttributedString(string: bookTitle).withLineHeightMultiple(0.8)
-//        overviewLabel.attributedText = NSAttributedString(string: overview).withLineHeightMultiple(0.9)
-//    }
-    
     func configureFor(book: Book) {
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
         let overviewString = book.overview
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
         
-//        let ratingString = String(book.rating).replacingOccurrences(of: ".", with: ",")
-//        ratingLabel.attributedText = NSAttributedString(string: ratingString).withLineHeightMultiple(0.9)
         ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue
         squareImageView.image = book.coverImage

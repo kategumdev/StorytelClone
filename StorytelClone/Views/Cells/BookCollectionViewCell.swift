@@ -57,19 +57,35 @@ class BookCollectionViewCell: UICollectionViewCell {
         
         bookButton.configuration?.background.image = book.coverImage
 
-        let bookKind  = book.bookKind
-        switch bookKind {
-        case .audiobook:
+        let bookKind = book.titleKind
+        if bookKind == .audiobook {
             badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
             badgeTwo.isHidden = true
-        case .ebook:
+        }
+        
+        if bookKind == .ebook {
             badgeOne.badgeImageView.image = UIImage(named: "glasses")
             badgeTwo.isHidden = true
-        case .audioBookAndEbook:
+        }
+        
+        if bookKind == .audioBookAndEbook {
             badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
             badgeTwo.isHidden = false
             badgeTwo.badgeImageView.image = UIImage(named: "glasses")
         }
+        
+//        switch bookKind {
+//        case .audiobook:
+//            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
+//            badgeTwo.isHidden = true
+//        case .ebook:
+//            badgeOne.badgeImageView.image = UIImage(named: "glasses")
+//            badgeTwo.isHidden = true
+//        case .audioBookAndEbook:
+//            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
+//            badgeTwo.isHidden = false
+//            badgeTwo.badgeImageView.image = UIImage(named: "glasses")
+//        }
     }
     
     private func addButtonUpdateHandler() {

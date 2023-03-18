@@ -52,6 +52,23 @@ extension NSAttributedString {
     }
 }
 
+extension UILabel {
+    
+    static func createOneLineLabel(withFont font: UIFont, maximumPointSize: CGFloat) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontForContentSizeCategory = true
+        let font = font
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+        label.font = scaledFont
+        return label
+    }
+    
+    
+}
+
+
 //extension NSAttributedString {
 //    func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
 //        let attributedString = NSMutableAttributedString(attributedString: self)

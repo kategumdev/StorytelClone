@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchResultsTableViewCell: UITableViewCell {
+class SearchResultsBookTableViewCell: UITableViewCell {
 
     static let identifier = "ResultsTableViewCell"
     
@@ -109,7 +109,7 @@ class SearchResultsTableViewCell: UITableViewCell {
     
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
-        bookKindLabel.text = book.bookKind.rawValue
+        bookKindLabel.text = book.titleKind.rawValue
         authorLabel.text = "By: \(book.author)"
         
         if let narrators = book.narrators {
@@ -170,8 +170,8 @@ class SearchResultsTableViewCell: UITableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsTableViewCell.topAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsTableViewCell.topAndBottomPadding),
+            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.topAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.topAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageView.trailingAnchor, constant: Constants.cvPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.cvPadding)
         ])

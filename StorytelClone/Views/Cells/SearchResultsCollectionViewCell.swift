@@ -40,7 +40,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 //        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
 //        table.contentInset = inset
         
-        table.register(SearchResultsTableViewCell.self, forCellReuseIdentifier: SearchResultsTableViewCell.identifier)
+        table.register(SearchResultsBookTableViewCell.self, forCellReuseIdentifier: SearchResultsBookTableViewCell.identifier)
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
@@ -112,7 +112,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsTableViewCell.identifier, for: indexPath) as? SearchResultsTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
         
 //        print("tvcell for \(String(describing: buttonKind?.rawValue)) configured")
         guard let buttonKind = buttonKind else { return UITableViewCell() }
@@ -142,7 +142,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return SearchResultsTableViewCell.getEstimatedHeightForRow()
+        return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

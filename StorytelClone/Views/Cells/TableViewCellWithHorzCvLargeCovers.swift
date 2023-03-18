@@ -43,11 +43,17 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
+        
+        if collectionView.contentOffset == CGPoint(x: 0, y: 0) {
+            collectionView.contentOffset = CGPoint(x: 0, y: 0)
+        }
     }
     
     func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallback) {
         self.books = books
         self.callbackClosure = callbackForButtons
+        
+        collectionView.reloadData()
     }
 
 }

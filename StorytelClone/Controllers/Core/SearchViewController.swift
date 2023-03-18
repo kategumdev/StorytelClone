@@ -128,12 +128,10 @@ class SearchViewController: UIViewController {
         let callbackClosure: ItemSelectedCallback = { [weak self] item in
             
             guard let item = item as? Book else { return }
-            print("SearchViewController hadles item selected \(item.title)")
+            print("SearchViewController handles item selected \(item.title)")
         }
         
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-        
-        print("searchResultsController is not nil")
         searchResultsController.itemSelectedCallback = callbackClosure
     }
     
@@ -175,7 +173,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {
-        print("willPresentSearchController")
+//        print("willPresentSearchController")
                 
         // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
@@ -191,7 +189,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        print("willDismissSearchController")
+//        print("willDismissSearchController")
         // Revert back to the original appearance of the navigation bar
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.scrollEdgeAppearance = nil
@@ -199,7 +197,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-        print("didDismissSearchController")
+//        print("didDismissSearchController")
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         resultsController.revertToInitialAppearance()

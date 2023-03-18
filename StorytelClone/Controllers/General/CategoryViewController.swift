@@ -39,6 +39,8 @@ class CategoryViewController: BaseTableViewController {
             self.navigationController?.pushViewController(controller, animated: true)
         }
         
+        
+        
         return cell
     }
     
