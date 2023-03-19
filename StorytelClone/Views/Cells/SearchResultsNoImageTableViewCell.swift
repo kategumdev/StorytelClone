@@ -42,9 +42,9 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         let rowHeight = labelsHeight + topAndBottomPadding * 2
         return rowHeight
     }
-        
-//    var storyteller: Storyteller?
-//    var hashtag: Tag?
+    
+    // Title model object (Storyteller or Tag)
+    var title: Title?
     
     private let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
     private let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
@@ -66,7 +66,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     
     private lazy var viewWithRound: UIView = {
         let view = UIView()
-//        view.backgroundColor = .green
         view.backgroundColor = .clear
         view.addSubview(roundView)
         return view
@@ -74,7 +73,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
 
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
-//        stack.backgroundColor = .magenta
         stack.axis = .vertical
         stack.distribution = .fillProportionally
         [titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0)}
@@ -86,7 +84,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
-//        contentView.backgroundColor = .blue
         contentView.addSubview(viewWithRound)
         contentView.addSubview(vertStackWithLabels)
         
@@ -101,25 +98,28 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         super.layoutSubviews()
         roundView.layer.cornerRadius = roundView.bounds.width / 2
     }
-
-    func configureFor(storyteller: Storyteller) {
-        titleLabel.text = storyteller.name
-        subtitleLabel.text = storyteller.titleKind.rawValue
-        
-        if storyteller.titleKind == .author {
-            let config = UIImage.SymbolConfiguration(weight: .semibold)
-            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
-        } else {
-            let config = UIImage.SymbolConfiguration(weight: .medium)
-            symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
-        }
-    }
     
-    func configureFor(tag: Tag) {
-        titleLabel.text = tag.title
-        subtitleLabel.text = tag.titleKind.rawValue
-        symbolView.image = UIImage(systemName: "number")
-
+    func configureFor(title: Title) {
+        self.title = title
+        
+        subtitleLabel.text = title.titleKind.rawValue
+        
+        if let storyteller = title as? Storyteller {
+            titleLabel.text = storyteller.name
+            
+            if storyteller.titleKind == .author {
+                let config = UIImage.SymbolConfiguration(weight: .semibold)
+                symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+            } else {
+                let config = UIImage.SymbolConfiguration(weight: .medium)
+                symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
+            }
+        }
+        
+        if let tag  = title as? Tag {
+            titleLabel.text = tag.tagTitle
+            symbolView.image = UIImage(systemName: "number")
+        }
     }
     
     private func applyConstraints() {

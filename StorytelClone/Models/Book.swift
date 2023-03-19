@@ -13,7 +13,7 @@ import UIKit
 //    case audioBookAndEbook = "Audiobook & Ebook"
 //}
 
-struct Book {
+struct Book: Title {
     let title: String
     let author: String
     let coverImage: UIImage?

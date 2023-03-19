@@ -16,7 +16,7 @@ class SearchResultsViewController: UIViewController {
 
     private let buttonsView = SearchResultsButtonsView()
     
-    var itemSelectedCallback: ItemSelectedCallback = {_ in}
+    var selectedTitleCallback: SelectedTitleCallback = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -55,15 +55,10 @@ class SearchResultsViewController: UIViewController {
         applyConstraints()
         
         setInitialOffsetsOfTablesInCells()
+        
 //        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     
-    private func setInitialOffsetsOfTablesInCells() {
-        let buttonKinds = buttonsView.buttonKinds
-        for kind in buttonKinds {
-            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
-        }
-    }
     
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
@@ -98,7 +93,8 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         
         let buttonKind = buttonsView.buttonKinds[indexPath.row]
         cell.buttonKind = buttonKind
-        cell.itemSelectedCallback = itemSelectedCallback
+        cell.model = getModelFor(buttonKind: buttonKind)
+        cell.selectedTitleCallback = selectedTitleCallback
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
@@ -187,6 +183,32 @@ extension SearchResultsViewController {
             collectionView.reloadItems(at: indexPathsToUnhide)
         }
     }
+    
+    private func setInitialOffsetsOfTablesInCells() {
+        let buttonKinds = buttonsView.buttonKinds
+        for kind in buttonKinds {
+            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
+        }
+    }
+    
+    // This function should fetch needed objects
+    private func getModelFor(buttonKind: ButtonKind) -> [Title] {
+        switch buttonKind {
+        case .top:
+            return [Book.book3, Book.book23, Storyteller.author1, Storyteller.author2, Book.book21,
+                    Book.book15, Storyteller.author3, Book.book18, Book.book20, Storyteller.author9]
+        case .books:
+            return [Book.book1, Book.book23, Book.book2, Book.book22, Book.book5, Book.book20,
+                    Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
+                    Book.book15, Book.book4, Book.book6, Book.book19]
+        case .authors: return Storyteller.authors
+        case .narrators: return Storyteller.narrators
+        case .series:
+            return [Book.book3, Book.book22, Book.book21, Book.book8, Book.book10, Book.book11,
+                    Book.book12, Book.book13, Book.book14, Book.book16]
+        case .tags: return Tag.tags
+        }
+    }
 
     func revertToInitialAppearance() {
         buttonsView.revertToInitialAppearance()
@@ -231,7 +253,7 @@ extension SearchResultsViewController {
         let currentButtonIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
         
         guard tappedButtonIndex != currentButtonIndex else {
-//            print("same indices")
+//            print("same indices, same cell is tapped two times in a row")
             // To avoid behavior when it is set to true, because code below in this method won't be triggered and therefore no cells need to be hidden
             isButtonTriggeredScroll = false
             return
@@ -288,5 +310,4 @@ extension SearchResultsViewController: SearchResultsCollectionViewCellDelegate {
     func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }
-    
 }

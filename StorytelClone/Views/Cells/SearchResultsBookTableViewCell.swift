@@ -12,9 +12,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     static let identifier = "ResultsTableViewCell"
     
     static let topAndBottomPadding: CGFloat = 15
-//    static let contentViewWidthFraction: CGFloat = 4
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
-//    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width / 5)
 
     static func getEstimatedHeightForRow() -> CGFloat {
         let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
@@ -26,12 +24,9 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
         
         let rowHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3) + (topAndBottomPadding * 2)
-        
         return rowHeight
     }
 
-//    private lazy var imageHeight: CGFloat = ceil(contentView.bounds.width / SearchResultsBookTableViewCell.contentViewWidthFraction)
-    
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical

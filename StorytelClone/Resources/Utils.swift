@@ -11,7 +11,7 @@ import UIKit
 //typealias WideButtonCallbackClosure = (_ sectionKind: SectionKind) -> ()
 //typealias CategoryButtonCallbackClosure = (_ buttonCategory: ButtonCategory) -> ()
 typealias ButtonCallback = (_ item: Any) -> ()
-typealias ItemSelectedCallback = (_ item: Any) -> ()
+typealias SelectedTitleCallback = (_ title: Title) -> ()
 
 struct Utils {
     

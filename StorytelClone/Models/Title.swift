@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol Title {
+    var titleKind: TitleKind { get }
+}
+
 enum TitleKind: String {
     case audiobook = "Audiobook"
     case ebook = "Ebook"
@@ -16,3 +20,5 @@ enum TitleKind: String {
     case tag = "Tag"
     case series = "Series"
 }
+
+

@@ -24,7 +24,25 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book?.title
+//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+
         navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        
+        extendedLayoutIncludesOpaqueBars = true
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("viewWillDisappear")
+        navigationController?.navigationBar.isTranslucent = false
+
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+    }
+    
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        print("viewDidDisappear")
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//    }
 
 }

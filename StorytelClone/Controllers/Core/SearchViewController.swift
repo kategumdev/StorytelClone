@@ -45,6 +45,7 @@ class SearchViewController: UIViewController {
         controller.searchBar.searchBarStyle = .minimal
         controller.hidesNavigationBarDuringPresentation = false
 //        controller.obscuresBackgroundDuringPresentation = false
+//        controller.automaticallyShowsSearchResultsController
         controller.showsSearchResultsController = true
         // To set color of the prompt
         controller.searchBar.tintColor = Utils.tintColor
@@ -90,13 +91,15 @@ class SearchViewController: UIViewController {
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.delegate = self
-//        definesPresentationContext = true
+//        searchController.definesPresentationContext = true
 
         configureNavBar()
         
         createAndPassItemSelectedCallback()
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: tableDidRequestKeyboardDismiss, object: nil)
+        
+        extendedLayoutIncludesOpaqueBars = true
         
 //        previousSize = traitCollection.preferredContentSizeCategory
         
@@ -105,7 +108,11 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("viewWillAppear")
         navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        
+//        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
+//        navigationController?.navigationBar.isTranslucent = false
 
     }
     
@@ -125,14 +132,28 @@ class SearchViewController: UIViewController {
     //MARK: - Helper methods
     
     private func createAndPassItemSelectedCallback() {
-        let callbackClosure: ItemSelectedCallback = { [weak self] item in
+        let callbackClosure: SelectedTitleCallback = { [weak self] title in
             
-            guard let item = item as? Book else { return }
-            print("SearchViewController handles item selected \(item.title)")
+            if let book = title as? Book {
+                print("SearchViewController handles selected book \(book.title)")
+//                let controller = UINavigationController(rootViewController: BookViewController(book: book))
+//                self?.present(controller, animated: true)
+                let controller = BookViewController(book: book)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+            
+            if let storyteller = title as? Storyteller {
+                print("SearchViewController handles selected storyteller \(storyteller.name)")
+            }
+            
+            if let tag = title as? Tag {
+                print("SearchViewController handles selected tag \(tag.tagTitle)")
+            }
+            
         }
         
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-        searchResultsController.itemSelectedCallback = callbackClosure
+        searchResultsController.selectedTitleCallback = callbackClosure
     }
     
     @objc func handleKeyboardDismissNotification(_ notification: Notification) {
@@ -173,7 +194,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {
-//        print("willPresentSearchController")
+        print("willPresentSearchController")
                 
         // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
@@ -189,7 +210,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-//        print("willDismissSearchController")
+        print("willDismissSearchController")
         // Revert back to the original appearance of the navigation bar
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.scrollEdgeAppearance = nil
@@ -209,7 +230,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         }
         #warning("This revert must be done only after cancel button is tapped, but now it also executes if app goes to background and then back to foreground")
     }
- 
+     
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -318,4 +339,3 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
 //        print("SearchViewController knows that item was selected")
 //    }
 //}
-
