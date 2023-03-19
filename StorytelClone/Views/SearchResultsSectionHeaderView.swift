@@ -38,6 +38,8 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
+        contentView.backgroundColor = .green
+
         contentView.addSubview(titleLabel)
         applyConstraints()
     }

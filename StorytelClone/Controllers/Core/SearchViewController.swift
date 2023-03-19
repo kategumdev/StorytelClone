@@ -49,16 +49,25 @@ class SearchViewController: UIViewController {
         controller.showsSearchResultsController = true
         // To set color of the prompt
         controller.searchBar.tintColor = Utils.tintColor
-        
+                
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
-
+            print("Configure placeholder string")
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16), .foregroundColor: UIColor.gray
             ]
+            
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
             textField.attributedPlaceholder = attributedPlaceholder
+            
+//            controller.searchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0, vertical: (textField.font?.pointSize ?? 0.0)/4)
+            
         }
+        
+//        if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
+//            textField.adjustsFontForContentSizeCategory = true
+//            searchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0, vertical: (textField.font?.pointSize ?? 0.0)/4)
+//        }
         
         // Configure cancel button
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
@@ -126,6 +135,16 @@ class SearchViewController: UIViewController {
         } else {
             // After searchResultsController was presented, actual initial contentOffset.y changes to 0
             initialTableOffsetY = 0
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        print("traitCollectionDidChange")
+        
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         }
     }
     

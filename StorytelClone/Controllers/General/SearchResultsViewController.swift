@@ -41,6 +41,8 @@ class SearchResultsViewController: UIViewController {
     private var indexPathsToUnhide = [IndexPath]()
         
 //    private var previousContentSize: UIContentSizeCategory?
+    
+//    private var firstTime = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,10 +57,19 @@ class SearchResultsViewController: UIViewController {
         applyConstraints()
         
         setInitialOffsetsOfTablesInCells()
-        
+
 //        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//        print("traitCollectionDidChange")
+//        
+//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+//            collectionView.setNeedsLayout()
+//            collectionView.layoutIfNeeded()
+//        }
+//    }
     
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
@@ -72,12 +83,32 @@ class SearchResultsViewController: UIViewController {
 //        }
 //    }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        if let scene = UIApplication.shared.connectedScenes.first,
+//           let windowScene = scene as? UIWindowScene,
+//           let mainWindow = windowScene.windows.first
+//        {
+//            let tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
+//            print("Tab bar height: \(tabBarHeight)")
+//        }
+//
+//    }
+    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return collectionView.bounds.size
+//        print("item size: \(collectionView.bounds.size)")
+        let sectionInset = (collectionViewLayout as? UICollectionViewFlowLayout)?.sectionInset ?? .zero
+        let contentInset = collectionView.contentInset
+        let width = collectionView.bounds.width - sectionInset.left - sectionInset.right - contentInset.left - contentInset.right
+        let height = collectionView.bounds.height - sectionInset.top - sectionInset.bottom - contentInset.top - contentInset.bottom
+        print("item height: \(height)")
+        return CGSize(width: width, height: height)
+//        return collectionView.bounds.size
     }
 }
 
@@ -296,12 +327,28 @@ extension SearchResultsViewController {
         ])
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        var tabBarHeight: CGFloat = 0.0
+        if let scene = UIApplication.shared.connectedScenes.first,
+           let windowScene = scene as? UIWindowScene,
+           let mainWindow = windowScene.windows.first
+        {
+            tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
+            print("Tab bar height: \(tabBarHeight)")
+        }
+        
         NSLayoutConstraint.activate([
+//            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: buttonsView.bounds.height),
             collectionView.topAnchor.constraint(equalTo: buttonsView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -tabBarHeight)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
+
         ])
+        
     }
     
 }

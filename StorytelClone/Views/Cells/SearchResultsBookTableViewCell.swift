@@ -11,8 +11,27 @@ class SearchResultsBookTableViewCell: UITableViewCell {
 
     static let identifier = "ResultsTableViewCell"
     
-    static let topAndBottomPadding: CGFloat = 15
+    static let minTopAndBottomPadding: CGFloat = 13
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
+    static let minCellHeight: CGFloat = imageHeight + (minTopAndBottomPadding * 2)
+    
+    static let calculatedTopAndBottomPadding: CGFloat = {
+//        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
+//        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
+        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
+    
+        titleLabel.text = "This is title"
+        subtitleLabel.text = "This is subtitle"
+        titleLabel.sizeToFit()
+        subtitleLabel.sizeToFit()
+        
+        let labelsHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3)
+        let padding = abs((minCellHeight - labelsHeight) / 2)
+//        print("   BOOK padding: \(padding)")
+//        print("BOOK minCellHeight: \(minCellHeight), calculated: \(labelsHeight + (padding * 2))")
+        return padding
+    }()
 
     static func getEstimatedHeightForRow() -> CGFloat {
         let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
@@ -23,7 +42,8 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         titleLabel.sizeToFit()
         subtitleLabel.sizeToFit()
         
-        let rowHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3) + (topAndBottomPadding * 2)
+        let rowHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3) + (calculatedTopAndBottomPadding * 2)
+//        print("BOOK rowHeight: \(rowHeight)")
         return rowHeight
     }
 
@@ -79,7 +99,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         applyConstraints()
     }
     
-    private lazy var customImageViewWidthAnchor =             customImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight)
+    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight)
 
     
     required init?(coder: NSCoder) {
@@ -157,8 +177,8 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.topAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.topAndBottomPadding),
+            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageView.trailingAnchor, constant: Constants.cvPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.cvPadding)
         ])

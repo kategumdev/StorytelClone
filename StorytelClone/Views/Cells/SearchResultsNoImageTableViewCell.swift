@@ -10,36 +10,44 @@ import UIKit
 class SearchResultsNoImageTableViewCell: UITableViewCell {
     
     static let identifier = "SearchResultsNoImageTableViewCell"
+    
     static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsBookTableViewCell.imageHeight
+    static let minCellHeight = viewWithRoundWidthAndHeight
     
-    static let topAndBottomPadding: CGFloat = {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-        titleLabel.text = "This is title"
-        subtitleLabel.text = "This is subtitle"
-        titleLabel.sizeToFit()
-        subtitleLabel.sizeToFit()
+//    static let topAndBottomPadding: CGFloat = 15
+      
+    static let calculatedTopAndBottomPadding: CGFloat = {
+//        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
+//        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
+        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
         
-        let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
-        
-//        let padding = ceil((viewWithRoundWidthAndHeight - labelsHeight) / 2)
-        let padding = (viewWithRoundWidthAndHeight - labelsHeight) / 2
-        print("padding + labelsHeight = \(padding * 2 + labelsHeight)")
-        print("viewWithRoundWidthAndHeight: \(viewWithRoundWidthAndHeight)")
-        return padding
-    }()
-    
-    static func getEstimatedHeightForRow() -> CGFloat {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
         titleLabel.text = "This is title"
         subtitleLabel.text = "This is subtitle"
         titleLabel.sizeToFit()
         subtitleLabel.sizeToFit()
 
         let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
-        
-        let rowHeight = labelsHeight + topAndBottomPadding * 2
+        let padding = abs((minCellHeight - labelsHeight) / 2)
+//        print("NOIMAGE minCellHeight: \(minCellHeight), calculated: \(labelsHeight + (padding * 2))")
+//        print("     padding: \(padding), labelsHeight: \(labelsHeight)")
+        return padding
+    }()
+    
+    static func getEstimatedHeightForRow() -> CGFloat {
+        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
+        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+
+        titleLabel.text = "This is title"
+        subtitleLabel.text = "This is subtitle"
+        titleLabel.sizeToFit()
+        subtitleLabel.sizeToFit()
+
+        let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
+
+        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
+//        print("NOIMAGE rowHeight: \(rowHeight)")
+
         return rowHeight
     }
     
@@ -81,12 +89,14 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     
     private var firstTime = true
     
+    private var padding: CGFloat = 0
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(viewWithRound)
         contentView.addSubview(vertStackWithLabels)
-        
+
         applyConstraints()
     }
     
@@ -131,6 +141,12 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
             viewWithRound.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
+//        roundView.translatesAutoresizingMaskIntoConstraints = false
+//        roundView.fillSuperview(withConstant: SearchResultsNoImageTableViewCell.minTopAndBottomPadding)
+//
+//        symbolView.translatesAutoresizingMaskIntoConstraints = false
+//        symbolView.fillSuperview(withConstant: SearchResultsNoImageTableViewCell.minTopAndBottomPadding * 1.5)
+        
         roundView.translatesAutoresizingMaskIntoConstraints = false
         let roundViewConstant = SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight * 0.14
         roundView.fillSuperview(withConstant: roundViewConstant)
@@ -140,8 +156,8 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsNoImageTableViewCell.topAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsNoImageTableViewCell.topAndBottomPadding),
+            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithRound.trailingAnchor, constant: Constants.cvPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
         ])

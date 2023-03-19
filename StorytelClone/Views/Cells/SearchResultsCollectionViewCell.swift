@@ -23,7 +23,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
             
-    private var isFirstTime = true
+//    private var isFirstTime = true
     
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     
@@ -74,15 +74,22 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+
+//        print("table view size: \(resultsTable.bounds.size)")
+        resultsTable.frame.size = contentView.bounds.size
+        print("table view size: \(resultsTable.bounds.size)")
+
+        
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
 //            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
         }
+        
     }
     
     private func applyConstraints() {
-        resultsTable.translatesAutoresizingMaskIntoConstraints = false
-        resultsTable.fillSuperview()
+//        resultsTable.translatesAutoresizingMaskIntoConstraints = false
+//        resultsTable.fillSuperview()
     }
     
     override func prepareForReuse() {
@@ -130,80 +137,20 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         
         cell.configureFor(title: title)
         return cell
-        
-
-        
-        
-//        guard let buttonKind = buttonKind else { return UITableViewCell() }
-//
-//        if buttonKind == .authors || buttonKind == .narrators || buttonKind == .tags {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsNoImageTableViewCell.identifier, for: indexPath) as? SearchResultsNoImageTableViewCell else { return UITableViewCell() }
-//
-//            let title = model[indexPath.row]
-//            cell.configureFor(title: title)
-//            return cell
-//
-//        }
-//
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
-//
-////        print("tvcell for \(String(describing: buttonKind?.rawValue)) configured")
-////        guard let buttonKind = buttonKind else { return UITableViewCell() }
-//        if buttonKind == .top {
-//            let title = model[indexPath.row]
-//        }
-//
-//
-//        switch buttonKind {
-//        case .top: cell.configureFor(book: Book.book20)
-//        case .books: cell.configureFor(book: Book.book22)
-//        case .authors: cell.configureFor(book: Book.book23)
-//        case .narrators: cell.configureFor(book: Book.book21)
-//        case .series: cell.configureFor(book: Book.book3)
-//        case .tags: cell.configureFor(book: Book.book1)
-//        }
-//        return cell
     }
-    
-    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        guard let buttonKind = buttonKind else { return UITableViewCell() }
-//
-//        if buttonKind == .authors || buttonKind == .narrators || buttonKind == .tags {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsNoImageTableViewCell.identifier, for: indexPath) as? SearchResultsNoImageTableViewCell else { return UITableViewCell() }
-//
-//            if buttonKind == .authors {
-//                cell.configureFor(storyteller: Storyteller.author2)
-//            } else if buttonKind == .narrators {
-//                cell.configureFor(storyteller: Storyteller.narrator1)
-//            } else {
-//                cell.configureFor(tag: Tag.tag10)
-//            }
-//            return cell
-//        }
-//
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
-//
-////        print("tvcell for \(String(describing: buttonKind?.rawValue)) configured")
-////        guard let buttonKind = buttonKind else { return UITableViewCell() }
-//
-//        switch buttonKind {
-//        case .top: cell.configureFor(book: Book.book20)
-//        case .books: cell.configureFor(book: Book.book22)
-//        case .authors: cell.configureFor(book: Book.book23)
-//        case .narrators: cell.configureFor(book: Book.book21)
-//        case .series: cell.configureFor(book: Book.book3)
-//        case .tags: cell.configureFor(book: Book.book1)
-//        }
-//        return cell
-//    }
+
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if buttonKind == .authors || buttonKind == .narrators || buttonKind == .tags {
+        
+        let title = model[indexPath.row]
+        
+        let book = title as? Book
+        if book != nil {
+            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+        } else {
             return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
         }
-        return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

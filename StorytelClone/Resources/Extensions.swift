@@ -54,14 +54,32 @@ extension NSAttributedString {
 
 extension UILabel {
     
-    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat, numberOfLines: Int = 1) -> UILabel {
+//    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat, numberOfLines: Int = 1) -> UILabel {
+//        let label = UILabel()
+//        label.numberOfLines = numberOfLines
+//        label.lineBreakMode = .byTruncatingTail
+//        label.adjustsFontForContentSizeCategory = true
+//        let font = font
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+//        label.font = scaledFont
+//        return label
+//    }
+    
+    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat, numberOfLines: Int = 1, withScaledFont: Bool = true) -> UILabel {
         let label = UILabel()
         label.numberOfLines = numberOfLines
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
-        let font = font
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-        label.font = scaledFont
+        
+        if withScaledFont {
+//            let font = font
+            let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+            label.font = scaledFont
+        } else {
+            label.font = font
+        }
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
+//        label.font = scaledFont
         return label
     }
     
