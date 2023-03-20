@@ -117,7 +117,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear")
+//        print("viewWillAppear")
         navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
         
 //        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
@@ -138,16 +138,6 @@ class SearchViewController: UIViewController {
         }
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        print("traitCollectionDidChange")
-        
-        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
-        }
-    }
-    
     //MARK: - Helper methods
     
     private func createAndPassItemSelectedCallback() {
@@ -155,8 +145,6 @@ class SearchViewController: UIViewController {
             
             if let book = title as? Book {
                 print("SearchViewController handles selected book \(book.title)")
-//                let controller = UINavigationController(rootViewController: BookViewController(book: book))
-//                self?.present(controller, animated: true)
                 let controller = BookViewController(book: book)
                 self?.navigationController?.pushViewController(controller, animated: true)
             }

@@ -21,42 +21,29 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
+    private var isBeingReused = false
+
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
-            
-//    private var isFirstTime = true
-    
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
-    
     var buttonKind: ButtonKind?
-    
     var model = [Title]()
     
     let resultsTable: UITableView = {
-//        let table = UITableView(frame: .zero, style: .grouped)
         let table = UITableView(frame: .zero, style: .plain)
 
         table.backgroundColor = Utils.customBackgroundColor
         table.separatorColor = UIColor.clear
-        
-        // Avoid gap at the very bottom of the table view
-//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
-//        table.contentInset = inset
         
         table.register(SearchResultsBookTableViewCell.self, forCellReuseIdentifier: SearchResultsBookTableViewCell.identifier)
         table.register(SearchResultsNoImageTableViewCell.self, forCellReuseIdentifier: SearchResultsNoImageTableViewCell.identifier)
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
-//        table.estimatedRowHeight = SearchResultsTableViewCell.getEstimatedHeightForRow()
-        
         table.sectionHeaderHeight = UITableView.automaticDimension
         // Avoid gap above custom section header
         table.sectionHeaderTopPadding = 0
-        
         return table
     }()
-    
-    var isBeingReused = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,12 +61,9 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
-//        print("table view size: \(resultsTable.bounds.size)")
-        resultsTable.frame.size = contentView.bounds.size
+//        resultsTable.frame.size = contentView.bounds.size
         print("table view size: \(resultsTable.bounds.size)")
 
-        
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
 //            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
@@ -88,8 +72,8 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     }
     
     private func applyConstraints() {
-//        resultsTable.translatesAutoresizingMaskIntoConstraints = false
-//        resultsTable.fillSuperview()
+        resultsTable.translatesAutoresizingMaskIntoConstraints = false
+        resultsTable.fillSuperview()
     }
     
     override func prepareForReuse() {
@@ -115,7 +99,6 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.count
-//        return 30 // hardcoded number
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -123,7 +106,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let title = model[indexPath.row]
         
         if let book = title as? Book {
@@ -139,9 +121,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         return cell
     }
 
-    
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         let title = model[indexPath.row]
         
         let book = title as? Book
@@ -158,8 +138,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         
         let selectedTitle = model[indexPath.row]
         selectedTitleCallback(selectedTitle)
-//        selectedTitleCallback(Book.book1)
-//        #warning("Change argument value to real one")
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -185,7 +163,6 @@ extension SearchResultsCollectionViewCell {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isDragging || scrollView.isDecelerating {
-//            print("cell \(buttonKind) scrollView.isDragging || scrollView.isDecelerating ")
             guard let buttonKind = buttonKind else { return }
             delegate?.searchResultsCollectionViewCell(self, withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
         }

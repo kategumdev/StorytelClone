@@ -16,8 +16,6 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     static let minCellHeight: CGFloat = imageHeight + (minTopAndBottomPadding * 2)
     
     static let calculatedTopAndBottomPadding: CGFloat = {
-//        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-//        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
         let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
         let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
     
@@ -28,8 +26,6 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         
         let labelsHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3)
         let padding = abs((minCellHeight - labelsHeight) / 2)
-//        print("   BOOK padding: \(padding)")
-//        print("BOOK minCellHeight: \(minCellHeight), calculated: \(labelsHeight + (padding * 2))")
         return padding
     }()
 
@@ -43,7 +39,6 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
         
         let rowHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3) + (calculatedTopAndBottomPadding * 2)
-//        print("BOOK rowHeight: \(rowHeight)")
         return rowHeight
     }
 
@@ -92,7 +87,6 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
-        
         contentView.addSubview(viewWithImageView)
         contentView.addSubview(vertStackWithLabels)
         contentView.addSubview(detailButton)
@@ -151,7 +145,6 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        
         viewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             viewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),

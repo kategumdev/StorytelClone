@@ -13,12 +13,8 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     
     static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsBookTableViewCell.imageHeight
     static let minCellHeight = viewWithRoundWidthAndHeight
-    
-//    static let topAndBottomPadding: CGFloat = 15
-      
+          
     static let calculatedTopAndBottomPadding: CGFloat = {
-//        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-//        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
         let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
         let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
         
@@ -29,8 +25,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
 
         let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
         let padding = abs((minCellHeight - labelsHeight) / 2)
-//        print("NOIMAGE minCellHeight: \(minCellHeight), calculated: \(labelsHeight + (padding * 2))")
-//        print("     padding: \(padding), labelsHeight: \(labelsHeight)")
         return padding
     }()
     
@@ -44,10 +38,7 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
 
         let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
-
         let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
-//        print("NOIMAGE rowHeight: \(rowHeight)")
-
         return rowHeight
     }
     
@@ -79,7 +70,7 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         return view
     }()
 
-    lazy var vertStackWithLabels: UIStackView = {
+    private lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fillProportionally
@@ -87,7 +78,7 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         return stack
     }()
     
-    private var firstTime = true
+//    private var firstTime = true
     
     private var padding: CGFloat = 0
     
@@ -96,7 +87,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(viewWithRound)
         contentView.addSubview(vertStackWithLabels)
-
         applyConstraints()
     }
     
@@ -111,7 +101,6 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     
     func configureFor(title: Title) {
         self.title = title
-        
         subtitleLabel.text = title.titleKind.rawValue
         
         if let storyteller = title as? Storyteller {
