@@ -52,7 +52,7 @@ class SearchViewController: UIViewController {
                 
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
-            print("Configure placeholder string")
+//            print("Configure placeholder string")
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16), .foregroundColor: UIColor.gray
             ]

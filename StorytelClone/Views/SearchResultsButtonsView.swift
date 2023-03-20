@@ -18,12 +18,16 @@ enum ButtonKind: String, CaseIterable {
 
 class SearchResultsButtonsView: UIView {
     
-    private static let slidingLineHeight: CGFloat = 2
+    private static let slidingLineHeight: CGFloat = 3
     
     private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
+//    private static let heightForStackWithSlidingLine = slidingLineHeight
+//    static let viewHeight = heightForStackWithButtons + heightForStackWithSlidingLine
     
-    private static let heightForStackWithSlidingLine = slidingLineHeight
-    static let viewHeight = heightForStackWithButtons + heightForStackWithSlidingLine
+    static let viewHeight = heightForStackWithButtons + slidingLineHeight / 2
+//    static let viewHeight = heightForStackWithButtons + slidingLineHeight
+
+
     
     let buttonKinds: [ButtonKind] = ButtonKind.allCases
     
@@ -47,7 +51,7 @@ class SearchResultsButtonsView: UIView {
             let button = UIButton()
             var config = UIButton.Configuration.plain()
 
-            // Top inset makes visual x-position of button text in stackView as if it's centered
+            // Top inset makes visual x-position of button text in scrollView as if it's centered
             config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
@@ -71,6 +75,10 @@ class SearchResultsButtonsView: UIView {
     private let slidingLine: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.tintColor
+        view.isOpaque = true
+//        view.layer.masksToBounds = true
+//        view.layer.borderColor = Utils.tintColor.cgColor
+//        view.layer.borderWidth = SearchResultsButtonsView.slidingLineHeight / 2
         return view
     }()
     
@@ -78,45 +86,33 @@ class SearchResultsButtonsView: UIView {
     private var previousSlidingLineLeadingConstant: CGFloat = 0
     
     private lazy var stackView: UIStackView = {
-        let horzStackButtons = UIStackView()
-        horzStackButtons.axis = .horizontal
-        horzStackButtons.alignment = .center
-        horzStackButtons.distribution = .fillProportionally
-        scopeButtons.forEach { horzStackButtons.addArrangedSubview($0) }
-        horzStackButtons.translatesAutoresizingMaskIntoConstraints = false
-        horzStackButtons.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithButtons).isActive = true
-        
-        let horzStackSlidingLine = UIStackView()
-        horzStackSlidingLine.axis = .horizontal
-        horzStackSlidingLine.alignment = .center
-        [UIView(), slidingLine, UIView()].forEach { horzStackSlidingLine.addArrangedSubview($0)}
-        horzStackSlidingLine.translatesAutoresizingMaskIntoConstraints = false
-        horzStackSlidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithSlidingLine).isActive = true
-        
-        let vertStack = UIStackView()
-        vertStack.axis = .vertical
-        vertStack.alignment = .center
-        [horzStackButtons, horzStackSlidingLine].forEach { vertStack.addArrangedSubview($0)}
-        
-        vertStack.backgroundColor = Utils.customBackgroundColor
-        return vertStack
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fillProportionally
+        scopeButtons.forEach { stack.addArrangedSubview($0) }
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithButtons).isActive = true
+        return stack
     }()
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
+        scrollView.backgroundColor = Utils.customBackgroundColor
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.clipsToBounds = false
         scrollView.addSubview(stackView)
+        scrollView.addSubview(slidingLine)
         return scrollView
     }()
 
-    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
+//    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
+    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor)
     lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(scrollView)
-        layer.borderColor = UIColor.label.cgColor
-        layer.borderWidth = 0.25
         addButtonActions()
         applyConstraints()
         // Set initial color of buttons' text
@@ -138,13 +134,13 @@ class SearchResultsButtonsView: UIView {
         adjustSlidingLinePosition(currentButton: scopeButtons[0])  
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            layer.borderColor = UIColor.label.cgColor
-        }
-    }
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//
+//        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+//            layer.borderColor = UIColor.label.cgColor
+//        }
+//    }
     
     private func addButtonActions() {
         for button in scopeButtons {
@@ -330,14 +326,16 @@ class SearchResultsButtonsView: UIView {
             stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
-            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor)
+            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2),
+            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
         ])
 
         slidingLine.translatesAutoresizingMaskIntoConstraints = false
         slidingLineLeadingAnchor.isActive = true
         slidingLineWidthAnchor.isActive = true
         slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
+        slidingLine.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: SearchResultsButtonsView.slidingLineHeight / 2).isActive = true
+        
         // To force layoutSubviews() to apply correct slidingLine anchors' constants
         layoutIfNeeded()
     }

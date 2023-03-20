@@ -30,6 +30,15 @@ class SearchResultsViewController: UIViewController {
         return collectionView
     }()
     
+    private let separatorWidth: CGFloat = 0.25
+    
+    private lazy var separatorLineView: UIView = {
+        let view = UIView()
+        view.layer.borderColor = UIColor.label.cgColor
+        view.layer.borderWidth = separatorWidth
+        return view
+    }()
+    
     private var rememberedOffsetsOfTablesInCells = [ButtonKind : CGPoint]()
     private var tappedButtonIndex: Int? = nil
     private var previousOffsetX: CGFloat = 0
@@ -42,8 +51,9 @@ class SearchResultsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
+//        print("viewDidLoad")
         view.backgroundColor = Utils.customBackgroundColor
+        view.addSubview(separatorLineView)
         view.addSubview(buttonsView)
         configureButtonsView()
         view.addSubview(collectionView)
@@ -56,10 +66,14 @@ class SearchResultsViewController: UIViewController {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        print("traitCollectionDidChange")
+//        print("traitCollectionDidChange")
         
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             collectionView.collectionViewLayout.invalidateLayout()
+        }
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            separatorLineView.layer.borderColor = UIColor.label.cgColor
         }
     }
     
@@ -80,13 +94,6 @@ class SearchResultsViewController: UIViewController {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        print("item size: \(collectionView.bounds.size)")
-//        let sectionInset = (collectionViewLayout as? UICollectionViewFlowLayout)?.sectionInset ?? .zero
-//        let contentInset = collectionView.contentInset
-//        let width = collectionView.bounds.width - sectionInset.left - sectionInset.right - contentInset.left - contentInset.right
-//        let height = collectionView.bounds.height - sectionInset.top - sectionInset.bottom - contentInset.top - contentInset.bottom
-//        print("item height: \(height)")
-//        return CGSize(width: width, height: height)
         return collectionView.bounds.size
     }
 }
@@ -243,19 +250,6 @@ extension SearchResultsViewController {
             
             self.scrollToCell(buttonIndex)
         }
-        
-        // Hide top border of buttonsView
-        let hideView = UIView()
-        hideView.backgroundColor = Utils.customBackgroundColor
-        view.addSubview(hideView)
-        
-        hideView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            hideView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -1),
-            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hideView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hideView.heightAnchor.constraint(equalToConstant: 3)
-        ])
     }
     
     private func scrollToCell(_ cellIndex: Int) {
@@ -297,12 +291,20 @@ extension SearchResultsViewController {
     
     private func applyConstraints() {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        // Constants added to hide borders of buttonsView on leading and trailing sides
         NSLayoutConstraint.activate([
             buttonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -1),
-            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 1),
+            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             buttonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SearchResultsButtonsView.viewHeight)
+        ])
+        
+        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
+        // Constants added to hide borders of buttonsView on leading and trailing sides
+        NSLayoutConstraint.activate([
+            separatorLineView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            separatorLineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            separatorLineView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            separatorLineView.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: separatorWidth)
         ])
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -313,18 +315,17 @@ extension SearchResultsViewController {
            let mainWindow = windowScene.windows.first
         {
             tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
-            print("Tab bar height: \(tabBarHeight)")
+//            print("Tab bar height: \(tabBarHeight)")
         }
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: buttonsView.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 //            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
 
         ])
-        
     }
     
 }

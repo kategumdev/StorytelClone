@@ -62,7 +62,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 //        resultsTable.frame.size = contentView.bounds.size
-        print("table view size: \(resultsTable.bounds.size)")
+//        print("table view size: \(resultsTable.bounds.size)")
 
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
