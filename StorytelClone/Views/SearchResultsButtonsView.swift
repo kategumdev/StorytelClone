@@ -244,25 +244,13 @@ class SearchResultsButtonsView: UIView {
             return
         }
         
-        
-    // Logic for adjusting sliding line width when current button is the first one and currentOffseX of collection view < 0
-        if currentScrollDirectionOfCv == .back && currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
-            // Width should decrease for number of points the sliding line leading anchor constant WOULD change (because actually it's set to 0 in didScroll of SearchResultsViewController)
-            let widthConstant = currentButtonWidth - abs(slidingLineXProportionalPart)
-            slidingLineWidthAnchor.constant = widthConstant
-            
-            // Use these two values later for calculations when scroll direction is .forward and currentOffseX of collection view < 0
-            lastSlidingLineCompressedWidth = widthConstant
-            previousSlidingLineLeadingConstant = slidingLineXProportionalPart
+        // slidingLine width needs no adjustments in this case
+        if slidingLineLeadingAnchor.constant < 0 {
             return
         }
-        
-        if currentScrollDirectionOfCv == .forward && currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
-            let pointsToAdd = previousSlidingLineLeadingConstant - slidingLineXProportionalPart
-            let widthConstant = lastSlidingLineCompressedWidth + abs(pointsToAdd)
-            slidingLineWidthAnchor.constant = widthConstant
-            return
-        }
+//        if currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
+//            return
+//        }
         
         
     // Logic for adjusting sliding line width for other cases
