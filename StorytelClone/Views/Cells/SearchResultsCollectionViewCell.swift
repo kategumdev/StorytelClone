@@ -36,6 +36,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         
         table.register(SearchResultsBookTableViewCell.self, forCellReuseIdentifier: SearchResultsBookTableViewCell.identifier)
         table.register(SearchResultsNoImageTableViewCell.self, forCellReuseIdentifier: SearchResultsNoImageTableViewCell.identifier)
+        table.register(SearchResultsSeriesTableViewCell.self, forCellReuseIdentifier: SearchResultsSeriesTableViewCell.identifier)
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
@@ -115,21 +116,60 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
             return cell
         }
         
+        if let series = title as? Series {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsSeriesTableViewCell.identifier, for: indexPath) as? SearchResultsSeriesTableViewCell else { return UITableViewCell() }
+            
+            cell.configureFor(series: series)
+            return cell
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsNoImageTableViewCell.identifier, for: indexPath) as? SearchResultsNoImageTableViewCell else { return UITableViewCell() }
         
         cell.configureFor(title: title)
         return cell
     }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if UIDevice.current.userInterfaceIdiom == .phone {
+//            return UITableView.automaticDimension
+//        }
+//
+//        let title = model[indexPath.row]
+//
+//        let book = title as? Book
+//        let series = title as? Series
+//
+//        if book != nil {
+//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+//        } else if series != nil {
+//            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
+//        } else {
+//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
+//
+//        }
+//
+//    }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let title = model[indexPath.row]
         
         let book = title as? Book
+        let series = title as? Series
+        
         if book != nil {
             return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+        } else if series != nil {
+            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
         } else {
             return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
+
         }
+        
+//        if book != nil {
+//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+//        } else {
+//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
+//        }
 
     }
     

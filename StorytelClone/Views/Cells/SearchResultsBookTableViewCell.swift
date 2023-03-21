@@ -7,18 +7,18 @@
 
 import UIKit
 
-class SearchResultsBookTableViewCell: UITableViewCell {
+class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
 
     static let identifier = "ResultsTableViewCell"
     
-    static let minTopAndBottomPadding: CGFloat = 13
-    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
+//    static let minTopAndBottomPadding: CGFloat = 13
+//    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
     static let minCellHeight: CGFloat = imageHeight + (minTopAndBottomPadding * 2)
     
     static let calculatedTopAndBottomPadding: CGFloat = {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
-    
+        // Not scaled font to calculate padding for default content size category
+        let titleLabel = createTitleLabel(withScaledFont: false)
+        let subtitleLabel = createSubtitleLabel(withScaledFont: false)
         titleLabel.text = "This is title"
         subtitleLabel.text = "This is subtitle"
         titleLabel.sizeToFit()
@@ -28,43 +28,48 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         let padding = abs((minCellHeight - labelsHeight) / 2)
         return padding
     }()
-
-    static func getEstimatedHeightForRow() -> CGFloat {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
     
-        titleLabel.text = "This is title"
-        subtitleLabel.text = "This is subtitle"
-        titleLabel.sizeToFit()
-        subtitleLabel.sizeToFit()
-        
-        let rowHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3) + (calculatedTopAndBottomPadding * 2)
+    static func getEstimatedHeightForRow() -> CGFloat {
+        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 3)
+        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
         return rowHeight
     }
+    
+    private let bookTitleLabel = SearchResultsTableViewCell.createTitleLabel()
+    private let bookKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
+    private let authorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
+    private let narratorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
 
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fillProportionally
-        [bookTitleLabel, bookKindLabel, authorLabel, narratorLabel].forEach { stack.addArrangedSubview($0)}
+        [bookTitleLabel, bookKindLabel, authorsLabel, narratorsLabel].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
     
-    private lazy var viewWithImageView: UIView = {
+    private lazy var squareViewWithImageView: UIView = {
         let view = UIView()
         view.addSubview(customImageView)
         return view
     }()
     
     private let customImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 2
-        imageView.clipsToBounds = true
+        let imageView = SearchResultsTableViewCell.createImageView()
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.26
         return imageView
     }()
+    
+//    private let customImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.contentMode = .scaleAspectFit
+//        imageView.layer.cornerRadius = 2
+//        imageView.clipsToBounds = true
+//        imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
+//        imageView.layer.borderWidth = 0.26
+//        return imageView
+//    }()
     
     private let detailButton: UIButton = {
         let button = UIButton()
@@ -79,21 +84,15 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         return button
     }()
     
-    private let bookTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-    private let bookKindLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-    private let authorLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-    private let narratorLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-        
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = Utils.customBackgroundColor
-        contentView.addSubview(viewWithImageView)
+        contentView.addSubview(squareViewWithImageView)
         contentView.addSubview(vertStackWithLabels)
         contentView.addSubview(detailButton)
         applyConstraints()
     }
     
-    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight)
+    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
 
     
     required init?(coder: NSCoder) {
@@ -111,21 +110,26 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
-        authorLabel.text = "By: \(book.author)"
+
+        let authorNames = book.authors.map { $0.name }
+        let authorNamesString = authorNames.joined(separator: ", ")
+        authorsLabel.text = "By: \(authorNamesString)"
         
         if let narrators = book.narrators {
-            narratorLabel.text = "With: \(narrators)"
-            narratorLabel.textColor = UIColor.label
+            let narratorNames = narrators.map { $0.name }
+            let narratorNamesString = narratorNames.joined(separator: ", ")
+            narratorsLabel.text = "With: \(narratorNamesString)"
+            narratorsLabel.textColor = UIColor.label
         } else {
             // This is needed to take height of this label into account when system calculates automaticDimension for this cell
-            narratorLabel.text = "Placeholder"
-            narratorLabel.textColor = UIColor.clear
+            narratorsLabel.text = "Placeholder"
+            narratorsLabel.textColor = UIColor.clear
         }
         
         if let image = book.coverImage {
 //            print("image size before: \(image.size)")
             let imageRatio = image.size.width / image.size.height
-            let targetHeight = SearchResultsBookTableViewCell.imageHeight
+            let targetHeight = SearchResultsTableViewCell.imageHeight
             let targetWidth = targetHeight * imageRatio
             let targetSize = CGSize(width: targetWidth, height: targetHeight)
             
@@ -145,19 +149,19 @@ class SearchResultsBookTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        viewWithImageView.translatesAutoresizingMaskIntoConstraints = false
+        squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            viewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            viewWithImageView.widthAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight),
-            viewWithImageView.heightAnchor.constraint(equalToConstant: SearchResultsBookTableViewCell.imageHeight),
-            viewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            squareViewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            squareViewWithImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.squareImageWidth),
+            squareViewWithImageView.heightAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight),
+            squareViewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            customImageView.topAnchor.constraint(equalTo: viewWithImageView.topAnchor),
-            customImageView.heightAnchor.constraint(equalTo: viewWithImageView.heightAnchor),
-            customImageView.centerXAnchor.constraint(equalTo: viewWithImageView.centerXAnchor),
+            customImageView.topAnchor.constraint(equalTo: squareViewWithImageView.topAnchor),
+            customImageView.heightAnchor.constraint(equalTo: squareViewWithImageView.heightAnchor),
+            customImageView.centerXAnchor.constraint(equalTo: squareViewWithImageView.centerXAnchor),
         ])
         customImageViewWidthAnchor.isActive = true
         
@@ -172,7 +176,7 @@ class SearchResultsBookTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageView.trailingAnchor, constant: Constants.cvPadding),
+            vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.cvPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.cvPadding)
         ])
     }

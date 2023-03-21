@@ -7,17 +7,17 @@
 
 import UIKit
 
-class SearchResultsNoImageTableViewCell: UITableViewCell {
+class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
     
     static let identifier = "SearchResultsNoImageTableViewCell"
     
-    static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsBookTableViewCell.imageHeight
+    static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsTableViewCell.imageHeight
     static let minCellHeight = viewWithRoundWidthAndHeight
           
     static let calculatedTopAndBottomPadding: CGFloat = {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: false)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: false)
-        
+        // Not scaled font to calculate padding for default content size category
+        let titleLabel = createTitleLabel(withScaledFont: false)
+        let subtitleLabel = createSubtitleLabel(withScaledFont: false)
         titleLabel.text = "This is title"
         subtitleLabel.text = "This is subtitle"
         titleLabel.sizeToFit()
@@ -29,24 +29,13 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     }()
     
     static func getEstimatedHeightForRow() -> CGFloat {
-        let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-        let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
-
-        titleLabel.text = "This is title"
-        subtitleLabel.text = "This is subtitle"
-        titleLabel.sizeToFit()
-        subtitleLabel.sizeToFit()
-
-        let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
+        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 1)
         let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
         return rowHeight
     }
     
-    // Title model object (Storyteller or Tag)
-    var title: Title?
-    
-    private let titleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
-    private let subtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+    private let titleLabel = SearchResultsTableViewCell.createTitleLabel()
+    private let subtitleLabel = SearchResultsTableViewCell.createSubtitleLabel()
     
     private let symbolView: UIImageView = {
         let imageView = UIImageView()
@@ -77,14 +66,11 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
         [titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
-    
-//    private var firstTime = true
-    
+        
     private var padding: CGFloat = 0
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(viewWithRound)
         contentView.addSubview(vertStackWithLabels)
         applyConstraints()
@@ -100,25 +86,25 @@ class SearchResultsNoImageTableViewCell: UITableViewCell {
     }
     
     func configureFor(title: Title) {
-        self.title = title
         subtitleLabel.text = title.titleKind.rawValue
         
-        if let storyteller = title as? Storyteller {
-            titleLabel.text = storyteller.name
-            
-            if storyteller.titleKind == .author {
-                let config = UIImage.SymbolConfiguration(weight: .semibold)
-                symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
-            } else {
-                let config = UIImage.SymbolConfiguration(weight: .medium)
-                symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
-            }
+        if let author = title as? Author {
+            titleLabel.text = author.name
+            let config = UIImage.SymbolConfiguration(weight: .semibold)
+            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+        }
+        
+        if let narrator = title as? Narrator {
+            titleLabel.text = narrator.name
+            let config = UIImage.SymbolConfiguration(weight: .medium)
+            symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
         }
         
         if let tag  = title as? Tag {
             titleLabel.text = tag.tagTitle
             symbolView.image = UIImage(systemName: "number")
         }
+        
     }
     
     private func applyConstraints() {

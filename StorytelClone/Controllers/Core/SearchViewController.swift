@@ -149,12 +149,20 @@ class SearchViewController: UIViewController {
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
             
-            if let storyteller = title as? Storyteller {
-                print("SearchViewController handles selected storyteller \(storyteller.name)")
+            if let author = title as? Author {
+                print("SearchViewController handles selected author \(author.name)")
+            }
+            
+            if let narrator = title as? Narrator {
+                print("SearchViewController handles selected narrator \(narrator.name)")
             }
             
             if let tag = title as? Tag {
                 print("SearchViewController handles selected tag \(tag.tagTitle)")
+            }
+            
+            if let series = title as? Series {
+                print("SearchViewController handles selected series \(series.title)")
             }
             
         }

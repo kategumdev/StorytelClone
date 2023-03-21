@@ -30,7 +30,16 @@ class SearchResultsViewController: UIViewController {
         return collectionView
     }()
     
-    private let separatorWidth: CGFloat = 0.25
+    private lazy var separatorWidth: CGFloat = {
+        let scale = UIScreen.main.scale
+        if scale == 2.0 {
+            return 0.25
+        } else {
+            return 0.35
+        }
+    }()
+    
+//    private let separatorWidth: CGFloat = 0.25
     
     private lazy var separatorLineView: UIView = {
         let view = UIView()
@@ -216,17 +225,21 @@ extension SearchResultsViewController {
     private func getModelFor(buttonKind: ButtonKind) -> [Title] {
         switch buttonKind {
         case .top:
-            return [Book.book3, Book.book23, Storyteller.author1, Storyteller.author2, Book.book21,
-                    Book.book15, Storyteller.author3, Book.book18, Book.book20, Storyteller.author9]
+//            return [Book.book3, Book.book23, Author.author1, Author.author2, Book.book21,
+//                    Book.book15, Author.author3, Book.book18, Book.book20, Author.author9]
+            return [Author.tolkien, Book.book3, Series.series1, Book.book21,
+                    Book.book15, Author.author3, Author.neilGaiman, Book.book18, Book.book20,
+                    Author.author9, Author.author5]
         case .books:
             return [Book.book1, Book.book23, Book.book2, Book.book22, Book.book5, Book.book20,
                     Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
                     Book.book15, Book.book4, Book.book6, Book.book19]
-        case .authors: return Storyteller.authors
-        case .narrators: return Storyteller.narrators
+        case .authors: return Author.authors
+        case .narrators: return Narrator.narrators
         case .series:
-            return [Book.book3, Book.book22, Book.book21, Book.book8, Book.book10, Book.book11,
-                    Book.book12, Book.book13, Book.book14, Book.book16]
+            return [Series.series1, Series.series3, Series.series3, Series.series1, Series.series1,
+                    Series.series3, Series.series2, Series.series1, Series.series2, Series.series2,
+                    Series.series3, Series.series3, Series.series1, Series.series1, Series.series1,]
         case .tags: return Tag.tags
         }
     }
