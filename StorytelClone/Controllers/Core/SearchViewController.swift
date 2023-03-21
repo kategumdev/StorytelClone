@@ -52,22 +52,13 @@ class SearchViewController: UIViewController {
                 
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
-//            print("Configure placeholder string")
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16), .foregroundColor: UIColor.gray
             ]
             
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
             textField.attributedPlaceholder = attributedPlaceholder
-            
-//            controller.searchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0, vertical: (textField.font?.pointSize ?? 0.0)/4)
-            
         }
-        
-//        if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
-//            textField.adjustsFontForContentSizeCategory = true
-//            searchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0, vertical: (textField.font?.pointSize ?? 0.0)/4)
-//        }
         
         // Configure cancel button
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
@@ -122,7 +113,6 @@ class SearchViewController: UIViewController {
         
 //        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
 //        navigationController?.navigationBar.isTranslucent = false
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -199,7 +189,6 @@ class SearchViewController: UIViewController {
             case .top:
                 newModel[buttonKind] = [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien,
                                         Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
-                //               return [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien, Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
             case .books:
                 newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6,
                                         Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
@@ -233,20 +222,9 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             let newModel = fetchTitlesFor(query: query)
             resultsController.modelForSearchQuery = newModel
             resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
             resultsController.collectionView.reloadData()
-            // Revert to initial model if current model isn't already initial one
-//            if resultsController.modelForSearchQuery != nil {
-//                resultsController.modelForSearchQuery = nil
-//                resultsController.setInitialOffsetsOfTablesInCells()
-//                resultsController.collectionView.reloadData()
-//            }
         } else {
 //            print("revert to initial model")
-            // Revert to initial model if current model isn't already initial one
-//            resultsController.modelForSearchQuery = nil
-//            resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
             if resultsController.modelForSearchQuery != nil {
                 print("revert to initial model")
                 resultsController.modelForSearchQuery = nil

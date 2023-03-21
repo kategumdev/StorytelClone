@@ -21,8 +21,6 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
-//    private var isBeingReused = false
-
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     var buttonKind: ButtonKind?
@@ -63,40 +61,9 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        print("layoutSubviews of \(String(describing: buttonKind?.rawValue))")
-//        resultsTable.frame.size = contentView.bounds.size
-//        print("table view size: \(resultsTable.bounds.size)")
-
-//        if rememberedOffset.y == 0.0 {
-//            resultsTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-//            print("scrolled to first row")
-//        } else {
-//            resultsTable.contentOffset = rememberedOffset
-//            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
-//        }
-        
-//        resultsTable.contentOffset = rememberedOffset
-//        print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
-
-        
-//        // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
-//        if resultsTable.contentOffset != rememberedOffset {
-//            print("offsetY is \(resultsTable.contentOffset.y)")
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self = self else { return }
-//                self.resultsTable.contentOffset = self.rememberedOffset
-//                print("async block offsetY of cell \(String(describing: self.buttonKind?.rawValue)) is set to \(self.rememberedOffset.y)")
-//
-//            }
-//        }
-        
-
         // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
         if resultsTable.contentOffset != rememberedOffset {
-            print("offsetY is \(resultsTable.contentOffset.y)")
             resultsTable.contentOffset = rememberedOffset
-//            resultsTable.setContentOffset(rememberedOffset, animated: true)
-            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
         }
         
     }
@@ -106,11 +73,11 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         resultsTable.fillSuperview()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-//        print("prepareForReuse")
-//        isBeingReused = true
-    }
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+////        print("prepareForReuse")
+////        isBeingReused = true
+//    }
     
     // MARK: - Helper methods
     func setupTapGesture() {
@@ -157,27 +124,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         cell.configureFor(title: title)
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if UIDevice.current.userInterfaceIdiom == .phone {
-//            return UITableView.automaticDimension
-//        }
-//
-//        let title = model[indexPath.row]
-//
-//        let book = title as? Book
-//        let series = title as? Series
-//
-//        if book != nil {
-//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
-//        } else if series != nil {
-//            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
-//        } else {
-//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
-//
-//        }
-//
-//    }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let title = model[indexPath.row]
@@ -193,12 +139,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
             return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
 
         }
-        
-//        if book != nil {
-//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
-//        } else {
-//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
-//        }
 
     }
     
@@ -234,8 +174,6 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         } else {
             return 0
         }
-        
-//        return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
     }
 
 }
@@ -247,7 +185,6 @@ extension SearchResultsCollectionViewCell {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scrollViewDidScroll of \(buttonKind?.rawValue), offset y is \(scrollView.contentOffset.y)")
         if scrollView.isDragging || scrollView.isDecelerating {
             guard let buttonKind = buttonKind else { return }
             delegate?.searchResultsCollectionViewCell(self, withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)

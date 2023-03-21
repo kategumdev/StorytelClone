@@ -38,9 +38,7 @@ class SearchResultsViewController: UIViewController {
             return 0.35
         }
     }()
-    
-//    private let separatorWidth: CGFloat = 0.25
-    
+        
     private lazy var separatorLineView: UIView = {
         let view = UIView()
         view.layer.borderColor = UIColor.label.cgColor
@@ -136,7 +134,6 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
-//            print("cell \(buttonKind.rawValue) remembered offset set to: \(offset.y)")
             cell.rememberedOffset = offset
         }
         
@@ -150,7 +147,7 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         
        // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
         DispatchQueue.main.async {
-            print("offset set in async block")
+//            print("offset set in async block")
             cell.resultsTable.contentOffset = cell.rememberedOffset
         }
         
@@ -190,15 +187,6 @@ extension SearchResultsViewController {
         let leadingConstant = previousButtonUpperBound + slidingLineXProportionalPart
         
         buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
-        
-//        // Avoid setting leading anchor outside the stackView, because it causes constraints conflict on scroll back when current button is 0
-//        if leadingConstant < 0 {
-//            buttonsView.slidingLineLeadingAnchor.constant = 0.0
-//        } else {
-//            buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
-//        }
-        
-        
                 
         // Adjust contentOffset.x of scroll of buttonsView
         buttonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)
@@ -245,8 +233,6 @@ extension SearchResultsViewController {
     private func getInitialModelFor(buttonKind: ButtonKind) -> [Title] {
         switch buttonKind {
         case .top:
-//            return [Book.book3, Book.book23, Author.author1, Author.author2, Book.book21,
-//                    Book.book15, Author.author3, Book.book18, Book.book20, Author.author9]
             return [Author.tolkien, Book.book3, Series.series1, Book.book21,
                     Book.book15, Author.author3, Author.neilGaiman, Book.book18, Book.book20,
                     Author.author9, Author.author5]
@@ -352,14 +338,12 @@ extension SearchResultsViewController {
            let mainWindow = windowScene.windows.first
         {
             tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
-//            print("Tab bar height: \(tabBarHeight)")
         }
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
 
         ])
