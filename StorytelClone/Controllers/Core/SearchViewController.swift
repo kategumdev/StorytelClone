@@ -190,22 +190,88 @@ class SearchViewController: UIViewController {
         return ButtonCategory.createModelFor(categoryButton: buttonCategory)
     }
     
+    private func fetchTitlesFor(query: String) -> [ButtonKind : [Title]] {
+        // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
+        var newModel = [ButtonKind : [Title]]()
+        let buttonKinds = ButtonKind.allCases
+        for buttonKind in buttonKinds {
+            switch buttonKind {
+            case .top:
+                newModel[buttonKind] = [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien,
+                                        Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
+                //               return [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien, Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
+            case .books:
+                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6,
+                                        Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
+            case .authors:
+                newModel[buttonKind] = [Author.neilGaiman, Author.tolkien, Author.author1, Author.author2, Author.author3, Author.author4, Author.author5, Author.author6, Author.author7, Author.author8, Author.author9, Author.author10]
+            case .narrators: newModel[buttonKind] = [Narrator.narrator10, Narrator.narrator3, Narrator.narrator5]
+            case .series: newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
+            case .tags: newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
+            }
+        }
+        return newModel
+    }
+    
 }
 
 // MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
+
     // Called when searchResultsController becomes visible and unvisible (after tapping Cancel)
     func updateSearchResults(for searchController: UISearchController) {
-        
+        print("updateSearchResults")
         let searchBar = searchController.searchBar
-        if searchBar.isFirstResponder == false {
-            // When cancel button was tapped
+        
+        guard let query = searchBar.text,
+              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        let queryString = query.trimmingCharacters(in: .whitespaces)
+        if !queryString.isEmpty {
+            // Fetch model objects for search query and create models for all buttonKinds. HARDCODED FOR NOW
+            print("setting newModel")
+            let newModel = fetchTitlesFor(query: query)
+            resultsController.modelForSearchQuery = newModel
+            resultsController.setInitialOffsetsOfTablesInCells()
+//            resultsController.collectionView.reloadData()
+            resultsController.collectionView.reloadData()
+            // Revert to initial model if current model isn't already initial one
+//            if resultsController.modelForSearchQuery != nil {
+//                resultsController.modelForSearchQuery = nil
+//                resultsController.setInitialOffsetsOfTablesInCells()
+//                resultsController.collectionView.reloadData()
+//            }
+        } else {
+//            print("revert to initial model")
+            // Revert to initial model if current model isn't already initial one
+//            resultsController.modelForSearchQuery = nil
+//            resultsController.setInitialOffsetsOfTablesInCells()
+//            resultsController.collectionView.reloadData()
+            if resultsController.modelForSearchQuery != nil {
+                print("revert to initial model")
+                resultsController.modelForSearchQuery = nil
+                resultsController.setInitialOffsetsOfTablesInCells()
+                resultsController.collectionView.reloadData()
+            }
         }
         
-        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            // Make some changes when the search bar begins editing
-        }
-
+//        resultsController.delegate = self
+        
+//        APICaller.shared.search(with: query) { result in
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success(let titles):
+//                    resultsController.titles = titles
+//                    resultsController.searchResultsCollectionView.reloadData()
+//                case .failure(let error):
+//                    print(error.localizedDescription )
+//                }
+//            }
+//        }
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        // Make some changes when the search bar begins editing
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {

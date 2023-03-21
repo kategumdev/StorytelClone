@@ -55,6 +55,8 @@ class SearchResultsViewController: UIViewController {
     
     private var cellsToHideContent = [Int]()
     private var indexPathsToUnhide = [IndexPath]()
+    
+    var modelForSearchQuery: [ButtonKind : [Title]]?
         
 //    private var previousContentSize: UIContentSizeCategory?
     
@@ -118,12 +120,23 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
         let buttonKind = buttonsView.buttonKinds[indexPath.row]
+        print("cell \(buttonKind) is configured")
         cell.buttonKind = buttonKind
-        cell.model = getModelFor(buttonKind: buttonKind)
+        
+        if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
+            cell.model = cellModel
+            cell.withSectionHeader = false
+        } else {
+            cell.model = getInitialModelFor(buttonKind: buttonKind)
+            cell.withSectionHeader = true
+        }
+        
+//        cell.model = getModelFor(buttonKind: buttonKind)
         cell.selectedTitleCallback = selectedTitleCallback
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
+//            print("cell \(buttonKind.rawValue) remembered offset set to: \(offset.y)")
             cell.rememberedOffset = offset
         }
         
@@ -134,6 +147,13 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         
         cell.resultsTable.isHidden = false
         cell.resultsTable.reloadData()
+        
+       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
+        DispatchQueue.main.async {
+            print("offset set in async block")
+            cell.resultsTable.contentOffset = cell.rememberedOffset
+        }
+        
         return cell
     }
     
@@ -214,15 +234,15 @@ extension SearchResultsViewController {
         }
     }
     
-    private func setInitialOffsetsOfTablesInCells() {
+    func setInitialOffsetsOfTablesInCells() {
         let buttonKinds = buttonsView.buttonKinds
         for kind in buttonKinds {
             rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
         }
     }
     
-    // This function should fetch needed objects
-    private func getModelFor(buttonKind: ButtonKind) -> [Title] {
+    // This function should fetch needed initial objects when user haven't perform any search yet
+    private func getInitialModelFor(buttonKind: ButtonKind) -> [Title] {
         switch buttonKind {
         case .top:
 //            return [Book.book3, Book.book23, Author.author1, Author.author2, Book.book21,

@@ -21,12 +21,13 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
-    private var isBeingReused = false
+//    private var isBeingReused = false
 
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     var buttonKind: ButtonKind?
     var model = [Title]()
+    var withSectionHeader = true
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
@@ -40,7 +41,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
-        table.sectionHeaderHeight = UITableView.automaticDimension
+//        table.sectionHeaderHeight = UITableView.automaticDimension
         // Avoid gap above custom section header
         table.sectionHeaderTopPadding = 0
         return table
@@ -62,12 +63,40 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        print("layoutSubviews of \(String(describing: buttonKind?.rawValue))")
 //        resultsTable.frame.size = contentView.bounds.size
 //        print("table view size: \(resultsTable.bounds.size)")
 
-        if resultsTable.contentOffset != rememberedOffset {
-            resultsTable.contentOffset = rememberedOffset
+//        if rememberedOffset.y == 0.0 {
+//            resultsTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//            print("scrolled to first row")
+//        } else {
+//            resultsTable.contentOffset = rememberedOffset
 //            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
+//        }
+        
+//        resultsTable.contentOffset = rememberedOffset
+//        print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
+
+        
+//        // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
+//        if resultsTable.contentOffset != rememberedOffset {
+//            print("offsetY is \(resultsTable.contentOffset.y)")
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self = self else { return }
+//                self.resultsTable.contentOffset = self.rememberedOffset
+//                print("async block offsetY of cell \(String(describing: self.buttonKind?.rawValue)) is set to \(self.rememberedOffset.y)")
+//
+//            }
+//        }
+        
+
+        // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
+        if resultsTable.contentOffset != rememberedOffset {
+            print("offsetY is \(resultsTable.contentOffset.y)")
+            resultsTable.contentOffset = rememberedOffset
+//            resultsTable.setContentOffset(rememberedOffset, animated: true)
+            print("offsetY of cell \(String(describing: buttonKind?.rawValue)) is set to \(rememberedOffset.y)")
         }
         
     }
@@ -80,7 +109,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 //        print("prepareForReuse")
-        isBeingReused = true
+//        isBeingReused = true
     }
     
     // MARK: - Helper methods
@@ -181,6 +210,8 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard withSectionHeader else { return UIView() }
+        
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
 
         if let buttonKind = buttonKind {
@@ -189,8 +220,22 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         return header
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if withSectionHeader {
+            return UITableView.automaticDimension
+        } else {
+            return 0
+        }
+    }
+    
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
+        if withSectionHeader {
+            return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
+        } else {
+            return 0
+        }
+        
+//        return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
     }
 
 }
@@ -202,6 +247,7 @@ extension SearchResultsCollectionViewCell {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("scrollViewDidScroll of \(buttonKind?.rawValue), offset y is \(scrollView.contentOffset.y)")
         if scrollView.isDragging || scrollView.isDecelerating {
             guard let buttonKind = buttonKind else { return }
             delegate?.searchResultsCollectionViewCell(self, withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
