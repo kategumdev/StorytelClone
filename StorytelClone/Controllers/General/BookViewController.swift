@@ -11,6 +11,10 @@ class BookViewController: UIViewController {
     
     var book: Book?
     
+//    private let scrollView = UIScrollView()
+    
+    private let bookDetailsView = BookDetailsView()
+    
     init(book: Book?) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -24,10 +28,13 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book?.title
-//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-
-        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//        view.addSubview(scrollView)
+        view.addSubview(bookDetailsView)
+        applyConstraints()
         
+        
+//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
     }
     
@@ -44,5 +51,52 @@ class BookViewController: UIViewController {
 //        print("viewDidDisappear")
 //        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
 //    }
+    
+    private func applyConstraints() {
+        
+        
+//        let contentG = scrollView.contentLayoutGuide
+//        let frameG = scrollView.frameLayoutGuide
+//
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+////            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//            scrollView.heightAnchor.constraint(equalToConstant: <#T##CGFloat#>)
+//        ])
+        
+//        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            bookDetailsView.topAnchor.constraint(equalTo: contentG.topAnchor),
+//            bookDetailsView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+//            bookDetailsView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
+//            bookDetailsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
+//            bookDetailsView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
+//        ])
+        
+        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            bookDetailsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bookDetailsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+//            bookDetailsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
+//            bookDetailsView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
+        ])
+        
+        
+        
+//
+        
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
+//            stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+//            stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
+//            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2),
+//            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
+//        ])
+    }
 
 }
