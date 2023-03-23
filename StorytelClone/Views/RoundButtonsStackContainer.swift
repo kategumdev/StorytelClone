@@ -151,40 +151,37 @@ class RoundButtonsStackContainer: UIStackView {
         NSLayoutConstraint.activate([
             listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
             listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-//            listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor, constant: topAndBottomPadding),
             listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
+            listenButton.leadingAnchor.constraint(equalTo: viewWithListenButton.leadingAnchor),
             listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
         ])
         
         listenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-//            listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor, constant: -topAndBottomPadding)
+            listenLabel.centerXAnchor.constraint(equalTo: viewWithListenButton.centerXAnchor),
             listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
         ])
 
         viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
         viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
-
-        NSLayoutConstraint.activate([
-//            viewWithListenButton.topAnchor.constraint(equalTo: listenButton.topAnchor),
-//            viewWithListenButton.bottomAnchor.constraint(equalTo: listenLabel.bottomAnchor),
-        ])
+//        viewWithListenButton.trailingAnchor.constraint(equalTo: listenButton.trailingAnchor).isActive = true
+//        viewWithListenButton.leadingAnchor.constraint(equalTo: listenButton.leadingAnchor).isActive = true
         
         // Save button
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             saveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
             saveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-//            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor, constant: topAndBottomPadding),
             saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor),
+            saveButton.leadingAnchor.constraint(equalTo: viewWithSaveButton.leadingAnchor),
             saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
         ])
         
         saveLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-//            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor, constant: -topAndBottomPadding)
+            saveLabel.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor),
             saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
 
         ])
@@ -193,8 +190,64 @@ class RoundButtonsStackContainer: UIStackView {
         viewWithSaveButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor).isActive = true
         
         // Set height of stack view
-        viewWithSaveButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+//        viewWithSaveButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         
     }
+    
+    
+//    private func applyConstraints() {
+////        let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+//        let buttonLabelPadding: CGFloat = 15
+//
+//        // Listen button
+//        listenButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//            listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+////            listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor, constant: topAndBottomPadding),
+//            listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
+//            listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
+//        ])
+//
+//        listenLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+////            listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor, constant: -topAndBottomPadding)
+//            listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
+//        ])
+//
+//        viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
+//        viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
+//
+//        NSLayoutConstraint.activate([
+////            viewWithListenButton.topAnchor.constraint(equalTo: listenButton.topAnchor),
+////            viewWithListenButton.bottomAnchor.constraint(equalTo: listenLabel.bottomAnchor),
+//        ])
+//
+//        // Save button
+//        saveButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            saveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//            saveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+////            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor, constant: topAndBottomPadding),
+//            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor),
+//            saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
+//        ])
+//
+//        saveLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+////            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor, constant: -topAndBottomPadding)
+//            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
+//
+//        ])
+//
+//        viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
+//        viewWithSaveButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor).isActive = true
+//
+//        // Set height of stack view
+//        viewWithSaveButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+//
+//    }
     
 }

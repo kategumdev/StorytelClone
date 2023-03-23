@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BookDetailsView: UIView {
+class BookDetailsView: UIStackView {
     
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
 //    static let imageHeight: CGFloat = 250
@@ -149,22 +149,22 @@ class BookDetailsView: UIView {
     }()
     
     
-    private let roundButtonsStackContainer = RoundButtonsStackContainer()
+    let roundButtonsStackContainer = RoundButtonsStackContainer()
     
 
-    lazy var stackView: UIStackView = {
-        let stack = UIStackView()
-//        stack.backgroundColor = .green
-        stack.axis = .vertical
-        stack.alignment = .center
-//        stack.distribution = .equalCentering
-//        stack.distribution = .fillProportionally
-        stack.distribution = .equalSpacing
-        stack.spacing = 8
-
-        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { stack.addArrangedSubview($0)}
-        return stack
-    }()
+//    lazy var stackView: UIStackView = {
+//        let stack = UIStackView()
+////        stack.backgroundColor = .green
+//        stack.axis = .vertical
+//        stack.alignment = .center
+////        stack.distribution = .equalCentering
+////        stack.distribution = .fillProportionally
+//        stack.distribution = .equalSpacing
+//        stack.spacing = 8
+//
+//        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { stack.addArrangedSubview($0)}
+//        return stack
+//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -172,11 +172,27 @@ class BookDetailsView: UIView {
         configureAuthorLabel(withName: "Neil Gaiman")
         configureNarratorLabel(withName: "Nancy Butler")
         bookTitleLabel.text = "La cadena de oro"
-        addSubview(stackView)
+        
+        axis = .vertical
+        alignment = .center
+//        distribution = .equalCentering
+//        distribution = .equalSpacing
+//        distribution = .fillProportionally
+//        spacing = 30
+        
+        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
+        
+        setCustomSpacing(24.0, after: coverImageView)
+        setCustomSpacing(16.0, after: bookTitleLabel)
+        setCustomSpacing(8.0, after: authorLabel)
+        setCustomSpacing(23.0, after: narratorLabel)
+        setCustomSpacing(33.0, after: viewWithShowSeriesButton)
+        
+//        addSubview(stackView)
         applyConstraints()
     }
     
-    required init?(coder: NSCoder) {
+    required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -190,9 +206,12 @@ class BookDetailsView: UIView {
     
 //    override func layoutSubviews() {
 //        super.layoutSubviews()
-//        print("stackView size: \(stackView.bounds.size)")
-//        frame.size = stackView.bounds.size
+////        print("stackView size: \(stackView.bounds.size)")
+////        frame.size = stackView.bounds.size
+//        print("distribution: \(distribution)")
 //    }
+    
+    
     
     private func applyConstraints() {
         
@@ -238,13 +257,18 @@ class BookDetailsView: UIView {
             seriesButtonTrailingImage.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 6).isActive = true
         }
         
+//        roundButtonsStackContainer.translatesAutoresizingMaskIntoConstraints = false
+//        roundButtonsStackContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
         // Set height of BookDetailsView
 //        coverImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
 //        roundButtonsStackContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.topAnchor.constraint(equalTo: coverImageView.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: roundButtonsStackContainer.bottomAnchor).isActive = true
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        stackView.topAnchor.constraint(equalTo: coverImageView.topAnchor).isActive = true
+//        stackView.bottomAnchor.constraint(equalTo: roundButtonsStackContainer.bottomAnchor).isActive = true
+        
+        
         
 //        stackView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         

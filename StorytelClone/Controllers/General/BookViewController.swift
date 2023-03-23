@@ -60,6 +60,14 @@ class BookViewController: UIViewController {
     
     private func applyConstraints() {
         
+        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            bookDetailsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bookDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            bookDetailsView.bottomAnchor.constraint(equalTo: bookDetailsView.roundButtonsStackContainer.bottomAnchor)
+        ])
+        
         
 //        let contentG = scrollView.contentLayoutGuide
 //        let frameG = scrollView.frameLayoutGuide
@@ -73,43 +81,6 @@ class BookViewController: UIViewController {
 //            scrollView.heightAnchor.constraint(equalToConstant: <#T##CGFloat#>)
 //        ])
         
-//        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            bookDetailsView.topAnchor.constraint(equalTo: contentG.topAnchor),
-//            bookDetailsView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-//            bookDetailsView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-//            bookDetailsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
-//            bookDetailsView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
-//        ])
-        
-        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            bookDetailsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bookDetailsView.heightAnchor.constraint(equalTo: bookDetailsView.stackView.heightAnchor),
-//            bookDetailsView.widthAnchor.constraint(equalTo: bookDetailsView.stackView.widthAnchor),
-            bookDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor),
-
-            bookDetailsView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-//            bookDetailsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            
-//            bookDetailsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
-//            bookDetailsView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
-        ])
-        
-        
-        
-//
-        
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
-//            stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-//            stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-//            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2),
-//            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
-//        ])
     }
 
 }
