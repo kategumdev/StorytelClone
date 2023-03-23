@@ -9,7 +9,9 @@ import UIKit
 
 class RoundButtonsStackContainer: UIStackView {
     
-    private let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+    static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+
+//    private let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
 //    private let topAndBottomPadding: CGFloat = 60
 
 
@@ -40,6 +42,7 @@ class RoundButtonsStackContainer: UIStackView {
         config.image = image
 //        config.imagePlacement = .all
         config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 9.5, bottom: 10, trailing: 8.5)
         button.configuration = config
         return button
     }()
@@ -65,16 +68,40 @@ class RoundButtonsStackContainer: UIStackView {
         return view
     }()
     
+//    private let saveButton: UIButton = {
+//        let button = UIButton()
+//        button.tintColor = UIColor.label
+////        var config = UIButton.Configuration.bordered()
+//        var config = UIButton.Configuration.bordered()
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
+//        let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
+//        config.image = image
+//
+////        config.imagePlacement = .all
+//        config.cornerStyle = .capsule
+//        config.baseBackgroundColor = .clear
+////        config.baseBackgroundColor = Utils.customBackgroundColor
+//        button.configuration = config
+//
+//        button.layer.borderWidth = 1
+//        button.layer.borderColor = UIColor.label.cgColor
+//        return button
+//    }()
+    
     private let saveButton: UIButton = {
         let button = UIButton()
         button.tintColor = UIColor.label
-        var config = UIButton.Configuration.bordered()
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+//        let symbolConfig = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
-        config.image = image
-//        config.imagePlacement = .all
-        config.cornerStyle = .capsule
-//        config.baseBackgroundColor = Utils.customBackgroundColor
+        button.setImage(image, for: .normal)
+//        button.backgroundColor = .clear
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.label.cgColor
+        button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
+        
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
         button.configuration = config
         return button
     }()
@@ -96,7 +123,7 @@ class RoundButtonsStackContainer: UIStackView {
 //        alignment = .center
         distribution = .fillProportionally
 //        distribution = .equalSpacing
-        spacing = buttonWidthAndHeight - 10
+        spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
         addArrangedSubview(viewWithListenButton)
         addArrangedSubview(viewWithSaveButton)
         translatesAutoresizingMaskIntoConstraints = false
@@ -107,6 +134,14 @@ class RoundButtonsStackContainer: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            saveButton.layer.borderColor = UIColor.label.cgColor
+        }
+    }
+    
     private func applyConstraints() {
 //        let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
         let buttonLabelPadding: CGFloat = 15
@@ -114,8 +149,8 @@ class RoundButtonsStackContainer: UIStackView {
         // Listen button
         listenButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            listenButton.heightAnchor.constraint(equalToConstant: buttonWidthAndHeight),
-            listenButton.widthAnchor.constraint(equalToConstant: buttonWidthAndHeight),
+            listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+            listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
 //            listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor, constant: topAndBottomPadding),
             listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
             listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
@@ -123,7 +158,7 @@ class RoundButtonsStackContainer: UIStackView {
         
         listenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            listenLabel.widthAnchor.constraint(equalToConstant: buttonWidthAndHeight),
+            listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
 //            listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor, constant: -topAndBottomPadding)
             listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
         ])
@@ -139,8 +174,8 @@ class RoundButtonsStackContainer: UIStackView {
         // Save button
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveButton.heightAnchor.constraint(equalToConstant: buttonWidthAndHeight),
-            saveButton.widthAnchor.constraint(equalToConstant: buttonWidthAndHeight),
+            saveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+            saveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
 //            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor, constant: topAndBottomPadding),
             saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor),
             saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
@@ -148,7 +183,7 @@ class RoundButtonsStackContainer: UIStackView {
         
         saveLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveLabel.widthAnchor.constraint(equalToConstant: buttonWidthAndHeight),
+            saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
 //            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor, constant: -topAndBottomPadding)
             saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
 

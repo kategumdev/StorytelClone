@@ -152,7 +152,7 @@ class BookDetailsView: UIView {
     private let roundButtonsStackContainer = RoundButtonsStackContainer()
     
 
-    private lazy var stackView: UIStackView = {
+    lazy var stackView: UIStackView = {
         let stack = UIStackView()
 //        stack.backgroundColor = .green
         stack.axis = .vertical
@@ -187,6 +187,12 @@ class BookDetailsView: UIView {
             coverImageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
+    
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        print("stackView size: \(stackView.bounds.size)")
+//        frame.size = stackView.bounds.size
+//    }
     
     private func applyConstraints() {
         
@@ -233,13 +239,18 @@ class BookDetailsView: UIView {
         }
         
         // Set height of BookDetailsView
-        coverImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        roundButtonsStackContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+//        coverImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+//        roundButtonsStackContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.topAnchor.constraint(equalTo: coverImageView.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: roundButtonsStackContainer.bottomAnchor).isActive = true
+        
+//        stackView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        
                 
+        
+        
 //        roundButtonsStackContainer.translatesAutoresizingMaskIntoConstraints = false
 //        NSLayoutConstraint.activate([
 //            roundButtonsStackContainer.

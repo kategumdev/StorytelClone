@@ -46,6 +46,12 @@ class BookViewController: UIViewController {
 //        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        print("bookDetailsView size: \(bookDetailsView.bounds.size)")
+//        bookDetailsView.frame = bookDetailsView.stackView.frame
+    }
+    
 //    override func viewDidDisappear(_ animated: Bool) {
 //        super.viewDidDisappear(animated)
 //        print("viewDidDisappear")
@@ -79,8 +85,15 @@ class BookViewController: UIViewController {
         bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            bookDetailsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bookDetailsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+//            bookDetailsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bookDetailsView.heightAnchor.constraint(equalTo: bookDetailsView.stackView.heightAnchor),
+//            bookDetailsView.widthAnchor.constraint(equalTo: bookDetailsView.stackView.widthAnchor),
+            bookDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor),
+
+            bookDetailsView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+//            bookDetailsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            
 //            bookDetailsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor),
 //            bookDetailsView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
         ])
