@@ -11,8 +11,7 @@ class RoundButtonsStackContainer: UIStackView {
     
     static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
     
-//    private var book: Book?
-    private var bookKind: TitleKind = .audiobook
+    private let bookKind: TitleKind
 
     private lazy var viewWithListenButton: UIView = {
         let view = UIView()
@@ -89,7 +88,6 @@ class RoundButtonsStackContainer: UIStackView {
 //        let symbolConfig = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
         button.setImage(image, for: .normal)
-//        button.backgroundColor = .clear
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
@@ -111,38 +109,14 @@ class RoundButtonsStackContainer: UIStackView {
     private var hasListenButton = true
     private var hasReadButton = true
     
-//    init(forBook book: Book) {
-//        super.init(frame: .zero)
-//        self.book = book
-//
-//        configureSelf()
-//
-//        applyConstraints()
-//    }
     
     init(forBookKind bookKind: TitleKind) {
-        super.init(frame: .zero)
         self.bookKind = bookKind
-        
+        super.init(frame: .zero)
         configureSelf()
-        
         applyConstraints()
     }
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        axis = .horizontal
-////        alignment = .center
-//        distribution = .fillProportionally
-////        distribution = .equalSpacing
-//        spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
-//        addArrangedSubview(viewWithListenButton)
-//        addArrangedSubview(viewWithReadButton)
-//        addArrangedSubview(viewWithSaveButton)
-//        translatesAutoresizingMaskIntoConstraints = false
-//        applyConstraints()
-//    }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -176,24 +150,6 @@ class RoundButtonsStackContainer: UIStackView {
             addArrangedSubview(viewWithSaveButton)
         }
         
-        
-//        if let bookKind = book?.titleKind {
-//            if bookKind == .audioBookAndEbook {
-//                addArrangedSubview(viewWithListenButton)
-//                addArrangedSubview(viewWithReadButton)
-//                addArrangedSubview(viewWithSaveButton)
-//            } else if bookKind == .audiobook {
-//                hasReadButton = false
-//                addArrangedSubview(viewWithListenButton)
-//                addArrangedSubview(viewWithSaveButton)
-//            } else {
-//                hasListenButton = false
-//                addArrangedSubview(viewWithReadButton)
-//                addArrangedSubview(viewWithSaveButton)
-//            }
-//        }
-
-//        translatesAutoresizingMaskIntoConstraints = false
     }
     
    

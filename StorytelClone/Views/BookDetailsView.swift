@@ -10,9 +10,8 @@ import UIKit
 class BookDetailsView: UIStackView {
     
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
-//    static let imageHeight: CGFloat = 250
     
-    private var book: Book?
+    private let book: Book
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -27,9 +26,7 @@ class BookDetailsView: UIStackView {
     }()
     
     private lazy var coverImageWidthAnchor = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight)
-    
-//    private let bookTitleLabel: UILabel = UILabel.createLabel(withFont: Utils.wideButtonLabelFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: true)
-    
+
     private let bookTitleLabel: UILabel = {
         let label = UILabel.createLabel(withFont: Utils.wideButtonLabelFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: true)
         label.textAlignment = .center
@@ -58,12 +55,14 @@ class BookDetailsView: UIStackView {
         authorLabel.attributedText = attributedString
     }
         
-    private let narratorLabel: UILabel = {
+    // Lazy var to avoid instantiation if it's not needed in this view
+    private lazy var narratorLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         return label
     }()
-
+    private var hasNarratorLabel = true
+//
     private func configureNarratorLabel(withName name: String) {
         let attributedString = NSMutableAttributedString(string: "With: \(name)")
         let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
@@ -80,94 +79,20 @@ class BookDetailsView: UIStackView {
         narratorLabel.attributedText = attributedString
     }
     
-    private lazy var showSeriesButtonContainer: UIView = {
-       let view = UIView()
-        view.layer.borderColor = UIColor.tertiaryLabel.cgColor
-        view.layer.borderWidth = 0.5
-        view.addSubview(showSeriesButton)
-        return view
-    }()
+    // Lazy var to avoid instantiation if it's not needed in this view
+    private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
+    private var hasShowSeriesButtonContainer = true
     
-    private lazy var showSeriesButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = UIColor.label
-        var config = UIButton.Configuration.plain()
-//        button.setTitle("Part 1", for: .normal)
-        button.setTitle("Part 1 in Cazadores de sombras. Las últimas horas", for: .normal)
-        button.titleLabel?.lineBreakMode = .byTruncatingTail
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        button.titleLabel?.font = font
-        button.titleLabel?.textAlignment = .center
-        button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.addSubview(seriesButtonLeadingImage)
-        button.addSubview(seriesButtonTrailingImage)
-        return button
-    }()
+    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBookKind: book.titleKind)
     
-    private let seriesButtonTrailingImage: UIImageView = {
-        let imageView = UIImageView()
-        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
-        let image = UIImage(systemName: "chevron.forward", withConfiguration: config)
-        imageView.image = image?.withRenderingMode(.alwaysOriginal)
-        imageView.image?.withTintColor(.label)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-    
-    private let seriesButtonLeadingImage: UIImageView = {
-        let imageView = UIImageView()
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        let image = UIImage(systemName: "rectangle.stack", withConfiguration: config)
-        imageView.image = image?.withRenderingMode(.alwaysOriginal)
-        imageView.image?.withTintColor(.label)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-    
-//    let roundButtonsStackContainer = RoundButtonsStackContainer()
-    
-//    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book!) // book will always be set
-    
-    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBookKind: book!.titleKind) // book will always be set
-    
-    private var hasSeriesButtonView = true
-    private var hasNarratorLabel = true
-
-
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        configureAuthorLabel(withName: "Neil Gaiman")
-//        configureNarratorLabel(withName: "Nancy Butler")
-//        bookTitleLabel.text = "La cadena de oro"
-//
-//        configureSelf()
-////        axis = .vertical
-////        alignment = .center
-////        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
-////        setCustomSpacing(24.0, after: coverImageView)
-////        setCustomSpacing(16.0, after: bookTitleLabel)
-////        setCustomSpacing(8.0, after: authorLabel)
-////        setCustomSpacing(23.0, after: narratorLabel)
-////        setCustomSpacing(33.0, after: viewWithShowSeriesButton)
-////
-//        applyConstraints()
-//    }
+//    private var hasShowSeriesButtonContainer = true
+//    private var hasNarratorLabel = true
     
     init(forBook book: Book) {
-        super.init(frame: .zero)
         self.book = book
-        
-        configureAuthorLabel(withName: "Neil Gaiman")
-        configureNarratorLabel(withName: "Nancy Butler")
-        bookTitleLabel.text = "La cadena de oro"
-        
+        super.init(frame: .zero)
         configureSelf()
-        
         applyConstraints()
-
     }
     
     required init(coder: NSCoder) {
@@ -176,7 +101,7 @@ class BookDetailsView: UIStackView {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             coverImageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
@@ -185,16 +110,12 @@ class BookDetailsView: UIStackView {
     private func configureSelf() {
         axis = .vertical
         alignment = .center
-        
-        guard let book = book else { return }
-        
+                
         if let image = book.coverImage {
             let resizedImage = image.resizeFor(targetHeight: BookDetailsView.imageHeight)
             coverImageView.image = resizedImage
-            
             coverImageWidthAnchor.constant = resizedImage.size.width
         }
-        
         addArrangedSubview(coverImageView)
         setCustomSpacing(24.0, after: coverImageView)
 
@@ -219,118 +140,35 @@ class BookDetailsView: UIStackView {
             setCustomSpacing(32.0, after: authorLabel)
         }
                     
-        if let series = book.series, let seriesPart = book.seriesPart {
-            let text = "Part \(seriesPart) in \(series)"
-            showSeriesButton.setTitle(text, for: .normal)
+        if let seriesTitle = book.series, let seriesPart = book.seriesPart {
+            showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart)
             addArrangedSubview(showSeriesButtonContainer)
             setCustomSpacing(33.0, after: showSeriesButtonContainer)
         } else {
-            hasSeriesButtonView = false
+            hasShowSeriesButtonContainer = false
         }
 
         addArrangedSubview(roundButtonsStackContainer)
     }
     
-//    private func configureSelf() {
-//        axis = .vertical
-//        alignment = .center
-//
-//        guard let book = book else { return }
-//
-//        bookTitleLabel.text = book.title
-//
-//        coverImageView.image = book.coverImage
-//
-//        #warning("Resize image and set coverImageWidthAnchor accordingly")
-//
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        configureAuthorLabel(withName: authorNamesString)
-//
-//        if let narrators = book.narrators {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            configureNarratorLabel(withName: narratorNamesString)
-//        } else {
-//            hasNarratorLabel = false
-//        }
-//
-//        #warning("Configure narratorLabel if book.narrators != nil")
-//
-//        if let series = book.series, let seriesPart = book.seriesPart {
-//            let text = "Part \(seriesPart) in \(series)"
-//            showSeriesButton.setTitle(text, for: .normal)
-//
-//            [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
-//            setCustomSpacing(24.0, after: coverImageView)
-//            setCustomSpacing(16.0, after: bookTitleLabel)
-//            setCustomSpacing(8.0, after: authorLabel)
-//            setCustomSpacing(23.0, after: narratorLabel)
-//            setCustomSpacing(33.0, after: viewWithShowSeriesButton)
-//        } else {
-//            hasSeriesButtonView = false
-//            [coverImageView, bookTitleLabel, authorLabel, narratorLabel, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
-//            setCustomSpacing(24.0, after: coverImageView)
-//            setCustomSpacing(16.0, after: bookTitleLabel)
-//            setCustomSpacing(8.0, after: authorLabel)
-//            setCustomSpacing(32.0, after: narratorLabel)
-//        }
-//
-////        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
-////        setCustomSpacing(24.0, after: coverImageView)
-////        setCustomSpacing(16.0, after: bookTitleLabel)
-////        setCustomSpacing(8.0, after: authorLabel)
-////        setCustomSpacing(23.0, after: narratorLabel)
-////        setCustomSpacing(33.0, after: viewWithShowSeriesButton)
-//    }
-    
     private func applyConstraints() {
-        
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
         coverImageWidthAnchor.isActive = true
         
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        let widthConstant = BookDetailsView.imageHeight * 0.75
-//        bookTitleLabel.widthAnchor.constraint(equalToConstant: widthConstant).isActive = true
         bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
         
-        let authorAndNarratorLabelWidth = BookDetailsView.imageHeight
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
-        authorLabel.widthAnchor.constraint(equalToConstant: authorAndNarratorLabelWidth).isActive = true
+        authorLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
         
         if hasNarratorLabel {
             narratorLabel.translatesAutoresizingMaskIntoConstraints = false
-            narratorLabel.widthAnchor.constraint(equalToConstant: authorAndNarratorLabelWidth).isActive = true
+            narratorLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
         }
         
-        guard hasSeriesButtonView else { return }
-        
-        showSeriesButtonContainer.translatesAutoresizingMaskIntoConstraints = false
-//        viewWithShowSeriesButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        showSeriesButtonContainer.topAnchor.constraint(equalTo: showSeriesButton.topAnchor, constant: -5).isActive = true
-        showSeriesButtonContainer.bottomAnchor.constraint(equalTo: showSeriesButton.bottomAnchor, constant: 5).isActive = true
-        showSeriesButtonContainer.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        
-        showSeriesButton.translatesAutoresizingMaskIntoConstraints = false
-        showSeriesButton.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight * 0.90).isActive = true
-        showSeriesButton.centerXAnchor.constraint(equalTo: showSeriesButtonContainer.centerXAnchor).isActive = true
-        showSeriesButton.centerYAnchor.constraint(equalTo: showSeriesButtonContainer.centerYAnchor).isActive = true
-        
-        seriesButtonLeadingImage.translatesAutoresizingMaskIntoConstraints = false
-        seriesButtonLeadingImage.centerYAnchor.constraint(equalTo: showSeriesButton.centerYAnchor).isActive = true
-        seriesButtonLeadingImage.leadingAnchor.constraint(greaterThanOrEqualTo: showSeriesButton.leadingAnchor).isActive = true
-//        seriesButtonLeadingImage.leadingAnchor.constraint(equalTo: showSeriesButton.leadingAnchor).isActive = true
-        
-        
-        seriesButtonTrailingImage.translatesAutoresizingMaskIntoConstraints = false
-        seriesButtonTrailingImage.centerYAnchor.constraint(equalTo: showSeriesButton.centerYAnchor).isActive = true
-        seriesButtonTrailingImage.trailingAnchor.constraint(lessThanOrEqualTo: showSeriesButton.trailingAnchor).isActive = true
-//        seriesButtonTrailingImage.trailingAnchor.constraint(equalTo: showSeriesButton.trailingAnchor).isActive = true
-        
-        if let titleLabel = showSeriesButton.titleLabel {
-            seriesButtonLeadingImage.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -6).isActive = true
-            seriesButtonTrailingImage.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 6).isActive = true
+        if hasShowSeriesButtonContainer {
+            showSeriesButtonContainer.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         }
     }
     
