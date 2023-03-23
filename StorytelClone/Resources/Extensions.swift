@@ -86,6 +86,25 @@ extension UILabel {
     
 }
 
+extension UIImage {
+    
+    // Resize image accounting for its ratio
+    func resizeFor(targetHeight: CGFloat, andSetAlphaTo targetAlpha: CGFloat = 1) -> UIImage {
+        let imageRatio = self.size.width / self.size.height
+        let targetHeight: CGFloat = targetHeight
+        let targetWidth = targetHeight * imageRatio
+        let targetSize = CGSize(width: targetWidth, height: targetHeight)
+        
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let resizedImage = renderer.image { _ in
+            
+            self.draw(in: CGRect(origin: .zero, size: targetSize), blendMode: .normal, alpha: targetAlpha)
+//            self.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+        return resizedImage
+    }
+}
+
 //extension NSAttributedString {
 //    func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
 //        let attributedString = NSMutableAttributedString(attributedString: self)

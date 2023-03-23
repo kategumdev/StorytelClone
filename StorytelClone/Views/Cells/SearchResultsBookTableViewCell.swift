@@ -128,15 +128,16 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         
         if let image = book.coverImage {
 //            print("image size before: \(image.size)")
-            let imageRatio = image.size.width / image.size.height
-            let targetHeight = SearchResultsTableViewCell.imageHeight
-            let targetWidth = targetHeight * imageRatio
-            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-            
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let resizedImage = renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: targetSize))
-            }
+//            let imageRatio = image.size.width / image.size.height
+//            let targetHeight = SearchResultsTableViewCell.imageHeight
+//            let targetWidth = targetHeight * imageRatio
+//            let targetSize = CGSize(width: targetWidth, height: targetHeight)
+//
+//            let renderer = UIGraphicsImageRenderer(size: targetSize)
+//            let resizedImage = renderer.image { _ in
+//                image.draw(in: CGRect(origin: .zero, size: targetSize))
+//            }
+            let resizedImage = image.resizeFor(targetHeight: SearchResultsTableViewCell.imageHeight)
             
             if customImageView.bounds.width != image.size.width {
                 customImageViewWidthAnchor.constant = resizedImage.size.width

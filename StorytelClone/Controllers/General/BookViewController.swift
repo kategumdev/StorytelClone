@@ -13,7 +13,9 @@ class BookViewController: UIViewController {
     
 //    private let scrollView = UIScrollView()
     
-    private let bookDetailsView = BookDetailsView()
+//    private let bookDetailsView = BookDetailsView()
+    
+    private lazy var bookDetailsView = BookDetailsView(forBook: book!) // book will always be set
     
     init(book: Book?) {
         self.book = book

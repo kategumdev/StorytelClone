@@ -71,8 +71,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
     }
     
     private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
-//    private lazy var transparentImageViewOneWidthAnchor = transparentImageViewOne.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
-//    private lazy var transparentImageViewTwoWidthAnchor = transparentImageViewTwo.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -101,54 +99,24 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         
         // Resize and set mainImage
         if let image = series.coverImage {
-//            print("image size before: \(image.size)")
-            let imageRatio = image.size.width / image.size.height
-            let targetHeight = SearchResultsTableViewCell.imageHeight
-            let targetWidth = targetHeight * imageRatio
-            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-            
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let resizedImage = renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: targetSize))
-            }
-            
-            
+            let resizedImage = image.resizeFor(targetHeight: SearchResultsTableViewCell.imageHeight)
             
             if mainImageView.bounds.width != image.size.width {
                 mainImageViewWidthAnchor.constant = resizedImage.size.width
             }
-
+            
             mainImageView.image = resizedImage
         }
         
         // Resize and set transparentImageOne
         if let image = series.coverImage {
-//            print("image size before: \(image.size)")
-            let imageRatio = image.size.width / image.size.height
-            let targetHeight = transparentImageOneHeight
-            let targetWidth = targetHeight * imageRatio
-            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-            
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let resizedTransparentImage = renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: targetSize), blendMode: .normal, alpha: 0.4)
-
-            }
+            let resizedTransparentImage = image.resizeFor(targetHeight: transparentImageOneHeight, andSetAlphaTo: 0.4)
             transparentImageViewOne.image = resizedTransparentImage
         }
         
         // Resize and set transparentImageTwo
         if let image = series.coverImage {
-//            print("image size before: \(image.size)")
-            let imageRatio = image.size.width / image.size.height
-            let targetHeight = transparentImageTwoHeight
-            let targetWidth = targetHeight * imageRatio
-            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-            
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let resizedTransparentImage = renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: targetSize), blendMode: .normal, alpha: 0.7)
-            }
+            let resizedTransparentImage = image.resizeFor(targetHeight: transparentImageTwoHeight, andSetAlphaTo: 0.7)
             transparentImageViewTwo.image = resizedTransparentImage
         }
 
