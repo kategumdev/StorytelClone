@@ -129,7 +129,11 @@ class BookDetailsView: UIStackView {
     
 //    let roundButtonsStackContainer = RoundButtonsStackContainer()
     
-    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book!) // book will always be set
+//    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book!) // book will always be set
+    
+    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBookKind: book!.titleKind) // book will always be set
+    
+    private var hasSeriesButtonView: Bool = true
 
 
 //    override init(frame: CGRect) {
@@ -180,12 +184,46 @@ class BookDetailsView: UIStackView {
     private func configureSelf() {
         axis = .vertical
         alignment = .center
-        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
-        setCustomSpacing(24.0, after: coverImageView)
-        setCustomSpacing(16.0, after: bookTitleLabel)
-        setCustomSpacing(8.0, after: authorLabel)
-        setCustomSpacing(23.0, after: narratorLabel)
-        setCustomSpacing(33.0, after: viewWithShowSeriesButton)
+        
+        guard let book = book else { return }
+        
+        bookTitleLabel.text = book.title
+        
+        coverImageView.image = book.coverImage
+        
+        #warning("Resize image and set coverImageWidthAnchor accordingly")
+        
+        let authorNames = book.authors.map { $0.name }
+        let authorNamesString = authorNames.joined(separator: ", ")
+        configureAuthorLabel(withName: authorNamesString)
+        
+        #warning("Configure narratorLabel if book.narrators != nil")
+            
+        if let series = book.series, let seriesPart = book.seriesPart {
+            let text = "Part \(seriesPart) in \(series)"
+            showSeriesButton.setTitle(text, for: .normal)
+            
+            [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
+            setCustomSpacing(24.0, after: coverImageView)
+            setCustomSpacing(16.0, after: bookTitleLabel)
+            setCustomSpacing(8.0, after: authorLabel)
+            setCustomSpacing(23.0, after: narratorLabel)
+            setCustomSpacing(33.0, after: viewWithShowSeriesButton)
+        } else {
+            hasSeriesButtonView = false
+            [coverImageView, bookTitleLabel, authorLabel, narratorLabel, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
+            setCustomSpacing(24.0, after: coverImageView)
+            setCustomSpacing(16.0, after: bookTitleLabel)
+            setCustomSpacing(8.0, after: authorLabel)
+            setCustomSpacing(32.0, after: narratorLabel)
+        }
+        
+//        [coverImageView, bookTitleLabel, authorLabel, narratorLabel, viewWithShowSeriesButton, roundButtonsStackContainer].forEach { addArrangedSubview($0)}
+//        setCustomSpacing(24.0, after: coverImageView)
+//        setCustomSpacing(16.0, after: bookTitleLabel)
+//        setCustomSpacing(8.0, after: authorLabel)
+//        setCustomSpacing(23.0, after: narratorLabel)
+//        setCustomSpacing(33.0, after: viewWithShowSeriesButton)
     }
     
     private func applyConstraints() {
@@ -204,6 +242,9 @@ class BookDetailsView: UIStackView {
         
         narratorLabel.translatesAutoresizingMaskIntoConstraints = false
         narratorLabel.widthAnchor.constraint(equalToConstant: authorAndNarratorLabelWidth).isActive = true
+        
+        
+        guard hasSeriesButtonView else { return }
         
         viewWithShowSeriesButton.translatesAutoresizingMaskIntoConstraints = false
 //        viewWithShowSeriesButton.heightAnchor.constraint(equalToConstant: 45).isActive = true

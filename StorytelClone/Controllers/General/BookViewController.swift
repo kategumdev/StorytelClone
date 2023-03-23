@@ -35,18 +35,18 @@ class BookViewController: UIViewController {
         applyConstraints()
         
         
-//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print("viewWillDisappear")
-        navigationController?.navigationBar.isTranslucent = false
-
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+////        print("viewWillDisappear")
+////        navigationController?.navigationBar.isTranslucent = false
+//
+////        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -61,6 +61,8 @@ class BookViewController: UIViewController {
 //    }
     
     private func applyConstraints() {
+        
+        #warning("Set top constraints with padding from view.safeAreaLayoutGuide.topAnchor")
         
         bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

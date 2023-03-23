@@ -41,9 +41,10 @@ class HomeViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("viewWillAppear")
+        print("viewWillAppear")
         let currentOffsetY = bookTable.contentOffset.y
         adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
+        
         
         guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
         tableHeader.updateGreetingsLabel()

@@ -232,12 +232,12 @@ extension SearchResultsViewController {
     // This function should fetch needed initial objects when user haven't perform any search yet
     private func getInitialModelFor(buttonKind: ButtonKind) -> [Title] {
         switch buttonKind {
-        case .top:
+        case .top:            
             return [Author.tolkien, Book.book3, Series.series1, Book.book21,
                     Book.book15, Author.author3, Author.neilGaiman, Book.book18, Book.book20,
                     Author.author9, Author.author5]
         case .books:
-            return [Book.book1, Book.book23, Book.book2, Book.book22, Book.book5, Book.book20,
+            return [Book.book1, Book.book23, Book.senorDeLosAnillos1, Book.book2, Book.book22, Book.book5, Book.book20,
                     Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
                     Book.book15, Book.book4, Book.book6, Book.book19]
         case .authors: return Author.authors

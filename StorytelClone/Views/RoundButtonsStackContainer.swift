@@ -11,7 +11,8 @@ class RoundButtonsStackContainer: UIStackView {
     
     static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
     
-    private var book: Book?
+//    private var book: Book?
+    private var bookKind: TitleKind = .audiobook
 
     private lazy var viewWithListenButton: UIView = {
         let view = UIView()
@@ -107,9 +108,21 @@ class RoundButtonsStackContainer: UIStackView {
         return label
     }()
     
-    init(forBook book: Book) {
+    private var hasListenButton = true
+    private var hasReadButton = true
+    
+//    init(forBook book: Book) {
+//        super.init(frame: .zero)
+//        self.book = book
+//
+//        configureSelf()
+//
+//        applyConstraints()
+//    }
+    
+    init(forBookKind bookKind: TitleKind) {
         super.init(frame: .zero)
-        self.book = book
+        self.bookKind = bookKind
         
         configureSelf()
         
@@ -149,73 +162,48 @@ class RoundButtonsStackContainer: UIStackView {
 //        distribution = .equalSpacing
         spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
         
-        if let bookKind = book?.titleKind {
-            if bookKind == .audioBookAndEbook {
-                addArrangedSubview(viewWithListenButton)
-                addArrangedSubview(viewWithReadButton)
-                addArrangedSubview(viewWithSaveButton)
-            } else if bookKind == .audiobook {
-                addArrangedSubview(viewWithListenButton)
-                addArrangedSubview(viewWithSaveButton)
-            } else {
-                addArrangedSubview(viewWithReadButton)
-                addArrangedSubview(viewWithSaveButton)
-            }
+        if bookKind == .audioBookAndEbook {
+            addArrangedSubview(viewWithListenButton)
+            addArrangedSubview(viewWithReadButton)
+            addArrangedSubview(viewWithSaveButton)
+        } else if bookKind == .audiobook {
+            hasReadButton = false
+            addArrangedSubview(viewWithListenButton)
+            addArrangedSubview(viewWithSaveButton)
+        } else {
+            hasListenButton = false
+            addArrangedSubview(viewWithReadButton)
+            addArrangedSubview(viewWithSaveButton)
         }
-//        addArrangedSubview(viewWithListenButton)
-//        addArrangedSubview(viewWithReadButton)
-//        addArrangedSubview(viewWithSaveButton)
-        translatesAutoresizingMaskIntoConstraints = false
-//        applyConstraints()
+        
+        
+//        if let bookKind = book?.titleKind {
+//            if bookKind == .audioBookAndEbook {
+//                addArrangedSubview(viewWithListenButton)
+//                addArrangedSubview(viewWithReadButton)
+//                addArrangedSubview(viewWithSaveButton)
+//            } else if bookKind == .audiobook {
+//                hasReadButton = false
+//                addArrangedSubview(viewWithListenButton)
+//                addArrangedSubview(viewWithSaveButton)
+//            } else {
+//                hasListenButton = false
+//                addArrangedSubview(viewWithReadButton)
+//                addArrangedSubview(viewWithSaveButton)
+//            }
+//        }
+
+//        translatesAutoresizingMaskIntoConstraints = false
     }
     
+   
+    
     private func applyConstraints() {
+        translatesAutoresizingMaskIntoConstraints = false
+        
 //        let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
         let buttonLabelPadding: CGFloat = 15
-        
-        // Listen button
-        listenButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
-            listenButton.leadingAnchor.constraint(equalTo: viewWithListenButton.leadingAnchor),
-            listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
-        ])
-        
-        listenLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            listenLabel.centerXAnchor.constraint(equalTo: viewWithListenButton.centerXAnchor),
-            listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
-        ])
 
-        viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
-        viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
-//        viewWithListenButton.trailingAnchor.constraint(equalTo: listenButton.trailingAnchor).isActive = true
-//        viewWithListenButton.leadingAnchor.constraint(equalTo: listenButton.leadingAnchor).isActive = true
-        
-        // Read button
-        readButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            readButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            readButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            readButton.topAnchor.constraint(equalTo: viewWithReadButton.topAnchor),
-            readButton.leadingAnchor.constraint(equalTo: viewWithReadButton.leadingAnchor),
-            readButton.bottomAnchor.constraint(equalTo: readLabel.topAnchor, constant: -buttonLabelPadding)
-        ])
-        
-        readLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            readLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            readLabel.centerXAnchor.constraint(equalTo: viewWithReadButton.centerXAnchor),
-            readLabel.bottomAnchor.constraint(equalTo: viewWithReadButton.bottomAnchor)
-        ])
-
-        viewWithReadButton.translatesAutoresizingMaskIntoConstraints = false
-        viewWithReadButton.widthAnchor.constraint(equalTo: readButton.widthAnchor).isActive = true
-        
-        
         // Save button
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -225,7 +213,7 @@ class RoundButtonsStackContainer: UIStackView {
             saveButton.leadingAnchor.constraint(equalTo: viewWithSaveButton.leadingAnchor),
             saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
         ])
-        
+
         saveLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
@@ -233,13 +221,59 @@ class RoundButtonsStackContainer: UIStackView {
             saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
 
         ])
-        
+
         viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
         viewWithSaveButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor).isActive = true
-        
+
+        if hasListenButton {
+            // Listen button
+            listenButton.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
+                listenButton.leadingAnchor.constraint(equalTo: viewWithListenButton.leadingAnchor),
+                listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
+            ])
+
+            listenLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                listenLabel.centerXAnchor.constraint(equalTo: viewWithListenButton.centerXAnchor),
+                listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
+            ])
+
+            viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
+            viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
+    //        viewWithListenButton.trailingAnchor.constraint(equalTo: listenButton.trailingAnchor).isActive = true
+    //        viewWithListenButton.leadingAnchor.constraint(equalTo: listenButton.leadingAnchor).isActive = true
+        }
+
+        if hasReadButton {
+            // Read button
+            readButton.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                readButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                readButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                readButton.topAnchor.constraint(equalTo: viewWithReadButton.topAnchor),
+                readButton.leadingAnchor.constraint(equalTo: viewWithReadButton.leadingAnchor),
+                readButton.bottomAnchor.constraint(equalTo: readLabel.topAnchor, constant: -buttonLabelPadding)
+            ])
+
+            readLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                readLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                readLabel.centerXAnchor.constraint(equalTo: viewWithReadButton.centerXAnchor),
+                readLabel.bottomAnchor.constraint(equalTo: viewWithReadButton.bottomAnchor)
+            ])
+
+            viewWithReadButton.translatesAutoresizingMaskIntoConstraints = false
+            viewWithReadButton.widthAnchor.constraint(equalTo: readButton.widthAnchor).isActive = true
+        }
+
         // Set height of stack view
 //        viewWithSaveButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        
+
     }
     
 }
