@@ -211,9 +211,11 @@ extension SearchResultsViewController {
     
     func setInitialOffsetsOfTablesInCells() {
         let buttonKinds = buttonsView.buttonKinds
-        for kind in buttonKinds {
-            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
-        }
+//        for kind in buttonKinds {
+//            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
+//        }
+        
+        buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
     }
     
     // This function should fetch needed initial objects when user haven't perform any search yet
@@ -277,9 +279,10 @@ extension SearchResultsViewController {
         let range: Range<Int> = currentButtonIndex < tappedButtonIndex ? currentButtonIndex + 1..<tappedButtonIndex : tappedButtonIndex + 1..<currentButtonIndex
         
         var buttonsIndicesBetween = [Int]()
-        for index in range {
-            buttonsIndicesBetween.append(index)
-        }
+//        for index in range {
+//            buttonsIndicesBetween.append(index)
+//        }
+        range.forEach { buttonsIndicesBetween.append($0) }
         
         // Save to hide content when cells in between will be reused while scrollToItem performs to imitate UIPageViewController behavior
         cellsToHideContent = buttonsIndicesBetween

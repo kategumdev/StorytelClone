@@ -10,10 +10,14 @@ import UIKit
 class BookViewController: UIViewController {
     
     var book: Book
+    
+//    private let mainScrollView = UIScrollView()
         
     private lazy var bookDetailsView = BookDetailsView(forBook: book)
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
+    
+    private lazy var overviewStackView = BookOverviewStackView(book: book)
     
     init(book: Book) {
         self.book = book
@@ -30,6 +34,7 @@ class BookViewController: UIViewController {
         title = book.title
         view.addSubview(bookDetailsView)
         view.addSubview(bookDetailsScrollView)
+        view.addSubview(overviewStackView)
         applyConstraints()
         
         
@@ -55,6 +60,10 @@ class BookViewController: UIViewController {
             bookDetailsScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 1),
 //            bookDetailsScrollView.heightAnchor.constraint(equalToConstant: 80)
         ])
+        
+        overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor).isActive = true
+        overviewStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        overviewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         
     }
 
