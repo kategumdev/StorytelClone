@@ -31,7 +31,6 @@ class TableViewCellWithCollection: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
-        
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -52,7 +51,6 @@ class TableViewCellWithCollection: UITableViewCell {
     func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallback) {
         self.books = books
         self.callbackClosure = callbackForButtons
-        
         collectionView.reloadData()
     }
 

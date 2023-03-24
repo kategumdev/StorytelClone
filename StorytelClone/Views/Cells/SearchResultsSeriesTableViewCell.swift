@@ -9,6 +9,7 @@ import UIKit
 
 class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
     
+    // MARK: - Static properties and methods
     static let identifier = "SearchResultsSeriesTableViewCell"
     static let minTopBottomPadding = SearchResultsTableViewCell.minTopAndBottomPadding - 2
     static let oneTransparentImageVisiblePartHeight: CGFloat = 4
@@ -24,7 +25,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         subtitleLabel.sizeToFit()
         
         let labelsHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3)
-//        let padding = abs((minCellHeight - labelsHeight) / 2)
         let padding = abs(minCellHeight - labelsHeight)
         return padding
     }()
@@ -35,6 +35,7 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         return rowHeight
     }
     
+    // MARK: - Instance properties
     private let seriesTitleLabel = SearchResultsTableViewCell.createTitleLabel()
     private let titleKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
     private let languageLabel = SearchResultsTableViewCell.createSubtitleLabel()
@@ -49,6 +50,8 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
     }()
     
     private let mainImageView = SearchResultsTableViewCell.createImageView()
+    private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
+    
     private let transparentImageViewOne = SearchResultsTableViewCell.createImageView()
     private let transparentImageViewTwo = SearchResultsTableViewCell.createImageView()
     private let transparentImageOneHeight = SearchResultsTableViewCell.imageHeight - SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4
@@ -62,20 +65,19 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         return view
     }()
     
+    // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(viewWithImageViews)
         contentView.addSubview(vertStackWithLabels)
         applyConstraints()
     }
     
-    private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helper methods
     func configureFor(series: Series) {
         seriesTitleLabel.text = series.title
         titleKindLabel.text = series.titleKind.rawValue
@@ -104,7 +106,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
             if mainImageView.bounds.width != image.size.width {
                 mainImageViewWidthAnchor.constant = resizedImage.size.width
             }
-            
             mainImageView.image = resizedImage
         }
         
@@ -145,7 +146,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         NSLayoutConstraint.activate([
             transparentImageViewOne.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor),
             transparentImageViewOne.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
-//            transparentImageViewOne.heightAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
             transparentImageViewOne.heightAnchor.constraint(equalToConstant: transparentImageOneHeight),
             transparentImageViewOne.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4)
         ])
@@ -154,7 +154,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         NSLayoutConstraint.activate([
             transparentImageViewTwo.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor, constant: SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
             transparentImageViewTwo.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
-//            transparentImageViewOne.heightAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
             transparentImageViewTwo.heightAnchor.constraint(equalToConstant: transparentImageTwoHeight),
             transparentImageViewTwo.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2)
         ])
@@ -163,8 +162,6 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         let topConstant = SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding / 2 + SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight
         let bottomConstant = SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding / 2 - SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight
         NSLayoutConstraint.activate([
-//            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding),
-//            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topConstant),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomConstant),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageViews.trailingAnchor, constant: Constants.cvPadding),

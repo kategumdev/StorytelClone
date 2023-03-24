@@ -74,18 +74,6 @@ class BookCollectionViewCell: UICollectionViewCell {
             badgeTwo.badgeImageView.image = UIImage(named: "glasses")
         }
         
-//        switch bookKind {
-//        case .audiobook:
-//            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
-//            badgeTwo.isHidden = true
-//        case .ebook:
-//            badgeOne.badgeImageView.image = UIImage(named: "glasses")
-//            badgeTwo.isHidden = true
-//        case .audioBookAndEbook:
-//            badgeOne.badgeImageView.image = UIImage(systemName: "headphones")
-//            badgeTwo.isHidden = false
-//            badgeTwo.badgeImageView.image = UIImage(named: "glasses")
-//        }
     }
     
     private func addButtonUpdateHandler() {

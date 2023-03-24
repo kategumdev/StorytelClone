@@ -11,9 +11,9 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     
     static let identifier = "TableViewCellWithHorzCvLargeCovers"
     
+    // MARK: - Instance properties
     // Actual value injected when cell is being configured in cellForRowAt
     var books: [Book] = [Book]() // It will contain 42 random audiobooks
-    
     var callbackClosure: ButtonCallback = {_ in}
     
     private let collectionView: UICollectionView = {
@@ -31,7 +31,6 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
-        
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -52,7 +51,6 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallback) {
         self.books = books
         self.callbackClosure = callbackForButtons
-        
         collectionView.reloadData()
     }
 
@@ -61,7 +59,6 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 42
         return books.count
     }
     

@@ -9,10 +9,8 @@ import UIKit
 
 class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
 
+    // MARK: - Static properties and methods
     static let identifier = "ResultsTableViewCell"
-    
-//    static let minTopAndBottomPadding: CGFloat = 13
-//    static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
     static let minCellHeight: CGFloat = imageHeight + (minTopAndBottomPadding * 2)
     
     static let calculatedTopAndBottomPadding: CGFloat = {
@@ -35,6 +33,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return rowHeight
     }
     
+    // MARK: - Instance properties
     private let bookTitleLabel = SearchResultsTableViewCell.createTitleLabel()
     private let bookKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
     private let authorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
@@ -61,15 +60,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return imageView
     }()
     
-//    private let customImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFit
-//        imageView.layer.cornerRadius = 2
-//        imageView.clipsToBounds = true
-//        imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
-//        imageView.layer.borderWidth = 0.26
-//        return imageView
-//    }()
+    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
     
     private let detailButton: UIButton = {
         let button = UIButton()
@@ -84,6 +75,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
+    // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(squareViewWithImageView)
@@ -91,9 +83,6 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         contentView.addSubview(detailButton)
         applyConstraints()
     }
-    
-    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
-
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -107,6 +96,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         }
     }
     
+    // MARK: - Helper methods
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
@@ -127,28 +117,16 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         }
         
         if let image = book.coverImage {
-//            print("image size before: \(image.size)")
-//            let imageRatio = image.size.width / image.size.height
-//            let targetHeight = SearchResultsTableViewCell.imageHeight
-//            let targetWidth = targetHeight * imageRatio
-//            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-//
-//            let renderer = UIGraphicsImageRenderer(size: targetSize)
-//            let resizedImage = renderer.image { _ in
-//                image.draw(in: CGRect(origin: .zero, size: targetSize))
-//            }
             let resizedImage = image.resizeFor(targetHeight: SearchResultsTableViewCell.imageHeight)
             
             if customImageView.bounds.width != image.size.width {
                 customImageViewWidthAnchor.constant = resizedImage.size.width
             }
-
             customImageView.image = resizedImage
         }
 
     }
     
-    // MARK: - Helper methods
     private func applyConstraints() {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

@@ -8,7 +8,8 @@
 import UIKit
 
 class CellButton: UIButton {
-
+    
+    // MARK: - Instance properties
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
 
@@ -19,6 +20,7 @@ class CellButton: UIButton {
     
     var callback: ButtonCallback = {_ in}
 
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureButton()
@@ -28,6 +30,7 @@ class CellButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helper methods
     private func configureButton() {
         layer.cornerRadius = Constants.bookCoverCornerRadius
         clipsToBounds = true
@@ -37,7 +40,6 @@ class CellButton: UIButton {
         
         // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
         config.background.cornerRadius = 0
-        
         configuration = config
         
         self.addAction(UIAction(handler: { [weak self] _ in
@@ -51,7 +53,6 @@ class CellButton: UIButton {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
 //                print("DO smth on touchUpInside")
-                
                 if let book = self.book {
                     self.callback(book)
                 } else if let sectionKind = self.sectionKind {

@@ -9,6 +9,7 @@ import UIKit
 
 class SectionHeaderView: UITableViewHeaderFooterView {
     
+    // MARK: - Static properties and methods
     static let identifier = "SectionHeaderView"
     
     static func calculateHeaderHeightFor(section: TableSection) -> CGFloat {
@@ -32,6 +33,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helper methods
     func configureFor(section: TableSection) {
         containerWithSubviews.tableSection = section
         containerWithSubviews.sectionTitleLabel.text = section.sectionTitle

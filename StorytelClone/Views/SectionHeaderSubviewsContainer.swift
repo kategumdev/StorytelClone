@@ -35,19 +35,16 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance properties
-    var tableSection: TableSection?
+    private var withButton = true
+    private lazy var seeAllButton = SectionHeaderSubviewsContainer.createSeeAllButton()
     
-    lazy var seeAllButton = SectionHeaderSubviewsContainer.createSeeAllButton()
- 
+    var tableSection: TableSection?
+    let sectionTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
+    let sectionSubtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
+    
     // Closure to tell owning controller to push new vc
     typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
     var callback: SeeAllButtonCallbackClosure = {_ in}
-    
-    let sectionTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
-    
-    let sectionSubtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
-    
-    var withButton = true
     
     // MARK: - View life cycle
     init(withButton button: Bool = true) {
@@ -59,7 +56,7 @@ class SectionHeaderSubviewsContainer: UIView {
         if withButton {
             addSubview(seeAllButton)
             configureButtonWithAction()
-            applyButtonConstraints()
+//            applyButtonConstraints()
         }
         applyConstraints()
     }
@@ -80,7 +77,6 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     private func applyConstraints() {
-        
         translatesAutoresizingMaskIntoConstraints = false
         widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         
@@ -102,21 +98,29 @@ class SectionHeaderSubviewsContainer: UIView {
             sectionSubtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
             sectionSubtitleLabel.trailingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor)
         ])
-
-    }
-    
-    private func applyButtonConstraints() {
+        
+        guard withButton else { return }
         seeAllButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
- 
             seeAllButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             seeAllButton.widthAnchor.constraint(equalToConstant: SectionHeaderSubviewsContainer.calculateSeeAllButtonWidth()),
-            
             seeAllButton.leadingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor, constant: SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
         ])
     }
+    
+//    private func applyButtonConstraints() {
+//        seeAllButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
+//
+//            seeAllButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+//
+//            seeAllButton.widthAnchor.constraint(equalToConstant: SectionHeaderSubviewsContainer.calculateSeeAllButtonWidth()),
+//
+//            seeAllButton.leadingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor, constant: SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
+//        ])
+//    }
 
 }
 

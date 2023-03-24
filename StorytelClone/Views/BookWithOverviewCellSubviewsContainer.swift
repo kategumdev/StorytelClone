@@ -9,9 +9,11 @@ import UIKit
 
 class BookWithOverviewCellSubviewsContainer: UIView {
     
+    // MARK: - Static properties
     static let borderColor = UIColor(named: "borderBookOverview")
     static let backgroundColor = UIColor(named: "backgroundBookOverview")
     
+    // MARK: - Instance properties
     let bookOverviewButton: CellButton = {
         let button = CellButton()
         button.backgroundColor = backgroundColor
@@ -26,7 +28,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return view
     }()
     
-    let squareImageView: UIImageView = {
+    private let squareImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
         imageView.clipsToBounds = true
@@ -34,7 +36,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return imageView
     }()
     
-    let bookTitleLabel: UILabel = {
+    private let bookTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 4
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
@@ -42,9 +44,9 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    let overviewLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
+    private let overviewLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
 
-    let starView: UIView = {
+    private let starView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: 18).isActive = true
@@ -66,20 +68,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return view
     }()
     
-//    let starImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .white
-//        imageView.image = UIImage(systemName: "star.fill")
-//        imageView.contentMode = .scaleAspectFit
-////        imageView.contentMode = .center
-//        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-//        imageView.heightAnchor.constraint(equalToConstant: 17).isActive = true
-//        return imageView
-//    }()
-    
-    let ratingLabel: UILabel = {
+    private let ratingLabel: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
         label.textColor = UIColor.secondaryLabel
@@ -87,7 +76,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    let vertBarLabel: UILabel = {
+    private let vertBarLabel: UILabel = {
         let label = UILabel()
         let font = UIFont.systemFont(ofSize: 19, weight: .ultraLight)
         label.textAlignment = .center
@@ -100,7 +89,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    let categoryLabel: UILabel = {
+    private let categoryLabel: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
         label.textColor = UIColor.label.withAlphaComponent(0.7)
@@ -108,7 +97,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return label
     }()
     
-    lazy var horzStackView: UIStackView = {
+    private lazy var horzStackView: UIStackView = {
         let stack = UIStackView()
         stack.isUserInteractionEnabled = false
         stack.axis = .horizontal
@@ -120,7 +109,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return stack
     }()
     
-    lazy var vertStackView: UIStackView = {
+    private lazy var vertStackView: UIStackView = {
         let stack = UIStackView()
         stack.isUserInteractionEnabled = false
         stack.axis = .vertical
@@ -132,6 +121,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return stack
     }()
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bookOverviewButton)
@@ -150,7 +140,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         }
     }
     
-
     required init?(coder: NSCoder) {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
@@ -194,9 +183,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         squareImageView.image = book.coverImage
         
         bookOverviewButton.book = book
-        
-        
-    }
+      }
     
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -235,8 +222,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
             squareImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.width),
             squareImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.height)
         ])
-        
-       
     }
 
 }

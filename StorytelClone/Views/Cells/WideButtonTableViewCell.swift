@@ -37,7 +37,6 @@ class WideButtonTableViewCell: UITableViewCell {
         return label
     }()
     
-    
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

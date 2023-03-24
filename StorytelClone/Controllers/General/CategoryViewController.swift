@@ -10,6 +10,7 @@ import UIKit
 // Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
 class CategoryViewController: BaseTableViewController {
 
+    // MARK: - Superclass overrides
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
@@ -39,15 +40,6 @@ class CategoryViewController: BaseTableViewController {
             let controller = BookViewController(book: book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
-        
-//        // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-//        cell.callbackClosure = { [weak self] book in
-//            guard let self = self else { return }
-//            let controller = BookViewController(book: book as? Book)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-        
-        
         
         return cell
     }

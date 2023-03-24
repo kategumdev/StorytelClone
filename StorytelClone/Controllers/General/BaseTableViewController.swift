@@ -9,10 +9,9 @@ import UIKit
 
 class BaseTableViewController: UIViewController {
     
+    // MARK: - Instance properties
     let category: Category
-
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
-    
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
     private var isFirstTime = true
@@ -47,7 +46,7 @@ class BaseTableViewController: UIViewController {
         return table
     }()
 
-    
+    // MARK: - View life cycle
     init(categoryModel: Category) {
         self.category = categoryModel
         super.init(nibName: nil, bundle: nil)
@@ -69,16 +68,10 @@ class BaseTableViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         layoutHeaderView()
     }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//    }
-    
+
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance

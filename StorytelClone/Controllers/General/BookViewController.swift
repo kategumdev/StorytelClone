@@ -10,9 +10,7 @@ import UIKit
 class BookViewController: UIViewController {
     
     var book: Book
-    
-//    private let scrollView = UIScrollView()
-    
+        
     private lazy var bookDetailsView = BookDetailsView(forBook: book)
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
@@ -30,7 +28,6 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book.title
-//        view.addSubview(scrollView)
         view.addSubview(bookDetailsView)
         view.addSubview(bookDetailsScrollView)
         applyConstraints()
@@ -41,19 +38,7 @@ class BookViewController: UIViewController {
         extendedLayoutIncludesOpaqueBars = true
     }
     
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-////        print("viewWillDisappear")
-////        navigationController?.navigationBar.isTranslucent = false
-//
-////        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//    }
-    
-    
     private func applyConstraints() {
-        
-        #warning("Set top constraint with padding from view.safeAreaLayoutGuide.topAnchor")
-        
         bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

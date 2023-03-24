@@ -9,6 +9,7 @@ import UIKit
 
 class BookWithOverviewTableViewCell: UITableViewCell {
     
+    // MARK: - Static properties and methods
     static let identifier = "BookWithOverviewTableViewCell"
     
     static func calculateHeightForRow(withBook book: Book) -> CGFloat {
@@ -18,7 +19,8 @@ class BookWithOverviewTableViewCell: UITableViewCell {
         return height
     }
     
-    let containerWithSubviews = BookWithOverviewCellSubviewsContainer()
+    // MARK: - Instance properties
+    private let containerWithSubviews = BookWithOverviewCellSubviewsContainer()
         
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -34,10 +36,8 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
-        
         containerWithSubviews.configureFor(book: book)
         containerWithSubviews.bookOverviewButton.callback = callback
-
     }
     
 }

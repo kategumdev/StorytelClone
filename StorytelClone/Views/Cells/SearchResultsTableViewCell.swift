@@ -9,6 +9,7 @@ import UIKit
 
 class SearchResultsTableViewCell: UITableViewCell {
     
+    // MARK: - Static properties and methods
     static let cornerRadius: CGFloat = 2
     static let minTopAndBottomPadding: CGFloat = 13
     static let squareImageWidth: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
@@ -44,6 +45,7 @@ class SearchResultsTableViewCell: UITableViewCell {
         return imageView
     }
     
+    // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor

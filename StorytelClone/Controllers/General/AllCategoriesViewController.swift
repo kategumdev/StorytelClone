@@ -35,10 +35,10 @@ class AllCategoriesViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("viewDidDisappear")
-    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        print("viewDidDisappear")
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

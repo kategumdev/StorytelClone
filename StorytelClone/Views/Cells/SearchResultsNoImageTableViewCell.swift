@@ -9,8 +9,8 @@ import UIKit
 
 class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
     
+    // MARK: - Static properties and methods
     static let identifier = "SearchResultsNoImageTableViewCell"
-    
     static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsTableViewCell.imageHeight
     static let minCellHeight = viewWithRoundWidthAndHeight
           
@@ -34,6 +34,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         return rowHeight
     }
     
+    // MARK: - Instance properties
     private let titleLabel = SearchResultsTableViewCell.createTitleLabel()
     private let subtitleLabel = SearchResultsTableViewCell.createSubtitleLabel()
     
@@ -69,6 +70,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         
     private var padding: CGFloat = 0
     
+    // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(viewWithRound)
@@ -85,6 +87,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         roundView.layer.cornerRadius = roundView.bounds.width / 2
     }
     
+    // MARK: - Helper methods
     func configureFor(title: Title) {
         subtitleLabel.text = title.titleKind.rawValue
         
@@ -115,12 +118,6 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
             viewWithRound.heightAnchor.constraint(equalToConstant: SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight),
             viewWithRound.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-        
-//        roundView.translatesAutoresizingMaskIntoConstraints = false
-//        roundView.fillSuperview(withConstant: SearchResultsNoImageTableViewCell.minTopAndBottomPadding)
-//
-//        symbolView.translatesAutoresizingMaskIntoConstraints = false
-//        symbolView.fillSuperview(withConstant: SearchResultsNoImageTableViewCell.minTopAndBottomPadding * 1.5)
         
         roundView.translatesAutoresizingMaskIntoConstraints = false
         let roundViewConstant = SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight * 0.14

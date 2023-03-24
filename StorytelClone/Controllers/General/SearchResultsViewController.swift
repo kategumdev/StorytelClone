@@ -14,8 +14,8 @@ enum ScrollDirection {
 
 class SearchResultsViewController: UIViewController {
 
+    // MARK: - Instance properties
     private let buttonsView = SearchResultsButtonsView()
-    
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
     
     lazy var collectionView: UICollectionView = {
@@ -58,9 +58,9 @@ class SearchResultsViewController: UIViewController {
         
 //    private var previousContentSize: UIContentSizeCategory?
     
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("viewDidLoad")
         view.backgroundColor = Utils.customBackgroundColor
         view.addSubview(separatorLineView)
         view.addSubview(buttonsView)
@@ -85,18 +85,6 @@ class SearchResultsViewController: UIViewController {
             separatorLineView.layer.borderColor = UIColor.label.cgColor
         }
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-//        let currentContentSize = traitCollection.preferredContentSizeCategory
-//
-//        if previousContentSize != currentContentSize {
-//            print("view minY AFTER: \(view.bounds.minY)")
-//
-//            previousContentSize = currentContentSize
-//        }
-//    }
     
 }
 
@@ -129,7 +117,6 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
             cell.withSectionHeader = true
         }
         
-//        cell.model = getModelFor(buttonKind: buttonKind)
         cell.selectedTitleCallback = selectedTitleCallback
         cell.delegate = self
         
@@ -351,6 +338,7 @@ extension SearchResultsViewController {
     
 }
 
+// MARK: - SearchResultsCollectionViewCellDelegate
 extension SearchResultsViewController: SearchResultsCollectionViewCellDelegate {
     func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset

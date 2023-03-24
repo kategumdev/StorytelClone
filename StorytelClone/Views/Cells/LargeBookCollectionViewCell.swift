@@ -11,6 +11,7 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "LargeBookCollectionViewCell"
         
+    // MARK: - Instance properties
     private let bookButton: CellButton = {
         let button = CellButton()
         button.layer.borderColor = UIColor.tertiaryLabel.cgColor
@@ -50,7 +51,6 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         bookButton.book = book
         bookButton.callback = callback
-        
         bookButton.configuration?.background.image = book.largeCoverImage
     }
     

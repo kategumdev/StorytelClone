@@ -11,6 +11,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
         
+    // MARK: - Instance properties
     private var categoryOfButton: ButtonCategory?
     
     private lazy var dimViewForButtonAnimation: UIView = {

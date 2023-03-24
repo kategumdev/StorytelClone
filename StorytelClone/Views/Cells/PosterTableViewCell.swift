@@ -9,10 +9,10 @@ import UIKit
 
 class PosterTableViewCell: UITableViewCell {
     
+    // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
         
     static let calculatedWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.cvPadding * 2)
-    
     static let calculatedHeightForRow: CGFloat = calculatedHeight + Constants.posterAndLargeCoversCellTopPadding
     
     static let calculatedHeight: CGFloat = {
@@ -29,7 +29,7 @@ class PosterTableViewCell: UITableViewCell {
         return view
     }()
     
-    // MARK: - Initializers
+    // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor

@@ -9,6 +9,8 @@ import UIKit
 
 class CategoriesTableViewCellWithCollection: UITableViewCell {
     
+    // MARK: - Static properties and methods
+    static let identifier = "CategoriesTableViewCellWithCollection"
     static let gapBetweenHeaderAndCell: CGFloat = 9
     
     static let calculatedCvItemSizeCategory: CGSize = {
@@ -27,13 +29,11 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         return height
     }
     
+    // MARK: - Instance properties
     var categoryButtons = [ButtonCategory]()
-    
     var callbackClosure: ButtonCallback = {_ in}
     
     private let categoryColors = [Utils.pinkCategoryColor, Utils.orangeCategoryColor, Utils.orangeCategoryColor, Utils.coralCategoryColor, Utils.darkBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.yellowCategoryColor, Utils.peachCategoryColor, Utils.lightBlueCategoryColor, Utils.pinkCategoryColor, Utils.greenCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor, Utils.orangeCategoryColor, Utils.yellowCategoryColor, Utils.greenCategoryColor, Utils.lightBlueCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor]
-    
-    static let identifier = "CategoriesTableViewCellWithCollection"
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -52,7 +52,6 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
-        
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -65,7 +64,6 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
     }
-    
     
     // MARK: - Helper methods
     func configureWith(categoryButtons: [ButtonCategory]) {
@@ -91,6 +89,7 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
 
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension CategoriesTableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CategoriesTableViewCellWithCollection.calculatedCvItemSizeCategory

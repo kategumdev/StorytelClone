@@ -8,7 +8,6 @@
 import UIKit
 
 protocol SearchResultsCollectionViewCellDelegate: AnyObject {
-    
     func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint)
 }
 
@@ -19,6 +18,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
     
+    // MARK: - Instance properties
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
@@ -29,7 +29,6 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
-
         table.backgroundColor = Utils.customBackgroundColor
         table.separatorColor = UIColor.clear
         
@@ -39,12 +38,13 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
-//        table.sectionHeaderHeight = UITableView.automaticDimension
+        
         // Avoid gap above custom section header
         table.sectionHeaderTopPadding = 0
         return table
     }()
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -68,17 +68,6 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         
     }
     
-    private func applyConstraints() {
-        resultsTable.translatesAutoresizingMaskIntoConstraints = false
-        resultsTable.fillSuperview()
-    }
-    
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-////        print("prepareForReuse")
-////        isBeingReused = true
-//    }
-    
     // MARK: - Helper methods
     func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
@@ -88,6 +77,11 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 
     @objc func handleTapGesure() {
         NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
+    }
+    
+    private func applyConstraints() {
+        resultsTable.translatesAutoresizingMaskIntoConstraints = false
+        resultsTable.fillSuperview()
     }
 
 }
