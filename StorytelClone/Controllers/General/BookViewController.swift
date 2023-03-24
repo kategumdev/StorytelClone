@@ -38,12 +38,7 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(bookDetailsStackView)
         mainScrollView.addSubview(bookDetailsScrollView)
         mainScrollView.addSubview(overviewStackView)
-        
-//        view.addSubview(bookDetailsStackView)
-//        view.addSubview(bookDetailsScrollView)
-//        view.addSubview(overviewStackView)
         applyConstraints()
-        
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
 //        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
