@@ -11,9 +11,9 @@ class BookViewController: UIViewController {
     
     var book: Book
     
-//    private let mainScrollView = UIScrollView()
+    private let mainScrollView = UIScrollView()
         
-    private lazy var bookDetailsView = BookDetailsView(forBook: book)
+    private lazy var bookDetailsStackView = BookDetailsStackView(forBook: book)
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     
@@ -32,9 +32,16 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book.title
-        view.addSubview(bookDetailsView)
-        view.addSubview(bookDetailsScrollView)
-        view.addSubview(overviewStackView)
+        
+        mainScrollView.showsVerticalScrollIndicator = false
+        view.addSubview(mainScrollView)
+        mainScrollView.addSubview(bookDetailsStackView)
+        mainScrollView.addSubview(bookDetailsScrollView)
+        mainScrollView.addSubview(overviewStackView)
+        
+//        view.addSubview(bookDetailsStackView)
+//        view.addSubview(bookDetailsScrollView)
+//        view.addSubview(overviewStackView)
         applyConstraints()
         
         
@@ -43,28 +50,41 @@ class BookViewController: UIViewController {
         extendedLayoutIncludesOpaqueBars = true
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
-        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        mainScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookDetailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            bookDetailsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bookDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor),
-//            bookDetailsView.bottomAnchor.constraint(equalTo: bookDetailsView.roundButtonsStackContainer.bottomAnchor)
+            mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            mainScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
         ])
-
+        
+        let contentG = mainScrollView.contentLayoutGuide
+        let frameG = mainScrollView.frameLayoutGuide
+        
+        bookDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: 22),
+            bookDetailsStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+            bookDetailsStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
+            bookDetailsStackView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
+        ])
+        
         // Leading and trailing constants are used to hide border on those sides
         bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsView.bottomAnchor, constant: 33),
-            bookDetailsScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -1),
-            bookDetailsScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 1),
-//            bookDetailsScrollView.heightAnchor.constraint(equalToConstant: 80)
+            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStackView.bottomAnchor, constant: 33),
+            bookDetailsScrollView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: -1),
+            bookDetailsScrollView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: 1),
         ])
         
-        overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor).isActive = true
-        overviewStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        overviewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        
+        NSLayoutConstraint.activate([
+            overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 7),
+            overviewStackView.widthAnchor.constraint(equalTo: contentG.widthAnchor),
+            overviewStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+            overviewStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+        ])
     }
 
 }

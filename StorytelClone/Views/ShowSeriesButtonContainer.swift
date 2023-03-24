@@ -76,7 +76,7 @@ class ShowSeriesButtonContainer: UIView {
         
         showSeriesButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            showSeriesButton.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight * 0.90),
+            showSeriesButton.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight * 0.90),
             showSeriesButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             showSeriesButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])

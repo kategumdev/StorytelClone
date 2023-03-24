@@ -9,43 +9,87 @@ import UIKit
 
 class BookOverviewStackView: UIStackView {
     
+//    static func createSecondaryTextViewWith(text: String) -> UITextView {
+//        let textView = UITextView()
+//        textView.backgroundColor = .clear
+//        textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        textView.isScrollEnabled = false
+//        textView.textColor = .label.withAlphaComponent(0.8)
+//        textView.textAlignment = .left
+//        textView.text = text
+//        return textView
+//    }
+    
+    static func createSecondaryTextView() -> UITextView {
+        let textView = UITextView()
+        textView.backgroundColor = .clear
+        textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        textView.isScrollEnabled = false
+        textView.textColor = .label.withAlphaComponent(0.8)
+        textView.textAlignment = .left
+//        textView.text = text
+        return textView
+    }
+    
     private let book: Book
 
     private let mainTextView: UITextView = {
         let textView = UITextView()
-        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16) // Set the font size for the text view
-        textView.isScrollEnabled = false // Disable scrolling so the text view can grow vertically
+        textView.backgroundColor = .clear
+        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+        textView.isScrollEnabled = false
         textView.textColor = .label
         textView.textAlignment = .left
-        textView.text = "«Ningún escritor del género ha aprovechado tanto como Tolkien las propiedades características de la Misión, el viaje heróico, el Objeto Numinoso, satisfaciendo nuestro sentido de la realidad histórica y social… Tolkien ha triunfado donde fracasó Milton.» —W.H. Auden\n«La invención de los pueblos extraños, incidentes curiosos u hechos maravillosos es en este segundo volumen de la trilogía tan exuberante y convincente como siempre. A medida que avanza la historia, el mundo del Anillo crece en dimensión y misterio, poblado por figuras curiosas, terroríficas, adorables o divertidas. La historia misma es soberbia.» —The Observer"
+//        textView.text = "«Ningún escritor del género ha aprovechado tanto como Tolkien las propiedades características de la Misión, el viaje heróico, el Objeto Numinoso, satisfaciendo nuestro sentido de la realidad histórica y social… Tolkien ha triunfado donde fracasó Milton.» —W.H. Auden\n«La invención de los pueblos extraños, incidentes curiosos u hechos maravillosos es en este segundo volumen de la trilogía tan exuberante y convincente como siempre. A medida que avanza la historia, el mundo del Anillo crece en dimensión y misterio, poblado por figuras curiosas, terroríficas, adorables o divertidas. La historia misma es soberbia.» —The Observer"
         return textView
     }()
     
-    private let releasePublisherTextView: UITextView = {
-        let textView = UITextView()
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        textView.isScrollEnabled = false // Disable scrolling so the text view can grow vertically
-        textView.textColor = .secondaryLabel
-        textView.textAlignment = .right
-        textView.text = "Audiobook\nRelease: 25 Jan 2023\nPublisher: Planeta Audio"
-        return textView
-    }()
+    private lazy var mainTextViewHeightAnchor = mainTextView.heightAnchor.constraint(equalToConstant: 100)
     
-    private let translatorsTextView: UITextView = {
-        let textView = UITextView()
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        textView.isScrollEnabled = false // Disable scrolling so the text view can grow vertically
-        textView.textColor = .secondaryLabel
-        textView.textAlignment = .right
-        textView.text = "Translators\nMatilde Horner, Luis Doménech"
-        return textView
-    }()
+//    private let releasePublisherTextView = createSecondaryTextViewWith(text: "Audiobook\nRelease: 25 Jan 2023\nPublisher: Planeta Audio")
+    private let releasePublisherTextView = createSecondaryTextView()
+
+    
+//    private let releasePublisherTextView: UITextView = {
+//        let textView = UITextView()
+//        textView.backgroundColor = .clear
+//        textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        textView.isScrollEnabled = false
+//        textView.textColor = .label.withAlphaComponent(0.8)
+//        textView.textAlignment = .left
+//        textView.text = "Audiobook\nRelease: 25 Jan 2023\nPublisher: Planeta Audio"
+//        return textView
+//    }()
+    
+    private lazy var releasePublisherTextViewHeightAnchor = releasePublisherTextView.heightAnchor.constraint(equalToConstant: 100)
+    
+//    private let translatorsTextView = createSecondaryTextViewWith(text: "Translators\nMatilde Horner, Luis Doménech")
+    private let translatorsTextView = createSecondaryTextView()
+
+    
+//    private let translatorsTextView: UITextView = {
+//        let textView = UITextView()
+//        textView.backgroundColor = .clear
+//        textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        textView.isScrollEnabled = false
+//        textView.textColor = .label.withAlphaComponent(0.8)
+//        textView.textAlignment = .left
+//        textView.text = "Translators\nMatilde Horner, Luis Doménech"
+//        return textView
+//    }()
+    
+    private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
+    
+    private var isFirstTime = true
     
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
         axis = .vertical
         alignment = .center
+        
+        configureTextViews()
+                
         [mainTextView, releasePublisherTextView, translatorsTextView].forEach { addArrangedSubview($0)}
         applyConstraints()
     }
@@ -54,27 +98,50 @@ class BookOverviewStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !isFirstTime {
+//            print("bounds width: \(bounds.width)")
+            let mainTextViewConstant = calculateHeightFor(textView: mainTextView)
+            mainTextViewHeightAnchor.constant = mainTextViewConstant
+            
+            let releasePublisherTextViewConstant = calculateHeightFor(textView: releasePublisherTextView)
+            releasePublisherTextViewHeightAnchor.constant = releasePublisherTextViewConstant
+
+            let translatorsTextViewConstant = calculateHeightFor(textView: translatorsTextView)
+            translatorsTextViewHeightAnchor.constant = translatorsTextViewConstant
+        } else {
+            isFirstTime = false
+        }
+
+    }
+    
+    private func configureTextViews() {
+        
+        mainTextView.text = "«Ningún escritor del género ha aprovechado tanto como Tolkien las propiedades características de la Misión, el viaje heróico, el Objeto Numinoso, satisfaciendo nuestro sentido de la realidad histórica y social… Tolkien ha triunfado donde fracasó Milton.» —W.H. Auden\n«La invención de los pueblos extraños, incidentes curiosos u hechos maravillosos es en este segundo volumen de la trilogía tan exuberante y convincente como siempre. A medida que avanza la historia, el mundo del Anillo crece en dimensión y misterio, poblado por figuras curiosas, terroríficas, adorables o divertidas. La historia misma es soberbia.» —The Observer"
+        releasePublisherTextView.text = "Audiobook\nRelease: 25 Jan 2023\nPublisher: Planeta Audio"
+        translatorsTextView.text = "Translators\nMatilde Horner, Luis Doménech"
+    }
+    
+    private func calculateHeightFor(textView: UITextView) -> CGFloat {
+        let width = bounds.width - Constants.cvPadding * 2
+        let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+        let height = size.height
+        return height
+    }
+    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        
-       
-        
-//        guard let superview = superview else { return }
-        
-        
+
         let textViews = [mainTextView, releasePublisherTextView, translatorsTextView]
-        
         for textView in textViews {
             textView.translatesAutoresizingMaskIntoConstraints = false
-            // Calculate height
-            let width = bounds.width - Constants.cvPadding * 2
-            let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
-            let height = size.height
-            NSLayoutConstraint.activate([
-                textView.heightAnchor.constraint(equalToConstant: height),
-                textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2)
-            ])
+            textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2).isActive = true
         }
+        
+        mainTextViewHeightAnchor.isActive = true
+        releasePublisherTextViewHeightAnchor.isActive = true
+        translatorsTextViewHeightAnchor.isActive = true
         
         // Set stack view height
         NSLayoutConstraint.activate([
@@ -82,21 +149,8 @@ class BookOverviewStackView: UIStackView {
             translatorsTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
-        
-//        mainTextView.translatesAutoresizingMaskIntoConstraints = false
-//        // Calculate height for mainTextView
-//        let mainTextViewSize = mainTextView.sizeThatFits(CGSize(width: bounds.width - Constants.cvPadding * 2, height: .greatestFiniteMagnitude))
-//        let mainTextViewHeight = mainTextViewSize.height
-//        NSLayoutConstraint.activate([
-//            mainTextView.heightAnchor.constraint(equalToConstant: mainTextViewHeight),
-//            mainTextView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2)
-//        ])
-//
-//        releasePublisherTextView.translatesAutoresizingMaskIntoConstraints = false
-//        let releasePublisherTextViewSize = releasePublisherTextView.sizeThatFits(CGSize(width: bounds.width - Constants.cvPadding * 2, height: .greatestFiniteMagnitude))
-//        let releasePublisherTextViewHeight = releasePublisherTextViewSize.height
-//
+        // Force layoutSubviews() second to get correct bounds.width for setting height of text views
+        layoutIfNeeded()
     }
-    
 
 }

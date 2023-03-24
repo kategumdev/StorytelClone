@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BookDetailsView: UIStackView {
+class BookDetailsStackView: UIStackView {
     
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
@@ -27,7 +27,7 @@ class BookDetailsView: UIStackView {
         return imageView
     }()
     
-    private lazy var coverImageWidthAnchor = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight)
+    private lazy var coverImageWidthAnchor = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
 
     private let bookTitleLabel: UILabel = {
         let label = UILabel.createLabel(withFont: Utils.wideButtonLabelFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: true)
@@ -113,7 +113,7 @@ class BookDetailsView: UIStackView {
         alignment = .center
                 
         if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: BookDetailsView.imageHeight)
+            let resizedImage = image.resizeFor(targetHeight: BookDetailsStackView.imageHeight)
             coverImageView.image = resizedImage
             coverImageWidthAnchor.constant = resizedImage.size.width
         }
@@ -154,18 +154,18 @@ class BookDetailsView: UIStackView {
     
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
-        coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
+        coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         coverImageWidthAnchor.isActive = true
         
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
+        bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
-        authorLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
+        authorLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         
         if hasNarratorLabel {
             narratorLabel.translatesAutoresizingMaskIntoConstraints = false
-            narratorLabel.widthAnchor.constraint(equalToConstant: BookDetailsView.imageHeight).isActive = true
+            narratorLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         }
         
         if hasShowSeriesButtonContainer {

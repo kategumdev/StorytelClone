@@ -27,6 +27,17 @@ struct Utils {
 //    static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let sectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
+    
+    static let tabBarHeight: CGFloat = {
+        var height: CGFloat = 0.0
+        if let scene = UIApplication.shared.connectedScenes.first,
+           let windowScene = scene as? UIWindowScene,
+           let mainWindow = windowScene.windows.first
+        {
+            height = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
+        }
+        return height
+    }()
 
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")
@@ -158,4 +169,5 @@ struct Utils {
 //    static let heightForRowWithOneBookOverview: CGFloat = Utils.calc
     
 
+    
 }

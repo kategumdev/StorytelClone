@@ -13,6 +13,7 @@ class BookDetailsScrollView: UIScrollView {
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
         label.font = Utils.sectionSubtitleFont
+        label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.textAlignment = .left
         label.sizeToFit()
@@ -21,7 +22,7 @@ class BookDetailsScrollView: UIScrollView {
     
     static func createButtonWith(text: String, symbolImageName: String?) -> UIButton {
         let button = UIButton()
-        button.tintColor = UIColor.label
+        button.tintColor = .label.withAlphaComponent(0.8)
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)

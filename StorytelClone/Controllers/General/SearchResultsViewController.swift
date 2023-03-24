@@ -322,19 +322,20 @@ extension SearchResultsViewController {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        var tabBarHeight: CGFloat = 0.0
-        if let scene = UIApplication.shared.connectedScenes.first,
-           let windowScene = scene as? UIWindowScene,
-           let mainWindow = windowScene.windows.first
-        {
-            tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
-        }
+//        var tabBarHeight: CGFloat = 0.0
+//        if let scene = UIApplication.shared.connectedScenes.first,
+//           let windowScene = scene as? UIWindowScene,
+//           let mainWindow = windowScene.windows.first
+//        {
+//            tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
+//        }
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
 
         ])
     }
