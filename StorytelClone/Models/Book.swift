@@ -22,13 +22,14 @@ struct Book: Title {
     let overview: String
     let category: ButtonCategory
     let rating: Double
+    let reviewsNumber: Int
     let duration: String
     let language: Language
     let narrators: [Narrator]?
     let series: String?
     let seriesPart: Int?
     
-    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "", category: ButtonCategory, rating: Double = 4.5, duration: String = "5h 5m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil) {
+    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
@@ -37,6 +38,7 @@ struct Book: Title {
         self.overview = overview
         self.category = category
         self.rating = rating
+        self.reviewsNumber = reviewsNumber
         self.duration = duration
         self.language = language
         self.narrators = narrators
