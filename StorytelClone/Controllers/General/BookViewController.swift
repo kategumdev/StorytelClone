@@ -9,15 +9,15 @@ import UIKit
 
 class BookViewController: UIViewController {
     
-    var book: Book?
+    var book: Book
     
 //    private let scrollView = UIScrollView()
     
-//    private let bookDetailsView = BookDetailsView()
+    private lazy var bookDetailsView = BookDetailsView(forBook: book)
     
-    private lazy var bookDetailsView = BookDetailsView(forBook: book!) // book will always be set
+    private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     
-    init(book: Book?) {
+    init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
     }
@@ -29,9 +29,10 @@ class BookViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
-        title = book?.title
+        title = book.title
 //        view.addSubview(scrollView)
         view.addSubview(bookDetailsView)
+        view.addSubview(bookDetailsScrollView)
         applyConstraints()
         
         
@@ -48,21 +49,10 @@ class BookViewController: UIViewController {
 ////        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
 //    }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        print("bookDetailsView size: \(bookDetailsView.bounds.size)")
-//        bookDetailsView.frame = bookDetailsView.stackView.frame
-    }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        print("viewDidDisappear")
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//    }
     
     private func applyConstraints() {
         
-        #warning("Set top constraints with padding from view.safeAreaLayoutGuide.topAnchor")
+        #warning("Set top constraint with padding from view.safeAreaLayoutGuide.topAnchor")
         
         bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -71,19 +61,15 @@ class BookViewController: UIViewController {
             bookDetailsView.widthAnchor.constraint(equalTo: view.widthAnchor),
 //            bookDetailsView.bottomAnchor.constraint(equalTo: bookDetailsView.roundButtonsStackContainer.bottomAnchor)
         ])
-        
-        
-//        let contentG = scrollView.contentLayoutGuide
-//        let frameG = scrollView.frameLayoutGuide
-//
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-////            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//            scrollView.heightAnchor.constraint(equalToConstant: <#T##CGFloat#>)
-//        ])
+
+        // Leading and trailing constants are used to hide border on those sides
+        bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsView.bottomAnchor, constant: 33),
+            bookDetailsScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -1),
+            bookDetailsScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 1),
+//            bookDetailsScrollView.heightAnchor.constraint(equalToConstant: 80)
+        ])
         
     }
 

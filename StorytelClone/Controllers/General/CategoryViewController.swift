@@ -35,9 +35,17 @@ class CategoryViewController: BaseTableViewController {
         // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
         cell.callbackClosure = { [weak self] book in
             guard let self = self else { return }
-            let controller = BookViewController(book: book as? Book)
+            let book = book as! Book
+            let controller = BookViewController(book: book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
+        
+//        // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
+//        cell.callbackClosure = { [weak self] book in
+//            guard let self = self else { return }
+//            let controller = BookViewController(book: book as? Book)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
         
         
         

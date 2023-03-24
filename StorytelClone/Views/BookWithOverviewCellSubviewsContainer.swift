@@ -66,18 +66,18 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return view
     }()
     
-    let starImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
-        imageView.image = UIImage(systemName: "star.fill")
-        imageView.contentMode = .scaleAspectFit
-//        imageView.contentMode = .center
-        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 17).isActive = true
-        return imageView
-    }()
+//    let starImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.backgroundColor = .white
+//        imageView.image = UIImage(systemName: "star.fill")
+//        imageView.contentMode = .scaleAspectFit
+////        imageView.contentMode = .center
+//        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.widthAnchor.constraint(equalToConstant: 17).isActive = true
+//        imageView.heightAnchor.constraint(equalToConstant: 17).isActive = true
+//        return imageView
+//    }()
     
     let ratingLabel: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)

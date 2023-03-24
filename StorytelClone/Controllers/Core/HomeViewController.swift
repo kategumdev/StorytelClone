@@ -195,7 +195,8 @@ extension HomeViewController {
         
         // To respond to button tap in PosterTableViewCell
         let callbackClosure: ButtonCallback = { [weak self] book in
-            let controller = BookViewController(book: book as? Book)
+            let book = book as! Book
+            let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureFor(book: posterBook, withCallbackForButton: callbackClosure)
@@ -210,7 +211,8 @@ extension HomeViewController {
         
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
         let callbackClosure: ButtonCallback = { [weak self] book in
-            let controller = BookViewController(book: book as? Book)
+            let book = book as! Book
+            let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
@@ -226,7 +228,8 @@ extension HomeViewController {
 
         // To respond to button tap in LargeBookCollectionViewCell of TableViewCellWithHorzCvLargeCovers
         let callbackClosure: ButtonCallback = { [weak self] book in
-            let controller = BookViewController(book: book as? Book)
+            let book = book as! Book
+            let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureWith(books: books, callbackForButtons: callbackClosure)
@@ -241,7 +244,8 @@ extension HomeViewController {
         
         // To respond to button tap in BookWithOverviewTableViewCell
         let callbackClosure: ButtonCallback = { [weak self] book in
-            let controller = BookViewController(book: book as? Book)
+            let book = book as! Book
+            let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureFor(book: book, withCallbackForButton: callbackClosure)

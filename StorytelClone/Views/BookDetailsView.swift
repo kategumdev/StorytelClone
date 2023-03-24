@@ -137,7 +137,7 @@ class BookDetailsView: UIStackView {
             setCustomSpacing(23.0, after: narratorLabel)
         } else {
             hasNarratorLabel = false
-            setCustomSpacing(32.0, after: authorLabel)
+            setCustomSpacing(33.0, after: authorLabel)
         }
                     
         if let seriesTitle = book.series, let seriesPart = book.seriesPart {
