@@ -9,8 +9,8 @@ import UIKit
 
 class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
 
+    // MARK: - Static properties and methods
     static let identifier = "SearchResultsSectionHeaderView"
-
     static let topAndBottomPadding: CGFloat = 15
     
     static func createLabel() -> UILabel {
@@ -33,8 +33,10 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
         return height
     }
     
+    // MARK: - Instance properties
     let titleLabel = createLabel()
     
+    // MARK: - View life cycle
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -46,16 +48,7 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func applyConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSectionHeaderView.topAndBottomPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSectionHeaderView.topAndBottomPadding)
-        ])
-    }
-    
+    // MARK: - Helper methods
     func configureFor(buttonKind: ButtonKind) {
         var titleText = ""
         switch buttonKind {
@@ -68,4 +61,15 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
         }
         titleLabel.text = titleText
     }
+    
+    private func applyConstraints() {
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSectionHeaderView.topAndBottomPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSectionHeaderView.topAndBottomPadding)
+        ])
+    }
+    
 }

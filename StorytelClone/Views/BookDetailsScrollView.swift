@@ -9,6 +9,7 @@ import UIKit
 
 class BookDetailsScrollView: UIScrollView {
 
+    // MARK: - Static methods
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
         label.font = Utils.sectionSubtitleFont
@@ -36,29 +37,15 @@ class BookDetailsScrollView: UIScrollView {
         }
         
         button.configuration = buttonConfig
-        button.sizeToFit()
         return button
     }
     
     static func createVertStackWith(label: UILabel, button: UIButton) -> UIStackView {
         let stack = UIStackView()
-//        stack.backgroundColor = .magenta
         stack.axis = .vertical
-//        stack.alignment = .center
         stack.alignment = .leading
         stack.spacing = 3
         [label, button].forEach { stack.addArrangedSubview($0)}
-        
-//        stack.translatesAutoresizingMaskIntoConstraints = false
-////        let width = max(label.bounds.width, button.bounds.width) + Constants.cvPadding * 2
-////        let width = max(label.bounds.width, button.bounds.width) + Constants.cvPadding
-//        let width = max(label.bounds.width, button.bounds.width)
-//        NSLayoutConstraint.activate([
-//            stack.widthAnchor.constraint(equalToConstant: width),
-//            stack.topAnchor.constraint(equalTo: label.topAnchor),
-//            stack.bottomAnchor.constraint(equalTo: button.bottomAnchor)
-//        ])
-        
         return stack
     }
     
@@ -68,6 +55,7 @@ class BookDetailsScrollView: UIScrollView {
         return view
     }
     
+    // MARK: - Instance properties
     private let book: Book
     
     private let ratingsLabel = createLabelWith(text: "80 Ratings")
@@ -91,7 +79,7 @@ class BookDetailsScrollView: UIScrollView {
     }()
     
     private lazy var categoryStack = BookDetailsScrollView.createVertStackWith(label: categoryLabel, button: categoryButton)
-
+    
     private lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -103,15 +91,15 @@ class BookDetailsScrollView: UIScrollView {
     
     private var vertBarViews = [UIView]()
     
+    private lazy var categoryStackWidthAnchor =         categoryStack.widthAnchor.constraint(equalToConstant: categoryButton.bounds.width)
+    
+    // MARK: - View life cycle
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
         layer.borderColor = UIColor.tertiaryLabel.cgColor
         layer.borderWidth = 0.5
         showsHorizontalScrollIndicator = false
-        
-        
-        
         configureMainStack()
         addSubview(mainStackView)
         applyConstraints()
@@ -121,9 +109,21 @@ class BookDetailsScrollView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if contentSize.width < bounds.width {
+            // Make scroll view contentSize 1 point wider than scroll view width to ensure that it will be always scrollable
+            let difference = (bounds.width - contentSize.width) + 1
+            categoryStackWidthAnchor.constant += difference
+        }
+    }
+    
+    // MARK: - Helper methods
     private func configure(button: UIButton, withText text: String) {
         button.configuration?.attributedTitle = AttributedString("\(text)")
         button.configuration?.attributedTitle?.font = Utils.navBarTitleFont
+        button.sizeToFit()
     }
     
     private func configureMainStack() {
@@ -131,25 +131,17 @@ class BookDetailsScrollView: UIScrollView {
         
         // Configure labels and buttons with text
         ratingsLabel.text = "\(book.reviewsNumber) Ratings"
+        ratingsLabel.sizeToFit()
         configure(button: ratingButton, withText: "\(book.rating)")
-
-        
-//        ratingButton.configuration?.attributedTitle = AttributedString("\(book.rating)")
-//        ratingButton.configuration?.attributedTitle?.font = Utils.navBarTitleFont
         
         if bookKind == .audioBookAndEbook || bookKind == .audiobook {
-//            durationButton.configuration?.attributedTitle = AttributedString("\(book.duration)")
             configure(button: durationButton, withText: "\(book.duration)")
-
         }
         
-//        languageButton.configuration?.attributedTitle = AttributedString("\(book.language.rawValue)")
         configure(button: languageButton, withText: "\(book.language.rawValue)")
 
-        
-//        categoryButton.configuration?.attributedTitle = AttributedString("\(book.category.rawValue)")
-        configure(button: categoryButton, withText: "\(book.category.rawValue)")
-
+        let categoryText = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+        configure(button: categoryButton, withText: categoryText)
         
         // Add arrangedSubviews
         mainStackView.addArrangedSubview(ratingStack)
@@ -176,45 +168,17 @@ class BookDetailsScrollView: UIScrollView {
         let contentG = contentLayoutGuide
         let frameG = frameLayoutGuide
         
-//        mainStackView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            mainStackView.centerYAnchor.constraint(equalTo: contentG.centerYAnchor),
-//            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: 8),
-//            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -8),
-////            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -16),
-//            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -32)
-//        ])
-
-
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        let extraPaddingsY: CGFloat = 36
+        let extraPaddingTop: CGFloat = 20
+        let extraPaddingBottom: CGFloat = 14
         let extraPaddingsX: CGFloat = 50
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: extraPaddingsY / 2.0),
+            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: extraPaddingTop),
             mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: extraPaddingsX / 2.0),
             mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -extraPaddingsX / 2),
-            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -extraPaddingsY / 2.0),
-            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -extraPaddingsY)
+            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -extraPaddingBottom),
+            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(extraPaddingTop + extraPaddingBottom))
         ])
-        
-//        var stacks = [UIStackView]()
-//        if book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook {
-//            stacks = [ratingStack, durationStack, languageStack, categoryStack]
-//        } else {
-//            stacks = [ratingStack, languageStack, categoryStack]
-//        }
-//
-//
-//
-//        for stack in stacks {
-//            stack.translatesAutoresizingMaskIntoConstraints = false
-//            let width = max(label.bounds.width, button.bounds.width)
-//            NSLayoutConstraint.activate([
-//                stack.widthAnchor.constraint(equalToConstant: width),
-//                stack.topAnchor.constraint(equalTo: label.topAnchor),
-//                stack.bottomAnchor.constraint(equalTo: button.bottomAnchor)
-//            ])
-//        }
         
         ratingStack.translatesAutoresizingMaskIntoConstraints = false
         let ratingStackWidth = max(ratingsLabel.bounds.width, ratingButton.bounds.width)
@@ -245,11 +209,12 @@ class BookDetailsScrollView: UIScrollView {
         categoryStack.translatesAutoresizingMaskIntoConstraints = false
         let categoryStackWidth = max(categoryLabel.bounds.width, categoryButton.bounds.width)
         NSLayoutConstraint.activate([
-            categoryStack.widthAnchor.constraint(equalToConstant: categoryStackWidth),
+//            categoryStack.widthAnchor.constraint(equalToConstant: categoryStackWidth),
             categoryStack.topAnchor.constraint(equalTo: categoryLabel.topAnchor),
             categoryStack.bottomAnchor.constraint(equalTo: categoryButton.bottomAnchor)
         ])
-        
+        categoryStackWidthAnchor.constant = categoryStackWidth
+        categoryStackWidthAnchor.isActive = true
         
         for vertBarView in vertBarViews {
             vertBarView.translatesAutoresizingMaskIntoConstraints = false
@@ -258,13 +223,6 @@ class BookDetailsScrollView: UIScrollView {
                 vertBarView.widthAnchor.constraint(equalToConstant: 1)
             ])
         }
-        
-        
-        
     }
-    
-    
-
-
 
 }

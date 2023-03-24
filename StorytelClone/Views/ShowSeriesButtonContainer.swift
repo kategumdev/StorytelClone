@@ -9,6 +9,7 @@ import UIKit
 
 class ShowSeriesButtonContainer: UIView {
     
+    // MARK: - Instance properties
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
         button.tintColor = UIColor.label
@@ -47,6 +48,7 @@ class ShowSeriesButtonContainer: UIView {
         return imageView
     }()
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.borderColor = UIColor.tertiaryLabel.cgColor
@@ -59,6 +61,7 @@ class ShowSeriesButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helper methods
     func configureFor(seriesTitle: String, seriesPart: Int) {
         let text = "Part \(seriesPart) in \(seriesTitle)"
         showSeriesButton.setTitle(text, for: .normal)

@@ -9,8 +9,10 @@ import UIKit
 
 class RoundButtonsStackContainer: UIStackView {
     
+    // MARK: - Static properties
     static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
     
+    // MARK: - Instance properties
     private let bookKind: TitleKind
 
     private lazy var viewWithListenButton: UIView = {
@@ -109,7 +111,7 @@ class RoundButtonsStackContainer: UIStackView {
     private var hasListenButton = true
     private var hasReadButton = true
     
-    
+    // MARK: - View life cycle
     init(forBookKind bookKind: TitleKind) {
         self.bookKind = bookKind
         super.init(frame: .zero)
@@ -129,6 +131,7 @@ class RoundButtonsStackContainer: UIStackView {
         }
     }
     
+    // MARK: - Helper methods
     private func configureSelf() {
         axis = .horizontal
 //        alignment = .center
@@ -152,12 +155,8 @@ class RoundButtonsStackContainer: UIStackView {
         
     }
     
-   
-    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        
-//        let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
         let buttonLabelPadding: CGFloat = 15
 
         // Save button
@@ -201,8 +200,6 @@ class RoundButtonsStackContainer: UIStackView {
 
             viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
             viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
-    //        viewWithListenButton.trailingAnchor.constraint(equalTo: listenButton.trailingAnchor).isActive = true
-    //        viewWithListenButton.leadingAnchor.constraint(equalTo: listenButton.leadingAnchor).isActive = true
         }
 
         if hasReadButton {

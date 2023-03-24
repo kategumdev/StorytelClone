@@ -18,17 +18,13 @@ enum ButtonKind: String, CaseIterable {
 
 class SearchResultsButtonsView: UIView {
     
+    // MARK: - Static properties
     private static let slidingLineHeight: CGFloat = 3
-    
     private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
-//    private static let heightForStackWithSlidingLine = slidingLineHeight
-//    static let viewHeight = heightForStackWithButtons + heightForStackWithSlidingLine
-    
     static let viewHeight = heightForStackWithButtons + slidingLineHeight / 2
-//    static let viewHeight = heightForStackWithButtons + slidingLineHeight
 
 
-    
+    // MARK: - Instance properties
     let buttonKinds: [ButtonKind] = ButtonKind.allCases
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
@@ -106,10 +102,10 @@ class SearchResultsButtonsView: UIView {
         return scrollView
     }()
 
-//    lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: stackView.leadingAnchor)
     lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor)
     lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(scrollView)
@@ -134,14 +130,7 @@ class SearchResultsButtonsView: UIView {
         adjustSlidingLinePosition(currentButton: scopeButtons[0])  
     }
     
-//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-//        super.traitCollectionDidChange(previousTraitCollection)
-//
-//        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-//            layer.borderColor = UIColor.label.cgColor
-//        }
-//    }
-    
+    // MARK: - Helper methods
     private func addButtonActions() {
         for button in scopeButtons {
             button.addAction(UIAction(handler: { [weak self] _ in
@@ -248,10 +237,6 @@ class SearchResultsButtonsView: UIView {
         if slidingLineLeadingAnchor.constant < 0 {
             return
         }
-//        if currentOffsetXOfCvInRangeOfOnePageWidth < 0 {
-//            return
-//        }
-        
         
     // Logic for adjusting sliding line width for other cases
         

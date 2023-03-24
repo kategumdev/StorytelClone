@@ -67,7 +67,7 @@ enum ButtonCategory: String {
     case novelaNegra = "Novela negra"
     case romantica = "Romántica"
     case thrillerYHorror = "Thriller y Horror"
-    case fantasiaYCienciaFiccion = "Fantasía y\nCiencis ficción"
+    case fantasiaYCienciaFiccion = "Fantasía y\nCiencia ficción"
     case crecimientoPersonalYLifestyle = "Crecimiento\npersonal y Lifestyle"
     case infantil = "Infantil"
     case clasicos = "Clásicos"

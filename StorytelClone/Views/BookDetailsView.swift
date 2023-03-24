@@ -9,8 +9,10 @@ import UIKit
 
 class BookDetailsView: UIStackView {
     
+    // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
     
+    // MARK: - Instance properties
     private let book: Book
     
     private let coverImageView: UIImageView = {
@@ -85,9 +87,7 @@ class BookDetailsView: UIStackView {
     
     private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBookKind: book.titleKind)
     
-//    private var hasShowSeriesButtonContainer = true
-//    private var hasNarratorLabel = true
-    
+    // MARK: - View life cycle
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
@@ -107,6 +107,7 @@ class BookDetailsView: UIStackView {
         }
     }
     
+    // MARK: - Helper methods
     private func configureSelf() {
         axis = .vertical
         alignment = .center
