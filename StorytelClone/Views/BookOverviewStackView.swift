@@ -12,6 +12,7 @@ class BookOverviewStackView: UIStackView {
     // MARK: - Static methods
     static func createSecondaryTextView() -> UITextView {
         let textView = UITextView()
+        textView.isEditable = false
         textView.backgroundColor = .clear
         textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
         textView.isScrollEnabled = false
@@ -25,6 +26,7 @@ class BookOverviewStackView: UIStackView {
 
     private let mainTextView: UITextView = {
         let textView = UITextView()
+        textView.isEditable = false
         textView.backgroundColor = .clear
         textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
         textView.isScrollEnabled = false

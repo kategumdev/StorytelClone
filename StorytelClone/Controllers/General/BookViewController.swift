@@ -12,13 +12,15 @@ class BookViewController: UIViewController {
     var book: Book
     
     private let mainScrollView = UIScrollView()
+    private var scrollViewInitialOffsetY: CGFloat = 0.0
+    private var isInitialOffsetYSet = false
         
     private lazy var bookDetailsStackView = BookDetailsStackView(forBook: book)
+    private let bookDetailsStackViewTopPadding: CGFloat = 12
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
-    
     private lazy var overviewStackView = BookOverviewStackView(book: book)
-    
+            
     init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -32,24 +34,42 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book.title
-        
+            
         mainScrollView.showsVerticalScrollIndicator = false
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(bookDetailsStackView)
         mainScrollView.addSubview(bookDetailsScrollView)
         mainScrollView.addSubview(overviewStackView)
+        mainScrollView.delegate = self
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
 //        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
     }
+
     
     // MARK: - Helper methods
+    
+    private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+        let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
+        
+        if currentOffsetY > scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//            print("to visible")
+        }
+
+        if currentOffsetY <= scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//            print("to transparent")
+        }
+    }
+    
     private func applyConstraints() {
         mainScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             mainScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
@@ -60,7 +80,9 @@ class BookViewController: UIViewController {
         
         bookDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: 22),
+            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: bookDetailsStackViewTopPadding),
+//            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: navBarMaxY + bookDetailsStackViewTopPadding),
+//            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor),
             bookDetailsStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
             bookDetailsStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
             bookDetailsStackView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
@@ -82,4 +104,20 @@ class BookViewController: UIViewController {
         ])
     }
 
+}
+
+extension BookViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffsetY = scrollView.contentOffset.y
+
+        guard isInitialOffsetYSet else {
+            scrollViewInitialOffsetY = currentOffsetY
+            isInitialOffsetYSet = true
+            return
+        }
+        
+        // Toggle navbar from transparent to visible (and vice versa)
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+    }
 }

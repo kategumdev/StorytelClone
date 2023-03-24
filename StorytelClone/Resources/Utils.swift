@@ -38,6 +38,7 @@ struct Utils {
         }
         return height
     }()
+    
 
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")

@@ -11,6 +11,7 @@ class BookDetailsStackView: UIStackView {
     
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
+    #warning("Try to make this property not static to know if it works")
     
     // MARK: - Instance properties
     private let book: Book
@@ -28,12 +29,16 @@ class BookDetailsStackView: UIStackView {
     }()
     
     private lazy var coverImageWidthAnchor = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
+    
+    let spacingAfterCoverImageView: CGFloat = 24.0
 
     private let bookTitleLabel: UILabel = {
         let label = UILabel.createLabel(withFont: Utils.wideButtonLabelFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: true)
         label.textAlignment = .center
         return label
     }()
+    
+    lazy var bookTitleLabelHeight = bookTitleLabel.bounds.height
         
     private let authorLabel: UILabel = {
         let label = UILabel()
@@ -107,6 +112,11 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        print("BookDetailsStackView height: \(bounds.height)")
+//    }
+    
     // MARK: - Helper methods
     private func configureSelf() {
         axis = .vertical
@@ -118,7 +128,8 @@ class BookDetailsStackView: UIStackView {
             coverImageWidthAnchor.constant = resizedImage.size.width
         }
         addArrangedSubview(coverImageView)
-        setCustomSpacing(24.0, after: coverImageView)
+//        setCustomSpacing(24.0, after: coverImageView)
+        setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)
 
         bookTitleLabel.text = book.title
         addArrangedSubview(bookTitleLabel)

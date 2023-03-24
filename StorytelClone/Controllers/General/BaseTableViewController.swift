@@ -159,7 +159,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    // Override in subclasses of this vc if no dimming behavior for table header is needed
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
 
@@ -169,7 +168,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 //            print("initialOffsetY is SET")
             return
         }
-
+        
         // Toggle navbar from transparent to visible at calculated contentOffset
         adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
     }
