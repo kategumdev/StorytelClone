@@ -20,6 +20,8 @@ class BookViewController: UIViewController {
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     private lazy var overviewStackView = BookOverviewStackView(book: book)
+    
+    private let seeMoreView = SeeMoreView()
             
     init(book: Book) {
         self.book = book
@@ -41,6 +43,10 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(bookDetailsScrollView)
         mainScrollView.addSubview(overviewStackView)
         mainScrollView.delegate = self
+        
+        mainScrollView.addSubview(seeMoreView)
+        
+//        view.addSubview(seeMoreView)
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
@@ -97,10 +103,22 @@ class BookViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 7),
+            overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 18),
             overviewStackView.widthAnchor.constraint(equalTo: contentG.widthAnchor),
             overviewStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-            overviewStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            overviewStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -seeMoreView.viewHeight)
+//            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
+        ])
+        
+        seeMoreView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            seeMoreView.heightAnchor.constraint(equalToConstant: seeMoreView.viewHeight),
+//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor),
+            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2),
+            seeMoreView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            seeMoreView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.view),
+            seeMoreView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
     }
 

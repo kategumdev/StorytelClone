@@ -18,6 +18,10 @@ class BookOverviewStackView: UIStackView {
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
         textView.textAlignment = .left
+//        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        textView.textContainerInset = .zero
+        // Ensure that the text is aligned with the left edge of the text view.
+        textView.textContainer.lineFragmentPadding = 0
         return textView
     }
     
@@ -32,6 +36,10 @@ class BookOverviewStackView: UIStackView {
         textView.isScrollEnabled = false
         textView.textColor = .label
         textView.textAlignment = .left
+        textView.textContainerInset = .zero
+        // Ensure that the text is aligned with the left edge of the text view.
+        textView.textContainer.lineFragmentPadding = 0
+
         return textView
     }()
     
@@ -57,9 +65,15 @@ class BookOverviewStackView: UIStackView {
         super.init(frame: .zero)
         axis = .vertical
         alignment = .center
+        spacing = 16
         configureTextViews()
         textViews.forEach { addArrangedSubview($0) }
         applyConstraints()
+        
+        
+//        backgroundColor = .blue
+//        mainTextView.backgroundColor = .cyan
+//        audiobookTextView.backgroundColor = .yellow
     }
     
     required init(coder: NSCoder) {
@@ -143,6 +157,11 @@ class BookOverviewStackView: UIStackView {
             mainTextView.topAnchor.constraint(equalTo: topAnchor),
             lastTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        
+//        lastTextView.backgroundColor = .green
+        // Ensure that last text view doesn't have even a tiny bottom padding
+        lastTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: -4, right: 0)
+
         
         // Force layoutSubviews() ro run second time to get correct bounds.width for setting height of text views
         layoutIfNeeded()
