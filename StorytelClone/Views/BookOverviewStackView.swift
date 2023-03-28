@@ -10,6 +10,21 @@ import UIKit
 class BookOverviewStackView: UIStackView {
     
     // MARK: - Static methods
+    static func createMainTextView() -> UITextView {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.backgroundColor = .clear
+        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+        textView.isScrollEnabled = false
+        textView.textColor = .label
+        textView.textAlignment = .left
+        textView.textContainerInset = .zero
+        // Ensure that the text is aligned with the left edge of the text view.
+        textView.textContainer.lineFragmentPadding = 0
+
+        return textView
+    }
+    
     static func createSecondaryTextView() -> UITextView {
         let textView = UITextView()
         textView.isEditable = false
@@ -28,20 +43,20 @@ class BookOverviewStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
 
-    private let mainTextView: UITextView = {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.backgroundColor = .clear
-        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-        textView.isScrollEnabled = false
-        textView.textColor = .label
-        textView.textAlignment = .left
-        textView.textContainerInset = .zero
-        // Ensure that the text is aligned with the left edge of the text view.
-        textView.textContainer.lineFragmentPadding = 0
-
-        return textView
-    }()
+//    private let mainTextView: UITextView = {
+//        let textView = UITextView()
+//        textView.isEditable = false
+//        textView.backgroundColor = .clear
+//        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+//        textView.isScrollEnabled = false
+//        textView.textColor = .label
+//        textView.textAlignment = .left
+//        textView.textContainerInset = .zero
+//        // Ensure that the text is aligned with the left edge of the text view.
+//        textView.textContainer.lineFragmentPadding = 0
+//        return textView
+//    }()
+    private let mainTextView = BookOverviewStackView.createMainTextView()
     
     private lazy var mainTextViewHeightAnchor = mainTextView.heightAnchor.constraint(equalToConstant: 100)
     
@@ -59,6 +74,17 @@ class BookOverviewStackView: UIStackView {
     private var textViews = [UITextView]()
     private var textViewsHeightAnchors = [NSLayoutConstraint]()
     
+    lazy var visiblePartForSeeMoreAppearance: CGFloat = {
+        var textView = BookOverviewStackView.createMainTextView()
+        textView.text = book.overview
+        textView.textContainer.maximumNumberOfLines = 8
+        
+        let width = bounds.width - Constants.cvPadding * 2
+        let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+        let height = size.height
+        return height
+    }()
+    
     // MARK: - View life cycle
     init(book: Book) {
         self.book = book
@@ -72,7 +98,7 @@ class BookOverviewStackView: UIStackView {
         
         
 //        backgroundColor = .blue
-//        mainTextView.backgroundColor = .cyan
+//        mainTextView.backgroundColor = .green
 //        audiobookTextView.backgroundColor = .yellow
     }
     
