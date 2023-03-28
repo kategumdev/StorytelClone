@@ -22,7 +22,9 @@ class BookViewController: UIViewController {
     private lazy var overviewStackView = BookOverviewStackView(book: book)
     
     private let seeMoreView = SeeMoreView()
-            
+    private lazy var seeMoreAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2)
+    private lazy var seeLessAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: 150)
+    
     init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -74,7 +76,6 @@ class BookViewController: UIViewController {
     private func applyConstraints() {
         mainScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mainScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             mainScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
@@ -87,8 +88,6 @@ class BookViewController: UIViewController {
         bookDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: bookDetailsStackViewTopPadding),
-//            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: navBarMaxY + bookDetailsStackViewTopPadding),
-//            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor),
             bookDetailsStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
             bookDetailsStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
             bookDetailsStackView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
@@ -106,20 +105,19 @@ class BookViewController: UIViewController {
             overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 18),
             overviewStackView.widthAnchor.constraint(equalTo: contentG.widthAnchor),
             overviewStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-//            overviewStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -seeMoreView.viewHeight)
 //            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
         seeMoreView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             seeMoreView.heightAnchor.constraint(equalToConstant: seeMoreView.viewHeight),
-//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor),
-            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2),
+//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2),
             seeMoreView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             seeMoreView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.view),
             seeMoreView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
+        seeMoreAppearanceTopAnchor.isActive = true
+//        seeLessAppearanceTopAnchor.isActive = true
     }
 
 }

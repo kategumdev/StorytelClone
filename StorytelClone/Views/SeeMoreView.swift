@@ -10,10 +10,7 @@ import UIKit
 class SeeMoreView: UIView {
     
     static let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//    static let bottomPadding: CGFloat = 24
     
-    
-//    private let bottomPadding: CGFloat = 24
     let viewHeight: CGFloat = 110
     
     private let seeMoreButton: UIButton = {
@@ -35,7 +32,9 @@ class SeeMoreView: UIView {
         button.configuration = buttonConfig
         
 //        button.sizeToFit()
-//        button.backgroundColor = .cyan
+//        button.backgroundColor = Utils.customBackgroundColor
+//        button.backgroundColor = .magenta
+
         return button
     }()
     
@@ -45,12 +44,18 @@ class SeeMoreView: UIView {
         return height
     }()
     
-    private let dimView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .magenta.withAlphaComponent(0.5)
-//        view.backgroundColor = Utils.customBackgroundColor?.withAlphaComponent(0.5)
-        return view
-    }()
+//    private let dimView: UIView = {
+//        let view = UIView()
+//        return view
+//    }()
+    
+    private let dimView = UIView()
+    private var gradientIsAdded = false
+    
+    private var gradientColors: [CGColor] {
+        let colors = [Utils.customBackgroundColor!.withAlphaComponent(1).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(0).cgColor]
+        return colors
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,114 +70,69 @@ class SeeMoreView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    private func getIntrinsicButtonHeight() -> CGFloat {
-//        seeMoreButton.sizeToFit()
-//        let height = seeMoreButton.bounds.height
-//        return height
-//    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+//        print("layoutSubviews, dimView size: \(dimView.bounds.size)")
+        
+        if !gradientIsAdded {
+            addGradient()
+            print("adding gradient")
+            gradientIsAdded = true
+        }
+
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            
+            if let gradientLayer = dimView.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+                    gradientLayer.colors = gradientColors
+                }
+        }
+    }
     
     private func applyConstraints() {
-        
         dimView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             dimView.topAnchor.constraint(equalTo: topAnchor),
-//            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
             dimView.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
             dimView.widthAnchor.constraint(equalTo: widthAnchor),
             dimView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            dimView.bottomAnchor.constraint(equalTo: seeMoreButton.topAnchor)
         ])
         
+        // Position button y- and x-centered in the lower part of seeMoreView
         let intrinsicButtonHeight = intrinsicButtonHeight
-        print("intrinsicButtonHeight: \(intrinsicButtonHeight)")
-//        let topAndBottomPadding = viewHeight - intrinsicButtonHeight
         let bottomPadding = ((viewHeight / 2) - intrinsicButtonHeight) / 2
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            seeMoreButton.heightAnchor.constraint(equalToConstant: intrinsicButtonHeight),
-//            seeMoreButton.topAnchor.constraint(equalTo: dimView.bottomAnchor),
-//            seeMoreButton.heightAnchor.constraint(equalToConstant: viewHeight / 2),
             seeMoreButton.widthAnchor.constraint(equalTo: widthAnchor),
+//            seeMoreButton.heightAnchor.constraint(equalToConstant: viewHeight / 2),
             seeMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomPadding)
             seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomPadding)
         ])
         
         
-//        dimView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            dimView.topAnchor.constraint(equalTo: topAnchor),
-////            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
-////            dimView.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
-//            dimView.widthAnchor.constraint(equalTo: widthAnchor),
-//            dimView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            dimView.bottomAnchor.constraint(equalTo: seeMoreButton.topAnchor)
-//        ])
         
+        
+//        // Position button y- and x-centered in the lower part of seeMoreView
+//        seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            seeMoreButton.widthAnchor.constraint(equalTo: widthAnchor),
+//            seeMoreButton.heightAnchor.constraint(equalToConstant: viewHeight / 2),
+//            seeMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+//        ])
     }
     
-    
-    
-    
-//    private func applyConstraints() {
-//
-//        seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-////            seeMoreButton.topAnchor.constraint(equalTo: dimView.bottomAnchor),
-//            seeMoreButton.widthAnchor.constraint(equalTo: widthAnchor),
-////            seeMoreButton.heightAnchor.constraint(equalToConstant: 70),
-////            seeMoreButton.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            seeMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-////            seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomPadding)
-//            seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        ])
-//
-//
-//        dimView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            dimView.topAnchor.constraint(equalTo: topAnchor),
-////            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
-////            dimView.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
-//            dimView.widthAnchor.constraint(equalTo: widthAnchor),
-//            dimView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            dimView.bottomAnchor.constraint(equalTo: seeMoreButton.topAnchor)
-//        ])
-//
-//    }
-    
-    
-    
-    
-    
-//    private func applyConstraints() {
-//
-//        dimView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            dimView.topAnchor.constraint(equalTo: topAnchor),
-////            dimView.heightAnchor.constraint(equalTo: seeMoreButton.heightAnchor),
-//            dimView.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            dimView.widthAnchor.constraint(equalTo: widthAnchor),
-//            dimView.leadingAnchor.constraint(equalTo: leadingAnchor),
-////            dimView.bottomAnchor.constraint(equalTo: seeMoreButton.topAnchor)
-//        ])
-//
-//        seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-////            seeMoreButton.topAnchor.constraint(equalTo: dimView.bottomAnchor),
-//            seeMoreButton.widthAnchor.constraint(equalTo: widthAnchor),
-////            seeMoreButton.heightAnchor.constraint(equalToConstant: 70),
-////            seeMoreButton.heightAnchor.constraint(equalToConstant: viewHeight / 2),
-//            seeMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-////            seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomPadding)
-//            seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        ])
-//
-////        translatesAutoresizingMaskIntoConstraints = false
-////        let height = (seeMoreButton.bounds.height + SeeMoreView.topAndBottomPadding * 2) * 2
-////        heightAnchor.constraint(equalToConstant: height).isActive = true
-//    }
+    private func addGradient() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = [0, 1]
+        gradientLayer.frame = dimView.bounds
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
+        dimView.layer.addSublayer(gradientLayer)
+    }
     
 }
