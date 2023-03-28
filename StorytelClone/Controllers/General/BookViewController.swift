@@ -21,9 +21,13 @@ class BookViewController: UIViewController {
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     private lazy var overviewStackView = BookOverviewStackView(book: book)
     
-    private let seeMoreView = SeeMoreView()
-    private lazy var seeMoreAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2)
-    private lazy var seeLessAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: 150)
+//    private let seeMoreView = SeeMoreView()
+//    private lazy var seeMoreAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2)
+//    private lazy var seeLessAppearanceTopAnchor = seeMoreView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: 150)
+    
+    private let seeMoreButton = SeeMoreButton()
+    private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreButton.buttonHeight / 2)
+    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: 120)
     
     init(book: Book) {
         self.book = book
@@ -46,7 +50,9 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(overviewStackView)
         mainScrollView.delegate = self
         
-        mainScrollView.addSubview(seeMoreView)
+//        mainScrollView.addSubview(seeMoreView)
+        mainScrollView.addSubview(seeMoreButton)
+
         
 //        view.addSubview(seeMoreView)
         applyConstraints()
@@ -108,16 +114,29 @@ class BookViewController: UIViewController {
 //            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
-        seeMoreView.translatesAutoresizingMaskIntoConstraints = false
+        seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            seeMoreView.heightAnchor.constraint(equalToConstant: seeMoreView.viewHeight),
-//            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2),
-            seeMoreView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            seeMoreView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            seeMoreView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+            seeMoreButton.heightAnchor.constraint(equalToConstant: seeMoreButton.buttonHeight),
+            seeMoreButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            seeMoreButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
-        seeMoreAppearanceTopAnchor.isActive = true
-//        seeLessAppearanceTopAnchor.isActive = true
+//        seeMoreAppearanceTopAnchor.isActive = true
+        seeLessAppearanceTopAnchor.isActive = true
+        
+        
+        
+        
+//        seeMoreView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            seeMoreView.heightAnchor.constraint(equalToConstant: seeMoreView.viewHeight),
+////            seeMoreView.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreView.viewHeight / 2),
+//            seeMoreView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+//            seeMoreView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            seeMoreView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//        ])
+//        seeMoreAppearanceTopAnchor.isActive = true
+////        seeLessAppearanceTopAnchor.isActive = true
     }
 
 }
