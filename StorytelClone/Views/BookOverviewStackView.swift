@@ -42,6 +42,7 @@ class BookOverviewStackView: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
+//    let isFullSize: Bool
 
 //    private let mainTextView: UITextView = {
 //        let textView = UITextView()
@@ -56,23 +57,25 @@ class BookOverviewStackView: UIStackView {
 //        textView.textContainer.lineFragmentPadding = 0
 //        return textView
 //    }()
+//    var maxNumberOfLinesOfMainTextView
+    
     private let mainTextView = BookOverviewStackView.createMainTextView()
     
-    private lazy var mainTextViewHeightAnchor = mainTextView.heightAnchor.constraint(equalToConstant: 100)
+//    private lazy var mainTextViewHeightAnchor = mainTextView.heightAnchor.constraint(equalToConstant: 100)
     
     private lazy var audiobookTextView = BookOverviewStackView.createSecondaryTextView()
-    private lazy var audiobookTextViewHeightAnchor = audiobookTextView.heightAnchor.constraint(equalToConstant: 100)
+//    private lazy var audiobookTextViewHeightAnchor = audiobookTextView.heightAnchor.constraint(equalToConstant: 100)
     
     private lazy var ebookTextView = BookOverviewStackView.createSecondaryTextView()
-    private lazy var ebookTextViewHeightAnchor = ebookTextView.heightAnchor.constraint(equalToConstant: 100)
+//    private lazy var ebookTextViewHeightAnchor = ebookTextView.heightAnchor.constraint(equalToConstant: 100)
     
     private lazy var translatorsTextView = BookOverviewStackView.createSecondaryTextView()
     private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
     
-    private var isFirstTime = true
+//    private var isFirstTime = true
 
     private var textViews = [UITextView]()
-    private var textViewsHeightAnchors = [NSLayoutConstraint]()
+//    private var textViewsHeightAnchors = [NSLayoutConstraint]()
     
     lazy var visiblePartForSeeMoreAppearance: CGFloat = {
         var textView = BookOverviewStackView.createMainTextView()
@@ -102,43 +105,70 @@ class BookOverviewStackView: UIStackView {
 //        audiobookTextView.backgroundColor = .yellow
     }
     
+//    init(book: Book, isFullSize: Bool) {
+//        self.book = book
+//        self.isFullSize = isFullSize
+//        super.init(frame: .zero)
+//        axis = .vertical
+//        alignment = .center
+//        spacing = 16
+//        configureTextViews()
+//        textViews.forEach { addArrangedSubview($0) }
+//        applyConstraints()
+//
+//
+////        backgroundColor = .blue
+////        mainTextView.backgroundColor = .green
+////        audiobookTextView.backgroundColor = .yellow
+//    }
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if !isFirstTime {
-            setHeightOfTextViews()
-        } else {
-            isFirstTime = false
-        }
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        if !isFirstTime {
+//            setHeightOfTextViews()
+//        } else {
+//            isFirstTime = false
+//        }
+//    }
     
     // MARK: - Helper methods
     private func configureTextViews() {
+        
+//        if !isFullSize {
+//            mainTextView.textContainer.maximumNumberOfLines = 8
+//            mainTextView.textContainer.lineBreakMode = .byClipping
+//            textViews.append(mainTextView)
+//            mainTextView.text = book.overview
+//            textViewsHeightAnchors.append(mainTextViewHeightAnchor)
+//            return
+//        }
+        
         textViews.append(mainTextView)
         mainTextView.text = book.overview
-        textViewsHeightAnchors.append(mainTextViewHeightAnchor)
+//        textViewsHeightAnchors.append(mainTextViewHeightAnchor)
         
         let bookKind = book.titleKind
         
         if bookKind == .audioBookAndEbook {
             textViews.append(audiobookTextView)
             audiobookTextView.text = "Audiobook\nRelease: \(book.releaseDate)\nPublisher: \(book.publisher)"
-            textViewsHeightAnchors.append(audiobookTextViewHeightAnchor)
+//            textViewsHeightAnchors.append(audiobookTextViewHeightAnchor)
             
             textViews.append(ebookTextView)
             ebookTextView.text = "Ebook\nRelease: \(book.releaseDate)\nPublisher: \(book.publisher)"
-            textViewsHeightAnchors.append(ebookTextViewHeightAnchor)
+//            textViewsHeightAnchors.append(ebookTextViewHeightAnchor)
         } else if bookKind == .audiobook {
             textViews.append(audiobookTextView)
             audiobookTextView.text = "Audiobook\nRelease: \(book.releaseDate)\nPublisher: \(book.publisher)"
-            textViewsHeightAnchors.append(audiobookTextViewHeightAnchor)
+//            textViewsHeightAnchors.append(audiobookTextViewHeightAnchor)
         } else {
             textViews.append(ebookTextView)
             ebookTextView.text = "Ebook\nRelease: \(book.releaseDate)\nPublisher: \(book.publisher)"
-            textViewsHeightAnchors.append(ebookTextViewHeightAnchor)
+//            textViewsHeightAnchors.append(ebookTextViewHeightAnchor)
         }
         
         if let translators = book.translators {
@@ -148,22 +178,22 @@ class BookOverviewStackView: UIStackView {
             
             textViews.append(translatorsTextView)
             translatorsTextView.text = "\(title)\n\(translatorsString)"
-            textViewsHeightAnchors.append(translatorsTextViewHeightAnchor)
+//            textViewsHeightAnchors.append(translatorsTextViewHeightAnchor)
         }
 
     }
     
-    private func setHeightOfTextViews() {
-        for (index, textView) in textViews.enumerated() {
-            let width = bounds.width - Constants.cvPadding * 2
-            let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
-            let height = size.height
-            
-            let heightAnchorOfTextView = textViewsHeightAnchors[index]
-            heightAnchorOfTextView.constant = height
-        }
-        
-    }
+//    private func setHeightOfTextViews() {
+//        for (index, textView) in textViews.enumerated() {
+//            let width = bounds.width - Constants.cvPadding * 2
+//            let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+//            let height = size.height
+//
+//            let heightAnchorOfTextView = textViewsHeightAnchors[index]
+//            heightAnchorOfTextView.constant = height
+//        }
+//
+//    }
 
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -173,9 +203,9 @@ class BookOverviewStackView: UIStackView {
             textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2).isActive = true
         }
         
-        for anchor in textViewsHeightAnchors {
-            anchor.isActive = true
-        }
+//        for anchor in textViewsHeightAnchors {
+//            anchor.isActive = true
+//        }
         
         // Set stack view height
         let lastTextView = textViews.last!

@@ -20,6 +20,7 @@ class BookViewController: UIViewController {
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     private lazy var overviewStackView = BookOverviewStackView(book: book)
+//    private lazy var overviewStackView = BookOverviewStackView(book: book, isFullSize: false)
     
     private let seeMoreButton = SeeMoreButton()
     private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreButton.buttonHeight / 2)
@@ -48,6 +49,8 @@ class BookViewController: UIViewController {
         mainScrollView.delegate = self
         
         mainScrollView.addSubview(seeMoreButton)
+        addSeeMoreButtonAction()
+        
 
         applyConstraints()
         
@@ -71,6 +74,78 @@ class BookViewController: UIViewController {
             navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
 //            print("to transparent")
         }
+    }
+    
+    private func addSeeMoreButtonAction() {
+        seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            
+            
+            self.toggleSeeMoreButton()
+//            self.view.setNeedsLayout()
+//            self.view.layoutIfNeeded()
+
+        }), for: .touchUpInside)
+    }
+    
+//    private func toggleSeeMoreButton() {
+////        seeMoreButton.toggleButtonText()
+//
+//        if overviewStackView.isFullSize {
+//            print("make smaller")
+//
+//            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
+//            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
+//
+////            overviewStackView = BookOverviewStackView(book: book, isFullSize: false)
+//
+//
+//        } else {
+//            print("make full size")
+//
+//            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
+//            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
+//
+////            overviewStackView = BookOverviewStackView(book: book, isFullSize: true)
+//
+//        }
+//
+//        let subviews = mainScrollView.subviews
+//        for view in subviews {
+//            if view is BookOverviewStackView {
+//                view.removeFromSuperview()
+//                mainScrollView.addSubview(overviewStackView)
+//                break
+//            }
+//        }
+//
+//        overviewStackView.setNeedsLayout()
+//        overviewStackView.layoutIfNeeded()
+//
+//        mainScrollView.setNeedsLayout()
+//        mainScrollView.layoutIfNeeded()
+//
+//    }
+    
+    private func toggleSeeMoreButton() {
+        if seeMoreAppearanceTopAnchor.isActive {
+            seeMoreAppearanceTopAnchor.isActive = false
+            seeLessAppearanceTopAnchor.isActive = true
+            print("make larger")
+            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
+            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
+            seeMoreButton.addGradient()
+        } else {
+            seeMoreAppearanceTopAnchor.isActive = true
+            seeLessAppearanceTopAnchor.isActive = false
+            print("make smaller")
+            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
+            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
+            seeMoreButton.removeGradient()
+        }
+        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     private func applyConstraints() {

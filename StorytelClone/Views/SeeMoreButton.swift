@@ -10,7 +10,7 @@ import UIKit
 class SeeMoreButton: UIButton {
 
 //    static let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-    private let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+    let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
 
 //    static let buttonHeight: CGFloat = 110
     let buttonHeight: CGFloat = 110
@@ -27,6 +27,16 @@ class SeeMoreButton: UIButton {
         buttonConfig.imagePlacement = .trailing
         buttonConfig.imagePadding = 4
         return buttonConfig
+    }()
+    
+    lazy var gradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+//        gradientLayer.colors = [UIColor.magenta.withAlphaComponent(0).cgColor,    UIColor.magenta.withAlphaComponent(1).cgColor]
+        gradientLayer.colors = gradientColors
+//        gradientLayer.locations = [0, 0.75]
+        gradientLayer.locations = [0, 0.5]
+        gradientLayer.frame = self.bounds
+        return gradientLayer
     }()
     
     private var gradientIsAdded = false
@@ -78,6 +88,19 @@ class SeeMoreButton: UIButton {
         }
     }
     
+//    func toggleButtonText() {
+////        configuration?.attributedTitle?.font = font
+//        if configuration?.attributedTitle == AttributedString("See more") {
+//            print("is see more")
+//            configuration?.attributedTitle = AttributedString("See less")
+//            configuration?.attributedTitle?.font = font
+//        } else {
+//            print("is see less")
+//            configuration?.attributedTitle = AttributedString("See more")
+//            configuration?.attributedTitle?.font = font
+//        }
+//    }
+    
     private func configureSelf() {
         self.tintColor = .label
         var config = buttonConfig
@@ -91,17 +114,34 @@ class SeeMoreButton: UIButton {
         self.configuration = config
     }
     
-    private func addGradient() {
-        let gradientLayer = CAGradientLayer()
-//        gradientLayer.colors = [UIColor.magenta.withAlphaComponent(0).cgColor,    UIColor.magenta.withAlphaComponent(1).cgColor]
+    func addGradient() {
         gradientLayer.colors = gradientColors
-//        gradientLayer.locations = [0, 0.75]
-        gradientLayer.locations = [0, 0.5]
-        gradientLayer.frame = self.bounds
         self.layer.addSublayer(gradientLayer)
         
         // Ensure that button text and symbol image show above gradient layer
         gradientLayer.zPosition = -1
     }
+    
+    func removeGradient() {
+//        gradientLayer.removeFromSuperlayer()
+        if let gradientLayer = self.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+            gradientLayer.removeFromSuperlayer()
+
+//            gradientLayer.colors = gradientColors
+        }
+    }
+    
+//    func addGradient() {
+//        let gradientLayer = CAGradientLayer()
+////        gradientLayer.colors = [UIColor.magenta.withAlphaComponent(0).cgColor,    UIColor.magenta.withAlphaComponent(1).cgColor]
+//        gradientLayer.colors = gradientColors
+////        gradientLayer.locations = [0, 0.75]
+//        gradientLayer.locations = [0, 0.5]
+//        gradientLayer.frame = self.bounds
+//        self.layer.addSublayer(gradientLayer)
+//
+//        // Ensure that button text and symbol image show above gradient layer
+//        gradientLayer.zPosition = -1
+//    }
 
 }
