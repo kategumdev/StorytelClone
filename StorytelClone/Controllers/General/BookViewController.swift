@@ -29,13 +29,10 @@ class BookViewController: UIViewController {
     private let hideView: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
-//        view.backgroundColor = .magenta
         return view
     }()
     
-//    private var firstTime = true
-//    private var currentAngle: CGFloat = 0
-    private var currentTransform = CGAffineTransform.identity
+//    private var currentTransform = CGAffineTransform.identity
     
     init(book: Book) {
         self.book = book
@@ -90,51 +87,16 @@ class BookViewController: UIViewController {
     private func addSeeMoreButtonAction() {
         seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-  
-            guard let imageView = self.seeMoreButton.imageView else { return }
-
-//            var toValue: CGFloat
-//            if self.currentAngle == 0 {
-//                toValue = -CGFloat.pi
-//            } else {
-//                toValue = 0
-//            }
-//
-//
-//            let spin = CABasicAnimation(keyPath: #keyPath(CALayer.transform))
-//            spin.duration = 0.3
-//            spin.valueFunction = CAValueFunction(name: .rotateZ) // 1
-////            spin.fromValue = 0 // 2
-//            spin.fromValue = self.currentAngle // 2
-//            print("from \(self.currentAngle) to \(toValue)")
-////            spin.toValue = angle
-//            spin.toValue = toValue
-//            self.currentAngle = toValue
-//            imageView.layer.add(spin, forKey: "spinAnimation")
-//            CATransaction.setDisableActions(true)
-//            imageView.layer.transform = CATransform3DMakeRotation(toValue, 0, 0, 1)
             
- 
-
-            // Rotate the image view 180 degrees
-            var newTransform: CGAffineTransform
-            if self.currentTransform == CGAffineTransform.identity {
-                newTransform = CGAffineTransform(rotationAngle: -CGFloat.pi)
-            } else {
-                newTransform = CGAffineTransform.identity
-            }
-
-//            imageView.transform = self.currentTransform
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
-                imageView.transform = newTransform
-            }
-            self.currentTransform = newTransform
-            
+//            self.seeMoreButton.rotateImage()
             self.adjustForSeeMoreSeeLessAppearance()
+            
         }), for: .touchUpInside)
     }
     
     private func adjustForSeeMoreSeeLessAppearance() {
+        seeMoreButton.rotateImage()
+        
         if seeMoreAppearanceTopAnchor.isActive {
             seeMoreButton.gradientLayer.isHidden = true
             hideView.isHidden = true

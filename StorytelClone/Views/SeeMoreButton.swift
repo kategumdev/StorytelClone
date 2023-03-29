@@ -53,6 +53,8 @@ class SeeMoreButton: UIButton {
         return height
     }()
     
+    private var currentTransform = CGAffineTransform.identity
+    
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,18 +91,22 @@ class SeeMoreButton: UIButton {
         configuration?.attributedTitle?.font = font
     }
     
-//    func toggleButtonText() {
-////        configuration?.attributedTitle?.font = font
-//        if configuration?.attributedTitle == AttributedString("See more") {
-//            print("is see more")
-//            configuration?.attributedTitle = AttributedString("See less")
-//            configuration?.attributedTitle?.font = font
-//        } else {
-//            print("is see less")
-//            configuration?.attributedTitle = AttributedString("See more")
-//            configuration?.attributedTitle?.font = font
-//        }
-//    }
+    func rotateImage() {
+        guard let imageView = imageView else { return }
+        // Rotate the image view 180 degrees
+        var newTransform: CGAffineTransform
+        if currentTransform == CGAffineTransform.identity {
+            newTransform = CGAffineTransform(rotationAngle: -CGFloat.pi)
+        } else {
+            newTransform = CGAffineTransform.identity
+        }
+
+//            imageView.transform = self.currentTransform
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            imageView.transform = newTransform
+        }
+        currentTransform = newTransform
+    }
     
     // MARK: - Helper methods
     private func configureSelf() {
