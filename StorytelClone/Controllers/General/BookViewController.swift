@@ -33,6 +33,10 @@ class BookViewController: UIViewController {
         return view
     }()
     
+//    private var firstTime = true
+//    private var currentAngle: CGFloat = 0
+    private var currentTransform = CGAffineTransform.identity
+    
     init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -67,10 +71,8 @@ class BookViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
     }
-
     
     // MARK: - Helper methods
-    
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
         
@@ -88,37 +90,64 @@ class BookViewController: UIViewController {
     private func addSeeMoreButtonAction() {
         seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.toggleSeeMoreButton()
+  
+            guard let imageView = self.seeMoreButton.imageView else { return }
+
+//            var toValue: CGFloat
+//            if self.currentAngle == 0 {
+//                toValue = -CGFloat.pi
+//            } else {
+//                toValue = 0
+//            }
+//
+//
+//            let spin = CABasicAnimation(keyPath: #keyPath(CALayer.transform))
+//            spin.duration = 0.3
+//            spin.valueFunction = CAValueFunction(name: .rotateZ) // 1
+////            spin.fromValue = 0 // 2
+//            spin.fromValue = self.currentAngle // 2
+//            print("from \(self.currentAngle) to \(toValue)")
+////            spin.toValue = angle
+//            spin.toValue = toValue
+//            self.currentAngle = toValue
+//            imageView.layer.add(spin, forKey: "spinAnimation")
+//            CATransaction.setDisableActions(true)
+//            imageView.layer.transform = CATransform3DMakeRotation(toValue, 0, 0, 1)
+            
+ 
+
+            // Rotate the image view 180 degrees
+            var newTransform: CGAffineTransform
+            if self.currentTransform == CGAffineTransform.identity {
+                newTransform = CGAffineTransform(rotationAngle: -CGFloat.pi)
+            } else {
+                newTransform = CGAffineTransform.identity
+            }
+
+//            imageView.transform = self.currentTransform
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+                imageView.transform = newTransform
+            }
+            self.currentTransform = newTransform
+            
+            self.adjustForSeeMoreSeeLessAppearance()
         }), for: .touchUpInside)
     }
     
-    private func toggleSeeMoreButton() {
+    private func adjustForSeeMoreSeeLessAppearance() {
         if seeMoreAppearanceTopAnchor.isActive {
             seeMoreButton.gradientLayer.isHidden = true
             hideView.isHidden = true
-
             seeMoreAppearanceTopAnchor.isActive = false
             seeLessAppearanceTopAnchor.isActive = true
-            print("make larger")
-            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
-            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-//            seeMoreButton.gradientLayer.isHidden = false
+            seeMoreButton.setButtonTextTo(text: "See less")
         } else {
-            hideView.isHidden = false
-
             seeMoreAppearanceTopAnchor.isActive = true
             seeLessAppearanceTopAnchor.isActive = false
-            print("make smaller")
-            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
-            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-//            hideView.isHidden = false
+            seeMoreButton.setButtonTextTo(text: "See more")
+            hideView.isHidden = false
             seeMoreButton.gradientLayer.isHidden = false
         }
-        
-//        overviewStackView.setNeedsLayout()
-//        overviewStackView.layoutIfNeeded()
-//        view.setNeedsLayout()
-//        view.layoutIfNeeded()
     }
     
     private func applyConstraints() {
@@ -157,23 +186,12 @@ class BookViewController: UIViewController {
         ])
         
         hideView.translatesAutoresizingMaskIntoConstraints = false
-//        let heightConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
         let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
-
         NSLayoutConstraint.activate([
-//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor, constant: -heightConstant),
             hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
+            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
             hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
             hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hideView.bottomAnchor.constraint(equalTo: overviewStackView.bottomAnchor)
-            
-//            hideView.bottomAnchor.constraint(equalTo: mainScrollView.bottomAnchor)
-//            hideView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
-//            hideView.bottomAnchor.constraint(equalTo: seeMoreButton.bottomAnchor)
-
-            
-
-//            hideView.topAnchor.constraint(equalTo: topAnchor, constant: heightConstant)
         ])
         
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
@@ -184,6 +202,7 @@ class BookViewController: UIViewController {
             seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
         seeMoreAppearanceTopAnchor.isActive = true
+//        seeLessAppearanceTopAnchor.isActive = true
     }
 
 }

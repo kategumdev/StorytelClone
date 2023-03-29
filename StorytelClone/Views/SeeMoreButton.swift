@@ -84,6 +84,11 @@ class SeeMoreButton: UIButton {
         }
     }
     
+    func setButtonTextTo(text: String) {
+        configuration?.attributedTitle = AttributedString(text)
+        configuration?.attributedTitle?.font = font
+    }
+    
 //    func toggleButtonText() {
 ////        configuration?.attributedTitle?.font = font
 //        if configuration?.attributedTitle == AttributedString("See more") {
@@ -109,6 +114,8 @@ class SeeMoreButton: UIButton {
         config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
                
         self.configuration = config
+        
+//        imageView?.transform = CGAffineTransform.identity
     }
     
     func addGradient() {
