@@ -32,6 +32,10 @@ class BookViewController: UIViewController {
 //    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartForSeeMoreAppearance - seeMoreButton.buttonHeight / 2)
     private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
     
+    private lazy var playSampleButton = PlaySampleButton()
+    
+    private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
+    
     private let hideView: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
@@ -63,9 +67,16 @@ class BookViewController: UIViewController {
         mainScrollView.delegate = self
         
         view.addSubview(hideView)
+//        hideView.layer.zPosition = -1
 
         mainScrollView.addSubview(seeMoreButton)
         addSeeMoreButtonAction()
+        
+        if hasAudio {
+            mainScrollView.addSubview(playSampleButton)
+        }
+//        if book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook {
+//        }
         
         applyConstraints()
         
@@ -173,10 +184,24 @@ class BookViewController: UIViewController {
             seeMoreButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight),
             seeMoreButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             seeMoreButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
         seeMoreAppearanceTopAnchor.isActive = true
 //        seeLessAppearanceTopAnchor.isActive = true
+        
+        guard hasAudio else {
+            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+            return
+        }
+        
+        playSampleButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            playSampleButton.heightAnchor.constraint(equalToConstant: PlaySampleButton.buttonHeight),
+            playSampleButton.widthAnchor.constraint(equalTo: contentG.widthAnchor, constant: -Constants.cvPadding * 2),
+            playSampleButton.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
+            playSampleButton.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
+            playSampleButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+        ])
     }
 
 }
