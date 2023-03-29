@@ -8,12 +8,10 @@
 import UIKit
 
 class SeeMoreButton: UIButton {
-
-//    static let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+    
+    // MARK: - Instance properties
     let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-
-//    static let buttonHeight: CGFloat = 110
-    let buttonHeight: CGFloat = 110
+    static let buttonHeight: CGFloat = 110
     
     private lazy var buttonConfig: UIButton.Configuration = {
         var buttonConfig = UIButton.Configuration.plain()
@@ -31,7 +29,6 @@ class SeeMoreButton: UIButton {
     
     lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
-//        gradientLayer.colors = [UIColor.magenta.withAlphaComponent(0).cgColor,    UIColor.magenta.withAlphaComponent(1).cgColor]
         gradientLayer.colors = gradientColors
 //        gradientLayer.locations = [0, 0.75]
         gradientLayer.locations = [0, 0.5]
@@ -40,7 +37,7 @@ class SeeMoreButton: UIButton {
     }()
     
     private var gradientIsAdded = false
-    
+
     private var gradientColors: [CGColor] {
         let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
@@ -56,6 +53,7 @@ class SeeMoreButton: UIButton {
         return height
     }()
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureSelf()
@@ -68,13 +66,11 @@ class SeeMoreButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 //        print("layoutSubviews, button size: \(bounds.size)")
-        
         if !gradientIsAdded {
             addGradient()
-            print("adding gradient")
+//            print("adding gradient")
             gradientIsAdded = true
         }
-
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -101,47 +97,24 @@ class SeeMoreButton: UIButton {
 //        }
 //    }
     
+    // MARK: - Helper methods
     private func configureSelf() {
         self.tintColor = .label
         var config = buttonConfig
         
         // Position button text y-centered in the lower half of the button height
-        let bottomInset = ((buttonHeight / 2) - intrinsicButtonHeight) / 2
+        let bottomInset = ((SeeMoreButton.buttonHeight / 2) - intrinsicButtonHeight) / 2
         print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
-        let topInset = buttonHeight - (intrinsicButtonHeight + bottomInset)
+        let topInset = SeeMoreButton.buttonHeight - (intrinsicButtonHeight + bottomInset)
         config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
                
         self.configuration = config
     }
     
     func addGradient() {
-        gradientLayer.colors = gradientColors
         self.layer.addSublayer(gradientLayer)
-        
         // Ensure that button text and symbol image show above gradient layer
         gradientLayer.zPosition = -1
     }
-    
-    func removeGradient() {
-//        gradientLayer.removeFromSuperlayer()
-        if let gradientLayer = self.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
-            gradientLayer.removeFromSuperlayer()
-
-//            gradientLayer.colors = gradientColors
-        }
-    }
-    
-//    func addGradient() {
-//        let gradientLayer = CAGradientLayer()
-////        gradientLayer.colors = [UIColor.magenta.withAlphaComponent(0).cgColor,    UIColor.magenta.withAlphaComponent(1).cgColor]
-//        gradientLayer.colors = gradientColors
-////        gradientLayer.locations = [0, 0.75]
-//        gradientLayer.locations = [0, 0.5]
-//        gradientLayer.frame = self.bounds
-//        self.layer.addSublayer(gradientLayer)
-//
-//        // Ensure that button text and symbol image show above gradient layer
-//        gradientLayer.zPosition = -1
-//    }
 
 }

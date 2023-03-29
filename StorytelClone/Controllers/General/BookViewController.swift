@@ -20,12 +20,18 @@ class BookViewController: UIViewController {
     
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     private lazy var overviewStackView = BookOverviewStackView(book: book)
-//    private lazy var overviewStackView = BookOverviewStackView(book: book, isFullSize: false)
     
     private let seeMoreButton = SeeMoreButton()
-    private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreButton.buttonHeight / 2)
-    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartForSeeMoreAppearance - seeMoreButton.buttonHeight / 2)
-//    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: 120)
+    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -SeeMoreButton.buttonHeight / 2)
+//    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartForSeeMoreAppearance - seeMoreButton.buttonHeight / 2)
+    private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
+    
+    private let hideView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Utils.customBackgroundColor
+//        view.backgroundColor = .magenta
+        return view
+    }()
     
     init(book: Book) {
         self.book = book
@@ -48,14 +54,17 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(overviewStackView)
         mainScrollView.delegate = self
         
+        view.addSubview(hideView)
+//        mainScrollView.addSubview(hideView)
+
         mainScrollView.addSubview(seeMoreButton)
         addSeeMoreButtonAction()
         
+//        mainScrollView.addSubview(hideView)
 
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
     }
 
@@ -79,73 +88,37 @@ class BookViewController: UIViewController {
     private func addSeeMoreButtonAction() {
         seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            
-            
             self.toggleSeeMoreButton()
-//            self.view.setNeedsLayout()
-//            self.view.layoutIfNeeded()
-
         }), for: .touchUpInside)
     }
     
-//    private func toggleSeeMoreButton() {
-////        seeMoreButton.toggleButtonText()
-//
-//        if overviewStackView.isFullSize {
-//            print("make smaller")
-//
-//            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
-//            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-//
-////            overviewStackView = BookOverviewStackView(book: book, isFullSize: false)
-//
-//
-//        } else {
-//            print("make full size")
-//
-//            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
-//            seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-//
-////            overviewStackView = BookOverviewStackView(book: book, isFullSize: true)
-//
-//        }
-//
-//        let subviews = mainScrollView.subviews
-//        for view in subviews {
-//            if view is BookOverviewStackView {
-//                view.removeFromSuperview()
-//                mainScrollView.addSubview(overviewStackView)
-//                break
-//            }
-//        }
-//
-//        overviewStackView.setNeedsLayout()
-//        overviewStackView.layoutIfNeeded()
-//
-//        mainScrollView.setNeedsLayout()
-//        mainScrollView.layoutIfNeeded()
-//
-//    }
-    
     private func toggleSeeMoreButton() {
         if seeMoreAppearanceTopAnchor.isActive {
+            seeMoreButton.gradientLayer.isHidden = true
+            hideView.isHidden = true
+
             seeMoreAppearanceTopAnchor.isActive = false
             seeLessAppearanceTopAnchor.isActive = true
             print("make larger")
-            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
+            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
             seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-            seeMoreButton.addGradient()
+//            seeMoreButton.gradientLayer.isHidden = false
         } else {
+            hideView.isHidden = false
+
             seeMoreAppearanceTopAnchor.isActive = true
             seeLessAppearanceTopAnchor.isActive = false
             print("make smaller")
-            seeMoreButton.configuration?.attributedTitle = AttributedString("See less")
+            seeMoreButton.configuration?.attributedTitle = AttributedString("See more")
             seeMoreButton.configuration?.attributedTitle?.font = seeMoreButton.font
-            seeMoreButton.removeGradient()
+//            hideView.isHidden = false
+            seeMoreButton.gradientLayer.isHidden = false
         }
         
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
+//        overviewStackView.setNeedsLayout()
+//        overviewStackView.layoutIfNeeded()
+//        view.setNeedsLayout()
+//        view.layoutIfNeeded()
     }
     
     private func applyConstraints() {
@@ -183,16 +156,34 @@ class BookViewController: UIViewController {
 //            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
+        hideView.translatesAutoresizingMaskIntoConstraints = false
+//        let heightConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
+        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
+
+        NSLayoutConstraint.activate([
+//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor, constant: -heightConstant),
+            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
+            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hideView.bottomAnchor.constraint(equalTo: overviewStackView.bottomAnchor)
+            
+//            hideView.bottomAnchor.constraint(equalTo: mainScrollView.bottomAnchor)
+//            hideView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            hideView.bottomAnchor.constraint(equalTo: seeMoreButton.bottomAnchor)
+
+            
+
+//            hideView.topAnchor.constraint(equalTo: topAnchor, constant: heightConstant)
+        ])
+        
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            seeMoreButton.heightAnchor.constraint(equalToConstant: seeMoreButton.buttonHeight),
+            seeMoreButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight),
             seeMoreButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             seeMoreButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
-//        seeMoreAppearanceTopAnchor.isActive = true
-        seeLessAppearanceTopAnchor.isActive = true
-        
+        seeMoreAppearanceTopAnchor.isActive = true
     }
 
 }

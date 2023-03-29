@@ -59,6 +59,15 @@ class BookOverviewStackView: UIStackView {
 //    }()
 //    var maxNumberOfLinesOfMainTextView
     
+    let visiblePartInSeeMoreAppearance: CGFloat = 120
+    
+//    private let hideView: UIView = {
+//        let view = UIView()
+////        view.backgroundColor = Utils.customBackgroundColor
+//        view.backgroundColor = .magenta
+//        return view
+//    }()
+    
     private let mainTextView = BookOverviewStackView.createMainTextView()
     
 //    private lazy var mainTextViewHeightAnchor = mainTextView.heightAnchor.constraint(equalToConstant: 100)
@@ -77,16 +86,18 @@ class BookOverviewStackView: UIStackView {
     private var textViews = [UITextView]()
 //    private var textViewsHeightAnchors = [NSLayoutConstraint]()
     
-    lazy var visiblePartForSeeMoreAppearance: CGFloat = {
-        var textView = BookOverviewStackView.createMainTextView()
-        textView.text = book.overview
-        textView.textContainer.maximumNumberOfLines = 8
-        
-        let width = bounds.width - Constants.cvPadding * 2
-        let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
-        let height = size.height
-        return height
-    }()
+//    lazy var visiblePartForSeeMoreAppearance: CGFloat = {
+//        var textView = BookOverviewStackView.createMainTextView()
+//        textView.text = book.overview
+//        textView.textContainer.maximumNumberOfLines = 8
+//        print("bounds.width: \(bounds.width)")
+////        let width = bounds.width - Constants.cvPadding * 2
+//        let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
+//        let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+//        let height = size.height
+//        print("visiblePartForSeeMoreAppearance: \(height)")
+//        return height
+//    }()
     
     // MARK: - View life cycle
     init(book: Book) {
@@ -97,6 +108,7 @@ class BookOverviewStackView: UIStackView {
         spacing = 16
         configureTextViews()
         textViews.forEach { addArrangedSubview($0) }
+//        addSubview(hideView)
         applyConstraints()
         
         
@@ -218,9 +230,27 @@ class BookOverviewStackView: UIStackView {
         // Ensure that last text view doesn't have even a tiny bottom padding
         lastTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: -4, right: 0)
 
+//        hideView.translatesAutoresizingMaskIntoConstraints = false
+//        let heightConstant = visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
+//        NSLayoutConstraint.activate([
+//            hideView.heightAnchor.constraint(equalTo: heightAnchor, constant: -heightConstant),
+//            hideView.widthAnchor.constraint(equalTo: widthAnchor),
+//            hideView.leadingAnchor.constraint(equalTo: leadingAnchor),
+////            hideView.bottomAnchor.constraint(equalTo: bottomAnchor)
+//            hideView.topAnchor.constraint(equalTo: topAnchor, constant: heightConstant)
+//        ])
+        
+//        let topConstant = visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
+//        NSLayoutConstraint.activate([
+//            hideView.topAnchor.constraint(equalTo: topAnchor, constant: topConstant),
+//            hideView.widthAnchor.constraint(equalTo: widthAnchor),
+//            hideView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            hideView.bottomAnchor.constraint(equalTo: bottomAnchor)
+////            hideView.bottomAnchor.constraint(equalTo: lastTextView.bottomAnchor)
+//        ])
         
         // Force layoutSubviews() ro run second time to get correct bounds.width for setting height of text views
-        layoutIfNeeded()
+//        layoutIfNeeded()
     }
 
 }
