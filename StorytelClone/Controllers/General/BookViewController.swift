@@ -32,8 +32,9 @@ class BookViewController: UIViewController {
 //    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartForSeeMoreAppearance - seeMoreButton.buttonHeight / 2)
     private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
     
-    private lazy var playSampleButton = PlaySampleButton()
-    
+//    private lazy var playSampleButton = PlaySampleButton()
+    private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
+
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     
     private let hideView: UIView = {
@@ -73,7 +74,8 @@ class BookViewController: UIViewController {
         addSeeMoreButtonAction()
         
         if hasAudio {
-            mainScrollView.addSubview(playSampleButton)
+//            mainScrollView.addSubview(playSampleButton)
+            mainScrollView.addSubview(playSampleButtonContainer)
         }
 //        if book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook {
 //        }
@@ -112,26 +114,28 @@ class BookViewController: UIViewController {
     private func addSeeMoreButtonAction() {
         seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self.seeMoreButton.rotateImage()
             self.adjustForSeeMoreSeeLessAppearance()
         }), for: .touchUpInside)
     }
     
     private func adjustForSeeMoreSeeLessAppearance() {
-        seeMoreButton.rotateImage()
-        
         if seeMoreAppearanceTopAnchor.isActive {
+            seeMoreButton.rotateImage()
             seeMoreButton.gradientLayer.isHidden = true
             hideView.isHidden = true
             seeMoreAppearanceTopAnchor.isActive = false
             seeLessAppearanceTopAnchor.isActive = true
             seeMoreButton.setButtonTextTo(text: "See less")
         } else {
-            seeMoreAppearanceTopAnchor.isActive = true
-            seeLessAppearanceTopAnchor.isActive = false
-            seeMoreButton.setButtonTextTo(text: "See more")
-            hideView.isHidden = false
             seeMoreButton.gradientLayer.isHidden = false
+            // Avoid blinking of overviewStackView's text beneath seeMorebutton ensuring that gradientLayer of seeMoreButton is fully drawn before other adjustements are done
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+                self?.seeMoreButton.rotateImage()
+                self?.hideView.isHidden = false
+                self?.seeMoreAppearanceTopAnchor.isActive = true
+                self?.seeLessAppearanceTopAnchor.isActive = false
+                self?.seeMoreButton.setButtonTextTo(text: "See more")
+            }
         }
     }
     
@@ -170,14 +174,14 @@ class BookViewController: UIViewController {
 //            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
-        hideView.translatesAutoresizingMaskIntoConstraints = false
-        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
-        NSLayoutConstraint.activate([
-            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
-            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
-            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        ])
+//        hideView.translatesAutoresizingMaskIntoConstraints = false
+//        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
+//        NSLayoutConstraint.activate([
+//            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
+//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
+//            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//        ])
         
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -189,19 +193,49 @@ class BookViewController: UIViewController {
         seeMoreAppearanceTopAnchor.isActive = true
 //        seeLessAppearanceTopAnchor.isActive = true
         
-        guard hasAudio else {
+        if !hasAudio {
             seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-            return
+        } else {
+            playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
+                playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
+                playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
+                playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
+                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+            ])
         }
         
-        playSampleButton.translatesAutoresizingMaskIntoConstraints = false
+        hideView.translatesAutoresizingMaskIntoConstraints = false
+//        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
         NSLayoutConstraint.activate([
-            playSampleButton.heightAnchor.constraint(equalToConstant: PlaySampleButton.buttonHeight),
-            playSampleButton.widthAnchor.constraint(equalTo: contentG.widthAnchor, constant: -Constants.cvPadding * 2),
-            playSampleButton.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
-            playSampleButton.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
-            playSampleButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
+            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
+            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
+        
+        if !hasAudio {
+            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
+        } else {
+//            hideView.topAnchor.constraint(equalTo: playSampleButton.bottomAnchor).isActive = true
+            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+        }
+        
+        
+//        guard hasAudio else {
+//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//            return
+//        }
+        
+//        playSampleButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            playSampleButton.heightAnchor.constraint(equalToConstant: PlaySampleButton.buttonHeight),
+//            playSampleButton.widthAnchor.constraint(equalTo: contentG.widthAnchor, constant: -Constants.cvPadding * 2),
+//            playSampleButton.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
+//            playSampleButton.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
+//            playSampleButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//        ])
     }
 
 }
