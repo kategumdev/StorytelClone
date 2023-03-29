@@ -34,6 +34,9 @@ class BookViewController: UIViewController {
     
 //    private lazy var playSampleButton = PlaySampleButton()
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
+    
+//    private lazy var tagsView = TagsView(tags: Tag.tagsBookVC)
+    private lazy var tagsView = TagsView(tags: book.tags)
 
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     
@@ -77,9 +80,11 @@ class BookViewController: UIViewController {
 //            mainScrollView.addSubview(playSampleButton)
             mainScrollView.addSubview(playSampleButtonContainer)
         }
-//        if book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook {
-//        }
         
+        if !book.tags.isEmpty {
+            mainScrollView.addSubview(tagsView)
+        }
+
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
@@ -174,15 +179,6 @@ class BookViewController: UIViewController {
 //            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
-//        hideView.translatesAutoresizingMaskIntoConstraints = false
-//        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
-//        NSLayoutConstraint.activate([
-//            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
-//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
-//            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
-//            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//        ])
-        
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             seeMoreButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight),
@@ -193,49 +189,109 @@ class BookViewController: UIViewController {
         seeMoreAppearanceTopAnchor.isActive = true
 //        seeLessAppearanceTopAnchor.isActive = true
         
-        if !hasAudio {
-            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-        } else {
+        if hasAudio {
             playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
+//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
+//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 10),
+                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 32),
+
                 playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
                 playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
                 playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
-                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
             ])
         }
         
+//        if !hasAudio {
+//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//        } else {
+//            playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
+//                playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
+//                playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
+//                playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
+//                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            ])
+//        }
+        
+//        if !book.tags.isEmpty {
+//            tagsView.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                tagsView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor),
+//                tagsView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
+//                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//            ])
+//        } else if hasAudio {
+//            playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//        } else {
+//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//        }
+        
+        
+        
+        
+//        if !hasAudio {
+//            tagsView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
+//        } else {
+//            tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+//        }
+        
+        
+        
+        
+//        hideView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
+//            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//        ])
+//
+//
+//        if !hasAudio {
+//            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
+//        } else {
+//            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+//        }
+        
         hideView.translatesAutoresizingMaskIntoConstraints = false
-//        let topConstant = overviewStackView.visiblePartInSeeMoreAppearance + SeeMoreButton.buttonHeight
         NSLayoutConstraint.activate([
-//            hideView.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: topConstant),
             hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
             hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
             hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
         
-        if !hasAudio {
-            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
-        } else {
-//            hideView.topAnchor.constraint(equalTo: playSampleButton.bottomAnchor).isActive = true
+        if !book.tags.isEmpty {
+            tagsView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                tagsView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor),
+                tagsView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
+                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+            ])
+            
+            if !hasAudio {
+                tagsView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
+            } else {
+                tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+            }
+            
+            hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
+        } else if hasAudio {
+            playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
             hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+        } else {
+            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
         }
         
-        
-//        guard hasAudio else {
-//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-//            return
+//        
+//        if !hasAudio {
+//            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
+//        } else {
+//            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
 //        }
         
-//        playSampleButton.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            playSampleButton.heightAnchor.constraint(equalToConstant: PlaySampleButton.buttonHeight),
-//            playSampleButton.widthAnchor.constraint(equalTo: contentG.widthAnchor, constant: -Constants.cvPadding * 2),
-//            playSampleButton.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
-//            playSampleButton.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
-//            playSampleButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
-//        ])
     }
 
 }

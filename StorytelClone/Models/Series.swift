@@ -18,7 +18,7 @@ struct Series: Title {
     let books: [Book]
     let narrators: [Narrator]?
     
-    init(title: String, authors: [Author], coverImage: UIImage?, titleKind: TitleKind, category: ButtonCategory, language: Language, numberOfFollowers: Int, books: [Book], narrators: [Narrator]? = nil) {
+    init(title: String, authors: [Author], coverImage: UIImage?, titleKind: TitleKind = .series, category: ButtonCategory, language: Language, numberOfFollowers: Int, books: [Book], narrators: [Narrator]? = nil) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage

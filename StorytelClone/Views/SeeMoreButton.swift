@@ -86,6 +86,7 @@ class SeeMoreButton: UIButton {
         }
     }
     
+    // MARK: - Helper methods
     func setButtonTextTo(text: String) {
         configuration?.attributedTitle = AttributedString(text)
         configuration?.attributedTitle?.font = font
