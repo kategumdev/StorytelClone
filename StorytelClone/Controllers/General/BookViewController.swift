@@ -263,7 +263,7 @@ class BookViewController: UIViewController {
         ])
         
         if !book.tags.isEmpty {
-            tagsView.translatesAutoresizingMaskIntoConstraints = false
+//            tagsView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 tagsView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor),
                 tagsView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),

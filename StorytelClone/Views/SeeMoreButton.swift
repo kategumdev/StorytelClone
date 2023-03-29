@@ -116,7 +116,7 @@ class SeeMoreButton: UIButton {
         
         // Position button text y-centered in the lower half of the button height
         let bottomInset = ((SeeMoreButton.buttonHeight / 2) - intrinsicButtonHeight) / 2
-        print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
+//        print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
         let topInset = SeeMoreButton.buttonHeight - (intrinsicButtonHeight + bottomInset)
         config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
                

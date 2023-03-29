@@ -107,7 +107,7 @@ struct Book: Title {
     
     static let book22 = Book(title: "La travesía final", authors: [Author.pabloToledo], coverImage: UIImage(named: "image22"), titleKind: .ebook, category: .novela, rating: 4.7, tags: Tag.tags)
     
-    static let book23 = Book(title: "El hombre nacido en Danzig", authors: [Author.pabloToledo], coverImage: UIImage(named: "image23"), titleKind: .ebook, category: .novela, rating: 0.0)
+    static let book23 = Book(title: "El hombre nacido en Danzig", authors: [Author.pabloToledo], coverImage: UIImage(named: "image23"), titleKind: .ebook, overview: "Riquelme, el detective, es un tipo gris pero eficiente que no está convencido de revelar los resultados de sus investigaciones. Su cliente, protagonista de esa novela, es un hombre doliente y confundido porque su mujer, Elisa Miller, lo ha abandonado. Elena, Mónica, Sonia, son las sombras que atormentan con sus apariciones al desubicado personaje. Séneca, Schopenhauer y Weininger, pero también el jugador de basquetbol Magic Johnson, son las voces que agitan la conciencia del hombre cada vez que éste sostiene diálogos con sus héroes morales y deportivos.", category: .novela, rating: 0.0)
     
     
     

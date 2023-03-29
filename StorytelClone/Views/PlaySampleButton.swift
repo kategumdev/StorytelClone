@@ -44,6 +44,14 @@ class PlaySampleButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            button.layer.borderColor = UIColor.label.cgColor
+        }
+    }
+    
     // MARK: - Helper methods
     private func applyConstraints() {
         button.translatesAutoresizingMaskIntoConstraints = false
