@@ -98,8 +98,8 @@ class BookDetailsScrollView: UIScrollView {
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-        layer.borderColor = UIColor.tertiaryLabel.cgColor
-        layer.borderWidth = 0.5
+        layer.borderColor = BookViewController.lightBordersColor
+        layer.borderWidth = BookViewController.lightBordersWidth
         showsHorizontalScrollIndicator = false
         configureMainStack()
         addSubview(mainStackView)

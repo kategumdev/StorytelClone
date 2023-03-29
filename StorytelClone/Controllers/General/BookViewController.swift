@@ -9,6 +9,12 @@ import UIKit
 
 class BookViewController: UIViewController {
     
+    // MARK: - Static properties
+    // For ShowSeriesButtonContainer and BookDetailsScrollView
+    static let lightBordersColor = UIColor.quaternaryLabel.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).cgColor
+    static let lightBordersWidth = 0.7
+    
+    // MARK: - Instance properties
     var book: Book
     
     private let mainScrollView = UIScrollView()
@@ -31,9 +37,8 @@ class BookViewController: UIViewController {
         view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
-    
-//    private var currentTransform = CGAffineTransform.identity
-    
+        
+    // MARK: - View life cycle
     init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -53,16 +58,15 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(bookDetailsStackView)
         mainScrollView.addSubview(bookDetailsScrollView)
         mainScrollView.addSubview(overviewStackView)
+        setupTapGesture()
+        
         mainScrollView.delegate = self
         
         view.addSubview(hideView)
-//        mainScrollView.addSubview(hideView)
 
         mainScrollView.addSubview(seeMoreButton)
         addSeeMoreButtonAction()
         
-//        mainScrollView.addSubview(hideView)
-
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
@@ -70,6 +74,16 @@ class BookViewController: UIViewController {
     }
     
     // MARK: - Helper methods
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        tapGesture.cancelsTouchesInView = false
+        overviewStackView.addGestureRecognizer(tapGesture)
+    }
+
+    @objc func handleTapGesure() {
+        adjustForSeeMoreSeeLessAppearance()
+    }
+    
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
         
@@ -87,10 +101,8 @@ class BookViewController: UIViewController {
     private func addSeeMoreButtonAction() {
         seeMoreButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            
 //            self.seeMoreButton.rotateImage()
             self.adjustForSeeMoreSeeLessAppearance()
-            
         }), for: .touchUpInside)
     }
     
@@ -170,7 +182,6 @@ class BookViewController: UIViewController {
 }
 
 extension BookViewController: UIScrollViewDelegate {
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
 

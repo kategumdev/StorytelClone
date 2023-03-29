@@ -30,8 +30,7 @@ class ShowSeriesButtonContainer: UIView {
         let imageView = UIImageView()
         let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
         let image = UIImage(systemName: "chevron.forward", withConfiguration: config)
-        imageView.image = image?.withRenderingMode(.alwaysOriginal)
-        imageView.image?.withTintColor(.label)
+        imageView.image = image
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         return imageView
@@ -39,10 +38,9 @@ class ShowSeriesButtonContainer: UIView {
     
     private let seriesButtonLeadingImage: UIImageView = {
         let imageView = UIImageView()
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
         let image = UIImage(systemName: "rectangle.stack", withConfiguration: config)
-        imageView.image = image?.withRenderingMode(.alwaysOriginal)
-        imageView.image?.withTintColor(.label)
+        imageView.image = image
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         return imageView
@@ -51,8 +49,10 @@ class ShowSeriesButtonContainer: UIView {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.borderColor = UIColor.tertiaryLabel.cgColor
-        layer.borderWidth = 0.5
+//        layer.borderColor = UIColor.quaternaryLabel.cgColor
+//        layer.borderWidth = 0.8
+        layer.borderColor = BookViewController.lightBordersColor
+        layer.borderWidth = BookViewController.lightBordersWidth
         addSubview(showSeriesButton)
         applyConstraints()
     }

@@ -112,11 +112,6 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        print("BookDetailsStackView height: \(bounds.height)")
-//    }
-    
     // MARK: - Helper methods
     private func configureSelf() {
         axis = .vertical

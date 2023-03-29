@@ -69,7 +69,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
-    func setupTapGesture() {
+    private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
         tapGesture.cancelsTouchesInView = false
         resultsTable.addGestureRecognizer(tapGesture)
