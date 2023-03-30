@@ -35,6 +35,9 @@ class BookViewController: UIViewController {
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
     
     private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: view.bounds.width)
+    private lazy var showAllTagsButton = SeeMoreButton(forOverview: false)
+    private lazy var showAllTagsButtonTopAnchor = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.compressedViewHeight)
+    private lazy var seeLessTagsButtonTopAnchor = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
 
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     
@@ -87,6 +90,10 @@ class BookViewController: UIViewController {
         
         if !book.tags.isEmpty {
             mainScrollView.addSubview(tagsView)
+            if tagsView.needsShowAllButton {
+                mainScrollView.addSubview(showAllTagsButton)
+                addShowAllTagsButtonAction()
+            }
         }
     }
     
@@ -121,6 +128,13 @@ class BookViewController: UIViewController {
         }), for: .touchUpInside)
     }
     
+    private func addShowAllTagsButtonAction() {
+        showAllTagsButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.adjustForSeeMoreSeeLessAppearanceTagsButton()
+        }), for: .touchUpInside)
+    }
+    
     private func adjustForSeeMoreSeeLessAppearance() {
         if seeMoreAppearanceTopAnchor.isActive {
             seeMoreButton.rotateImage()
@@ -139,6 +153,23 @@ class BookViewController: UIViewController {
                 self?.seeLessAppearanceTopAnchor.isActive = false
                 self?.seeMoreButton.setButtonTextTo(text: "See more")
             }
+        }
+    }
+    
+    private func adjustForSeeMoreSeeLessAppearanceTagsButton() {
+        if showAllTagsButtonTopAnchor.isActive {
+            showAllTagsButton.rotateImage()
+//            seeMoreButton.gradientLayer.isHidden = true
+//            hideView.isHidden = true
+            showAllTagsButtonTopAnchor.isActive = false
+            seeLessTagsButtonTopAnchor.isActive = true
+            showAllTagsButton.setButtonTextTo(text: "See less")
+        } else {
+            showAllTagsButton.rotateImage()
+//            self?.hideView.isHidden = false
+            showAllTagsButtonTopAnchor.isActive = true
+            seeLessTagsButtonTopAnchor.isActive = false
+            showAllTagsButton.setButtonTextTo(text: "Show all tags")
         }
     }
     
@@ -207,7 +238,7 @@ class BookViewController: UIViewController {
             NSLayoutConstraint.activate([
                 tagsView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor),
                 tagsView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
-                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
+//                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
             ])
             
             if !hasAudio {
@@ -216,7 +247,26 @@ class BookViewController: UIViewController {
                 tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
             }
             
-            hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
+            print("compressedHeight: \(tagsView.compressedViewHeight), full height: \(tagsView.bounds.height), needsShowAllButton: \(tagsView.needsShowAllButton)")
+            
+            if tagsView.needsShowAllButton {
+//                print("compressedHeight: \(tagsView.compressedViewHeight), full height: \(tagsView.bounds.height), needsShowAllButton: \(tagsView.needsShowAllButton)")
+                showAllTagsButton.translatesAutoresizingMaskIntoConstraints = false
+                showAllTagsButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight / 2).isActive = true
+                showAllTagsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+                showAllTagsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+
+                showAllTagsButtonTopAnchor.isActive = true
+
+                showAllTagsButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+
+                hideView.topAnchor.constraint(equalTo: showAllTagsButton.bottomAnchor).isActive = true
+            } else {
+                hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
+                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+            }
+            
+//            hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
         } else if hasAudio {
             playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
             hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true

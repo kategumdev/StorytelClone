@@ -44,6 +44,19 @@ class TagsView: UIView {
     
     private var tagButtons = [UIButton]()
     
+//    private lazy var compressedViewHeight: CGFloat = 0
+    lazy var compressedViewHeight: CGFloat = {
+        let height = calculateViewHeightFor(numberOfRows: 3)
+        return height
+    }()
+    
+    var fullViewHeight: CGFloat = 0
+    lazy var needsShowAllButton = fullViewHeight > compressedViewHeight ? true : false
+
+    private let topPadding: CGFloat = 18
+    private let spacingBetweenButtons: CGFloat = 7
+    private let spacingBetweenRows: CGFloat = 11
+    
     // MARK: - View life cycle
     init(tags: [Tag], superviewWidth: CGFloat) {
         self.tags = tags
@@ -80,6 +93,12 @@ class TagsView: UIView {
         }
     }
     
+    private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
+        let spacings = CGFloat(spacingBetweenRows) * (numberOfRows - 1) + topPadding
+        let viewHeight = numberOfRows * TagsView.buttonHeight + spacings + tagsLabel.frame.height
+        return viewHeight
+    }
+    
     private func applyConstraints() {
         tagsLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -91,10 +110,8 @@ class TagsView: UIView {
 //        let containerWidth = UIScreen.main.bounds.width - Constants.cvPadding * 2
         let containerWidth = superviewWidth - Constants.cvPadding * 2
         // Position the buttons
-        let spacingBetweenButtons: CGFloat = 7
-        let spacingBetweenRows: CGFloat = 11
         var currentLeadingConstant: CGFloat = Constants.cvPadding
-        var currentTopConstant: CGFloat = 18
+        var currentTopConstant = topPadding
         var numberOfRows: CGFloat = 1
         
         for button in tagButtons {
@@ -115,11 +132,11 @@ class TagsView: UIView {
 
         }
         
-        // Set view's height
+        // Set full view height
         translatesAutoresizingMaskIntoConstraints = false
-        let spacings = CGFloat(spacingBetweenRows) * (numberOfRows - 1) + 18
-        let viewHeight = numberOfRows * TagsView.buttonHeight + spacings + tagsLabel.frame.height
-        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+        let fullViewHeight = calculateViewHeightFor(numberOfRows: numberOfRows)
+        heightAnchor.constraint(equalToConstant: fullViewHeight).isActive = true
+        self.fullViewHeight = fullViewHeight
     }
     
 }
