@@ -16,6 +16,7 @@ class BookViewController: UIViewController {
     
     // MARK: - Instance properties
     var book: Book
+    private let tableSection = TableSection(sectionTitle: "Similar titles")
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0
@@ -28,7 +29,7 @@ class BookViewController: UIViewController {
     private lazy var overviewStackView = BookOverviewStackView(book: book)
     
     private let seeMoreOverviewButton = SeeMoreButton(forOverview: true)
-    private lazy var seeMoreOverviewButtonTopAnchorFullSizeAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -SeeMoreButton.buttonHeight / 2)
+    private lazy var seeMoreOverviewButtonTopAnchorFullSizeAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreOverviewButton.seeMoreOverviewButtonHeight / 2)
     private lazy var seeMoreOverviewButtonTopAnchorCompressedAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
     
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
@@ -44,6 +45,36 @@ class BookViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
         return view
+    }()
+    
+    let bookTable: UITableView = {
+        let table = UITableView(frame: .zero, style: .grouped)
+        table.backgroundColor = Utils.customBackgroundColor
+        table.showsVerticalScrollIndicator = false
+        table.separatorColor = UIColor.clear
+        table.allowsSelection = false
+        
+        // Avoid gap at the very bottom of the table view
+//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
+//        table.contentInset = inset
+        
+        table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+//        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
+        
+        // Avoid gaps between sections and custom section headers
+        table.sectionFooterHeight = 0
+        
+        // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
+//        table.estimatedSectionHeaderHeight = 60
+        
+//        table.tableHeaderView = FeedTableHeaderView()
+        // These two lines avoid constraints' conflict of header and its label when view just loaded
+//        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+//        table.tableHeaderView?.fillSuperview()
+        
+        table.isScrollEnabled = false
+        return table
     }()
         
     // MARK: - View life cycle
@@ -63,6 +94,11 @@ class BookViewController: UIViewController {
         configureMainScrollView()
         view.addSubview(hideView)
 //        hideView.layer.zPosition = -1
+        
+//        mainScrollView.addSubview(bookTable)
+//        bookTable.dataSource = self
+//        bookTable.delegate = self
+        
         applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
@@ -94,6 +130,10 @@ class BookViewController: UIViewController {
                 addShowAllTagsButtonAction()
             }
         }
+        
+        mainScrollView.addSubview(bookTable)
+        bookTable.dataSource = self
+        bookTable.delegate = self
     }
     
     private func setupTapGesture() {
@@ -205,7 +245,7 @@ class BookViewController: UIViewController {
         
         seeMoreOverviewButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            seeMoreOverviewButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight),
+            seeMoreOverviewButton.heightAnchor.constraint(equalToConstant: seeMoreOverviewButton.seeMoreOverviewButtonHeight),
             seeMoreOverviewButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             seeMoreOverviewButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         ])
@@ -247,28 +287,53 @@ class BookViewController: UIViewController {
                         
             if tagsView.needsShowAllButton {
                 showAllTagsButton.translatesAutoresizingMaskIntoConstraints = false
-                showAllTagsButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight / 2).isActive = true
+//                showAllTagsButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight / 2).isActive = true
+//                showAllTagsButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight / 4).isActive = true
+                showAllTagsButton.heightAnchor.constraint(equalToConstant: showAllTagsButton.showAllTagButtonHeight).isActive = true
+
                 showAllTagsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
                 showAllTagsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
 
                 showAllTagsButtonTopAnchorCompressedAppearance.isActive = true
 
-                showAllTagsButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//                showAllTagsButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
 
-                hideView.topAnchor.constraint(equalTo: showAllTagsButton.bottomAnchor).isActive = true
+//                hideView.topAnchor.constraint(equalTo: showAllTagsButton.bottomAnchor).isActive = true
             } else {
-                hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
-                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//                hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
+//                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
             }
             
 //            hideView.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
         } else if hasAudio {
-            playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+//            playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
         } else {
-            seeMoreOverviewButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-            hideView.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor).isActive = true
+//            seeMoreOverviewButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
+//            hideView.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor).isActive = true
         }
+        
+        // Configure bookTable constraints
+        bookTable.translatesAutoresizingMaskIntoConstraints = false
+        if !book.tags.isEmpty {
+            if tagsView.needsShowAllButton {
+                bookTable.topAnchor.constraint(equalTo: showAllTagsButton.bottomAnchor).isActive = true
+            } else {
+                bookTable.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
+            }
+        } else if hasAudio {
+            bookTable.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
+        } else {
+            bookTable.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor).isActive = true
+        }
+        bookTable.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true
+        bookTable.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
+        bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.cvPadding).isActive = true
+        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection) + Utils.heightForRowWithHorizontalCv
+        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
+        
+        hideView.topAnchor.constraint(equalTo: bookTable.bottomAnchor).isActive = true
+
     }
 
 }
@@ -286,4 +351,66 @@ extension BookViewController: UIScrollViewDelegate {
         // Toggle navbar from transparent to visible (and vice versa)
         adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
     }
+}
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension BookViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+        
+        let books = Book.books
+//        let books = category.tableSections[indexPath.section].books
+        
+        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
+        let callbackClosure: ButtonCallback = { [weak self] book in
+            let book = book as! Book
+            let controller = BookViewController(book: book)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+ 
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return Utils.heightForRowWithHorizontalCv
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+
+        sectionHeader.configureFor(section: self.tableSection)
+//        sectionHeader.configureFor(section: category.tableSections[section])
+
+        // Respond to seeAllButton in section header
+        sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
+            guard let self = self else { return }
+            let controller = SeeAllViewController(tableSection: tableSection)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        return sectionHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        // Get height for headers with button
+//        let section = TableSection(sectionTitle: "Similar titles")
+        #warning("This section has to be configured properly")
+        
+        let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection)
+        return calculatedHeight
+    }
+    
 }

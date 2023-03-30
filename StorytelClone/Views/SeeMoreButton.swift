@@ -10,7 +10,14 @@ import UIKit
 class SeeMoreButton: UIButton {
     // MARK: - Instance properties
     let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-    static let buttonHeight: CGFloat = 110
+//    static let seeMoreOverviewButtonHeight: CGFloat = 110
+    let seeMoreOverviewButtonHeight: CGFloat = 110
+    
+    lazy var showAllTagButtonHeight: CGFloat = {
+        let topInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+        let height = intrinsicButtonHeight + topInset
+        return height
+    }()
     
     private lazy var buttonConfig: UIButton.Configuration = {
         var buttonConfig = UIButton.Configuration.plain()
@@ -126,11 +133,19 @@ class SeeMoreButton: UIButton {
         
         if forOverview {
             // Position button text y-centered in the lower half of the button height
-            let bottomInset = ((SeeMoreButton.buttonHeight / 2) - intrinsicButtonHeight) / 2
+            let bottomInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
     //        print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
-            let topInset = SeeMoreButton.buttonHeight - (intrinsicButtonHeight + bottomInset)
+            let topInset = seeMoreOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
         } else {
+            // Position button text at the bottom of the button
+            let topInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+            let height = intrinsicButtonHeight + topInset
+            
+//            let topInset = SeeMoreButton.buttonHeight / 4 - intrinsicButtonHeight
+            config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
+            
+            
             backgroundColor = Utils.customBackgroundColor
         }
         
