@@ -229,12 +229,18 @@ class BookViewController: UIViewController {
         if hasAudio {
             playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 32),
-
+//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 32),
+//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
                 playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
                 playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor),
                 playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
             ])
+            
+            if hasTags {
+                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 32).isActive = true
+            } else {
+                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight).isActive = true
+            }
         }
         
         // Configure tagsView constraints

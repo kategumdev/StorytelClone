@@ -139,7 +139,7 @@ class SeeMoreButton: UIButton {
         self.configuration = config
     }
     
-    func addGradient() {
+    private func addGradient() {
         self.layer.addSublayer(gradientLayer)
         // Ensure that button text and symbol image show above gradient layer
         gradientLayer.zPosition = -1
