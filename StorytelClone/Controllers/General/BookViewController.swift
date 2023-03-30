@@ -81,6 +81,7 @@ class BookViewController: UIViewController {
         
         mainScrollView.delegate = self
         
+        #warning("add seeMoreButton only if its height is greater than its compressed size, do checks like when adding showAllTagsButton")
         mainScrollView.addSubview(seeMoreButton)
         addSeeMoreButtonAction()
 
@@ -139,7 +140,7 @@ class BookViewController: UIViewController {
         if seeMoreAppearanceTopAnchor.isActive {
             seeMoreButton.rotateImage()
             seeMoreButton.gradientLayer.isHidden = true
-            hideView.isHidden = true
+//            hideView.isHidden = true
             seeMoreAppearanceTopAnchor.isActive = false
             seeLessAppearanceTopAnchor.isActive = true
             seeMoreButton.setButtonTextTo(text: "See less")
@@ -148,7 +149,7 @@ class BookViewController: UIViewController {
             // Avoid blinking of overviewStackView's text beneath seeMorebutton ensuring that gradientLayer of seeMoreButton is fully drawn before other adjustements are done
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
                 self?.seeMoreButton.rotateImage()
-                self?.hideView.isHidden = false
+//                self?.hideView.isHidden = false
                 self?.seeMoreAppearanceTopAnchor.isActive = true
                 self?.seeLessAppearanceTopAnchor.isActive = false
                 self?.seeMoreButton.setButtonTextTo(text: "See more")
@@ -227,6 +228,7 @@ class BookViewController: UIViewController {
         }
 
         hideView.translatesAutoresizingMaskIntoConstraints = false
+        #warning("Make hideView high enough to cover hidden tags. In cases overview is short, but there are many tags, tags may show below mainScrollView contentSize bottom (when scrolled to bottom, on spring)")
         NSLayoutConstraint.activate([
             hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
             hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
@@ -246,11 +248,8 @@ class BookViewController: UIViewController {
             } else {
                 tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
             }
-            
-            print("compressedHeight: \(tagsView.compressedViewHeight), full height: \(tagsView.bounds.height), needsShowAllButton: \(tagsView.needsShowAllButton)")
-            
+                        
             if tagsView.needsShowAllButton {
-//                print("compressedHeight: \(tagsView.compressedViewHeight), full height: \(tagsView.bounds.height), needsShowAllButton: \(tagsView.needsShowAllButton)")
                 showAllTagsButton.translatesAutoresizingMaskIntoConstraints = false
                 showAllTagsButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight / 2).isActive = true
                 showAllTagsButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
