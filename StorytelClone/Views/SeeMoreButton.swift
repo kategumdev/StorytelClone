@@ -58,7 +58,7 @@ class SeeMoreButton: UIButton {
     private let forOverview: Bool
     
     // MARK: - View life cycle
-    init(forOverview: Bool = true) {
+    init(forOverview: Bool) {
         self.forOverview = forOverview
         super.init(frame: .zero)
         configureSelf()

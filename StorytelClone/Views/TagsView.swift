@@ -22,7 +22,6 @@ class TagsView: UIView {
         buttonConfig.attributedTitle = AttributedString(text)
         buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
         buttonConfig.titleAlignment = .center
-//        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.cvPadding, bottom: 7, trailing: Constants.cvPadding)
         
         button.configuration = buttonConfig
@@ -58,7 +57,6 @@ class TagsView: UIView {
     var fullViewHeight: CGFloat = 0
     lazy var needsShowAllButton = fullViewHeight > compressedViewHeight ? true : false
 
-//    private let topPadding: CGFloat = 18
     private let firstButtonTopConstant: CGFloat = 18
     private let spacingBetweenButtons: CGFloat = 7
     private let spacingBetweenRows: CGFloat = 11
@@ -92,24 +90,15 @@ class TagsView: UIView {
     // MARK: - Helper methods
     private func createTagButtons() {
         let tagTitles = tags.map { $0.tagTitle }
-        
         for title in tagTitles {
             let button = TagsView.createButtonWith(text: title)
             button.layer.cornerRadius = button.frame.height / 2
             tagButtons.append(button)
         }
-        
-//        for button in tagButtons {
-//            button.layer.cornerRadius = buttonHeight / 2
-//        }
     }
     
     private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
-//        let spacings = CGFloat(spacingBetweenRows) * (numberOfRows - 1) + firstButtonTopConstant
         let spacings = firstButtonTopConstant + CGFloat(spacingBetweenRows) * (numberOfRows - 1)
-
-//        let viewHeight = numberOfRows * TagsView.buttonHeight + spacings + tagsLabel.frame.height
-//        let viewHeight = numberOfRows * buttonHeight + spacings + tagsLabel.frame.height
         let viewHeight = tagsLabel.frame.height + numberOfRows * buttonHeight + spacings
         return viewHeight
     }
@@ -122,11 +111,9 @@ class TagsView: UIView {
             tagsLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
 
-//        let containerWidth = UIScreen.main.bounds.width - Constants.cvPadding * 2
         let containerWidth = superviewWidth - Constants.cvPadding * 2
         // Position the buttons
         var currentLeadingConstant: CGFloat = Constants.cvPadding
-//        let firstButtonTopConstant = topPadding
         var numberOfRows: CGFloat = 1
         
         for (index, button) in tagButtons.enumerated() {
@@ -135,8 +122,6 @@ class TagsView: UIView {
             if index == 0 {
                 button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: currentLeadingConstant).isActive = true
                 button.topAnchor.constraint(equalTo: tagsLabel.bottomAnchor, constant: firstButtonTopConstant).isActive = true
-
-                #warning("set max button width and truncating tail")
             } else {
                 let previousButton = tagButtons[index - 1]
                 
@@ -155,7 +140,7 @@ class TagsView: UIView {
 
         }
         
-        // Set full view height
+        // Enable top-to-bottom auto layout approach for the view
         let lastButton = tagButtons.last!
         translatesAutoresizingMaskIntoConstraints = false
         lastButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
@@ -163,46 +148,5 @@ class TagsView: UIView {
         let fullViewHeight = calculateViewHeightFor(numberOfRows: numberOfRows)
         self.fullViewHeight = fullViewHeight
     }
-    
-    
-//    private func applyConstraints() {
-//        tagsLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            tagsLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2),
-//            tagsLabel.topAnchor.constraint(equalTo: topAnchor),
-//            tagsLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-//        ])
-//
-////        let containerWidth = UIScreen.main.bounds.width - Constants.cvPadding * 2
-//        let containerWidth = superviewWidth - Constants.cvPadding * 2
-//        // Position the buttons
-//        var currentLeadingConstant: CGFloat = Constants.cvPadding
-//        var currentTopConstant = topPadding
-//        var numberOfRows: CGFloat = 1
-//
-//        for button in tagButtons {
-//            button.translatesAutoresizingMaskIntoConstraints = false
-//            button.heightAnchor.constraint(equalToConstant: TagsView.buttonHeight).isActive = true
-//
-//            if currentLeadingConstant + button.frame.width > containerWidth {
-//                // Move to the next row
-//                currentLeadingConstant = Constants.cvPadding
-//                currentTopConstant += TagsView.buttonHeight + spacingBetweenRows
-//                numberOfRows += 1
-//            }
-//
-//            button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: currentLeadingConstant).isActive = true
-//            button.topAnchor.constraint(equalTo: tagsLabel.bottomAnchor, constant: currentTopConstant).isActive = true
-//
-//            currentLeadingConstant += button.frame.width + spacingBetweenButtons
-//
-//        }
-//
-//        // Set full view height
-//        translatesAutoresizingMaskIntoConstraints = false
-//        let fullViewHeight = calculateViewHeightFor(numberOfRows: numberOfRows)
-//        heightAnchor.constraint(equalToConstant: fullViewHeight).isActive = true
-//        self.fullViewHeight = fullViewHeight
-//    }
     
 }

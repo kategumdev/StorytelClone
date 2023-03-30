@@ -8,10 +8,8 @@
 import UIKit
 
 class BookDetailsStackView: UIStackView {
-    
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
-    #warning("Try to make this property not static to know if it works")
     
     // MARK: - Instance properties
     private let book: Book
@@ -21,7 +19,6 @@ class BookDetailsStackView: UIStackView {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
-//        imageView.layer.borderWidth = 0.26
         imageView.layer.borderWidth = 0.6
         imageView.clipsToBounds = true
         imageView.image = UIImage(named: "image1")
@@ -62,14 +59,13 @@ class BookDetailsStackView: UIStackView {
         authorLabel.attributedText = attributedString
     }
         
-    // Lazy var to avoid instantiation if it's not needed in this view
     private lazy var narratorLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         return label
     }()
     private var hasNarratorLabel = true
-//
+
     private func configureNarratorLabel(withName name: String) {
         let attributedString = NSMutableAttributedString(string: "With: \(name)")
         let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
@@ -86,7 +82,6 @@ class BookDetailsStackView: UIStackView {
         narratorLabel.attributedText = attributedString
     }
     
-    // Lazy var to avoid instantiation if it's not needed in this view
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
     
@@ -123,7 +118,6 @@ class BookDetailsStackView: UIStackView {
             coverImageWidthAnchor.constant = resizedImage.size.width
         }
         addArrangedSubview(coverImageView)
-//        setCustomSpacing(24.0, after: coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)
 
         bookTitleLabel.text = book.title
