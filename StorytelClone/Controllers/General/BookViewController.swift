@@ -32,11 +32,9 @@ class BookViewController: UIViewController {
 //    private lazy var seeLessAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartForSeeMoreAppearance - seeMoreButton.buttonHeight / 2)
     private lazy var seeMoreAppearanceTopAnchor = seeMoreButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
     
-//    private lazy var playSampleButton = PlaySampleButton()
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
     
-//    private lazy var tagsView = TagsView(tags: Tag.tagsBookVC)
-    private lazy var tagsView = TagsView(tags: book.tags)
+    private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: view.bounds.width)
 
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     
@@ -60,7 +58,17 @@ class BookViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         title = book.title
-            
+        configureMainScrollView()
+        view.addSubview(hideView)
+//        hideView.layer.zPosition = -1
+        applyConstraints()
+        
+        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+        extendedLayoutIncludesOpaqueBars = true
+    }
+    
+    // MARK: - Helper methods
+    private func configureMainScrollView() {
         mainScrollView.showsVerticalScrollIndicator = false
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(bookDetailsStackView)
@@ -70,28 +78,18 @@ class BookViewController: UIViewController {
         
         mainScrollView.delegate = self
         
-        view.addSubview(hideView)
-//        hideView.layer.zPosition = -1
-
         mainScrollView.addSubview(seeMoreButton)
         addSeeMoreButtonAction()
-        
+
         if hasAudio {
-//            mainScrollView.addSubview(playSampleButton)
             mainScrollView.addSubview(playSampleButtonContainer)
         }
         
         if !book.tags.isEmpty {
             mainScrollView.addSubview(tagsView)
         }
-
-        applyConstraints()
-        
-        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-        extendedLayoutIncludesOpaqueBars = true
     }
     
-    // MARK: - Helper methods
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
         tapGesture.cancelsTouchesInView = false
@@ -176,7 +174,6 @@ class BookViewController: UIViewController {
             overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 18),
             overviewStackView.widthAnchor.constraint(equalTo: contentG.widthAnchor),
             overviewStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-//            overviewStackView.bottomAnchor.constraint(equalTo: seeMoreView.topAnchor)
         ])
         
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
@@ -184,77 +181,20 @@ class BookViewController: UIViewController {
             seeMoreButton.heightAnchor.constraint(equalToConstant: SeeMoreButton.buttonHeight),
             seeMoreButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             seeMoreButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
         ])
         seeMoreAppearanceTopAnchor.isActive = true
-//        seeLessAppearanceTopAnchor.isActive = true
         
         if hasAudio {
             playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
-//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 10),
                 playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight + 32),
 
                 playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
                 playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
                 playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
-//                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
             ])
         }
-        
-//        if !hasAudio {
-//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-//        } else {
-//            playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                playSampleButtonContainer.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
-//                playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
-//                playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor),
-//                playSampleButtonContainer.centerXAnchor.constraint(equalTo: mainScrollView.centerXAnchor),
-//                playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
-//            ])
-//        }
-        
-//        if !book.tags.isEmpty {
-//            tagsView.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                tagsView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor),
-//                tagsView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
-//                tagsView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor)
-//            ])
-//        } else if hasAudio {
-//            playSampleButtonContainer.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-//        } else {
-//            seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
-//        }
-        
-        
-        
-        
-//        if !hasAudio {
-//            tagsView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
-//        } else {
-//            tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
-//        }
-        
-        
-        
-        
-//        hideView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
-//            hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
-//            hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//        ])
-//
-//
-//        if !hasAudio {
-//            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
-//        } else {
-//            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
-//        }
-        
+
         hideView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             hideView.heightAnchor.constraint(equalTo: overviewStackView.heightAnchor),
@@ -284,14 +224,6 @@ class BookViewController: UIViewController {
             seeMoreButton.bottomAnchor.constraint(equalTo: contentG.bottomAnchor).isActive = true
             hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
         }
-        
-//        
-//        if !hasAudio {
-//            hideView.topAnchor.constraint(equalTo: seeMoreButton.bottomAnchor).isActive = true
-//        } else {
-//            hideView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
-//        }
-        
     }
 
 }
