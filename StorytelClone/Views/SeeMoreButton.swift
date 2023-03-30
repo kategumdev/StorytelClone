@@ -7,13 +7,13 @@
 
 import UIKit
 
+// For SeeMoreOverviewButton and showAllTagsButton in BookViewController
 class SeeMoreButton: UIButton {
     // MARK: - Instance properties
     let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//    static let seeMoreOverviewButtonHeight: CGFloat = 110
     let seeMoreOverviewButtonHeight: CGFloat = 110
     
-    lazy var showAllTagButtonHeight: CGFloat = {
+    lazy var showAllTagsButtonHeight: CGFloat = {
         let topInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
         let height = intrinsicButtonHeight + topInset
         return height
@@ -23,7 +23,6 @@ class SeeMoreButton: UIButton {
         var buttonConfig = UIButton.Configuration.plain()
         let text = forOverview == true ? "See more" : "Show all tags"
         buttonConfig.attributedTitle = AttributedString(text)
-//        buttonConfig.attributedTitle = AttributedString("See more")
         buttonConfig.attributedTitle?.font = font
         buttonConfig.titleAlignment = .center
         
@@ -62,6 +61,7 @@ class SeeMoreButton: UIButton {
     
     private var currentTransform = CGAffineTransform.identity
     
+    // true if initializing seeMoreOverviewButton, false if initializing showAllTagsButton in BookViewController
     private let forOverview: Bool
     
     // MARK: - View life cycle
@@ -70,11 +70,6 @@ class SeeMoreButton: UIButton {
         super.init(frame: .zero)
         configureSelf()
     }
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        configureSelf()
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -82,10 +77,8 @@ class SeeMoreButton: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         if !gradientIsAdded && forOverview {
             addGradient()
-//            print("adding gradient")
             gradientIsAdded = true
         }
     }
@@ -134,27 +127,14 @@ class SeeMoreButton: UIButton {
         if forOverview {
             // Position button text y-centered in the lower half of the button height
             let bottomInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
-    //        print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
             let topInset = seeMoreOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
         } else {
             // Position button text at the bottom of the button
-            let topInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
-            let height = intrinsicButtonHeight + topInset
-            
-//            let topInset = SeeMoreButton.buttonHeight / 4 - intrinsicButtonHeight
+            let topInset = showAllTagsButtonHeight - intrinsicButtonHeight
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
-            
-            
             backgroundColor = Utils.customBackgroundColor
         }
-        
-        
-//        // Position button text y-centered in the lower half of the button height
-//        let bottomInset = ((SeeMoreButton.buttonHeight / 2) - intrinsicButtonHeight) / 2
-////        print("intrinsicButtonHeight: \(intrinsicButtonHeight), bottomInset: \(bottomInset)")
-//        let topInset = SeeMoreButton.buttonHeight - (intrinsicButtonHeight + bottomInset)
-//        config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
                
         self.configuration = config
     }
