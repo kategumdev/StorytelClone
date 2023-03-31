@@ -169,13 +169,13 @@ class RoundButtonsStackContainer: UIStackView {
     private func handleSaveButtonTapped() {
         
         if isBookAlreadySaved {
-            // User removes book, image should be toggled after animation completes
+            // User removes book, image should be changed after animation completes
             animateSaveButtonImageView(withCompletion: { [weak self] (_) in
                 guard let self = self else { return }
                 self.saveOrRemoveBookAndToggleImage()
             })
         } else {
-            // User adds book, image should be toggled before animation begins
+            // User adds book, image should be changed before animation begins
             saveOrRemoveBookAndToggleImage()
             animateSaveButtonImageView(withCompletion: nil)
         }
@@ -186,7 +186,7 @@ class RoundButtonsStackContainer: UIStackView {
         // Set the initial transform of the view
         imageView.transform = CGAffineTransform.identity
         
-        UIView.animateKeyframes(withDuration: 0.7, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
+        UIView.animateKeyframes(withDuration: 0.6, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
 
             let duration1 = 0.15 // shorter duration for 1st keyframe
             let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
@@ -224,13 +224,15 @@ class RoundButtonsStackContainer: UIStackView {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.saveButton.setImage(newImage, for: .normal)
-        self.isBookAlreadySaved = !self.isBookAlreadySaved
 
         if self.isBookAlreadySaved {
-            toReadBooks.append(self.book)
-        } else {
             toReadBooks.removeAll { $0.title == self.book.title }
+        } else {
+            toReadBooks.append(self.book)
         }
+        
+        // Toggle isBookAlreadySaved
+        self.isBookAlreadySaved = !self.isBookAlreadySaved
     }
     
     private func applyConstraints() {
