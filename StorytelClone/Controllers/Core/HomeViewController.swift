@@ -43,7 +43,8 @@ class HomeViewController: BaseTableViewController {
         super.viewWillAppear(animated)
 //        print("viewWillAppear")
         let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
+//        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
         
         
         guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
@@ -68,6 +69,18 @@ class HomeViewController: BaseTableViewController {
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         navigationItem.backButtonTitle = ""
+    }
+    
+    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//            print("to visible")
+        }
+        
+        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//            print("to transparent")
+        }
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -141,35 +154,35 @@ class HomeViewController: BaseTableViewController {
         }
     }
 
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard isInitialOffsetYSet else {
-            tableViewInitialOffsetY = scrollView.contentOffset.y
-            isInitialOffsetYSet = true
-//            print("initialOffsetY is SET")
-            return
-        }
-
-        // Toggle navbar from transparent to visible as it does by default, but add another blur
-        let currentOffsetY = scrollView.contentOffset.y
-        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
-    }
+//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard isInitialOffsetYSet else {
+//            tableViewInitialOffsetY = scrollView.contentOffset.y
+//            isInitialOffsetYSet = true
+////            print("initialOffsetY is SET")
+//            return
+//        }
+//
+//        // Toggle navbar from transparent to visible as it does by default, but add another blur
+//        let currentOffsetY = scrollView.contentOffset.y
+//        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
+//    }
 
 }
 
 // MARK: - Helper methods
 extension HomeViewController {
     
-    private func adjustNavBarAppearance(forCurrentOffsetY currentOffsetY: CGFloat) {
-        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//            print("to visible")
-        }
-        
-        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-//            print("to transparent")
-        }
-    }
+//    private func adjustNavBarAppearance(forCurrentOffsetY currentOffsetY: CGFloat) {
+//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+////            print("to transparent")
+//        }
+//    }
     
     private func wideButtonCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}

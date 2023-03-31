@@ -21,10 +21,11 @@ class NoButtonSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Instance properties
-    private let containerWithSubviews: SectionHeaderSubviewsContainer = {
+    let containerWithSubviews: SectionHeaderSubviewsContainer = {
         let container = SectionHeaderSubviewsContainer(withButton: false)
         return container
     }()
+    #warning("Make this property private")
 
     // MARK: - View life cycle
     override init(reuseIdentifier: String?) {

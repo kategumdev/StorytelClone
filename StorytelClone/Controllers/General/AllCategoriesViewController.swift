@@ -29,7 +29,7 @@ class AllCategoriesViewController: BaseTableViewController {
         
         guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
         headerView.headerLabel.text = category.title
-        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
+        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategoryOrSectionTitle
         
         title = category.title
         navigationItem.backButtonTitle = ""

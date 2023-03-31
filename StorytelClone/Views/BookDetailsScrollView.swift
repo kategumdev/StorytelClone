@@ -173,16 +173,9 @@ class BookDetailsScrollView: UIScrollView {
     private func addCategoryButtonAction() {
         categoryButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self.handleCategoryButtonTapped()
             self.callback()
         }), for: .touchUpInside)
     }
-//    
-//    private func handleCategoryButtonTapped() {
-//        let category = ButtonCategory.createModelFor(categoryButton: book.category)
-//        let controller = CategoryViewController(categoryModel: category)
-//        self.navigationController?.pushViewController(controller, animated: true)
-//    }
     
     private func applyConstraints() {
         let contentG = contentLayoutGuide

@@ -11,14 +11,17 @@ class BaseTableViewController: UIViewController {
     
     // MARK: - Instance properties
     let category: Category
+    let tableViewStyle: UITableView.Style
+    
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
     private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
- 
-    let bookTable: UITableView = {
-        let table = UITableView(frame: .zero, style: .grouped)
+    
+    lazy var bookTable: UITableView = {
+//        let table = UITableView(frame: .zero, style: .grouped)
+        let table = UITableView(frame: .zero, style: tableViewStyle)
         table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
@@ -45,10 +48,45 @@ class BaseTableViewController: UIViewController {
         
         return table
     }()
+ 
+//    let bookTable: UITableView = {
+//        let table = UITableView(frame: .zero, style: .grouped)
+//        table.backgroundColor = Utils.customBackgroundColor
+//        table.showsVerticalScrollIndicator = false
+//        table.separatorColor = UIColor.clear
+//        table.allowsSelection = false
+//
+//        // Avoid gap at the very bottom of the table view
+//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
+//        table.contentInset = inset
+//
+//        table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+//        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+//        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
+//
+//        // Avoid gaps between sections and custom section headers
+//        table.sectionFooterHeight = 0
+//
+//        // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
+////        table.estimatedSectionHeaderHeight = 60
+//
+//        table.tableHeaderView = FeedTableHeaderView()
+//        // These two lines avoid constraints' conflict of header and its label when view just loaded
+//        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+//        table.tableHeaderView?.fillSuperview()
+//
+//        return table
+//    }()
 
     // MARK: - View life cycle
-    init(categoryModel: Category) {
+//    init(categoryModel: Category) {
+//        self.category = categoryModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+    init(categoryModel: Category, tableViewStyle: UITableView.Style = .grouped) {
         self.category = categoryModel
+        self.tableViewStyle = tableViewStyle
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,6 +114,23 @@ class BaseTableViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
     }
+    
+    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+        
+        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+        
+        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+        
+        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//            print("to visible")
+        }
+        
+        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//            print("to transparent")
+        }
+    }
 
 }
 
@@ -90,7 +145,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         return category.tableSections.count
     }
     
-    // This has to be overriden by subclasses
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return UITableViewCell()
     }
@@ -178,22 +232,22 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Helper methods
 extension BaseTableViewController {
     
-    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-        
-        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
-        
-        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
-        
-        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//            print("to visible")
-        }
-        
-        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-//            print("to transparent")
-        }
-    }
+//    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+//
+//        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+//
+//        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+//
+//        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+////            print("to transparent")
+//        }
+//    }
 
     func layoutHeaderView() {
 //                print("layoutHeaderView")

@@ -20,7 +20,8 @@ class TagsView: UIView {
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)
-        buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
+//        buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
+        buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
         buttonConfig.titleAlignment = .center
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.cvPadding, bottom: 7, trailing: Constants.cvPadding)
         

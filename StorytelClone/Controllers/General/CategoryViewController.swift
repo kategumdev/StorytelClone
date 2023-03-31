@@ -10,12 +10,11 @@ import UIKit
 // Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
 class CategoryViewController: BaseTableViewController {
 
-    // MARK: - Superclass overrides
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
         headerView.headerLabel.text = category.title
-        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
+        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategoryOrSectionTitle
         
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
@@ -28,6 +27,7 @@ class CategoryViewController: BaseTableViewController {
         adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
     }
     
+    // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         

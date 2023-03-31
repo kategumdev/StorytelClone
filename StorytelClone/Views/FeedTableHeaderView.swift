@@ -12,7 +12,7 @@ class FeedTableHeaderView: UIView {
     // MARK: - Static properties
     static let labelBottomAnchor: CGFloat = 4
     static let labelTopAnchorForGreeting: CGFloat = 15
-    static let labelTopAnchorForCategory: CGFloat = 19
+    static let labelTopAnchorForCategoryOrSectionTitle: CGFloat = 19
     static let labelLeadingAnchor = Constants.cvPadding
     static let labelTrailingAnchor: CGFloat = 46
     

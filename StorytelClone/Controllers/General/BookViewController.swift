@@ -129,23 +129,6 @@ class BookViewController: UIViewController {
         handleSeeMoreOverviewButtonTapped()
     }
     
-//    private func addCategoryButtonAction() {
-//        categoryButton.addAction(UIAction(handler: { [weak self] _ in
-//            guard let self = self else { return }
-//            self.handleCategoryButtonTapped()
-//        }), for: .touchUpInside)
-//    }
-    
-//    private func passCallbackForCategoryButtonTapped() {
-//        bookDetailsScrollView.callback = { [weak self] in
-//            guard let self = self else { return }
-//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//            let controller = CategoryViewController(categoryModel: category)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//    }
-    
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
         
@@ -370,7 +353,9 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         // Respond to seeAllButton in section header
         sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
             guard let self = self else { return }
-            let controller = SeeAllViewController(tableSection: tableSection)
+//            let controller = SeeAllViewController(tableSection: tableSection)
+            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         return sectionHeader

@@ -7,6 +7,7 @@
 
 import UIKit
 
+#warning("Replace all uses of this class with AllTitlesViewController and delete this file")
 // Presented when seeAllButton tapped
 class SeeAllViewController: UIViewController {
     
