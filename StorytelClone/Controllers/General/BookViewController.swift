@@ -355,7 +355,8 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
 //            let controller = SeeAllViewController(tableSection: tableSection)
             let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category)
+//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category)
+            let controller = AllTitlesViewController(tableSection: tableSection, book: self.book, categoryOfParentVC: category)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         return sectionHeader

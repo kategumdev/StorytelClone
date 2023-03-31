@@ -12,9 +12,11 @@ class CategoryViewController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-        headerView.headerLabel.text = category.title
-        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategoryOrSectionTitle
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
+//        headerView.headerLabel.text = category.title
+//        headerView.topAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
+        headerView.configureWith(title: category.title)
+        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true

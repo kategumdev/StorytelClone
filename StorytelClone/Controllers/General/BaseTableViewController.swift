@@ -112,7 +112,7 @@ class BaseTableViewController: UIViewController {
     }
     
     func addTableHeaderView() {
-        bookTable.tableHeaderView = FeedTableHeaderView()
+        bookTable.tableHeaderView = TableHeaderView()
         // These two lines avoid constraints' conflict of header and its label when view just loaded
         bookTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
         bookTable.tableHeaderView?.fillSuperview()
@@ -282,7 +282,7 @@ extension BaseTableViewController {
     }
     
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
-        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         
         let height = tableHeader.bounds.size.height + 10
         let maxOffset = tableViewInitialOffsetY + height

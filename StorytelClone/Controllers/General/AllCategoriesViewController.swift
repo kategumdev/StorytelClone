@@ -27,9 +27,12 @@ class AllCategoriesViewController: BaseTableViewController {
         
         bookTable.estimatedSectionHeaderHeight = 0
         
-        guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-        headerView.headerLabel.text = category.title
-        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategoryOrSectionTitle
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
+        headerView.configureWith(title: category.title)
+        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
+
+//        headerView.headerLabel.text = category.title
+//        headerView.topAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
         title = category.title
         navigationItem.backButtonTitle = ""

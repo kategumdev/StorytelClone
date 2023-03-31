@@ -68,7 +68,7 @@
 		5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */; };
 		5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */; };
 		5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */; };
-		5AF93323299D689F00DF17C7 /* FeedTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93322299D689F00DF17C7 /* FeedTableHeaderView.swift */; };
+		5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93322299D689F00DF17C7 /* TableHeaderView.swift */; };
 		5AF93326299D722100DF17C7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93325299D722100DF17C7 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -155,7 +155,7 @@
 		5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCellWithCollection.swift; sourceTree = "<group>"; };
 		5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderSubviewsContainer.swift; sourceTree = "<group>"; };
-		5AF93322299D689F00DF17C7 /* FeedTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableHeaderView.swift; sourceTree = "<group>"; };
+		5AF93322299D689F00DF17C7 /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
 		5AF93325299D722100DF17C7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -294,7 +294,7 @@
 		5ABBA3FE299C0F2000D0E0F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5AF93322299D689F00DF17C7 /* FeedTableHeaderView.swift */,
+				5AF93322299D689F00DF17C7 /* TableHeaderView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
@@ -487,7 +487,7 @@
 				5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */,
 				5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */,
 				5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */,
-				5AF93323299D689F00DF17C7 /* FeedTableHeaderView.swift in Sources */,
+				5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
 				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift in Sources */,
 				5A5A1FDB29D3235600AA08BB /* SeeMoreButton.swift in Sources */,

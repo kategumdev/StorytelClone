@@ -47,14 +47,14 @@ class HomeViewController: BaseTableViewController {
         adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
         
         
-        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         tableHeader.updateGreetingsLabel()
     }
     
     override func viewDidLayoutSubviews() {
 //        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
-        guard let tableHeader = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
+        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         tableHeader.updateGreetingsLabel()
         layoutHeaderView()
     }

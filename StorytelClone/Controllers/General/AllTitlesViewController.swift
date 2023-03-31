@@ -10,13 +10,22 @@ import UIKit
 class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
+    let book: Book
+    
     let books = Book.books
     
-    init(tableSection: TableSection, categoryOfParentVC: Category) {
+    init(tableSection: TableSection, book: Book, categoryOfParentVC: Category) {
         self.tableSection = tableSection
+        self.book = book
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
         #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
     }
+    
+//    init(tableSection: TableSection, categoryOfParentVC: Category) {
+//        self.tableSection = tableSection
+//        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
+//        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -37,9 +46,11 @@ class AllTitlesViewController: BaseTableViewController {
     private func customizeBookTable() {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         
-        guard let headerView = bookTable.tableHeaderView as? FeedTableHeaderView else { return }
-        headerView.headerLabel.text = tableSection.sectionTitle
-        headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategoryOrSectionTitle
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
+//        headerView.configureWith(title: tableSection.sectionTitle)
+//        headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!")
+        headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
     
     // MARK: - Superclass overrides
