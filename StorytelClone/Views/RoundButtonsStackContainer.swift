@@ -89,10 +89,6 @@ class RoundButtonsStackContainer: UIStackView {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
         button.setImage(image, for: .normal)
-        
-//        let image = UIImage(systemName: "heart")
-//        button.setImage(image, for: .normal)
-        
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
@@ -100,14 +96,10 @@ class RoundButtonsStackContainer: UIStackView {
         var config = UIButton.Configuration.plain()
         config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
         button.configuration = config
-//        button.imageView?.backgroundColor = .magenta
-//        button.imageView?.contentMode = .scaleAspectFit
-//        button.imageView?.bounds.size.width = 25
-//        button.imageView?.bounds.size.height = 25
         return button
     }()
     
-    private var isSaved = false
+    private var isBookAlreadySaved = false
     
     private let saveLabel: UILabel = {
         let font = Utils.sectionSubtitleFont
@@ -121,13 +113,6 @@ class RoundButtonsStackContainer: UIStackView {
     private var hasReadButton = true
     
     // MARK: - View life cycle
-//    init(forBookKind bookKind: TitleKind) {
-//        self.bookKind = bookKind
-//        super.init(frame: .zero)
-//        configureSelf()
-//        applyConstraints()
-//    }
-    
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
@@ -172,127 +157,80 @@ class RoundButtonsStackContainer: UIStackView {
         }
         
         addSaveButtonAction()
-        
     }
     
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self.isSaved = !self.isSaved
-//            print("\n isSaved to \(self.isSaved)")
-            self.toggleSaveButtonImage()
-            
-//            if self.isSaved {
-//                toReadBooks.append(self.book)
-//            } else {
-//                toReadBooks.removeAll { $0.title == self.book.title }
-//            }
-            
+            self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
     
-    private func toggleSaveButtonImage() {
-//        isSaved = !isSaved
-//        let newImageName = isSaved ? "heart.fill" : "heart"
-        let newImageName = isSaved ? "heart" : "heart.fill"
+    private func handleSaveButtonTapped() {
         
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let image = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-        
-//        saveButton.setImage(image, for: .normal)
-        
+        if isBookAlreadySaved {
+            // User removes book, image should be toggled after animation completes
+            animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+                guard let self = self else { return }
+                self.saveOrRemoveBookAndToggleImage()
+            })
+        } else {
+            // User adds book, image should be toggled before animation begins
+            saveOrRemoveBookAndToggleImage()
+            animateSaveButtonImageView(withCompletion: nil)
+        }
+    }
+    
+    private func animateSaveButtonImageView(withCompletion completion: ((Bool) -> Void)?) {
         let imageView = saveButton.imageView!
         // Set the initial transform of the view
         imageView.transform = CGAffineTransform.identity
         
-        if isSaved {
-//            saveButton.setImage(image, for: .normal)
-            
-            UIView.animateKeyframes(withDuration: 0.8, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
+        UIView.animateKeyframes(withDuration: 0.7, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
 
-                let duration1 = 0.15 // shorter duration for 1st keyframe
-                let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
-                let duration4 = 0.15 // shorter duration for 4th keyframe
+            let duration1 = 0.15 // shorter duration for 1st keyframe
+            let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
+            let duration4 = 0.15 // shorter duration for 4th keyframe
 
-                // First keyframe: animate to 30% of initial size
-                UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: duration1) {
-                    imageView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-                }
+            // First keyframe: animate to 30% of initial size
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: duration1) {
+                imageView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+            }
 
-                // Second keyframe: animate back to 100% of initial size with longer duration
-                UIView.addKeyframe(withRelativeStartTime: duration1, relativeDuration: duration2) {
-                    imageView.transform = CGAffineTransform.identity
-                }
+            // Second keyframe: animate back to 100% of initial size with longer duration
+            UIView.addKeyframe(withRelativeStartTime: duration1, relativeDuration: duration2) {
+                imageView.transform = CGAffineTransform.identity
+            }
 
-                // Third keyframe: animate to 50% of initial size with the same duration as 2nd keyframe
-                UIView.addKeyframe(withRelativeStartTime: duration1 + duration2, relativeDuration: duration2) {
-                    imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-                }
+            // Third keyframe: animate to 50% of initial size with the same duration as 2nd keyframe
+            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2, relativeDuration: duration2) {
+                imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+            }
 
-                // Fourth keyframe: animate back to 100% of initial size with spring animation
-                UIView.addKeyframe(withRelativeStartTime: duration1 + duration2 + duration2, relativeDuration: duration4) {
-                    imageView.transform = CGAffineTransform.identity
-                }
-                
-                UIView.animate(withDuration: duration4, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: [.allowUserInteraction], animations: {
-                    imageView.transform = CGAffineTransform.identity
-                }, completion: nil )
-
-            }, completion: { [weak self] (_) in
-                guard let self = self else { return }
-                self.saveButton.setImage(image, for: .normal)
-                self.isSaved = !self.isSaved
-                
-                if self.isSaved {
-                    toReadBooks.append(self.book)
-                } else {
-                    toReadBooks.removeAll { $0.title == self.book.title }
-                }
-                
-            })
-
-        } else {
-            saveButton.setImage(image, for: .normal)
-            isSaved = !isSaved
-            if self.isSaved {
-                toReadBooks.append(self.book)
-            } else {
-                toReadBooks.removeAll { $0.title == self.book.title }
+            // Fourth keyframe: animate back to 100% of initial size with spring animation
+            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2 + duration2, relativeDuration: duration4) {
+                imageView.transform = CGAffineTransform.identity
             }
             
-            UIView.animateKeyframes(withDuration: 0.8, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
-
-                let duration1 = 0.15 // shorter duration for 1st keyframe
-                let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
-                let duration4 = 0.15 // shorter duration for 4th keyframe
-
-                // First keyframe: animate to 30% of initial size
-                UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: duration1) {
-                    imageView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-                }
-
-                // Second keyframe: animate back to 100% of initial size with longer duration
-                UIView.addKeyframe(withRelativeStartTime: duration1, relativeDuration: duration2) {
-                    imageView.transform = CGAffineTransform.identity
-                }
-
-                // Third keyframe: animate to 50% of initial size with the same duration as 2nd keyframe
-                UIView.addKeyframe(withRelativeStartTime: duration1 + duration2, relativeDuration: duration2) {
-                    imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-                }
-
-                // Fourth keyframe: animate back to 100% of initial size with spring animation
-                UIView.addKeyframe(withRelativeStartTime: duration1 + duration2 + duration2, relativeDuration: duration4) {
-                    imageView.transform = CGAffineTransform.identity
-                }
-                
-                UIView.animate(withDuration: duration4, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: [.allowUserInteraction], animations: {
-                    imageView.transform = CGAffineTransform.identity
-                }, completion: nil )
-
+            UIView.animate(withDuration: duration4, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: [.allowUserInteraction], animations: {
+                imageView.transform = CGAffineTransform.identity
             }, completion: nil )
-        }
 
+        }, completion: completion)
+    }
+    
+    private func saveOrRemoveBookAndToggleImage() {
+        let newImageName = isBookAlreadySaved ? "heart" : "heart.fill"
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
+        self.saveButton.setImage(newImage, for: .normal)
+        self.isBookAlreadySaved = !self.isBookAlreadySaved
+
+        if self.isBookAlreadySaved {
+            toReadBooks.append(self.book)
+        } else {
+            toReadBooks.removeAll { $0.title == self.book.title }
+        }
     }
     
     private func applyConstraints() {
@@ -363,10 +301,6 @@ class RoundButtonsStackContainer: UIStackView {
             viewWithReadButton.translatesAutoresizingMaskIntoConstraints = false
             viewWithReadButton.widthAnchor.constraint(equalTo: readButton.widthAnchor).isActive = true
         }
-
-        // Set height of stack view
-//        viewWithSaveButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-
     }
     
 }
