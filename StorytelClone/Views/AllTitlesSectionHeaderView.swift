@@ -8,7 +8,6 @@
 import UIKit
 
 class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
-
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 23
@@ -28,13 +27,19 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Instance properties
+    private let stackViewHeight: CGFloat = 26
+    
     private let titleLabel = createLabel()
     private lazy var shareButton = createButtonWithImageWith(symbolName: "paperplane")
     private lazy var filterButton = createButtonWithImageWith(symbolName: "arrow.up.arrow.down")
+
     private lazy var vertBarView: UIView = {
         let view = UIView()
 //        view.backgroundColor = .systemGray3
         view.backgroundColor = .tertiaryLabel
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: stackViewHeight).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 1).isActive = true
         return view
     }()
     
@@ -43,7 +48,7 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.distribution = .equalSpacing
-        [shareButton, vertBarView, filterButton].forEach { stack.addArrangedSubview($0)}
+//        [shareButton, vertBarView, filterButton].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
     
@@ -78,24 +83,15 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     func showOnlyFilterButton() {
-        shareButton.isHidden = true
-        vertBarView.isHidden = true
-//        stackShareFilter.removeArrangedSubview(filterButton)
-//        let spacerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 5, height: 5)))
-//        let spacerView = UIView()
-//        spacerView.translatesAutoresizingMaskIntoConstraints = false
-//        spacerView.widthAnchor.constraint(equalToConstant: 8).isActive = true
-//        spacerView.heightAnchor.constraint(equalToConstant: 8).isActive = true
-//        spacerView.backgroundColor = .blue
-//
-        stackShareFilter.insertArrangedSubview(spacerView, at: 0)
-//        sectionHeader.stackShareFilter.addArrangedSubview(sectionHeader.filterButton)
+        [spacerView, filterButton].forEach { stackShareFilter.addArrangedSubview($0)}
     }
     
     func showOnlyShareButton() {
-        filterButton.isHidden = true
-        vertBarView.isHidden = true
-        stackShareFilter.insertArrangedSubview(spacerView, at: 0)
+        [spacerView, shareButton].forEach { stackShareFilter.addArrangedSubview($0)}
+    }
+    
+    func showShareAndFilterButtons() {
+        [shareButton, vertBarView, filterButton].forEach { stackShareFilter.addArrangedSubview($0)}
     }
     
     private func createButtonWithImageWith(symbolName: String) -> UIButton {
@@ -112,7 +108,6 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSectionHeaderView.topAndBottomPadding),
-//            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
             titleLabel.trailingAnchor.constraint(equalTo: stackShareFilter.leadingAnchor, constant: -Constants.cvPadding),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSectionHeaderView.topAndBottomPadding)
         ])
@@ -122,12 +117,8 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
             stackShareFilter.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -26),
             stackShareFilter.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             stackShareFilter.widthAnchor.constraint(equalToConstant: 96),
-            stackShareFilter.heightAnchor.constraint(equalToConstant: 26)
+            stackShareFilter.heightAnchor.constraint(equalToConstant: stackViewHeight)
         ])
-        
-        vertBarView.translatesAutoresizingMaskIntoConstraints = false
-        vertBarView.heightAnchor.constraint(equalTo: stackShareFilter.heightAnchor).isActive = true
-        vertBarView.widthAnchor.constraint(equalToConstant: 1).isActive = true
     }
 
 }

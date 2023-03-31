@@ -41,10 +41,10 @@ class BaseTableViewController: UIViewController {
         // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
 //        table.estimatedSectionHeaderHeight = 60
         
-        table.tableHeaderView = FeedTableHeaderView()
-        // These two lines avoid constraints' conflict of header and its label when view just loaded
-        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
-        table.tableHeaderView?.fillSuperview()
+//        table.tableHeaderView = FeedTableHeaderView()
+//        // These two lines avoid constraints' conflict of header and its label when view just loaded
+//        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+//        table.tableHeaderView?.fillSuperview()
         
         return table
     }()
@@ -101,6 +101,7 @@ class BaseTableViewController: UIViewController {
         bookTable.delegate = self
         bookTable.dataSource = self
         
+        addTableHeaderView()
         configureNavBar()
     }
     
@@ -108,6 +109,13 @@ class BaseTableViewController: UIViewController {
         super.viewDidLayoutSubviews()
         bookTable.frame = view.bounds
         layoutHeaderView()
+    }
+    
+    func addTableHeaderView() {
+        bookTable.tableHeaderView = FeedTableHeaderView()
+        // These two lines avoid constraints' conflict of header and its label when view just loaded
+        bookTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        bookTable.tableHeaderView?.fillSuperview()
     }
 
     func configureNavBar() {

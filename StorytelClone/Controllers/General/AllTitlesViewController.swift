@@ -10,13 +10,10 @@ import UIKit
 class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
-    let categoryOfParentVC: Category
-    
     let books = Book.books
     
     init(tableSection: TableSection, categoryOfParentVC: Category) {
         self.tableSection = tableSection
-        self.categoryOfParentVC = categoryOfParentVC
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
         #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
     }
@@ -70,21 +67,9 @@ class AllTitlesViewController: BaseTableViewController {
             return UIView()
         }
         sectionHeader.configureWith(title: "All titles")
+        sectionHeader.showShareAndFilterButtons()
+//        sectionHeader.showOnlyShareButton()
 //        sectionHeader.showOnlyFilterButton()
-        sectionHeader.showOnlyShareButton()
-        
-        
-//        sectionHeader.shareButton.isHidden = true
-//        sectionHeader.vertBarView.isHidden = true
-//        sectionHeader.stackShareFilter.removeArrangedSubview(sectionHeader.filterButton)
-//        let spacerView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 5, height: 5)))
-//        let spacerView = UIView()
-//        spacerView.translatesAutoresizingMaskIntoConstraints = false
-//        spacerView.widthAnchor.constraint(equalToConstant: 8).isActive = true
-//        spacerView.heightAnchor.constraint(equalToConstant: 8).isActive = true
-//        spacerView.backgroundColor = .blue
-//        [spacerView, sectionHeader.filterButton].forEach { sectionHeader.stackShareFilter.addArrangedSubview($0) }
-//        sectionHeader.stackShareFilter.addArrangedSubview(sectionHeader.filterButton)
         return sectionHeader
     }
     
