@@ -125,7 +125,7 @@ struct Category {
         self.title = title
         self.tableSections = tableSections
     }
-    
+        
     static let series = Category(
         title: ButtonCategory.series.rawValue,
         tableSections: [

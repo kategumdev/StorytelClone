@@ -18,6 +18,7 @@ class CategoryViewController: BaseTableViewController {
         headerView.topAnchorConstraint.constant = FeedTableHeaderView.labelTopAnchorForCategory
         
         navigationItem.backButtonTitle = ""
+        extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewWillAppear(_ animated: Bool) {

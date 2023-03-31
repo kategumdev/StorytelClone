@@ -94,6 +94,10 @@ class BookDetailsScrollView: UIScrollView {
     
     private lazy var categoryStackWidthAnchor =         categoryStack.widthAnchor.constraint(equalToConstant: categoryButton.bounds.width)
     
+    // Closure to tell owning controller to push new vc
+//    typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
+    var callback: () -> () = {}
+    
     // MARK: - View life cycle
     init(book: Book) {
         self.book = book
@@ -143,6 +147,7 @@ class BookDetailsScrollView: UIScrollView {
 
         let categoryText = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         configure(button: categoryButton, withText: categoryText)
+        addCategoryButtonAction()
         
         // Add arrangedSubviews
         mainStackView.addArrangedSubview(ratingStack)
@@ -164,6 +169,20 @@ class BookDetailsScrollView: UIScrollView {
         
         mainStackView.addArrangedSubview(categoryStack)
     }
+    
+    private func addCategoryButtonAction() {
+        categoryButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+//            self.handleCategoryButtonTapped()
+            self.callback()
+        }), for: .touchUpInside)
+    }
+//    
+//    private func handleCategoryButtonTapped() {
+//        let category = ButtonCategory.createModelFor(categoryButton: book.category)
+//        let controller = CategoryViewController(categoryModel: category)
+//        self.navigationController?.pushViewController(controller, animated: true)
+//    }
     
     private func applyConstraints() {
         let contentG = contentLayoutGuide

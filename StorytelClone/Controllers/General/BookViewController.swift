@@ -79,6 +79,7 @@ class BookViewController: UIViewController {
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
+        navigationItem.backButtonTitle = ""
     }
     
     // MARK: - Helper methods
@@ -88,6 +89,12 @@ class BookViewController: UIViewController {
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(bookDetailsStackView)
         mainScrollView.addSubview(bookDetailsScrollView)
+        bookDetailsScrollView.callback = { [weak self] in
+            guard let self = self else { return }
+            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+            let controller = CategoryViewController(categoryModel: category)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
         
         mainScrollView.addSubview(overviewStackView)
         setupTapGesture()
@@ -121,6 +128,23 @@ class BookViewController: UIViewController {
     @objc func handleTapGesure() {
         handleSeeMoreOverviewButtonTapped()
     }
+    
+//    private func addCategoryButtonAction() {
+//        categoryButton.addAction(UIAction(handler: { [weak self] _ in
+//            guard let self = self else { return }
+//            self.handleCategoryButtonTapped()
+//        }), for: .touchUpInside)
+//    }
+    
+//    private func passCallbackForCategoryButtonTapped() {
+//        bookDetailsScrollView.callback = { [weak self] in
+//            guard let self = self else { return }
+//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//            let controller = CategoryViewController(categoryModel: category)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//    }
     
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
