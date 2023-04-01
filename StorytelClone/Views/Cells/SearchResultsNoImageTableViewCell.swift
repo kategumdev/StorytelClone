@@ -68,7 +68,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         return stack
     }()
         
-    private var padding: CGFloat = 0
+//    private var padding: CGFloat = 0
     
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

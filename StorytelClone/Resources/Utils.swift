@@ -60,6 +60,8 @@ struct Utils {
     static let peachCategoryColor = UIColor(red: 245/255, green: 202/255, blue: 191/255, alpha: 1)
     static let greenCategoryColor = UIColor(red: 189/255, green: 210/255, blue: 163/255, alpha: 1)
     
+    static let seeAllButtonColor = UIColor.label.withAlphaComponent(0.7)
+    
     // MARK: - Constructors
     static let transparentNavBarAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()

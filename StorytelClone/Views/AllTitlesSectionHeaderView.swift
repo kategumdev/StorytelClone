@@ -59,7 +59,7 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         return view
     }()
-    
+        
     // MARK: - View life cycle
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)

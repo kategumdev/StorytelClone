@@ -8,47 +8,23 @@
 import UIKit
 
 class TableHeaderView: UIView {
-
     // MARK: - Instance properties
-//    private let stackBottomAnchor: CGFloat = 4
     private let stackBottomAnchor: CGFloat = 14
     private let stackTopAnchorForGreeting: CGFloat = 15
     let stackTopAnchorForCategoryOrSectionTitle: CGFloat = 19
     private let stackLeadingAnchor = Constants.cvPadding
-//    private let stackTrailingAnchor: CGFloat = 46
     private let stackTrailingAnchor: CGFloat = Constants.cvPadding
     
     lazy var stackTopAnchorConstraint = stackView.topAnchor.constraint(equalTo: topAnchor, constant: stackTopAnchorForGreeting)
     lazy var stackBottomAnchorConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -stackBottomAnchor)
 
-    
-
-//    private let headerLabel: UILabel = {
-//        let label = UILabel()
-//        label.numberOfLines = 4
-//        label.lineBreakMode = .byWordWrapping
-//
-//        label.adjustsFontForContentSizeCategory = true
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 31)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
-//        label.font = scaledFont
-//        return label
-//    }()
     private let headerLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 31), maximumPointSize: 50, numberOfLines: 4)
 
     private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 13), maximumPointSize: 32, numberOfLines: 2)
-//    private lazy var bookTitleForSimilarLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 32, numberOfLines: 2)
-//        return label
-//    }()
 
     private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
-//    private lazy var sectionDescriptionLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 32, numberOfLines: 3)
-//        return label
-//    }()
+    
+    private lazy var followSeriesView = FollowSeriesView()
 
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -97,20 +73,13 @@ class TableHeaderView: UIView {
         stackView.spacing = 15
     }
     
-    private func applyConstraints() {
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAnchor),
-//            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -stackBottomAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackTrailingAnchor)
-        ])
-        stackTopAnchorConstraint.isActive = true
-        stackBottomAnchorConstraint.isActive = true
-
-        dimView.translatesAutoresizingMaskIntoConstraints = false
-        dimView.fillSuperview()
+    func configureWith(seriesTitle: String, numberOfFollowers: Int) {
+        headerLabel.text = seriesTitle
+        followSeriesView.configureWith(numberOfFollowers: numberOfFollowers)
+        stackView.addArrangedSubview(followSeriesView)
+        stackView.spacing = 9
     }
-
+    
      func updateGreetingsLabel() {
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -131,6 +100,19 @@ class TableHeaderView: UIView {
         } else {
             headerLabel.text = "Good evening"
         }
+    }
+    
+    private func applyConstraints() {
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackTrailingAnchor)
+        ])
+        stackTopAnchorConstraint.isActive = true
+        stackBottomAnchorConstraint.isActive = true
+
+        dimView.translatesAutoresizingMaskIntoConstraints = false
+        dimView.fillSuperview()
     }
 
 }

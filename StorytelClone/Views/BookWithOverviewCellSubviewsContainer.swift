@@ -55,7 +55,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "star.fill")
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
+//        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
+        imageView.tintColor = Utils.seeAllButtonColor
        
         view.addSubview(imageView)
         
@@ -92,7 +93,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     private let categoryLabel: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
-        label.textColor = UIColor.label.withAlphaComponent(0.7)
+//        label.textColor = UIColor.label.withAlphaComponent(0.7)
+        label.textColor = Utils.seeAllButtonColor
         label.sizeToFit()
         return label
     }()

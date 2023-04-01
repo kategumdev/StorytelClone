@@ -132,11 +132,12 @@ class SearchViewController: UIViewController {
     
     private func createAndPassItemSelectedCallback() {
         let callbackClosure: SelectedTitleCallback = { [weak self] title in
+            guard let self = self else { return }
             
             if let book = title as? Book {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
-                self?.navigationController?.pushViewController(controller, animated: true)
+                self.navigationController?.pushViewController(controller, animated: true)
             }
             
             if let author = title as? Author {
@@ -153,6 +154,9 @@ class SearchViewController: UIViewController {
             
             if let series = title as? Series {
                 print("SearchViewController handles selected series \(series.title)")
+                let tableSection = TableSection(sectionTitle: series.title)
+                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
+                self.navigationController?.pushViewController(controller, animated: true)
             }
             
         }

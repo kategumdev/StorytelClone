@@ -11,12 +11,14 @@ class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
     let book: Book?
+    let series: Series?
     
 //    let books = Book.books
     
-    init(tableSection: TableSection, book: Book?, categoryOfParentVC: Category) {
+    init(tableSection: TableSection, book: Book?, categoryOfParentVC: Category, series: Series? = nil) {
         self.tableSection = tableSection
         self.book = book
+        self.series = series
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
         #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
     }
@@ -47,13 +49,24 @@ class AllTitlesViewController: BaseTableViewController {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
+        
         if let sectionDescription = tableSection.sectionDescription {
             headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
         } else if tableSection.forSimilarBooks, let book = book {
             headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+        } else if let series = series {
+            headerView.configureWith(seriesTitle: series.title, numberOfFollowers: series.numberOfFollowers)
         } else {
             headerView.configureWith(title: tableSection.sectionTitle)
         }
+        
+//        if let sectionDescription = tableSection.sectionDescription {
+//            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
+//        } else if tableSection.forSimilarBooks, let book = book {
+//            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+//        } else {
+//            headerView.configureWith(title: tableSection.sectionTitle)
+//        }
 
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
@@ -92,9 +105,6 @@ class AllTitlesViewController: BaseTableViewController {
             sectionHeader.showOnlyShareButton()
         }
         
-//        sectionHeader.showShareAndFilterButtons()
-//        sectionHeader.showOnlyShareButton()
-//        sectionHeader.showOnlyFilterButton()
         return sectionHeader
     }
     

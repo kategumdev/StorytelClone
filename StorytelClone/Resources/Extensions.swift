@@ -66,11 +66,13 @@ extension UILabel {
 //    }
     
     #warning("Refactor to have only maximumPointSize and no withScaledFont")
-    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat?, numberOfLines: Int = 1, withScaledFont: Bool = true) -> UILabel {
+    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat?, numberOfLines: Int = 1, withScaledFont: Bool = true, textColor: UIColor = .label, text: String = "") -> UILabel {
         let label = UILabel()
         label.numberOfLines = numberOfLines
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true
+        label.textColor = textColor
+        label.text = text
         
         if withScaledFont {
 //            let font = font
