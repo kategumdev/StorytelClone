@@ -22,13 +22,21 @@ struct TableSection {
     let sectionSubtitle: String
     let sectionKind: SectionKind
     let books: [Book]
+    let sectionDescription: String?
+    let forSimilarBooks: Bool
+    let canBeShared: Bool
+    let canBeFiltered: Bool
     
     #warning("Add more than 10 books to books array. For showing vcs, TableSection will randomly fetch from general model only 10 books that belong to this section. But for showing SeeAllVC it will fetch all books that belong to this section")
-    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books) {
+    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, forSimilarBooks: Bool = false, canBeShared: Bool = true, canBeFiltered: Bool = true) {
         self.sectionTitle = sectionTitle
         self.sectionSubtitle = sectionSubtitle
         self.sectionKind = sectionKind
         self.books = books
+        self.sectionDescription = sectionDescription
+        self.forSimilarBooks = forSimilarBooks
+        self.canBeShared = canBeShared
+        self.canBeFiltered = canBeFiltered
     }
 }
 
@@ -344,28 +352,31 @@ struct Category {
     static let home = Category(
         title: "",
         tableSections: [
-            TableSection(sectionTitle: "Solo para ti"),
-            TableSection(sectionTitle: "Los títulos del momento"),
+            TableSection(sectionTitle: "Solo para ti", canBeShared: false),
+            TableSection(sectionTitle: "Los títulos del momento", sectionDescription: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
             TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
             TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
-            TableSection(sectionTitle: "Top 50 hoy"),
+            TableSection(sectionTitle: "Top 50 hoy", sectionDescription: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
             TableSection(sectionTitle: "Nuevos audiolibros"),
             TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
-            TableSection(sectionTitle: "Solo en Storytel"),
-            TableSection(sectionTitle: "Novela: Recomendados para ti"),
+            TableSection(sectionTitle: "Solo en Storytel", sectionDescription: "Historias que solo podrás encontrar aquí."),
+            TableSection(sectionTitle: "Novela: Recomendados para ti", canBeShared: false),
             TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview1]),
             TableSection(sectionTitle: "Tendecia en Storytel"),
             TableSection(sectionTitle: "Pronto en audiolibro"),
             TableSection(sectionTitle: "Historias de pelicula (y serie)"),
             TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview2]),
             TableSection(sectionTitle: "Novela: Los más populares"),
-            TableSection(sectionTitle: "Porque te interesa", sectionSubtitle: "Brick Lane"),
-            TableSection(sectionTitle: "Novela negra: Recomendados para ti"),
+            
+            // sectionSubtitle and sectionDescription have to be dynamic (one of books user saved)
+            TableSection(sectionTitle: "Porque te interesa", sectionSubtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", sectionDescription: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
+            TableSection(sectionTitle: "Novela negra: Recomendados para ti", canBeShared: false),
             TableSection(sectionTitle: "", sectionKind: .seriesCategoryButton),
             TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview]),
             TableSection(sectionTitle: "Series Top esta semana"),
             TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
         ])
+    #warning("In 'Porque te interesa' TableSection: sectionSubtitle and sectionDescription have to be dynamic (one of books user saved)")
     
     static let todasLasCategorias = Category(
         title: "Todas las categorías",

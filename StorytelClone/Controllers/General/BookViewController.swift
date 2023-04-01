@@ -15,7 +15,7 @@ class BookViewController: UIViewController {
     
     // MARK: - Instance properties
     var book: Book
-    private let tableSection = TableSection(sectionTitle: "Similar titles")
+    private let tableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0

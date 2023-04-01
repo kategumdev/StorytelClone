@@ -55,6 +55,7 @@ class HomeViewController: BaseTableViewController {
 //        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
+        tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
         layoutHeaderView()
     }

@@ -10,11 +10,11 @@ import UIKit
 class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
-    let book: Book
+    let book: Book?
     
-    let books = Book.books
+//    let books = Book.books
     
-    init(tableSection: TableSection, book: Book, categoryOfParentVC: Category) {
+    init(tableSection: TableSection, book: Book?, categoryOfParentVC: Category) {
         self.tableSection = tableSection
         self.book = book
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
@@ -40,23 +40,28 @@ class AllTitlesViewController: BaseTableViewController {
         
 //        extendedLayoutIncludesOpaqueBars = true
 //        navigationItem.backButtonTitle = ""
-        customizeBookTable()
+        configureBookTable()
     }
     
-    private func customizeBookTable() {
+    private func configureBookTable() {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-//        headerView.configureWith(title: tableSection.sectionTitle)
-//        headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!")
-        headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+        if let sectionDescription = tableSection.sectionDescription {
+            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
+        } else if tableSection.forSimilarBooks, let book = book {
+            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+        } else {
+            headerView.configureWith(title: tableSection.sectionTitle)
+        }
+
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
     
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("\(books.count) BOOKS")
-        return books.count
+        return tableSection.books.count
+//        return books.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,7 +83,16 @@ class AllTitlesViewController: BaseTableViewController {
             return UIView()
         }
         sectionHeader.configureWith(title: "All titles")
-        sectionHeader.showShareAndFilterButtons()
+        
+        if tableSection.canBeFiltered && tableSection.canBeShared {
+            sectionHeader.showShareAndFilterButtons()
+        } else if tableSection.canBeFiltered {
+            sectionHeader.showOnlyFilterButton()
+        } else {
+            sectionHeader.showOnlyShareButton()
+        }
+        
+//        sectionHeader.showShareAndFilterButtons()
 //        sectionHeader.showOnlyShareButton()
 //        sectionHeader.showOnlyFilterButton()
         return sectionHeader

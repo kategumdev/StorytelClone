@@ -38,6 +38,9 @@ class BaseTableViewController: UIViewController {
         // Avoid gaps between sections and custom section headers
         table.sectionFooterHeight = 0
         
+        // Avoid gap above custom section header
+        table.sectionHeaderTopPadding = 0
+        
         // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
 //        table.estimatedSectionHeaderHeight = 60
         
@@ -179,7 +182,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
             // Respond to seeAllButton in section header
             sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
                 guard let self = self else { return }
-                let controller = SeeAllViewController(tableSection: tableSection)
+//                let controller = SeeAllViewController(tableSection: tableSection)
+                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.category)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
             return sectionHeader
