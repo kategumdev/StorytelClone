@@ -65,7 +65,11 @@ class FollowSeriesView: UIView {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        toggleButton()
+//        toggleButton()
+        
+//        toggleFollowLabelText()
+//        toggleButtonAppearance()
+        
         addSubview(followButton)
         addSubview(vertStack)
         applyConstraints()
@@ -86,7 +90,11 @@ class FollowSeriesView: UIView {
     // MARK: - Helper methods
     func configureWith(series: Series) {
         seriesIsFollowed = series.isFollowed
-        toggleButton()
+        
+//        toggleButton()
+        toggleFollowLabelText()
+        toggleButtonAppearance()
+        
         addButtonAction()
         let numberOfFollowers = series.numberOfFollowers
         numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
@@ -95,39 +103,62 @@ class FollowSeriesView: UIView {
     private func addButtonAction() {
         followButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
+            
             self.seriesIsFollowed = !self.seriesIsFollowed
             self.toggleButton()
             // Also new isFollowed value of series model object must be saved here
         }), for: .touchUpInside)
     }
     
+    
     private func toggleButton() {
-        // Change button appearance
+        toggleFollowLabelText()
+        
+        configureActivityIndicator(show: true)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+            guard let self = self else { return }
+            self.configureActivityIndicator(show: false)
+            self.toggleButtonAppearance()
+        }
+    }
+    
+    private func toggleFollowLabelText() {
+        followLabel.text = seriesIsFollowed ? "Following" : "Follow"
+    }
+    
+    private func toggleButtonAppearance() {
+        var config = UIButton.Configuration.plain()
+        
         if !seriesIsFollowed {
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+            let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)
+            config.image = image
             followButton.tintColor = Utils.customBackgroundLight
             followButton.backgroundColor = Utils.tintColor
             followButton.layer.borderColor = UIColor.clear.cgColor
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
-            let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)
-            followButton.setImage(image, for: .normal)
         } else {
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
+            let image = UIImage(systemName: "checkmark", withConfiguration: symbolConfig)
+            config.image = image
             followButton.tintColor = UIColor.label
             followButton.backgroundColor = .clear
             followButton.layer.borderWidth = 1.8
             followButton.layer.borderColor = UIColor.label.cgColor
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
-            let image = UIImage(systemName: "checkmark", withConfiguration: symbolConfig)
-            followButton.setImage(image, for: .normal)
         }
         
-        // Change followLabel text
-        if seriesIsFollowed {
-            followLabel.text = "Following"
-        } else {
-            followLabel.text = "Follow"
-        }
+        followButton.configuration = config
     }
     
+    #warning("Activity indicator must show while context is saving new isFollowed value of the series model object")
+    // Activity indicator must show while context is saving new isFollowed value of the series model object
+    private func configureActivityIndicator(show: Bool) {
+        var config = followButton.configuration
+        config?.showsActivityIndicator = show
+        followButton.configuration = config
+        followButton.isUserInteractionEnabled = !show
+    }
+        
     private func createFollowLabel(withScaledFont: Bool) -> UILabel {
         let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: withScaledFont, text: "Follow")
         return label
