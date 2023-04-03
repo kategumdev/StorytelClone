@@ -55,19 +55,11 @@ class AllTitlesViewController: BaseTableViewController {
         } else if tableSection.forSimilarBooks, let book = book {
             headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
         } else if let series = series {
-            headerView.configureWith(seriesTitle: series.title, numberOfFollowers: series.numberOfFollowers)
+            headerView.configureWith(series: series)
         } else {
             headerView.configureWith(title: tableSection.sectionTitle)
         }
         
-//        if let sectionDescription = tableSection.sectionDescription {
-//            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
-//        } else if tableSection.forSimilarBooks, let book = book {
-//            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
-//        } else {
-//            headerView.configureWith(title: tableSection.sectionTitle)
-//        }
-
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
     

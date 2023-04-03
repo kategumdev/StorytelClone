@@ -25,6 +25,7 @@ class TableHeaderView: UIView {
     private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
     
     private lazy var followSeriesView = FollowSeriesView()
+//    lazy var followSeriesView = FollowSeriesView()
 
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
@@ -41,7 +42,7 @@ class TableHeaderView: UIView {
         return view
     }()
 
-    //MARK: - View life cycle
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
@@ -73,9 +74,10 @@ class TableHeaderView: UIView {
         stackView.spacing = 15
     }
     
-    func configureWith(seriesTitle: String, numberOfFollowers: Int) {
+    func configureWith(series: Series) {
+        let seriesTitle = series.title
         headerLabel.text = seriesTitle
-        followSeriesView.configureWith(numberOfFollowers: numberOfFollowers)
+        followSeriesView.configureWith(series: series)
         stackView.addArrangedSubview(followSeriesView)
         stackView.spacing = 9
     }

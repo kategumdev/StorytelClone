@@ -9,14 +9,14 @@ import UIKit
 
 class FollowSeriesView: UIView {
         
+    // MARK: - Instance properties
     private let imageHeightAndWidth: CGFloat = 50
+    private var seriesIsFollowed = false
     
     private lazy var calculatedTopAndBottomPadding: CGFloat = {
         // Not scaled font to calculate padding for default content size category
         let followLabel = createFollowLabel(withScaledFont: false)
         let numberOfFollowersLabel = createNumberOfFollowersLabel(withScaledFont: false)
-//        titleLabel.text = "This is title"
-//        subtitleLabel.text = "This is subtitle"
         followLabel.sizeToFit()
         numberOfFollowersLabel.sizeToFit()
         
@@ -25,19 +25,27 @@ class FollowSeriesView: UIView {
         return padding
     }()
     
-    private let followButton: UIButton = {
+//    private let followButton = UIButton()
+    
+    private lazy var followButton: UIButton = {
         let button = UIButton()
-//        let button = UIButton(frame: CGRect(origin: .zero, size: CGSize(width: 50, height: 50)))
-        button.tintColor = Utils.tintColor
-        var config = UIButton.Configuration.filled()
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-        let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)?.withTintColor(Utils.customBackgroundLight)
-        config.image = image
-        config.cornerStyle = .capsule
-//        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
-        button.configuration = config
+        button.layer.cornerRadius = imageHeightAndWidth / 2
         return button
     }()
+    
+//    private let followButton: UIButton = {
+//        let button = UIButton()
+//        button.tintColor = Utils.tintColor
+//        var config = UIButton.Configuration.filled()
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+//        let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)?.withTintColor(Utils.customBackgroundLight)
+//        config.image = image
+//        config.cornerStyle = .capsule
+////        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
+//
+//        button.configuration = config
+//        return button
+//    }()
 
     private lazy var followLabel = createFollowLabel(withScaledFont: true)
     private lazy var numberOfFollowersLabel = createNumberOfFollowersLabel(withScaledFont: true)
@@ -54,8 +62,10 @@ class FollowSeriesView: UIView {
         return stack
     }()
     
+    // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
+        toggleButton()
         addSubview(followButton)
         addSubview(vertStack)
         applyConstraints()
@@ -65,8 +75,57 @@ class FollowSeriesView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWith(numberOfFollowers: Int) {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) && seriesIsFollowed {
+            followButton.layer.borderColor = UIColor.label.cgColor
+        }
+    }
+    
+    // MARK: - Helper methods
+    func configureWith(series: Series) {
+        seriesIsFollowed = series.isFollowed
+        toggleButton()
+        addButtonAction()
+        let numberOfFollowers = series.numberOfFollowers
         numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
+    }
+    
+    private func addButtonAction() {
+        followButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.seriesIsFollowed = !self.seriesIsFollowed
+            self.toggleButton()
+            // Also new isFollowed value of series model object must be saved here
+        }), for: .touchUpInside)
+    }
+    
+    private func toggleButton() {
+        // Change button appearance
+        if !seriesIsFollowed {
+            followButton.tintColor = Utils.customBackgroundLight
+            followButton.backgroundColor = Utils.tintColor
+            followButton.layer.borderColor = UIColor.clear.cgColor
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+            let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)
+            followButton.setImage(image, for: .normal)
+        } else {
+            followButton.tintColor = UIColor.label
+            followButton.backgroundColor = .clear
+            followButton.layer.borderWidth = 1.8
+            followButton.layer.borderColor = UIColor.label.cgColor
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
+            let image = UIImage(systemName: "checkmark", withConfiguration: symbolConfig)
+            followButton.setImage(image, for: .normal)
+        }
+        
+        // Change followLabel text
+        if seriesIsFollowed {
+            followLabel.text = "Following"
+        } else {
+            followLabel.text = "Follow"
+        }
     }
     
     private func createFollowLabel(withScaledFont: Bool) -> UILabel {
