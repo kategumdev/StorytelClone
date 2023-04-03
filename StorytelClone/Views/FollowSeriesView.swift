@@ -12,6 +12,7 @@ class FollowSeriesView: UIView {
     // MARK: - Instance properties
     private let imageHeightAndWidth: CGFloat = 50
     private var seriesIsFollowed = false
+    private var numberOfFollowers = 0
     
     private lazy var calculatedTopAndBottomPadding: CGFloat = {
         // Not scaled font to calculate padding for default content size category
@@ -24,29 +25,13 @@ class FollowSeriesView: UIView {
         let padding = abs((imageHeightAndWidth - labelsHeight) / 2)
         return padding
     }()
-    
-//    private let followButton = UIButton()
-    
+        
     private lazy var followButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = imageHeightAndWidth / 2
         return button
     }()
     
-//    private let followButton: UIButton = {
-//        let button = UIButton()
-//        button.tintColor = Utils.tintColor
-//        var config = UIButton.Configuration.filled()
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-//        let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)?.withTintColor(Utils.customBackgroundLight)
-//        config.image = image
-//        config.cornerStyle = .capsule
-////        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
-//
-//        button.configuration = config
-//        return button
-//    }()
-
     private lazy var followLabel = createFollowLabel(withScaledFont: true)
     private lazy var numberOfFollowersLabel = createNumberOfFollowersLabel(withScaledFont: true)
     
@@ -65,11 +50,6 @@ class FollowSeriesView: UIView {
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        toggleButton()
-        
-//        toggleFollowLabelText()
-//        toggleButtonAppearance()
-        
         addSubview(followButton)
         addSubview(vertStack)
         applyConstraints()
@@ -91,12 +71,12 @@ class FollowSeriesView: UIView {
     func configureWith(series: Series) {
         seriesIsFollowed = series.isFollowed
         
-//        toggleButton()
         toggleFollowLabelText()
         toggleButtonAppearance()
         
         addButtonAction()
-        let numberOfFollowers = series.numberOfFollowers
+//        let numberOfFollowers = series.numberOfFollowers
+        numberOfFollowers = series.numberOfFollowers
         numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
     }
     
@@ -120,11 +100,17 @@ class FollowSeriesView: UIView {
             guard let self = self else { return }
             self.configureActivityIndicator(show: false)
             self.toggleButtonAppearance()
+            self.updateNumberOfFollowers()
         }
     }
     
     private func toggleFollowLabelText() {
         followLabel.text = seriesIsFollowed ? "Following" : "Follow"
+    }
+    
+    private func updateNumberOfFollowers() {
+        numberOfFollowers = seriesIsFollowed ? numberOfFollowers + 1 : numberOfFollowers - 1
+        numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
     }
     
     private func toggleButtonAppearance() {

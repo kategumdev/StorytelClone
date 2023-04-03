@@ -25,7 +25,6 @@ class TableHeaderView: UIView {
     private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
     
     private lazy var followSeriesView = FollowSeriesView()
-//    lazy var followSeriesView = FollowSeriesView()
 
     private lazy var stackView: UIStackView = {
         let stack = UIStackView()
