@@ -58,7 +58,17 @@ class BookViewController: UIViewController {
         view.backgroundColor = Utils.customBackgroundColor
         return view
     }()
-        
+    
+//    private lazy var leftToRightGradientLayer: CAGradientLayer = {
+//        let gradientLayer = CAGradientLayer()
+//        gradientLayer.colors = gradientColors
+//        gradientLayer.locations = [0, 0.5]
+//        gradientLayer.frame = self.bounds
+//        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+//        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+//        return gradientLayer
+//    }()
+    
     // MARK: - View life cycle
     init(book: Book) {
         self.book = book

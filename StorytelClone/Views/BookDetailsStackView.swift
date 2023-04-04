@@ -93,6 +93,46 @@ class BookDetailsStackView: UIStackView {
 //    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBookKind: book.titleKind)
     private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book)
     
+    private lazy var leadingViewWithGradient: UIView = {
+        let view = UIView()
+//        view.backgroundColor = .green
+        view.layer.addSublayer(leadingGradientLayer)
+        return view
+    }()
+    
+    private lazy var trailingViewWithGradient: UIView = {
+        let view = UIView()
+        view.layer.addSublayer(trailingGradientLayer)
+        return view
+    }()
+    
+    private lazy var trailingGradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = [0, 0.5]
+//        gradientLayer.frame = leadingViewWithGradient.bounds
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        return gradientLayer
+    }()
+    
+    private lazy var leadingGradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = [0, 0.5]
+//        gradientLayer.frame = trailingViewWithGradient.bounds
+        gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
+        return gradientLayer
+    }()
+    
+    private var gradientIsAdded = false
+
+    private var gradientColors: [CGColor] {
+        let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
+        return colors
+    }
+    
     // MARK: - View life cycle
     init(forBook book: Book) {
         self.book = book
@@ -101,16 +141,16 @@ class BookDetailsStackView: UIStackView {
         applyConstraints()
     }
     
-//    init(forBook book: Book, showSeriesButtonCallback: () -> ()) {
-//        self.book = book
-//        self.showSeriesButtonCallback = showSeriesButtonCallback
-//        super.init(frame: .zero)
-//        configureSelf()
-//        applyConstraints()
-//    }
-    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if hasShowSeriesButtonContainer {
+            leadingGradientLayer.frame = leadingViewWithGradient.bounds
+            trailingGradientLayer.frame = trailingViewWithGradient.bounds
+        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -118,6 +158,15 @@ class BookDetailsStackView: UIStackView {
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             coverImageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
+            
+            guard hasShowSeriesButtonContainer else { return }
+            if let gradientLayer = leadingViewWithGradient.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+                    gradientLayer.colors = gradientColors
+                }
+            
+            if let gradientLayer = trailingViewWithGradient.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+                    gradientLayer.colors = gradientColors
+                }
         }
     }
     
@@ -157,17 +206,18 @@ class BookDetailsStackView: UIStackView {
                     
         if let seriesTitle = book.series, let seriesPart = book.seriesPart {
             showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart)
-//            showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart, withCallback: callback)
             addArrangedSubview(showSeriesButtonContainer)
             setCustomSpacing(33.0, after: showSeriesButtonContainer)
+            
+            // Add gradient views
+            addSubview(leadingViewWithGradient)
+            addSubview(trailingViewWithGradient)
         } else {
             hasShowSeriesButtonContainer = false
         }
 
         addArrangedSubview(roundButtonsStackContainer)
     }
-    
-
     
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,6 +237,22 @@ class BookDetailsStackView: UIStackView {
         
         if hasShowSeriesButtonContainer {
             showSeriesButtonContainer.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+            
+            // Apply constraints of gradient views
+            let heightConstant: CGFloat = 10
+            leadingViewWithGradient.translatesAutoresizingMaskIntoConstraints = false
+            leadingViewWithGradient.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+            leadingViewWithGradient.trailingAnchor.constraint(equalTo: coverImageView.leadingAnchor).isActive = true
+            leadingViewWithGradient.heightAnchor.constraint(equalTo: showSeriesButtonContainer.heightAnchor, constant: heightConstant).isActive = true
+            leadingViewWithGradient.centerYAnchor.constraint(equalTo: showSeriesButtonContainer.centerYAnchor).isActive = true
+            
+            trailingViewWithGradient.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                trailingViewWithGradient.trailingAnchor.constraint(equalTo: trailingAnchor),
+                trailingViewWithGradient.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
+                trailingViewWithGradient.heightAnchor.constraint(equalTo: showSeriesButtonContainer.heightAnchor, constant: heightConstant),
+                trailingViewWithGradient.centerYAnchor.constraint(equalTo: showSeriesButtonContainer.centerYAnchor)
+            ])
         }
     }
     
