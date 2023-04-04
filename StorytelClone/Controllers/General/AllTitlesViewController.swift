@@ -51,6 +51,8 @@ class AllTitlesViewController: BaseTableViewController {
             headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
         } else if let series = titleModel as? Series {
             headerView.configureWith(series: series)
+        } else if let tag = titleModel as? Tag {
+            headerView.configureWith(title: tag.tagTitle)
         } else {
             headerView.configureWith(title: tableSection.sectionTitle)
         }

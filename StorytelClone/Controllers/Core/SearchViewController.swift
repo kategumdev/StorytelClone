@@ -150,6 +150,11 @@ class SearchViewController: UIViewController {
             
             if let tag = title as? Tag {
                 print("SearchViewController handles selected tag \(tag.tagTitle)")
+                let tableSection = TableSection(sectionTitle: tag.tagTitle)
+//                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: tag)
+
+                self.navigationController?.pushViewController(controller, animated: true)
             }
             
             if let series = title as? Series {
