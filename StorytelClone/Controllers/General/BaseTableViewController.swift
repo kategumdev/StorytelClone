@@ -183,7 +183,9 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
             sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
                 guard let self = self else { return }
 //                let controller = SeeAllViewController(tableSection: tableSection)
-                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.category)
+//                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.category)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
+
                 self.navigationController?.pushViewController(controller, animated: true)
             }
             return sectionHeader

@@ -10,24 +10,19 @@ import UIKit
 class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
-    let book: Book?
-    let series: Series?
-    
+//    let book: Book?
+//    let series: Series?
+    let titleModel: Title?
 //    let books = Book.books
     
-    init(tableSection: TableSection, book: Book?, categoryOfParentVC: Category, series: Series? = nil) {
+    init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
         self.tableSection = tableSection
-        self.book = book
-        self.series = series
+//        self.book = book
+//        self.series = series
+        self.titleModel = titleModel
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
         #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
     }
-    
-//    init(tableSection: TableSection, categoryOfParentVC: Category) {
-//        self.tableSection = tableSection
-//        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
-//        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -48,13 +43,25 @@ class AllTitlesViewController: BaseTableViewController {
     private func configureBookTable() {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         
+        if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
+            let headerView = StorytellerTableHeaderView()
+            headerView.configureFor(storyteller: titleModel!)
+            bookTable.tableHeaderView = headerView
+            
+            // These two lines avoid constraints' conflict of header and its label when view just loaded
+            headerView.translatesAutoresizingMaskIntoConstraints = false
+            headerView.fillSuperview()
+//            layoutHeaderView()
+            return
+        }
+        
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
         
         if let sectionDescription = tableSection.sectionDescription {
             headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
-        } else if tableSection.forSimilarBooks, let book = book {
+        } else if tableSection.forSimilarBooks, let book = titleModel as? Book {
             headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
-        } else if let series = series {
+        } else if let series = titleModel as? Series {
             headerView.configureWith(series: series)
         } else {
             headerView.configureWith(title: tableSection.sectionTitle)
@@ -63,10 +70,28 @@ class AllTitlesViewController: BaseTableViewController {
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
     
+//    private func configureBookTable() {
+//        bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
+//
+//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
+//
+//        if let sectionDescription = tableSection.sectionDescription {
+//            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
+//        } else if tableSection.forSimilarBooks, let book = book {
+//            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
+//        } else if let series = series {
+//            headerView.configureWith(series: series)
+//        } else {
+//            headerView.configureWith(title: tableSection.sectionTitle)
+//        }
+//
+//        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
+//    }
+    
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableSection.books.count
-//        return books.count
+//        return tableSection.books.count
+        return 50
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

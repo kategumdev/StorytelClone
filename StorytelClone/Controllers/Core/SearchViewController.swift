@@ -155,7 +155,17 @@ class SearchViewController: UIViewController {
             if let series = title as? Series {
                 print("SearchViewController handles selected series \(series.title)")
                 let tableSection = TableSection(sectionTitle: series.title)
-                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
+//                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: series)
+
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+            
+            if title.titleKind == .author || title.titleKind == .narrator {
+                print("SearchViewController handles selected \(title.titleKind.rawValue)")
+                let tableSection = TableSection(sectionTitle: title.titleKind.rawValue)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: title)
+
                 self.navigationController?.pushViewController(controller, animated: true)
             }
             

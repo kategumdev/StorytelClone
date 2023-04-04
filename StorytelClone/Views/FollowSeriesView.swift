@@ -86,7 +86,7 @@ class FollowSeriesView: UIView {
             
             self.seriesIsFollowed = !self.seriesIsFollowed
             self.toggleButton()
-            // Also new isFollowed value of series model object must be saved here
+            // Also new isFollowed value of series model object must be saved here and series added to things user follows
         }), for: .touchUpInside)
     }
     
