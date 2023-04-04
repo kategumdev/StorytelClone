@@ -29,7 +29,14 @@ class FollowSeriesView: UIView {
     private lazy var followButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = imageHeightAndWidth / 2
+        button.addSubview(activityIndicator)
         return button
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.hidesWhenStopped = true
+        return view
     }()
     
     private lazy var followLabel = createFollowLabel(withScaledFont: true)
@@ -53,6 +60,7 @@ class FollowSeriesView: UIView {
         addSubview(followButton)
         addSubview(vertStack)
         applyConstraints()
+//        backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
@@ -139,11 +147,25 @@ class FollowSeriesView: UIView {
     #warning("Activity indicator must show while context is saving new isFollowed value of the series model object")
     // Activity indicator must show while context is saving new isFollowed value of the series model object
     private func configureActivityIndicator(show: Bool) {
-        var config = followButton.configuration
-        config?.showsActivityIndicator = show
-        followButton.configuration = config
+        activityIndicator.color = followButton.tintColor
+        if show {
+            activityIndicator.startAnimating()
+            followButton.imageView?.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+            followButton.imageView?.isHidden = false
+        }
         followButton.isUserInteractionEnabled = !show
     }
+    
+    //    #warning("Activity indicator must show while context is saving new isFollowed value of the series model object")
+    //    // Activity indicator must show while context is saving new isFollowed value of the series model object
+    //    private func configureActivityIndicator(show: Bool) {
+    //        var config = followButton.configuration
+    //        config?.showsActivityIndicator = show
+    //        followButton.configuration = config
+    //        followButton.isUserInteractionEnabled = !show
+    //    }
         
     private func createFollowLabel(withScaledFont: Bool) -> UILabel {
         let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: withScaledFont, text: "Follow")
@@ -162,6 +184,12 @@ class FollowSeriesView: UIView {
             followButton.widthAnchor.constraint(equalToConstant: imageHeightAndWidth),
             followButton.heightAnchor.constraint(equalToConstant: imageHeightAndWidth),
             followButton.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: followButton.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: followButton.centerYAnchor)
         ])
         
         vertStack.translatesAutoresizingMaskIntoConstraints = false
