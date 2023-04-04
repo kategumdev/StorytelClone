@@ -10,15 +10,10 @@ import UIKit
 class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
-//    let book: Book?
-//    let series: Series?
     let titleModel: Title?
-//    let books = Book.books
     
     init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
         self.tableSection = tableSection
-//        self.book = book
-//        self.series = series
         self.titleModel = titleModel
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
         #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
@@ -30,13 +25,6 @@ class AllTitlesViewController: BaseTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        title = tableSection.sectionTitle
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-        
-//        extendedLayoutIncludesOpaqueBars = true
-//        navigationItem.backButtonTitle = ""
         configureBookTable()
     }
     
@@ -69,24 +57,6 @@ class AllTitlesViewController: BaseTableViewController {
         
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
-    
-//    private func configureBookTable() {
-//        bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
-//
-//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-//
-//        if let sectionDescription = tableSection.sectionDescription {
-//            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
-//        } else if tableSection.forSimilarBooks, let book = book {
-//            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
-//        } else if let series = series {
-//            headerView.configureWith(series: series)
-//        } else {
-//            headerView.configureWith(title: tableSection.sectionTitle)
-//        }
-//
-//        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
-//    }
     
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

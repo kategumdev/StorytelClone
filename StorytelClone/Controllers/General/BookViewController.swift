@@ -88,6 +88,15 @@ class BookViewController: UIViewController {
         mainScrollView.showsVerticalScrollIndicator = false
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(bookDetailsStackView)
+        if let series = book.series {
+            bookDetailsStackView.showSeriesButtonCallback = { [weak self] in
+                let tableSection = TableSection(sectionTitle: series)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
+                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category")
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+        
         mainScrollView.addSubview(bookDetailsScrollView)
         bookDetailsScrollView.callback = { [weak self] in
             guard let self = self else { return }

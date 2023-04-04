@@ -136,32 +136,6 @@ class StorytellerTableHeaderView: UIView {
         roundLabelWithLetters.text = letters.uppercased()
     }
     
-//    private func convertNumberOfFollowersIntoString(number: Int) -> String {
-//        var string: String
-//        if number < 1000 {
-//            // less than 1000, use string interpolation
-//            string = "\(number)"
-//        } else {
-//            // 1000 or greater, format as thousands with "K" suffix
-//            let thousands = number / 1000
-//            let remainder = number % 1000
-//            if remainder == 0 {
-//                // no remainder, use format "XK"
-//                string = "\(thousands)K"
-//            } else {
-//                let decimal = Double(remainder) / 100.0
-//
-//                var decimalString = String(format: "%.1f", decimal).replacingOccurrences(of: ".", with: "")
-//                decimalString.removeLast() // remove decimal point
-//                if decimalString == "0" {
-//                    decimalString = ""
-//                }
-//                string = "\(thousands),\(decimalString)K"
-//            }
-//        }
-//        return string
-//    }
-    
     private func convertNumber(number: Int) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .scientific

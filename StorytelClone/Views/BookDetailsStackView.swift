@@ -13,6 +13,11 @@ class BookDetailsStackView: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
+    var showSeriesButtonCallback: () -> () = {} {
+        didSet {
+            showSeriesButtonContainer.callback = showSeriesButtonCallback
+        }
+    }
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -96,6 +101,14 @@ class BookDetailsStackView: UIStackView {
         applyConstraints()
     }
     
+//    init(forBook book: Book, showSeriesButtonCallback: () -> ()) {
+//        self.book = book
+//        self.showSeriesButtonCallback = showSeriesButtonCallback
+//        super.init(frame: .zero)
+//        configureSelf()
+//        applyConstraints()
+//    }
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -144,6 +157,7 @@ class BookDetailsStackView: UIStackView {
                     
         if let seriesTitle = book.series, let seriesPart = book.seriesPart {
             showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart)
+//            showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart, withCallback: callback)
             addArrangedSubview(showSeriesButtonContainer)
             setCustomSpacing(33.0, after: showSeriesButtonContainer)
         } else {

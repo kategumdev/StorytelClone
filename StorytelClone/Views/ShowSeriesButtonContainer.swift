@@ -8,8 +8,9 @@
 import UIKit
 
 class ShowSeriesButtonContainer: UIView {
-    
     // MARK: - Instance properties
+    var callback: () -> () = {}
+    
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
         button.tintColor = UIColor.label
@@ -54,6 +55,7 @@ class ShowSeriesButtonContainer: UIView {
         layer.borderColor = BookViewController.lightBordersColor
         layer.borderWidth = BookViewController.lightBordersWidth
         addSubview(showSeriesButton)
+        addButtonAction()
         applyConstraints()
     }
     
@@ -65,6 +67,12 @@ class ShowSeriesButtonContainer: UIView {
     func configureFor(seriesTitle: String, seriesPart: Int) {
         let text = "Part \(seriesPart) in \(seriesTitle)"
         showSeriesButton.setTitle(text, for: .normal)
+    }
+    
+    private func addButtonAction() {
+        showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.callback()
+        }), for: .touchUpInside)
     }
     
     private func applyConstraints() {

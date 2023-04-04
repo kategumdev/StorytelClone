@@ -35,7 +35,6 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
 
     private lazy var vertBarView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .systemGray3
         view.backgroundColor = .tertiaryLabel
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: stackViewHeight).isActive = true
@@ -48,7 +47,6 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.distribution = .equalSpacing
-//        [shareButton, vertBarView, filterButton].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
     
