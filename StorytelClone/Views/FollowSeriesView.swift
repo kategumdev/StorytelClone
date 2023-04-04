@@ -77,7 +77,7 @@ class FollowSeriesView: UIView {
         addButtonAction()
 //        let numberOfFollowers = series.numberOfFollowers
         numberOfFollowers = series.numberOfFollowers
-        numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
+        numberOfFollowersLabel.text = "\(numberOfFollowers.shorted()) Followers"
     }
     
     private func addButtonAction() {
@@ -110,7 +110,7 @@ class FollowSeriesView: UIView {
     
     private func updateNumberOfFollowers() {
         numberOfFollowers = seriesIsFollowed ? numberOfFollowers + 1 : numberOfFollowers - 1
-        numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
+        numberOfFollowersLabel.text = "\(numberOfFollowers.shorted()) Followers"
     }
     
     private func toggleButtonAppearance() {

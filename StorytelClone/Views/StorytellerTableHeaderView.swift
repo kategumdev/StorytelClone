@@ -8,15 +8,20 @@
 import UIKit
 
 class StorytellerTableHeaderView: UIView {
+    // MARK: - Static property
+    static let lighterLabelColor = UIColor.label.withAlphaComponent(0.75)
+
     // MARK: - Instance properties
     private var storyteller: Title?
     private let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
         
-    private lazy var roundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = roundWidthAndHeight / 2
-        return view
+    private lazy var roundLabelWithLetters: UILabel = {
+        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 35), maximumPointSize: nil, withScaledFont: false, textColor: StorytellerTableHeaderView.lighterLabelColor, text: "NS")
+        label.textAlignment = .center
+        label.backgroundColor = .systemGray5
+        label.layer.cornerRadius = roundWidthAndHeight / 2
+        label.clipsToBounds = true
+        return label
     }()
     
     private let nameLabel: UILabel = {
@@ -58,7 +63,7 @@ class StorytellerTableHeaderView: UIView {
     private let numberOfFollowersButton: UIButton = {
         let button = UIButton()
         button.isUserInteractionEnabled = false
-        button.tintColor = UIColor.label.withAlphaComponent(0.75)
+        button.tintColor = lighterLabelColor
         var config = UIButton.Configuration.plain()
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
@@ -68,7 +73,7 @@ class StorytellerTableHeaderView: UIView {
         
         config.attributedTitle = "100 Followers"
         config.attributedTitle?.font = Utils.sectionSubtitleFont
-        config.attributedTitle?.foregroundColor = UIColor.label.withAlphaComponent(0.75)
+        config.attributedTitle?.foregroundColor = lighterLabelColor
 
         button.configuration = config
         return button
@@ -79,7 +84,8 @@ class StorytellerTableHeaderView: UIView {
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 20
-        [roundView, nameLabel, titleKindLabel, followButton, numberOfFollowersButton].forEach { stack.addArrangedSubview($0) }
+        [roundLabelWithLetters, nameLabel, titleKindLabel, followButton, numberOfFollowersButton].forEach { stack.addArrangedSubview($0) }
+
         stack.setCustomSpacing(7, after: nameLabel)
         return stack
     }()
@@ -99,27 +105,75 @@ class StorytellerTableHeaderView: UIView {
     func configureFor(storyteller: Title) {
         self.storyteller = storyteller
         titleKindLabel.text = storyteller.titleKind.rawValue
-
+                
         if let author = storyteller as? Author {
             nameLabel.text = author.name
+            configureRoundLabelWithLettersFrom(name: author.name)
             
-            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(author.numberOfFollowers) Followers")
-//            numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
+            let numberOfFollowers = author.numberOfFollowers.shorted()
+            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
         } else if let narrator = storyteller as? Narrator {
             nameLabel.text = narrator.name
+            configureRoundLabelWithLettersFrom(name: narrator.name)
             
-            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(narrator.numberOfFollowers) Followers")
-//            numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
+            let numberOfFollowers = narrator.numberOfFollowers.shorted()
+            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
         }
-        
         numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
+        
+    }
+    
+    private func configureRoundLabelWithLettersFrom(name: String) {
+        let originalString = name
+        let components = originalString.components(separatedBy: " ")
+        var letters = ""
+
+        if components.count >= 2 {
+            let firstLetter = String(components[0].prefix(1))
+            let secondLetter = String(components[1].prefix(1))
+            letters = firstLetter + secondLetter
+        }
+        roundLabelWithLetters.text = letters.uppercased()
+    }
+    
+//    private func convertNumberOfFollowersIntoString(number: Int) -> String {
+//        var string: String
+//        if number < 1000 {
+//            // less than 1000, use string interpolation
+//            string = "\(number)"
+//        } else {
+//            // 1000 or greater, format as thousands with "K" suffix
+//            let thousands = number / 1000
+//            let remainder = number % 1000
+//            if remainder == 0 {
+//                // no remainder, use format "XK"
+//                string = "\(thousands)K"
+//            } else {
+//                let decimal = Double(remainder) / 100.0
+//
+//                var decimalString = String(format: "%.1f", decimal).replacingOccurrences(of: ".", with: "")
+//                decimalString.removeLast() // remove decimal point
+//                if decimalString == "0" {
+//                    decimalString = ""
+//                }
+//                string = "\(thousands),\(decimalString)K"
+//            }
+//        }
+//        return string
+//    }
+    
+    private func convertNumber(number: Int) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .scientific
+        let scientificNumber = formatter.string(for: number)!
+        print("\(number) spelled out is \(scientificNumber).")
     }
     
     private func applyConstraints() {
-        roundView.translatesAutoresizingMaskIntoConstraints = false
+        roundLabelWithLetters.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            roundView.widthAnchor.constraint(equalToConstant: roundWidthAndHeight),
-            roundView.heightAnchor.constraint(equalToConstant: roundWidthAndHeight)
+            roundLabelWithLetters.widthAnchor.constraint(equalToConstant: roundWidthAndHeight),
+            roundLabelWithLetters.heightAnchor.constraint(equalToConstant: roundWidthAndHeight)
         ])
         
         stack.translatesAutoresizingMaskIntoConstraints = false

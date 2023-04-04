@@ -33,17 +33,17 @@ struct Author: Title {
     
     static let author2 = Author(name: "Megan Maxwell", numberOfFollowers: 2100)
     
-    static let author3 = Author(name: "Javier Cercas", numberOfFollowers: 481)
+    static let author3 = Author(name: "Javier Cercas", numberOfFollowers: 2000)
     
-    static let author4 = Author(name: "Juan Gómez-Jurado", numberOfFollowers: 1200)
+    static let author4 = Author(name: "Juan Gómez-Jurado", numberOfFollowers: 1235)
     
-    static let author5 = Author(name: "Paloma Sánchez-Garnica", numberOfFollowers: 909)
+    static let author5 = Author(name: "Paloma Sánchez-Garnica", numberOfFollowers: 1235000)
     
-    static let author6 = Author(name: "Lorraine Cocó", numberOfFollowers: 358)
+    static let author6 = Author(name: "Lorraine Cocó", numberOfFollowers: 453679)
     
-    static let author7 = Author(name: "Sarah J. Maas", numberOfFollowers: 7900)
+    static let author7 = Author(name: "Sarah J. Maas", numberOfFollowers: 1000000)
     
-    static let author8 = Author(name: "Ian Gibson", numberOfFollowers: 36)
+    static let author8 = Author(name: "Ian Gibson", numberOfFollowers: 2456769)
     
     static let author9 = Author(name: "Manuel Vilas", numberOfFollowers: 98)
     
