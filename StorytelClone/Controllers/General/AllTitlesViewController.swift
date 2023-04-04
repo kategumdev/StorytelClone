@@ -116,13 +116,37 @@ class AllTitlesViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
-        var text = tableSection.sectionTitle
+        
+        var text: String
+        if let author = titleModel as? Author {
+            text = author.name
+        } else if let narrator = titleModel as? Narrator {
+            text = narrator.name
+        } else if let series = titleModel as? Series {
+            text = series.title
+        } else if let tag = titleModel as? Tag {
+            text = tag.tagTitle
+        } else {
+            text = tableSection.sectionTitle
+        }
+        
+//        var text = tableSection.sectionTitle
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text
         
         extendedLayoutIncludesOpaqueBars = true
         navigationItem.backButtonTitle = ""
     }
+    
+//    override func configureNavBar() {
+//        super.configureNavBar()
+//        var text = tableSection.sectionTitle
+//        text = text.replacingOccurrences(of: "\n", with: " ")
+//        title = text
+//
+//        extendedLayoutIncludesOpaqueBars = true
+//        navigationItem.backButtonTitle = ""
+//    }
     
     override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
