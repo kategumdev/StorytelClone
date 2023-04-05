@@ -59,6 +59,19 @@ class BookViewController: UIViewController {
         return view
     }()
     
+    private lazy var popupButton: PopupButton = {
+        let button = PopupButton()
+//        view.addSubview(button)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            button.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor, constant: Constants.cvPadding),
+//            button.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor, constant: -Constants.cvPadding),
+//            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+////            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100)
+//        ])
+        return button
+    }()
+    
 //    private lazy var leftToRightGradientLayer: CAGradientLayer = {
 //        let gradientLayer = CAGradientLayer()
 //        gradientLayer.colors = gradientColors
@@ -84,8 +97,13 @@ class BookViewController: UIViewController {
         view.backgroundColor = Utils.customBackgroundColor
         title = book.title
         configureMainScrollView()
+        
+        
         view.addSubview(hideView)
         applyConstraints()
+        
+        addPopupButton()
+        
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
@@ -320,6 +338,19 @@ class BookViewController: UIViewController {
             hideView.widthAnchor.constraint(equalTo: view.widthAnchor),
             hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hideView.topAnchor.constraint(equalTo: bookTable.bottomAnchor)
+        ])
+    }
+    
+    private func addPopupButton() {
+        view.addSubview(popupButton)
+//        guard let tabBarHeight = tabBarController?.tabBar.bounds.height else { return }
+        
+        popupButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popupButton.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor, constant: Constants.cvPadding),
+            popupButton.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor, constant: -Constants.cvPadding),
+            popupButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(Utils.tabBarHeight + 7)),
+            popupButton.heightAnchor.constraint(equalToConstant: 46)
         ])
     }
 

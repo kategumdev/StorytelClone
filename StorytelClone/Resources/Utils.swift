@@ -43,6 +43,7 @@ struct Utils {
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")
     static let customBackgroundLight = UIColor(red: 253/255, green: 251/255, blue: 250/255, alpha: 1)
+//    static let reversedCustomBackgroundColor = UIColor(named: "reversedCustomBackground")
     
     static let tintColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
     

@@ -89,10 +89,7 @@ class SeeMoreButton: UIButton {
         guard forOverview else { return }
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            
-            if let gradientLayer = self.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
-                    gradientLayer.colors = gradientColors
-                }
+            gradientLayer.colors = gradientColors
         }
     }
     

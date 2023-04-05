@@ -95,7 +95,8 @@ class BookDetailsStackView: UIStackView {
     
     private lazy var leadingViewWithGradient: UIView = {
         let view = UIView()
-//        view.backgroundColor = .green
+        
+        
         view.layer.addSublayer(leadingGradientLayer)
         return view
     }()
@@ -110,7 +111,6 @@ class BookDetailsStackView: UIStackView {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = gradientColors
         gradientLayer.locations = [0, 0.5]
-//        gradientLayer.frame = leadingViewWithGradient.bounds
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         return gradientLayer
@@ -120,7 +120,6 @@ class BookDetailsStackView: UIStackView {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = gradientColors
         gradientLayer.locations = [0, 0.5]
-//        gradientLayer.frame = trailingViewWithGradient.bounds
         gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
         return gradientLayer
@@ -160,13 +159,8 @@ class BookDetailsStackView: UIStackView {
             coverImageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
             
             guard hasShowSeriesButtonContainer else { return }
-            if let gradientLayer = leadingViewWithGradient.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
-                    gradientLayer.colors = gradientColors
-                }
-            
-            if let gradientLayer = trailingViewWithGradient.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
-                    gradientLayer.colors = gradientColors
-                }
+            leadingGradientLayer.colors = gradientColors
+            trailingGradientLayer.colors = gradientColors
         }
     }
     
