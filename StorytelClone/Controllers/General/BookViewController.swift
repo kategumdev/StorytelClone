@@ -60,14 +60,16 @@ class BookViewController: UIViewController {
     }()
     
     private lazy var popupButton = PopupButton()
-    private lazy var popupButtonBottomAnchor =             popupButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: Utils.tabBarHeight + 7)
+    private lazy var popupButtonBottomAnchor =             popupButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: popupButton.bottomAnchorConstant)
+
     
     private lazy var hidePopupCallback = { [weak self] in
+        guard let self = self else { return }
         print("hidePopupCallback is executing")
-        UIView.animate(withDuration: 0.6, animations: {
-            self?.popupButtonBottomAnchor.constant = Utils.tabBarHeight + 7
-            self?.view.layoutIfNeeded()
-            self?.popupButton.alpha = 0
+        UIView.animate(withDuration: 0.4, animations: {
+            self.popupButtonBottomAnchor.constant = self.popupButton.bottomAnchorConstant
+            self.view.layoutIfNeeded()
+            self.popupButton.alpha = 0
         })
     }
     
@@ -91,11 +93,13 @@ class BookViewController: UIViewController {
         title = book.title
         configureMainScrollView()
         
-        
         view.addSubview(hideView)
-        applyConstraints()
         
-        addPopupButton()
+        view.addSubview(popupButton)
+        passCallbacksToSaveButton()
+        addPopupButtonAction()
+        
+        applyConstraints()
         
         navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
@@ -219,68 +223,39 @@ class BookViewController: UIViewController {
         }
     }
     
-    private func addPopupButton() {
-        view.addSubview(popupButton)
-//        guard let tabBarHeight = tabBarController?.tabBar.bounds.height else { return }
-        
-        popupButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            popupButton.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor, constant: Constants.cvPadding),
-            popupButton.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor, constant: -Constants.cvPadding),
-            popupButton.heightAnchor.constraint(equalToConstant: 46)
-        ])
-        popupButtonBottomAnchor.isActive = true
-        
-        popupButton.alpha = 0
-        popupButton.customLabel.text = book.isAddedToBookshelf ? "Removed from Bookshelf" : "Added to Bookshelf"
-        
-        bookDetailsStackView.roundButtonsStackContainer.togglePopupButtonTextCallback = { [weak self] isSavingBook in
-            
-            if isSavingBook {
-                self?.popupButton.customLabel.text = "Added to Bookshelf"
-            } else {
-                self?.popupButton.customLabel.text = "Removed from Bookshelf"
-            }
-            
-//            if self?.popupButton.customLabel.text != "Removed from Bookshelf" {
-//                self?.popupButton.customLabel.text = "Removed from Bookshelf"
-//            } else {
-//                self?.popupButton.customLabel.text = "Added to Bookshelf"
-//            }
+    private func passCallbacksToSaveButton() {
+        bookDetailsStackView.roundButtonsStackContainer.togglePopupButtonTextCallback = { [weak self] userAddedBookToBookshelf in
+            self?.popupButton.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
         }
         
         bookDetailsStackView.roundButtonsStackContainer.showPopupCallback = { [weak self] in
             print("showPopupCallback is executing")
-            UIView.animate(withDuration: 0.6, animations: {
-                self?.popupButtonBottomAnchor.constant = -(Utils.tabBarHeight + 7)
-//                self?.popupButton.layoutIfNeeded()
-                self?.view.layoutIfNeeded()
-                self?.popupButton.alpha = 1
+            guard let self = self else { return }
+            UIView.animate(withDuration: 0.5, animations: {
+                self.popupButtonBottomAnchor.constant = -self.popupButton.bottomAnchorConstant
+                self.view.layoutIfNeeded()
+                self.popupButton.alpha = 1
             })
         }
         
         bookDetailsStackView.roundButtonsStackContainer.hidePopupCallback = hidePopupCallback
-        
+    }
+    
+    private func addPopupButtonAction() {
         popupButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
+            // Cancel the work item to prevent it from executing with the delay
+            self.bookDetailsStackView.roundButtonsStackContainer.hidePopupWorkItem.cancel()
             
-            let workItem = self.bookDetailsStackView.roundButtonsStackContainer.hidePopupWorkItem
-            if !workItem.isCancelled {
-                // Cancel the work item to prevent it from executing with the delay
-                workItem.cancel()
-
-                // Execute the work item immediately
-//                workItem.perform()
-            }
-            
-            // Execute the work item immediately
+            // Execute the callback immediately
             self.hidePopupCallback()
+            
+            // Reassign workItem to replace the cancelled one
             self.bookDetailsStackView.roundButtonsStackContainer.hidePopupWorkItem = DispatchWorkItem { [weak self] in
                 self?.hidePopupCallback()
             }
-            
+                        
         }), for: .touchUpInside)
-        
     }
     
     private func applyConstraints() {
@@ -393,6 +368,15 @@ class BookViewController: UIViewController {
             hideView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hideView.topAnchor.constraint(equalTo: bookTable.bottomAnchor)
         ])
+        
+        // Configure popupButton constraints
+        popupButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popupButton.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor, constant: Constants.cvPadding),
+            popupButton.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor, constant: -Constants.cvPadding),
+            popupButton.heightAnchor.constraint(equalToConstant: 46)
+        ])
+        popupButtonBottomAnchor.isActive = true
     }
 
 }

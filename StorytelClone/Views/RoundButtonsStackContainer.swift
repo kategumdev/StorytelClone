@@ -9,8 +9,14 @@ import UIKit
 
 class RoundButtonsStackContainer: UIStackView {
     
-    // MARK: - Static properties
+    // MARK: - Static properties and methods
     static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+    
+    static func createLabel() -> UILabel {
+        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "")
+        label.textAlignment = .center
+        return label
+    }
     
     // MARK: - Instance properties
     private let book: Book
@@ -47,8 +53,7 @@ class RoundButtonsStackContainer: UIStackView {
     }()
     
     private let listenLabel: UILabel = {
-        let font = Utils.sectionSubtitleFont
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: nil, withScaledFont: false)
+        let label = RoundButtonsStackContainer.createLabel()
         label.text = "Listen"
         label.textAlignment = .center
         return label
@@ -80,8 +85,7 @@ class RoundButtonsStackContainer: UIStackView {
     }()
     
     private let readLabel: UILabel = {
-        let font = Utils.sectionSubtitleFont
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: nil, withScaledFont: false)
+        let label = RoundButtonsStackContainer.createLabel()
         label.text = "Read"
         label.textAlignment = .center
         return label
@@ -110,11 +114,10 @@ class RoundButtonsStackContainer: UIStackView {
         return button
     }()
     
-    private var isBookAlreadySaved = false
+    private var isBookAlreadyAddedToBookshelf = false
     
     private let saveLabel: UILabel = {
-        let font = Utils.sectionSubtitleFont
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: nil, withScaledFont: false)
+        let label = RoundButtonsStackContainer.createLabel()
         label.text = "Save"
         label.textAlignment = .center
         return label
@@ -127,7 +130,7 @@ class RoundButtonsStackContainer: UIStackView {
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
-        isBookAlreadySaved = book.isAddedToBookshelf
+        isBookAlreadyAddedToBookshelf = book.isAddedToBookshelf
         saveOrRemoveBookAndToggleImage()
         
         configureSelf()
@@ -174,16 +177,49 @@ class RoundButtonsStackContainer: UIStackView {
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self.saveButton.isUserInteractionEnabled = false
             self.handleSaveButtonTapped()
-//            self.saveButton.isUserInteractionEnabled = true
         }), for: .touchUpInside)
     }
     
-    
     private func handleSaveButtonTapped() {
+        cancelAndReassignWorkItems()
         
-//        showPopupCallback()
+        if isBookAlreadyAddedToBookshelf {
+            // User removes book, image should be changed after animation completes
+            UIView.animate(withDuration: 0.6, animations: { [weak self] in
+                guard let self = self else { return }
+                self.togglePopupButtonTextCallback(false)
+                DispatchQueue.main.async(execute: self.showPopupWorkItem)
+                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+                    guard let self = self else { return }
+                    
+                    self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
+                    self.saveOrRemoveBookAndToggleImage()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+                })
+            })
+
+        } else {
+            // User adds book, image should be changed before animation begins
+            UIView.animate(withDuration: 0.6, animations: { [weak self] in
+                guard let self = self else { return }
+                self.togglePopupButtonTextCallback(true)
+                DispatchQueue.main.async(execute: self.showPopupWorkItem)
+                
+                self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
+                self.saveOrRemoveBookAndToggleImage()
+                
+                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
+                    guard let self = self else { return }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+                })
+            })
+        }
+
+    }
+    
+    private func cancelAndReassignWorkItems() {
         showPopupWorkItem.cancel()
         hidePopupWorkItem.cancel()
         
@@ -194,134 +230,7 @@ class RoundButtonsStackContainer: UIStackView {
         hidePopupWorkItem = DispatchWorkItem { [weak self] in
             self?.hidePopupCallback()
         }
-        
-        if isBookAlreadySaved {
-            // User removes book, image should be changed after animation completes
-            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-                guard let self = self else { return }
-                self.togglePopupButtonTextCallback(false)
-                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//                self?.showPopupCallback()
-                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-                    guard let self = self else { return }
-                    // Toggle isBookAlreadySaved
-                    self.isBookAlreadySaved = !self.isBookAlreadySaved
-                    self.saveOrRemoveBookAndToggleImage()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-                    
-                })
-            })
-
-        } else {
-            // User adds book, image should be changed before animation begins
-            
-            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-                guard let self = self else { return }
-                self.togglePopupButtonTextCallback(true)
-                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//                self?.showPopupCallback()
-                 // Toggle isBookAlreadySaved
-                    self.isBookAlreadySaved = !self.isBookAlreadySaved
-                self.saveOrRemoveBookAndToggleImage()
-                
-//                self.togglePopupButtonTextCallback(true)
-                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-                    guard let self = self else { return }
-//                    self?.saveButton.isUserInteractionEnabled = true
-
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: {
-//                        self?.hidePopupCallback()
-//                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-                })
-            })
-//            saveOrRemoveBookAndToggleImage()
-//            animateSaveButtonImageView(withCompletion: { [weak self] _ in
-////                self?.hidePopupCallback()
-//            })
-        }
-
     }
-    
-    
-    
-    
-//    private func handleSaveButtonTapped() {
-//
-////        showPopupCallback()
-//
-//        if isBookAlreadySaved {
-//            // User removes book, image should be changed after animation completes
-//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-//                self?.showPopupCallback()
-//                self?.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                    guard let self = self else { return }
-//                    self.saveOrRemoveBookAndToggleImage()
-////                    self.saveButton.isUserInteractionEnabled = true
-//
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: {
-////                        self.hidePopupCallback()
-////                    })
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//
-//                })
-//            })
-//
-//        } else {
-//            // User adds book, image should be changed before animation begins
-//
-//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-//                self?.showPopupCallback()
-//                self?.saveOrRemoveBookAndToggleImage()
-//                self?.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-//                    guard let self = self else { return }
-////                    self?.saveButton.isUserInteractionEnabled = true
-//
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: {
-////                        self?.hidePopupCallback()
-////                    })
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//                })
-//            })
-////            saveOrRemoveBookAndToggleImage()
-////            animateSaveButtonImageView(withCompletion: { [weak self] _ in
-//////                self?.hidePopupCallback()
-////            })
-//        }
-//
-////        if isBookAlreadySaved {
-////            // User removes book, image should be changed after animation completes
-////            animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-////                guard let self = self else { return }
-////                self.saveOrRemoveBookAndToggleImage()
-//////                self.hidePopupCallback()
-////            })
-////        } else {
-////            // User adds book, image should be changed before animation begins
-////            saveOrRemoveBookAndToggleImage()
-////            animateSaveButtonImageView(withCompletion: { [weak self] _ in
-//////                self?.hidePopupCallback()
-////            })
-////        }
-//    }
-    
-//    private func handleSaveButtonTapped() {
-//
-//        showPopupCallback()
-//
-//        if isBookAlreadySaved {
-//            // User removes book, image should be changed after animation completes
-//            animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                guard let self = self else { return }
-//                self.saveOrRemoveBookAndToggleImage()
-//            })
-//        } else {
-//            // User adds book, image should be changed before animation begins
-//            saveOrRemoveBookAndToggleImage()
-//            animateSaveButtonImageView(withCompletion: nil)
-//        }
-//    }
     
     private func animateSaveButtonImageView(withCompletion completion: ((Bool) -> Void)?) {
         let imageView = saveButton.imageView!
@@ -365,14 +274,14 @@ class RoundButtonsStackContainer: UIStackView {
         // Toggle isBookAlreadySaved
 //        self.isBookAlreadySaved = !self.isBookAlreadySaved
 
-        let newImageName = isBookAlreadySaved ? "heart.fill" : "heart"
+        let newImageName = isBookAlreadyAddedToBookshelf ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.saveButton.setImage(newImage, for: .normal)
 
-        self.saveLabel.text = isBookAlreadySaved ? "Saved" : "Save"
+        self.saveLabel.text = isBookAlreadyAddedToBookshelf ? "Saved" : "Save"
 
-        if self.isBookAlreadySaved {
+        if self.isBookAlreadyAddedToBookshelf {
             toReadBooks.append(self.book)
 
         } else {
@@ -382,48 +291,6 @@ class RoundButtonsStackContainer: UIStackView {
 //        // Toggle isBookAlreadySaved
 //        self.isBookAlreadySaved = !self.isBookAlreadySaved
     }
-    
-    
-    
-    
-//    private func saveOrRemoveBookAndToggleImage() {
-//        let newImageName = isBookAlreadySaved ? "heart" : "heart.fill"
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-//        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-//        self.saveButton.setImage(newImage, for: .normal)
-//
-//        self.saveLabel.text = isBookAlreadySaved ? "Save" : "Saved"
-//
-//        if self.isBookAlreadySaved {
-//            toReadBooks.removeAll { $0.title == self.book.title }
-//        } else {
-//            toReadBooks.append(self.book)
-//        }
-//
-////        // Toggle isBookAlreadySaved
-////        self.isBookAlreadySaved = !self.isBookAlreadySaved
-//    }
-    
-    
-    
-    
-//    private func saveOrRemoveBookAndToggleImage() {
-//        let newImageName = isBookAlreadySaved ? "heart" : "heart.fill"
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-//        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-//        self.saveButton.setImage(newImage, for: .normal)
-//
-//        self.saveLabel.text = isBookAlreadySaved ? "Save" : "Saved"
-//
-//        if self.isBookAlreadySaved {
-//            toReadBooks.removeAll { $0.title == self.book.title }
-//        } else {
-//            toReadBooks.append(self.book)
-//        }
-//
-//        // Toggle isBookAlreadySaved
-//        self.isBookAlreadySaved = !self.isBookAlreadySaved
-//    }
     
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
