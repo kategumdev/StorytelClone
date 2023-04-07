@@ -14,98 +14,46 @@ class AllTitlesTableViewCell: UITableViewCell {
     static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
     static let minTopAndBottomPadding: CGFloat = Constants.cvPadding
     static let minCellHeight: CGFloat = imageWidthAndHeight + (minTopAndBottomPadding * 2)
+    static let vertStackWidth: CGFloat = UIScreen.main.bounds.size.width - ((Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight)
+    static let maxSubtitleLabelCount: Int = 4 // CHANGE IT TO 4 WHEN SERIES LABEL WILL BE CREATED
     
-    static var calculatedTopAndBottomPadding: CGFloat = 0
-    
-//    static var calculatedTopAndBottomPadding: CGFloat = {
-//        // Not scaled font to calculate padding for default content size category
-//        let titleLabel = createTitleLabel(withScaledFont: false)
-//        let subtitleLabel = createSubtitleLabel(withScaledFont: false)
-//        titleLabel.text = "This is title"
-//        subtitleLabel.text = "This is subtitle"
-//        titleLabel.sizeToFit()
-//        subtitleLabel.sizeToFit()
-//
-//        let labelsHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3)
-//        let padding = abs((minCellHeight - labelsHeight) / 2)
-//        return padding
-//    }()
-    
-    
-    static func calculateTopAndBottomPadding(forBook book: Book, subtitleLabelNumber: Int, labelWidth: CGFloat) -> CGFloat{
-        // Not scaled font to calculate padding for default content size category
-        let titleLabel = createTitleLabel(withScaledFont: false)
-        let subtitleLabel = createSubtitleLabel(withScaledFont: false)
-//        titleLabel.text = "This is title"
-        titleLabel.text = book.title
-        subtitleLabel.text = "This is subtitle"
-//        titleLabel.sizeToFit()
-        subtitleLabel.sizeToFit()
-
-        let titleLabelHeight = titleLabel.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude)).height
-
-        let labelsHeight = titleLabelHeight + subtitleLabel.bounds.height * CGFloat(subtitleLabelNumber)
-
-//        let labelsHeight = titleLabel.bounds.height + (subtitleLabel.bounds.height * 3)
-        let padding = abs((minCellHeight - labelsHeight) / 2)
-        return padding
-    }
-    
-    static func calculateLabelsHeightWith(subtitleLabelNumber: Int, labelWidth: CGFloat, forBook book: Book) -> CGFloat {
+    static func calculateLabelsHeight(forBook book: Book) -> CGFloat {
+        // Height of titleLabel
         let titleLabel = createTitleLabel()
-        let subtitleLabel = createSubtitleLabel()
         titleLabel.text = book.title
-//        titleLabel.text = "This is title"
+        let titleLabelWidth = vertStackWidth
+        let titleLabelHeight = titleLabel.sizeThatFits(CGSize(width: titleLabelWidth, height: CGFloat.greatestFiniteMagnitude)).height
+        
+        // Height of subtitleLabels
+        let subtitleLabel = createSubtitleLabel()
         subtitleLabel.text = "This is subtitle"
-//        titleLabel.sizeToFit()
         subtitleLabel.sizeToFit()
-        
-        let titleLabelHeight = titleLabel.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude)).height
-        
-        let labelsHeight = titleLabelHeight + subtitleLabel.bounds.height * CGFloat(subtitleLabelNumber)
 
-        print("calculateLabelsHeightWith: \(labelsHeight)")
-//        let labelsHeight = titleLabel.bounds.height + titleLabel.bounds.height * CGFloat(subtitleLabelNumber)
+        var subtitleLabelCount = maxSubtitleLabelCount
+        if book.narrators == nil { subtitleLabelCount -= 1 }
+        if book.series == nil { subtitleLabelCount -= 1 }
+        
+        let heightOfSubtitleLabels = subtitleLabel.bounds.height * CGFloat(subtitleLabelCount)
+        
+        // Total labelsHeight
+        let labelsHeight = titleLabelHeight + heightOfSubtitleLabels
         return labelsHeight
     }
-    
-//    static func calculateLabelsHeightWith(subtitleLabelNumber: Int) -> CGFloat {
-//        let titleLabel = createTitleLabel()
-//        let subtitleLabel = createSubtitleLabel()
-//        titleLabel.text = "This is title"
-//        subtitleLabel.text = "This is subtitle"
-//        titleLabel.sizeToFit()
-//        subtitleLabel.sizeToFit()
-//
-//        let labelsHeight = titleLabel.bounds.height + titleLabel.bounds.height * CGFloat(subtitleLabelNumber)
-//        return labelsHeight
-//    }
-    
-    static func getEstimatedHeightForRow(subtitleLabelNumber: Int, labelWidth: CGFloat, forBook book: Book) -> CGFloat {
-        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 3, labelWidth: labelWidth, forBook: book)
+
+    static func getEstimatedHeightForRow(withBook book: Book) -> CGFloat {
+        let labelsHeight = calculateLabelsHeight(forBook: book)
         
-//        var rowHeight: CGFloat
-//        if labelsHeight > AllTitlesTableViewCell.imageWidthAndHeight {
-//            rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2 + Constants.cvPadding * 2
-//        } else {
-//            rowHeight = AllTitlesTableViewCell.imageWidthAndHeight
-//        }
+        var rowHeight: CGFloat
+        if labelsHeight < imageWidthAndHeight {
+            rowHeight = imageWidthAndHeight + Constants.cvPadding * 2
+        } else {
+            rowHeight = labelsHeight + Constants.cvPadding * 2
+        }
         
-//        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
-//        let calculatedTopAndBottomPadding = calculatedTopAndBottomPadding(subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth, forBook: book)
-        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2 + Constants.cvPadding * 2
-        print("getEstimatedHeightForRow: \(rowHeight)")
         return rowHeight
     }
-    //    static func getEstimatedHeightForRow() -> CGFloat {
-    //        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 3)
-    //        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
-    //        print("getEstimatedHeightForRow: \(rowHeight)")
-    //        return rowHeight
-    //    }
-        
+
     static func createTitleLabel(withScaledFont: Bool = true) -> UILabel {
-//        let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: withScaledFont)
         let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: withScaledFont)
         return label
     }
@@ -114,24 +62,20 @@ class AllTitlesTableViewCell: UITableViewCell {
         let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: withScaledFont)
         return label
     }
-    
 
-    
     // MARK: - Instance properties
-//    private let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
-        
     private let bookTitleLabel = AllTitlesTableViewCell.createTitleLabel()
     private let bookKindLabel = AllTitlesTableViewCell.createSubtitleLabel()
     private let authorsLabel = AllTitlesTableViewCell.createSubtitleLabel()
     private let narratorsLabel = AllTitlesTableViewCell.createSubtitleLabel()
+    private let seriesLabel = AllTitlesTableViewCell.createSubtitleLabel()
 
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
 //        stack.distribution = .fillProportionally
-        [bookTitleLabel, bookKindLabel, authorsLabel, narratorsLabel].forEach { stack.addArrangedSubview($0)}
-        stack.backgroundColor = .green
+        [bookTitleLabel, bookKindLabel, authorsLabel, narratorsLabel, seriesLabel].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
     
@@ -145,6 +89,17 @@ class AllTitlesTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private lazy var horzStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+//        stack.distribution = .fillProportionally
+//        stack.distribution = .equalSpacing
+        stack.spacing = Constants.cvPadding
+        [squareViewWithImageView, vertStackWithLabels].forEach { stack.addArrangedSubview($0) }
+        return stack
+    }()
+    
     private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
     
     private lazy var squareViewWithImageView: UIView = {
@@ -156,12 +111,9 @@ class AllTitlesTableViewCell: UITableViewCell {
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        contentView.backgroundColor = Utils.customBackgroundColor
-        contentView.backgroundColor = .brown
+        contentView.backgroundColor = Utils.customBackgroundColor
 
-        
-        contentView.addSubview(squareViewWithImageView)
-        contentView.addSubview(vertStackWithLabels)
+        contentView.addSubview(horzStack)
         applyConstraints()
     }
     
@@ -193,12 +145,10 @@ class AllTitlesTableViewCell: UITableViewCell {
             narratorsLabel.textColor = UIColor.label
         }
         
-//        else {
-//            // This is needed to take height of this label into account when system calculates automaticDimension for this cell
-//            narratorsLabel.text = "Placeholder"
-//            narratorsLabel.textColor = UIColor.clear
-//        }
-        
+        if let seriesTitle = book.series {
+            seriesLabel.text = "Series: \(seriesTitle)"
+        }
+
         if let image = book.coverImage {
             let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
             
@@ -210,46 +160,11 @@ class AllTitlesTableViewCell: UITableViewCell {
 
     }
     
-//    func configureFor(book: Book) {
-//        bookTitleLabel.text = book.title
-//        bookKindLabel.text = book.titleKind.rawValue
-//
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        authorsLabel.text = "By: \(authorNamesString)"
-//
-//        if let narrators = book.narrators {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            narratorsLabel.text = "With: \(narratorNamesString)"
-//            narratorsLabel.textColor = UIColor.label
-//        } else {
-//            // This is needed to take height of this label into account when system calculates automaticDimension for this cell
-//            narratorsLabel.text = "Placeholder"
-//            narratorsLabel.textColor = UIColor.clear
-//        }
-//
-//        if let image = book.coverImage {
-//            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
-//
-//            if customImageView.bounds.width != image.size.width {
-//                customImageViewWidthAnchor.constant = resizedImage.size.width
-//            }
-//            customImageView.image = resizedImage
-//        }
-//
-//    }
-    
     private func applyConstraints() {
         
-        squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            squareViewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            squareViewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            squareViewWithImageView.heightAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight),
-            squareViewWithImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
-        ])
-        
+        horzStack.translatesAutoresizingMaskIntoConstraints = false
+        horzStack.fillSuperview(withConstant: Constants.cvPadding)
+
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customImageView.topAnchor.constraint(equalTo: squareViewWithImageView.topAnchor),
@@ -259,13 +174,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         customImageViewWidthAnchor.isActive = true
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AllTitlesTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AllTitlesTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.cvPadding),
-//            vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.cvPadding)
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding)
-        ])
+        vertStackWithLabels.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.vertStackWidth).isActive = true
     }
     
 }

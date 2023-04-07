@@ -22,6 +22,20 @@ class FollowSeriesView: UIView {
         numberOfFollowersLabel.sizeToFit()
         
         let labelsHeight = followLabel.bounds.height + numberOfFollowersLabel.bounds.height
+        
+        
+        
+        
+//        let paddings = (imageHeightAndWidth - labelsHeight) / 2
+//        var onePadding: CGFloat
+//        if paddings < 0 {
+//            onePadding = Constants.cvPadding
+//        } else {
+//            onePadding = abs(paddings)
+//        }
+//        return onePadding
+
+        
         let padding = abs((imageHeightAndWidth - labelsHeight) / 2)
         return padding
     }()

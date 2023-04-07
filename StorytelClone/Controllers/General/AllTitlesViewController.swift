@@ -12,6 +12,12 @@ class AllTitlesViewController: BaseTableViewController {
     let tableSection: TableSection
     let titleModel: Title?
     
+    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
+//    private let books = [Book.book1, Book.book1, Book.book1, Book.book1,
+//                         Book.book1, Book.book1, Book.book1, Book.book1,
+//                         Book.book1, Book.book1, Book.book1, Book.book1,
+//                         Book.book1, Book.book1, Book.book1, Book.book1]
+    
     init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
         self.tableSection = tableSection
         self.titleModel = titleModel
@@ -28,14 +34,21 @@ class AllTitlesViewController: BaseTableViewController {
         configureBookTable()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var frame = view.bounds
+        frame.size.height = view.bounds.height - Utils.tabBarHeight
+        bookTable.frame = frame
+    }
+    
     private func configureBookTable() {
         bookTable.separatorColor = UIColor.tertiaryLabel
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        bookTable.contentInset = inset
         
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
-        
-//        bookTable.rowHeight = UITableView.automaticDimension
-        
+                
         if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
             let headerView = StorytellerTableHeaderView()
             headerView.configureFor(storyteller: titleModel!)
@@ -68,7 +81,7 @@ class AllTitlesViewController: BaseTableViewController {
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return tableSection.books.count
-        return 50
+        return books.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,38 +91,13 @@ class AllTitlesViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
-        
-        cell.configureFor(book: Book.book1)
-//        cell.configureFor(book: Book.senorDeLosAnillos1)
-        
-//        let cell = UITableViewCell()
-//        cell.contentView.backgroundColor = .purple
+        cell.configureFor(book: books[indexPath.row])
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return AllTitlesTableViewCell.getEstimatedHeightForRow()
-//    }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        //        let book = Book.senorDeLosAnillos1
-                let book = Book.book1
-        
-
-
-
-        print("bookTable.bounds.width: \(view.bounds.width)")
-        let labelWidth = view.bounds.width - (Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight
-        var subtitleLabelNumber: Int = 3
-        if book.narrators == nil {
-            subtitleLabelNumber = 2
-        }
-        
-        let calculatedTopAndBottomPadding = AllTitlesTableViewCell.calculateTopAndBottomPadding(forBook: book, subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth)
-        AllTitlesTableViewCell.calculatedTopAndBottomPadding = calculatedTopAndBottomPadding
-        
-//        return AllTitlesTableViewCell.getEstimatedHeightForRow(subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth, forBook: book, calculatedTopAndBottomPadding: calculatedTopAndBottomPadding)
-
-        return AllTitlesTableViewCell.getEstimatedHeightForRow(subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth, forBook: book)
+        let book = books[indexPath.row]
+        return AllTitlesTableViewCell.getEstimatedHeightForRow(withBook: book)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -173,16 +161,6 @@ class AllTitlesViewController: BaseTableViewController {
         extendedLayoutIncludesOpaqueBars = true
         navigationItem.backButtonTitle = ""
     }
-    
-//    override func configureNavBar() {
-//        super.configureNavBar()
-//        var text = tableSection.sectionTitle
-//        text = text.replacingOccurrences(of: "\n", with: " ")
-//        title = text
-//
-//        extendedLayoutIncludesOpaqueBars = true
-//        navigationItem.backButtonTitle = ""
-//    }
     
     override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
