@@ -42,9 +42,9 @@ class RatingHorzStackView: UIStackView {
     }()
     
     private lazy var ratingLabel: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 12)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 40)
-        label.textColor = UIColor.secondaryLabel
+        label.textColor = Utils.seeAllButtonColor
         label.sizeToFit()
         return label
     }()

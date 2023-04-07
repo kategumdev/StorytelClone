@@ -72,7 +72,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     private let ratingLabel: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
-        label.textColor = UIColor.secondaryLabel
+        label.textColor = Utils.seeAllButtonColor
         label.sizeToFit()
         return label
     }()
