@@ -13,7 +13,8 @@ class PopupButton: UIButton {
     private let trailingPadding: CGFloat = Constants.cvPadding - 2
     let bottomAnchorConstant = Utils.tabBarHeight + 7
 
-    private let customLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
+    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
+
     
     private let textForAddingBook = "Added to Bookshelf"
     private let textForRemovingBook = "Removed from Bookshelf"

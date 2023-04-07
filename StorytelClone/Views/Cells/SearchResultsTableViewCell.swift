@@ -33,7 +33,9 @@ class SearchResultsTableViewCell: UITableViewCell {
         titleLabel.sizeToFit()
         subtitleLabel.sizeToFit()
         
-        let labelsHeight = titleLabel.bounds.height + titleLabel.bounds.height * CGFloat(subtitleLabelNumber)
+//        let labelsHeight = titleLabel.bounds.height + titleLabel.bounds.height * CGFloat(subtitleLabelNumber)
+        let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height * CGFloat(subtitleLabelNumber)
+        
         return labelsHeight
     }
     

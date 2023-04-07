@@ -17,14 +17,13 @@ struct Utils {
     
     //MARK: - Fonts
     static let navBarTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+
     static let navBarTitleFontScaled = UIFontMetrics.default.scaledFont(for: navBarTitleFont, maximumPointSize: 18)
     
-//    static let sectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     static let sectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
 
     static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     
-//    static let tableViewSectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let sectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
     static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
     
@@ -43,14 +42,8 @@ struct Utils {
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")
     static let customBackgroundLight = UIColor(red: 253/255, green: 251/255, blue: 250/255, alpha: 1)
-//    static let reversedCustomBackgroundColor = UIColor(named: "reversedCustomBackground")
     
     static let tintColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
-    
-//    static let badgeBorderColor = UIColor(named: "badgeBorder")
-//    
-//    static let badgeBackgroundColor = UIColor(named: "badgeBackground")
-    
     
     static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
     static let coralCategoryColor = UIColor(red: 234/255, green: 114/255, blue: 95/255, alpha: 1)
@@ -91,21 +84,6 @@ struct Utils {
         
         return appearance
     }()
-    
-//    static let visibleNavBarAppearance2: UINavigationBarAppearance = {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithDefaultBackground()
-//        appearance.shadowColor = .tertiaryLabel
-//        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-//
-//        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
-//        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-//        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-//        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-//
-//        return appearance
-//    }()
     
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
@@ -152,16 +130,6 @@ struct Utils {
         return calculatedHorzCvItemSizeLargeCovers.height
     }()
     
-//    static let calculatedCvItemSizeCategory: CGSize = {
-//        let height = Constants.categoryCvItemHeight
-//        
-//        let contentViewWidth = UIScreen.main.bounds.size.width
-//        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
-//
-//        let size = CGSize(width: width, height: height)
-//        return size
-//    }()
-    
     static let heightForRowWithWideButton: CGFloat = Utils.calculatedSquareCoverSize.height
 
     static let calculatedSmallSquareImageCoverSize: CGSize = {
@@ -169,9 +137,5 @@ struct Utils {
         let height = width
         return CGSize(width: width, height: height)
     }()
-    
-//    static let heightForRowWithOneBookOverview: CGFloat = Utils.calc
-    
 
-    
 }

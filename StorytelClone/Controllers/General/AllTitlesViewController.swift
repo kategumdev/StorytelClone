@@ -29,7 +29,12 @@ class AllTitlesViewController: BaseTableViewController {
     }
     
     private func configureBookTable() {
+        bookTable.separatorColor = UIColor.tertiaryLabel
+        
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
+        bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
+        
+//        bookTable.rowHeight = UITableView.automaticDimension
         
         if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
             let headerView = StorytellerTableHeaderView()
@@ -71,13 +76,44 @@ class AllTitlesViewController: BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.contentView.backgroundColor = .purple
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
+        
+        
+        cell.configureFor(book: Book.book1)
+//        cell.configureFor(book: Book.senorDeLosAnillos1)
+        
+//        let cell = UITableViewCell()
+//        cell.contentView.backgroundColor = .purple
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return AllTitlesTableViewCell.getEstimatedHeightForRow()
+//    }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        //        let book = Book.senorDeLosAnillos1
+                let book = Book.book1
+        
+
+
+
+        print("bookTable.bounds.width: \(view.bounds.width)")
+        let labelWidth = view.bounds.width - (Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight
+        var subtitleLabelNumber: Int = 3
+        if book.narrators == nil {
+            subtitleLabelNumber = 2
+        }
+        
+        let calculatedTopAndBottomPadding = AllTitlesTableViewCell.calculateTopAndBottomPadding(forBook: book, subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth)
+        AllTitlesTableViewCell.calculatedTopAndBottomPadding = calculatedTopAndBottomPadding
+        
+//        return AllTitlesTableViewCell.getEstimatedHeightForRow(subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth, forBook: book, calculatedTopAndBottomPadding: calculatedTopAndBottomPadding)
+
+        return AllTitlesTableViewCell.getEstimatedHeightForRow(subtitleLabelNumber: subtitleLabelNumber, labelWidth: labelWidth, forBook: book)
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
