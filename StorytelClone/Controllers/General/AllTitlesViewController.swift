@@ -43,6 +43,8 @@ class AllTitlesViewController: BaseTableViewController {
     
     private func configureBookTable() {
         bookTable.separatorColor = UIColor.tertiaryLabel
+        bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
+        
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         bookTable.contentInset = inset
         
@@ -97,7 +99,8 @@ class AllTitlesViewController: BaseTableViewController {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let book = books[indexPath.row]
-        return AllTitlesTableViewCell.getEstimatedHeightForRow(withBook: book)
+        return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
+//        return AllTitlesTableViewCell.getEstimatedHeightForRow(withBook: book)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -128,6 +131,13 @@ class AllTitlesViewController: BaseTableViewController {
 //        return calculatedHeight
 ////        return 40
 //    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Hide separator line under the last cell
+        if indexPath.row == books.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.width / 2, bottom: 0, right: cell.bounds.width / 2)
+        }
+    }
 
     override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()

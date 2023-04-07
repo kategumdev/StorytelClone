@@ -8,20 +8,21 @@
 import UIKit
 
 class AllTitlesTableViewCell: UITableViewCell {
-    
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesTableViewCell"
     static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
     static let minTopAndBottomPadding: CGFloat = Constants.cvPadding
     static let minCellHeight: CGFloat = imageWidthAndHeight + (minTopAndBottomPadding * 2)
-    static let vertStackWidth: CGFloat = UIScreen.main.bounds.size.width - ((Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight)
-    static let maxSubtitleLabelCount: Int = 4 // CHANGE IT TO 4 WHEN SERIES LABEL WILL BE CREATED
+//    static let vertStackWidth: CGFloat = UIScreen.main.bounds.size.width - ((Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight)
+    static let maxSubtitleLabelCount: Int = 4
+    static let imageWidthPlusAllHorzPaddings: CGFloat = ( AllTitlesTableViewCell.imageWidthAndHeight + (Constants.cvPadding * 3))
     
-    static func calculateLabelsHeight(forBook book: Book) -> CGFloat {
+    static func calculateLabelsHeight(forBook book: Book, andCellWidth cellWidth: CGFloat) -> CGFloat {
         // Height of titleLabel
         let titleLabel = createTitleLabel()
         titleLabel.text = book.title
-        let titleLabelWidth = vertStackWidth
+//        let titleLabelWidth = vertStackWidth
+        let titleLabelWidth = cellWidth - imageWidthPlusAllHorzPaddings
         let titleLabelHeight = titleLabel.sizeThatFits(CGSize(width: titleLabelWidth, height: CGFloat.greatestFiniteMagnitude)).height
         
         // Height of subtitleLabels
@@ -39,16 +40,28 @@ class AllTitlesTableViewCell: UITableViewCell {
         let labelsHeight = titleLabelHeight + heightOfSubtitleLabels
         return labelsHeight
     }
-
-    static func getEstimatedHeightForRow(withBook book: Book) -> CGFloat {
-        let labelsHeight = calculateLabelsHeight(forBook: book)
+    
+    static func getEstimatedHeightForRowWith(width: CGFloat, andBook book: Book) -> CGFloat {
+        // Get labelsHeight
+        let labelsHeight = calculateLabelsHeight(forBook: book, andCellWidth: width)
         
-        var rowHeight: CGFloat
+        // Get ratingHorzStackView height
+        let ratingHorzStackViewHeight = RatingHorzStackView.createCategoryLabel().bounds.height
+        
+        // Get total height
+        var rowHeight: CGFloat = Constants.cvPadding * 3 + ratingHorzStackViewHeight
         if labelsHeight < imageWidthAndHeight {
-            rowHeight = imageWidthAndHeight + Constants.cvPadding * 2
+            rowHeight += imageWidthAndHeight
         } else {
-            rowHeight = labelsHeight + Constants.cvPadding * 2
+            rowHeight += labelsHeight
         }
+        
+//        var rowHeight: CGFloat
+//        if labelsHeight < imageWidthAndHeight {
+//            rowHeight = imageWidthAndHeight + Constants.cvPadding * 2
+//        } else {
+//            rowHeight = labelsHeight + Constants.cvPadding * 2
+//        }
         
         return rowHeight
     }
@@ -74,7 +87,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
-//        stack.distribution = .fillProportionally
         [bookTitleLabel, bookKindLabel, authorsLabel, narratorsLabel, seriesLabel].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
@@ -89,14 +101,20 @@ class AllTitlesTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private lazy var horzStack: UIStackView = {
+    private lazy var imageLabelsHorzStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
-//        stack.distribution = .fillProportionally
-//        stack.distribution = .equalSpacing
         stack.spacing = Constants.cvPadding
         [squareViewWithImageView, vertStackWithLabels].forEach { stack.addArrangedSubview($0) }
+        return stack
+    }()
+    
+    private lazy var mainVertStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = Constants.cvPadding
+        [imageLabelsHorzStack, ratingHorzStackView].forEach { stack.addArrangedSubview($0) }
         return stack
     }()
     
@@ -108,12 +126,17 @@ class AllTitlesTableViewCell: UITableViewCell {
         return view
     }()
     
+    private lazy var ratingHorzStackView: RatingHorzStackView = {
+        let stack = RatingHorzStackView()
+        stack.backgroundColor = .magenta
+        return stack
+    }()
+    
     // MARK: - View life cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
-
-        contentView.addSubview(horzStack)
+        contentView.addSubview(mainVertStack)
         applyConstraints()
     }
     
@@ -157,13 +180,13 @@ class AllTitlesTableViewCell: UITableViewCell {
             }
             customImageView.image = resizedImage
         }
-
+        
+        ratingHorzStackView.configureForAllTitleCellWith(book: book)
     }
     
     private func applyConstraints() {
-        
-        horzStack.translatesAutoresizingMaskIntoConstraints = false
-        horzStack.fillSuperview(withConstant: Constants.cvPadding)
+        mainVertStack.translatesAutoresizingMaskIntoConstraints = false
+        mainVertStack.fillSuperview(withConstant: Constants.cvPadding)
 
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -174,7 +197,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         customImageViewWidthAnchor.isActive = true
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
-        vertStackWithLabels.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.vertStackWidth).isActive = true
+        let widthConstant = AllTitlesTableViewCell.imageWidthPlusAllHorzPaddings
+        vertStackWithLabels.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -widthConstant).isActive = true
     }
     
 }
