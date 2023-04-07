@@ -13,7 +13,6 @@ class AllTitlesTableViewCell: UITableViewCell {
     static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
     static let minTopAndBottomPadding: CGFloat = Constants.cvPadding
     static let minCellHeight: CGFloat = imageWidthAndHeight + (minTopAndBottomPadding * 2)
-//    static let vertStackWidth: CGFloat = UIScreen.main.bounds.size.width - ((Constants.cvPadding * 3) + AllTitlesTableViewCell.imageWidthAndHeight)
     static let maxSubtitleLabelCount: Int = 4
     static let imageWidthPlusAllHorzPaddings: CGFloat = ( AllTitlesTableViewCell.imageWidthAndHeight + (Constants.cvPadding * 3))
     
@@ -21,7 +20,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         // Height of titleLabel
         let titleLabel = createTitleLabel()
         titleLabel.text = book.title
-//        let titleLabelWidth = vertStackWidth
         let titleLabelWidth = cellWidth - imageWidthPlusAllHorzPaddings
         let titleLabelHeight = titleLabel.sizeThatFits(CGSize(width: titleLabelWidth, height: CGFloat.greatestFiniteMagnitude)).height
         
@@ -42,10 +40,8 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     static func getEstimatedHeightForRowWith(width: CGFloat, andBook book: Book) -> CGFloat {
-        // Get labelsHeight
         let labelsHeight = calculateLabelsHeight(forBook: book, andCellWidth: width)
         
-        // Get ratingHorzStackView height
         let ratingHorzStackViewHeight = RatingHorzStackView.createCategoryLabel().bounds.height
         
         // Get total height
@@ -55,14 +51,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         } else {
             rowHeight += labelsHeight
         }
-        
-//        var rowHeight: CGFloat
-//        if labelsHeight < imageWidthAndHeight {
-//            rowHeight = imageWidthAndHeight + Constants.cvPadding * 2
-//        } else {
-//            rowHeight = labelsHeight + Constants.cvPadding * 2
-//        }
-        
         return rowHeight
     }
 
@@ -91,6 +79,12 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
+    private lazy var squareViewWithImageView: UIView = {
+        let view = UIView()
+        view.addSubview(customImageView)
+        return view
+    }()
+    
     private let customImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -101,6 +95,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
+    
     private lazy var imageLabelsHorzStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -110,25 +106,13 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
+    private lazy var ratingHorzStackView = RatingHorzStackView()
+    
     private lazy var mainVertStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = Constants.cvPadding
         [imageLabelsHorzStack, ratingHorzStackView].forEach { stack.addArrangedSubview($0) }
-        return stack
-    }()
-    
-    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
-    
-    private lazy var squareViewWithImageView: UIView = {
-        let view = UIView()
-        view.addSubview(customImageView)
-        return view
-    }()
-    
-    private lazy var ratingHorzStackView: RatingHorzStackView = {
-        let stack = RatingHorzStackView()
-        stack.backgroundColor = .magenta
         return stack
     }()
     

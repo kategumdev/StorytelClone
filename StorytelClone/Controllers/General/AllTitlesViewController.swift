@@ -100,7 +100,6 @@ class AllTitlesViewController: BaseTableViewController {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let book = books[indexPath.row]
         return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
-//        return AllTitlesTableViewCell.getEstimatedHeightForRow(withBook: book)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
