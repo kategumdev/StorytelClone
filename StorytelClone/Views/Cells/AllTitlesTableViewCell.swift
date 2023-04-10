@@ -138,7 +138,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
-    func configureFor(book: Book, togglePopupButtonTextCallback: @escaping (Bool) -> (), showPopupCallback: @escaping () -> (), hidePopupCallback: @escaping () -> () ) {
+    func configureFor(book: Book, saveButtonTappedCallback: @escaping (Bool) -> () ) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
 
@@ -167,7 +167,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         }
         
 //        ratingHorzStackView.configureForAllTitleCellWith(book: book)
-        ratingHorzStackView.configureForAllTitleCellWith(book: book, togglePopupButtonTextCallback: togglePopupButtonTextCallback, showPopupCallback: showPopupCallback, hidePopupCallback: hidePopupCallback)
+//        ratingHorzStackView.configureForAllTitleCellWith(book: book, togglePopupButtonTextCallback: togglePopupButtonTextCallback, showPopupCallback: showPopupCallback, hidePopupCallback: hidePopupCallback)
+        ratingHorzStackView.configureForAllTitleCellWith(book: book, saveButtonTappedCallback: saveButtonTappedCallback)
 
     }
 //    func configureFor(book: Book) {
