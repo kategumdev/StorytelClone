@@ -114,7 +114,26 @@ class RoundButtonsStackContainer: UIStackView {
         return button
     }()
     
-    private var isBookAlreadyAddedToBookshelf = false
+    private var isBookAddedToBookshelf = false
+//    var saveButtonTappedCallback: (Bool) -> () = {_ in}
+    var saveButtonTappedCallback: (Bool, @escaping () -> () ) -> () = {_,_  in}
+    
+    private lazy var animateWhenBookIsAdded: () -> () = {
+        self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+            guard let self = self else { return }
+            
+            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+            self.saveOrRemoveBookAndToggleImage()
+            
+        })
+    }
+    
+    private lazy var animateWhenBookIsRemoved: () -> () = {
+        self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+        self.saveOrRemoveBookAndToggleImage()
+        self.animateSaveButtonImageView(withCompletion: { _ in })
+    }
+    
     
     private let saveLabel: UILabel = {
         let label = RoundButtonsStackContainer.createLabel()
@@ -130,7 +149,7 @@ class RoundButtonsStackContainer: UIStackView {
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
-        isBookAlreadyAddedToBookshelf = book.isAddedToBookshelf
+        isBookAddedToBookshelf = book.isAddedToBookshelf
         saveOrRemoveBookAndToggleImage()
         
         configureSelf()
@@ -177,60 +196,110 @@ class RoundButtonsStackContainer: UIStackView {
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.handleSaveButtonTapped()
+            
+            if !self.isBookAddedToBookshelf {
+                self.saveButtonTappedCallback(self.isBookAddedToBookshelf, self.animateWhenBookIsAdded)
+            } else {
+                self.saveButtonTappedCallback(self.isBookAddedToBookshelf, self.animateWhenBookIsRemoved)
+            }
+            
+//            if !self.isBookAddedToBookshelf {
+//                self.saveButtonTappedCallback(self.isBookAddedToBookshelf, self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+//                    guard let self = self else { return }
+//
+//                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//                    self.saveOrRemoveBookAndToggleImage()
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//                }) )
+//            } else {
+//
+//            }
+//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf, self.animateSaveButtonImageView(withCompletion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>) )
+            
+//            self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
     
-    private func handleSaveButtonTapped() {
-        cancelAndReassignWorkItems()
-        
-        if isBookAlreadyAddedToBookshelf {
-            // User removes book, image should be changed after animation completes
-            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-                guard let self = self else { return }
-                self.togglePopupButtonTextCallback(false)
-                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-                    guard let self = self else { return }
-                    
-                    self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
-                    self.saveOrRemoveBookAndToggleImage()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-                })
-            })
-
-        } else {
-            // User adds book, image should be changed before animation begins
-            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-                guard let self = self else { return }
-                self.togglePopupButtonTextCallback(true)
-                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-                
-                self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
-                self.saveOrRemoveBookAndToggleImage()
-                
-                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-                    guard let self = self else { return }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-                })
-            })
-        }
-
-    }
+//    private func handleSaveButtonTapped() {
+//        cancelAndReassignWorkItems()
+//
+//        UIView.animate(withDuration: 0.6) { [weak self] in
+//            guard let self = self else { return }
+//            self.togglePopupButtonTextCallback(!self.isBookAddedToBookshelf)
+//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//            
+//            if self.isBookAddedToBookshelf {
+//                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+//                    guard let self = self else { return }
+//
+//                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//                    self.saveOrRemoveBookAndToggleImage()
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//                })
+//            } else {
+//                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//                self.saveOrRemoveBookAndToggleImage()
+//
+//                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//                })
+//            }
+//        }
+//    }
     
-    private func cancelAndReassignWorkItems() {
-        showPopupWorkItem.cancel()
-        hidePopupWorkItem.cancel()
-        
-        showPopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.showPopupCallback()
-        }
-        
-        hidePopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.hidePopupCallback()
-        }
-    }
+//    private func handleSaveButtonTapped() {
+//        cancelAndReassignWorkItems()
+//
+//        if isBookAddedToBookshelf {
+//            // User removes book, image should be changed after animation completes
+//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
+//                guard let self = self else { return }
+//                self.togglePopupButtonTextCallback(false)
+//                DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+//                    guard let self = self else { return }
+//
+//                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//                    self.saveOrRemoveBookAndToggleImage()
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//                })
+//            })
+//
+//        } else {
+//            // User adds book, image should be changed before animation begins
+//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
+//                guard let self = self else { return }
+//                self.togglePopupButtonTextCallback(true)
+//                DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//
+//                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//                self.saveOrRemoveBookAndToggleImage()
+//
+//                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//                })
+//            })
+//        }
+//
+//    }
+    
+//    private func cancelAndReassignWorkItems() {
+//        showPopupWorkItem.cancel()
+//        hidePopupWorkItem.cancel()
+//
+//        showPopupWorkItem = DispatchWorkItem { [weak self] in
+//            self?.showPopupCallback()
+//        }
+//
+//        hidePopupWorkItem = DispatchWorkItem { [weak self] in
+//            self?.hidePopupCallback()
+//        }
+//    }
     
     private func animateSaveButtonImageView(withCompletion completion: ((Bool) -> Void)?) {
         let imageView = saveButton.imageView!
@@ -274,14 +343,14 @@ class RoundButtonsStackContainer: UIStackView {
         // Toggle isBookAlreadySaved
 //        self.isBookAlreadySaved = !self.isBookAlreadySaved
 
-        let newImageName = isBookAlreadyAddedToBookshelf ? "heart.fill" : "heart"
+        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.saveButton.setImage(newImage, for: .normal)
 
-        self.saveLabel.text = isBookAlreadyAddedToBookshelf ? "Saved" : "Save"
+        self.saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
 
-        if self.isBookAlreadyAddedToBookshelf {
+        if self.isBookAddedToBookshelf {
             toReadBooks.append(self.book)
 
         } else {
@@ -291,6 +360,8 @@ class RoundButtonsStackContainer: UIStackView {
 //        // Toggle isBookAlreadySaved
 //        self.isBookAlreadySaved = !self.isBookAlreadySaved
     }
+    
+    
     
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false

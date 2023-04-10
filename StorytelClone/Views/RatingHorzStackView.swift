@@ -111,15 +111,38 @@ class RatingHorzStackView: UIStackView {
         addSaveButtonAction()
     }
     
+//    private func addSaveButtonAction() {
+//        saveButton.addAction(UIAction(handler: { [weak self] _ in
+//            guard let self = self else { return }
+//            print("saveButton tapped")
+//            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//            self.toggleButtonImage()
+//            self.updateBook()
+//
+//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+//
+//        }), for: .touchUpInside)
+//    }
+    
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             print("saveButton tapped")
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleButtonImage()
-            self.updateBook()
+//            self.updateBook()
             
+//            UIView.animate(withDuration: 0.6, delay: 0) {
+//                UIView.animate(withDuration: 0.1, delay: 0, animations: {
+//                    self.toggleButtonImage()
+//                })
+//                self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+//
+//            }
+
             self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+            
+            self.updateBook()
             
         }), for: .touchUpInside)
     }
@@ -130,15 +153,6 @@ class RatingHorzStackView: UIStackView {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.saveButton.setImage(newImage, for: .normal)
-
-//        guard let book = book else { return }
-//
-//        if self.isBookAddedToBookshelf {
-//            toReadBooks.append(book)
-//        } else {
-//            toReadBooks.removeAll { $0.title == book.title }
-//        }
-
     }
     
     private func updateBook() {
@@ -152,24 +166,6 @@ class RatingHorzStackView: UIStackView {
             // With real data, update book object here
         }
     }
-    
-    // With real data, when this func is called in configureForAllTitleCellWith, it shouldn't add or remove book to the
-//    private func saveOrRemoveBookAndToggleImage() {
-//        self.saveButton.tintColor = isBookAddedToBookshelf ? Utils.tintColor : .label
-//        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-//        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-//        self.saveButton.setImage(newImage, for: .normal)
-//
-//        guard let book = book else { return }
-//
-//        if self.isBookAddedToBookshelf {
-//            toReadBooks.append(book)
-//        } else {
-//            toReadBooks.removeAll { $0.title == book.title }
-//        }
-//
-//    }
     
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
