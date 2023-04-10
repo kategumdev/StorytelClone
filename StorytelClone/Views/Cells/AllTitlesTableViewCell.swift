@@ -106,7 +106,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-//    private lazy var ratingHorzStackView = RatingHorzStackView()
     lazy var ratingHorzStackView = RatingHorzStackView()
     
     private lazy var mainVertStack: UIStackView = {
@@ -165,119 +164,11 @@ class AllTitlesTableViewCell: UITableViewCell {
             }
             customImageView.image = resizedImage
         }
-        
-//        ratingHorzStackView.configureForAllTitleCellWith(book: book)
-//        ratingHorzStackView.configureForAllTitleCellWith(book: book, togglePopupButtonTextCallback: togglePopupButtonTextCallback, showPopupCallback: showPopupCallback, hidePopupCallback: hidePopupCallback)
+
         ratingHorzStackView.configureForAllTitleCellWith(book: book, saveButtonTappedCallback: saveButtonTappedCallback)
 
     }
-//    func configureFor(book: Book) {
-//        bookTitleLabel.text = book.title
-//        bookKindLabel.text = book.titleKind.rawValue
-//
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        authorsLabel.text = "By: \(authorNamesString)"
-//
-//        if let narrators = book.narrators {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            narratorsLabel.text = "With: \(narratorNamesString)"
-//            narratorsLabel.textColor = UIColor.label
-//        }
-//
-//        if let seriesTitle = book.series {
-//            seriesLabel.text = "Series: \(seriesTitle)"
-//        }
-//
-//        if let image = book.coverImage {
-//            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
-//
-//            if customImageView.bounds.width != image.size.width {
-//                customImageViewWidthAnchor.constant = resizedImage.size.width
-//            }
-//            customImageView.image = resizedImage
-//        }
-//
-//        ratingHorzStackView.configureForAllTitleCellWith(book: book)
-//    }
-    
-//    private func passCallbacksToSaveButton() {
-//        bookDetailsStackView.roundButtonsStackContainer.togglePopupButtonTextCallback = { [weak self] userAddedBookToBookshelf in
-//            self?.popupButton.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
-//        }
-//        
-//        bookDetailsStackView.roundButtonsStackContainer.showPopupCallback = { [weak self] in
-//            print("showPopupCallback is executing")
-//            guard let self = self else { return }
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.popupButtonBottomAnchor.constant = -self.popupButton.bottomAnchorConstant
-//                self.view.layoutIfNeeded()
-//                self.popupButton.alpha = 1
-//            })
-//        }
-//        
-//        bookDetailsStackView.roundButtonsStackContainer.hidePopupCallback = hidePopupCallback
-//    }
-    
-//    private func addSaveButtonAction() {
-//        ratingHorzStackView.saveButton.addAction(UIAction(handler: { [weak self] _ in
-//            guard let self = self else { return }
-//            self.handleSaveButtonTapped()
-//        }), for: .touchUpInside)
-//    }
-//    
-//    private func handleSaveButtonTapped() {
-//        cancelAndReassignWorkItems()
-//        
-//        if isBookAlreadyAddedToBookshelf {
-//            // User removes book, image should be changed after animation completes
-//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-//                guard let self = self else { return }
-//                self.togglePopupButtonTextCallback(false)
-//                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                    guard let self = self else { return }
-//                    
-//                    self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
-//                    self.saveOrRemoveBookAndToggleImage()
-//                    
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//                })
-//            })
-//
-//        } else {
-//            // User adds book, image should be changed before animation begins
-//            UIView.animate(withDuration: 0.6, animations: { [weak self] in
-//                guard let self = self else { return }
-//                self.togglePopupButtonTextCallback(true)
-//                DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//                
-//                self.isBookAlreadyAddedToBookshelf = !self.isBookAlreadyAddedToBookshelf
-//                self.saveOrRemoveBookAndToggleImage()
-//                
-//                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-//                    guard let self = self else { return }
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//                })
-//            })
-//        }
-//
-//    }
-//    
-//    private func cancelAndReassignWorkItems() {
-//        showPopupWorkItem.cancel()
-//        hidePopupWorkItem.cancel()
-//        
-//        showPopupWorkItem = DispatchWorkItem { [weak self] in
-//            self?.showPopupCallback()
-//        }
-//        
-//        hidePopupWorkItem = DispatchWorkItem { [weak self] in
-//            self?.hidePopupCallback()
-//        }
-//    }
-    
+
     private func applyConstraints() {
         mainVertStack.translatesAutoresizingMaskIntoConstraints = false
         mainVertStack.fillSuperview(withConstant: Constants.cvPadding)
