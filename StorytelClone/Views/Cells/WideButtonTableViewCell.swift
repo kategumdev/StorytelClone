@@ -13,14 +13,14 @@ class WideButtonTableViewCell: UITableViewCell {
         
     private var timeLayoutSubviewsIsBeingCalled = 0
 
-    private lazy var dimViewForButtonAnimation: UIView = {
-        let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
-        return view
-    }()
+//    private lazy var dimViewForButtonAnimation: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = Utils.customBackgroundColor
+//        return view
+//    }()
     
-    private lazy var wideButton: CellButton = {
-        let button = CellButton()
+    private lazy var wideButton: DimViewCellButton = {
+        let button = DimViewCellButton()
         button.backgroundColor = UIColor(red: 200/255, green: 217/255, blue: 228/255, alpha: 1)
         return button
     }()
@@ -43,10 +43,11 @@ class WideButtonTableViewCell: UITableViewCell {
         contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(wideButton)
         contentView.addSubview(wideButtonLabel)
-        contentView.addSubview(dimViewForButtonAnimation)
+//        contentView.addSubview(dimViewForButtonAnimation)
         
 //        addButtonUpdateHandler()
-        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+//        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         
         applyConstraints()
     }
@@ -77,36 +78,9 @@ class WideButtonTableViewCell: UITableViewCell {
         }
     }
     
-//    private func addButtonUpdateHandler() {
-//        wideButton.configurationUpdateHandler = { [weak self] theButton in
-//            guard let self = self else { return }
-//            if theButton.isHighlighted {
-//                print("button is highlighted")
-//
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-//                    self.dimViewForButtonAnimation.alpha = 0.1
-//                })
-//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-//                    if self.isHighlighted {
-//                        print("Button held for more than 2 seconds, do not perform action")
-//                        self.wideButton.isButtonTooLongInHighlightedState = true
-//                    }
-//                }
-//                self.wideButton.buttonTimer = timer
-//
-//            } else {
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = .identity
-//                    self.dimViewForButtonAnimation.alpha = 0
-//                })
-//            }
-//        }
-//    }
-    
     private func applyConstraints() {
-        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-        dimViewForButtonAnimation.fillSuperview()
+//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+//        dimViewForButtonAnimation.fillSuperview()
         
         let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
         wideButton.translatesAutoresizingMaskIntoConstraints = false

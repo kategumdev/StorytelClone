@@ -14,11 +14,11 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Instance properties
     private var categoryOfButton: ButtonCategory?
     
-    private lazy var dimViewForButtonAnimation: UIView = {
-        let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
-        return view
-    }()
+//    private lazy var dimViewForButtonAnimation: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = Utils.customBackgroundColor
+//        return view
+//    }()
     
     private lazy var categoryTitleLabel: UILabel = {
         let label = UILabel()
@@ -34,8 +34,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var cellButton: CellButton = {
-        let button = CellButton()
+    private lazy var cellButton: DimViewCellButton = {
+        let button = DimViewCellButton()
         button.addSubview(categoryTitleLabel)
         return button
     }()
@@ -44,10 +44,11 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(cellButton)
-        contentView.addSubview(dimViewForButtonAnimation)
+//        contentView.addSubview(dimViewForButtonAnimation)
         
 //        addButtonUpdateHandler()
-        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+//        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         
         applyConstraints()
     }
@@ -64,36 +65,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         categoryTitleLabel.text = category.rawValue
     }
     
-//    private func addButtonUpdateHandler() {
-//        cellButton.configurationUpdateHandler = { [weak self] theButton in
-//            guard let self = self else { return }
-//            if theButton.isHighlighted {
-//                print("button is highlighted")
-//
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-//                    self.dimViewForButtonAnimation.alpha = 0.1
-//                })
-//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-//                    if self.isHighlighted {
-//                        print("Button held for more than 2 seconds, do not perform action")
-//                        self.cellButton.isButtonTooLongInHighlightedState = true
-//                    }
-//                }
-//                self.cellButton.buttonTimer = timer
-//
-//            } else {
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = .identity
-//                    self.dimViewForButtonAnimation.alpha = 0
-//                })
-//            }
-//        }
-//    }
-    
     private func applyConstraints() {
-        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-        dimViewForButtonAnimation.fillSuperview()
+//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+//        dimViewForButtonAnimation.fillSuperview()
 
         cellButton.translatesAutoresizingMaskIntoConstraints = false
         cellButton.fillSuperview()

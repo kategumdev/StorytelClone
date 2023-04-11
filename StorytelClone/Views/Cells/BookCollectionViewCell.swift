@@ -14,18 +14,18 @@ class BookCollectionViewCell: UICollectionViewCell {
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
         
-    private let bookButton: CellButton = {
-        let button = CellButton()
+    private let bookButton: DimViewCellButton = {
+        let button = DimViewCellButton()
         button.layer.borderColor = UIColor.tertiaryLabel.cgColor
         button.layer.borderWidth = 0.26
         return button
     }()
     
-    private lazy var dimViewForButtonAnimation: UIView = {
-        let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
-        return view
-    }()
+//    private lazy var dimViewForButtonAnimation: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = Utils.customBackgroundColor
+//        return view
+//    }()
         
     // MARK: - View life cycle
     override init(frame: CGRect) {
@@ -33,10 +33,11 @@ class BookCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(bookButton)
         contentView.addSubview(badgeOne)
         contentView.addSubview(badgeTwo)
-        contentView.addSubview(dimViewForButtonAnimation)
+//        contentView.addSubview(dimViewForButtonAnimation)
         
 //        addButtonUpdateHandler()
-        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+//        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         
         applyConstraints()
     }
@@ -79,36 +80,9 @@ class BookCollectionViewCell: UICollectionViewCell {
         
     }
     
-//    private func addButtonUpdateHandler() {
-//        bookButton.configurationUpdateHandler = { [weak self] theButton in
-//            guard let self = self else { return }
-//            if theButton.isHighlighted {
-//                print("button is highlighted")
-//
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-//                    self.dimViewForButtonAnimation.alpha = 0.1
-//                })
-//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-//                    if self.isHighlighted {
-//                        print("Button held for more than 2 seconds, do not perform action")
-//                        self.bookButton.isButtonTooLongInHighlightedState = true
-//                    }
-//                }
-//                self.bookButton.buttonTimer = timer
-//
-//            } else {
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = .identity
-//                    self.dimViewForButtonAnimation.alpha = 0
-//                })
-//            }
-//        }
-//    }
-    
     private func applyConstraints() {
-        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-        dimViewForButtonAnimation.fillSuperview()
+//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+//        dimViewForButtonAnimation.fillSuperview()
 
         bookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

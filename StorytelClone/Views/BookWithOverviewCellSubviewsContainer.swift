@@ -13,19 +13,19 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     static let backgroundColor = UIColor(named: "backgroundBookOverview")
     
     // MARK: - Instance properties
-    let bookOverviewButton: CellButton = {
-        let button = CellButton()
+    let bookOverviewButton: DimViewCellButton = {
+        let button = DimViewCellButton()
         button.backgroundColor = backgroundColor
         button.layer.borderColor = borderColor?.cgColor
         button.layer.borderWidth = 0.9
         return button
     }()
     
-    private lazy var dimViewForButtonAnimation: UIView = {
-        let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
-        return view
-    }()
+//    private lazy var dimViewForButtonAnimation: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = Utils.customBackgroundColor
+//        return view
+//    }()
     
     private let squareImageView: UIImageView = {
         let imageView = UIImageView()
@@ -65,9 +65,10 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         addSubview(bookOverviewButton)
         bookOverviewButton.addSubview(vertStackView)
         addSubview(squareImageView)
-        addSubview(dimViewForButtonAnimation)
+//        addSubview(dimViewForButtonAnimation)
         
-        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+//        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
 //        addButtonUpdateHandler()
         applyConstraints()
     }
@@ -85,33 +86,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }
     
     // MARK: - Helper methods
-//    private func addButtonUpdateHandler() {
-//        bookOverviewButton.configurationUpdateHandler = { [weak self] theButton in
-//            guard let self = self else { return }
-//            if theButton.isHighlighted {
-//                print("button is highlighted")
-//
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-//                    self.dimViewForButtonAnimation.alpha = 0.1
-//                })
-//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-//                    if theButton.isHighlighted {
-//                        print("Button held for more than 2 seconds, do not perform action")
-//                        self.bookOverviewButton.isButtonTooLongInHighlightedState = true
-//                    }
-//                }
-//                self.bookOverviewButton.buttonTimer = timer
-//
-//            } else {
-//                UIView.animate(withDuration: 0.1, animations: {
-//                    self.transform = .identity
-//                    self.dimViewForButtonAnimation.alpha = 0
-//                })
-//            }
-//        }
-//    }
-    
     func configureFor(book: Book) {
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
@@ -130,8 +104,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         heightAnchor.constraint(equalTo: bookOverviewButton.heightAnchor, constant: 15).isActive = true
         
-        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-        dimViewForButtonAnimation.fillSuperview()
+//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
+//        dimViewForButtonAnimation.fillSuperview()
         
         let leadingConstant: CGFloat = 24
         let imageTopConstant: CGFloat = 8
