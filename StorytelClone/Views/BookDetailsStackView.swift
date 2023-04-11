@@ -13,9 +13,20 @@ class BookDetailsStackView: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
-    var showSeriesButtonCallback: () -> () = {} {
+//    var bookVcCallback: () -> () = {} {
+//        didSet {
+//            showSeriesButtonContainer.callback = bookVcCallback
+//        }
+//    }
+    var bookVcCallback: BookVcCallback = {} {
         didSet {
-            showSeriesButtonContainer.callback = showSeriesButtonCallback
+            showSeriesButtonContainer.bookVcCallback = bookVcCallback
+        }
+    }
+    
+    var popupButtonCallback: PopupButtonCallback = {_ in} {
+        didSet {
+            roundButtonsStackContainer.popupButtonCallback = popupButtonCallback
         }
     }
     

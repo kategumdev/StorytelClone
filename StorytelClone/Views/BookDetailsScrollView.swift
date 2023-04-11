@@ -96,7 +96,9 @@ class BookDetailsScrollView: UIScrollView {
     
     // Closure to tell owning controller to push new vc
 //    typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
-    var callback: () -> () = {}
+    
+    var bookVcCallback: BookVcCallback = {}
+//    var callback: () -> () = {}
     
     // MARK: - View life cycle
     init(book: Book) {
@@ -173,7 +175,8 @@ class BookDetailsScrollView: UIScrollView {
     private func addCategoryButtonAction() {
         categoryButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.callback()
+//            self.callback()
+            self.bookVcCallback()
         }), for: .touchUpInside)
     }
     

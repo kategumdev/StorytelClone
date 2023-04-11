@@ -20,17 +20,6 @@ class RoundButtonsStackContainer: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
-    var showPopupCallback: () -> () = {}
-    var hidePopupCallback: () -> () = {}
-    var togglePopupButtonTextCallback: (Bool) -> () = {_ in}
-    
-    lazy var hidePopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.hidePopupCallback()
-    }
-    
-    private lazy var showPopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.showPopupCallback()
-    }
 
     private lazy var viewWithListenButton: UIView = {
         let view = UIView()
@@ -115,25 +104,8 @@ class RoundButtonsStackContainer: UIStackView {
     }()
     
     private var isBookAddedToBookshelf = false
-    var saveButtonTappedCallback: (Bool) -> () = {_ in}
-//    var saveButtonTappedCallback: (Bool, @escaping () -> () ) -> () = {_,_  in}
-    
-//    private lazy var animateWhenBookIsAdded: () -> () = {
-//        self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//            guard let self = self else { return }
-//
-//            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//            self.saveOrRemoveBookAndToggleImage()
-//
-//        })
-//    }
-//
-//    private lazy var animateWhenBookIsRemoved: () -> () = {
-//        self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//        self.saveOrRemoveBookAndToggleImage()
-//        self.animateSaveButtonImageView(withCompletion: { _ in })
-//    }
-    
+//    var saveButtonTappedCallback: (Bool) -> () = {_ in}
+    var popupButtonCallback: PopupButtonCallback = {_ in}
     
     private let saveLabel: UILabel = {
         let label = RoundButtonsStackContainer.createLabel()
@@ -149,9 +121,8 @@ class RoundButtonsStackContainer: UIStackView {
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
-        isBookAddedToBookshelf = book.isAddedToBookshelf
-//        saveOrRemoveBookAndToggleImage()
-        toggleButtonImage()
+//        isBookAddedToBookshelf = book.isAddedToBookshelf
+//        toggleButtonImage()
         
         configureSelf()
         applyConstraints()
@@ -175,6 +146,9 @@ class RoundButtonsStackContainer: UIStackView {
         distribution = .fillProportionally
         spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
         
+        isBookAddedToBookshelf = book.isAddedToBookshelf
+        toggleButtonImage()
+        
         let bookKind = book.titleKind
         
         if bookKind == .audioBookAndEbook {
@@ -197,54 +171,22 @@ class RoundButtonsStackContainer: UIStackView {
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//
-//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
-//
-//            if !self.isBookAddedToBookshelf {
-//                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                    guard let self = self else { return }
-//
-////                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//                    self.saveOrRemoveBookAndToggleImage()
-//
-//                })
-//            } else {
-////                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//                self.saveOrRemoveBookAndToggleImage()
-//                self.animateSaveButtonImageView(withCompletion: { _ in })
-//            }
-
-            
             self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
     
     private func handleSaveButtonTapped() {
-//        self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//        self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+        self.popupButtonCallback(self.isBookAddedToBookshelf)
 
-        self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
-        
-//        if !self.isBookAddedToBookshelf {
-//            self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                guard let self = self else { return }
-//                self.saveOrRemoveBookAndToggleImage()
-//            })
-//        } else {
-//            self.saveOrRemoveBookAndToggleImage()
-//            self.animateSaveButtonImageView(withCompletion: { _ in })
-//        }
-        
         if self.isBookAddedToBookshelf {
-//            self.saveOrRemoveBookAndToggleImage()
             self.toggleButtonImage()
             self.updateBook()
             self.animateSaveButtonImageView(withCompletion: { _ in })
         } else {
             self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
                 guard let self = self else { return }
-//                self.saveOrRemoveBookAndToggleImage()
                 self.toggleButtonImage()
                 self.updateBook()
             })
@@ -289,28 +231,6 @@ class RoundButtonsStackContainer: UIStackView {
         }, completion: completion)
     }
     
-//    private func saveOrRemoveBookAndToggleImage() {
-//        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-//        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-//        self.saveButton.setImage(newImage, for: .normal)
-//
-//        self.saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
-//
-////        if self.isBookAddedToBookshelf {
-////            // Add book only if it's not already in the array
-////            if !toReadBooks.contains(where: { $0.title == book.title }) {
-////                toReadBooks.append(book)
-////            }
-////        } else {
-////            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == book.title }) {
-////                toReadBooks.remove(at: bookIndex)
-////            }
-//////            toReadBooks.removeAll { $0.title == self.book.title }
-////        }
-//
-//    }
-    
     private func toggleButtonImage() {
         let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
@@ -330,7 +250,6 @@ class RoundButtonsStackContainer: UIStackView {
             if let bookIndex = toReadBooks.firstIndex(where: { $0.title == book.title }) {
                 toReadBooks.remove(at: bookIndex)
             }
-//            toReadBooks.removeAll { $0.title == self.book.title }
         }
 
     }

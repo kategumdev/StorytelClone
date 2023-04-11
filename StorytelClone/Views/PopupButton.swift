@@ -7,19 +7,17 @@
 
 import UIKit
 
+typealias PopupButtonCallback = (Bool) -> ()
+
 class PopupButton: UIButton {
     // MARK: - Instance properties
     private let leadingPadding: CGFloat = Constants.cvPadding
     private let trailingPadding: CGFloat = Constants.cvPadding - 2
-    let bottomAnchorConstant = Utils.tabBarHeight + 7
-
-    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
-    
-    private let textForAddingBook = "Added to Bookshelf"
-    private let textForRemovingBook = "Removed from Bookshelf"
-    
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
+    private let bottomAnchorConstant = Utils.tabBarHeight + 7
+
+    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
     
     private let customImageView: UIImageView = {
         let imageView = UIImageView()
@@ -33,43 +31,15 @@ class PopupButton: UIButton {
     
     private var bottomAnchorConstraint: NSLayoutConstraint?
     
-    private lazy var showPopupCallback = { [weak self] in
-        print("showPopupCallback is executing")
-        guard let self = self else { return }
-        UIView.animate(withDuration: 0.4, animations: {
-            self.bottomAnchorConstraint?.constant = -self.bottomAnchorConstant
-//            self.view.layoutIfNeeded()
-            self.superview?.layoutIfNeeded()
-            self.alpha = 1
-        })
-    }
-    
-    private lazy var hidePopupCallback = { [weak self] in
-        guard let self = self else { return }
-        print("hidePopupCallback is executing")
-        UIView.animate(withDuration: 0.3, animations: {
-            self.bottomAnchorConstraint?.constant = self.bottomAnchorConstant
-//            self.view.layoutIfNeeded()
-            self.superview?.layoutIfNeeded()
-            self.alpha = 0
-        })
-    }
-    
-    lazy var hidePopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.hidePopupCallback()
-    }
-    
     private lazy var showPopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.showPopupCallback()
+        self?.showPopupButton()
     }
     
-    private lazy var togglePopupButtonTextCallback = { [weak self] userAddedBookToBookshelf in
-        guard let self = self else { return }
-        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
+    private lazy var hidePopupWorkItem = DispatchWorkItem { [weak self] in
+        self?.hidePopupButton()
     }
     
-    // Not for use in BookViewController
-    lazy var saveButtonTappedCallback: (Bool) -> () = { [weak self]
+    lazy var reconfigureAndAnimateSelf: PopupButtonCallback = { [weak self]
         userAddedBookToBookshelf in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
@@ -80,105 +50,56 @@ class PopupButton: UIButton {
         if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
             bottomAnchorConstraint.constant = self.bottomAnchorConstant
             self.alpha = 0
-//            self.view.layoutIfNeeded()
             self.superview?.layoutIfNeeded()
         }
-        
-//        UIView.animate(withDuration: 0.4, animations: { [weak self] in
-//            guard let self = self else { return }
-//            self.togglePopupButtonTextCallback(userAddedBookToBookshelf)
-//
-////            self.showPopupCallback()
-//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//        })
-        
-        self.togglePopupButtonTextCallback(userAddedBookToBookshelf)
+
+        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
         
         DispatchQueue.main.async(execute: self.showPopupWorkItem)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
     }
     
-    lazy var bookVcSaveButtonTappedCallback: (Bool, @escaping () -> () ) -> () = { [weak self]
-        userAddedBookToBookshelf, animateSaveButtonImageViewClosure in
-        guard let self = self else { return }
-        self.cancelAndReassignWorkItems()
-        self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
-        print("this is executing")
-        DispatchQueue.main.async(execute: self.showPopupWorkItem)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-        
-        animateSaveButtonImageViewClosure()
-
-        
-        UIView.animate(withDuration: 0.6) { [weak self] in
-            guard let self = self else { return }
-//            self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
-//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
-            
-//            animateSaveButtonImageViewClosure()
-            
-//            if self.isBookAddedToBookshelf {
-//                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-//                    guard let self = self else { return }
-//
-//                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//                    self.saveOrRemoveBookAndToggleImage()
-//
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//                })
-//            } else {
-//                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//                self.saveOrRemoveBookAndToggleImage()
-//
-//                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-//                    guard let self = self else { return }
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//                })
-//            }
-            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-        }
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-    }
-    
-//    lazy var bookVcSaveButtonTappedCallback: (Bool, @escaping () -> () ) -> () = { [weak self]
-//        userAddedBookToBookshelf, animateSaveButtonImageViewClosure in
+//    lazy var callback: PopupButtonCallback = { [weak self]
+//        userAddedBookToBookshelf in
 //        guard let self = self else { return }
 //        self.cancelAndReassignWorkItems()
 //
-//        UIView.animate(withDuration: 0.6) { [weak self] in
-//            guard let self = self else { return }
-//            self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
-//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//        // If popupView is already visible, hide it to enable animation in showPopupWorkItem
+//        guard let bottomAnchorConstraint = self.bottomAnchorConstraint else { return}
 //
-//            animateSaveButtonImageViewClosure()
-//
-////            if self.isBookAddedToBookshelf {
-////                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
-////                    guard let self = self else { return }
-////
-////                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-////                    self.saveOrRemoveBookAndToggleImage()
-////
-//////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-////                })
-////            } else {
-////                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-////                self.saveOrRemoveBookAndToggleImage()
-////
-////                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
-////                    guard let self = self else { return }
-//////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-////                })
-////            }
-//
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//        if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
+//            bottomAnchorConstraint.constant = self.bottomAnchorConstant
+//            self.alpha = 0
+//            self.superview?.layoutIfNeeded()
 //        }
+//
+//        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
+//
+//        DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//    }
+    
+//    lazy var saveButtonTappedCallback: (Bool) -> () = { [weak self]
+//        userAddedBookToBookshelf in
+//        guard let self = self else { return }
+//        self.cancelAndReassignWorkItems()
+//
+//        // If popupView is already visible, hide it to enable animation in showPopupWorkItem
+//        guard let bottomAnchorConstraint = self.bottomAnchorConstraint else { return}
+//
+//        if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
+//            bottomAnchorConstraint.constant = self.bottomAnchorConstant
+//            self.alpha = 0
+//            self.superview?.layoutIfNeeded()
+//        }
+//
+//        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
+//
+//        DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
 //    }
         
     // MARK: - View life cycle
@@ -190,9 +111,7 @@ class PopupButton: UIButton {
         alpha = 0
         
         addSubview(customLabel)
-//        customLabel.text = "Added to Bookshelf"
         addSubview(customImageView)
-//        applyConstraints()
         addButtonAction()
     }
     
@@ -201,24 +120,44 @@ class PopupButton: UIButton {
     }
     
     // MARK: - Helper methods
-    func changeLabelTextWhen(bookIsAdded: Bool) {
-        customLabel.text = bookIsAdded ? textForAddingBook : textForRemovingBook
-    }
-    
     private func addButtonAction() {
         addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             // Cancel the work item to prevent it from executing with the delay
             self.hidePopupWorkItem.cancel()
 
-            // Execute the callback immediately
-            self.hidePopupCallback()
+            // Execute hidePopupButton() immediately
+            self.hidePopupButton()
 
             // Reassign workItem to replace the cancelled one
             self.hidePopupWorkItem = DispatchWorkItem { [weak self] in
-                self?.hidePopupCallback()
+                self?.hidePopupButton()
             }
         }), for: .touchUpInside)
+    }
+    
+    private func showPopupButton() {
+        print("\nSHOW popupButton")
+        UIView.animate(withDuration: 0.4, animations: { [weak self] in
+            guard let self = self else { return }
+            self.bottomAnchorConstraint?.constant = -self.bottomAnchorConstant
+            self.superview?.layoutIfNeeded()
+            self.alpha = 1
+        })
+    }
+    
+    private func hidePopupButton() {
+        print("HIDE popupButton")
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            guard let self = self else { return }
+            self.bottomAnchorConstraint?.constant = self.bottomAnchorConstant
+            self.superview?.layoutIfNeeded()
+            self.alpha = 0
+        })
+    }
+    
+    private func changeLabelTextWhen(bookIsAdded: Bool) {
+        customLabel.text = bookIsAdded ? "Added to Bookshelf" : "Removed from Bookshelf"
     }
     
     private func cancelAndReassignWorkItems() {
@@ -226,11 +165,11 @@ class PopupButton: UIButton {
         hidePopupWorkItem.cancel()
         
         showPopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.showPopupCallback()
+            self?.showPopupButton()
         }
         
         hidePopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.hidePopupCallback()
+            self?.hidePopupButton()
         }
     }
     
@@ -263,21 +202,6 @@ class PopupButton: UIButton {
         bottomAnchorConstraint = bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: bottomAnchorConstant)
         bottomAnchorConstraint?.isActive = true
     }
-    
-//    func applyButtonConstraints() {
-//        guard let superview = superview else { return }
-//        print("superview: \(superview)")
-//        // Configure popupButton constraints
-//        translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: Constants.cvPadding),
-//            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -Constants.cvPadding),
-//            heightAnchor.constraint(equalToConstant: 46)
-//        ])
-//
-//        bottomAnchorConstraint = bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: bottomAnchorConstant)
-//        bottomAnchorConstraint?.isActive = true
-//    }
     
 }
 

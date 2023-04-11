@@ -68,7 +68,8 @@ class RatingHorzStackView: UIStackView {
     
     private var book: Book?
     private var isBookAddedToBookshelf = false
-    var saveButtonTappedCallback: (Bool) -> () = {_ in}
+//    var saveButtonTappedCallback: (Bool) -> () = {_ in}
+    var popupButtonCallback: PopupButtonCallback = {_ in}
     
     private lazy var menuButton: UIButton = {
         let button = UIButton()
@@ -99,9 +100,9 @@ class RatingHorzStackView: UIStackView {
     }
     
     // MARK: - Helper methods
-    func configureForAllTitleCellWith(book: Book,  saveButtonTappedCallback: @escaping (Bool) -> () ) {
+    func configureForAllTitleCellWith(book: Book, popupButtonCallback: @escaping PopupButtonCallback ) {
         self.book = book
-        self.saveButtonTappedCallback = saveButtonTappedCallback
+        self.popupButtonCallback = popupButtonCallback
         
         ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
@@ -110,6 +111,21 @@ class RatingHorzStackView: UIStackView {
         
         addSaveButtonAction()
     }
+    
+//    func configureForAllTitleCellWith(book: Book,  saveButtonTappedCallback: @escaping (Bool) -> () ) {
+//        self.book = book
+//        self.saveButtonTappedCallback = saveButtonTappedCallback
+//
+//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+//        isBookAddedToBookshelf = book.isAddedToBookshelf
+//        toggleButtonImage()
+//
+//        addSaveButtonAction()
+//    }
+    
+    
+
     
 //    private func addSaveButtonAction() {
 //        saveButton.addAction(UIAction(handler: { [weak self] _ in
@@ -140,7 +156,8 @@ class RatingHorzStackView: UIStackView {
 //
 //            }
 
-            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+            self.popupButtonCallback(self.isBookAddedToBookshelf)
             
             self.updateBook()
             
