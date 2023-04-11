@@ -30,14 +30,16 @@ class AllCategoriesViewController: BaseTableViewController {
             headerView.configureWithDimView(andText: category.title)
         }
         
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+        navigationController?.makeNavbarAppearance(transparent: true)
         title = category.title
-        navigationItem.backButtonTitle = ""
+//        navigationItem.backButtonTitle = ""
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
+//    }
     
     //MARK: - Helper methods
     private func getModelFor(buttonCategory: ButtonCategory) -> Category {

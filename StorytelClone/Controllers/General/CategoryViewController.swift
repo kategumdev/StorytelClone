@@ -16,14 +16,16 @@ class CategoryViewController: BaseTableViewController {
             headerView.configureWithDimView(andText: category.title)
         }
         
-        navigationItem.backButtonTitle = ""
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+        navigationController?.makeNavbarAppearance(transparent: true)
+//        navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
+//    }
     
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

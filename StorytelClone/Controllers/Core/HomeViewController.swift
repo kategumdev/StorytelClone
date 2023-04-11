@@ -41,20 +41,16 @@ class HomeViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarAppearanceTo(currentOffsetY: currentOffsetY)
+        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
         
         if let tableHeader = bookTable.tableHeaderView as? TableHeaderView {
             tableHeader.updateGreetingsLabel()
         }
-//        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
-//        tableHeader.updateGreetingsLabel()
     }
     
     override func viewDidLayoutSubviews() {
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
-//        tableHeader.stackTopAnchorConstraint.constant = tableHeader.stackTopAnchorConstantForGreeting
         tableHeader.stackTopAnchorConstraint.constant = 15
         tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
@@ -69,7 +65,7 @@ class HomeViewController: BaseTableViewController {
         
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-        navigationItem.backButtonTitle = ""
+//        navigationItem.backButtonTitle = ""
     }
     
     override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {

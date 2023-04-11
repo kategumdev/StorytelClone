@@ -108,8 +108,8 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+        navigationController?.makeNavbarAppearance(transparent: false)
     }
     
     override func viewDidLayoutSubviews() {
@@ -188,8 +188,8 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
-//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+        navigationController?.makeNavbarAppearance(transparent: false)
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     

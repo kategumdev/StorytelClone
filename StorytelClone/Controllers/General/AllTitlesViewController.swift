@@ -118,7 +118,7 @@ class AllTitlesViewController: BaseTableViewController {
         title = text
         
         extendedLayoutIncludesOpaqueBars = true
-        navigationItem.backButtonTitle = ""
+//        navigationItem.backButtonTitle = ""
     }
     
     override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {

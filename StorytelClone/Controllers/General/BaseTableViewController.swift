@@ -90,7 +90,9 @@ class BaseTableViewController: UIViewController {
 
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationItem.backButtonTitle = ""
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
     }
     
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {

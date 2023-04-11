@@ -82,11 +82,10 @@ class BookViewController: UIViewController {
         addAndConfigurePopupButton()
         applyConstraints()
         
-//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
-
+        navigationController?.makeNavbarAppearance(transparent: true)
+//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
-        navigationItem.backButtonTitle = ""
+//        navigationItem.backButtonTitle = ""
     }
     
     // MARK: - Helper methods

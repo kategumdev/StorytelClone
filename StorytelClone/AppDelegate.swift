@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSAttributedString.Key.font: Utils.navBarTitleFont
         ]
         UINavigationBar.appearance().titleTextAttributes = attrs
-        
         return true
     }
 

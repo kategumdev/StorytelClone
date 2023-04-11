@@ -146,6 +146,16 @@ extension UINavigationController {
         return appearance
     }()
     
+    func makeNavbarAppearance(transparent: Bool) {
+        if transparent {
+            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+            // print("navBar made transparent")
+        } else {
+            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+            // print("navBar made visible")
+        }
+    }
+    
     func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
         
         if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
