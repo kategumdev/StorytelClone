@@ -159,11 +159,16 @@ class RatingHorzStackView: UIStackView {
         guard let book = book else { return }
 
         if self.isBookAddedToBookshelf {
-            toReadBooks.append(book)
-            // With real data, update book object here
+            // Add book only if it's not already in the array
+            if !toReadBooks.contains(where: { $0.title == book.title }) {
+                toReadBooks.append(book)
+                // With real data, update book object here
+            }
         } else {
-            toReadBooks.removeAll { $0.title == book.title }
-            // With real data, update book object here
+            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == book.title }) {
+                toReadBooks.remove(at: bookIndex)
+                // With real data, update book object here
+            }
         }
     }
     

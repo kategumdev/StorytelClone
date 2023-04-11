@@ -229,7 +229,8 @@ class BookViewController: UIViewController {
     }
     
     private func passCallbackToSaveButton() {
-        bookDetailsStackView.roundButtonsStackContainer.saveButtonTappedCallback = popupButton.bookVcSaveButtonTappedCallback
+//        bookDetailsStackView.roundButtonsStackContainer.saveButtonTappedCallback = popupButton.bookVcSaveButtonTappedCallback
+        bookDetailsStackView.roundButtonsStackContainer.saveButtonTappedCallback = popupButton.saveButtonTappedCallback
     }
     
 //    private func passCallbacksToSaveButton() {

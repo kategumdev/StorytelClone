@@ -105,13 +105,21 @@ class PopupButton: UIButton {
         userAddedBookToBookshelf, animateSaveButtonImageViewClosure in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
+        self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
+        print("this is executing")
+        DispatchQueue.main.async(execute: self.showPopupWorkItem)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+        
+        animateSaveButtonImageViewClosure()
+
         
         UIView.animate(withDuration: 0.6) { [weak self] in
             guard let self = self else { return }
-            self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
-            DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//            self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
+//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
             
-            animateSaveButtonImageViewClosure()
+//            animateSaveButtonImageViewClosure()
             
 //            if self.isBookAddedToBookshelf {
 //                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
@@ -132,9 +140,46 @@ class PopupButton: UIButton {
 //                })
 //            }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
         }
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
     }
+    
+//    lazy var bookVcSaveButtonTappedCallback: (Bool, @escaping () -> () ) -> () = { [weak self]
+//        userAddedBookToBookshelf, animateSaveButtonImageViewClosure in
+//        guard let self = self else { return }
+//        self.cancelAndReassignWorkItems()
+//
+//        UIView.animate(withDuration: 0.6) { [weak self] in
+//            guard let self = self else { return }
+//            self.togglePopupButtonTextCallback(!userAddedBookToBookshelf)
+//            DispatchQueue.main.async(execute: self.showPopupWorkItem)
+//
+//            animateSaveButtonImageViewClosure()
+//
+////            if self.isBookAddedToBookshelf {
+////                self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+////                    guard let self = self else { return }
+////
+////                    self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+////                    self.saveOrRemoveBookAndToggleImage()
+////
+//////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+////                })
+////            } else {
+////                self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+////                self.saveOrRemoveBookAndToggleImage()
+////
+////                self.animateSaveButtonImageView(withCompletion: { [weak self] _ in
+////                    guard let self = self else { return }
+//////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+////                })
+////            }
+//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+//        }
+//    }
         
     // MARK: - View life cycle
     override init(frame: CGRect) {
