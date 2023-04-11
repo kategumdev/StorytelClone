@@ -8,17 +8,8 @@
 import UIKit
 
 class TableHeaderView: UIView {
-    // MARK: - Instance properties
-    private let stackBottomAnchor: CGFloat = 14
-    private let stackTopAnchorForGreeting: CGFloat = 15
-    let stackTopAnchorForCategoryOrSectionTitle: CGFloat = 19
-//    private let stackLeadingAnchor = Constants.cvPadding
-//    private let stackTrailingAnchor: CGFloat = Constants.cvPadding
-    private let stackLeadingAndTrailingConstant = Constants.cvPadding
     
-    lazy var stackTopAnchorConstraint = stackView.topAnchor.constraint(equalTo: topAnchor, constant: stackTopAnchorForGreeting)
-    lazy var stackBottomAnchorConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -stackBottomAnchor)
-
+    // MARK: - Instance properties
     private let headerLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 31), maximumPointSize: 50, numberOfLines: 4)
 
     private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 13), maximumPointSize: 32, numberOfLines: 2)
@@ -34,14 +25,10 @@ class TableHeaderView: UIView {
         stack.addArrangedSubview(headerLabel)
         return stack
     }()
-
-//    let dimView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        view.alpha = 0
-//        return view
-//    }()
     
+    lazy var stackTopAnchorConstraint = stackView.topAnchor.constraint(equalTo: topAnchor, constant: 19)
+    lazy var stackBottomAnchorConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14)
+
     lazy var dimView: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
@@ -53,7 +40,6 @@ class TableHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
-//        addSubview(dimView)
         applyConstraints()
     }
 
@@ -64,7 +50,6 @@ class TableHeaderView: UIView {
     // MARK: - Instance methods
     func configureWithDimView(andText text: String) {
         headerLabel.text = text
-        
         addSubview(dimView)
         dimView.translatesAutoresizingMaskIntoConstraints = false
         dimView.fillSuperview()
@@ -117,9 +102,9 @@ class TableHeaderView: UIView {
         }
     }
     
-    
     // MARK: - Helper methods
     private func applyConstraints() {
+        let stackLeadingAndTrailingConstant = Constants.cvPadding
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAndTrailingConstant),
@@ -127,9 +112,6 @@ class TableHeaderView: UIView {
         ])
         stackTopAnchorConstraint.isActive = true
         stackBottomAnchorConstraint.isActive = true
-
-//        dimView.translatesAutoresizingMaskIntoConstraints = false
-//        dimView.fillSuperview()
     }
 
 }

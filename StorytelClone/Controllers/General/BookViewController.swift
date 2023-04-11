@@ -149,7 +149,7 @@ class BookViewController: UIViewController {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
         
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
-        navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
     }
     
     private func addSeeMoreButtonAction() {

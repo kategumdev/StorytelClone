@@ -42,7 +42,7 @@ class HomeViewController: BaseTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
+        adjustNavBarAppearanceTo(currentOffsetY: currentOffsetY)
         
         if let tableHeader = bookTable.tableHeaderView as? TableHeaderView {
             tableHeader.updateGreetingsLabel()
@@ -54,6 +54,8 @@ class HomeViewController: BaseTableViewController {
     override func viewDidLayoutSubviews() {
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
+//        tableHeader.stackTopAnchorConstraint.constant = tableHeader.stackTopAnchorConstantForGreeting
+        tableHeader.stackTopAnchorConstraint.constant = 15
         tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
         layoutHeaderView()
@@ -70,8 +72,8 @@ class HomeViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    override func adjustNavBarPositionFor(currentOffsetY: CGFloat) {
-        navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
+    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource

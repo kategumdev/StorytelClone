@@ -146,7 +146,7 @@ extension UINavigationController {
         return appearance
     }()
     
-    func adjustPositionTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
+    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
         
         if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
             self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance

@@ -12,9 +12,9 @@ class CategoryViewController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-        headerView.configureWithDimView(andText: category.title)
-        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
+        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
+            headerView.configureWithDimView(andText: category.title)
+        }
         
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
@@ -22,8 +22,7 @@ class CategoryViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
+        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
     }
     
     // MARK: - Superclass overrides

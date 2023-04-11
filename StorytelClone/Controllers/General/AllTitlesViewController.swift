@@ -121,8 +121,8 @@ class AllTitlesViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-    override func adjustNavBarPositionFor(currentOffsetY: CGFloat) {
-        navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
+    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
     }
     
     // MARK: - Helper methods
@@ -156,34 +156,7 @@ class AllTitlesViewController: BaseTableViewController {
         
         if let headerView = bookTable.tableHeaderView as? TableHeaderView {
             headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-
-            headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         }
-                
-//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-//        print("passing guard")
-//        print("titleModel is \(titleModel)")
-//        if let titleModel = titleModel {
-//            print("titleModel is not nil")
-//            headerView.configureFor(tableSection: tableSection, title: titleModel)
-//        }
-        
-//        if let sectionDescription = tableSection.sectionDescription {
-//            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
-//        } else if tableSection.forSimilarBooks, let book = titleModel as? Book {
-//            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
-//        } else if let series = titleModel as? Series {
-//            headerView.configureFor(series: series)
-//        } else if let tag = titleModel as? Tag {
-//            headerView.configureWith(title: tag.tagTitle)
-//        } else {
-//            headerView.configureWith(title: tableSection.sectionTitle)
-//        }
-        
-        
-        
-        
-//        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
     }
 
 }

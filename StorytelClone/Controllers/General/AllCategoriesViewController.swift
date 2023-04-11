@@ -24,12 +24,11 @@ class AllCategoriesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
-        
         bookTable.estimatedSectionHeaderHeight = 0
         
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-        headerView.configureWithDimView(andText: category.title)
-        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
+        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
+            headerView.configureWithDimView(andText: category.title)
+        }
         
         title = category.title
         navigationItem.backButtonTitle = ""
@@ -37,8 +36,7 @@ class AllCategoriesViewController: BaseTableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
+        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
     }
     
     //MARK: - Helper methods
