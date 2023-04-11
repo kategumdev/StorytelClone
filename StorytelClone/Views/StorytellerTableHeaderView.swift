@@ -90,7 +90,7 @@ class StorytellerTableHeaderView: UIView {
         return stack
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stack)
@@ -101,7 +101,7 @@ class StorytellerTableHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(storyteller: Title) {
         self.storyteller = storyteller
         titleKindLabel.text = storyteller.titleKind.rawValue
@@ -123,6 +123,7 @@ class StorytellerTableHeaderView: UIView {
         
     }
     
+    // MARK: - Helper methods
     private func configureRoundLabelWithLettersFrom(name: String) {
         let originalString = name
         let components = originalString.components(separatedBy: " ")

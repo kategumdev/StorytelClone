@@ -35,7 +35,7 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Instance properties
     let titleLabel = createLabel()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -47,7 +47,7 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(buttonKind: ButtonKind) {
         var titleText = ""
         switch buttonKind {
@@ -61,6 +61,7 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
         titleLabel.text = titleText
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

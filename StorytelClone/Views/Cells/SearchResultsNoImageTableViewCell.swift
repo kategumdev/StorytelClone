@@ -67,10 +67,8 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         [titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0)}
         return stack
     }()
-        
-//    private var padding: CGFloat = 0
-    
-    // MARK: - View life cycle
+            
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(viewWithRound)
@@ -82,12 +80,13 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         roundView.layer.cornerRadius = roundView.bounds.width / 2
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(title: Title) {
         subtitleLabel.text = title.titleKind.rawValue
         
@@ -110,6 +109,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
         viewWithRound.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

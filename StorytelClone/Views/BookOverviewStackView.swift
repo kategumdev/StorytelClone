@@ -33,7 +33,6 @@ class BookOverviewStackView: UIStackView {
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
         textView.textAlignment = .left
-//        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textView.textContainerInset = .zero
         // Ensure that the text is aligned with the left edge of the text view.
         textView.textContainer.lineFragmentPadding = 0
@@ -56,7 +55,7 @@ class BookOverviewStackView: UIStackView {
     
     private var textViews = [UITextView]()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
@@ -74,7 +73,6 @@ class BookOverviewStackView: UIStackView {
     
     // MARK: - Helper methods
     private func configureTextViews() {
-        
         textViews.append(mainTextView)
         mainTextView.text = book.overview
         

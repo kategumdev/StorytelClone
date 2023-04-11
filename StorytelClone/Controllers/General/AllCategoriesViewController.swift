@@ -11,6 +11,7 @@ class AllCategoriesViewController: BaseTableViewController {
     
     private let categoryButtons: [ButtonCategory]
     
+    // MARK: - Initializers
     init(categoryModel: Category, categoryButtons: [ButtonCategory]) {
         self.categoryButtons = categoryButtons
         super.init(categoryModel: categoryModel)
@@ -20,7 +21,7 @@ class AllCategoriesViewController: BaseTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - View life cycle
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
@@ -30,17 +31,10 @@ class AllCategoriesViewController: BaseTableViewController {
             headerView.configureWithDimView(andText: category.title)
         }
         
-//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
         navigationController?.makeNavbarAppearance(transparent: true)
         title = category.title
-//        navigationItem.backButtonTitle = ""
     }
 
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
-//    }
-    
     //MARK: - Helper methods
     private func getModelFor(buttonCategory: ButtonCategory) -> Category {
         return ButtonCategory.createModelFor(categoryButton: buttonCategory)

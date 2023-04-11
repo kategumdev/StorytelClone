@@ -8,6 +8,7 @@
 import UIKit
 
 class PosterTableViewCell: UITableViewCell {
+    
     // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
         

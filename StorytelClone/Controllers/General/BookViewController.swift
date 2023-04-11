@@ -83,9 +83,7 @@ class BookViewController: UIViewController {
         applyConstraints()
         
         navigationController?.makeNavbarAppearance(transparent: true)
-//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
         extendedLayoutIncludesOpaqueBars = true
-//        navigationItem.backButtonTitle = ""
     }
     
     // MARK: - Helper methods
@@ -318,19 +316,20 @@ class BookViewController: UIViewController {
 
 }
 
-extension BookViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentOffsetY = scrollView.contentOffset.y
-
-        guard isInitialOffsetYSet else {
-            scrollViewInitialOffsetY = currentOffsetY
-            isInitialOffsetYSet = true
-            return
-        }
-        // Toggle navbar from transparent to visible (and vice versa)
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
-    }
-}
+//// MARK: - UIScrollViewDelegate
+//extension BookViewController: UIScrollViewDelegate {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let currentOffsetY = scrollView.contentOffset.y
+//
+//        guard isInitialOffsetYSet else {
+//            scrollViewInitialOffsetY = currentOffsetY
+//            isInitialOffsetYSet = true
+//            return
+//        }
+//        // Toggle navbar from transparent to visible (and vice versa)
+//        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+//    }
+//}
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension BookViewController: UITableViewDelegate, UITableViewDataSource {
@@ -379,6 +378,18 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection)
         return calculatedHeight
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffsetY = scrollView.contentOffset.y
+
+        guard isInitialOffsetYSet else {
+            scrollViewInitialOffsetY = currentOffsetY
+            isInitialOffsetYSet = true
+            return
+        }
+        // Toggle navbar from transparent to visible (and vice versa)
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
     }
     
 }

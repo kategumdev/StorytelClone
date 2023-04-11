@@ -97,7 +97,6 @@ class BookDetailsStackView: UIStackView {
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
     
-//    private lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book)
     lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book)
     
     private lazy var leadingViewWithGradient: UIView = {
@@ -139,7 +138,7 @@ class BookDetailsStackView: UIStackView {
         return colors
     }
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
@@ -151,6 +150,7 @@ class BookDetailsStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         if hasShowSeriesButtonContainer {

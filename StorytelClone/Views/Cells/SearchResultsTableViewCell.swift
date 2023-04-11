@@ -46,7 +46,7 @@ class SearchResultsTableViewCell: UITableViewCell {
         return imageView
     }
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor

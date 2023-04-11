@@ -53,7 +53,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return stack
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bookOverviewButton)
@@ -63,6 +63,11 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         applyConstraints()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
+    }
+    
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -71,11 +76,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
-    }
-    
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book) {
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
@@ -88,6 +89,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         bookOverviewButton.book = book
       }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         // These two constraints are used only when creating container for calculation of row height for the cell using this container

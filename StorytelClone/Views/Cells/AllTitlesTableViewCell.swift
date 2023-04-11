@@ -8,6 +8,7 @@
 import UIKit
 
 class AllTitlesTableViewCell: UITableViewCell {
+    
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesTableViewCell"
     static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
@@ -42,7 +43,6 @@ class AllTitlesTableViewCell: UITableViewCell {
     static func getEstimatedHeightForRowWith(width: CGFloat, andBook book: Book) -> CGFloat {
         let labelsHeight = calculateLabelsHeight(forBook: book, andCellWidth: width)
         
-//        let ratingHorzStackViewHeight = RatingHorzStackView.createCategoryLabel().bounds.height
         let ratingHorzStackViewHeight = StarHorzStackView.getHeight()
         
         // Get total height
@@ -117,7 +117,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -129,6 +129,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -137,7 +138,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book, popupButtonCallback: @escaping PopupButtonCallback) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
@@ -169,6 +170,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         ratingHorzStackView.configureForAllTitleCellWith(book: book, popupButtonCallback: popupButtonCallback)
     }
 
+    // MARK: - Helper methods
     private func applyConstraints() {
         mainVertStack.translatesAutoresizingMaskIntoConstraints = false
         mainVertStack.fillSuperview(withConstant: Constants.cvPadding)

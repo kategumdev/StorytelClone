@@ -22,7 +22,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     
     let containerWithSubviews = SectionHeaderSubviewsContainer()
 
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(containerWithSubviews)
@@ -33,7 +33,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(section: TableSection) {
         containerWithSubviews.tableSection = section
         containerWithSubviews.sectionTitleLabel.text = section.sectionTitle

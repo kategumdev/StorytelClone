@@ -64,7 +64,7 @@ class SeeMoreButton: UIButton {
     // true if initializing seeMoreOverviewButton, false if initializing showAllTagsButton in BookViewController
     private let forOverview: Bool
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(forOverview: Bool) {
         self.forOverview = forOverview
         super.init(frame: .zero)
@@ -75,6 +75,7 @@ class SeeMoreButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         if !gradientIsAdded && forOverview {
@@ -93,7 +94,7 @@ class SeeMoreButton: UIButton {
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func setButtonTextTo(text: String) {
         configuration?.attributedTitle = AttributedString(text)
         configuration?.attributedTitle?.font = font
@@ -109,7 +110,6 @@ class SeeMoreButton: UIButton {
             newTransform = CGAffineTransform.identity
         }
 
-//            imageView.transform = self.currentTransform
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             imageView.transform = newTransform
         }

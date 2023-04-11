@@ -48,7 +48,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         return collectionView
     }()
  
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
@@ -60,12 +60,13 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureWith(categoryButtons: [ButtonCategory]) {
         self.categoryButtons = categoryButtons
     }

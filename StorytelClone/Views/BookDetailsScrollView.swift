@@ -93,14 +93,10 @@ class BookDetailsScrollView: UIScrollView {
     private var vertBarViews = [UIView]()
     
     private lazy var categoryStackWidthAnchor =         categoryStack.widthAnchor.constraint(equalToConstant: categoryButton.bounds.width)
-    
-    // Closure to tell owning controller to push new vc
-//    typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
-    
+        
     var bookVcCallback: BookVcCallback = {}
-//    var callback: () -> () = {}
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
@@ -116,9 +112,9 @@ class BookDetailsScrollView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         if contentSize.width < bounds.width {
             // Make scroll view contentSize 1 point wider than scroll view width to ensure that it will be always scrollable
             let difference = (bounds.width - contentSize.width) + 1
@@ -175,7 +171,6 @@ class BookDetailsScrollView: UIScrollView {
     private func addCategoryButtonAction() {
         categoryButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self.callback()
             self.bookVcCallback()
         }), for: .touchUpInside)
     }
@@ -225,7 +220,6 @@ class BookDetailsScrollView: UIScrollView {
         categoryStack.translatesAutoresizingMaskIntoConstraints = false
         let categoryStackWidth = max(categoryLabel.bounds.width, categoryButton.bounds.width)
         NSLayoutConstraint.activate([
-//            categoryStack.widthAnchor.constraint(equalToConstant: categoryStackWidth),
             categoryStack.topAnchor.constraint(equalTo: categoryLabel.topAnchor),
             categoryStack.bottomAnchor.constraint(equalTo: categoryButton.bottomAnchor)
         ])

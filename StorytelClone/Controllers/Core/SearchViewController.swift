@@ -70,6 +70,7 @@ class SearchViewController: UIViewController {
         return controller
     }()
     
+    // MARK: - Initializers
     init(categoryModel: Category, categoryButtons: [ButtonCategory]) {
         self.categoryButtons = categoryButtons
         self.model = categoryModel
@@ -80,6 +81,7 @@ class SearchViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -102,13 +104,10 @@ class SearchViewController: UIViewController {
         extendedLayoutIncludesOpaqueBars = true
         
 //        previousSize = traitCollection.preferredContentSizeCategory
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
         navigationController?.makeNavbarAppearance(transparent: false)
     }
     
@@ -126,7 +125,6 @@ class SearchViewController: UIViewController {
     }
     
     //MARK: - Helper methods
-    
     private func createAndPassItemSelectedCallback() {
         let callbackClosure: SelectedTitleCallback = { [weak self] title in
             guard let self = self else { return }
@@ -148,7 +146,6 @@ class SearchViewController: UIViewController {
             if let tag = title as? Tag {
                 print("SearchViewController handles selected tag \(tag.tagTitle)")
                 let tableSection = TableSection(sectionTitle: tag.tagTitle)
-//                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
                 let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: tag)
 
                 self.navigationController?.pushViewController(controller, animated: true)
@@ -157,7 +154,6 @@ class SearchViewController: UIViewController {
             if let series = title as? Series {
                 print("SearchViewController handles selected series \(series.title)")
                 let tableSection = TableSection(sectionTitle: series.title)
-//                let controller = AllTitlesViewController(tableSection: tableSection, book: nil, categoryOfParentVC: self.model, series: series)
                 let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: series)
 
                 self.navigationController?.pushViewController(controller, animated: true)
@@ -188,7 +184,6 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
-//        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
         navigationController?.makeNavbarAppearance(transparent: false)
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
@@ -249,20 +244,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                 resultsController.collectionView.reloadData()
             }
         }
-        
-//        resultsController.delegate = self
-        
-//        APICaller.shared.search(with: query) { result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let titles):
-//                    resultsController.titles = titles
-//                    resultsController.searchResultsCollectionView.reloadData()
-//                case .failure(let error):
-//                    print(error.localizedDescription )
-//                }
-//            }
-//        }
+
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

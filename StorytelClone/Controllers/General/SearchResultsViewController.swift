@@ -58,7 +58,7 @@ class SearchResultsViewController: UIViewController {
         
 //    private var previousContentSize: UIContentSizeCategory?
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -73,6 +73,7 @@ class SearchResultsViewController: UIViewController {
 //        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 //        print("traitCollectionDidChange")
@@ -84,6 +85,26 @@ class SearchResultsViewController: UIViewController {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             separatorLineView.layer.borderColor = UIColor.label.cgColor
         }
+    }
+    
+    // MARK: - Instance methods
+    func setInitialOffsetsOfTablesInCells() {
+        let buttonKinds = buttonsView.buttonKinds
+        buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
+    }
+    
+    func revertToInitialAppearance() {
+        buttonsView.revertToInitialAppearance()
+        
+        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
+        toggleIsButtonTriggeredScrollAndUnhideCells()
+        
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
+        setInitialOffsetsOfTablesInCells()
+        collectionView.reloadData()
+        
+        let firstButton = buttonsView.scopeButtons[0]
+        buttonsView.toggleButtonsColors(currentButton: firstButton)
     }
     
 }
@@ -209,15 +230,6 @@ extension SearchResultsViewController {
         }
     }
     
-    func setInitialOffsetsOfTablesInCells() {
-        let buttonKinds = buttonsView.buttonKinds
-//        for kind in buttonKinds {
-//            rememberedOffsetsOfTablesInCells[kind] = CGPoint(x: 0.0, y: 0.0)
-//        }
-        
-        buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
-    }
-    
     // This function should fetch needed initial objects when user haven't perform any search yet
     private func getInitialModelFor(buttonKind: ButtonKind) -> [Title] {
         switch buttonKind {
@@ -239,20 +251,6 @@ extension SearchResultsViewController {
         }
     }
 
-    func revertToInitialAppearance() {
-        buttonsView.revertToInitialAppearance()
-        
-        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
-        toggleIsButtonTriggeredScrollAndUnhideCells()
-        
-        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
-        setInitialOffsetsOfTablesInCells()
-        collectionView.reloadData()
-        
-        let firstButton = buttonsView.scopeButtons[0]
-        buttonsView.toggleButtonsColors(currentButton: firstButton)
-    }
-    
     private func configureButtonsView() {
         // Respond to button actions in buttonsView
         buttonsView.callBack = { [weak self] buttonIndex in
@@ -279,9 +277,6 @@ extension SearchResultsViewController {
         let range: Range<Int> = currentButtonIndex < tappedButtonIndex ? currentButtonIndex + 1..<tappedButtonIndex : tappedButtonIndex + 1..<currentButtonIndex
         
         var buttonsIndicesBetween = [Int]()
-//        for index in range {
-//            buttonsIndicesBetween.append(index)
-//        }
         range.forEach { buttonsIndicesBetween.append($0) }
         
         // Save to hide content when cells in between will be reused while scrollToItem performs to imitate UIPageViewController behavior
@@ -295,7 +290,6 @@ extension SearchResultsViewController {
         }
         
         collectionView.reloadItems(at: indexPaths)
-        
         indexPathsToUnhide = indexPaths
     
         let indexPath = IndexPath(item: tappedButtonIndex, section: 0)
@@ -322,21 +316,11 @@ extension SearchResultsViewController {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-//        var tabBarHeight: CGFloat = 0.0
-//        if let scene = UIApplication.shared.connectedScenes.first,
-//           let windowScene = scene as? UIWindowScene,
-//           let mainWindow = windowScene.windows.first
-//        {
-//            tabBarHeight = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
-//        }
-        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
-//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight)
-
         ])
     }
     

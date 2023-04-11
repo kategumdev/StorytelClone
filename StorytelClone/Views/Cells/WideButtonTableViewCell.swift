@@ -11,6 +11,7 @@ class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
         
+    // MARK: - Instance properties
     private var timeLayoutSubviewsIsBeingCalled = 0
 
     private lazy var wideButton: DimViewCellButton = {

@@ -27,7 +27,7 @@ class NoButtonSectionHeaderView: UITableViewHeaderFooterView {
     }()
     #warning("Make this property private")
 
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(containerWithSubviews)
@@ -38,7 +38,7 @@ class NoButtonSectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(section: TableSection) {
         containerWithSubviews.tableSection = section
         containerWithSubviews.sectionTitleLabel.text = section.sectionTitle

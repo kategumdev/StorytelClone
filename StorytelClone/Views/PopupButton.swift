@@ -10,6 +10,7 @@ import UIKit
 typealias PopupButtonCallback = (Bool) -> ()
 
 class PopupButton: UIButton {
+    
     // MARK: - Instance properties
     private let leadingPadding: CGFloat = Constants.cvPadding
     private let trailingPadding: CGFloat = Constants.cvPadding - 2
@@ -58,14 +59,13 @@ class PopupButton: UIButton {
     
     private var constraintsApplied = false
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(named: "popupBackground")
         layer.cornerRadius = Constants.bookCoverCornerRadius
         tintColor = UIColor.label.withAlphaComponent(0.7)
         alpha = 0
-        
         addSubview(customLabel)
         addSubview(customImageView)
         addButtonAction()
@@ -75,6 +75,7 @@ class PopupButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         if superview != nil && constraintsApplied == false {

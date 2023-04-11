@@ -22,7 +22,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     // MARK: - Instance properties
     private let containerWithSubviews = BookWithOverviewCellSubviewsContainer()
         
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor        
@@ -34,7 +34,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         containerWithSubviews.configureFor(book: book)
         containerWithSubviews.bookOverviewButton.callback = callback

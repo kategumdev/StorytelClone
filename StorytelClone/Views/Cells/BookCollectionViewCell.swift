@@ -11,6 +11,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "BookCollectionViewCell"
         
+    // MARK: - Instance properties
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
         
@@ -21,7 +22,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(bookButton)
@@ -35,6 +36,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -43,7 +45,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         bookButton.book = book
         bookButton.callback = callback
@@ -69,6 +71,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
         bookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

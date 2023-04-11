@@ -9,18 +9,14 @@ import UIKit
 
 class TagsView: UIView {
     
-//    static let buttonHeight: CGFloat = 30
-
     static func createButtonWith(text: String) -> UIButton {
         let button = UIButton()
         button.tintColor = UIColor.label
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.secondaryLabel.cgColor
-//        button.layer.cornerRadius = TagsView.buttonHeight / 2
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)
-//        buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
         buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
         buttonConfig.titleAlignment = .center
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.cvPadding, bottom: 7, trailing: Constants.cvPadding)
@@ -62,7 +58,7 @@ class TagsView: UIView {
     private let spacingBetweenButtons: CGFloat = 7
     private let spacingBetweenRows: CGFloat = 11
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(tags: [Tag], superviewWidth: CGFloat) {
         self.tags = tags
         self.superviewWidth = superviewWidth
@@ -78,6 +74,7 @@ class TagsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         

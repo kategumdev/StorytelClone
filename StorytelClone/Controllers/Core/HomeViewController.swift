@@ -65,7 +65,6 @@ class HomeViewController: BaseTableViewController {
         
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-//        navigationItem.backButtonTitle = ""
     }
     
     override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {

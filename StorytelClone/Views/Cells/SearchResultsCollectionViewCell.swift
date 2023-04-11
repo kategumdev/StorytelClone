@@ -44,7 +44,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         return table
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -59,13 +59,13 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
         }
-        
     }
     
     // MARK: - Helper methods

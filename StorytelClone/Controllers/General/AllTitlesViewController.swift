@@ -20,7 +20,7 @@ class AllTitlesViewController: BaseTableViewController {
     
     private let popupButton = PopupButton()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
         self.tableSection = tableSection
         self.titleModel = titleModel
@@ -32,6 +32,7 @@ class AllTitlesViewController: BaseTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBookTable()
@@ -100,7 +101,6 @@ class AllTitlesViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
-        
         var text: String
         if let author = titleModel as? Author {
             text = author.name
@@ -118,7 +118,6 @@ class AllTitlesViewController: BaseTableViewController {
         title = text
         
         extendedLayoutIncludesOpaqueBars = true
-//        navigationItem.backButtonTitle = ""
     }
     
     override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {

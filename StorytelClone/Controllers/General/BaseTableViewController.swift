@@ -52,7 +52,7 @@ class BaseTableViewController: UIViewController {
         return table
     }()
  
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(categoryModel: Category, tableViewStyle: UITableView.Style = .grouped) {
         self.category = categoryModel
         self.tableViewStyle = tableViewStyle
@@ -63,13 +63,13 @@ class BaseTableViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         view.addSubview(bookTable)
         bookTable.delegate = self
         bookTable.dataSource = self
-        
         addTableHeaderView()
         configureNavBar()
     }
@@ -80,7 +80,7 @@ class BaseTableViewController: UIViewController {
         layoutHeaderView()
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func addTableHeaderView() {
         bookTable.tableHeaderView = TableHeaderView()
         // These two lines avoid constraints' conflict of header and its label when view just loaded
@@ -92,7 +92,6 @@ class BaseTableViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
-//        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
     }
     
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
@@ -124,6 +123,7 @@ class BaseTableViewController: UIViewController {
         }
     }
     
+    // MARK: - Helper methods
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         

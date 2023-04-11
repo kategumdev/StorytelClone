@@ -8,8 +8,8 @@
 import UIKit
 
 class ShowSeriesButtonContainer: UIView {
+    
     // MARK: - Instance properties
-//    var callback: () -> () = {}
     var bookVcCallback: BookVcCallback = {}
     
     private lazy var showSeriesButton: UIButton = {
@@ -48,11 +48,9 @@ class ShowSeriesButtonContainer: UIView {
         return imageView
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        layer.borderColor = UIColor.quaternaryLabel.cgColor
-//        layer.borderWidth = 0.8
         layer.borderColor = BookViewController.lightBordersColor
         layer.borderWidth = BookViewController.lightBordersWidth
         addSubview(showSeriesButton)
@@ -64,15 +62,15 @@ class ShowSeriesButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(seriesTitle: String, seriesPart: Int) {
         let text = "Part \(seriesPart) in \(seriesTitle)"
         showSeriesButton.setTitle(text, for: .normal)
     }
     
+    // MARK: - Helper methods
     private func addButtonAction() {
         showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
-//            self?.callback()
             self?.bookVcCallback()
         }), for: .touchUpInside)
     }

@@ -8,6 +8,7 @@
 import UIKit
 
 class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
+    
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 23
@@ -58,7 +59,7 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         return view
     }()
         
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
@@ -70,14 +71,9 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureWith(title: String) {
         titleLabel.text = title
-    }
-    
-    private func addSubviews() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(stackShareFilter)
     }
     
     func showOnlyFilterButton() {
@@ -90,6 +86,12 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     
     func showShareAndFilterButtons() {
         [shareButton, vertBarView, filterButton].forEach { stackShareFilter.addArrangedSubview($0)}
+    }
+    
+    // MARK: - Helper methods
+    private func addSubviews() {
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(stackShareFilter)
     }
     
     private func createButtonWithImageWith(symbolName: String) -> UIButton {

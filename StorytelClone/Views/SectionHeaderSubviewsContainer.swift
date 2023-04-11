@@ -46,7 +46,7 @@ class SectionHeaderSubviewsContainer: UIView {
     typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
     var callback: SeeAllButtonCallbackClosure = {_ in}
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(withButton button: Bool = true) {
         super.init(frame: .zero)
         self.withButton = button
@@ -56,7 +56,6 @@ class SectionHeaderSubviewsContainer: UIView {
         if withButton {
             addSubview(seeAllButton)
             configureButtonWithAction()
-//            applyButtonConstraints()
         }
         applyConstraints()
     }
@@ -69,10 +68,8 @@ class SectionHeaderSubviewsContainer: UIView {
     private func configureButtonWithAction() {
         seeAllButton.addAction(UIAction(handler: { [weak self] action in
             guard let self = self, let tableSection = self.tableSection else { return }
-            
             // Notify owning vc that the button was tapped
             self.callback(tableSection)
-            
         }), for: .touchUpInside)
     }
     
@@ -108,19 +105,6 @@ class SectionHeaderSubviewsContainer: UIView {
             seeAllButton.leadingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor, constant: SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
         ])
     }
-    
-//    private func applyButtonConstraints() {
-//        seeAllButton.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
-//
-//            seeAllButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-//
-//            seeAllButton.widthAnchor.constraint(equalToConstant: SectionHeaderSubviewsContainer.calculateSeeAllButtonWidth()),
-//
-//            seeAllButton.leadingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor, constant: SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
-//        ])
-//    }
 
 }
 

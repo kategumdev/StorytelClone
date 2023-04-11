@@ -27,7 +27,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
         return collectionView
     }()
  
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
@@ -39,6 +39,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
@@ -48,6 +49,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
         }
     }
     
+    // MARK: - Instance methods
     func configureWith(books: [Book], callbackForButtons: @escaping ButtonCallback) {
         self.books = books
         self.callbackClosure = callbackForButtons

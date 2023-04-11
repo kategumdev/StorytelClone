@@ -32,7 +32,7 @@ class PlaySampleButtonContainer: UIView {
         return button
     }()
 
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = Utils.customBackgroundColor
@@ -44,6 +44,7 @@ class PlaySampleButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -56,10 +57,8 @@ class PlaySampleButtonContainer: UIView {
     private func applyConstraints() {
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            button.heightAnchor.constraint(equalTo: heightAnchor),
             button.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
             button.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2),
-//            button.topAnchor.constraint(equalTo: topAnchor),
             button.topAnchor.constraint(equalTo: topAnchor),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])

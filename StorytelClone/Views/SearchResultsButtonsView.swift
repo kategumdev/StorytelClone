@@ -72,9 +72,6 @@ class SearchResultsButtonsView: UIView {
         let view = UIView()
         view.backgroundColor = Utils.tintColor
         view.isOpaque = true
-//        view.layer.masksToBounds = true
-//        view.layer.borderColor = Utils.tintColor.cgColor
-//        view.layer.borderWidth = SearchResultsButtonsView.slidingLineHeight / 2
         return view
     }()
     
@@ -105,7 +102,7 @@ class SearchResultsButtonsView: UIView {
     lazy var slidingLineLeadingAnchor = slidingLine.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor)
     lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(scrollView)
@@ -119,9 +116,9 @@ class SearchResultsButtonsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         guard firstTime == false else {
             firstTime = false
             return
@@ -130,53 +127,7 @@ class SearchResultsButtonsView: UIView {
         adjustSlidingLinePosition(currentButton: scopeButtons[0])  
     }
     
-    // MARK: - Helper methods
-    private func addButtonActions() {
-        for button in scopeButtons {
-            button.addAction(UIAction(handler: { [weak self] _ in
-                guard let self = self else { return }
-                
-                let buttonIndex = self.scopeButtons.firstIndex(of: button)
-                guard let buttonIndex = buttonIndex else { return }
-                let buttonIndexInt = buttonIndex + 0
-
-                UIView.animate(withDuration: 0.2) {
-                    self.toggleButtonsColors(currentButton: button)
-                    self.setScrollViewOffsetX(currentButton: button)
-                    self.adjustSlidingLinePosition(currentButton: button)
-
-                    self.callBack(buttonIndexInt)
-                    
-                    // It won't animate without this line
-                    self.layoutIfNeeded()
-                }
-            }), for: .touchUpInside)
-        }
-    }
-    
-    private func adjustSlidingLinePosition(currentButton: UIButton) {
-        let leadingConstant: CGFloat = currentButton.frame.origin.x
-        let width: CGFloat = currentButton.bounds.size.width
-
-        slidingLineLeadingAnchor.constant = leadingConstant
-        slidingLineWidthAnchor.constant = width
-    }
-    
-    private func setScrollViewOffsetX(currentButton: UIButton) {
-        let scrollViewContentWidth = scrollView.contentSize.width
-        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-        
-        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-
-        guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
-        let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
-        
-        // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
-        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
-        scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
-    }
-    
+    // MARK: - Instance methods
     func getCurrentButtonIndex() -> Int {
         let slidingLineConstant = slidingLineLeadingAnchor.constant
         var currentButtonIndex: Int = 0
@@ -281,12 +232,58 @@ class SearchResultsButtonsView: UIView {
         self.adjustSlidingLinePosition(currentButton: firstButton)
     }
     
+    // MARK: - Helper methods
+    private func addButtonActions() {
+        for button in scopeButtons {
+            button.addAction(UIAction(handler: { [weak self] _ in
+                guard let self = self else { return }
+                
+                let buttonIndex = self.scopeButtons.firstIndex(of: button)
+                guard let buttonIndex = buttonIndex else { return }
+                let buttonIndexInt = buttonIndex + 0
+
+                UIView.animate(withDuration: 0.2) {
+                    self.toggleButtonsColors(currentButton: button)
+                    self.setScrollViewOffsetX(currentButton: button)
+                    self.adjustSlidingLinePosition(currentButton: button)
+
+                    self.callBack(buttonIndexInt)
+                    
+                    // It won't animate without this line
+                    self.layoutIfNeeded()
+                }
+            }), for: .touchUpInside)
+        }
+    }
+    
+    private func adjustSlidingLinePosition(currentButton: UIButton) {
+        let leadingConstant: CGFloat = currentButton.frame.origin.x
+        let width: CGFloat = currentButton.bounds.size.width
+
+        slidingLineLeadingAnchor.constant = leadingConstant
+        slidingLineWidthAnchor.constant = width
+    }
+    
+    private func setScrollViewOffsetX(currentButton: UIButton) {
+        let scrollViewContentWidth = scrollView.contentSize.width
+        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+        
+        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+
+        guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
+        let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
+        
+        // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
+        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
+        scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
+    }
+    
     private func applyConstraints() {
         let contentG = scrollView.contentLayoutGuide
         let frameG = scrollView.frameLayoutGuide
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),

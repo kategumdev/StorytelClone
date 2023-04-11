@@ -75,7 +75,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(squareViewWithImageView)
@@ -88,6 +88,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -96,7 +97,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
@@ -127,6 +128,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
 
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

@@ -8,7 +8,7 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -18,10 +18,16 @@ class TabBarViewController: UITabBarController {
         let vc3 = UINavigationController(rootViewController: BookshelfViewController())
         let vc4 = UINavigationController(rootViewController: ProfileViewController())
         
-        vc1.tabBarItem.image = UIImage(systemName: "lightbulb")
-        vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
-        vc3.tabBarItem.image = UIImage(systemName: "heart")
-        vc4.tabBarItem.image = UIImage(systemName: "person")
+//        vc1.tabBarItem.image = UIImage(systemName: "lightbulb")
+//        vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
+//        vc3.tabBarItem.image = UIImage(systemName: "heart")
+//        vc4.tabBarItem.image = UIImage(systemName: "person")
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
+        
+        vc1.tabBarItem.image = UIImage(systemName: "lightbulb")?.withConfiguration(symbolConfig)
+        vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")?.withConfiguration(symbolConfig)
+        vc3.tabBarItem.image = UIImage(systemName: "heart")?.withConfiguration(symbolConfig)
+        vc4.tabBarItem.image = UIImage(systemName: "person")?.withConfiguration(symbolConfig)
         
         vc1.title = "Home"
         vc2.title = "Search"
@@ -34,13 +40,11 @@ class TabBarViewController: UITabBarController {
         tabBar.backgroundColor = Utils.customBackgroundColor
         
         tabBar.standardAppearance.backgroundEffect = nil
-        
         tabBar.standardAppearance.shadowColor = .tertiaryLabel
                 
         setTabBarItemColors([tabBar.standardAppearance.stackedLayoutAppearance, tabBar.standardAppearance.inlineLayoutAppearance, tabBar.standardAppearance.compactInlineLayoutAppearance])
         
         tabBar.scrollEdgeAppearance = tabBar.standardAppearance
-        
         setViewControllers([vc1, vc2, vc3, vc4], animated: true)
     }
 

@@ -65,7 +65,7 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         return view
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(viewWithImageViews)
@@ -77,7 +77,7 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(series: Series) {
         seriesTitleLabel.text = series.title
         titleKindLabel.text = series.titleKind.rawValue
