@@ -35,18 +35,25 @@ class TableHeaderView: UIView {
         return stack
     }()
 
-    let dimView: UIView = {
+//    let dimView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = Utils.customBackgroundColor
+//        view.alpha = 0
+//        return view
+//    }()
+    
+    lazy var dimView: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
         view.alpha = 0
         return view
     }()
 
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
-        addSubview(dimView)
+//        addSubview(dimView)
         applyConstraints()
     }
 
@@ -54,29 +61,13 @@ class TableHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Helper methods
-//    func configureWith(title: String) {
-//        headerLabel.text = title
-//    }
-    
-//    func configureWith(title: String, bookTitleForSimilar: String? = nil, sectionDescription: String? = nil) {
-//        headerLabel.text = title
-//
-//        if let bookTitleForSimilar = bookTitleForSimilar {
-//            bookTitleForSimilarLabel.text = bookTitleForSimilar
-//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
-//            stackView.spacing = 9
-//        }
-//
-//        if let sectionDescription = sectionDescription {
-//            sectionDescriptionLabel.text = sectionDescription
-//            stackView.addArrangedSubview(sectionDescriptionLabel)
-//            stackView.spacing = 15
-//        }
-//    }
-    
-    func configureWith(text: String) {
+    // MARK: - Instance methods
+    func configureWithDimView(andText text: String) {
         headerLabel.text = text
+        
+        addSubview(dimView)
+        dimView.translatesAutoresizingMaskIntoConstraints = false
+        dimView.fillSuperview()
     }
     
     func configureFor(tableSection: TableSection, titleModel: Title?) {
@@ -104,56 +95,6 @@ class TableHeaderView: UIView {
         }
     }
     
-//    func configureFor(tableSection: TableSection?, titleModel: Title?) {
-//        if let series = titleModel as? Series {
-//            headerLabel.text = series.title
-//            followSeriesView.configureWith(series: series)
-//            stackView.addArrangedSubview(followSeriesView)
-//            stackView.spacing = 9
-//        } else if let tag = titleModel as? Tag {
-//            headerLabel.text = tag.tagTitle
-//        } else {
-//            headerLabel.text = tableSection.sectionTitle
-//        }
-//
-//        if tableSection.forSimilarBooks, let book = titleModel as? Book {
-//            bookTitleForSimilarLabel.text = book.title
-//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
-//            stackView.spacing = 9
-//        }
-//
-//        if let sectionDescription = tableSection.sectionDescription {
-//            sectionDescriptionLabel.text = sectionDescription
-//            stackView.addArrangedSubview(sectionDescriptionLabel)
-//            stackView.spacing = 15
-//        }
-//    }
-    
-    
-    
-    
-//    func configureWith(title: String, bookTitleForSimilar: String) {
-//        headerLabel.text = title
-//        bookTitleForSimilarLabel.text = bookTitleForSimilar
-//        stackView.addArrangedSubview(bookTitleForSimilarLabel)
-//        stackView.spacing = 9
-//    }
-//
-//    func configureWith(title: String, sectionDescription: String) {
-//        headerLabel.text = title
-//        sectionDescriptionLabel.text = sectionDescription
-//        stackView.addArrangedSubview(sectionDescriptionLabel)
-//        stackView.spacing = 15
-//    }
-    
-//    func configureFor(series: Series) {
-//        let seriesTitle = series.title
-//        headerLabel.text = seriesTitle
-//        followSeriesView.configureWith(series: series)
-//        stackView.addArrangedSubview(followSeriesView)
-//        stackView.spacing = 9
-//    }
-    
      func updateGreetingsLabel() {
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -176,6 +117,8 @@ class TableHeaderView: UIView {
         }
     }
     
+    
+    // MARK: - Helper methods
     private func applyConstraints() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -185,8 +128,8 @@ class TableHeaderView: UIView {
         stackTopAnchorConstraint.isActive = true
         stackBottomAnchorConstraint.isActive = true
 
-        dimView.translatesAutoresizingMaskIntoConstraints = false
-        dimView.fillSuperview()
+//        dimView.translatesAutoresizingMaskIntoConstraints = false
+//        dimView.fillSuperview()
     }
 
 }

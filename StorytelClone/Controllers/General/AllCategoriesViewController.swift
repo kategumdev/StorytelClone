@@ -28,7 +28,7 @@ class AllCategoriesViewController: BaseTableViewController {
         bookTable.estimatedSectionHeaderHeight = 0
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-        headerView.configureWith(text: category.title)
+        headerView.configureWithDimView(andText: category.title)
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
         title = category.title
