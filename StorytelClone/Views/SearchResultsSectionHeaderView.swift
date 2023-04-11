@@ -8,7 +8,6 @@
 import UIKit
 
 class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
-
     // MARK: - Static properties and methods
     static let identifier = "SearchResultsSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 15

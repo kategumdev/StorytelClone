@@ -9,7 +9,7 @@ import UIKit
 
 class PlaySampleButtonContainer: UIView {
     // MARK: - Static properties
-    static let buttonHeight: CGFloat = RoundButtonsStackContainer.buttonWidthAndHeight
+    static let buttonHeight: CGFloat = RoundButtonsStackContainer.roundWidth
     
     // MARK: - Instance properties
     private let button: UIButton = {

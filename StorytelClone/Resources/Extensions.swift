@@ -130,6 +130,24 @@ extension Int {
     }
 }
 
+extension UINavigationController {
+    
+    func adjustPositionTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
+        
+//        let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
+        
+        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+            self.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//            print("to visible")
+        }
+
+        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+            self.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//            print("to transparent")
+        }
+    }
+}
+
 //extension NSAttributedString {
 //    func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
 //        let attributedString = NSMutableAttributedString(attributedString: self)

@@ -72,16 +72,31 @@ class HomeViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
+//    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+////            print("to transparent")
+//        }
+//    }
+    
     override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-//            print("to visible")
-        }
         
-        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-//            print("to transparent")
-        }
+        navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
+        
+//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
+//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+////            print("to transparent")
+//        }
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource

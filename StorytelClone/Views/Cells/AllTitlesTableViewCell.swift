@@ -165,41 +165,8 @@ class AllTitlesTableViewCell: UITableViewCell {
             customImageView.image = resizedImage
         }
 
-//        ratingHorzStackView.configureForAllTitleCellWith(book: book, saveButtonTappedCallback: saveButtonTappedCallback)
         ratingHorzStackView.configureForAllTitleCellWith(book: book, popupButtonCallback: popupButtonCallback)
     }
-    
-//    func configureFor(book: Book, saveButtonTappedCallback: @escaping (Bool) -> () ) {
-//        bookTitleLabel.text = book.title
-//        bookKindLabel.text = book.titleKind.rawValue
-//
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        authorsLabel.text = "By: \(authorNamesString)"
-//
-//        if let narrators = book.narrators {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            narratorsLabel.text = "With: \(narratorNamesString)"
-//            narratorsLabel.textColor = UIColor.label
-//        }
-//
-//        if let seriesTitle = book.series {
-//            seriesLabel.text = "Series: \(seriesTitle)"
-//        }
-//
-//        if let image = book.coverImage {
-//            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
-//
-//            if customImageView.bounds.width != image.size.width {
-//                customImageViewWidthAnchor.constant = resizedImage.size.width
-//            }
-//            customImageView.image = resizedImage
-//        }
-//
-//        ratingHorzStackView.configureForAllTitleCellWith(book: book, saveButtonTappedCallback: saveButtonTappedCallback)
-//
-//    }
 
     private func applyConstraints() {
         mainVertStack.translatesAutoresizingMaskIntoConstraints = false

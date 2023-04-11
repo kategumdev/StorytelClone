@@ -20,6 +20,10 @@ class RatingHorzStackView: UIStackView {
     }
 
     // MARK: - Instance properties
+    private var book: Book?
+    private var isBookAddedToBookshelf = false
+    var popupButtonCallback: PopupButtonCallback = {_ in}
+    
     private lazy var starView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,12 +68,7 @@ class RatingHorzStackView: UIStackView {
     
     private let categoryLabel = createCategoryLabel()
         
-    private let saveButton = UIButton()
-    
-    private var book: Book?
-    private var isBookAddedToBookshelf = false
-//    var saveButtonTappedCallback: (Bool) -> () = {_ in}
-    var popupButtonCallback: PopupButtonCallback = {_ in}
+    private let saveButton = SaveBookButton()
     
     private lazy var menuButton: UIButton = {
         let button = UIButton()
@@ -99,7 +98,7 @@ class RatingHorzStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance method
     func configureForAllTitleCellWith(book: Book, popupButtonCallback: @escaping PopupButtonCallback ) {
         self.book = book
         self.popupButtonCallback = popupButtonCallback
@@ -107,88 +106,27 @@ class RatingHorzStackView: UIStackView {
         ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         isBookAddedToBookshelf = book.isAddedToBookshelf
-        toggleButtonImage()
         
+        toggleSaveButtonImage()
         addSaveButtonAction()
     }
     
-//    func configureForAllTitleCellWith(book: Book,  saveButtonTappedCallback: @escaping (Bool) -> () ) {
-//        self.book = book
-//        self.saveButtonTappedCallback = saveButtonTappedCallback
-//
-//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-//        isBookAddedToBookshelf = book.isAddedToBookshelf
-//        toggleButtonImage()
-//
-//        addSaveButtonAction()
-//    }
-    
-    
-
-    
-//    private func addSaveButtonAction() {
-//        saveButton.addAction(UIAction(handler: { [weak self] _ in
-//            guard let self = self else { return }
-//            print("saveButton tapped")
-//            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//            self.toggleButtonImage()
-//            self.updateBook()
-//
-//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
-//
-//        }), for: .touchUpInside)
-//    }
-    
+    // MARK: - Helper methods
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            print("saveButton tapped")
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-            self.toggleButtonImage()
-//            self.updateBook()
-            
-//            UIView.animate(withDuration: 0.6, delay: 0) {
-//                UIView.animate(withDuration: 0.1, delay: 0, animations: {
-//                    self.toggleButtonImage()
-//                })
-//                self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
-//
-//            }
-
-//            self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
+            self.toggleSaveButtonImage()
             self.popupButtonCallback(self.isBookAddedToBookshelf)
-            
-            self.updateBook()
-            
+            self.book?.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
         }), for: .touchUpInside)
     }
     
-    private func toggleButtonImage() {
-        self.saveButton.tintColor = isBookAddedToBookshelf ? Utils.tintColor : .label
-        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-        self.saveButton.setImage(newImage, for: .normal)
+    private func toggleSaveButtonImage() {
+        saveButton.tintColor = self.isBookAddedToBookshelf ? Utils.tintColor : .label
+        saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
     }
-    
-    private func updateBook() {
-        guard let book = book else { return }
 
-        if self.isBookAddedToBookshelf {
-            // Add book only if it's not already in the array
-            if !toReadBooks.contains(where: { $0.title == book.title }) {
-                toReadBooks.append(book)
-                // With real data, update book object here
-            }
-        } else {
-            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == book.title }) {
-                toReadBooks.remove(at: bookIndex)
-                // With real data, update book object here
-            }
-        }
-    }
-    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalTo: categoryLabel.heightAnchor).isActive = true

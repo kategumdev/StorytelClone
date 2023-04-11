@@ -43,65 +43,21 @@ class PopupButton: UIButton {
         userAddedBookToBookshelf in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
-        
-        // If popupView is already visible, hide it to enable animation in showPopupWorkItem
-        guard let bottomAnchorConstraint = self.bottomAnchorConstraint else { return}
-        
-        if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
+
+        // If it's already visible, hide it to make animation in showPopupWorkItem noticeable
+        if let bottomAnchorConstraint = self.bottomAnchorConstraint, bottomAnchorConstraint.constant < self.bottomAnchorConstant {
             bottomAnchorConstraint.constant = self.bottomAnchorConstant
             self.alpha = 0
             self.superview?.layoutIfNeeded()
         }
 
         self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
-        
         DispatchQueue.main.async(execute: self.showPopupWorkItem)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
     }
     
-//    lazy var callback: PopupButtonCallback = { [weak self]
-//        userAddedBookToBookshelf in
-//        guard let self = self else { return }
-//        self.cancelAndReassignWorkItems()
-//
-//        // If popupView is already visible, hide it to enable animation in showPopupWorkItem
-//        guard let bottomAnchorConstraint = self.bottomAnchorConstraint else { return}
-//
-//        if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
-//            bottomAnchorConstraint.constant = self.bottomAnchorConstant
-//            self.alpha = 0
-//            self.superview?.layoutIfNeeded()
-//        }
-//
-//        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
-//
-//        DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//    }
+    private var constraintsApplied = false
     
-//    lazy var saveButtonTappedCallback: (Bool) -> () = { [weak self]
-//        userAddedBookToBookshelf in
-//        guard let self = self else { return }
-//        self.cancelAndReassignWorkItems()
-//
-//        // If popupView is already visible, hide it to enable animation in showPopupWorkItem
-//        guard let bottomAnchorConstraint = self.bottomAnchorConstraint else { return}
-//
-//        if bottomAnchorConstraint.constant < self.bottomAnchorConstant {
-//            bottomAnchorConstraint.constant = self.bottomAnchorConstant
-//            self.alpha = 0
-//            self.superview?.layoutIfNeeded()
-//        }
-//
-//        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
-//
-//        DispatchQueue.main.async(execute: self.showPopupWorkItem)
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
-//    }
-        
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -117,6 +73,14 @@ class PopupButton: UIButton {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if superview != nil && constraintsApplied == false {
+            applyConstraints()
+            constraintsApplied = true
+        }
     }
     
     // MARK: - Helper methods
@@ -167,13 +131,12 @@ class PopupButton: UIButton {
         showPopupWorkItem = DispatchWorkItem { [weak self] in
             self?.showPopupButton()
         }
-        
         hidePopupWorkItem = DispatchWorkItem { [weak self] in
             self?.hidePopupButton()
         }
     }
     
-    func applyConstraints() {
+    private func applyConstraints() {
         customLabel.translatesAutoresizingMaskIntoConstraints = false
         let widthConstant = leadingPadding + trailingPadding + labelImagePadding + imageWidthHeight
         NSLayoutConstraint.activate([
@@ -181,7 +144,7 @@ class PopupButton: UIButton {
             customLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             customLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingPadding)
         ])
-        
+
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customImageView.widthAnchor.constraint(equalToConstant: imageWidthHeight),
@@ -189,7 +152,7 @@ class PopupButton: UIButton {
             customImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             customImageView.leadingAnchor.constraint(equalTo: customLabel.trailingAnchor, constant: labelImagePadding)
         ])
-        
+
         guard let superview = superview else { return }
         // Configure popupButton constraints
         translatesAutoresizingMaskIntoConstraints = false

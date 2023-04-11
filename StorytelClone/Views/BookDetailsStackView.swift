@@ -13,11 +13,7 @@ class BookDetailsStackView: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
-//    var bookVcCallback: () -> () = {} {
-//        didSet {
-//            showSeriesButtonContainer.callback = bookVcCallback
-//        }
-//    }
+    
     var bookVcCallback: BookVcCallback = {} {
         didSet {
             showSeriesButtonContainer.bookVcCallback = bookVcCallback

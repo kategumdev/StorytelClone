@@ -8,12 +8,12 @@
 import UIKit
 
 class RoundButtonsStackContainer: UIStackView {
-    
     // MARK: - Static properties and methods
-    static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+//    static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+    static let roundWidth = UIScreen.main.bounds.width * 0.12
     
-    static func createLabel() -> UILabel {
-        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "")
+    static func createLabel(withText text: String) -> UILabel {
+        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label, text: text)
         label.textAlignment = .center
         return label
     }
@@ -41,12 +41,7 @@ class RoundButtonsStackContainer: UIStackView {
         return button
     }()
     
-    private let listenLabel: UILabel = {
-        let label = RoundButtonsStackContainer.createLabel()
-        label.text = "Listen"
-        label.textAlignment = .center
-        return label
-    }()
+    private let listenLabel: UILabel = RoundButtonsStackContainer.createLabel(withText: "Listen")
     
     private lazy var viewWithReadButton: UIView = {
        let view = UIView()
@@ -73,57 +68,57 @@ class RoundButtonsStackContainer: UIStackView {
         return button
     }()
     
-    private let readLabel: UILabel = {
-        let label = RoundButtonsStackContainer.createLabel()
-        label.text = "Read"
-        label.textAlignment = .center
-        return label
+    private let readLabel: UILabel = RoundButtonsStackContainer.createLabel(withText: "Read")
+    
+    private lazy var saveView: UIView = {
+        let view = UIView()
+        view.addSubview(viewWithSaveButton)
+        view.addSubview(saveLabel)
+        return view
     }()
     
     private lazy var viewWithSaveButton: UIView = {
         let view = UIView()
         view.addSubview(saveButton)
-        view.addSubview(saveLabel)
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.label.cgColor
+        view.layer.cornerRadius = RoundButtonsStackContainer.roundWidth / 2
         return view
     }()
-    
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = UIColor.label
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
-        button.setImage(image, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.label.cgColor
-        button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
         
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
-        button.configuration = config
+    private let saveButton: SaveBookButton = {
+        let button = SaveBookButton()
+        button.layer.cornerRadius = RoundButtonsStackContainer.roundWidth / 2
         return button
     }()
     
     private var isBookAddedToBookshelf = false
-//    var saveButtonTappedCallback: (Bool) -> () = {_ in}
     var popupButtonCallback: PopupButtonCallback = {_ in}
+
+    private let saveLabel: UILabel = RoundButtonsStackContainer.createLabel(withText: "Save")
     
-    private let saveLabel: UILabel = {
-        let label = RoundButtonsStackContainer.createLabel()
-        label.text = "Save"
-        label.textAlignment = .center
-        return label
+    private lazy var hasListenButton: Bool = {
+        var hasButton = false
+        let bookKind = book.titleKind
+        if bookKind == .audiobook || bookKind == .audioBookAndEbook {
+            hasButton = true
+        }
+        return hasButton
     }()
     
-    private var hasListenButton = true
-    private var hasReadButton = true
+    private lazy var hasReadButton: Bool = {
+        var hasButton = false
+        let bookKind = book.titleKind
+        if bookKind == .ebook || bookKind == .audioBookAndEbook {
+            hasButton = true
+        }
+        return hasButton
+    }()
     
     // MARK: - View life cycle
     init(forBook book: Book) {
         self.book = book
         super.init(frame: .zero)
-//        isBookAddedToBookshelf = book.isAddedToBookshelf
-//        toggleButtonImage()
-        
         configureSelf()
         applyConstraints()
     }
@@ -136,7 +131,7 @@ class RoundButtonsStackContainer: UIStackView {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            saveButton.layer.borderColor = UIColor.label.cgColor
+            viewWithSaveButton.layer.borderColor = UIColor.label.cgColor
         }
     }
     
@@ -144,28 +139,23 @@ class RoundButtonsStackContainer: UIStackView {
     private func configureSelf() {
         axis = .horizontal
         distribution = .fillProportionally
-        spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
+        spacing = RoundButtonsStackContainer.roundWidth - 10
         
         isBookAddedToBookshelf = book.isAddedToBookshelf
-        toggleButtonImage()
         
-        let bookKind = book.titleKind
-        
-        if bookKind == .audioBookAndEbook {
+        toggleSaveLabelText()
+        saveButton.toggleImage(isBookAdded: isBookAddedToBookshelf)
+        addSaveButtonAction()
+                
+        if hasListenButton {
             addArrangedSubview(viewWithListenButton)
-            addArrangedSubview(viewWithReadButton)
-            addArrangedSubview(viewWithSaveButton)
-        } else if bookKind == .audiobook {
-            hasReadButton = false
-            addArrangedSubview(viewWithListenButton)
-            addArrangedSubview(viewWithSaveButton)
-        } else {
-            hasListenButton = false
-            addArrangedSubview(viewWithReadButton)
-            addArrangedSubview(viewWithSaveButton)
         }
         
-        addSaveButtonAction()
+        if hasReadButton {
+            addArrangedSubview(viewWithReadButton)
+        }
+        
+        addArrangedSubview(saveView)
     }
     
     private func addSaveButtonAction() {
@@ -175,124 +165,76 @@ class RoundButtonsStackContainer: UIStackView {
             self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
-    
+
     private func handleSaveButtonTapped() {
-//        self.saveButtonTappedCallback(self.isBookAddedToBookshelf)
         self.popupButtonCallback(self.isBookAddedToBookshelf)
 
         if self.isBookAddedToBookshelf {
-            self.toggleButtonImage()
-            self.updateBook()
-            self.animateSaveButtonImageView(withCompletion: { _ in })
+            self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+            self.toggleSaveLabelText()
+            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+            self.saveButton.animateImageView(withCompletion: { _ in })
         } else {
-            self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+            self.saveButton.animateImageView(withCompletion: { [weak self] (_) in
                 guard let self = self else { return }
-                self.toggleButtonImage()
-                self.updateBook()
+                self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+                self.toggleSaveLabelText()
+                self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
             })
         }
     }
     
-    private func animateSaveButtonImageView(withCompletion completion: ((Bool) -> Void)?) {
-        let imageView = saveButton.imageView!
-        // Set the initial transform of the view
-        imageView.transform = CGAffineTransform.identity
-        
-        UIView.animateKeyframes(withDuration: 0.6, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
-
-            let duration1 = 0.15 // shorter duration for 1st keyframe
-            let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
-            let duration4 = 0.15 // shorter duration for 4th keyframe
-
-            // First keyframe: animate to 30% of initial size
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: duration1) {
-                imageView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-            }
-
-            // Second keyframe: animate back to 100% of initial size with longer duration
-            UIView.addKeyframe(withRelativeStartTime: duration1, relativeDuration: duration2) {
-                imageView.transform = CGAffineTransform.identity
-            }
-
-            // Third keyframe: animate to 50% of initial size with the same duration as 2nd keyframe
-            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2, relativeDuration: duration2) {
-                imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-            }
-
-            // Fourth keyframe: animate back to 100% of initial size with spring animation
-            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2 + duration2, relativeDuration: duration4) {
-                imageView.transform = CGAffineTransform.identity
-            }
-            
-            UIView.animate(withDuration: duration4, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: [.allowUserInteraction], animations: {
-                imageView.transform = CGAffineTransform.identity
-            }, completion: nil )
-
-        }, completion: completion)
+    private func toggleSaveLabelText() {
+        saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
     }
-    
-    private func toggleButtonImage() {
-        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
-        self.saveButton.setImage(newImage, for: .normal)
 
-        self.saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
-    }
-    
-    private func updateBook() {
-        if self.isBookAddedToBookshelf {
-            // Add book only if it's not already in the array
-            if !toReadBooks.contains(where: { $0.title == book.title }) {
-                toReadBooks.append(book)
-            }
-        } else {
-            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == book.title }) {
-                toReadBooks.remove(at: bookIndex)
-            }
-        }
-
-    }
-    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        let buttonLabelPadding: CGFloat = 15
+        let labelPadding: CGFloat = 15
 
         // Save button
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            saveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor),
-            saveButton.leadingAnchor.constraint(equalTo: viewWithSaveButton.leadingAnchor),
-            saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
+            saveButton.widthAnchor.constraint(equalTo: viewWithSaveButton.widthAnchor),
+            saveButton.heightAnchor.constraint(equalTo: viewWithSaveButton.heightAnchor),
+            saveButton.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor, constant: 1),
+            saveButton.centerYAnchor.constraint(equalTo: viewWithSaveButton.centerYAnchor, constant: 0.5)
+        ])
+
+        viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            viewWithSaveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
+            viewWithSaveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
+            viewWithSaveButton.topAnchor.constraint(equalTo: saveView.topAnchor),
+            viewWithSaveButton.leadingAnchor.constraint(equalTo: saveView.leadingAnchor),
+            viewWithSaveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -labelPadding)
         ])
 
         saveLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-            saveLabel.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor),
-            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
+            saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
+            saveLabel.centerXAnchor.constraint(equalTo: saveView.centerXAnchor),
+            saveLabel.bottomAnchor.constraint(equalTo: saveView.bottomAnchor)
 
         ])
 
-        viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
-        viewWithSaveButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor).isActive = true
+        saveView.translatesAutoresizingMaskIntoConstraints = false
+        saveView.widthAnchor.constraint(equalTo: viewWithSaveButton.widthAnchor).isActive = true
 
         if hasListenButton {
             // Listen button
             listenButton.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-                listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
+                listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
                 listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
                 listenButton.leadingAnchor.constraint(equalTo: viewWithListenButton.leadingAnchor),
-                listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
+                listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -labelPadding)
             ])
 
             listenLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
                 listenLabel.centerXAnchor.constraint(equalTo: viewWithListenButton.centerXAnchor),
                 listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
             ])
@@ -305,16 +247,16 @@ class RoundButtonsStackContainer: UIStackView {
             // Read button
             readButton.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                readButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
-                readButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                readButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
+                readButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
                 readButton.topAnchor.constraint(equalTo: viewWithReadButton.topAnchor),
                 readButton.leadingAnchor.constraint(equalTo: viewWithReadButton.leadingAnchor),
-                readButton.bottomAnchor.constraint(equalTo: readLabel.topAnchor, constant: -buttonLabelPadding)
+                readButton.bottomAnchor.constraint(equalTo: readLabel.topAnchor, constant: -labelPadding)
             ])
 
             readLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                readLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+                readLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.roundWidth),
                 readLabel.centerXAnchor.constraint(equalTo: viewWithReadButton.centerXAnchor),
                 readLabel.bottomAnchor.constraint(equalTo: viewWithReadButton.bottomAnchor)
             ])
@@ -325,3 +267,363 @@ class RoundButtonsStackContainer: UIStackView {
     }
     
 }
+
+
+
+
+//class RoundButtonsStackContainer: UIStackView {
+//
+//    // MARK: - Static properties and methods
+//    static let buttonWidthAndHeight = UIScreen.main.bounds.width * 0.12
+//
+//    static func createLabel() -> UILabel {
+//        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "")
+//        label.textAlignment = .center
+//        return label
+//    }
+//
+//    // MARK: - Instance properties
+//    private let book: Book
+//
+//    private lazy var viewWithListenButton: UIView = {
+//        let view = UIView()
+//        view.addSubview(listenButton)
+//        view.addSubview(listenLabel)
+//        return view
+//    }()
+//
+//    private let listenButton: UIButton = {
+//        let button = UIButton()
+//        button.tintColor = Utils.tintColor
+//        var config = UIButton.Configuration.filled()
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
+//        let image = UIImage(systemName: "headphones", withConfiguration: symbolConfig)?.withTintColor(Utils.customBackgroundLight)
+//        config.image = image
+//        config.cornerStyle = .capsule
+//        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 9.5, bottom: 10, trailing: 8.5)
+//        button.configuration = config
+//        return button
+//    }()
+//
+//    private let listenLabel: UILabel = {
+//        let label = RoundButtonsStackContainer.createLabel()
+//        label.text = "Listen"
+//        label.textAlignment = .center
+//        return label
+//    }()
+//
+//    private lazy var viewWithReadButton: UIView = {
+//       let view = UIView()
+//        view.addSubview(readButton)
+//        view.addSubview(readLabel)
+//        return view
+//    }()
+//
+//    private let readButton: UIButton = {
+//        let button = UIButton()
+//        button.tintColor = Utils.tintColor
+//        var config = UIButton.Configuration.filled()
+//        let image = UIImage(named: "glasses")?.withTintColor(Utils.customBackgroundLight)
+//
+//        // Resize image
+//        if let image = image {
+//            let resizedImage = image.resizeFor(targetHeight: 25)
+//            config.image = resizedImage
+//        }
+//
+//        config.cornerStyle = .capsule
+//        config.contentInsets = NSDirectionalEdgeInsets(top: 8.5, leading: 9.5, bottom: 9.5, trailing: 8.5)
+//        button.configuration = config
+//        return button
+//    }()
+//
+//    private let readLabel: UILabel = {
+//        let label = RoundButtonsStackContainer.createLabel()
+//        label.text = "Read"
+//        label.textAlignment = .center
+//        return label
+//    }()
+//
+//    private lazy var viewWithSaveButton: UIView = {
+//        let view = UIView()
+//        view.addSubview(saveButton)
+//        view.addSubview(saveLabel)
+//        return view
+//    }()
+//
+//    private let saveButton: SaveBookButton = {
+//        let button = SaveBookButton()
+////        button.tintColor = UIColor.label
+////        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+////        let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
+////        button.setImage(image, for: .normal)
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor = UIColor.label.cgColor
+//        button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
+//
+////        let inset = (RoundButtonsStackContainer.buttonWidthAndHeight - 16) / 2
+////        let leadingInset: CGFloat = inset + 0.5
+////        let trailingInset: CGFloat = inset - 0.5
+//
+//        var config = UIButton.Configuration.plain()
+//
+//        if let defaultInsets = button.configuration?.contentInsets {
+//            config.contentInsets = NSDirectionalEdgeInsets(top: defaultInsets.top, leading: defaultInsets.leading + 0.5, bottom: defaultInsets.bottom, trailing: defaultInsets.trailing - 0.5)
+//        }
+////        let defaultContentInsets = button.configuration?.contentInsets
+////        let insets = button.configuration?.contentInsets
+////        config.contentInsets = NSDirectionalEdgeInsets(top: insets?.top, leading: leadingInset, bottom: insets.bottom, trailing: trailingInset)
+////        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset, bottom: 0, trailing: trailingInset)
+//        button.configuration = config
+//
+////        var config = UIButton.Configuration.plain()
+////        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
+////        button.configuration = config
+//        return button
+//    }()
+//
+////    private let saveButton: UIButton = {
+////        let button = UIButton()
+////        button.tintColor = UIColor.label
+////        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+////        let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
+////        button.setImage(image, for: .normal)
+////        button.layer.borderWidth = 2
+////        button.layer.borderColor = UIColor.label.cgColor
+////        button.layer.cornerRadius = RoundButtonsStackContainer.buttonWidthAndHeight / 2
+////
+////        var config = UIButton.Configuration.plain()
+////        config.contentInsets = NSDirectionalEdgeInsets(top: 9.5, leading: 9.5, bottom: 8.5, trailing: 8.5)
+////        button.configuration = config
+////        return button
+////    }()
+//
+//    private var isBookAddedToBookshelf = false
+////    var saveButtonTappedCallback: (Bool) -> () = {_ in}
+//    var popupButtonCallback: PopupButtonCallback = {_ in}
+//
+//    private let saveLabel: UILabel = {
+//        let label = RoundButtonsStackContainer.createLabel()
+//        label.text = "Save"
+//        label.textAlignment = .center
+//        return label
+//    }()
+//
+//    private var hasListenButton = true
+//    private var hasReadButton = true
+//
+//    // MARK: - View life cycle
+//    init(forBook book: Book) {
+//        self.book = book
+//        super.init(frame: .zero)
+////        isBookAddedToBookshelf = book.isAddedToBookshelf
+////        toggleButtonImage()
+//
+//        configureSelf()
+//        applyConstraints()
+//    }
+//
+//    required init(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//
+//        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+//            saveButton.layer.borderColor = UIColor.label.cgColor
+//        }
+//    }
+//
+//    // MARK: - Helper methods
+//    private func configureSelf() {
+//        axis = .horizontal
+//        distribution = .fillProportionally
+//        spacing = RoundButtonsStackContainer.buttonWidthAndHeight - 10
+//
+//        isBookAddedToBookshelf = book.isAddedToBookshelf
+//
+//        saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
+//        saveButton.toggleImage(isBookAdded: isBookAddedToBookshelf)
+////        toggleButtonImage()
+//        addSaveButtonAction()
+//
+//        let bookKind = book.titleKind
+//
+//        if bookKind == .audioBookAndEbook {
+//            addArrangedSubview(viewWithListenButton)
+//            addArrangedSubview(viewWithReadButton)
+//            addArrangedSubview(viewWithSaveButton)
+//        } else if bookKind == .audiobook {
+//            hasReadButton = false
+//            addArrangedSubview(viewWithListenButton)
+//            addArrangedSubview(viewWithSaveButton)
+//        } else {
+//            hasListenButton = false
+//            addArrangedSubview(viewWithReadButton)
+//            addArrangedSubview(viewWithSaveButton)
+//        }
+//
+////        addSaveButtonAction()
+//    }
+//
+//    private func addSaveButtonAction() {
+//        saveButton.addAction(UIAction(handler: { [weak self] _ in
+//            guard let self = self else { return }
+//            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+//            self.handleSaveButtonTapped()
+//        }), for: .touchUpInside)
+//    }
+//
+////    private func handleSaveButtonTapped() {
+////        self.popupButtonCallback(self.isBookAddedToBookshelf)
+////
+////        if self.isBookAddedToBookshelf {
+////            self.toggleButtonImage()
+//////            self.updateBook()
+////            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+////            self.animateSaveButtonImageView(withCompletion: { _ in })
+////        } else {
+////            self.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+////                guard let self = self else { return }
+////                self.toggleButtonImage()
+//////                self.updateBook()
+////                self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+////            })
+////        }
+////    }
+//
+//    private func handleSaveButtonTapped() {
+//        self.popupButtonCallback(self.isBookAddedToBookshelf)
+//
+//        if self.isBookAddedToBookshelf {
+//            self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+//            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+//            self.saveButton.animateSaveButtonImageView(withCompletion: { _ in })
+//        } else {
+//            self.saveButton.animateSaveButtonImageView(withCompletion: { [weak self] (_) in
+//                guard let self = self else { return }
+//                self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+//                self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+//            })
+//        }
+//    }
+//
+////    private func animateSaveButtonImageView(withCompletion completion: ((Bool) -> Void)?) {
+////        let imageView = saveButton.imageView!
+////        // Set the initial transform of the view
+////        imageView.transform = CGAffineTransform.identity
+////
+////        UIView.animateKeyframes(withDuration: 0.6, delay: 0, options: [.calculationModeCubic, .beginFromCurrentState], animations: {
+////
+////            let duration1 = 0.15 // shorter duration for 1st keyframe
+////            let duration2 = 0.4 // longer duration for 2nd and 3rd keyframes
+////            let duration4 = 0.15 // shorter duration for 4th keyframe
+////
+////            // First keyframe: animate to 30% of initial size
+////            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: duration1) {
+////                imageView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+////            }
+////
+////            // Second keyframe: animate back to 100% of initial size with longer duration
+////            UIView.addKeyframe(withRelativeStartTime: duration1, relativeDuration: duration2) {
+////                imageView.transform = CGAffineTransform.identity
+////            }
+////
+////            // Third keyframe: animate to 50% of initial size with the same duration as 2nd keyframe
+////            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2, relativeDuration: duration2) {
+////                imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+////            }
+////
+////            // Fourth keyframe: animate back to 100% of initial size with spring animation
+////            UIView.addKeyframe(withRelativeStartTime: duration1 + duration2 + duration2, relativeDuration: duration4) {
+////                imageView.transform = CGAffineTransform.identity
+////            }
+////
+////            UIView.animate(withDuration: duration4, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 6.0, options: [.allowUserInteraction], animations: {
+////                imageView.transform = CGAffineTransform.identity
+////            }, completion: nil )
+////
+////        }, completion: completion)
+////    }
+//
+////    private func toggleButtonImage() {
+////        let newImageName = isBookAddedToBookshelf ? "heart.fill" : "heart"
+////        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+////        let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
+////        self.saveButton.setImage(newImage, for: .normal)
+////
+////        self.saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
+////    }
+//
+//    private func applyConstraints() {
+//        translatesAutoresizingMaskIntoConstraints = false
+//        let buttonLabelPadding: CGFloat = 15
+//
+//        // Save button
+//        saveButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            saveButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//            saveButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//            saveButton.topAnchor.constraint(equalTo: viewWithSaveButton.topAnchor),
+//            saveButton.leadingAnchor.constraint(equalTo: viewWithSaveButton.leadingAnchor),
+//            saveButton.bottomAnchor.constraint(equalTo: saveLabel.topAnchor, constant: -buttonLabelPadding)
+//        ])
+//
+//        saveLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            saveLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//            saveLabel.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor),
+//            saveLabel.bottomAnchor.constraint(equalTo: viewWithSaveButton.bottomAnchor)
+//
+//        ])
+//
+//        viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
+//        viewWithSaveButton.widthAnchor.constraint(equalTo: saveButton.widthAnchor).isActive = true
+//
+//        if hasListenButton {
+//            // Listen button
+//            listenButton.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                listenButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                listenButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                listenButton.topAnchor.constraint(equalTo: viewWithListenButton.topAnchor),
+//                listenButton.leadingAnchor.constraint(equalTo: viewWithListenButton.leadingAnchor),
+//                listenButton.bottomAnchor.constraint(equalTo: listenLabel.topAnchor, constant: -buttonLabelPadding)
+//            ])
+//
+//            listenLabel.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                listenLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                listenLabel.centerXAnchor.constraint(equalTo: viewWithListenButton.centerXAnchor),
+//                listenLabel.bottomAnchor.constraint(equalTo: viewWithListenButton.bottomAnchor)
+//            ])
+//
+//            viewWithListenButton.translatesAutoresizingMaskIntoConstraints = false
+//            viewWithListenButton.widthAnchor.constraint(equalTo: listenButton.widthAnchor).isActive = true
+//        }
+//
+//        if hasReadButton {
+//            // Read button
+//            readButton.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                readButton.heightAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                readButton.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                readButton.topAnchor.constraint(equalTo: viewWithReadButton.topAnchor),
+//                readButton.leadingAnchor.constraint(equalTo: viewWithReadButton.leadingAnchor),
+//                readButton.bottomAnchor.constraint(equalTo: readLabel.topAnchor, constant: -buttonLabelPadding)
+//            ])
+//
+//            readLabel.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                readLabel.widthAnchor.constraint(equalToConstant: RoundButtonsStackContainer.buttonWidthAndHeight),
+//                readLabel.centerXAnchor.constraint(equalTo: viewWithReadButton.centerXAnchor),
+//                readLabel.bottomAnchor.constraint(equalTo: viewWithReadButton.bottomAnchor)
+//            ])
+//
+//            viewWithReadButton.translatesAutoresizingMaskIntoConstraints = false
+//            viewWithReadButton.widthAnchor.constraint(equalTo: readButton.widthAnchor).isActive = true
+//        }
+//    }
+//
+//}
