@@ -90,27 +90,11 @@ class BaseTableViewController: UIViewController {
 
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
     }
     
-//    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-//
-//        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
-//
-//        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
-//
-//        if currentOffsetY > tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY + tableHeaderHeight + 10 && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
-//    }
-    
-    func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
+    func adjustNavBarPositionFor(currentOffsetY: CGFloat) {
         guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
         
         changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
@@ -120,11 +104,8 @@ class BaseTableViewController: UIViewController {
     }
     
     func layoutHeaderView() {
-//                print("layoutHeaderView")
         guard let headerView = bookTable.tableHeaderView else { return }
-//        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
         if headerView.translatesAutoresizingMaskIntoConstraints != true {
-//                        print("translatesAutoresizingMask set to true")
             headerView.translatesAutoresizingMaskIntoConstraints = true
         }
         
@@ -140,7 +121,6 @@ class BaseTableViewController: UIViewController {
             view.setNeedsLayout()
             view.layoutIfNeeded()
         }
-        
     }
     
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
@@ -234,60 +214,14 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
-
         guard isInitialOffsetYSet else {
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
-//            print("initialOffsetY is SET")
             return
         }
         
         // Toggle navbar from transparent to visible at calculated contentOffset
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
     }
     
 }
-
-// MARK: - Helper methods
-//extension BaseTableViewController {
-
-//    func layoutHeaderView() {
-////                print("layoutHeaderView")
-//        guard let headerView = bookTable.tableHeaderView else { return }
-////        (headerView as? FeedTableHeaderView)?.updateGreetingsLabel()
-//        if headerView.translatesAutoresizingMaskIntoConstraints != true {
-////                        print("translatesAutoresizingMask set to true")
-//            headerView.translatesAutoresizingMaskIntoConstraints = true
-//        }
-//
-//        let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//        if headerView.frame.size.height != size.height {
-////            print("header frame adjusted")
-//            headerView.frame.size.height = size.height
-//            bookTable.tableHeaderView = headerView
-//
-//            guard isFirstTime == true else { return }
-//            isFirstTime = false
-//            // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        }
-//
-//    }
-//
-//    private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
-//        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
-//
-//        let height = tableHeader.bounds.size.height + 10
-//        let maxOffset = tableViewInitialOffsetY + height
-//
-//        if offsetY <= tableViewInitialOffsetY && tableHeader.dimView.alpha != 0 {
-//            tableHeader.dimView.alpha = 0
-//        } else if offsetY >= maxOffset && tableHeader.dimView.alpha != 1 {
-//            tableHeader.dimView.alpha = 1
-//        } else if offsetY > tableViewInitialOffsetY && offsetY < maxOffset {
-//            let alpha = (offsetY + abs(tableViewInitialOffsetY)) / height
-//            tableHeader.dimView.alpha = alpha
-//        }
-//    }
-//}

@@ -41,18 +41,17 @@ class HomeViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("viewWillAppear")
         let currentOffsetY = bookTable.contentOffset.y
-//        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
         
-        
-        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
-        tableHeader.updateGreetingsLabel()
+        if let tableHeader = bookTable.tableHeaderView as? TableHeaderView {
+            tableHeader.updateGreetingsLabel()
+        }
+//        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
+//        tableHeader.updateGreetingsLabel()
     }
     
     override func viewDidLayoutSubviews() {
-//        print("viewDidLayoutSubviews")
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         tableHeader.stackBottomAnchorConstraint.constant = 0
@@ -64,7 +63,6 @@ class HomeViewController: BaseTableViewController {
     override func configureNavBar() {
         super.configureNavBar()
         title = "Home"
-//        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
         let configuration = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
         
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
@@ -72,31 +70,8 @@ class HomeViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-//    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
-//    }
-    
-    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-        
+    override func adjustNavBarPositionFor(currentOffsetY: CGFloat) {
         navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
-        
-//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -115,7 +90,6 @@ class HomeViewController: BaseTableViewController {
         } else if sectionKind == .oneBookWithOverview {
             return bookWithOverviewCell(from: tableView, for: indexPath)
         } else {
-//            print("SectionKind \(sectionKind) isn't handled in cellForRowAt yet")
             return cellWithHorizontalCv(from: tableView, for: indexPath)
         }
     }
@@ -169,40 +143,13 @@ class HomeViewController: BaseTableViewController {
             return calculatedHeight
         }
     }
-
-//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard isInitialOffsetYSet else {
-//            tableViewInitialOffsetY = scrollView.contentOffset.y
-//            isInitialOffsetYSet = true
-////            print("initialOffsetY is SET")
-//            return
-//        }
-//
-//        // Toggle navbar from transparent to visible as it does by default, but add another blur
-//        let currentOffsetY = scrollView.contentOffset.y
-//        adjustNavBarAppearance(forCurrentOffsetY: currentOffsetY)
-//    }
-
 }
 
 // MARK: - Helper methods
 extension HomeViewController {
     
-//    private func adjustNavBarAppearance(forCurrentOffsetY currentOffsetY: CGFloat) {
-//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
-//    }
-    
     private func wideButtonCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
-//        cell.delegate = self
         
         // To respond to button tap in WideButtonTableViewCell
         let callbackClosure: ButtonCallback = { [weak self] sectionKind in
@@ -284,17 +231,3 @@ extension HomeViewController {
     }
 
 }
-
-//extension HomeViewController: WideButtonTableViewCellDelegate {
-//
-//    func wideButtonTableViewCellDidTapButton(_ cell: WideButtonTableViewCell, forSectionKind sectionKind: SectionKind) {
-//        if sectionKind == .seriesCategoryButton {
-//            let controller = CategoryViewController(categoryModel: Category.series)
-//            navigationController?.pushViewController(controller, animated: true)
-//        } else {
-//            let controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: CategoryButton.categoriesForAllCategories)
-//            navigationController?.pushViewController(controller, animated: true)
-//        }
-//    }
-//
-//}

@@ -54,17 +54,6 @@ extension NSAttributedString {
 
 extension UILabel {
     
-//    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat, numberOfLines: Int = 1) -> UILabel {
-//        let label = UILabel()
-//        label.numberOfLines = numberOfLines
-//        label.lineBreakMode = .byTruncatingTail
-//        label.adjustsFontForContentSizeCategory = true
-//        let font = font
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-//        label.font = scaledFont
-//        return label
-//    }
-    
     #warning("Refactor to have only maximumPointSize and no withScaledFont")
     static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat?, numberOfLines: Int = 1, withScaledFont: Bool = true, textColor: UIColor = .label, text: String = "") -> UILabel {
         let label = UILabel()
@@ -75,15 +64,12 @@ extension UILabel {
         label.text = text
         
         if withScaledFont {
-//            let font = font
             guard let maximumPointSize = maximumPointSize else { return label }
             let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
             label.font = scaledFont
         } else {
             label.font = font
         }
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-//        label.font = scaledFont
         return label
     }
     
@@ -132,31 +118,44 @@ extension Int {
 
 extension UINavigationController {
     
+    static let transparentNavBarAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        appearance.configureWithTransparentBackground()
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
+        return appearance
+    }()
+    
+    static let visibleNavBarAppearance: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.shadowColor = .tertiaryLabel
+        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
+        return appearance
+    }()
+    
     func adjustPositionTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
         
-//        let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
-        
-        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-            self.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
+            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
 //            print("to visible")
         }
 
-        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-            self.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.transparentNavBarAppearance {
+            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
 //            print("to transparent")
         }
     }
 }
-
-//extension NSAttributedString {
-//    func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
-//        let attributedString = NSMutableAttributedString(attributedString: self)
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.lineBreakMode = .byTruncatingTail
-//        paragraphStyle.lineSpacing = spacing
-//        attributedString.addAttribute(.paragraphStyle,
-//                                      value: paragraphStyle,
-//                                      range: NSRange(location: 0, length: string.count))
-//        return NSAttributedString(attributedString: attributedString)
-//    }
-//}

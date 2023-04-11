@@ -7,11 +7,13 @@
 
 import UIKit
 
-//typealias BookButtonCallbackClosure = (_ book: Book) -> ()
-//typealias WideButtonCallbackClosure = (_ sectionKind: SectionKind) -> ()
-//typealias CategoryButtonCallbackClosure = (_ buttonCategory: ButtonCategory) -> ()
 typealias ButtonCallback = (_ item: Any) -> ()
 typealias SelectedTitleCallback = (_ title: Title) -> ()
+
+enum ScrollDirection {
+    case forward
+    case back
+}
 
 struct Utils {
     
@@ -55,35 +57,6 @@ struct Utils {
     static let greenCategoryColor = UIColor(red: 189/255, green: 210/255, blue: 163/255, alpha: 1)
     
     static let seeAllButtonColor = UIColor.label.withAlphaComponent(0.7)
-    
-    // MARK: - Constructors
-    static let transparentNavBarAppearance: UINavigationBarAppearance = {
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-        appearance.configureWithTransparentBackground()
-        
-        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
-        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-        
-        return appearance
-    }()
-    
-    static let visibleNavBarAppearance: UINavigationBarAppearance = {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.shadowColor = .tertiaryLabel
-        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-        
-        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
-        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-        
-        return appearance
-    }()
     
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {

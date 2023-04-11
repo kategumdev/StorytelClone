@@ -79,7 +79,7 @@ class RatingHorzStackView: UIStackView {
         return button
     }()
         
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         axis = .horizontal

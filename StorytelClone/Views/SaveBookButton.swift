@@ -8,7 +8,7 @@
 import UIKit
 
 class SaveBookButton: UIButton {
-    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         tintColor = UIColor.label
@@ -20,14 +20,10 @@ class SaveBookButton: UIButton {
     
     // MARK: - Instance methods
     func toggleImage(isBookAdded: Bool) {
-        // FOR RatingHorzStackView: self.saveButton.tintColor = isBookAddedToBookshelf ? Utils.tintColor : .label
-
         let newImageName = isBookAdded ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.setImage(newImage, for: .normal)
-
-        // FOR RoundButtonsStackContainer: self.saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
     }
     
     func animateImageView(withCompletion completion: ((Bool) -> Void)?) {

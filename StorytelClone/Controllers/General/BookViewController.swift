@@ -82,7 +82,9 @@ class BookViewController: UIViewController {
         addAndConfigurePopupButton()
         applyConstraints()
         
-        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+
         extendedLayoutIncludesOpaqueBars = true
         navigationItem.backButtonTitle = ""
     }
@@ -143,35 +145,11 @@ class BookViewController: UIViewController {
         handleSeeMoreOverviewButtonTapped()
     }
     
-//    private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-//        let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
-//
-//        if currentOffsetY > scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
-//    }
-    
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
         
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
         navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
-        
-//        if currentOffsetY > scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= scrollViewInitialOffsetY + maxYOfBookTitleLabel && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
     }
     
     private func addSeeMoreButtonAction() {

@@ -121,31 +121,8 @@ class AllTitlesViewController: BaseTableViewController {
         navigationItem.backButtonTitle = ""
     }
     
-//    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
-//    }
-    
-    override func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
-        
+    override func adjustNavBarPositionFor(currentOffsetY: CGFloat) {
         navigationController?.adjustPositionTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
-        
-//        if currentOffsetY > tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.visibleNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-////            print("to visible")
-//        }
-//
-//        if currentOffsetY <= tableViewInitialOffsetY && navigationController?.navigationBar.standardAppearance != Utils.transparentNavBarAppearance {
-//            navigationController?.navigationBar.standardAppearance = Utils.transparentNavBarAppearance
-////            print("to transparent")
-//        }
     }
     
     // MARK: - Helper methods

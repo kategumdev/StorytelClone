@@ -8,7 +8,6 @@
 import UIKit
 
 class BadgeView: UIView {
-
     // MARK: - Static properties
     static let badgeWidthAndHeight: CGFloat = 28
     static let paddingBetweenBadges: CGFloat = 4
@@ -23,7 +22,7 @@ class BadgeView: UIView {
         return imageView
     }()
         
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         tintColor = UIColor.label
@@ -39,6 +38,7 @@ class BadgeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = bounds.width / 2

@@ -7,10 +7,10 @@
 
 import UIKit
 
-enum ScrollDirection {
-    case forward
-    case back
-}
+//enum ScrollDirection {
+//    case forward
+//    case back
+//}
 
 class SearchResultsViewController: UIViewController {
 

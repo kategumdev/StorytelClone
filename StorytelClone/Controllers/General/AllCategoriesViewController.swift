@@ -30,24 +30,15 @@ class AllCategoriesViewController: BaseTableViewController {
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
         headerView.configureWith(title: category.title)
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
-
-//        headerView.headerLabel.text = category.title
-//        headerView.topAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
         title = category.title
         navigationItem.backButtonTitle = ""
     }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        print("viewDidDisappear")
-//    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
     }
     
     //MARK: - Helper methods

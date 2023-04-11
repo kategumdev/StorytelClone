@@ -55,16 +55,21 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "star.fill")
         imageView.contentMode = .scaleAspectFit
-//        imageView.tintColor = UIColor.label.withAlphaComponent(0.7)
         imageView.tintColor = Utils.seeAllButtonColor
        
         view.addSubview(imageView)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2).isActive = true
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2)
+        ])
+//        imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2).isActive = true
         
         return view
     }()

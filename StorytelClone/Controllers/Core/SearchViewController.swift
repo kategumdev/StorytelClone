@@ -108,11 +108,8 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("viewWillAppear")
-        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
-        
-//        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
-//        navigationController?.navigationBar.isTranslucent = false
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
     }
     
     override func viewDidLayoutSubviews() {
@@ -191,7 +188,8 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+//        navigationController?.navigationBar.standardAppearance = Utils.visibleNavBarAppearance
+        navigationController?.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     

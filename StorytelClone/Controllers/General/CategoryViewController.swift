@@ -13,8 +13,6 @@ class CategoryViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-//        headerView.headerLabel.text = category.title
-//        headerView.topAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         headerView.configureWith(title: category.title)
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
@@ -24,9 +22,8 @@ class CategoryViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         let currentOffsetY = bookTable.contentOffset.y
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+        adjustNavBarPositionFor(currentOffsetY: currentOffsetY)
     }
     
     // MARK: - Superclass overrides
