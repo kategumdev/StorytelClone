@@ -12,8 +12,9 @@ class TableHeaderView: UIView {
     private let stackBottomAnchor: CGFloat = 14
     private let stackTopAnchorForGreeting: CGFloat = 15
     let stackTopAnchorForCategoryOrSectionTitle: CGFloat = 19
-    private let stackLeadingAnchor = Constants.cvPadding
-    private let stackTrailingAnchor: CGFloat = Constants.cvPadding
+//    private let stackLeadingAnchor = Constants.cvPadding
+//    private let stackTrailingAnchor: CGFloat = Constants.cvPadding
+    private let stackLeadingAndTrailingConstant = Constants.cvPadding
     
     lazy var stackTopAnchorConstraint = stackView.topAnchor.constraint(equalTo: topAnchor, constant: stackTopAnchorForGreeting)
     lazy var stackBottomAnchorConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -stackBottomAnchor)
@@ -54,32 +55,104 @@ class TableHeaderView: UIView {
     }
 
     // MARK: - Helper methods
+//    func configureWith(title: String) {
+//        headerLabel.text = title
+//    }
     
-    func configureWith(title: String) {
-        headerLabel.text = title
+//    func configureWith(title: String, bookTitleForSimilar: String? = nil, sectionDescription: String? = nil) {
+//        headerLabel.text = title
+//
+//        if let bookTitleForSimilar = bookTitleForSimilar {
+//            bookTitleForSimilarLabel.text = bookTitleForSimilar
+//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
+//            stackView.spacing = 9
+//        }
+//
+//        if let sectionDescription = sectionDescription {
+//            sectionDescriptionLabel.text = sectionDescription
+//            stackView.addArrangedSubview(sectionDescriptionLabel)
+//            stackView.spacing = 15
+//        }
+//    }
+    
+    func configureWith(text: String) {
+        headerLabel.text = text
     }
     
-    func configureWith(title: String, bookTitleForSimilar: String) {
-        headerLabel.text = title
-        bookTitleForSimilarLabel.text = bookTitleForSimilar
-        stackView.addArrangedSubview(bookTitleForSimilarLabel)
-        stackView.spacing = 9
+    func configureFor(tableSection: TableSection, titleModel: Title?) {
+        if let series = titleModel as? Series {
+            headerLabel.text = series.title
+            followSeriesView.configureWith(series: series)
+            stackView.addArrangedSubview(followSeriesView)
+            stackView.spacing = 9
+        } else if let tag = titleModel as? Tag {
+            headerLabel.text = tag.tagTitle
+        } else {
+            headerLabel.text = tableSection.sectionTitle
+        }
+        
+        if tableSection.forSimilarBooks, let book = titleModel as? Book {
+            bookTitleForSimilarLabel.text = book.title
+            stackView.addArrangedSubview(bookTitleForSimilarLabel)
+            stackView.spacing = 9
+        }
+        
+        if let sectionDescription = tableSection.sectionDescription {
+            sectionDescriptionLabel.text = sectionDescription
+            stackView.addArrangedSubview(sectionDescriptionLabel)
+            stackView.spacing = 15
+        }
     }
     
-    func configureWith(title: String, sectionDescription: String) {
-        headerLabel.text = title
-        sectionDescriptionLabel.text = sectionDescription
-        stackView.addArrangedSubview(sectionDescriptionLabel)
-        stackView.spacing = 15
-    }
+//    func configureFor(tableSection: TableSection?, titleModel: Title?) {
+//        if let series = titleModel as? Series {
+//            headerLabel.text = series.title
+//            followSeriesView.configureWith(series: series)
+//            stackView.addArrangedSubview(followSeriesView)
+//            stackView.spacing = 9
+//        } else if let tag = titleModel as? Tag {
+//            headerLabel.text = tag.tagTitle
+//        } else {
+//            headerLabel.text = tableSection.sectionTitle
+//        }
+//
+//        if tableSection.forSimilarBooks, let book = titleModel as? Book {
+//            bookTitleForSimilarLabel.text = book.title
+//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
+//            stackView.spacing = 9
+//        }
+//
+//        if let sectionDescription = tableSection.sectionDescription {
+//            sectionDescriptionLabel.text = sectionDescription
+//            stackView.addArrangedSubview(sectionDescriptionLabel)
+//            stackView.spacing = 15
+//        }
+//    }
     
-    func configureWith(series: Series) {
-        let seriesTitle = series.title
-        headerLabel.text = seriesTitle
-        followSeriesView.configureWith(series: series)
-        stackView.addArrangedSubview(followSeriesView)
-        stackView.spacing = 9
-    }
+    
+    
+    
+//    func configureWith(title: String, bookTitleForSimilar: String) {
+//        headerLabel.text = title
+//        bookTitleForSimilarLabel.text = bookTitleForSimilar
+//        stackView.addArrangedSubview(bookTitleForSimilarLabel)
+//        stackView.spacing = 9
+//    }
+//
+//    func configureWith(title: String, sectionDescription: String) {
+//        headerLabel.text = title
+//        sectionDescriptionLabel.text = sectionDescription
+//        stackView.addArrangedSubview(sectionDescriptionLabel)
+//        stackView.spacing = 15
+//    }
+    
+//    func configureFor(series: Series) {
+//        let seriesTitle = series.title
+//        headerLabel.text = seriesTitle
+//        followSeriesView.configureWith(series: series)
+//        stackView.addArrangedSubview(followSeriesView)
+//        stackView.spacing = 9
+//    }
     
      func updateGreetingsLabel() {
         let date = Date()
@@ -106,8 +179,8 @@ class TableHeaderView: UIView {
     private func applyConstraints() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackTrailingAnchor)
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAndTrailingConstant),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackLeadingAndTrailingConstant)
         ])
         stackTopAnchorConstraint.isActive = true
         stackBottomAnchorConstraint.isActive = true

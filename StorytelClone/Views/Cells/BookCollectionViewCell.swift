@@ -21,24 +21,13 @@ class BookCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-//    private lazy var dimViewForButtonAnimation: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        return view
-//    }()
-        
     // MARK: - View life cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(bookButton)
         contentView.addSubview(badgeOne)
         contentView.addSubview(badgeTwo)
-//        contentView.addSubview(dimViewForButtonAnimation)
-        
-//        addButtonUpdateHandler()
-//        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
         bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        
         applyConstraints()
     }
     
@@ -81,9 +70,6 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     private func applyConstraints() {
-//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-//        dimViewForButtonAnimation.fillSuperview()
-
         bookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

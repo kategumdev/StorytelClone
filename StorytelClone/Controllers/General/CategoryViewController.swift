@@ -13,7 +13,7 @@ class CategoryViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-        headerView.configureWith(title: category.title)
+        headerView.configureWith(text: category.title)
         headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         
         navigationItem.backButtonTitle = ""

@@ -13,19 +13,13 @@ class WideButtonTableViewCell: UITableViewCell {
         
     private var timeLayoutSubviewsIsBeingCalled = 0
 
-//    private lazy var dimViewForButtonAnimation: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        return view
-//    }()
-    
     private lazy var wideButton: DimViewCellButton = {
         let button = DimViewCellButton()
         button.backgroundColor = UIColor(red: 200/255, green: 217/255, blue: 228/255, alpha: 1)
         return button
     }()
     
-    let wideButtonLabel: UILabel = {
+    let customLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         let font = Utils.wideButtonLabelFont
@@ -42,13 +36,8 @@ class WideButtonTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(wideButton)
-        contentView.addSubview(wideButtonLabel)
-//        contentView.addSubview(dimViewForButtonAnimation)
-        
-//        addButtonUpdateHandler()
-//        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        contentView.addSubview(customLabel)
         wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        
         applyConstraints()
     }
     
@@ -66,35 +55,32 @@ class WideButtonTableViewCell: UITableViewCell {
         }
     }
     
-    // MARK: - Helper methods
-    
+    // MARK: - Instance methods
     func configureFor(sectionKind: SectionKind, withCallbackForButton callback: @escaping ButtonCallback) {
         wideButton.sectionKind = sectionKind
         wideButton.callback = callback
         if sectionKind == .seriesCategoryButton {
-            wideButtonLabel.text = "Series"
+            customLabel.text = "Series"
         } else {
-            wideButtonLabel.text = "Todas las categorías"
+            customLabel.text = "Todas las categorías"
         }
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
-//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-//        dimViewForButtonAnimation.fillSuperview()
-        
-        let width = UIScreen.main.bounds.width - Constants.cvPadding * 2
+        let buttonWidth = UIScreen.main.bounds.width - Constants.cvPadding * 2
         wideButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wideButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             wideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
-            wideButton.widthAnchor.constraint(equalToConstant: width),
+            wideButton.widthAnchor.constraint(equalToConstant: buttonWidth),
             wideButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
         ])
         
-        wideButtonLabel.translatesAutoresizingMaskIntoConstraints = false
+        customLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            wideButtonLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.cvPadding),
-            wideButtonLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.cvPadding),
+            customLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.cvPadding),
+            customLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.cvPadding),
         ])
 
     }

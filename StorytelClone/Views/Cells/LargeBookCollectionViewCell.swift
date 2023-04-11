@@ -18,24 +18,13 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
         button.layer.borderWidth = 0.26
         return button
     }()
-    
-//    private lazy var dimViewForButtonAnimation: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        return view
-//    }()
         
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(bookButton)
         bookButton.layer.cornerRadius = Constants.largeCoverCornerRadius
-//        contentView.addSubview(dimViewForButtonAnimation)
-        
-//        addButtonUpdateHandler()
-//        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
         bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        
         applyConstraints()
     }
     
@@ -43,25 +32,23 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
+    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             bookButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
         bookButton.book = book
         bookButton.callback = callback
         bookButton.configuration?.background.image = book.largeCoverImage
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
-//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-//        dimViewForButtonAnimation.fillSuperview()
-        
         bookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.posterAndLargeCoversCellTopPadding),

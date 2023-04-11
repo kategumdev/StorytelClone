@@ -154,71 +154,36 @@ class AllTitlesViewController: BaseTableViewController {
             return
         }
         
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-        
-        if let sectionDescription = tableSection.sectionDescription {
-            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
-        } else if tableSection.forSimilarBooks, let book = titleModel as? Book {
-            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
-        } else if let series = titleModel as? Series {
-            headerView.configureWith(series: series)
-        } else if let tag = titleModel as? Tag {
-            headerView.configureWith(title: tag.tagTitle)
-        } else {
-            headerView.configureWith(title: tableSection.sectionTitle)
+        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
+            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+
+            headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
         }
-        
-        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
-    }
-
-}
-
-//// MARK: - Helper methods
-//extension AllTitlesViewController {
-//
-//    private func configureBookTable() {
-//        bookTable.separatorColor = UIColor.tertiaryLabel
-//        bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
-//
-//        // Hide separator line under the last cell
-//        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bookTable.bounds.width, height: 1))
-//        footerView.backgroundColor = .clear
-//        bookTable.tableFooterView = footerView
-//
-//        // Reset insets set in superclass
-//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        bookTable.contentInset = inset
-//
-//        bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
-//        bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
-//
-//        if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
-//            let headerView = StorytellerTableHeaderView()
-//            headerView.configureFor(storyteller: titleModel!)
-//            bookTable.tableHeaderView = headerView
-//
-//            // These two lines avoid constraints' conflict of header and its label when view just loaded
-//            headerView.translatesAutoresizingMaskIntoConstraints = false
-//            headerView.fillSuperview()
-////            layoutHeaderView()
-//            return
-//        }
-//
+                
 //        guard let headerView = bookTable.tableHeaderView as? TableHeaderView else { return }
-//
+//        print("passing guard")
+//        print("titleModel is \(titleModel)")
+//        if let titleModel = titleModel {
+//            print("titleModel is not nil")
+//            headerView.configureFor(tableSection: tableSection, title: titleModel)
+//        }
+        
 //        if let sectionDescription = tableSection.sectionDescription {
 //            headerView.configureWith(title: tableSection.sectionTitle, sectionDescription: sectionDescription)
 //        } else if tableSection.forSimilarBooks, let book = titleModel as? Book {
 //            headerView.configureWith(title: tableSection.sectionTitle, bookTitleForSimilar: book.title)
 //        } else if let series = titleModel as? Series {
-//            headerView.configureWith(series: series)
+//            headerView.configureFor(series: series)
 //        } else if let tag = titleModel as? Tag {
 //            headerView.configureWith(title: tag.tagTitle)
 //        } else {
 //            headerView.configureWith(title: tableSection.sectionTitle)
 //        }
-//
+        
+        
+        
+        
 //        headerView.stackTopAnchorConstraint.constant = headerView.stackTopAnchorForCategoryOrSectionTitle
-//    }
-//
-//}
+    }
+
+}

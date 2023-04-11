@@ -13,13 +13,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         
     // MARK: - Instance properties
     private var categoryOfButton: ButtonCategory?
-    
-//    private lazy var dimViewForButtonAnimation: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        return view
-//    }()
-    
+
     private lazy var categoryTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -40,16 +34,11 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(cellButton)
-//        contentView.addSubview(dimViewForButtonAnimation)
-        
-//        addButtonUpdateHandler()
-//        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
         cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        
         applyConstraints()
     }
     
@@ -57,7 +46,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         fatalError("CategoryCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Helper methods
+    // MARK: - Instance methods
     func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallback ) {
         cellButton.backgroundColor = color
         cellButton.categoryButton = category
@@ -65,10 +54,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         categoryTitleLabel.text = category.rawValue
     }
     
+    // MARK: - Helper methods
     private func applyConstraints() {
-//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-//        dimViewForButtonAnimation.fillSuperview()
-
         cellButton.translatesAutoresizingMaskIntoConstraints = false
         cellButton.fillSuperview()
         

@@ -21,12 +21,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         return button
     }()
     
-//    private lazy var dimViewForButtonAnimation: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = Utils.customBackgroundColor
-//        return view
-//    }()
-    
     private let squareImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
@@ -65,11 +59,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         addSubview(bookOverviewButton)
         bookOverviewButton.addSubview(vertStackView)
         addSubview(squareImageView)
-//        addSubview(dimViewForButtonAnimation)
-        
         bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-//        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
-//        addButtonUpdateHandler()
         applyConstraints()
     }
     
@@ -103,9 +93,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         // These two constraints are used only when creating container for calculation of row height for the cell using this container
         widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         heightAnchor.constraint(equalTo: bookOverviewButton.heightAnchor, constant: 15).isActive = true
-        
-//        dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false
-//        dimViewForButtonAnimation.fillSuperview()
         
         let leadingConstant: CGFloat = 24
         let imageTopConstant: CGFloat = 8
