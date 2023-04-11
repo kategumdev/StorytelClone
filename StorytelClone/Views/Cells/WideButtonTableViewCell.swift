@@ -37,14 +37,16 @@ class WideButtonTableViewCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(wideButton)
         contentView.addSubview(wideButtonLabel)
         contentView.addSubview(dimViewForButtonAnimation)
-        addButtonUpdateHandler()
+        
+//        addButtonUpdateHandler()
+        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
         
         applyConstraints()
     }
@@ -53,6 +55,7 @@ class WideButtonTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -74,32 +77,32 @@ class WideButtonTableViewCell: UITableViewCell {
         }
     }
     
-    private func addButtonUpdateHandler() {
-        wideButton.configurationUpdateHandler = { [weak self] theButton in
-            guard let self = self else { return }
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self.dimViewForButtonAnimation.alpha = 0.1
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if self.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self.wideButton.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self.wideButton.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = .identity
-                    self.dimViewForButtonAnimation.alpha = 0
-                })
-            }
-        }
-    }
+//    private func addButtonUpdateHandler() {
+//        wideButton.configurationUpdateHandler = { [weak self] theButton in
+//            guard let self = self else { return }
+//            if theButton.isHighlighted {
+//                print("button is highlighted")
+//
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+//                    self.dimViewForButtonAnimation.alpha = 0.1
+//                })
+//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+//                    if self.isHighlighted {
+//                        print("Button held for more than 2 seconds, do not perform action")
+//                        self.wideButton.isButtonTooLongInHighlightedState = true
+//                    }
+//                }
+//                self.wideButton.buttonTimer = timer
+//
+//            } else {
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = .identity
+//                    self.dimViewForButtonAnimation.alpha = 0
+//                })
+//            }
+//        }
+//    }
     
     private func applyConstraints() {
         dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false

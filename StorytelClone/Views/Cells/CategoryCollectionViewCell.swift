@@ -45,7 +45,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(cellButton)
         contentView.addSubview(dimViewForButtonAnimation)
-        addButtonUpdateHandler()
+        
+//        addButtonUpdateHandler()
+        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+        
         applyConstraints()
     }
     
@@ -61,32 +64,32 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         categoryTitleLabel.text = category.rawValue
     }
     
-    private func addButtonUpdateHandler() {
-        cellButton.configurationUpdateHandler = { [weak self] theButton in
-            guard let self = self else { return }
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self.dimViewForButtonAnimation.alpha = 0.1
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if self.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self.cellButton.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self.cellButton.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = .identity
-                    self.dimViewForButtonAnimation.alpha = 0
-                })
-            }
-        }
-    }
+//    private func addButtonUpdateHandler() {
+//        cellButton.configurationUpdateHandler = { [weak self] theButton in
+//            guard let self = self else { return }
+//            if theButton.isHighlighted {
+//                print("button is highlighted")
+//
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+//                    self.dimViewForButtonAnimation.alpha = 0.1
+//                })
+//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+//                    if self.isHighlighted {
+//                        print("Button held for more than 2 seconds, do not perform action")
+//                        self.cellButton.isButtonTooLongInHighlightedState = true
+//                    }
+//                }
+//                self.cellButton.buttonTimer = timer
+//
+//            } else {
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = .identity
+//                    self.dimViewForButtonAnimation.alpha = 0
+//                })
+//            }
+//        }
+//    }
     
     private func applyConstraints() {
         dimViewForButtonAnimation.translatesAutoresizingMaskIntoConstraints = false

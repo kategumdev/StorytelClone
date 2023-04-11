@@ -66,7 +66,7 @@
 		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsScrollView.swift */; };
 		5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */; };
-		5ACD558529E092C400097B40 /* RatingHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* RatingHorzStackView.swift */; };
+		5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* StarHorzStackView.swift */; };
 		5ADA577F29C23BE7004BC23B /* SearchResultsBookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADA577E29C23BE7004BC23B /* SearchResultsBookTableViewCell.swift */; };
 		5ADC083229CB2DC20042A432 /* RoundButtonsStackContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADC083129CB2DC20042A432 /* RoundButtonsStackContainer.swift */; };
 		5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */; };
@@ -158,7 +158,7 @@
 		5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
 		5ABFA11729CD0E6800F7474C /* BookDetailsScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsScrollView.swift; sourceTree = "<group>"; };
 		5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesTableViewCell.swift; sourceTree = "<group>"; };
-		5ACD558429E092C400097B40 /* RatingHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingHorzStackView.swift; sourceTree = "<group>"; };
+		5ACD558429E092C400097B40 /* StarHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHorzStackView.swift; sourceTree = "<group>"; };
 		5ADA577E29C23BE7004BC23B /* SearchResultsBookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsBookTableViewCell.swift; sourceTree = "<group>"; };
 		5ADC083129CB2DC20042A432 /* RoundButtonsStackContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButtonsStackContainer.swift; sourceTree = "<group>"; };
 		5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoriesViewController.swift; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 				5A8497FC29D4B4060047AB44 /* TagsView.swift */,
 				5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */,
 				5A37EB2029DD83710053F6A7 /* PopupButton.swift */,
-				5ACD558429E092C400097B40 /* RatingHorzStackView.swift */,
+				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
@@ -545,7 +545,7 @@
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5A5B878929C52C45001A7A64 /* Tag.swift in Sources */,
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
-				5ACD558529E092C400097B40 /* RatingHorzStackView.swift in Sources */,
+				5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */,
 				5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */,
 				5AB86E6129B1723B005122A6 /* Book.swift in Sources */,
 				5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */,

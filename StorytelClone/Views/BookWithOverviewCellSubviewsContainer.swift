@@ -8,7 +8,6 @@
 import UIKit
 
 class BookWithOverviewCellSubviewsContainer: UIView {
-    
     // MARK: - Static properties
     static let borderColor = UIColor(named: "borderBookOverview")
     static let backgroundColor = UIColor(named: "backgroundBookOverview")
@@ -45,76 +44,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }()
     
     private let overviewLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
-
-    private let starView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 18).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 21).isActive = true
-        
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star.fill")
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = Utils.seeAllButtonColor
-       
-        view.addSubview(imageView)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2)
-        ])
-//        imageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2).isActive = true
-        
-        return view
-    }()
     
-    private let ratingLabel: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
-        label.textColor = Utils.seeAllButtonColor
-        label.sizeToFit()
-        return label
-    }()
-    
-    private let vertBarLabel: UILabel = {
-        let label = UILabel()
-        let font = UIFont.systemFont(ofSize: 19, weight: .ultraLight)
-        label.textAlignment = .center
-        let text = "|"
-        let attributedString = NSAttributedString(string: text).withLineHeightMultiple(0.8)
-        label.attributedText = attributedString
-        label.font = font
-        label.textColor = .secondaryLabel
-        label.sizeToFit()
-        return label
-    }()
-    
-    private let categoryLabel: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 16)
-//        label.textColor = UIColor.label.withAlphaComponent(0.7)
-        label.textColor = Utils.seeAllButtonColor
-        label.sizeToFit()
-        return label
-    }()
-    
-    private lazy var horzStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.isUserInteractionEnabled = false
-        stack.axis = .horizontal
-        stack.alignment = .center
-        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { stack.addArrangedSubview($0) }
-        stack.setCustomSpacing(4, after: starView)
-        stack.setCustomSpacing(6, after: ratingLabel)
-        stack.setCustomSpacing(6, after: vertBarLabel)
-        return stack
-    }()
+    private lazy var starHorzStackView = StarHorzStackView()
     
     private lazy var vertStackView: UIStackView = {
         let stack = UIStackView()
@@ -122,7 +53,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         stack.axis = .vertical
         stack.alignment = .fill
         stack.distribution = .equalCentering
-        [bookTitleLabel, overviewLabel, horzStackView].forEach { stack.addArrangedSubview($0) }
+        [bookTitleLabel, overviewLabel, starHorzStackView].forEach { stack.addArrangedSubview($0) }
         stack.setCustomSpacing(12.0, after: bookTitleLabel)
         stack.setCustomSpacing(15, after: overviewLabel)
         return stack
@@ -135,7 +66,9 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         bookOverviewButton.addSubview(vertStackView)
         addSubview(squareImageView)
         addSubview(dimViewForButtonAnimation)
-        addButtonUpdateHandler()
+        
+        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self, viewToChangeAlpha: dimViewForButtonAnimation)
+//        addButtonUpdateHandler()
         applyConstraints()
     }
     
@@ -152,32 +85,32 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }
     
     // MARK: - Helper methods
-    private func addButtonUpdateHandler() {
-        bookOverviewButton.configurationUpdateHandler = { [weak self] theButton in
-            guard let self = self else { return }
-            if theButton.isHighlighted {
-                print("button is highlighted")
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    self.dimViewForButtonAnimation.alpha = 0.1
-                })
-                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
-                    if theButton.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
-                        self.bookOverviewButton.isButtonTooLongInHighlightedState = true
-                    }
-                }
-                self.bookOverviewButton.buttonTimer = timer
-                
-            } else {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.transform = .identity
-                    self.dimViewForButtonAnimation.alpha = 0
-                })
-            }
-        }
-    }
+//    private func addButtonUpdateHandler() {
+//        bookOverviewButton.configurationUpdateHandler = { [weak self] theButton in
+//            guard let self = self else { return }
+//            if theButton.isHighlighted {
+//                print("button is highlighted")
+//
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+//                    self.dimViewForButtonAnimation.alpha = 0.1
+//                })
+//                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+//                    if theButton.isHighlighted {
+//                        print("Button held for more than 2 seconds, do not perform action")
+//                        self.bookOverviewButton.isButtonTooLongInHighlightedState = true
+//                    }
+//                }
+//                self.bookOverviewButton.buttonTimer = timer
+//
+//            } else {
+//                UIView.animate(withDuration: 0.1, animations: {
+//                    self.transform = .identity
+//                    self.dimViewForButtonAnimation.alpha = 0
+//                })
+//            }
+//        }
+//    }
     
     func configureFor(book: Book) {
         let titleString = book.title
@@ -185,8 +118,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let overviewString = book.overview
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
         
-        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-        categoryLabel.text = book.category.rawValue
+        starHorzStackView.configureForOverviewCellSubviewsContainerWith(book: book)
         squareImageView.image = book.coverImage
         
         bookOverviewButton.book = book

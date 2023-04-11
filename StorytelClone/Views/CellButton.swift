@@ -8,7 +8,6 @@
 import UIKit
 
 class CellButton: UIButton {
-    
     // MARK: - Instance properties
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
@@ -19,19 +18,57 @@ class CellButton: UIButton {
     var categoryButton: ButtonCategory?
     
     var callback: ButtonCallback = {_ in}
+    
+    weak var viewToTransform: UIView?
+    weak var viewToChangeAlpha: UIView?
 
-    // MARK: - View life cycle
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureButton()
+        configureSelf()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Instance methods
+    func addConfigurationUpdateHandlerWith(viewToTransform: UIView, viewToChangeAlpha: UIView) {
+        // Save passed views from arguments as weak properties
+        self.viewToTransform = viewToTransform
+        self.viewToChangeAlpha = viewToChangeAlpha
+        
+        self.configurationUpdateHandler = { [weak self] _ in
+            guard let self = self,
+            let transformView = self.viewToTransform,
+                  let alphaView = self.viewToChangeAlpha else { return }
+            
+            if self.isHighlighted {
+                print("button is highlighted")
+
+                UIView.animate(withDuration: 0.1, animations: {
+                    transformView.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
+                    alphaView.alpha = 0.1
+                })
+                let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    if self.isHighlighted {
+                        print("Button held for more than 2 seconds, do not perform action")
+                        self.isButtonTooLongInHighlightedState = true
+                    }
+                }
+                self.buttonTimer = timer
+
+            } else {
+                UIView.animate(withDuration: 0.1, animations: {
+                    transformView.transform = .identity
+                    alphaView.alpha = 0
+                })
+            }
+        }
+    }
+    
     // MARK: - Helper methods
-    private func configureButton() {
+    private func configureSelf() {
         layer.cornerRadius = Constants.bookCoverCornerRadius
         clipsToBounds = true
 
@@ -64,5 +101,4 @@ class CellButton: UIButton {
 
         }), for: .touchUpInside)
     }
-
 }

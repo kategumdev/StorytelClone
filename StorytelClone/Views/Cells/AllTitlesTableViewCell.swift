@@ -42,7 +42,8 @@ class AllTitlesTableViewCell: UITableViewCell {
     static func getEstimatedHeightForRowWith(width: CGFloat, andBook book: Book) -> CGFloat {
         let labelsHeight = calculateLabelsHeight(forBook: book, andCellWidth: width)
         
-        let ratingHorzStackViewHeight = RatingHorzStackView.createCategoryLabel().bounds.height
+//        let ratingHorzStackViewHeight = RatingHorzStackView.createCategoryLabel().bounds.height
+        let ratingHorzStackViewHeight = StarHorzStackView.getHeight()
         
         // Get total height
         var rowHeight: CGFloat = Constants.cvPadding * 3 + ratingHorzStackViewHeight
@@ -106,7 +107,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-    lazy var ratingHorzStackView = RatingHorzStackView()
+    lazy var ratingHorzStackView = StarHorzStackView()
     
     private lazy var mainVertStack: UIStackView = {
         let stack = UIStackView()
