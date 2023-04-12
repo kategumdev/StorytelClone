@@ -300,8 +300,9 @@ class BookViewController: UIViewController {
         bookTable.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true
         bookTable.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.cvPadding).isActive = true
-        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection) + Utils.heightForRowWithHorizontalCv
-        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
+//        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection) + Utils.heightForRowWithHorizontalCv
+//        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
+        #warning("")
         
         // Configure hideView constraints
         hideView.translatesAutoresizingMaskIntoConstraints = false
@@ -362,12 +363,13 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         sectionHeader.configureFor(section: self.tableSection)
 
         // Respond to seeAllButton in section header
-        sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
-            guard let self = self else { return }
-            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category, titleModel: self.book)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
+//        sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
+//            guard let self = self else { return }
+//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category, titleModel: self.book)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+        #warning("T##message")
         return sectionHeader
     }
     
@@ -375,10 +377,12 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection)
-        return calculatedHeight
-    }
+//    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection)
+//        return calculatedHeight
+//    }
+    #warning("T##message")
+
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y

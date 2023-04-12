@@ -164,46 +164,57 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionKind = category.tableSections[section].sectionKind
 
-        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView()}
+        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
         
-        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoButtonSectionHeaderView.identifier) as? NoButtonSectionHeaderView else { return UIView() }
-            
-            sectionHeader.configureFor(section: category.tableSections[section])
-            return sectionHeader
-        } else {
-            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-
-            sectionHeader.configureFor(section: category.tableSections[section])
-
-            // Respond to seeAllButton in section header
-            sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
-                guard let self = self else { return }
-                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
-
-                self.navigationController?.pushViewController(controller, animated: true)
-            }
-            return sectionHeader
-        }
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+        
+        sectionHeader.configureFor(section: category.tableSections[section])
+        return sectionHeader
     }
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+//        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView()}
+//
+//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
+//            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoButtonSectionHeaderView.identifier) as? NoButtonSectionHeaderView else { return UIView() }
+//
+//            sectionHeader.configureFor(section: category.tableSections[section])
+//            return sectionHeader
+//        } else {
+//            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+//
+//            sectionHeader.configureFor(section: category.tableSections[section])
+//
+//            // Respond to seeAllButton in section header
+//            sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
+//                guard let self = self else { return }
+//                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
+//
+//                self.navigationController?.pushViewController(controller, animated: true)
+//            }
+//            return sectionHeader
+//        }
+//    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let sectionKind = category.tableSections[section].sectionKind
-        
-        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-
-            // Get height for headers with no button
-            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-            return calculatedHeight
-        } else {
-            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-            return calculatedHeight
-        }
-    }
+//    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
+//
+//            // Get height for headers with no button
+//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+//            return calculatedHeight
+//        } else {
+//            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+//            return calculatedHeight
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == category.tableSections.count - 1 {

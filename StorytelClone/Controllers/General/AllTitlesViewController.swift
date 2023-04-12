@@ -90,10 +90,10 @@ class AllTitlesViewController: BaseTableViewController {
         return sectionHeader
     }
 
-    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
-        return calculatedHeight
-    }
+//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
+//        return calculatedHeight
+//    }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0

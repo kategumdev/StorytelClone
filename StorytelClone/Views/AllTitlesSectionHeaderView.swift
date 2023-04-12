@@ -43,7 +43,7 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         return view
     }()
     
-    private lazy var stackShareFilter: UIStackView = {
+    private lazy var shareFilterStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
@@ -77,21 +77,21 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     func showOnlyFilterButton() {
-        [spacerView, filterButton].forEach { stackShareFilter.addArrangedSubview($0)}
+        [spacerView, filterButton].forEach { shareFilterStack.addArrangedSubview($0)}
     }
     
     func showOnlyShareButton() {
-        [spacerView, shareButton].forEach { stackShareFilter.addArrangedSubview($0)}
+        [spacerView, shareButton].forEach { shareFilterStack.addArrangedSubview($0)}
     }
     
     func showShareAndFilterButtons() {
-        [shareButton, vertBarView, filterButton].forEach { stackShareFilter.addArrangedSubview($0)}
+        [shareButton, vertBarView, filterButton].forEach { shareFilterStack.addArrangedSubview($0)}
     }
     
     // MARK: - Helper methods
     private func addSubviews() {
         contentView.addSubview(titleLabel)
-        contentView.addSubview(stackShareFilter)
+        contentView.addSubview(shareFilterStack)
     }
     
     private func createButtonWithImageWith(symbolName: String) -> UIButton {
@@ -108,16 +108,16 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSectionHeaderView.topAndBottomPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: stackShareFilter.leadingAnchor, constant: -Constants.cvPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: shareFilterStack.leadingAnchor, constant: -Constants.cvPadding),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSectionHeaderView.topAndBottomPadding)
         ])
         
-        stackShareFilter.translatesAutoresizingMaskIntoConstraints = false
+        shareFilterStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackShareFilter.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -26),
-            stackShareFilter.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            stackShareFilter.widthAnchor.constraint(equalToConstant: 96),
-            stackShareFilter.heightAnchor.constraint(equalToConstant: stackViewHeight)
+            shareFilterStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -26),
+            shareFilterStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            shareFilterStack.widthAnchor.constraint(equalToConstant: 96),
+            shareFilterStack.heightAnchor.constraint(equalToConstant: stackViewHeight)
         ])
     }
 

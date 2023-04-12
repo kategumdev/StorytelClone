@@ -111,6 +111,16 @@ class HomeViewController: BaseTableViewController {
         }
     }
 
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+//        if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
+//            return Constants.generalTopPaddingSectionHeader
+//        } else {
+//            return UITableView.automaticDimension
+//        }
+//    }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionKind = category.tableSections[section].sectionKind
         
@@ -122,24 +132,48 @@ class HomeViewController: BaseTableViewController {
     }
     
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let sectionKind = category.tableSections[section].sectionKind
-
+        
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
             return Constants.generalTopPaddingSectionHeader
         } else if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-
-            // Get height for headers with no button
-            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-//            print("calculated height for section \(section): \(height)")
-            return calculatedHeight
-
+            
+//            // Get height for headers with no button
+//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+//            //            print("calculated height for section \(section): \(height)")
+//            return calculatedHeight
+            return 50
+            
         } else {
-            // Get height for headers with button
-            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-            return calculatedHeight
+//            // Get height for headers with button
+//            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+//            return calculatedHeight
+            return 50
         }
     }
+    
+    
+    
+//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+//        if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
+//            return Constants.generalTopPaddingSectionHeader
+//        } else if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
+//
+//            // Get height for headers with no button
+//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+////            print("calculated height for section \(section): \(height)")
+//            return calculatedHeight
+//
+//        } else {
+//            // Get height for headers with button
+//            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
+//            return calculatedHeight
+//        }
+//    }
+    #warning("")
 }
 
 // MARK: - Helper methods
