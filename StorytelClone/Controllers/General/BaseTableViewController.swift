@@ -168,7 +168,24 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
         
-        sectionHeader.configureFor(section: category.tableSections[section])
+//        sectionHeader.configureFor(section: category.tableSections[section])
+//
+//        // Respond to seeAllButton tap in section header
+//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] tableSection in
+//            guard let self = self else { return }
+//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+        let tableSection = category.tableSections[section]
+        sectionHeader.configureFor(section: tableSection)
+        
+        // Respond to seeAllButton tap in section header
+        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
         return sectionHeader
     }
     
@@ -200,6 +217,11 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        let tableSection = category.tableSections[section]
+        return SectionHeaderView.calculateHeaderHeightFor(section: tableSection, superviewWidth: view.bounds.width)
     }
     
 //    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {

@@ -83,6 +83,7 @@ class BookViewController: UIViewController {
         applyConstraints()
         
         navigationController?.makeNavbarAppearance(transparent: true)
+        navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
     }
     
@@ -300,8 +301,13 @@ class BookViewController: UIViewController {
         bookTable.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true
         bookTable.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.cvPadding).isActive = true
+        
+
+        
 //        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection) + Utils.heightForRowWithHorizontalCv
 //        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
+        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
         #warning("")
         
         // Configure hideView constraints
@@ -361,6 +367,13 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
 
         sectionHeader.configureFor(section: self.tableSection)
+        
+        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
 
         // Respond to seeAllButton in section header
 //        sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
