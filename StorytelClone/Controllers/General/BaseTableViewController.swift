@@ -28,12 +28,12 @@ class BaseTableViewController: UIViewController {
         table.allowsSelection = false
         
         // Avoid gap at the very bottom of the table view
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
-        table.contentInset = inset
+//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
+//        table.contentInset = inset
         
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
-        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
+//        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
         
         // Avoid gaps between sections and custom section headers
         table.sectionFooterHeight = 0
@@ -49,6 +49,17 @@ class BaseTableViewController: UIViewController {
 //        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
 //        table.tableHeaderView?.fillSuperview()
         
+//        table.contentInsetAdjustmentBehavior = .never
+        
+        // Set an empty view as the tableFooterView
+//        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: 0.1)))
+//        view.backgroundColor = .red
+//        table.tableFooterView = view
+        
+        // Avoid gap at the very bottom of the table view
+        table.tableFooterView = UIView()
+//        table.tableFooterView?.frame.size.height = 0.1
+        table.tableFooterView?.frame.size.height = Constants.generalTopPaddingSectionHeader
         return table
     }()
  
@@ -78,6 +89,11 @@ class BaseTableViewController: UIViewController {
         super.viewDidLayoutSubviews()
         bookTable.frame = view.bounds
         layoutHeaderView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
     }
     
     // MARK: - Instance methods
@@ -220,8 +236,15 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let tableSection = category.tableSections[section]
-        return SectionHeaderView.calculateHeaderHeightFor(section: tableSection, superviewWidth: view.bounds.width)
+        
+        // If all categories have sections, this checking is not needed, just use calculateEstimatedHeightFor
+        if !category.tableSections.isEmpty {
+            let tableSection = category.tableSections[section]
+            return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
+        }
+//        let tableSection = category.tableSections[section]
+//        return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
+        return 0
     }
     
 //    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
@@ -238,13 +261,14 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
 //        }
 //    }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == category.tableSections.count - 1 {
-            return Constants.generalTopPaddingSectionHeader
-        } else {
-            return 0
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0
+////        if section == category.tableSections.count - 1 {
+////            return Constants.generalTopPaddingSectionHeader
+////        } else {
+////            return 0
+////        }
+//    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y

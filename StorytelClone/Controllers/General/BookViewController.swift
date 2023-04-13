@@ -84,7 +84,12 @@ class BookViewController: UIViewController {
         
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
-        extendedLayoutIncludesOpaqueBars = true
+//        extendedLayoutIncludesOpaqueBars = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        adjustNavBarAppearanceFor(currentOffsetY: bookTable.contentOffset.y)
     }
     
     // MARK: - Helper methods
@@ -209,7 +214,9 @@ class BookViewController: UIViewController {
             mainScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             mainScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
+//            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight) // Use this instead of the one below if    extendedLayoutIncludesOpaqueBars = true
+
+            mainScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
         let contentG = mainScrollView.contentLayoutGuide
@@ -306,7 +313,7 @@ class BookViewController: UIViewController {
         
 //        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection) + Utils.heightForRowWithHorizontalCv
 //        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
-        let bookTableHeight = SectionHeaderView.calculateHeaderHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        let bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
         #warning("")
         
@@ -374,15 +381,6 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
             let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
-
-        // Respond to seeAllButton in section header
-//        sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
-//            guard let self = self else { return }
-//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category, titleModel: self.book)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-        #warning("T##message")
         return sectionHeader
     }
     

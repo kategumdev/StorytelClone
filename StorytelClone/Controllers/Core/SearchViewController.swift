@@ -28,15 +28,19 @@ class SearchViewController: UIViewController {
         table.allowsSelection = false
         
         // Avoid gap at the very bottom of the table view
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
-        table.contentInset = inset
+//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
+//        table.contentInset = inset
         
         table.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
-        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
+        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+//        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
         
         // Enbale correct usage of heightForFooterInSection
         table.sectionFooterHeight = 0
         
+        table.tableFooterView = UIView()
+        table.tableFooterView?.frame.size.height = Constants.generalTopPaddingSectionHeader
+
         return table
     }()
     
@@ -113,7 +117,10 @@ class SearchViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        categoriesTable.frame = view.bounds
+//        categoriesTable.frame = view.bounds
+        var frame = view.bounds
+        frame.size.height = view.bounds.height - Utils.tabBarHeight
+        categoriesTable.frame = frame
         
         if firstTime {
             initialTableOffsetY = categoriesTable.contentOffset.y
@@ -344,10 +351,16 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             return UIView()
         } else {
-            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoButtonSectionHeaderView.identifier) as? NoButtonSectionHeaderView else { return UIView() }
+//            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoButtonSectionHeaderView.identifier) as? NoButtonSectionHeaderView else { return UIView() }
+//
+//            sectionHeader.configureFor(section: model.tableSections[section])
+//            return sectionHeader
+            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
             
-            sectionHeader.configureFor(section: model.tableSections[section])
+            let currentSection = model.tableSections[section]
+            sectionHeader.configureFor(section: currentSection)
             return sectionHeader
+            #warning("T##message")
         }
     }
     
@@ -358,9 +371,16 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
 //            return Constants.generalTopPaddingSectionHeader
         } else {
             // Get height for headers with no button
-            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: model.tableSections[section])
+//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: model.tableSections[section])
             
-            return calculatedHeight
+            
+            
+//            let currentSection = model.tableSections[section]
+//            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(section: currentSection, superviewWidth: view.bounds.width)
+//
+//            return calculatedHeight
+            return UITableView.automaticDimension
+            #warning("T##message, maybe return UITableView.automaticDimension here")
         }
     }
     
@@ -370,19 +390,23 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             return Constants.generalTopPaddingSectionHeader
         } else {
             // Get height for headers with no button
-            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: model.tableSections[section])
-
+//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: model.tableSections[section])
+            
+            let currentSection = model.tableSections[section]
+            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(section: currentSection, superviewWidth: view.bounds.width)
+//
             return calculatedHeight
+            #warning("T##message")
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == model.tableSections.count - 1 {
-            return Constants.generalTopPaddingSectionHeader
-        } else {
-            return 0
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        if section == model.tableSections.count - 1 {
+//            return Constants.generalTopPaddingSectionHeader
+//        } else {
+//            return 0
+//        }
+//    }
     
 }
 

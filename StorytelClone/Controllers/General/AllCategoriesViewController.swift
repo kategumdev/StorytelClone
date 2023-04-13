@@ -79,7 +79,11 @@ extension AllCategoriesViewController {
         return 32
     }
 
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return Constants.generalTopPaddingSectionHeader
-    }
+//    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return Constants.generalTopPaddingSectionHeader
+//    }
+    
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return Constants.generalTopPaddingSectionHeader
+//    }
 }

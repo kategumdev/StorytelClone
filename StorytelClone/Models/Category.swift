@@ -15,6 +15,7 @@ enum SectionKind {
     case largeCoversHorizontalCv
     case seriesCategoryButton
     case allCategoriesButton
+    case searchVc
 }
 
 struct TableSection {
@@ -277,8 +278,13 @@ struct Category {
     
     static let infantil = Category(
         title: ButtonCategory.infantil.rawValue,
-        tableSections: [TableSection]()
+        tableSections: [
+            TableSection(sectionTitle: "Los más populares - Romántica"),
+            TableSection(sectionTitle: "Nuevas histotias de amor")
+        ]
     )
+//        tableSections: [TableSection]()
+    
     
     static let crecimientoPersonalYLifestyle = Category(
         title: ButtonCategory.crecimientoPersonalYLifestyle.rawValue,
@@ -389,7 +395,7 @@ struct Category {
         title: "",
         tableSections: [
             TableSection(sectionTitle: ""),
-            TableSection(sectionTitle: "Todas las categorías")
+            TableSection(sectionTitle: "Todas las categorías", sectionKind: .searchVc)
         ])
     
 }

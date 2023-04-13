@@ -100,9 +100,9 @@ class AllTitlesViewController: BaseTableViewController {
         return calculatedHeight
     }
     
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
-    }
+//    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0
+//    }
     
     override func configureNavBar() {
         super.configureNavBar()
@@ -139,9 +139,9 @@ class AllTitlesViewController: BaseTableViewController {
         footerView.backgroundColor = .clear
         bookTable.tableFooterView = footerView
         
-        // Reset insets set in superclass
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        bookTable.contentInset = inset
+//        // Reset insets set in superclass
+//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        bookTable.contentInset = inset
         
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
