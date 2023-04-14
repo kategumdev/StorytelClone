@@ -24,6 +24,7 @@ class AllTitlesViewController: BaseTableViewController {
 //                         Book.book1, Book.book1, Book.book1, Book.book1]
     
     private let popupButton = PopupButton()
+    private let viewWithPopupButton = UIView()
     
     // MARK: - Initializers
     init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
@@ -41,7 +42,10 @@ class AllTitlesViewController: BaseTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBookTable()
+//        addViewWithPopupButton()
         view.addSubview(popupButton)
+//        bookTable.addSubview(popupButton)
+//        bookTable.tableFooterView?.addSubview(popupButton)
     }
     
 //    override func viewDidLayoutSubviews() {
@@ -64,8 +68,12 @@ class AllTitlesViewController: BaseTableViewController {
         super.viewDidLayoutSubviews()
         print("viewDidLayoutSubviews, view.bounds = \(view.bounds), bookTable.bounds = \(bookTable.bounds)")
         var frame = view.bounds
-        frame.size.height = view.bounds.height - Utils.tabBarHeight
-        bookTable.frame = frame
+//        frame.size.height = view.bounds.height - Utils.tabBarHeight
+        frame.size.height -= Utils.tabBarHeight
+        frame.size.height += PopupButton.bottomAnchorConstantForVisibleState // This line and bottom contentInset of bookTable are needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
+//        frame.size.height -= Utils.tabBarHeight - PopupButton.buttonHeight
+        
+//        bookTable.frame = frame
         bookTable.backgroundColor = .green
 //        bookTable.frame = view.bounds
     }
@@ -160,11 +168,19 @@ class AllTitlesViewController: BaseTableViewController {
     private func configureBookTable() {
         bookTable.separatorColor = UIColor.tertiaryLabel
         bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
+        
+        // Bottom inset needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
+        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
+//        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.bottomAnchorConstantForVisibleState, right: 0)
 
+        
         // Hide separator line under the last cell
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bookTable.bounds.width, height: 1))
-        footerView.backgroundColor = .clear
-        bookTable.tableFooterView = footerView
+//        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bookTable.bounds.width, height: 1))
+//        footerView.backgroundColor = .clear
+//        bookTable.tableFooterView = footerView
+        
+        // Hide tableFooterView
+        bookTable.tableFooterView?.frame.size.height = 0.1
 
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
@@ -185,17 +201,19 @@ class AllTitlesViewController: BaseTableViewController {
             headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
         }
                 
-//        bookTable.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
-////            bookTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-////            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight) // Use this instead of the one below if    extendedLayoutIncludesOpaqueBars = true
+        bookTable.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
+//            bookTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight) // Use this instead of the one below if    extendedLayoutIncludesOpaqueBars = true
+//            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -(Utils.tabBarHeight + PopupButton.bottomAnchorConstantForVisibleState))
 //            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Utils.tabBarHeight)
-////            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-////            bookTable.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
-//        ])
+
+//            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//            bookTable.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+        ])
         
     }
 
