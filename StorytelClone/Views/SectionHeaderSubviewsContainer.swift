@@ -18,36 +18,26 @@ class SectionHeaderSubviewsContainer: UIView {
     private static let paddingBetweenLabels: CGFloat = 1
     
     // MARK: - Instance properties
-    var tableSection: TableSection?
-    private var withButton = true
-
-    let sectionTitleLabel: UILabel = {
+    private let sectionTitleLabel: UILabel = {
         let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
-    let sectionSubtitleLabel: UILabel = {
+    private let sectionSubtitleLabel: UILabel = {
         let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
-        
-//    let sectionTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
-//    let sectionSubtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
-    
     private lazy var seeAllButton: UIButton = {
         let button = UIButton()
         button.setTitle(SectionHeaderSubviewsContainer.seeAllButtonTitle, for: .normal)
-//        button.titleLabel?.lineBreakMode = .byTruncatingTail
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
         let scaledFont = UIFontMetrics.default.scaledFont(for: font)
         button.titleLabel?.font = scaledFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(Utils.seeAllButtonColor, for: .normal)
-//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return button
     }()
@@ -70,7 +60,6 @@ class SectionHeaderSubviewsContainer: UIView {
         stack.alignment = .trailing
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(seeAllButton)
-//        seeAllButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return stack
     }()
     
@@ -84,49 +73,26 @@ class SectionHeaderSubviewsContainer: UIView {
         return stack
     }()
     
-//    typealias SeeAllButtonDidTapCallback = () -> ()
-    
-//    var seeAllButtonDidTapCallback: SeeAllButtonDidTapCallback = {}
-//    var seeAllButtonDidTapCallback: () -> () = {}
     var callback: SeeAllButtonDidTapCallback = {}
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    // MARK: - Initializers
+    init(addButtonAction: Bool) {
+        super.init(frame: .zero)
+        print("container initialized")
         addSubview(horzStackView)
         applyConstraints()
+        
+        // Avoid doind unnecessary job of adding button action to the container that is initialized for estimated header height calculation
+        if addButtonAction {
+            configureButtonWithAction()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func configureFor(section: TableSection, passCallback callback: @escaping SeeAllButtonDidTapCallback) {
-//        sectionTitleLabel.text = section.sectionTitle
-//        sectionTitleLabel.sizeToFit()
-//
-//        // Show or hide sectionSubtitleLabel
-//        if section.sectionSubtitle.isEmpty {
-//            sectionSubtitleLabel.isHidden = true
-//        } else {
-//            sectionSubtitleLabel.isHidden = false
-//        }
-//        sectionSubtitleLabel.text = section.sectionSubtitle
-//        sectionTitleLabel.sizeToFit()
-//
-//        // Show or hide seeAllButton
-//        let sectionKind = section.sectionKind
-//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-//            seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
-//            horzStackView.spacing = 0
-//        } else {
-//            seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
-//            horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
-//        }
-//
-//        self.callback = callback
-//        configureButtonWithAction()
-//    }
-    
+    // MARK: - Instance methods
     func configureFor(section: TableSection) {
         sectionTitleLabel.text = section.sectionTitle
         sectionTitleLabel.sizeToFit()
@@ -150,11 +116,11 @@ class SectionHeaderSubviewsContainer: UIView {
             horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
         }
         
-//        self.callback = callback
-        configureButtonWithAction()
     }
     
+    // MARK: - Helper methods
     private func configureButtonWithAction() {
+        print("action is added to the button")
         seeAllButton.addAction(UIAction(handler: { [weak self] action in
             guard let self = self else { return }
             self.callback()
@@ -178,107 +144,3 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
 }
-
-
-
-//// Create it as a separate class to make calculation of estimated section header height (and smooth scrolling experience, especially after dynamic font size change) possible
-//class SectionHeaderSubviewsContainer: UIView {
-//
-//    // MARK: Static properties and methods
-//    private static let paddingBetweenLabelAndButton: CGFloat = 20
-//    private static let seeAllButtonTitle = "See all"
-//    private static let paddingBetweenLabels: CGFloat = 1
-//
-//    private static func createSeeAllButton() -> UIButton {
-//        let button = UIButton()
-//        button.setTitle(seeAllButtonTitle, for: .normal)
-//        button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
-//        button.titleLabel?.font = scaledFont
-//        button.contentHorizontalAlignment = .right
-//        button.setTitleColor(.label.withAlphaComponent(0.7), for: .normal)
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        return button
-//    }
-//
-//    private static func calculateSeeAllButtonWidth() -> CGFloat {
-//        let button = createSeeAllButton()
-//        button.sizeToFit()
-//        return button.bounds.size.width
-//    }
-//
-//    // MARK: - Instance properties
-//    private var withButton = true
-//    private lazy var seeAllButton = SectionHeaderSubviewsContainer.createSeeAllButton()
-//
-//    var tableSection: TableSection?
-//    let sectionTitleLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
-//    let sectionSubtitleLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
-//
-//    // Closure to tell owning controller to push new vc
-//    typealias SeeAllButtonCallbackClosure = (_ tableSection: TableSection) -> ()
-//    var callback: SeeAllButtonCallbackClosure = {_ in}
-//
-//    // MARK: - Initializers
-//    init(withButton button: Bool = true) {
-//        super.init(frame: .zero)
-//        self.withButton = button
-//        addSubview(sectionTitleLabel)
-//        addSubview(sectionSubtitleLabel)
-//
-//        if withButton {
-//            addSubview(seeAllButton)
-//            configureButtonWithAction()
-//        }
-//        applyConstraints()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    // MARK: - Helper methods
-//    private func configureButtonWithAction() {
-//        seeAllButton.addAction(UIAction(handler: { [weak self] action in
-//            guard let self = self, let tableSection = self.tableSection else { return }
-//            // Notify owning vc that the button was tapped
-//            self.callback(tableSection)
-//        }), for: .touchUpInside)
-//    }
-//
-//    private func applyConstraints() {
-//        translatesAutoresizingMaskIntoConstraints = false
-//        widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-//
-//        sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-//
-//        if !withButton {
-//            sectionTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -55).isActive = true
-//        }
-//
-//        NSLayoutConstraint.activate([
-//            sectionTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
-//            sectionTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constants.generalTopPaddingSectionHeader),
-//            sectionTitleLabel.bottomAnchor.constraint(equalTo: sectionSubtitleLabel.topAnchor, constant: -5)
-//        ])
-//
-//        sectionSubtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            sectionSubtitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            sectionSubtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
-//            sectionSubtitleLabel.trailingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor)
-//        ])
-//
-//        guard withButton else { return }
-//        seeAllButton.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
-//            seeAllButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            seeAllButton.widthAnchor.constraint(equalToConstant: SectionHeaderSubviewsContainer.calculateSeeAllButtonWidth()),
-//            seeAllButton.leadingAnchor.constraint(equalTo: sectionTitleLabel.trailingAnchor, constant: SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton)
-//        ])
-//    }
-//
-//}
-

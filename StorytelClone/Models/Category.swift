@@ -28,7 +28,6 @@ struct TableSection {
     let canBeShared: Bool
     let canBeFiltered: Bool
     
-    #warning("Add more than 10 books to books array. For showing vcs, TableSection will randomly fetch from general model only 10 books that belong to this section. But for showing SeeAllVC it will fetch all books that belong to this section")
     init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, forSimilarBooks: Bool = false, canBeShared: Bool = true, canBeFiltered: Bool = true) {
         self.sectionTitle = sectionTitle
         self.sectionSubtitle = sectionSubtitle

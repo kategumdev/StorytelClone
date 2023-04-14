@@ -27,13 +27,8 @@ class BaseTableViewController: UIViewController {
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
         
-        // Avoid gap at the very bottom of the table view
-//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: -20, right: 0)
-//        table.contentInset = inset
-        
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
-//        table.register(NoButtonSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: NoButtonSectionHeaderView.identifier)
         
         // Avoid gaps between sections and custom section headers
         table.sectionFooterHeight = 0
@@ -44,21 +39,8 @@ class BaseTableViewController: UIViewController {
         // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
 //        table.estimatedSectionHeaderHeight = 60
         
-//        table.tableHeaderView = FeedTableHeaderView()
-//        // These two lines avoid constraints' conflict of header and its label when view just loaded
-//        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
-//        table.tableHeaderView?.fillSuperview()
-        
-//        table.contentInsetAdjustmentBehavior = .never
-        
-        // Set an empty view as the tableFooterView
-//        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: 0.1)))
-//        view.backgroundColor = .red
-//        table.tableFooterView = view
-        
         // Avoid gap at the very bottom of the table view
         table.tableFooterView = UIView()
-//        table.tableFooterView?.frame.size.height = 0.1
         table.tableFooterView?.frame.size.height = Constants.generalTopPaddingSectionHeader
         return table
     }()
@@ -183,15 +165,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
         
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-        
-//        sectionHeader.configureFor(section: category.tableSections[section])
-//
-//        // Respond to seeAllButton tap in section header
-//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] tableSection in
-//            guard let self = self else { return }
-//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
+
         let tableSection = category.tableSections[section]
         sectionHeader.configureFor(section: tableSection)
         
@@ -204,71 +178,19 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         return sectionHeader
     }
-    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let sectionKind = category.tableSections[section].sectionKind
-//
-//        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView()}
-//
-//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-//            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoButtonSectionHeaderView.identifier) as? NoButtonSectionHeaderView else { return UIView() }
-//
-//            sectionHeader.configureFor(section: category.tableSections[section])
-//            return sectionHeader
-//        } else {
-//            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//
-//            sectionHeader.configureFor(section: category.tableSections[section])
-//
-//            // Respond to seeAllButton in section header
-//            sectionHeader.containerWithSubviews.callback = { [weak self] tableSection in
-//                guard let self = self else { return }
-//                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
-//
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
-//            return sectionHeader
-//        }
-//    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        
         // If all categories have sections, this checking is not needed, just use calculateEstimatedHeightFor
         if !category.tableSections.isEmpty {
             let tableSection = category.tableSections[section]
             return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
         }
-//        let tableSection = category.tableSections[section]
-//        return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
         return 0
     }
-    
-//    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-//        let sectionKind = category.tableSections[section].sectionKind
-//
-//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv {
-//
-//            // Get height for headers with no button
-//            let calculatedHeight = NoButtonSectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-//            return calculatedHeight
-//        } else {
-//            let calculatedHeight = SectionHeaderView.calculateHeaderHeightFor(section: category.tableSections[section])
-//            return calculatedHeight
-//        }
-//    }
-    
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 0
-////        if section == category.tableSections.count - 1 {
-////            return Constants.generalTopPaddingSectionHeader
-////        } else {
-////            return 0
-////        }
-//    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y

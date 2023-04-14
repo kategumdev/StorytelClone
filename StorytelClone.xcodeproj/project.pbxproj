@@ -47,7 +47,6 @@
 		5AB1A29C29B3E32A001CC50A /* DimViewCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */; };
 		5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC629B21C090048A4FB /* BookViewController.swift */; };
 		5AB2CCCE29B2437D0048A4FB /* PosterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */; };
-		5AB2CCD029B275DA0048A4FB /* NoButtonSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */; };
 		5AB86E6129B1723B005122A6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB86E6029B1723B005122A6 /* Book.swift */; };
 		5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */; };
 		5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA38C299C09A700D0E0F4 /* SceneDelegate.swift */; };
@@ -135,7 +134,6 @@
 		5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimViewCellButton.swift; sourceTree = "<group>"; };
 		5AB2CCC629B21C090048A4FB /* BookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterTableViewCell.swift; sourceTree = "<group>"; };
-		5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoButtonSectionHeaderView.swift; sourceTree = "<group>"; };
 		5AB86E6029B1723B005122A6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		5ABBA387299C09A700D0E0F4 /* StorytelClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorytelClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ABBA38A299C09A700D0E0F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -309,7 +307,6 @@
 				5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */,
 				5A54A5F129DC446D003BB8D4 /* StorytellerTableHeaderView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
-				5AB2CCCF29B275DA0048A4FB /* NoButtonSectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
 				5A8380BA299ED7E200611543 /* BadgeView.swift */,
 				5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */,
@@ -560,7 +557,6 @@
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 				5A5B878529C527AA001A7A64 /* SearchResultsNoImageTableViewCell.swift in Sources */,
 				5AB1A29C29B3E32A001CC50A /* DimViewCellButton.swift in Sources */,
-				5AB2CCD029B275DA0048A4FB /* NoButtonSectionHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

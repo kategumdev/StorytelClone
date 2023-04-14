@@ -18,15 +18,8 @@ class CategoryViewController: BaseTableViewController {
         }
         
         navigationController?.makeNavbarAppearance(transparent: true)
-//        navigationController?.adjustAppearanceTo(currentOffsetY: bookTable.contentOffset.y, offsetYToCompareTo: isInitialOffsetYSet)
-//        extendedLayoutIncludesOpaqueBars = true
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
-//    }
-    
+
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
@@ -44,17 +37,6 @@ class CategoryViewController: BaseTableViewController {
         
         return cell
     }
-    
-//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-//        if !category.tableSections.isEmpty {
-//            let tableSection = category.tableSections[section]
-//            return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
-//        }
-//        print("estimatedHeightForHeaderInSection section \(section)")
-////        let tableSection = category.tableSections[section]
-////        return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
-//        return 0
-//    }
     
     override func configureNavBar() {
         super.configureNavBar()

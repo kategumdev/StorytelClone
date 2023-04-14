@@ -12,6 +12,11 @@ class AllTitlesViewController: BaseTableViewController {
     let tableSection: TableSection
     let titleModel: Title?
     
+//    private var isBookTableFrameSet = false
+    private var timesDidLayoutSubviewsCalled = 1
+    
+    private var savedFrame: CGRect?
+    
     private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 //    private let books = [Book.book1, Book.book1, Book.book1, Book.book1,
 //                         Book.book1, Book.book1, Book.book1, Book.book1,
@@ -39,12 +44,43 @@ class AllTitlesViewController: BaseTableViewController {
         view.addSubview(popupButton)
     }
     
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        print("viewDidLayoutSubviews, view.bounds = \(view.bounds), bookTable.bounds = \(bookTable.bounds)")
+//        if savedFrame == nil {
+//            var frame = view.bounds
+//            frame.size.height = frame.height - Utils.tabBarHeight
+//            savedFrame = frame
+//        }
+//
+//        if let savedFrame = savedFrame {
+//            bookTable.frame = savedFrame
+//        }
+//
+//        bookTable.backgroundColor = .green
+//    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        print("viewDidLayoutSubviews, view.bounds = \(view.bounds), bookTable.bounds = \(bookTable.bounds)")
         var frame = view.bounds
         frame.size.height = view.bounds.height - Utils.tabBarHeight
         bookTable.frame = frame
+        bookTable.backgroundColor = .green
+//        bookTable.frame = view.bounds
     }
+    
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        if timesDidLayoutSubviewsCalled < 3 {
+//            print("bookTableFrameSet is being called")
+//            var frame = view.bounds
+//            frame.size.height = view.bounds.height - Utils.tabBarHeight
+//            bookTable.frame = frame
+//            timesDidLayoutSubviewsCalled += 1
+//        }
+//    }
     
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,20 +125,11 @@ class AllTitlesViewController: BaseTableViewController {
         
         return sectionHeader
     }
-
-//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-//        let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
-//        return calculatedHeight
-//    }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
         return calculatedHeight
     }
-    
-//    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 0
-//    }
     
     override func configureNavBar() {
         super.configureNavBar()
@@ -138,11 +165,7 @@ class AllTitlesViewController: BaseTableViewController {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bookTable.bounds.width, height: 1))
         footerView.backgroundColor = .clear
         bookTable.tableFooterView = footerView
-        
-//        // Reset insets set in superclass
-//        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        bookTable.contentInset = inset
-        
+
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
                 
@@ -161,6 +184,19 @@ class AllTitlesViewController: BaseTableViewController {
         if let headerView = bookTable.tableHeaderView as? TableHeaderView {
             headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
         }
+                
+//        bookTable.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
+////            bookTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+////            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight) // Use this instead of the one below if    extendedLayoutIncludesOpaqueBars = true
+//            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Utils.tabBarHeight)
+////            bookTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+////            bookTable.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+//        ])
+        
     }
 
 }

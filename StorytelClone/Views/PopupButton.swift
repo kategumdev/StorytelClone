@@ -17,6 +17,7 @@ class PopupButton: UIButton {
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
     private let bottomAnchorConstant = Utils.tabBarHeight + 7
+    private let buttonHeight: CGFloat = 46
 
     private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
     
@@ -48,7 +49,7 @@ class PopupButton: UIButton {
         // If it's already visible, hide it to make animation in showPopupWorkItem noticeable
         if let bottomAnchorConstraint = self.bottomAnchorConstraint, bottomAnchorConstraint.constant < self.bottomAnchorConstant {
             bottomAnchorConstraint.constant = self.bottomAnchorConstant
-            self.alpha = 0
+//            self.alpha = 0
             self.superview?.layoutIfNeeded()
         }
 
@@ -65,7 +66,7 @@ class PopupButton: UIButton {
         backgroundColor = UIColor(named: "popupBackground")
         layer.cornerRadius = Constants.bookCoverCornerRadius
         tintColor = UIColor.label.withAlphaComponent(0.7)
-        alpha = 0
+//        alpha = 0
         addSubview(customLabel)
         addSubview(customImageView)
         addButtonAction()
@@ -82,6 +83,8 @@ class PopupButton: UIButton {
             applyConstraints()
             constraintsApplied = true
         }
+        
+        print("     popupButton bottom anchor: \(self.bottomAnchorConstraint?.constant)")
     }
     
     // MARK: - Helper methods
@@ -107,7 +110,7 @@ class PopupButton: UIButton {
             guard let self = self else { return }
             self.bottomAnchorConstraint?.constant = -self.bottomAnchorConstant
             self.superview?.layoutIfNeeded()
-            self.alpha = 1
+//            self.alpha = 1
         })
     }
     
@@ -117,7 +120,7 @@ class PopupButton: UIButton {
             guard let self = self else { return }
             self.bottomAnchorConstraint?.constant = self.bottomAnchorConstant
             self.superview?.layoutIfNeeded()
-            self.alpha = 0
+//            self.alpha = 0
         })
     }
     
@@ -160,9 +163,11 @@ class PopupButton: UIButton {
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: Constants.cvPadding),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -Constants.cvPadding),
-            heightAnchor.constraint(equalToConstant: 46)
-        ])
+//            heightAnchor.constraint(equalToConstant: 46)
+            heightAnchor.constraint(equalToConstant: buttonHeight)
 
+        ])
+        
         bottomAnchorConstraint = bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: bottomAnchorConstant)
         bottomAnchorConstraint?.isActive = true
     }
