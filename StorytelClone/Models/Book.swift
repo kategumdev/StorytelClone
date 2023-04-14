@@ -32,7 +32,8 @@ struct Book: Title {
     let publisher: String
     let translators: [String]?
     let tags: [Tag]
-    let isAddedToBookshelf: Bool
+//    let isAddedToBookshelf: Bool
+    var isAddedToBookshelf: Bool
     
     init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false) {
         self.title = title
@@ -57,7 +58,22 @@ struct Book: Title {
     }
     
     func update(isAddedToBookshelf: Bool) {
-//        guard let self = self else { return }
+        // Update book model object in allTitlesBooks
+        var updatedBook = self
+        updatedBook.isAddedToBookshelf = isAddedToBookshelf
+        
+        var indexToReplace = 0
+        for (index, book) in allTitlesBooks.enumerated() {
+            if book.title == self.title {
+                indexToReplace = index
+                break
+            }
+        }
+        
+        allTitlesBooks.insert(updatedBook, at: indexToReplace)
+        allTitlesBooks.remove(at: indexToReplace + 1)
+        
+        // Update toReadBooks
         if isAddedToBookshelf {
             // Add book only if it's not already in the array
             if !toReadBooks.contains(where: { $0.title == self.title }) {
@@ -71,6 +87,22 @@ struct Book: Title {
             }
         }
     }
+    
+//    func update(isAddedToBookshelf: Bool) {
+////        guard let self = self else { return }
+//        if isAddedToBookshelf {
+//            // Add book only if it's not already in the array
+//            if !toReadBooks.contains(where: { $0.title == self.title }) {
+//                toReadBooks.append(self)
+//                // With real data, update book object here
+//            }
+//        } else {
+//            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == self.title }) {
+//                toReadBooks.remove(at: bookIndex)
+//                // With real data, update book object here
+//            }
+//        }
+//    }
     
     static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
     

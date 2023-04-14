@@ -107,13 +107,14 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-    lazy var ratingHorzStackView = StarHorzStackView()
+//    lazy var starHorzStackView = StarHorzStackView()
+    lazy var starHorzStackView = StarHorzStackView(withSaveButton: true)
     
     private lazy var mainVertStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = Constants.cvPadding
-        [imageLabelsHorzStack, ratingHorzStackView].forEach { stack.addArrangedSubview($0) }
+        [imageLabelsHorzStack, starHorzStackView].forEach { stack.addArrangedSubview($0) }
         return stack
     }()
     
@@ -166,8 +167,8 @@ class AllTitlesTableViewCell: UITableViewCell {
             }
             customImageView.image = resizedImage
         }
-
-        ratingHorzStackView.configureForAllTitleCellWith(book: book, popupButtonCallback: popupButtonCallback)
+        print("cell with book \(book.title) configures starHorzStackView")
+        starHorzStackView.configureForAllTitleCellWith(book: book, popupButtonCallback: popupButtonCallback)
     }
 
     // MARK: - Helper methods

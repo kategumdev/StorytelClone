@@ -90,8 +90,21 @@ class StarHorzStackView: UIStackView {
     }()
         
     // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        axis = .horizontal
+//        alignment = .center
+//        spacing = 0
+//        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { addArrangedSubview($0) }
+//        setCustomSpacing(4, after: starView)
+//        setCustomSpacing(6, after: ratingLabel)
+//        setCustomSpacing(6, after: vertBarLabel)
+//        applyConstraints()
+//        addSaveButtonAction()
+//    }
+    
+    init(withSaveButton: Bool) {
+        super.init(frame: .zero)
         axis = .horizontal
         alignment = .center
         spacing = 0
@@ -100,6 +113,11 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(6, after: ratingLabel)
         setCustomSpacing(6, after: vertBarLabel)
         applyConstraints()
+        
+        if withSaveButton {
+            addSaveButtonAction()
+        }
+//        addSaveButtonAction()
     }
     
     required init(coder: NSCoder) {
@@ -118,7 +136,7 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(15, after: saveButton)
 
         toggleSaveButtonImage()
-        addSaveButtonAction()
+//        addSaveButtonAction()
         
         ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
@@ -132,6 +150,7 @@ class StarHorzStackView: UIStackView {
     
     // MARK: - Helper methods
     private func addSaveButtonAction() {
+        print("starHorzStackView adds saveButton action\n")
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf

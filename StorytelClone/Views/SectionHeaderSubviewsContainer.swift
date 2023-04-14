@@ -78,7 +78,6 @@ class SectionHeaderSubviewsContainer: UIView {
     // MARK: - Initializers
     init(addButtonAction: Bool) {
         super.init(frame: .zero)
-        print("container initialized")
         addSubview(horzStackView)
         applyConstraints()
         

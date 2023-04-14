@@ -16,8 +16,15 @@ class CategoryViewController: BaseTableViewController {
         if let headerView = bookTable.tableHeaderView as? TableHeaderView {
             headerView.configureWithDimView(andText: category.title)
         }
-        
         navigationController?.makeNavbarAppearance(transparent: true)
+        extendedLayoutIncludesOpaqueBars = true
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var frame = view.bounds
+        frame.size.height -= Utils.tabBarHeight
+        bookTable.frame = frame
     }
 
     // MARK: - Superclass overrides
