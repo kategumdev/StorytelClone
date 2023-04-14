@@ -52,6 +52,7 @@ class BookDetailsStackView: UIStackView {
     private let authorLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     
@@ -74,6 +75,7 @@ class BookDetailsStackView: UIStackView {
     private lazy var narratorLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     private var hasNarratorLabel = true

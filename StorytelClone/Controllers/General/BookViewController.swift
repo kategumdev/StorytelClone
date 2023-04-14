@@ -55,6 +55,14 @@ class BookViewController: UIViewController {
         return table
     }()
     
+    private lazy var bookTableHeight = calculateBookTableHeight() {
+        didSet {
+            bookTableHeightConstraint.constant = bookTableHeight
+        }
+    }
+    
+    private lazy var bookTableHeightConstraint = bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight)
+    
     private let hideView: UIView = {
         let view = UIView()
         view.backgroundColor = Utils.customBackgroundColor
@@ -90,6 +98,13 @@ class BookViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         adjustNavBarAppearanceFor(currentOffsetY: bookTable.contentOffset.y)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            print("bookTableHeight UPDATED")
+            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        }
     }
     
     // MARK: - Helper methods
@@ -150,6 +165,7 @@ class BookViewController: UIViewController {
     
     private func adjustNavBarAppearanceFor(currentOffsetY: CGFloat) {
         let maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
+        #warning("Rewrite somehow simpler")
         
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
@@ -208,14 +224,18 @@ class BookViewController: UIViewController {
         bookDetailsStackView.popupButtonCallback = popupButton.reconfigureAndAnimateSelf
     }
     
+    private func calculateBookTableHeight() -> CGFloat {
+        let height = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        return height
+    }
+    
     private func applyConstraints() {
         mainScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             mainScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight) // Use this instead of the one below if    extendedLayoutIncludesOpaqueBars = true
-//            mainScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
         ])
         
         let contentG = mainScrollView.contentLayoutGuide
@@ -307,9 +327,7 @@ class BookViewController: UIViewController {
         bookTable.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true
         bookTable.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.cvPadding).isActive = true
-        
-        let bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
-        bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight).isActive = true
+        bookTableHeightConstraint.isActive = true
         
         // Configure hideView constraints
         hideView.translatesAutoresizingMaskIntoConstraints = false
