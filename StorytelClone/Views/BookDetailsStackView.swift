@@ -48,80 +48,14 @@ class BookDetailsStackView: UIStackView {
     }()
     
     lazy var bookTitleLabelHeight = bookTitleLabel.bounds.height
-        
-//    private let authorLabel: UILabel = {
-//        let label = UILabel()
-//        label.textAlignment = .center
-//        label.adjustsFontForContentSizeCategory = true
-//        return label
-//    }()
-    
-//    private let authorsButton: UIButton = {
-//        let button = UIButton()
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-////        button.backgroundColor = .purple
-//        button.sizeToFit()
-//        return button
-//    }()
     
     private let authorsButton: UIButton = {
         let button = UIButton()
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        button.titleLabel?.numberOfLines = 1
         button.titleLabel?.lineBreakMode = .byTruncatingTail
-//
-//        var config = UIButton.Configuration.plain()
-//        config.contentInsets = .zero
-//        config.titleAlignment = .center
-//
-//        button.configuration = config
-        
-//        button.backgroundColor = .purple
-//        button.sizeToFit()
         return button
     }()
     
     private lazy var authorsButtonHeightConstraint = authorsButton.heightAnchor.constraint(equalToConstant: authorsButton.bounds.height) // Random value, it will be reset later
-    
-//    private lazy var authorButtonHeightConstraint = authorButton.heightAnchor.constraint(equalToConstant: authorButton.bounds.height)
-    
-//    private func configureAuthorButton(withName name: String) {
-//        let attributedString = NSMutableAttributedString(string: "By: \(name)")
-//        let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-//        let scaledFont1 = UIFontMetrics.default.scaledFont(for: font1, maximumPointSize: 45)
-//        let byAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont1, .foregroundColor: UIColor.label]
-//
-//        let font2 = Utils.navBarTitleFont
-//        let scaledFont2 = UIFontMetrics.default.scaledFont(for: font2, maximumPointSize: 45)
-//        let authorNameAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont2, .foregroundColor: Utils.tintColor]
-//
-//        attributedString.addAttributes(byAttributes, range: NSRange(location: 0, length: 3))
-//        attributedString.addAttributes(authorNameAttributes, range: NSRange(location: 3, length: attributedString.length - 3))
-//
-////        print("button height BEFORE: \(authorButton.bounds.height)")
-////        print("button height constant BEFORE: \(authorButtonHeightConstraint.constant)")
-//
-//        authorButton.setAttributedTitle(attributedString, for: .normal)
-////        authorButton.sizeToFit()
-//
-////        let button = UIButton()
-////        button.titleLabel?.adjustsFontForContentSizeCategory = true
-////        button.setAttributedTitle(attributedString, for: .normal)
-////        button.sizeToFit()
-////        authorButtonHeightConstraint.constant = button.bounds.height
-//////        print("button height AFTER: \(authorButton.bounds.height)")
-////        print("button height constant AFTER: \(authorButtonHeightConstraint.constant)")
-////
-////
-////        superview?.layoutIfNeeded()
-//
-//
-////        authorButtonHeightConstraint.constant = authorButton.bounds.height
-//
-//    }
-    
-    
-    
     
     private func configureAuthorsButton() {
         let authorNames = book.authors.map { $0.name }
@@ -141,48 +75,22 @@ class BookDetailsStackView: UIStackView {
 
         authorsButton.setAttributedTitle(attributedString, for: .normal)
         
-//        var config = authorsButton.configuration
-//        config?.contentInsets = .zero
-//        authorsButton.configuration = config
-        
         print("authorsButton height BEFORE: \(authorsButton.bounds.height)")
         // Avoid top and bottom content insets
-        
-//        let label = UILabel()
-//        label.adjustsFontForContentSizeCategory = true
-//        label.attributedText = attributedString
-//        label.numberOfLines = 1
-//        label.sizeToFit()
-//        authorsButtonHeightConstraint.constant = label.bounds.height
-//        print("authorsButton height AFTER: \(authorsButton.bounds.height)")
-
-
-        
         authorsButton.titleLabel?.sizeToFit()
         guard let buttonTitleLabel = authorsButton.titleLabel else { return }
         authorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
         print("titleLabel height: \(buttonTitleLabel.bounds.size.height)")
     }
         
-//    private lazy var narratorLabel: UILabel = {
-//        let label = UILabel()
-//        label.textAlignment = .center
-//        label.adjustsFontForContentSizeCategory = true
-//        return label
-//    }()
-    
     private let narratorsButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
-//        button.backgroundColor = .green
-//        button.sizeToFit()
         return button
     }()
     
     private lazy var narratorsButtonHeightConstraint = narratorsButton.heightAnchor.constraint(equalToConstant: 50) // Random value, it will be reset later
     
-//    private var hasNarratorLabel = true
     private var hasNarratorsButton = true
     
     private func configureNarratorsLabel() {
@@ -202,34 +110,13 @@ class BookDetailsStackView: UIStackView {
         attributedString.addAttributes(byAttributes, range: NSRange(location: 0, length: 5))
         attributedString.addAttributes(authorNameAttributes, range: NSRange(location: 5, length: attributedString.length - 5))
         
-//        var config = narratorsButton.configuration
-//        config?.contentInsets = .zero
-//        narratorsButton.configuration = config
-        
-//        narratorsButton.attributedText = attributedString
         narratorsButton.setAttributedTitle(attributedString, for: .normal)
-        
+
         // Avoid top and bottom content insets
         narratorsButton.titleLabel?.sizeToFit()
         guard let buttonTitleLabel = narratorsButton.titleLabel else { return }
         narratorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
     }
-
-//    private func configureNarratorLabel(withName name: String) {
-//        let attributedString = NSMutableAttributedString(string: "With: \(name)")
-//        let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-//        let scaledFont1 = UIFontMetrics.default.scaledFont(for: font1, maximumPointSize: 45)
-//        let byAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont1, .foregroundColor: UIColor.label]
-//
-//        let font2 = Utils.navBarTitleFont
-//        let scaledFont2 = UIFontMetrics.default.scaledFont(for: font2, maximumPointSize: 45)
-//        let authorNameAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont2, .foregroundColor: Utils.tintColor]
-//
-//        attributedString.addAttributes(byAttributes, range: NSRange(location: 0, length: 5))
-//        attributedString.addAttributes(authorNameAttributes, range: NSRange(location: 5, length: attributedString.length - 5))
-//
-//        narratorLabel.attributedText = attributedString
-//    }
     
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
@@ -238,8 +125,6 @@ class BookDetailsStackView: UIStackView {
     
     private lazy var leadingViewWithGradient: UIView = {
         let view = UIView()
-        
-        
         view.layer.addSublayer(leadingGradientLayer)
         return view
     }()
@@ -308,9 +193,11 @@ class BookDetailsStackView: UIStackView {
         }
         
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-            // Adjust height of authorsButton and narratorsButton after font size change
+            // Reconfigure authorsButton and narratorsButton to adjust their height after font size change
             configureAuthorsButton()
-            configureNarratorsLabel()
+            if hasNarratorsButton {
+                configureNarratorsLabel()
+            }
         }
     }
     
@@ -331,30 +218,16 @@ class BookDetailsStackView: UIStackView {
         addArrangedSubview(bookTitleLabel)
         setCustomSpacing(16.0, after: bookTitleLabel)
         
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        configureAuthorLabel(withName: authorNamesString)
-//        configureAuthorButton(withName: authorNamesString)
         configureAuthorsButton()
-//        addArrangedSubview(authorLabel)
-//        setCustomSpacing(8.0, after: authorLabel)
         addArrangedSubview(authorsButton)
         setCustomSpacing(8.0, after: authorsButton)
-//        setCustomSpacing(0, after: authorsButton)
                 
         if book.narrators != nil {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            configureNarratorLabel(withName: narratorNamesString)
            configureNarratorsLabel()
-//            addArrangedSubview(narratorLabel)
-//            setCustomSpacing(23.0, after: narratorLabel)
             addArrangedSubview(narratorsButton)
             setCustomSpacing(23.0, after: narratorsButton)
         } else {
-//            hasNarratorLabel = false
             hasNarratorsButton = false
-//            setCustomSpacing(33.0, after: authorLabel)
             setCustomSpacing(33.0, after: authorsButton)
         }
                     
@@ -381,17 +254,10 @@ class BookDetailsStackView: UIStackView {
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         
-//        authorLabel.translatesAutoresizingMaskIntoConstraints = false
-//        authorLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
         authorsButton.translatesAutoresizingMaskIntoConstraints = false
         authorsButton.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
-//        authorButtonHeightConstraint.isActive = true
         authorsButtonHeightConstraint.isActive = true
         
-//        if hasNarratorLabel {
-//            narratorLabel.translatesAutoresizingMaskIntoConstraints = false
-//            narratorLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
-//        }
         if hasNarratorsButton {
             narratorsButton.translatesAutoresizingMaskIntoConstraints = false
             narratorsButton.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
