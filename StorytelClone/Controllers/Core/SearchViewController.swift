@@ -112,7 +112,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        categoriesTable.frame = view.bounds
         var frame = view.bounds
         frame.size.height = view.bounds.height - Utils.tabBarHeight
         categoriesTable.frame = frame
@@ -135,14 +134,6 @@ class SearchViewController: UIViewController {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
                 self.navigationController?.pushViewController(controller, animated: true)
-            }
-            
-            if let author = title as? Author {
-                print("SearchViewController handles selected author \(author.name)")
-            }
-            
-            if let narrator = title as? Narrator {
-                print("SearchViewController handles selected narrator \(narrator.name)")
             }
             
             if let tag = title as? Tag {
