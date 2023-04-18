@@ -14,7 +14,8 @@ class BookViewController: UIViewController {
     static let lightBordersWidth = 0.7
     
     // MARK: - Instance properties
-    var book: Book
+//    var book: Book
+    let book: Book
     private let tableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
     
     private let mainScrollView = UIScrollView()
@@ -69,7 +70,7 @@ class BookViewController: UIViewController {
     
     private let popupButton = PopupButton()
     
-    // MARK: - View life cycle
+    // MARK: - Initializers
     init(book: Book) {
         self.book = book
         super.init(nibName: nil, bundle: nil)
@@ -79,6 +80,7 @@ class BookViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -157,16 +159,64 @@ class BookViewController: UIViewController {
             true)
         }
         
+//        if let narrators = book.narrators {
+//            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
+//                guard let self = self else { return }
+//                let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//                let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
+//                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
+//                self .navigationController?.pushViewController(controller, animated:
+//                true)
+//            }
+//        }
+        
         if let narrators = book.narrators {
-            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-                guard let self = self else { return }
-                let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-                let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
-                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
-                self .navigationController?.pushViewController(controller, animated:
-                true)
+            
+            if narrators.count == 1 {
+                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
+                    guard let self = self else { return }
+                    let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+                    let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
+                    #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
+                    self .navigationController?.pushViewController(controller, animated:
+                    true)
+                }
+                
+            } else {
+                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
+                    guard let self = self else { return }
+                    
+                    let controller = CustomBottomSheetViewController(book: self.book)
+                    controller.modalPresentationStyle = .overFullScreen
+                    self.present(controller, animated: false)
+                }
+                
+//                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
+//                    guard let self = self else { return }
+//
+//                    let vc = UIViewController()
+////                    vc.view.backgroundColor = .green
+//
+//                    // Make sure vc is of type UIViewController or its subclass
+//                    if let vc = vc as? UIViewController, let sheet = vc.sheetPresentationController {
+////                        sheet.detents = [.custom(resolver: { context in
+//////                            0.1 * context.maximumDetentValue
+////                            150
+////                        })]
+//                        sheet.detents = [.medium()]
+////                        sheet.largestUndimmedDetentIdentifier = .large // keeping the buttons underneath from becoming grayed-out
+////                        sheet.largestUndimmedDetentIdentifier = .medium // keeping the buttons underneath from becoming grayed-out
+//
+//
+//                    }
+//                    self.present(vc, animated: true)
+//                }
+                
             }
+            
         }
+        
+        
     }
     
     private func configureBookDetailsScrollView() {

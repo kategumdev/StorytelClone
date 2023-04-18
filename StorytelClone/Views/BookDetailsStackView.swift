@@ -267,6 +267,28 @@ class BookDetailsStackView: UIStackView {
         }), for: .touchUpInside)
     }
     
+//    private func addNarratorsButtonAction() {
+//        narratorsButton.addAction(UIAction(handler: { [weak self] _ in
+//            self?.handleNarratorsButtonsDidTapAction()
+//        }), for: .touchUpInside)
+//    }
+    
+//    private func handleNarratorsButtonsDidTapAction() {
+//        guard let narrators = book.narrators else { return }
+//        if narrators.count == 1 {
+//            self.narratorsButtonDidTapCallback()
+//        } else {
+//            let vc = UIViewController()
+//            vc.view.backgroundColor = .green
+//
+//            if let sheet = vc.sheetPresentationController {
+//
+//            }
+////            present(vc, animated: true)
+//
+//        }
+//    }
+    
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
