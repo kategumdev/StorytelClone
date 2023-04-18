@@ -13,9 +13,7 @@ class AllTitlesViewController: BaseTableViewController {
 
     let tableSection: TableSection
     let titleModel: Title?
-        
-    private var savedFrame: CGRect?
-    
+            
 //    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 //    private var books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 

@@ -29,8 +29,9 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
-    typealias AuthorsButtonDidTapCallback = () -> ()
-    var authorsButtonDidTapCallback: AuthorsButtonDidTapCallback = {}
+//    typealias AuthorsButtonDidTapCallback = () -> ()
+    var authorsButtonDidTapCallback: () -> () = {}
+    var narratorsButtonDidTapCallback: () -> () = {}
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -227,11 +228,13 @@ class BookDetailsStackView: UIStackView {
         configureAuthorsButton()
         addArrangedSubview(authorsButton)
         setCustomSpacing(8.0, after: authorsButton)
+        addAuthorsButtonAction()
                 
         if book.narrators != nil {
            configureNarratorsLabel()
             addArrangedSubview(narratorsButton)
             setCustomSpacing(23.0, after: narratorsButton)
+            addNarratorsButtonAction()
         } else {
             hasNarratorsButton = false
             setCustomSpacing(33.0, after: authorsButton)
@@ -250,6 +253,18 @@ class BookDetailsStackView: UIStackView {
         }
 
         addArrangedSubview(roundButtonsStackContainer)
+    }
+    
+    private func addAuthorsButtonAction() {
+        authorsButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.authorsButtonDidTapCallback()
+        }), for: .touchUpInside)
+    }
+    
+    private func addNarratorsButtonAction() {
+        narratorsButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.narratorsButtonDidTapCallback()
+        }), for: .touchUpInside)
     }
     
     private func applyConstraints() {

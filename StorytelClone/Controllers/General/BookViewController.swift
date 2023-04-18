@@ -7,8 +7,6 @@
 
 import UIKit
 
-//typealias BookVcCallback = () -> ()
-
 class BookViewController: UIViewController {
     // MARK: - Static properties
     // For borders in ShowSeriesButtonContainer and BookDetailsScrollView
@@ -112,23 +110,9 @@ class BookViewController: UIViewController {
         mainScrollView.delegate = self
         mainScrollView.showsVerticalScrollIndicator = false
         view.addSubview(mainScrollView)
-        mainScrollView.addSubview(bookDetailsStackView)
-        if let series = book.series {
-            bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
-                let tableSection = TableSection(sectionTitle: series)
-                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
-                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category")
-                self?.navigationController?.pushViewController(controller, animated: true)
-            }
-        }
         
-        mainScrollView.addSubview(bookDetailsScrollView)
-        bookDetailsScrollView.categoryButtonDidTapCallback = { [weak self] in
-            guard let self = self else { return }
-            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-            let controller = CategoryViewController(categoryModel: category)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
+        configureBookDetailsStackView()
+        configureBookDetailsScrollView()
         
         mainScrollView.addSubview(overviewStackView)
         setupTapGesture()
@@ -151,6 +135,48 @@ class BookViewController: UIViewController {
         mainScrollView.addSubview(bookTable)
         bookTable.dataSource = self
         bookTable.delegate = self
+    }
+    
+    private func configureBookDetailsStackView() {
+        mainScrollView.addSubview(bookDetailsStackView)
+        if let series = book.series {
+            bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
+                let tableSection = TableSection(sectionTitle: series)
+                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
+                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category")
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+        
+        bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book.authors[0])
+            #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND self.book.authors[0] needs to be refactored")
+            self .navigationController?.pushViewController(controller, animated:
+            true)
+        }
+        
+        if let narrators = book.narrators {
+            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
+                guard let self = self else { return }
+                let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+                let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
+                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
+                self .navigationController?.pushViewController(controller, animated:
+                true)
+            }
+        }
+    }
+    
+    private func configureBookDetailsScrollView() {
+        mainScrollView.addSubview(bookDetailsScrollView)
+        bookDetailsScrollView.categoryButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+            let controller = CategoryViewController(categoryModel: category)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     private func setupTapGesture() {
@@ -178,13 +204,6 @@ class BookViewController: UIViewController {
         }), for: .touchUpInside)
     }
     
-    private func addShowAllTagsButtonAction() {
-        showAllTagsButton.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            self.handleShowAllTagsButtonTapped()
-        }), for: .touchUpInside)
-    }
-    
     private func handleSeeMoreOverviewButtonTapped() {
         if seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive {
             seeMoreOverviewButton.rotateImage()
@@ -204,6 +223,13 @@ class BookViewController: UIViewController {
         }
     }
     
+    private func addShowAllTagsButtonAction() {
+        showAllTagsButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.handleShowAllTagsButtonTapped()
+        }), for: .touchUpInside)
+    }
+        
     private func handleShowAllTagsButtonTapped() {
         if showAllTagsButtonTopAnchorCompressedAppearance.isActive {
             showAllTagsButton.rotateImage()
