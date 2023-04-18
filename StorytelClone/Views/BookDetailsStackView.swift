@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias ShowSeriesButtonDidTapCallback = () -> ()
+
 class BookDetailsStackView: UIStackView {
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
@@ -14,17 +16,21 @@ class BookDetailsStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
     
-    var bookVcCallback: BookVcCallback = {} {
+    
+    var showSeriesButtonDidTapCallback: ShowSeriesButtonDidTapCallback = {} {
         didSet {
-            showSeriesButtonContainer.bookVcCallback = bookVcCallback
+            showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesButtonDidTapCallback
         }
     }
     
-    var popupButtonCallback: PopupButtonCallback = {_ in} {
+    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in} {
         didSet {
-            roundButtonsStackContainer.popupButtonCallback = popupButtonCallback
+            roundButtonsStackContainer.saveButtonDidTapCallback = saveButtonDidTapCallback
         }
     }
+    
+    typealias AuthorsButtonDidTapCallback = () -> ()
+    var authorsButtonDidTapCallback: AuthorsButtonDidTapCallback = {}
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()

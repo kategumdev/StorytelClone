@@ -92,7 +92,7 @@ class RoundButtonsStackContainer: UIStackView {
     }()
     
     private var isBookAddedToBookshelf = false
-    var popupButtonCallback: PopupButtonCallback = {_ in}
+    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
 
     private let saveLabel: UILabel = RoundButtonsStackContainer.createLabel(withText: "Save")
     
@@ -167,7 +167,7 @@ class RoundButtonsStackContainer: UIStackView {
     }
 
     private func handleSaveButtonTapped() {
-        self.popupButtonCallback(self.isBookAddedToBookshelf)
+        self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
 
         if self.isBookAddedToBookshelf {
             self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)

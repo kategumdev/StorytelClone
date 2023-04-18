@@ -94,7 +94,8 @@ class BookDetailsScrollView: UIScrollView {
     
     private lazy var categoryStackWidthAnchor =         categoryStack.widthAnchor.constraint(equalToConstant: categoryButton.bounds.width)
         
-    var bookVcCallback: BookVcCallback = {}
+    typealias CategoryButtonDidTapCallback = () -> ()
+    var categoryButtonDidTapCallback: CategoryButtonDidTapCallback = {}
     
     // MARK: - Initializers
     init(book: Book) {
@@ -171,7 +172,7 @@ class BookDetailsScrollView: UIScrollView {
     private func addCategoryButtonAction() {
         categoryButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.bookVcCallback()
+            self.categoryButtonDidTapCallback()
         }), for: .touchUpInside)
     }
     

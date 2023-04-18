@@ -29,7 +29,7 @@ class StarHorzStackView: UIStackView {
     // MARK: - Instance properties
     private var book: Book?
     private var isBookAddedToBookshelf = false
-    var popupButtonCallback: PopupButtonCallback = {_ in}
+    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
     
     private lazy var starView: UIView = {
         let view = UIView()
@@ -125,10 +125,10 @@ class StarHorzStackView: UIStackView {
     }
     
     // MARK: - Instance methods
-    func configureForAllTitleCellWith(book: Book, popupButtonCallback: @escaping PopupButtonCallback ) {
+    func configureForAllTitleCellWith(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback ) {
         self.book = book
         isBookAddedToBookshelf = book.isAddedToBookshelf
-        self.popupButtonCallback = popupButtonCallback
+        self.saveButtonDidTapCallback = saveButtonDidTapCallback
         
         addArrangedSubview(saveButton)
         addArrangedSubview(menuButton)
@@ -155,7 +155,7 @@ class StarHorzStackView: UIStackView {
             guard let self = self else { return }
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleSaveButtonImage()
-            self.popupButtonCallback(self.isBookAddedToBookshelf)
+            self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
             self.book?.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
         }), for: .touchUpInside)
     }

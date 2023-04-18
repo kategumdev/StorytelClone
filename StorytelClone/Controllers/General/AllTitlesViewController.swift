@@ -63,7 +63,7 @@ class AllTitlesViewController: BaseTableViewController {
         
 //        let book = books[indexPath.row]
         let book = allTitlesBooks[indexPath.row]
-        cell.configureFor(book: book, popupButtonCallback: popupButton.reconfigureAndAnimateSelf)
+        cell.configureFor(book: book, saveButtonDidTapCallback: popupButton.reconfigureAndAnimateSelf)
         return cell
     }
     

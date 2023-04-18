@@ -140,7 +140,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, popupButtonCallback: @escaping PopupButtonCallback) {
+    func configureFor(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
 
@@ -168,7 +168,7 @@ class AllTitlesTableViewCell: UITableViewCell {
             customImageView.image = resizedImage
         }
         print("cell with book \(book.title) configures starHorzStackView")
-        starHorzStackView.configureForAllTitleCellWith(book: book, popupButtonCallback: popupButtonCallback)
+        starHorzStackView.configureForAllTitleCellWith(book: book, saveButtonDidTapCallback: saveButtonDidTapCallback)
     }
 
     // MARK: - Helper methods

@@ -10,7 +10,7 @@ import UIKit
 class ShowSeriesButtonContainer: UIView {
     
     // MARK: - Instance properties
-    var bookVcCallback: BookVcCallback = {}
+    var showSeriesButtonDidTapCallback: ShowSeriesButtonDidTapCallback = {}
     
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
@@ -71,7 +71,7 @@ class ShowSeriesButtonContainer: UIView {
     // MARK: - Helper methods
     private func addButtonAction() {
         showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.bookVcCallback()
+            self?.showSeriesButtonDidTapCallback()
         }), for: .touchUpInside)
     }
     

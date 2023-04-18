@@ -7,7 +7,7 @@
 
 import UIKit
 
-typealias PopupButtonCallback = (Bool) -> ()
+typealias SaveButtonDidTapCallback = (Bool) -> ()
 
 class PopupButton: UIButton {
     
@@ -43,7 +43,7 @@ class PopupButton: UIButton {
         self?.hidePopupButton()
     }
 
-    lazy var reconfigureAndAnimateSelf: PopupButtonCallback = { [weak self]
+    lazy var reconfigureAndAnimateSelf: SaveButtonDidTapCallback = { [weak self]
         userAddedBookToBookshelf in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
