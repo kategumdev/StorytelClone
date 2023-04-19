@@ -26,14 +26,9 @@ class AllTitlesViewController: BaseTableViewController {
     private let popupButton = PopupButton()
     private let viewWithPopupButton = UIView()
     
-    // MARK: - Initializers
-//    init(tableSection: TableSection? = nil, categoryOfParentVC: Category? = nil, titleModel: Title? = nil) {
-//        self.tableSection = tableSection
-//        self.titleModel = titleModel
-//        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
-//        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
-//    }
+    private var currentSelectedBook: Book?
     
+    // MARK: - Initializers
     init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
         self.tableSection = tableSection
         self.titleModel = titleModel
@@ -51,6 +46,27 @@ class AllTitlesViewController: BaseTableViewController {
         view.addSubview(popupButton)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("viewWillAppear of AllTitlesViewController")
+        // This will execute when returning from BookViewController (presented when cell selected)
+        guard let currentSelectedBook = currentSelectedBook else { return }
+
+        var selectedBookIndexPath = IndexPath(row: 0, section: 0)
+        for (index, book) in allTitlesBooks.enumerated() {
+            if book.title == currentSelectedBook.title {
+                selectedBookIndexPath.row = index
+                break
+            }
+        }
+
+        // This delay avoids warning that "UITableView was told to layout its visible cells and other contents without being in the view hierarchy"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+            self.bookTable.reloadRows(at: [selectedBookIndexPath], with: .none)
+        }
+    }
+    
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return tableSection.books.count
@@ -65,7 +81,6 @@ class AllTitlesViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
-//        let book = books[indexPath.row]
         let book = allTitlesBooks[indexPath.row]
         
         cell.configureWith(book: book)
@@ -131,8 +146,10 @@ class AllTitlesViewController: BaseTableViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt")
+//        print("didSelectRowAt")
         let book = allTitlesBooks[indexPath.row]
+        currentSelectedBook = book
+        
         let controller = BookViewController(book: book)
         self.navigationController?.pushViewController(controller, animated: true)
     }

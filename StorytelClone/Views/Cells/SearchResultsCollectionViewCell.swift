@@ -137,8 +137,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt \(indexPath.row)")
-        
+//        print("didSelectRowAt \(indexPath.row)")
         let selectedTitle = model[indexPath.row]
         selectedTitleCallback(selectedTitle)
     }

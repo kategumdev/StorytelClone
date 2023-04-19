@@ -82,12 +82,10 @@ class BookDetailsStackView: UIStackView {
 
         authorsButton.setAttributedTitle(attributedString, for: .normal)
         
-        print("authorsButton height BEFORE: \(authorsButton.bounds.height)")
         // Avoid top and bottom content insets
         authorsButton.titleLabel?.sizeToFit()
         guard let buttonTitleLabel = authorsButton.titleLabel else { return }
         authorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
-        print("titleLabel height: \(buttonTitleLabel.bounds.size.height)")
     }
         
     private let narratorsButton: UIButton = {

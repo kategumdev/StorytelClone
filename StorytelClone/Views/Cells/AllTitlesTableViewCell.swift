@@ -151,37 +151,6 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-//    func configureFor(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback) {
-//        bookTitleLabel.text = book.title
-//        bookKindLabel.text = book.titleKind.rawValue
-//
-//        let authorNames = book.authors.map { $0.name }
-//        let authorNamesString = authorNames.joined(separator: ", ")
-//        authorsLabel.text = "By: \(authorNamesString)"
-//
-//        if let narrators = book.narrators {
-//            let narratorNames = narrators.map { $0.name }
-//            let narratorNamesString = narratorNames.joined(separator: ", ")
-//            narratorsLabel.text = "With: \(narratorNamesString)"
-//            narratorsLabel.textColor = UIColor.label
-//        }
-//
-//        if let seriesTitle = book.series {
-//            seriesLabel.text = "Series: \(seriesTitle)"
-//        }
-//
-//        if let image = book.coverImage {
-//            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
-//
-//            if customImageView.bounds.width != image.size.width {
-//                customImageViewWidthAnchor.constant = resizedImage.size.width
-//            }
-//            customImageView.image = resizedImage
-//        }
-////        print("cell with book \(book.title) configures starHorzStackView")
-//        starHorzStackView.configureForAllTitleCellWith(book: book, saveButtonDidTapCallback: saveButtonDidTapCallback)
-//    }
-    
     func configureWith(book: Book) {
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue

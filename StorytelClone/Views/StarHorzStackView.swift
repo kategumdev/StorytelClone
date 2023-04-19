@@ -93,19 +93,6 @@ class StarHorzStackView: UIStackView {
     var ellipsisButtonDidTapCallback: (Book) -> () = {_ in}
         
     // MARK: - Initializers
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        axis = .horizontal
-//        alignment = .center
-//        spacing = 0
-//        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { addArrangedSubview($0) }
-//        setCustomSpacing(4, after: starView)
-//        setCustomSpacing(6, after: ratingLabel)
-//        setCustomSpacing(6, after: vertBarLabel)
-//        applyConstraints()
-//        addSaveButtonAction()
-//    }
-    
     init(withSaveAndEllipsisButtons: Bool) {
         self.hasSaveAndEllipsisButtons = withSaveAndEllipsisButtons
         super.init(frame: .zero)
@@ -122,7 +109,6 @@ class StarHorzStackView: UIStackView {
             addSaveButtonAction()
             addEllipsisButtonAction()
         }
-//        addSaveButtonAction()
     }
     
     required init(coder: NSCoder) {
@@ -130,29 +116,6 @@ class StarHorzStackView: UIStackView {
     }
     
     // MARK: - Instance methods
-//    func configureForAllTitleCellWith(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback ) {
-//        self.book = book
-//        isBookAddedToBookshelf = book.isAddedToBookshelf
-//        self.saveButtonDidTapCallback = saveButtonDidTapCallback
-//
-//        addArrangedSubview(saveButton)
-//        addArrangedSubview(ellipsisButton)
-//        setCustomSpacing(6, after: categoryLabel)
-//        setCustomSpacing(15, after: saveButton)
-//
-//        toggleSaveButtonImage()
-////        addSaveButtonAction()
-//
-//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-//    }
-//
-//    func configureForOverviewCellSubviewsContainerWith(book: Book) {
-//        self.book = book
-//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-//    }
-    
     func configureWith(book: Book) {
         self.book = book
         ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
@@ -166,9 +129,7 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(15, after: saveButton)
         toggleSaveButtonImage()
     }
-    
-    
-    
+
     // MARK: - Helper methods
     private func addSaveButtonAction() {
 //        print("starHorzStackView adds saveButton action\n")
