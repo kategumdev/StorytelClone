@@ -8,8 +8,6 @@
 import UIKit
 
 class CustomBottomSheetViewController: UIViewController {
-
-//    static let storytellerTableSection = TableSection(sectionTitle: "")
     
     enum TriggeredBy {
         case ellipsisButton
@@ -22,7 +20,6 @@ class CustomBottomSheetViewController: UIViewController {
     private var isTriggeredBy: TriggeredBy? = .ellipsisButton
     private var isSwiping = false
     private var currentTableViewHeight: CGFloat = 0
-//    private var tableRowHeight: CGFloat = 45
     
     private lazy var tableRowHeight: CGFloat = {
         if isTriggeredBy == .ellipsisButton {
@@ -63,14 +60,6 @@ class CustomBottomSheetViewController: UIViewController {
         window!.addSubview(view)
         return view
     }()
-    
-//    private lazy var tableViewSectionHeaderHeight: CGFloat = {
-//        if isTriggeredBy == .authorsButton || isTriggeredBy == .narratorsButton{
-//            return 2
-//        } else {
-//            return 44
-//        }
-//    }()
     
     private let maxDimmedViewAlpha: CGFloat = 0.35
 
@@ -130,11 +119,6 @@ class CustomBottomSheetViewController: UIViewController {
     var tableViewDidSelectTitleCallback: (Title) -> () = {_ in}
     
     // MARK: - Initializers
-//    init(book: Book) {
-//        self.book = book
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
     init(book: Book, isTriggeredBy: TriggeredBy) {
         self.book = book
         self.isTriggeredBy = isTriggeredBy

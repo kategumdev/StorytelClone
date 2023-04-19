@@ -130,12 +130,6 @@ class SearchViewController: UIViewController {
         let callbackClosure: SelectedTitleCallback = { [weak self] title in
             guard let self = self else { return }
             
-//            if let book = title as? Book {
-//                print("SearchViewController handles selected book \(book.title)")
-//                let controller = BookViewController(book: book)
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
-            
             if let book = title as? Book {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
@@ -144,35 +138,6 @@ class SearchViewController: UIViewController {
                 let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: title)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
-            
-            
-//            if let tag = title as? Tag {
-//                print("SearchViewController handles selected tag \(tag.tagTitle)")
-//                let tableSection = TableSection(sectionTitle: tag.tagTitle)
-////                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: tag)
-////                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tag)
-//                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tag)
-//
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
-//
-//            if let series = title as? Series {
-//                print("SearchViewController handles selected series \(series.title)")
-//                let tableSection = TableSection(sectionTitle: series.title)
-////                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: series)
-//                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: series)
-//
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
-//
-//            if title.titleKind == .author || title.titleKind == .narrator {
-//                print("SearchViewController handles selected \(title.titleKind.rawValue)")
-//                let tableSection = TableSection(sectionTitle: title.titleKind.rawValue)
-////                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.model, titleModel: title)
-//                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: title)
-//
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
             
         }
         

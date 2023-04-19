@@ -39,7 +39,7 @@ struct TableSection {
         self.canBeFiltered = canBeFiltered
     }
     
-    static let generalForAllTitlesVC = TableSection(sectionTitle: "All titles")
+    static let generalForAllTitlesVC = TableSection(sectionTitle: "")
 }
 
 enum ButtonCategory: String {

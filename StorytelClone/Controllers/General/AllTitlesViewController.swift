@@ -27,18 +27,17 @@ class AllTitlesViewController: BaseTableViewController {
     private let viewWithPopupButton = UIView()
     
     // MARK: - Initializers
-//    init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
+//    init(tableSection: TableSection? = nil, categoryOfParentVC: Category? = nil, titleModel: Title? = nil) {
 //        self.tableSection = tableSection
 //        self.titleModel = titleModel
 //        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
 //        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
 //    }
     
-    init(tableSection: TableSection? = nil, categoryOfParentVC: Category? = nil, titleModel: Title? = nil) {
+    init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
         self.tableSection = tableSection
         self.titleModel = titleModel
-        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
-        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
+        super.init(tableViewStyle: .plain)
     }
     
     required init?(coder: NSCoder) {
@@ -86,18 +85,14 @@ class AllTitlesViewController: BaseTableViewController {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView else {
             return UIView()
         }
-//        sectionHeader.configureWith(title: "All titles")
-//        if let tableSection = tableSection {
-//            sectionHeader.configureWith(title: tableSection.sectionTitle)
-//        }
         
-        guard let tableSection = tableSection, let titleModel = titleModel else { return UIView() }
-        
-        if titleModel.titleKind == .series {
+        if let titleModel = titleModel, titleModel.titleKind == .series {
             sectionHeader.configureWith(title: "All books")
         } else {
-            sectionHeader.configureWith(title: tableSection.sectionTitle)
+            sectionHeader.configureWith(title: "All titles")
         }
+
+        guard let tableSection = tableSection else { return UIView() }
         
         if tableSection.canBeFiltered && tableSection.canBeShared {
             sectionHeader.showShareAndFilterButtons()

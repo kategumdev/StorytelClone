@@ -11,9 +11,9 @@ class BookViewController: UIViewController {
     
     // MARK: - Instance properties
     let book: Book
+//    private let book: Book
 
     private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
-//    private let storytellerTableSection = TableSection(sectionTitle: "")
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0
@@ -209,8 +209,6 @@ extension BookViewController {
         let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
             guard let self = self else { return }
             self.dismiss(animated: false)
-//            let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: selectedTitle)
-//            let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: selectedTitle)
             let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
             self .navigationController?.pushViewController(controller, animated:
             true)
@@ -219,8 +217,6 @@ extension BookViewController {
         if book.authors.count == 1 {
             bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
                 guard let self = self else { return }
-//                let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: self.book.authors.first)
-//                let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: self.book.authors.first)
                 let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: self.book.authors.first)
                 self .navigationController?.pushViewController(controller, animated:
                 true)
@@ -239,8 +235,6 @@ extension BookViewController {
             if narrators.count == 1 {
                 bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
                     guard let self = self else { return }
-//                    let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: narrators.first)
-//                    let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: narrators.first)
                     let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: narrators.first)
                     self.navigationController?.pushViewController(controller, animated:
                     true)

@@ -162,6 +162,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let category = category else { return UIView() }
+        
         let sectionKind = category.tableSections[section].sectionKind
 
         guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
