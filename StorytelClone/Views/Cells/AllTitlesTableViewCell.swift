@@ -167,7 +167,7 @@ class AllTitlesTableViewCell: UITableViewCell {
             }
             customImageView.image = resizedImage
         }
-        print("cell with book \(book.title) configures starHorzStackView")
+//        print("cell with book \(book.title) configures starHorzStackView")
         starHorzStackView.configureForAllTitleCellWith(book: book, saveButtonDidTapCallback: saveButtonDidTapCallback)
     }
 

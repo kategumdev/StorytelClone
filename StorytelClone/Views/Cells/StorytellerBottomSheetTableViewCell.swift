@@ -34,7 +34,7 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        contentView.backgroundColor = .clear
+        selectedBackgroundView = UIView() // avoid gray color when cell is selected
         backgroundColor = .clear
         contentView.addSubview(customImageView)
         contentView.addSubview(customTitleLabel)

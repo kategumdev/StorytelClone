@@ -73,6 +73,7 @@ class HomeViewController: BaseTableViewController {
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let category = category else { return UITableViewCell() }
         let sectionKind = category.tableSections[indexPath.section].sectionKind
         
 //        print("section \(indexPath.row)")
@@ -92,6 +93,7 @@ class HomeViewController: BaseTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let category = category else { return 0 }
         let sectionKind = category.tableSections[indexPath.section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
@@ -112,6 +114,7 @@ class HomeViewController: BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let category = category else { return 0 }
         let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
@@ -140,7 +143,11 @@ extension HomeViewController {
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
+        
+        if let category = category {
+            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
+        }
+//        cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
         return cell
     }
     
@@ -159,8 +166,8 @@ extension HomeViewController {
     }
     
     private func cellWithHorizontalCv(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection, let category = category else { return UITableViewCell() }
+
         let books = category.tableSections[indexPath.section].books
         
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
@@ -171,12 +178,11 @@ extension HomeViewController {
         }
         
         cell.configureWith(books: books, callbackForButtons: callbackClosure)
- 
         return cell
     }
     
     private func cellWithLargeCoversHorizontalCv(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeCovers else { return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeCovers, let category = category else { return UITableViewCell()}
         
         let books = category.tableSections[indexPath.section].books
 
@@ -187,12 +193,11 @@ extension HomeViewController {
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureWith(books: books, callbackForButtons: callbackClosure)
- 
         return cell
     }
     
     private func bookWithOverviewCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
 
         let book = category.tableSections[indexPath.section].books[0]
         
@@ -203,9 +208,7 @@ extension HomeViewController {
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureFor(book: book, withCallbackForButton: callbackClosure)
- 
-        return cell
-        
+         return cell
     }
 
 }

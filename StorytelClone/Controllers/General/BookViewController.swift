@@ -18,7 +18,10 @@ class BookViewController: UIViewController {
     // MARK: - Instance properties
 //    var book: Book
     let book: Book
-    private let tableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
+
+//    private let tableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
+    private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
+    private let storytellerTableSection = TableSection(sectionTitle: "")
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0
@@ -105,11 +108,73 @@ class BookViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             print("bookTableHeight UPDATED")
-            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+            
+            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: similarTitlesTableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         }
     }
     
-    // MARK: - Helper methods
+}
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension BookViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+        
+        let books = Book.books
+        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
+        let callbackClosure: ButtonCallback = { [weak self] book in
+            let book = book as! Book
+            let controller = BookViewController(book: book)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return Utils.heightForRowWithHorizontalCv
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+
+        sectionHeader.configureFor(section: self.similarTitlesTableSection)
+        
+        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book)
+            let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, titleModel: self.book)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        return sectionHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffsetY = scrollView.contentOffset.y
+
+        guard isInitialOffsetYSet else {
+            scrollViewInitialOffsetY = currentOffsetY
+            isInitialOffsetYSet = true
+            return
+        }
+        // Toggle navbar from transparent to visible (and vice versa)
+        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
+    }
+    
+}
+
+// MARK: - Helper methods
+extension BookViewController {
     private func addAndConfigureMainScrollView() {
         mainScrollView.delegate = self
         mainScrollView.showsVerticalScrollIndicator = false
@@ -146,78 +211,62 @@ class BookViewController: UIViewController {
         if let series = book.series {
             bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
                 let tableSection = TableSection(sectionTitle: series)
-                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
-                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category")
+//                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
+                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
         }
         
-        bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
+        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
             guard let self = self else { return }
-            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book.authors[0])
-            #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND self.book.authors[0] needs to be refactored")
+            self.dismiss(animated: false)
+//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: selectedTitle)
+//            let tableSection = TableSection(sectionTitle: "")
+            let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: selectedTitle)
             self .navigationController?.pushViewController(controller, animated:
             true)
         }
         
-//        if let narrators = book.narrators {
-//            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-//                guard let self = self else { return }
+        if book.authors.count == 1 {
+            bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
+                guard let self = self else { return }
 //                let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//                let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
-//                #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
-//                self .navigationController?.pushViewController(controller, animated:
-//                true)
-//            }
-//        }
+//                let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, categoryOfParentVC: category, titleModel: self.book.authors.first)
+                let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: self.book.authors.first)
+                self .navigationController?.pushViewController(controller, animated:
+                true)
+            }
+        } else {
+            bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
+                guard let self = self else { return }
+                let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .authorsButton)
+                bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
+                bottomSheetController.modalPresentationStyle = .overFullScreen
+                self.present(bottomSheetController, animated: false)
+            }
+        }
         
         if let narrators = book.narrators {
-            
             if narrators.count == 1 {
                 bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
                     guard let self = self else { return }
-                    let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-                    let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: narrators[0])
-                    #warning("titleModel IS HARDCODED HERE, it has to be determined at runtime. categoryOfParentVC is also hardcoded, it is not needed at all. tableSection is also hardcoded, not needed. Refactor AllTitlesViewController to work in cases whe there is no tableSection. Refactor BaseTableViewController to work in cases when here is no category. AND narrators[0] needs to be refactored")
+//                    let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
+//                    let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, categoryOfParentVC: category, titleModel: narrators.first)
+                    let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: narrators.first)
                     self .navigationController?.pushViewController(controller, animated:
                     true)
                 }
-                
             } else {
                 bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
                     guard let self = self else { return }
-                    
-                    let controller = CustomBottomSheetViewController(book: self.book)
-                    controller.modalPresentationStyle = .overFullScreen
-                    self.present(controller, animated: false)
+                    let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .narratorsButton)
+                    bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
+                    bottomSheetController.modalPresentationStyle = .overFullScreen
+                    self.present(bottomSheetController, animated: false)
                 }
-                
-//                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-//                    guard let self = self else { return }
-//
-//                    let vc = UIViewController()
-////                    vc.view.backgroundColor = .green
-//
-//                    // Make sure vc is of type UIViewController or its subclass
-//                    if let vc = vc as? UIViewController, let sheet = vc.sheetPresentationController {
-////                        sheet.detents = [.custom(resolver: { context in
-//////                            0.1 * context.maximumDetentValue
-////                            150
-////                        })]
-//                        sheet.detents = [.medium()]
-////                        sheet.largestUndimmedDetentIdentifier = .large // keeping the buttons underneath from becoming grayed-out
-////                        sheet.largestUndimmedDetentIdentifier = .medium // keeping the buttons underneath from becoming grayed-out
-//
-//
-//                    }
-//                    self.present(vc, animated: true)
-//                }
-                
             }
-            
         }
-        
         
     }
     
@@ -303,7 +352,7 @@ class BookViewController: UIViewController {
     }
     
     private func calculateBookTableHeight() -> CGFloat {
-        let height = SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        let height = SectionHeaderView.calculateEstimatedHeightFor(section: similarTitlesTableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         return height
     }
     
@@ -417,62 +466,4 @@ class BookViewController: UIViewController {
             hideView.topAnchor.constraint(equalTo: bookTable.bottomAnchor)
         ])
     }
-
-}
-
-// MARK: - UITableViewDelegate, UITableViewDataSource
-extension BookViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
-        let books = Book.books
-        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callbackClosure: ButtonCallback = { [weak self] book in
-            let book = book as! Book
-            let controller = BookViewController(book: book)
-            self?.navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        cell.configureWith(books: books, callbackForButtons: callbackClosure)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Utils.heightForRowWithHorizontalCv
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-
-        sectionHeader.configureFor(section: self.tableSection)
-        
-        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
-            guard let self = self else { return }
-            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-        return sectionHeader
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentOffsetY = scrollView.contentOffset.y
-
-        guard isInitialOffsetYSet else {
-            scrollViewInitialOffsetY = currentOffsetY
-            isInitialOffsetYSet = true
-            return
-        }
-        // Toggle navbar from transparent to visible (and vice versa)
-        adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
-    }
-    
 }

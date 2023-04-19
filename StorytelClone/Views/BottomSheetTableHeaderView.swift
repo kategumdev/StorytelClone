@@ -24,33 +24,30 @@ class BottomSheetTableHeaderView: UIView {
     
     var closeButtonDidTapCallback: () -> () = {}
     
-//    lazy var separatorView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = UIColor(cgColor: BookViewController.lightBordersColor)
-//
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//
-//        addSubview(view)
-//        NSLayoutConstraint.activate([
-//            view.heightAnchor.constraint(equalToConstant: BookViewController.lightBordersWidth),
-//            view.widthAnchor.constraint(equalTo: widthAnchor),
-//            view.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            view.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        ])
-//        return view
-//    }()
-    
     // MARK: - Initializers
-    init(titleText: String) {
+//    init(titleText: String) {
+//        super.init(frame: .zero)
+////        backgroundColor = .green
+//        titleLabel.text = titleText
+//        addSubview(titleLabel)
+//        addSubview(closeButton)
+//        addButtonAction()
+//
+//        addSeparatorView()
+//
+//        applyConstraints()
+//    }
+    
+    init(titleText: String, withSeparatorView: Bool) {
         super.init(frame: .zero)
 //        backgroundColor = .green
         titleLabel.text = titleText
         addSubview(titleLabel)
         addSubview(closeButton)
         addButtonAction()
-        
-        addSeparatorView()
-                
+        if withSeparatorView {
+            addSeparatorView()
+        }
         applyConstraints()
     }
 

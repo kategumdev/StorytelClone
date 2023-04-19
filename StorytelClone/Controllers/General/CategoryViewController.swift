@@ -13,11 +13,19 @@ class CategoryViewController: BaseTableViewController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
-            headerView.configureWithDimView(andText: category.title)
-        }
+        
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
+        
+        headerView.configureWithDimView(andText: category.title)
         navigationController?.makeNavbarAppearance(transparent: true)
         extendedLayoutIncludesOpaqueBars = true
+
+        
+//        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
+//            headerView.configureWithDimView(andText: category.title)
+//        }
+//        navigationController?.makeNavbarAppearance(transparent: true)
+//        extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -31,8 +39,10 @@ class CategoryViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         
-        // Dependency injection
-        cell.books = category.tableSections[indexPath.row].books
+        if let category = category {
+            cell.books = category.tableSections[indexPath.row].books
+        }
+//        cell.books = category.tableSections[indexPath.row].books
         
         // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
         cell.callbackClosure = { [weak self] book in
@@ -47,6 +57,7 @@ class CategoryViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
+        guard let category = category else { return }
         var text = category.title
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text

@@ -11,7 +11,7 @@ var allTitlesBooks = Book.books + [Book.book20, Book.book21, Book.book22, Book.b
 
 class AllTitlesViewController: BaseTableViewController {
 
-    let tableSection: TableSection
+    var tableSection: TableSection?
     let titleModel: Title?
             
 //    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
@@ -27,7 +27,14 @@ class AllTitlesViewController: BaseTableViewController {
     private let viewWithPopupButton = UIView()
     
     // MARK: - Initializers
-    init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
+//    init(tableSection: TableSection, categoryOfParentVC: Category, titleModel: Title?) {
+//        self.tableSection = tableSection
+//        self.titleModel = titleModel
+//        super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
+//        #warning("This category is not needed in this vc, only needed for BaseTableViewController initializer")
+//    }
+    
+    init(tableSection: TableSection? = nil, categoryOfParentVC: Category? = nil, titleModel: Title? = nil) {
         self.tableSection = tableSection
         self.titleModel = titleModel
         super.init(categoryModel: categoryOfParentVC, tableViewStyle: .plain)
@@ -81,6 +88,7 @@ class AllTitlesViewController: BaseTableViewController {
         }
         sectionHeader.configureWith(title: "All titles")
         
+        guard let tableSection = tableSection else { return UIView() }
         if tableSection.canBeFiltered && tableSection.canBeShared {
             sectionHeader.showShareAndFilterButtons()
         } else if tableSection.canBeFiltered {
@@ -99,7 +107,7 @@ class AllTitlesViewController: BaseTableViewController {
     
     override func configureNavBar() {
         super.configureNavBar()
-        var text: String
+        var text = ""
         if let author = titleModel as? Author {
             text = author.name
         } else if let narrator = titleModel as? Narrator {
@@ -108,7 +116,7 @@ class AllTitlesViewController: BaseTableViewController {
             text = series.title
         } else if let tag = titleModel as? Tag {
             text = tag.tagTitle
-        } else {
+        } else if let tableSection = tableSection {
             text = tableSection.sectionTitle
         }
         
@@ -148,17 +156,18 @@ class AllTitlesViewController: BaseTableViewController {
             return
         }
         
-        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
+        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
             headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
         }
                 
-        bookTable.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
-            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
-        ])
+//        print("   bookTable cosntraints are set")
+//        bookTable.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
+//            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+//            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
+//        ])
     }
 
 }

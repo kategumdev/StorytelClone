@@ -150,7 +150,7 @@ class StarHorzStackView: UIStackView {
     
     // MARK: - Helper methods
     private func addSaveButtonAction() {
-        print("starHorzStackView adds saveButton action\n")
+//        print("starHorzStackView adds saveButton action\n")
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
