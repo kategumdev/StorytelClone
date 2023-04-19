@@ -10,7 +10,7 @@ import UIKit
 class StorytellerBottomSheetTableViewCell: UITableViewCell {
     
     static let identifier = "StorytellerBottomSheetTableViewCell"
-    static let rowHeight: CGFloat = 40
+//    static let rowHeight: CGFloat = 40
     
     // MARK: - Instance properties
     
@@ -55,7 +55,42 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         customTitleLabel.text = text
     }
     
+    func configureFor(book: Book, ellipsisButtonCell: EllipsisButtonCell) {
+//        print("ellipsisButtonCell \(ellipsisButtonCell.rawValue)")
+        let imageName = ellipsisButtonCell.rawValue
+        customImageView.image = UIImage(systemName: imageName)
+        
+        var text = ""
+        switch ellipsisButtonCell {
+        case .addRemoveToBookShelf:
+            text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
+        case .markAsFinished:
+            text = "Mark as finished"
+        case .download:
+            text = "Download"
+        case .viewSeries:
+            text = "View series"
+        case .viewAuthors:
+            text = book.authors.count == 1 ? "View author" : "View authors"
+        case .viewNarrators:
+            if let narrators = book.narrators {
+                text = narrators.count == 1 ? "View narrator" : "View narrators"
+            }
+        case .showMoreTitlesLikeThis:
+            text = "Show more titles like this"
+        case .share:
+            text = "Share"
+        }
+        
+        customTitleLabel.text = text
+    }
+    
     // MARK: - Helper methods
+//    private func update(labelText: String, imageName: String) {
+//        customTitleLabel.text = labelText
+//        customImageView.image = UIImage(systemName: imageName)
+//    }
+    
     private func applyConstraints() {
         let constant: CGFloat = 22
         

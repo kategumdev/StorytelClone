@@ -48,7 +48,7 @@ class AllTitlesViewController: BaseTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear of AllTitlesViewController")
+//        print("viewWillAppear of AllTitlesViewController")
         // This will execute when returning from BookViewController (presented when cell selected)
         guard let currentSelectedBook = currentSelectedBook else { return }
 
@@ -65,6 +65,7 @@ class AllTitlesViewController: BaseTableViewController {
             guard let self = self else { return }
             self.bookTable.reloadRows(at: [selectedBookIndexPath], with: .none)
         }
+        #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow.")
     }
     
     // MARK: - UITableViewDataSource, UITableViewDelegate

@@ -7,6 +7,17 @@
 
 import UIKit
 
+enum EllipsisButtonCell: String, CaseIterable {
+    case addRemoveToBookShelf = "heart"
+    case markAsFinished = "checkmark"
+    case download = "arrow.down.circle"
+    case viewSeries = "rectangle.stack"
+    case viewAuthors = "pencil"
+    case viewNarrators = "mic"
+    case showMoreTitlesLikeThis = "square.grid.3x2" // turn it for 90 degrees
+    case share = "paperplane"
+}
+
 class CustomBottomSheetViewController: UIViewController {
     
     enum TriggeredBy {
@@ -21,17 +32,43 @@ class CustomBottomSheetViewController: UIViewController {
     private var isSwiping = false
     private var currentTableViewHeight: CGFloat = 0
     
-    private lazy var tableRowHeight: CGFloat = {
-        if isTriggeredBy == .ellipsisButton {
-            return 40
-        } else {
-            return 45
+//    private lazy var rowHeight: CGFloat = {
+//        var height: CGFloat
+//        if isTriggeredBy == .ellipsisButton {
+//            height = 48
+//        } else {
+//            height = 40
+//        }
+//    }()
+    
+    private lazy var ellipsisButtonCells: [EllipsisButtonCell] = {
+        var cells = EllipsisButtonCell.allCases
+        
+        if book.series == nil {
+            cells = cells.filter { $0 != .viewSeries }
         }
+        
+        print("book is \(book.title), book.narrators is \(book.narrators)")
+        if book.narrators == nil {
+            cells = cells.filter { $0 != .viewNarrators }
+        }
+
+        return cells
     }()
+    
+//    private lazy var tableRowHeight: CGFloat = {
+//        if isTriggeredBy == .ellipsisButton {
+//            return 46
+//        } else {
+//            return 44
+//        }
+//    }()
+    
+    private let tableRowHeight: CGFloat = 48
     
     private lazy var tableHeaderHeight: CGFloat = {
         if isTriggeredBy == .ellipsisButton {
-            return 40
+            return 42
         } else {
             return 48
         }
@@ -63,29 +100,42 @@ class CustomBottomSheetViewController: UIViewController {
     
     private let maxDimmedViewAlpha: CGFloat = 0.35
 
-    private lazy var tableViewHeightWithoutCells: CGFloat = tableRowHeight
+//    private lazy var tableViewHeightWithoutCells: CGFloat = tableRowHeight
+    private lazy var tableViewHeightWithoutCells: CGFloat = 28
     
     private lazy var defaultTableViewHeight: CGFloat = {
         var multiplier: Int
-        var rowHeight: CGFloat = StorytellerBottomSheetTableViewCell.rowHeight
+//        var rowHeight: CGFloat = StorytellerBottomSheetTableViewCell.rowHeight
         if isTriggeredBy == .authorsButton {
             multiplier = book.authors.count
         } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
             multiplier = narrators.count
         } else {
-            multiplier = 7
-            rowHeight = tableRowHeight
+            multiplier = ellipsisButtonCells.count
+//            multiplier = 7
+//            rowHeight = tableRowHeight
         }
         
-        let height = tableViewHeightWithoutCells + tableHeaderHeight + rowHeight * CGFloat(multiplier)
+//        let height = tableViewHeightWithoutCells + tableHeaderHeight + rowHeight * CGFloat(multiplier)
+        let height = tableViewHeightWithoutCells + tableHeaderHeight + tableRowHeight * CGFloat(multiplier)
+
         currentTableViewHeight = height
         return height
     }()
     
     let cellIdentifier = "CellIdentifier"
     
+//    private lazy var tableHeaderView: BottomSheetTableHeaderView = {
+//        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText, withSeparatorView: true)
+//        headerView.closeButtonDidTapCallback = { [weak self] in
+//            self?.dismissWithCustomAnimation()
+//        }
+//        return headerView
+//    }()
+    
     private lazy var tableHeaderView: BottomSheetTableHeaderView = {
-        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText, withSeparatorView: true)
+        let addSeparatorView = isTriggeredBy == .ellipsisButton ? false : true
+        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText, withSeparatorView: addSeparatorView)
         headerView.closeButtonDidTapCallback = { [weak self] in
             self?.dismissWithCustomAnimation()
         }
@@ -120,6 +170,7 @@ class CustomBottomSheetViewController: UIViewController {
     
     // MARK: - Initializers
     init(book: Book, isTriggeredBy: TriggeredBy) {
+        print("bottom sheet vc is initialized")
         self.book = book
         self.isTriggeredBy = isTriggeredBy
         super.init(nibName: nil, bundle: nil)
@@ -307,28 +358,58 @@ extension CustomBottomSheetViewController: UITableViewDataSource, UITableViewDel
         } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
             return narrators.count
         } else {
-            return 7
+            return ellipsisButtonCells.count
+//            return 7
         }
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //        print("BottomSheetVC dataSource providing cells")
-        guard isTriggeredBy != .ellipsisButton else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-            cell.textLabel?.text = "Lorem ipsum"
-            return cell
-        }
+//        guard isTriggeredBy != .ellipsisButton else {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+//            cell.textLabel?.text = "Lorem ipsum"
+//            return cell
+//        }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: StorytellerBottomSheetTableViewCell.identifier, for: indexPath) as? StorytellerBottomSheetTableViewCell else { return UITableViewCell() }
         
         if isTriggeredBy == .authorsButton {
             cell.configureWith(storyteller: book.authors[indexPath.row])
-        } else if let narrators = book.narrators {
+        } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
             cell.configureWith(storyteller: narrators[indexPath.row])
+        } else {
+            cell.configureFor(book: book, ellipsisButtonCell: ellipsisButtonCells[indexPath.row])
         }
+        
+        
+//        if isTriggeredBy == .authorsButton {
+//            cell.configureWith(storyteller: book.authors[indexPath.row])
+//        } else if let narrators = book.narrators {
+//            cell.configureWith(storyteller: narrators[indexPath.row])
+//        } else {
+//            cell.configureFor(book: book, ellipsisButtonCell: ellipsisButtonCells[indexPath.row])
+//        }
         return cell
     }
+    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        //        print("BottomSheetVC dataSource providing cells")
+//        guard isTriggeredBy != .ellipsisButton else {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+//            cell.textLabel?.text = "Lorem ipsum"
+//            return cell
+//        }
+//
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: StorytellerBottomSheetTableViewCell.identifier, for: indexPath) as? StorytellerBottomSheetTableViewCell else { return UITableViewCell() }
+//
+//        if isTriggeredBy == .authorsButton {
+//            cell.configureWith(storyteller: book.authors[indexPath.row])
+//        } else if let narrators = book.narrators {
+//            cell.configureWith(storyteller: narrators[indexPath.row])
+//        }
+//        return cell
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
