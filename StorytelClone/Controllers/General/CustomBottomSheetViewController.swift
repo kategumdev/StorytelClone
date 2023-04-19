@@ -214,10 +214,16 @@ extension CustomBottomSheetViewController {
     
     private func animateTableViewHeight(_ height: CGFloat) {
 //        print("BottomSheetVC animateTableViewHeight")
-        UIView.animate(withDuration: 0.3, delay: 0) { [self] in
-            windowDimmedView?.alpha = maxDimmedViewAlpha
-            tableViewHeightConstraint.constant = height
-            view.layoutIfNeeded()
+//        UIView.animate(withDuration: 0.3, delay: 0) { [self] in
+//            windowDimmedView?.alpha = maxDimmedViewAlpha
+//            tableViewHeightConstraint.constant = height
+//            view.layoutIfNeeded()
+//        }
+        UIView.animate(withDuration: 0.3, delay: 0) { [weak self] in
+            guard let self = self else { return }
+            self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
+            self.tableViewHeightConstraint.constant = height
+            self.view.layoutIfNeeded()
         }
         // Save current height
         currentTableViewHeight = height
@@ -244,22 +250,13 @@ extension CustomBottomSheetViewController {
     }
 
     @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
-//        print("BottomSheetVC handlePanGesture")
         let translation = gesture.translation(in: view)
         // drag to top will be minus value and vice versa
 //        print("Pan gesture y offset: \(translation.y)")
 
-        // get drag direction
         let isDraggingDown = translation.y > 0
-//        print("Dragging direction: \(isDraggingDown ? "going down" : "going up")")
-        
-        // New height is based on value of dragging plus current container height
-//        let newHeightForDraggingUp = currentTableViewHeight - (translation.y / 7)
-//        print("newHeightForDraggingUp: \(newHeightForDraggingUp)")
-        
         
         let newHeightForDraggingDown = currentTableViewHeight - translation.y
-//        print("newHeightForDraggingDown: \(newHeightForDraggingDown)")
         
         // calculations for smooth proportional change of alpha value of the dimmed view
         let percentageOfTableViewHeight = (newHeightForDraggingDown * 100) / defaultTableViewHeight
@@ -271,7 +268,6 @@ extension CustomBottomSheetViewController {
         // Handle based on gesture state
         switch gesture.state {
         case .changed:
-            // This state will occur when user is dragging
             if isDraggingDown {
                 
                 self.windowDimmedView?.alpha = newDimmedViewAlpha
@@ -284,13 +280,11 @@ extension CustomBottomSheetViewController {
                     isSwiping = true
                     break
                 }
-                
                 // to let animateTableViewHeight be called in case .ended
                 isSwiping = false
             }
             
         case .ended:
-            // This happens when user stop drag, so we will get the last height of container
             guard isSwiping != true else {
                 dismissWithCustomAnimation()
                 break

@@ -20,11 +20,8 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         return label
     }()
 
-//    let customImageView: UIImageView = UIImageView()
-    
     let customImageView: UIImageView = {
         let imageView = UIImageView()
-//        imageView.backgroundColor = .magenta
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = UIColor.label.withAlphaComponent(0.8)
         imageView.image = UIImage(systemName: "person.circle.fill")
@@ -60,7 +57,6 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-//        let leadingTrailingConstant: CGFloat = 22
         let constant: CGFloat = 22
         
         customImageView.translatesAutoresizingMaskIntoConstraints = false

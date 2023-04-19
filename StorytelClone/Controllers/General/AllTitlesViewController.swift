@@ -51,7 +51,7 @@ class AllTitlesViewController: BaseTableViewController {
         view.addSubview(popupButton)
     }
     
-    // MARK: - Superclass overrides
+    // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return tableSection.books.count
 //        return books.count
@@ -67,7 +67,27 @@ class AllTitlesViewController: BaseTableViewController {
         
 //        let book = books[indexPath.row]
         let book = allTitlesBooks[indexPath.row]
-        cell.configureFor(book: book, saveButtonDidTapCallback: popupButton.reconfigureAndAnimateSelf)
+        
+        cell.configureWith(book: book)
+        cell.saveButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
+        
+//        cell.configureFor(book: book, saveButtonDidTapCallback: popupButton.reconfigureAndAnimateSelf)
+        
+//        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
+//            guard let self = self else { return }
+//            self.dismiss(animated: false)
+//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
+//            self .navigationController?.pushViewController(controller, animated:
+//            true)
+//        }
+        
+        cell.ellipsisButtonDidTapCallback = { [weak self] book in
+            guard let self = self else { return }
+            let bottomSheetController = CustomBottomSheetViewController(book: book, isTriggeredBy: .ellipsisButton)
+//            bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
+            bottomSheetController.modalPresentationStyle = .overFullScreen
+            self.present(bottomSheetController, animated: false)
+        }
         return cell
     }
     
@@ -110,6 +130,14 @@ class AllTitlesViewController: BaseTableViewController {
         return calculatedHeight
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("didSelectRowAt")
+        let book = allTitlesBooks[indexPath.row]
+        let controller = BookViewController(book: book)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
         var text = ""
@@ -137,6 +165,7 @@ class AllTitlesViewController: BaseTableViewController {
     
     // MARK: - Helper methods
     private func configureBookTable() {
+        bookTable.allowsSelection = true
         bookTable.separatorColor = UIColor.tertiaryLabel
         bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
         

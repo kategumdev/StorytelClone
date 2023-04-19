@@ -29,7 +29,6 @@ class StarHorzStackView: UIStackView {
     // MARK: - Instance properties
     private var book: Book?
     private var isBookAddedToBookshelf = false
-    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
     
     private lazy var starView: UIView = {
         let view = UIView()
@@ -80,7 +79,7 @@ class StarHorzStackView: UIStackView {
         
     private lazy var saveButton = SaveBookButton()
     
-    private lazy var menuButton: UIButton = {
+    private lazy var ellipsisButton: UIButton = {
         let button = UIButton()
         button.tintColor = UIColor.label
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular)
@@ -88,6 +87,10 @@ class StarHorzStackView: UIStackView {
         button.setImage(image, for: .normal)
         return button
     }()
+    
+    private var hasSaveAndEllipsisButtons: Bool
+    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
+    var ellipsisButtonDidTapCallback: (Book) -> () = {_ in}
         
     // MARK: - Initializers
 //    override init(frame: CGRect) {
@@ -103,7 +106,8 @@ class StarHorzStackView: UIStackView {
 //        addSaveButtonAction()
 //    }
     
-    init(withSaveButton: Bool) {
+    init(withSaveAndEllipsisButtons: Bool) {
+        self.hasSaveAndEllipsisButtons = withSaveAndEllipsisButtons
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .center
@@ -114,8 +118,9 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(6, after: vertBarLabel)
         applyConstraints()
         
-        if withSaveButton {
+        if hasSaveAndEllipsisButtons {
             addSaveButtonAction()
+            addEllipsisButtonAction()
         }
 //        addSaveButtonAction()
     }
@@ -125,28 +130,44 @@ class StarHorzStackView: UIStackView {
     }
     
     // MARK: - Instance methods
-    func configureForAllTitleCellWith(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback ) {
+//    func configureForAllTitleCellWith(book: Book, saveButtonDidTapCallback: @escaping SaveButtonDidTapCallback ) {
+//        self.book = book
+//        isBookAddedToBookshelf = book.isAddedToBookshelf
+//        self.saveButtonDidTapCallback = saveButtonDidTapCallback
+//
+//        addArrangedSubview(saveButton)
+//        addArrangedSubview(ellipsisButton)
+//        setCustomSpacing(6, after: categoryLabel)
+//        setCustomSpacing(15, after: saveButton)
+//
+//        toggleSaveButtonImage()
+////        addSaveButtonAction()
+//
+//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+//    }
+//
+//    func configureForOverviewCellSubviewsContainerWith(book: Book) {
+//        self.book = book
+//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+//    }
+    
+    func configureWith(book: Book) {
         self.book = book
-        isBookAddedToBookshelf = book.isAddedToBookshelf
-        self.saveButtonDidTapCallback = saveButtonDidTapCallback
+        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         
+        guard hasSaveAndEllipsisButtons else { return }
+        isBookAddedToBookshelf = book.isAddedToBookshelf
         addArrangedSubview(saveButton)
-        addArrangedSubview(menuButton)
+        addArrangedSubview(ellipsisButton)
         setCustomSpacing(6, after: categoryLabel)
         setCustomSpacing(15, after: saveButton)
-
         toggleSaveButtonImage()
-//        addSaveButtonAction()
-        
-        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
     }
     
-    func configureForOverviewCellSubviewsContainerWith(book: Book) {
-        self.book = book
-        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-    }
+    
     
     // MARK: - Helper methods
     private func addSaveButtonAction() {
@@ -157,6 +178,14 @@ class StarHorzStackView: UIStackView {
             self.toggleSaveButtonImage()
             self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
             self.book?.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
+        }), for: .touchUpInside)
+    }
+    
+    private func addEllipsisButtonAction() {
+//        print("starHorzStackView adds saveButton action\n")
+        ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self, let book = self.book else { return }
+            self.ellipsisButtonDidTapCallback(book)
         }), for: .touchUpInside)
     }
     
