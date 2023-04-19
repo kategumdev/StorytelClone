@@ -101,8 +101,10 @@ class BookDetailsScrollView: UIScrollView {
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-        layer.borderColor = BookViewController.lightBordersColor
-        layer.borderWidth = BookViewController.lightBordersWidth
+//        layer.borderColor = BookViewController.lightBordersColor
+        layer.borderColor = UIColor.quaternaryLabel.cgColor
+        layer.borderWidth = 1
+//        layer.borderWidth = BookViewController.lightBordersWidth
         showsHorizontalScrollIndicator = false
         configureMainStack()
         addSubview(mainStackView)
@@ -120,6 +122,14 @@ class BookDetailsScrollView: UIScrollView {
             // Make scroll view contentSize 1 point wider than scroll view width to ensure that it will be always scrollable
             let difference = (bounds.width - contentSize.width) + 1
             categoryStackWidthAnchor.constant += difference
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            layer.borderColor = UIColor.quaternaryLabel.cgColor
         }
     }
     

@@ -10,8 +10,10 @@ import UIKit
 class BookViewController: UIViewController {
     // MARK: - Static properties
     // For borders in ShowSeriesButtonContainer and BookDetailsScrollView
-    static let lightBordersColor = UIColor.quaternaryLabel.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).cgColor
-    static let lightBordersWidth = 0.7
+//    static let lightBordersColor = UIColor.quaternaryLabel.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).cgColor
+//    static let lightBordersColor = UIColor.quaternaryLabel.cgColor
+//    static let lightBordersWidth = 0.7
+//    static let lightBordersWidth: CGFloat = 1
     
     // MARK: - Instance properties
 //    var book: Book

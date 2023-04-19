@@ -51,8 +51,10 @@ class ShowSeriesButtonContainer: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.borderColor = BookViewController.lightBordersColor
-        layer.borderWidth = BookViewController.lightBordersWidth
+        layer.borderColor = UIColor.quaternaryLabel.cgColor
+        layer.borderWidth = 1
+//        layer.borderColor = BookViewController.lightBordersColor
+//        layer.borderWidth = BookViewController.lightBordersWidth
         addSubview(showSeriesButton)
         addButtonAction()
         applyConstraints()
@@ -60,6 +62,15 @@ class ShowSeriesButtonContainer: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - View life cycle
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            layer.borderColor = UIColor.quaternaryLabel.cgColor
+        }
     }
     
     // MARK: - Instance methods

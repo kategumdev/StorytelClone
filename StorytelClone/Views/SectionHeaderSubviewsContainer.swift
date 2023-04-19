@@ -119,7 +119,7 @@ class SectionHeaderSubviewsContainer: UIView {
     
     // MARK: - Helper methods
     private func configureButtonWithAction() {
-        print("action is added to the button")
+//        print("action is added to seeAllButton")
         seeAllButton.addAction(UIAction(handler: { [weak self] action in
             guard let self = self else { return }
             self.callback()

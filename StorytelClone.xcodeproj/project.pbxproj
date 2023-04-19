@@ -10,6 +10,7 @@
 		5A041BDA29AE70D3002539CF /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A041BD929AE70D3002539CF /* Category.swift */; };
 		5A0A426429A583340000EE64 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0A426329A583340000EE64 /* Utils.swift */; };
 		5A0F8A2129CA681B004FAB36 /* BookDetailsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */; };
+		5A1D2E4B29EF53530020C000 /* BottomSheetTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */; };
 		5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BEF029D747B80038D132 /* AllTitlesViewController.swift */; };
 		5A23BEF329D7656F0038D132 /* AllTitlesSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */; };
 		5A34351029BD005E00178CDA /* SearchResultsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A34350F29BD005E00178CDA /* SearchResultsCollectionViewCell.swift */; };
@@ -99,6 +100,7 @@
 		5A041BD929AE70D3002539CF /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		5A0A426329A583340000EE64 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsStackView.swift; sourceTree = "<group>"; };
+		5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTableHeaderView.swift; sourceTree = "<group>"; };
 		5A23BEF029D747B80038D132 /* AllTitlesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesViewController.swift; sourceTree = "<group>"; };
 		5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesSectionHeaderView.swift; sourceTree = "<group>"; };
 		5A34350F29BD005E00178CDA /* SearchResultsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				5A37EB2029DD83710053F6A7 /* PopupButton.swift */,
 				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
+				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
 			path = Views;
@@ -539,6 +542,7 @@
 				5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */,
 				5ABBA38B299C09A700D0E0F4 /* AppDelegate.swift in Sources */,
 				5ADA577F29C23BE7004BC23B /* SearchResultsBookTableViewCell.swift in Sources */,
+				5A1D2E4B29EF53530020C000 /* BottomSheetTableHeaderView.swift in Sources */,
 				5A23BEF329D7656F0038D132 /* AllTitlesSectionHeaderView.swift in Sources */,
 				5ABBA402299C0FD000D0E0F4 /* TabBarViewController.swift in Sources */,
 				5AA8006929C8DD5100198B8A /* SearchResultsTableViewCell.swift in Sources */,

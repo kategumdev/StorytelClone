@@ -25,13 +25,31 @@ class CustomBottomSheetViewController: UIViewController {
     
     // MARK: Instance properties
 //    var titleModel: Title?
-    let book: Book
-    var isTriggeredBy: TriggeredBy? = .narratorsButton
-    var isSwiping = false
-    var currentTableViewHeight: CGFloat = 0
-    var tableRowHeight: CGFloat = 45
+    private let book: Book
+    private var isTriggeredBy: TriggeredBy? = .narratorsButton
+    private var isSwiping = false
+    private var currentTableViewHeight: CGFloat = 0
+    private var tableRowHeight: CGFloat = 45
     
-    lazy var windowDimmedView: UIView? = {
+    private lazy var tableHeaderHeight: CGFloat = {
+        if isTriggeredBy == .ellipsisButton {
+            return 40
+        } else {
+            return 48
+        }
+    }()
+    
+    private lazy var tableHeaderTitleText: String = {
+        if isTriggeredBy == .authorsButton {
+            return "Authors"
+        } else if isTriggeredBy == .narratorsButton {
+            return "Narrators"
+        } else {
+            return book.title
+        }
+    }()
+    
+    private lazy var windowDimmedView: UIView? = {
 //        print("windowDimmedView created and added to view")
         let view = UIView()
         view.alpha = 0
@@ -45,7 +63,7 @@ class CustomBottomSheetViewController: UIViewController {
         return view
     }()
     
-    lazy var tableViewSectionHeaderHeight: CGFloat = {
+    private lazy var tableViewSectionHeaderHeight: CGFloat = {
 //        print("tableViewHeaderHeight calculated lazily")
 //        if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
 //            return 40
@@ -60,7 +78,7 @@ class CustomBottomSheetViewController: UIViewController {
         }
     }()
     
-    let maxDimmedViewAlpha: CGFloat = 0.35
+    private let maxDimmedViewAlpha: CGFloat = 0.35
     
 //    lazy var maxDimmedViewAlpha: CGFloat = {
 ////        print("maxDimmedViewAlpha calculated lazily")
@@ -73,7 +91,7 @@ class CustomBottomSheetViewController: UIViewController {
 //
 //    }()
     
-    lazy var tableViewHeightWithoutCells: CGFloat = tableRowHeight
+    private lazy var tableViewHeightWithoutCells: CGFloat = tableRowHeight
     
 //    lazy var tableViewHeightWithoutCells: CGFloat = {
 ////        print("tableViewHeightWithoutCells calculated lazily")
@@ -87,7 +105,7 @@ class CustomBottomSheetViewController: UIViewController {
 //        }
 //    }()
     
-    lazy var defaultTableViewHeight: CGFloat = {
+    private lazy var defaultTableViewHeight: CGFloat = {
 //        print("defaultTableViewHeight calculated lazily")
 //        var height: CGFloat
 //        if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
@@ -97,15 +115,19 @@ class CustomBottomSheetViewController: UIViewController {
 //        }
         
         var multiplier: Int
+        var rowHeight: CGFloat = StorytellerBottomSheetTableViewCell.rowHeight
         if isTriggeredBy == .authorsButton {
             multiplier = book.authors.count
         } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
             multiplier = narrators.count
         } else {
             multiplier = 7
+            rowHeight = tableRowHeight
         }
         
-        let height = tableViewHeightWithoutCells + tableRowHeight * CGFloat(multiplier)
+        
+//        let height = tableViewHeightWithoutCells + tableRowHeight * CGFloat(multiplier)
+        let height = tableViewHeightWithoutCells + tableHeaderHeight + rowHeight * CGFloat(multiplier)
         
 //        if isTriggeredBy == .authorsButton || isTriggeredBy == .narratorsButton {
 //            height = tableViewHeightWithoutCells + (tableRowHeight * 3)
@@ -194,25 +216,61 @@ class CustomBottomSheetViewController: UIViewController {
     
     let cellIdentifier = "CellIdentifier"
     
-    lazy var tableView: UITableView = {
+//    lazy var tableHeaderView: BottomSheetTableHeaderView = {
+////        var titleText = ""
+////        if isTriggeredBy == .authorsButton {
+////            titleText = "Authors"
+////        } else if isTriggeredBy == .narratorsButton {
+////            titleText = "Narrators"
+////        } else {
+////            titleText = book.title
+////        }
+////        let width = tableView.bounds.width
+//
+//        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText)
+//
+////        let headerView = BottomSheetTableHeaderView(frame: CGRect(origin: .zero, size: CGSize(width: width, height: tableHeaderHeight)), titleText: tableHeaderTitleText)
+//        headerView.frame.size.height = tableHeaderHeight
+//
+//        return headerView
+//    }()
+    
+//    lazy var tableHeaderView = BottomSheetTableHeaderView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: tableHeaderHeight)), titleText: tableHeaderTitleText)\
+    
+    private lazy var tableHeaderView: BottomSheetTableHeaderView = {
+        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText)
+        headerView.closeButtonDidTapCallback = { [weak self] in
+            self?.dismissWithCustomAnimation()
+        }
+        return headerView
+    }()
+
+    
+//    lazy var tableHeaderView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText)
+        
+    private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
-//        tableView.backgroundColor = Utils.customBackgroundColor
-        tableView.backgroundColor = .magenta
+        tableView.backgroundColor = UIColor(named: "bottomSheetBackground")
         tableView.clipsToBounds = true
         tableView.separatorColor = .clear
         tableView.layer.cornerRadius = 10
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(StorytellerBottomSheetTableViewCell.self, forCellReuseIdentifier: StorytellerBottomSheetTableViewCell.identifier)
         
         tableView.estimatedRowHeight = tableRowHeight
         tableView.rowHeight = tableRowHeight
         
-//        table.tableHeaderView =
+        tableView.tableHeaderView = tableHeaderView
+        
+        // These two lines avoid constraints' conflict of header when view just loaded
+        tableView.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView.tableHeaderView?.fillSuperview()
         return tableView
     }()
     
-    lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-    lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     
 //    @IBOutlet weak var tableView: UITableView!
 //    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
@@ -245,6 +303,12 @@ class CustomBottomSheetViewController: UIViewController {
         windowDimmedView?.alpha = 0
         
 //        configureInitialView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+        tableHeaderView.frame.size = CGSize(width: tableView.bounds.width, height: tableHeaderHeight)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -336,7 +400,7 @@ extension CustomBottomSheetViewController {
 //    }
     
     // MARK: - Animations
-    func animatePresentingTableView() {
+    private func animatePresentingTableView() {
 //        print("BottomSheetVC animatePresentingTableView()")
         // Update bottom constraint in animation block and animate dimmed view alpha
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -347,7 +411,7 @@ extension CustomBottomSheetViewController {
         }, completion: nil)
     }
     
-    func animateDismissView() {
+    private func dismissWithCustomAnimation() {
 //        print("BottomSheetVC animateDismissView()")
         // hide table view by updating bottom constraint
         UIView.animate(withDuration: 0.2) {
@@ -363,7 +427,7 @@ extension CustomBottomSheetViewController {
         }
     }
     
-    func animateTableViewHeight(_ height: CGFloat) {
+    private func animateTableViewHeight(_ height: CGFloat) {
 //        print("BottomSheetVC animateTableViewHeight")
         
         UIView.animate(withDuration: 0.3, delay: 0) { [self] in
@@ -376,20 +440,17 @@ extension CustomBottomSheetViewController {
     }
     
     // MARK: - Gesture Recognizers
-    func setupTapGesture() {
-//        print("BottomSheetVC setupTapGesture()")
+    private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
     }
     
     @objc func handleTapGesure() {
-//        print("BottomSheetVC handleTapGesure()")
-        animateDismissView()
+        dismissWithCustomAnimation()
     }
     
-    func setupPanGesture() {
-//        print("BottomSheetVC setupPanGesture()")
+    private func setupPanGesture() {
         // add pan gesture recognizer to the tableView
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(gesture:)))
         
@@ -525,7 +586,7 @@ extension CustomBottomSheetViewController {
         case .ended:
             // This happens when user stop drag, so we will get the last height of container
             guard isSwiping != true else {
-                animateDismissView()
+                dismissWithCustomAnimation()
                 break
             }
             animateTableViewHeight(defaultTableViewHeight)
@@ -554,15 +615,22 @@ extension CustomBottomSheetViewController: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        print("BottomSheetVC dataSource providing cells")
 //        let cellIdentifier = "CellIdentifier"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
-        if isTriggeredBy == .authorsButton {
-            cell.textLabel?.text = book.authors[indexPath.row].name
-        } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
-            cell.textLabel?.text = narrators[indexPath.row].name
-            cell.imageView?.image = UIImage(systemName: "person.circle.fill")
-        } else {
+        guard isTriggeredBy != .ellipsisButton else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             cell.textLabel?.text = "Lorem ipsum"
+            return cell
+        }
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StorytellerBottomSheetTableViewCell.identifier, for: indexPath) as? StorytellerBottomSheetTableViewCell else { return UITableViewCell() }
+
+        if isTriggeredBy == .authorsButton {
+            cell.configureWith(storyteller: book.authors[indexPath.row])
+//            cell.textLabel?.text = book.authors[indexPath.row].name
+        } else if let narrators = book.narrators {
+            cell.configureWith(storyteller: narrators[indexPath.row])
+//            cell.textLabel?.text = narrators[indexPath.row].name
+//            cell.imageView?.image = UIImage(systemName: "person.circle.fill")
         }
         
         return cell
