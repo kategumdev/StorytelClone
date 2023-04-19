@@ -86,9 +86,19 @@ class AllTitlesViewController: BaseTableViewController {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView else {
             return UIView()
         }
-        sectionHeader.configureWith(title: "All titles")
+//        sectionHeader.configureWith(title: "All titles")
+//        if let tableSection = tableSection {
+//            sectionHeader.configureWith(title: tableSection.sectionTitle)
+//        }
         
-        guard let tableSection = tableSection else { return UIView() }
+        guard let tableSection = tableSection, let titleModel = titleModel else { return UIView() }
+        
+        if titleModel.titleKind == .series {
+            sectionHeader.configureWith(title: "All books")
+        } else {
+            sectionHeader.configureWith(title: tableSection.sectionTitle)
+        }
+        
         if tableSection.canBeFiltered && tableSection.canBeShared {
             sectionHeader.showShareAndFilterButtons()
         } else if tableSection.canBeFiltered {

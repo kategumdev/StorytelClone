@@ -9,6 +9,8 @@ import UIKit
 
 class CustomBottomSheetViewController: UIViewController {
 
+//    static let storytellerTableSection = TableSection(sectionTitle: "")
+    
     enum TriggeredBy {
         case ellipsisButton
         case authorsButton

@@ -10,7 +10,6 @@ import UIKit
 class BaseTableViewController: UIViewController {
     
     // MARK: - Instance properties
-//    let category: Category
     var category: Category?
     let tableViewStyle: UITableView.Style
     
@@ -47,12 +46,6 @@ class BaseTableViewController: UIViewController {
     }()
  
     // MARK: - Initializers
-//    init(categoryModel: Category, tableViewStyle: UITableView.Style = .grouped) {
-//        self.category = categoryModel
-//        self.tableViewStyle = tableViewStyle
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
     init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped) {
         self.category = categoryModel
         self.tableViewStyle = tableViewStyle
@@ -181,8 +174,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         // Respond to seeAllButton tap in section header
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: self.category, titleModel: nil)
-//            let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: category, titleModel: nil)
             let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
             self.navigationController?.pushViewController(controller, animated: true)
         }

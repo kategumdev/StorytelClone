@@ -8,20 +8,12 @@
 import UIKit
 
 class BookViewController: UIViewController {
-    // MARK: - Static properties
-    // For borders in ShowSeriesButtonContainer and BookDetailsScrollView
-//    static let lightBordersColor = UIColor.quaternaryLabel.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).cgColor
-//    static let lightBordersColor = UIColor.quaternaryLabel.cgColor
-//    static let lightBordersWidth = 0.7
-//    static let lightBordersWidth: CGFloat = 1
     
     // MARK: - Instance properties
-//    var book: Book
     let book: Book
 
-//    private let tableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
     private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
-    private let storytellerTableSection = TableSection(sectionTitle: "")
+//    private let storytellerTableSection = TableSection(sectionTitle: "")
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0
@@ -147,8 +139,6 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: self.book)
             let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, titleModel: self.book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
@@ -211,7 +201,6 @@ extension BookViewController {
         if let series = book.series {
             bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
                 let tableSection = TableSection(sectionTitle: series)
-//                let controller = AllTitlesViewController(tableSection: tableSection, categoryOfParentVC: Category.series, titleModel: Series.series1)
                 let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
@@ -220,10 +209,9 @@ extension BookViewController {
         let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
             guard let self = self else { return }
             self.dismiss(animated: false)
-//            let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//            let controller = AllTitlesViewController(tableSection: self.tableSection, categoryOfParentVC: category, titleModel: selectedTitle)
-//            let tableSection = TableSection(sectionTitle: "")
-            let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: selectedTitle)
+//            let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: selectedTitle)
+//            let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: selectedTitle)
+            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
             self .navigationController?.pushViewController(controller, animated:
             true)
         }
@@ -231,9 +219,9 @@ extension BookViewController {
         if book.authors.count == 1 {
             bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
                 guard let self = self else { return }
-//                let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//                let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, categoryOfParentVC: category, titleModel: self.book.authors.first)
-                let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: self.book.authors.first)
+//                let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: self.book.authors.first)
+//                let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: self.book.authors.first)
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: self.book.authors.first)
                 self .navigationController?.pushViewController(controller, animated:
                 true)
             }
@@ -251,10 +239,10 @@ extension BookViewController {
             if narrators.count == 1 {
                 bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
                     guard let self = self else { return }
-//                    let category = ButtonCategory.createModelFor(categoryButton: self.book.category)
-//                    let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, categoryOfParentVC: category, titleModel: narrators.first)
-                    let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: narrators.first)
-                    self .navigationController?.pushViewController(controller, animated:
+//                    let controller = AllTitlesViewController(tableSection: self.storytellerTableSection, titleModel: narrators.first)
+//                    let controller = AllTitlesViewController(tableSection: CustomBottomSheetViewController.storytellerTableSection, titleModel: narrators.first)
+                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: narrators.first)
+                    self.navigationController?.pushViewController(controller, animated:
                     true)
                 }
             } else {

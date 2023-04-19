@@ -38,6 +38,8 @@ struct TableSection {
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
     }
+    
+    static let generalForAllTitlesVC = TableSection(sectionTitle: "All titles")
 }
 
 enum ButtonCategory: String {
