@@ -31,8 +31,6 @@ class CustomBottomSheetViewController: UIViewController {
     private var isTriggeredBy: TriggeredBy = .ellipsisButton
     private var isSwiping = false
     private var currentTableViewHeight: CGFloat = 0
-    
-    var addRemoveToBookshelfDidTap: () -> () = {}
 
     private lazy var ellipsisButtonCells: [EllipsisButtonCell] = {
         var cells = EllipsisButtonCell.allCases
@@ -134,10 +132,13 @@ class CustomBottomSheetViewController: UIViewController {
     private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
     private lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     
+    var addRemoveToBookshelfDidTap: () -> () = {}
+    var viewAuthorsDidTapCallback: () -> () = {}
     var tableViewDidSelectTitleCallback: (Title) -> () = {_ in}
     
     // MARK: - Initializers
     init(book: Book, isTriggeredBy: TriggeredBy) {
+        print("\n\nbottom sheet \(isTriggeredBy) CREATED")
         self.book = book
         self.isTriggeredBy = isTriggeredBy
         super.init(nibName: nil, bundle: nil)
@@ -148,7 +149,7 @@ class CustomBottomSheetViewController: UIViewController {
     }
     
     deinit {
-//        print("BottomSheetVC deinit")
+        print("BottomSheetVC \(isTriggeredBy) DEINIT")
         self.windowDimmedView?.removeFromSuperview()
         self.windowDimmedView = nil
 //        print("nil out dimmedView: \(String(describing: self.windowDimmedView))")
@@ -272,7 +273,17 @@ extension CustomBottomSheetViewController {
         case .viewSeries:
             print("viewSeries tapped")
         case .viewAuthors:
-            print("viewAuthors tapped")
+            
+            if book.authors.count == 1 {
+                self.dismiss(animated: false, completion: { [weak self] in
+                    self?.viewAuthorsDidTapCallback()
+                })
+            } else {
+                self.dismissWithCustomAnimation(completion: { [weak self] in
+                    self?.viewAuthorsDidTapCallback()
+                })
+            }
+
         case .viewNarrators:
             print("viewNarrators tapped")
         case .showMoreTitlesLikeThis:
@@ -353,19 +364,71 @@ extension CustomBottomSheetViewController {
         }, completion: nil)
     }
     
-    private func dismissWithCustomAnimation() {
+//    func dismissWithCustomAnimation() {
+////        print("BottomSheetVC animateDismissView()")
+//        // hide table view by updating bottom constraint
+//        UIView.animate(withDuration: 0.2) {
+//            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
+//            self.view.layoutIfNeeded()
+//        }
+//
+//        // hide dimmed view
+//        UIView.animate(withDuration: 0.2) {
+//            self.windowDimmedView?.alpha = 0
+//        } completion: { _ in
+//            self.dismiss(animated: true)
+//        }
+//    }
+    
+//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+////        print("BottomSheetVC animateDismissView()")
+//        // hide table view by updating bottom constraint
+//        UIView.animate(withDuration: 0.2) {
+//            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
+//            self.view.layoutIfNeeded()
+//        }
+//
+//        // hide dimmed view
+//        UIView.animate(withDuration: 0.2) {
+//            self.windowDimmedView?.alpha = 0
+//        } completion: { _ in
+////            self.dismiss(animated: true)
+//            self.dismiss(animated: true, completion: {
+//                completion?()
+//            })
+//        }
+//    }
+    
+//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+////        print("BottomSheetVC animateDismissView()")
+//        // hide table view by updating bottom constraint
+//        UIView.animate(withDuration: 0.2) {
+//            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
+//            //            self.view.layoutIfNeeded()
+//            self.windowDimmedView?.alpha = 0
+//            self.view.layoutIfNeeded()
+//        } completion: { _ in
+////            self.dismiss(animated: true)
+//            self.dismiss(animated: true, completion: {
+//                completion?()
+//            })
+//        }
+//    }
+    
+    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
 //        print("BottomSheetVC animateDismissView()")
         // hide table view by updating bottom constraint
         UIView.animate(withDuration: 0.2) {
             self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
-            self.view.layoutIfNeeded()
-        }
-
-        // hide dimmed view
-        UIView.animate(withDuration: 0.2) {
+            //            self.view.layoutIfNeeded()
             self.windowDimmedView?.alpha = 0
+            self.view.layoutIfNeeded()
         } completion: { _ in
-            self.dismiss(animated: true)
+//            self.dismiss(animated: true)
+//            print("is going to dismiss after custom animation")
+            self.dismiss(animated: false, completion: {
+                completion?()
+            })
         }
     }
     
