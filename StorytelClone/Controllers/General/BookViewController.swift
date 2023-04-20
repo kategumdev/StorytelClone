@@ -224,7 +224,7 @@ extension BookViewController {
         } else {
             bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
                 guard let self = self else { return }
-                let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .authorsButton)
+                let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .authors)
                 bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
                 bottomSheetController.modalPresentationStyle = .overFullScreen
                 self.present(bottomSheetController, animated: false)
@@ -242,7 +242,7 @@ extension BookViewController {
             } else {
                 bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
                     guard let self = self else { return }
-                    let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .narratorsButton)
+                    let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .narrators)
                     bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
                     bottomSheetController.modalPresentationStyle = .overFullScreen
                     self.present(bottomSheetController, animated: false)
