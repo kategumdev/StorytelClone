@@ -34,8 +34,10 @@ struct Book: Title {
     let tags: [Tag]
 //    let isAddedToBookshelf: Bool
     var isAddedToBookshelf: Bool
+    var isFinished: Bool
+    var isDownloaded: Bool
     
-    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false) {
+    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
@@ -55,6 +57,8 @@ struct Book: Title {
         self.translators = translators
         self.tags = tags
         self.isAddedToBookshelf = isAddedToBookshelf
+        self.isFinished = isFinished
+        self.isDownloaded = isDownloaded
     }
     
     func update(isAddedToBookshelf: Bool) {

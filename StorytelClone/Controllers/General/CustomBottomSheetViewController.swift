@@ -14,7 +14,7 @@ enum EllipsisButtonCell: String, CaseIterable {
     case viewSeries = "rectangle.stack"
     case viewAuthors = "pencil"
     case viewNarrators = "mic"
-    case showMoreTitlesLikeThis = "square.grid.3x2" // turn it for 90 degrees
+    case showMoreTitlesLikeThis = "square.grid.3x2"
     case share = "paperplane"
 }
 
@@ -27,28 +27,13 @@ class CustomBottomSheetViewController: UIViewController {
     }
     
     // MARK: Instance properties
-//    private let book: Book
     private var book: Book
-//    private var isTriggeredBy: TriggeredBy? = .ellipsisButton
     private var isTriggeredBy: TriggeredBy = .ellipsisButton
     private var isSwiping = false
     private var currentTableViewHeight: CGFloat = 0
     
-//    var addRemoveToBookshelfDidTap: (Book) -> () = {_ in}
     var addRemoveToBookshelfDidTap: () -> () = {}
 
-    
-//    private var shouldUpdateCell = false
-    
-//    private lazy var rowHeight: CGFloat = {
-//        var height: CGFloat
-//        if isTriggeredBy == .ellipsisButton {
-//            height = 48
-//        } else {
-//            height = 40
-//        }
-//    }()
-    
     private lazy var ellipsisButtonCells: [EllipsisButtonCell] = {
         var cells = EllipsisButtonCell.allCases
         
@@ -62,14 +47,6 @@ class CustomBottomSheetViewController: UIViewController {
 
         return cells
     }()
-    
-//    private lazy var tableRowHeight: CGFloat = {
-//        if isTriggeredBy == .ellipsisButton {
-//            return 46
-//        } else {
-//            return 44
-//        }
-//    }()
     
     private let tableRowHeight: CGFloat = 48
     
@@ -107,38 +84,23 @@ class CustomBottomSheetViewController: UIViewController {
     
     private let maxDimmedViewAlpha: CGFloat = 0.35
 
-//    private lazy var tableViewHeightWithoutCells: CGFloat = tableRowHeight
     private lazy var tableViewHeightWithoutCells: CGFloat = 28
     
     private lazy var defaultTableViewHeight: CGFloat = {
         var multiplier: Int
-//        var rowHeight: CGFloat = StorytellerBottomSheetTableViewCell.rowHeight
         if isTriggeredBy == .authorsButton {
             multiplier = book.authors.count
         } else if isTriggeredBy == .narratorsButton, let narrators = book.narrators {
             multiplier = narrators.count
         } else {
             multiplier = ellipsisButtonCells.count
-//            multiplier = 7
-//            rowHeight = tableRowHeight
         }
         
-//        let height = tableViewHeightWithoutCells + tableHeaderHeight + rowHeight * CGFloat(multiplier)
         let height = tableViewHeightWithoutCells + tableHeaderHeight + tableRowHeight * CGFloat(multiplier)
 
         currentTableViewHeight = height
         return height
     }()
-    
-//    let cellIdentifier = "CellIdentifier"
-    
-//    private lazy var tableHeaderView: BottomSheetTableHeaderView = {
-//        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText, withSeparatorView: true)
-//        headerView.closeButtonDidTapCallback = { [weak self] in
-//            self?.dismissWithCustomAnimation()
-//        }
-//        return headerView
-//    }()
     
     private lazy var tableHeaderView: BottomSheetTableHeaderView = {
         let addSeparatorView = isTriggeredBy == .ellipsisButton ? false : true
@@ -156,7 +118,6 @@ class CustomBottomSheetViewController: UIViewController {
         tableView.separatorColor = .clear
         tableView.layer.cornerRadius = 10
         
-//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.register(StorytellerBottomSheetTableViewCell.self, forCellReuseIdentifier: StorytellerBottomSheetTableViewCell.identifier)
         
         tableView.estimatedRowHeight = tableRowHeight
@@ -177,7 +138,6 @@ class CustomBottomSheetViewController: UIViewController {
     
     // MARK: - Initializers
     init(book: Book, isTriggeredBy: TriggeredBy) {
-//        print("bottom sheet vc is initialized")
         self.book = book
         self.isTriggeredBy = isTriggeredBy
         super.init(nibName: nil, bundle: nil)
@@ -274,18 +234,6 @@ extension CustomBottomSheetViewController: UITableViewDataSource, UITableViewDel
             handleSelection(ellipsisButtonCell: ellipsisButtonCell, withIndexPath: indexPath)
         }
         
-        
-        
-        
-//        if isTriggeredBy == .ellipsisButton {
-//            print("Row \(indexPath.row) in ellipsisButton bottom sheet selected")
-//        } else if isTriggeredBy == .authorsButton {
-//            let selectedTitle = book.authors[indexPath.row]
-//            tableViewDidSelectTitleCallback(selectedTitle)
-//        } else if let narrators = book.narrators {
-//            let selectedTitle = narrators[indexPath.row]
-//            tableViewDidSelectTitleCallback(selectedTitle)
-//        }
     }
     
 }
@@ -310,18 +258,12 @@ extension CustomBottomSheetViewController {
         
         switch ellipsisButtonCell {
         case .addRemoveToBookshelf:
-            // Update book of this instance
-            book.isAddedToBookshelf = !book.isAddedToBookshelf
             
-            // Update book in data model
-            book.update(isAddedToBookshelf: book.isAddedToBookshelf)
-            
-            // Reload row
-            tableView.reloadRows(at: [indexPath], with: .none)
-            
-            // Update cell with this book in AllTitlesViewController
-//            addRemoveToBookshelfDidTap(self.book)
-            addRemoveToBookshelfDidTap()
+            if book.isAddedToBookshelf {
+                handleRemovingBookWith(indexPath: indexPath)
+            } else {
+                handleAddingBookWith(indexPath: indexPath)
+            }
             
         case .markAsFinished:
             print("markAsFinished tapped")
@@ -339,6 +281,56 @@ extension CustomBottomSheetViewController {
             print("share tapped")
         }
     }
+    
+    private func handleAddingBookWith(indexPath: IndexPath) {
+        // Update book of this instance
+        book.isAddedToBookshelf = !book.isAddedToBookshelf
+        
+        // Update book in data model
+        book.update(isAddedToBookshelf: book.isAddedToBookshelf)
+        
+        // Reload row
+        tableView.reloadRows(at: [indexPath], with: .none)
+        
+        // Update cell with this book in AllTitlesViewController
+        addRemoveToBookshelfDidTap()
+    }
+    
+    private func handleRemovingBookWith(indexPath: IndexPath) {
+        let alert = UIAlertController(
+            title: "Remove from bookshelf",
+            message: "Do you want to remove \(book.title) from your bookshelf? Downloaded content for this title will also be removed from your device.",
+            preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(
+            title: "Cancel",
+            style: .cancel,
+            handler: nil)
+        cancelAction.setValue(UIColor.label, forKey: "titleTextColor")
+                        
+        let removeAction = UIAlertAction(
+            title: "Remove",
+            style: .destructive,
+            handler: { [weak self] _ in
+                guard let self = self else { return }
+                // Update book of this instance
+                self.book.isAddedToBookshelf = !self.book.isAddedToBookshelf
+                
+                // Update book in data model
+                self.book.update(isAddedToBookshelf: self.book.isAddedToBookshelf)
+                
+                // Update cell with this book in AllTitlesViewController
+                self.addRemoveToBookshelfDidTap()
+                
+                // Dismiss this bottom sheet
+                self.dismissWithCustomAnimation()
+            })
+        
+        alert.addAction(cancelAction)
+        alert.addAction(removeAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     private func applyConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -378,12 +370,6 @@ extension CustomBottomSheetViewController {
     }
     
     private func animateTableViewHeight(_ height: CGFloat) {
-//        print("BottomSheetVC animateTableViewHeight")
-//        UIView.animate(withDuration: 0.3, delay: 0) { [self] in
-//            windowDimmedView?.alpha = maxDimmedViewAlpha
-//            tableViewHeightConstraint.constant = height
-//            view.layoutIfNeeded()
-//        }
         UIView.animate(withDuration: 0.3, delay: 0) { [weak self] in
             guard let self = self else { return }
             self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
@@ -416,14 +402,14 @@ extension CustomBottomSheetViewController {
 
     @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
-        // drag to top will be minus value and vice versa
 //        print("Pan gesture y offset: \(translation.y)")
 
+        // If value is < 0, user is dragging up
         let isDraggingDown = translation.y > 0
         
         let newHeightForDraggingDown = currentTableViewHeight - translation.y
         
-        // calculations for smooth proportional change of alpha value of the dimmed view
+        // Calculations for smooth proportional change of alpha value of the dimmed view
         let percentageOfTableViewHeight = (newHeightForDraggingDown * 100) / defaultTableViewHeight
         var newDimmedViewAlpha = (percentageOfTableViewHeight * maxDimmedViewAlpha) / 100
         if newDimmedViewAlpha > maxDimmedViewAlpha {
@@ -441,11 +427,11 @@ extension CustomBottomSheetViewController {
                 
                 guard gesture.velocity(in: tableView).y < 1500 else {
 //                    print("velocity y is \(gesture.velocity(in: tableView).y)")
-                    // to prevent from calling animateTableViewHeight in case .ended
+                    // Prevent from calling animateTableViewHeight in case .ended
                     isSwiping = true
                     break
                 }
-                // to let animateTableViewHeight be called in case .ended
+                // Let animateTableViewHeight be called in case .ended
                 isSwiping = false
             }
             

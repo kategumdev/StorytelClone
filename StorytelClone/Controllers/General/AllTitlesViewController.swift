@@ -83,51 +83,15 @@ class AllTitlesViewController: BaseTableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
         let bookForThisCell = allTitlesBooks[indexPath.row]
-        
         cell.configureWith(book: bookForThisCell)
         cell.saveButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
-        
-//        cell.configureFor(book: book, saveButtonDidTapCallback: popupButton.reconfigureAndAnimateSelf)
-        
-//        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
-//            guard let self = self else { return }
-//            self.dismiss(animated: false)
-//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
-//            self .navigationController?.pushViewController(controller, animated:
-//            true)
-//        }
-        
-        cell.ellipsisButtonDidTapCallback = { [weak self] in
-//            guard let self = self else { return }
-            
-            let bottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, isTriggeredBy: .ellipsisButton)
-            
-//            bottomSheetController.addRemoveToBookshelfDidTap = { [weak self] updatedBook in
-//                guard let self = self else { return }
-//
-//                var bookIndexPath = IndexPath(row: 0, section: 0)
-//                for (index, book) in allTitlesBooks.enumerated() {
-//                    if book.title == updatedBook.title {
-//                        bookIndexPath.row = index
-//                        self.bookTable.reloadRows(at: [bookIndexPath], with: .none)
-//                        break
-//                    }
-//                }
-//            }
-            
-            bottomSheetController.addRemoveToBookshelfDidTap = { [weak self] in
-//                guard let self = self else { return }
-                self?.bookTable.reloadRows(at: [indexPath], with: .none)
 
-                
-//                var bookIndexPath = IndexPath(row: 0, section: 0)
-//                for (index, bookInArray) in allTitlesBooks.enumerated() {
-//                    if bookInArray.title == bookForThisCell.title {
-//                        bookIndexPath.row = index
-//                        self.bookTable.reloadRows(at: [bookIndexPath], with: .none)
-//                        break
-//                    }
-//                }
+        cell.ellipsisButtonDidTapCallback = { [weak self] in
+            let book = allTitlesBooks[indexPath.row]
+            let bottomSheetController = CustomBottomSheetViewController(book: book, isTriggeredBy: .ellipsisButton)
+
+            bottomSheetController.addRemoveToBookshelfDidTap = { [weak self] in
+                self?.bookTable.reloadRows(at: [indexPath], with: .none)
             }
             
             bottomSheetController.modalPresentationStyle = .overFullScreen

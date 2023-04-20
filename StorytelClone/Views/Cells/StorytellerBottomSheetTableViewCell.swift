@@ -68,8 +68,14 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
             let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
             customImageView.image = UIImage(systemName: newImageName)
         case .markAsFinished:
+            let color: UIColor = book.isFinished ? .label : .secondaryLabel.withAlphaComponent(0.4)
+            customTitleLabel.textColor = color
+            customImageView.tintColor = color
             text = "Mark as finished"
         case .download:
+            let color: UIColor = book.isDownloaded ? .label : .secondaryLabel.withAlphaComponent(0.4)
+            customTitleLabel.textColor = color
+            customImageView.tintColor = color
             text = "Download"
         case .viewSeries:
             text = "View series"
@@ -89,18 +95,6 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
-//    private func update(labelText: String, imageName: String) {
-//        customTitleLabel.text = labelText
-//        customImageView.image = UIImage(systemName: imageName)
-//    }
-    
-//    func toggleImageFor(book: Book) {
-//        customImageView.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
-//        let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
-//        customImageView.image = UIImage(systemName: newImageName)
-////        book.update(isAddedToBookshelf: !book.isAddedToBookshelf)
-//    }
-    
     private func applyConstraints() {
         let constant: CGFloat = 22
         
