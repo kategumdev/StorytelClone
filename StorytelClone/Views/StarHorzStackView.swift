@@ -90,7 +90,8 @@ class StarHorzStackView: UIStackView {
     
     private var hasSaveAndEllipsisButtons: Bool
     var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
-    var ellipsisButtonDidTapCallback: (Book) -> () = {_ in}
+//    var ellipsisButtonDidTapCallback: (Book) -> () = {_ in}
+    var ellipsisButtonDidTapCallback: () -> () = {}
         
     // MARK: - Initializers
     init(withSaveAndEllipsisButtons: Bool) {
@@ -145,8 +146,9 @@ class StarHorzStackView: UIStackView {
     private func addEllipsisButtonAction() {
 //        print("starHorzStackView adds saveButton action\n")
         ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self, let book = self.book else { return }
-            self.ellipsisButtonDidTapCallback(book)
+//            guard let self = self, let book = self.book else { return }
+//            self.ellipsisButtonDidTapCallback(book)
+            self?.ellipsisButtonDidTapCallback()
         }), for: .touchUpInside)
     }
     

@@ -117,7 +117,13 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-    var ellipsisButtonDidTapCallback: (Book) -> () = {_ in} {
+//    var ellipsisButtonDidTapCallback: (Book) -> () = {_ in} {
+//        didSet {
+//            starHorzStackView.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
+//        }
+//    }
+    
+    var ellipsisButtonDidTapCallback: () -> () = {} {
         didSet {
             starHorzStackView.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         }

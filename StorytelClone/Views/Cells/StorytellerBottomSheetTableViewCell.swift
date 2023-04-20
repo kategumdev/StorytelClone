@@ -62,8 +62,11 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         
         var text = ""
         switch ellipsisButtonCell {
-        case .addRemoveToBookShelf:
+        case .addRemoveToBookshelf:
             text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
+            customImageView.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
+            let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
+            customImageView.image = UIImage(systemName: newImageName)
         case .markAsFinished:
             text = "Mark as finished"
         case .download:
@@ -89,6 +92,13 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
 //    private func update(labelText: String, imageName: String) {
 //        customTitleLabel.text = labelText
 //        customImageView.image = UIImage(systemName: imageName)
+//    }
+    
+//    func toggleImageFor(book: Book) {
+//        customImageView.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
+//        let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
+//        customImageView.image = UIImage(systemName: newImageName)
+////        book.update(isAddedToBookshelf: !book.isAddedToBookshelf)
 //    }
     
     private func applyConstraints() {
