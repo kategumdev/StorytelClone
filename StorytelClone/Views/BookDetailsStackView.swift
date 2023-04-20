@@ -16,7 +16,6 @@ class BookDetailsStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
     
-    
     var showSeriesButtonDidTapCallback: ShowSeriesButtonDidTapCallback = {} {
         didSet {
             showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesButtonDidTapCallback
@@ -30,8 +29,9 @@ class BookDetailsStackView: UIStackView {
     }
     
 //    typealias AuthorsButtonDidTapCallback = () -> ()
-    var authorsButtonDidTapCallback: () -> () = {}
-    var narratorsButtonDidTapCallback: () -> () = {}
+//    var authorsButtonDidTapCallback: () -> () = {}
+//    var narratorsButtonDidTapCallback: () -> () = {}
+    var storytellerButtonDidTapCallback: ([Title]) -> () = {_ in}
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -256,37 +256,19 @@ class BookDetailsStackView: UIStackView {
     
     private func addAuthorsButtonAction() {
         authorsButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.authorsButtonDidTapCallback()
+            guard let self = self else { return }
+//            self?.authorsButtonDidTapCallback()
+            self.storytellerButtonDidTapCallback(self.book.authors)
         }), for: .touchUpInside)
     }
     
     private func addNarratorsButtonAction() {
         narratorsButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.narratorsButtonDidTapCallback()
+            guard let self = self else { return }
+//            self?.narratorsButtonDidTapCallback()
+            self.storytellerButtonDidTapCallback(self.book.narrators)
         }), for: .touchUpInside)
     }
-    
-//    private func addNarratorsButtonAction() {
-//        narratorsButton.addAction(UIAction(handler: { [weak self] _ in
-//            self?.handleNarratorsButtonsDidTapAction()
-//        }), for: .touchUpInside)
-//    }
-    
-//    private func handleNarratorsButtonsDidTapAction() {
-//        guard let narrators = book.narrators else { return }
-//        if narrators.count == 1 {
-//            self.narratorsButtonDidTapCallback()
-//        } else {
-//            let vc = UIViewController()
-//            vc.view.backgroundColor = .green
-//
-//            if let sheet = vc.sheetPresentationController {
-//
-//            }
-////            present(vc, animated: true)
-//
-//        }
-//    }
     
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false

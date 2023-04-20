@@ -206,66 +206,39 @@ extension BookViewController {
             }
         }
         
-        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
-            guard let self = self else { return }
-            self.dismiss(animated: false)
-            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
-            self .navigationController?.pushViewController(controller, animated:
-            true)
-        }
+//        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
+//            guard let self = self else { return }
+//            self.dismiss(animated: false)
+//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
+//            self .navigationController?.pushViewController(controller, animated:
+//            true)
+//        }
         
-        if book.authors.count == 1 {
-            bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
-                guard let self = self else { return }
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: self.book.authors.first)
+        bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
+            guard let self = self else { return }
+            
+            if storytellers.count == 1 {
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
                 self .navigationController?.pushViewController(controller, animated:
                 true)
             }
-        } else {
-            bookDetailsStackView.authorsButtonDidTapCallback = { [weak self] in
-                guard let self = self else { return }
-                let bottomSheetController = CustomBottomSheetViewController(book: self.book, kind: .authors)
-                bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
+            
+            if storytellers.count > 1 {
+                let bottomSheetKind: BottomSheetKind = storytellers.first is Author ? .authors : .narrators
+                let bottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+//                bottomSheetController.tableViewDidSelectStorytellerCallback = bottomSheetTableViewDidSelectTitleCallback
+                bottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
+                    guard let self = self else { return }
+                    self.dismiss(animated: false)
+                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                    self.navigationController?.pushViewController(controller, animated:
+                    true)
+                }
+
                 bottomSheetController.modalPresentationStyle = .overFullScreen
                 self.present(bottomSheetController, animated: false)
             }
         }
-        
-        if book.narrators.count == 1 {
-            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-                guard let self = self else { return }
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: self.book.narrators.first)
-                self.navigationController?.pushViewController(controller, animated:
-                true)
-            }
-        } else {
-            bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-                guard let self = self else { return }
-                let bottomSheetController = CustomBottomSheetViewController(book: self.book, kind: .narrators)
-                bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
-                bottomSheetController.modalPresentationStyle = .overFullScreen
-                self.present(bottomSheetController, animated: false)
-            }
-        }
-        
-//        if let narrators = book.narrators {
-//            if narrators.count == 1 {
-//                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-//                    guard let self = self else { return }
-//                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: narrators.first)
-//                    self.navigationController?.pushViewController(controller, animated:
-//                    true)
-//                }
-//            } else {
-//                bookDetailsStackView.narratorsButtonDidTapCallback = { [weak self] in
-//                    guard let self = self else { return }
-//                    let bottomSheetController = CustomBottomSheetViewController(book: self.book, isTriggeredBy: .narrators)
-//                    bottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
-//                    bottomSheetController.modalPresentationStyle = .overFullScreen
-//                    self.present(bottomSheetController, animated: false)
-//                }
-//            }
-//        }
         
     }
     

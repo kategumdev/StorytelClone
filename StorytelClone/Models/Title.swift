@@ -20,5 +20,10 @@ enum TitleKind: String {
     case tag = "Tag"
     case series = "Series"
 }
+//
+//// For Author and Narrator types
+//protocol Storyteller {
+//
+//}
 
 

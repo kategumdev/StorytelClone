@@ -7,10 +7,9 @@
 
 import UIKit
 
-class StorytellerBottomSheetTableViewCell: UITableViewCell {
+class BottomSheetTableViewCell: UITableViewCell {
     
-    static let identifier = "StorytellerBottomSheetTableViewCell"
-//    static let rowHeight: CGFloat = 40
+    static let identifier = "BottomSheetTableViewCell"
     
     // MARK: - Instance properties
     
@@ -55,41 +54,43 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         customTitleLabel.text = text
     }
     
-    func configureFor(book: Book, ellipsisButtonCell: EllipsisBottomSheetCell) {
+    func configureFor(book: Book, ellipsisButtonCell: BookDetailsBottomSheetCell) {
 //        print("ellipsisButtonCell \(ellipsisButtonCell.rawValue)")
         let imageName = ellipsisButtonCell.rawValue
         customImageView.image = UIImage(systemName: imageName)
         
         var text = ""
         switch ellipsisButtonCell {
-        case .addRemoveToBookshelf:
+        case .saveBook:
             text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
             customImageView.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
             let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
             customImageView.image = UIImage(systemName: newImageName)
+            
         case .markAsFinished:
             let color: UIColor = book.isFinished ? .label : .secondaryLabel.withAlphaComponent(0.4)
             customTitleLabel.textColor = color
             customImageView.tintColor = color
             text = "Mark as finished"
+            
         case .download:
             let color: UIColor = book.isDownloaded ? .label : .secondaryLabel.withAlphaComponent(0.4)
             customTitleLabel.textColor = color
             customImageView.tintColor = color
             text = "Download"
+            
         case .viewSeries:
             text = "View series"
+            
         case .viewAuthors:
             text = book.authors.count == 1 ? "View author" : "View authors"
-        case .viewNarrators:
             
+        case .viewNarrators:
             text = book.narrators.count == 1 ? "View narrator" : "View narrators"
-//
-//            if let narrators = book.narrators {
-//                text = narrators.count == 1 ? "View narrator" : "View narrators"
-//            }
+
         case .showMoreTitlesLikeThis:
             text = "Show more titles like this"
+            
         case .share:
             text = "Share"
         }

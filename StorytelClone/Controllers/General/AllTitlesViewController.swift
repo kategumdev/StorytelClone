@@ -82,46 +82,47 @@ class AllTitlesViewController: BaseTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
-        let bookForThisCell = allTitlesBooks[indexPath.row]
-        cell.configureWith(book: bookForThisCell)
+        let book = allTitlesBooks[indexPath.row]
+        cell.configureWith(book: book)
         cell.saveButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
         
-        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
-            guard let self = self else { return }
-            self.dismiss(animated: false)
-            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
-            self .navigationController?.pushViewController(controller, animated:
-            true)
-        }
-        
         cell.ellipsisButtonDidTapCallback = { [weak self] in
-            let book = allTitlesBooks[indexPath.row]
-            let ellipsisBottomSheetController = CustomBottomSheetViewController(book: book, kind: .ellipsis)
+            // Get book from array to get correct data for saveBook cell
+            let updatedBook = allTitlesBooks[indexPath.row]
+            let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
 
-            ellipsisBottomSheetController.addRemoveToBookshelfDidTapCallback = { [weak self] in
+            bookDetailsBottomSheetController.tableViewDidSelectSaveBookCellCallback = { [weak self] in
                 self?.bookTable.reloadRows(at: [indexPath], with: .none)
             }
             
-            ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] storytellers in
+            bookDetailsBottomSheetController.viewStorytellersDidTapCallback = { [weak self] storytellers in
                 
                 if storytellers.count == 1 {
                     let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
                     self?.navigationController?.pushViewController(controller, animated: true)
-                } else {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [weak self] in
+                }
+                
+                if storytellers.count > 1 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                         
-                        let triggeredBy: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, kind: triggeredBy)
-
-                        storytellerBottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
-                        storytellerBottomSheetController.modalPresentationStyle = .overFullScreen
-                        self?.present(storytellerBottomSheetController, animated: false)
-                    })
+                        let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+                        let bottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+                        
+                        bottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
+                            guard let self = self else { return }
+                            self.dismiss(animated: false)
+                            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
+                        
+                        bottomSheetController.modalPresentationStyle = .overFullScreen
+                        self?.present(bottomSheetController, animated: false)
+                    }
                 }
             }
             
-            ellipsisBottomSheetController.modalPresentationStyle = .overFullScreen
-            self?.present(ellipsisBottomSheetController, animated: false)
+            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+            self?.present(bookDetailsBottomSheetController, animated: false)
         }
 
         return cell
@@ -178,6 +179,7 @@ class AllTitlesViewController: BaseTableViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
+        
         var text = ""
         if let author = titleModel as? Author {
             text = author.name
@@ -190,10 +192,10 @@ class AllTitlesViewController: BaseTableViewController {
         } else if let tableSection = tableSection {
             text = tableSection.sectionTitle
         }
-        
+
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text
-        
+
         extendedLayoutIncludesOpaqueBars = true
     }
     
