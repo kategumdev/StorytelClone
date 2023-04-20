@@ -55,7 +55,7 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         customTitleLabel.text = text
     }
     
-    func configureFor(book: Book, ellipsisButtonCell: EllipsisButtonCell) {
+    func configureFor(book: Book, ellipsisButtonCell: EllipsisBottomSheetCell) {
 //        print("ellipsisButtonCell \(ellipsisButtonCell.rawValue)")
         let imageName = ellipsisButtonCell.rawValue
         customImageView.image = UIImage(systemName: imageName)
@@ -82,9 +82,12 @@ class StorytellerBottomSheetTableViewCell: UITableViewCell {
         case .viewAuthors:
             text = book.authors.count == 1 ? "View author" : "View authors"
         case .viewNarrators:
-            if let narrators = book.narrators {
-                text = narrators.count == 1 ? "View narrator" : "View narrators"
-            }
+            
+            text = book.narrators.count == 1 ? "View narrator" : "View narrators"
+//
+//            if let narrators = book.narrators {
+//                text = narrators.count == 1 ? "View narrator" : "View narrators"
+//            }
         case .showMoreTitlesLikeThis:
             text = "Show more titles like this"
         case .share:

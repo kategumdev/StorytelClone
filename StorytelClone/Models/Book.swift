@@ -25,7 +25,8 @@ struct Book: Title {
     let reviewsNumber: Int
     let duration: String
     let language: Language
-    let narrators: [Narrator]?
+//    let narrators: [Narrator]?
+    let narrators: [Narrator]
     let series: String?
     let seriesPart: Int?
     let releaseDate: String
@@ -37,7 +38,7 @@ struct Book: Title {
     var isFinished: Bool
     var isDownloaded: Bool
     
-    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator]? = nil, series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false) {
+    init(title: String, authors: [Author], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Narrator] = [Narrator](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage

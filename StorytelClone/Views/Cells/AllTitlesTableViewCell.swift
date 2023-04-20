@@ -30,7 +30,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
 
         var subtitleLabelCount = maxSubtitleLabelCount
-        if book.narrators == nil { subtitleLabelCount -= 1 }
+//        if book.narrators == nil { subtitleLabelCount -= 1 }
+        if book.narrators.isEmpty { subtitleLabelCount -= 1 }
         if book.series == nil { subtitleLabelCount -= 1 }
         
         let heightOfSubtitleLabels = subtitleLabel.bounds.height * CGFloat(subtitleLabelCount)
@@ -195,8 +196,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         let authorNamesString = authorNames.joined(separator: ", ")
         authorsLabel.text = "By: \(authorNamesString)"
         
-        if let narrators = book.narrators {
-            let narratorNames = narrators.map { $0.name }
+        if !book.narrators.isEmpty {
+            let narratorNames = book.narrators.map { $0.name }
             let narratorNamesString = narratorNames.joined(separator: ", ")
             narratorsLabel.text = "With: \(narratorNamesString)"
             narratorsLabel.textColor = UIColor.label

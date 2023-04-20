@@ -96,12 +96,11 @@ class AllTitlesViewController: BaseTableViewController {
         
         cell.ellipsisButtonDidTapCallback = { [weak self] in
             let book = allTitlesBooks[indexPath.row]
-            let ellipsisBottomSheetController = CustomBottomSheetViewController(book: book, isTriggeredBy: .ellipsis)
+            let ellipsisBottomSheetController = CustomBottomSheetViewController(book: book, kind: .ellipsis)
 
-            ellipsisBottomSheetController.addRemoveToBookshelfDidTap = { [weak self] in
+            ellipsisBottomSheetController.addRemoveToBookshelfDidTapCallback = { [weak self] in
                 self?.bookTable.reloadRows(at: [indexPath], with: .none)
             }
-            
             
             ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] storytellers in
                 
@@ -112,9 +111,8 @@ class AllTitlesViewController: BaseTableViewController {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [weak self] in
                         
                         let triggeredBy: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, isTriggeredBy: triggeredBy)
+                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, kind: triggeredBy)
 
-//                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, isTriggeredBy: .authorsButton)
                         storytellerBottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
                         storytellerBottomSheetController.modalPresentationStyle = .overFullScreen
                         self?.present(storytellerBottomSheetController, animated: false)
@@ -122,64 +120,10 @@ class AllTitlesViewController: BaseTableViewController {
                 }
             }
             
-            
-//            if bookForThisCell.authors.count == 1 {
-//                ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] in
-//                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: bookForThisCell.authors.first)
-//                    self?.navigationController?.pushViewController(controller, animated: true)
-//                }
-//            } else {
-//                ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] in
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [weak self] in
-//                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, isTriggeredBy: .authorsButton)
-//                        storytellerBottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
-//                        storytellerBottomSheetController.modalPresentationStyle = .overFullScreen
-//                        self?.present(storytellerBottomSheetController, animated: false)
-//                    })
-//
-//                }
-//            }
-            
-            
             ellipsisBottomSheetController.modalPresentationStyle = .overFullScreen
             self?.present(ellipsisBottomSheetController, animated: false)
         }
-        
-        
-        
-        
-        
-        
 
-//        cell.ellipsisButtonDidTapCallback = { [weak self] in
-//            let book = allTitlesBooks[indexPath.row]
-//            let ellipsisBottomSheetController = CustomBottomSheetViewController(book: book, isTriggeredBy: .ellipsisButton)
-//
-//            ellipsisBottomSheetController.addRemoveToBookshelfDidTap = { [weak self] in
-//                self?.bookTable.reloadRows(at: [indexPath], with: .none)
-//            }
-//
-//            if bookForThisCell.authors.count == 1 {
-//                ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] in
-//                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: bookForThisCell.authors.first)
-//                    self?.navigationController?.pushViewController(controller, animated: true)
-//                }
-//            } else {
-//                ellipsisBottomSheetController.viewAuthorsDidTapCallback = { [weak self] in
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [weak self] in
-//                        let storytellerBottomSheetController = CustomBottomSheetViewController(book: bookForThisCell, isTriggeredBy: .authorsButton)
-//                        storytellerBottomSheetController.tableViewDidSelectTitleCallback = bottomSheetTableViewDidSelectTitleCallback
-//                        storytellerBottomSheetController.modalPresentationStyle = .overFullScreen
-//                        self?.present(storytellerBottomSheetController, animated: false)
-//                    })
-//
-//                }
-//            }
-//            ellipsisBottomSheetController.modalPresentationStyle = .overFullScreen
-//            self?.present(ellipsisBottomSheetController, animated: false)
-//        }
         return cell
     }
     

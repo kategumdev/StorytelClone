@@ -106,8 +106,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         let authorNamesString = authorNames.joined(separator: ", ")
         authorsLabel.text = "By: \(authorNamesString)"
         
-        if let narrators = book.narrators {
-            let narratorNames = narrators.map { $0.name }
+        if !book.narrators.isEmpty {
+            let narratorNames = book.narrators.map { $0.name }
             let narratorNamesString = narratorNames.joined(separator: ", ")
             narratorsLabel.text = "With: \(narratorNamesString)"
             narratorsLabel.textColor = UIColor.label

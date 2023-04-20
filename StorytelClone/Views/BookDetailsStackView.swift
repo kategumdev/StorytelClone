@@ -99,8 +99,9 @@ class BookDetailsStackView: UIStackView {
     private var hasNarratorsButton = true
     
     private func configureNarratorsLabel() {
-        guard let narrators = book.narrators else { return }
-        let narratorNames = narrators.map { $0.name }
+//        guard let narrators = book.narrators else { return }
+        guard !book.narrators.isEmpty else { return }
+        let narratorNames = book.narrators.map { $0.name }
         let narratorNamesString = narratorNames.joined(separator: ", ")
         
         let attributedString = NSMutableAttributedString(string: "With: \(narratorNamesString)")
@@ -228,7 +229,7 @@ class BookDetailsStackView: UIStackView {
         setCustomSpacing(8.0, after: authorsButton)
         addAuthorsButtonAction()
                 
-        if book.narrators != nil {
+        if !book.narrators.isEmpty {
            configureNarratorsLabel()
             addArrangedSubview(narratorsButton)
             setCustomSpacing(23.0, after: narratorsButton)
