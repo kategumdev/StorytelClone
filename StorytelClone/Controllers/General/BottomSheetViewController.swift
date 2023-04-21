@@ -221,17 +221,15 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
 }
 
 extension BottomSheetViewController: UIGestureRecognizerDelegate {
-    
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-//        print("BottomSheetVC UIGestureRecognizerDelegate for tapGesture")
+        // To make tapGesture to be handled only if tap is outside the tableView
          if touch.view?.isDescendant(of: tableView) == true {
             return false
          }
          return true
     }
 }
-
-
 
 // MARK: - Helper methods
 extension BottomSheetViewController {
@@ -396,45 +394,33 @@ extension BottomSheetViewController {
 
     @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
-//        print("Pan gesture y offset: \(translation.y)")
 
         // If value is < 0, user is dragging up
         let isDraggingDown = translation.y > 0
         
-        let newHeightForDraggingDown = currentTableViewHeight - translation.y
+        let newTableViewHeight = currentTableViewHeight - translation.y
         
         // Calculations for smooth proportional change of alpha value of the dimmed view
-        let percentageOfTableViewHeight = (newHeightForDraggingDown * 100) / fullTableViewHeight
-        var newDimmedViewAlpha = (percentageOfTableViewHeight * maxDimmedViewAlpha) / 100
-        if newDimmedViewAlpha > maxDimmedViewAlpha {
-            newDimmedViewAlpha = maxDimmedViewAlpha
-        }
+        let percentageFromFullTableViewHeight = (newTableViewHeight * 100) / fullTableViewHeight
+        let newDimmedViewAlpha = (percentageFromFullTableViewHeight * maxDimmedViewAlpha) / 100
         
-        // Handle based on gesture state
         switch gesture.state {
         case .changed:
             if isDraggingDown {
-                
                 self.windowDimmedView?.alpha = newDimmedViewAlpha
-                tableViewHeightConstraint.constant = newHeightForDraggingDown
-//                tableView.layoutIfNeeded()
+                tableViewHeightConstraint.constant = newTableViewHeight
                 
                 // If velocity of panGesture is less than 1500, it is a swipe
-                guard gesture.velocity(in: tableView).y < 1500 else {
-//                    print("velocity y is \(gesture.velocity(in: tableView).y)")
-                    isSwiping = true
-                    break
-                }
-                isSwiping = false
+                isSwiping = gesture.velocity(in: tableView).y < 1500 ? false : true
             }
             
         case .ended:
-            if isSwiping == true || abs(translation.y) >= fullTableViewHeight / 2 {
+            if isSwiping == true || translation.y >= fullTableViewHeight / 2 {
                 dismissWithCustomAnimation()
                 break
             }
             animateToFullTableViewHeight()
-//            animateTableViewHeight(fullTableViewHeight)
+            
         default:
             break
         }

@@ -55,7 +55,6 @@ class BottomSheetTableViewCell: UITableViewCell {
     }
     
     func configureFor(book: Book, ellipsisButtonCell: BookDetailsBottomSheetCell) {
-//        print("ellipsisButtonCell \(ellipsisButtonCell.rawValue)")
         let imageName = ellipsisButtonCell.rawValue
         customImageView.image = UIImage(systemName: imageName)
         

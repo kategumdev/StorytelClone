@@ -132,7 +132,6 @@ class StarHorzStackView: UIStackView {
 
     // MARK: - Helper methods
     private func addSaveButtonAction() {
-//        print("starHorzStackView adds saveButton action\n")
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             
@@ -147,7 +146,6 @@ class StarHorzStackView: UIStackView {
     }
     
     private func addEllipsisButtonAction() {
-//        print("starHorzStackView adds saveButton action\n")
         ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
             self?.ellipsisButtonDidTapCallback()
         }), for: .touchUpInside)
