@@ -106,7 +106,7 @@ class BottomSheetViewController: UIViewController {
     private let tableViewHeightWithoutCells: CGFloat = 28
     private var currentTableViewHeight: CGFloat = 0
     
-    private lazy var defaultTableViewHeight: CGFloat = {
+    private lazy var fullTableViewHeight: CGFloat = {
         var multiplier: Int
         switch kind {
         case .bookDetails: multiplier = bookDetailsBottomSheetCells.count
@@ -119,13 +119,16 @@ class BottomSheetViewController: UIViewController {
     }()
     
     private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-    private lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//    private lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     
 //    var addRemoveToBookshelfDidTapCallback: () -> () = {}
     var tableViewDidSelectSaveBookCellCallback: () -> () = {}
     var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
 //    var viewAuthorsDidTapCallback: ([Storyteller]) -> () = {_ in}
     var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
+    
+    private var panGesture: UIPanGestureRecognizer?
+    private var swipeGesture: UISwipeGestureRecognizer?
     
     // MARK: - Initializers
     init(book: Book, kind: BottomSheetKind) {
@@ -155,10 +158,12 @@ class BottomSheetViewController: UIViewController {
         applyConstraints()
         
         // Place table view out of visible bounds of the screen
-        tableViewBottomConstraint.constant = defaultTableViewHeight
+//        tableViewBottomConstraint.constant = fullTableViewHeight
         
-        // Every new instance gets different initial default table view height
-        tableViewHeightConstraint.constant = defaultTableViewHeight
+        // Different kinds of instances get different full table view height
+//        tableViewHeightConstraint.constant = fullTableViewHeight
+        tableViewHeightConstraint.constant = 0
+
         
         windowDimmedView?.alpha = 0
         
@@ -336,34 +341,61 @@ extension BottomSheetViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableViewHeightConstraint.isActive = true
-        tableViewBottomConstraint.isActive = true
+//        tableViewBottomConstraint.isActive = true
     }
+    
+//    private func animatePresentingTableView() {
+////        print("BottomSheetVC animatePresentingTableView()")
+//        // Update bottom constraint in animation block and animate dimmed view alpha
+//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+//
+//            self.tableViewBottomConstraint.constant = 0
+//            self.view.layoutIfNeeded()
+//            self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
+//        }, completion: nil)
+//    }
     
     private func animatePresentingTableView() {
 //        print("BottomSheetVC animatePresentingTableView()")
         // Update bottom constraint in animation block and animate dimmed view alpha
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
 
-            self.tableViewBottomConstraint.constant = 0
+            self.tableViewHeightConstraint.constant = self.fullTableViewHeight
+
             self.view.layoutIfNeeded()
             self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
         }, completion: nil)
     }
     
-    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+//        // Hide table view and windowDimmedView
+//        UIView.animate(withDuration: 0.2) {
+//            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
+//            self.windowDimmedView?.alpha = 0
+//            self.view.layoutIfNeeded()
+//        } completion: { _ in
+//            self.dismiss(animated: false, completion: {
+//                completion?()
+//            })
+//        }
+//    }
+    
+    func dismissWithCustomAnimation(translationY: CGFloat = 0, completion: (() -> ())? = nil) {
         // Hide table view and windowDimmedView
-        UIView.animate(withDuration: 0.2) {
-            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
-            self.windowDimmedView?.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            
+            self.tableViewHeightConstraint.constant = 0
             self.view.layoutIfNeeded()
-        } completion: { _ in
+            self.windowDimmedView?.alpha = 0
+        }, completion: { _ in
             self.dismiss(animated: false, completion: {
                 completion?()
             })
-        }
+        })
     }
     
     private func animateTableViewHeight(_ height: CGFloat) {
@@ -390,7 +422,7 @@ extension BottomSheetViewController {
     private func setupPanGesture() {
         // add pan gesture recognizer to the tableView
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(gesture:)))
-        
+                
         // change to false to immediately listen on gesture movement
         panGesture.delaysTouchesBegan = false
         panGesture.delaysTouchesEnded = false
@@ -407,7 +439,7 @@ extension BottomSheetViewController {
         let newHeightForDraggingDown = currentTableViewHeight - translation.y
         
         // Calculations for smooth proportional change of alpha value of the dimmed view
-        let percentageOfTableViewHeight = (newHeightForDraggingDown * 100) / defaultTableViewHeight
+        let percentageOfTableViewHeight = (newHeightForDraggingDown * 100) / fullTableViewHeight
         var newDimmedViewAlpha = (percentageOfTableViewHeight * maxDimmedViewAlpha) / 100
         if newDimmedViewAlpha > maxDimmedViewAlpha {
             newDimmedViewAlpha = maxDimmedViewAlpha
@@ -422,6 +454,7 @@ extension BottomSheetViewController {
                 tableViewHeightConstraint.constant = newHeightForDraggingDown
 //                tableView.layoutIfNeeded()
                 
+                // If velocity of panGesture is less than 1500, it is swipe
                 guard gesture.velocity(in: tableView).y < 1500 else {
 //                    print("velocity y is \(gesture.velocity(in: tableView).y)")
                     // Prevent from calling animateTableViewHeight in case .ended
@@ -433,11 +466,23 @@ extension BottomSheetViewController {
             }
             
         case .ended:
-            guard isSwiping != true else {
+//            guard isSwiping != true || abs(translation.y) < defaultTableViewHeight / 2 else {
+//                dismissWithCustomAnimation()
+//                break
+//            }
+            print("translationY = \(translation.y)")
+            
+            if isSwiping == true || abs(translation.y) >= fullTableViewHeight / 2 {
                 dismissWithCustomAnimation()
+//                dismissWithCustomAnimation(translationY: translation.y)
                 break
             }
-            animateTableViewHeight(defaultTableViewHeight)
+            
+//            if translation.y >= defaultTableViewHeight / 2 {
+//                dismissWithCustomAnimation()
+//                break
+//            }
+            animateTableViewHeight(fullTableViewHeight)
         default:
             break
         }
