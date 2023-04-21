@@ -157,18 +157,7 @@ class RoundButtonsStackContainer: UIStackView {
         
         addArrangedSubview(saveView)
     }
-    
-//    private func addSaveButtonAction() {
-//        saveButton.addAction(UIAction(handler: { [weak self] _ in
-//            guard let self = self else { return }
-//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-//            impactFeedbackGenerator.impactOccurred()
-//
-//            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-//            self.handleSaveButtonTapped()
-//        }), for: .touchUpInside)
-//    }
-    
+
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
@@ -189,7 +178,6 @@ class RoundButtonsStackContainer: UIStackView {
             self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
             self.toggleSaveLabelText()
             self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
-//            self.saveButton.animateImageView(withCompletion: { _ in })
             self.saveButton.animateImageView(withCompletion: { [weak self] _ in
                 self?.saveButton.isUserInteractionEnabled = true
             })

@@ -170,7 +170,7 @@ class BottomSheetViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animatePresentingTableView()
+        animateToFullTableViewHeight()
         setupPanGesture()
         setupTapGesture()
     }
@@ -338,7 +338,7 @@ extension BottomSheetViewController {
         tableViewHeightConstraint.isActive = true
     }
     
-    private func animatePresentingTableView() {
+    private func animateToFullTableViewHeight() {
         // Show tableView and windowDimmedView
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
 
@@ -349,7 +349,7 @@ extension BottomSheetViewController {
         }, completion: nil)
     }
     
-    func dismissWithCustomAnimation(translationY: CGFloat = 0, completion: (() -> ())? = nil) {
+    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
         // Hide tableView and windowDimmedView
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             
@@ -419,35 +419,22 @@ extension BottomSheetViewController {
                 tableViewHeightConstraint.constant = newHeightForDraggingDown
 //                tableView.layoutIfNeeded()
                 
-                // If velocity of panGesture is less than 1500, it is swipe
+                // If velocity of panGesture is less than 1500, it is a swipe
                 guard gesture.velocity(in: tableView).y < 1500 else {
 //                    print("velocity y is \(gesture.velocity(in: tableView).y)")
-                    // Prevent from calling animateTableViewHeight in case .ended
                     isSwiping = true
                     break
                 }
-                // Let animateTableViewHeight be called in case .ended
                 isSwiping = false
             }
             
         case .ended:
-//            guard isSwiping != true || abs(translation.y) < defaultTableViewHeight / 2 else {
-//                dismissWithCustomAnimation()
-//                break
-//            }
-            print("translationY = \(translation.y)")
-            
             if isSwiping == true || abs(translation.y) >= fullTableViewHeight / 2 {
                 dismissWithCustomAnimation()
-//                dismissWithCustomAnimation(translationY: translation.y)
                 break
             }
-            
-//            if translation.y >= defaultTableViewHeight / 2 {
-//                dismissWithCustomAnimation()
-//                break
-//            }
-            animateTableViewHeight(fullTableViewHeight)
+            animateToFullTableViewHeight()
+//            animateTableViewHeight(fullTableViewHeight)
         default:
             break
         }
