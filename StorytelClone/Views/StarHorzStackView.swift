@@ -136,6 +136,9 @@ class StarHorzStackView: UIStackView {
 //        print("starHorzStackView adds saveButton action\n")
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
+            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
+            impactFeedbackGenerator.impactOccurred(intensity: 0.7)
+            
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleSaveButtonImage()
             self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
@@ -163,3 +166,5 @@ class StarHorzStackView: UIStackView {
     }
     
 }
+
+

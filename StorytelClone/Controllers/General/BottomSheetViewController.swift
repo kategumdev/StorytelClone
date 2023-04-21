@@ -119,12 +119,9 @@ class BottomSheetViewController: UIViewController {
     }()
     
     private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-//    private lazy var tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     
-//    var addRemoveToBookshelfDidTapCallback: () -> () = {}
     var tableViewDidSelectSaveBookCellCallback: () -> () = {}
     var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
-//    var viewAuthorsDidTapCallback: ([Storyteller]) -> () = {_ in}
     var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
     
     private var panGesture: UIPanGestureRecognizer?
@@ -157,14 +154,8 @@ class BottomSheetViewController: UIViewController {
         tableView.dataSource = self
         applyConstraints()
         
-        // Place table view out of visible bounds of the screen
-//        tableViewBottomConstraint.constant = fullTableViewHeight
-        
-        // Different kinds of instances get different full table view height
-//        tableViewHeightConstraint.constant = fullTableViewHeight
+        // Hide tableView and windowDimmedView
         tableViewHeightConstraint.constant = 0
-
-        
         windowDimmedView?.alpha = 0
         
 //        setupPanGesture()
@@ -345,23 +336,10 @@ extension BottomSheetViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableViewHeightConstraint.isActive = true
-//        tableViewBottomConstraint.isActive = true
     }
     
-//    private func animatePresentingTableView() {
-////        print("BottomSheetVC animatePresentingTableView()")
-//        // Update bottom constraint in animation block and animate dimmed view alpha
-//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-//
-//            self.tableViewBottomConstraint.constant = 0
-//            self.view.layoutIfNeeded()
-//            self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
-//        }, completion: nil)
-//    }
-    
     private func animatePresentingTableView() {
-//        print("BottomSheetVC animatePresentingTableView()")
-        // Update bottom constraint in animation block and animate dimmed view alpha
+        // Show tableView and windowDimmedView
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
 
             self.tableViewHeightConstraint.constant = self.fullTableViewHeight
@@ -371,21 +349,8 @@ extension BottomSheetViewController {
         }, completion: nil)
     }
     
-//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
-//        // Hide table view and windowDimmedView
-//        UIView.animate(withDuration: 0.2) {
-//            self.tableViewBottomConstraint.constant = self.defaultTableViewHeight
-//            self.windowDimmedView?.alpha = 0
-//            self.view.layoutIfNeeded()
-//        } completion: { _ in
-//            self.dismiss(animated: false, completion: {
-//                completion?()
-//            })
-//        }
-//    }
-    
     func dismissWithCustomAnimation(translationY: CGFloat = 0, completion: (() -> ())? = nil) {
-        // Hide table view and windowDimmedView
+        // Hide tableView and windowDimmedView
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             
             self.tableViewHeightConstraint.constant = 0
