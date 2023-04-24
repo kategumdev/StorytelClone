@@ -58,6 +58,8 @@ struct Utils {
     
     static let seeAllButtonColor = UIColor.label.withAlphaComponent(0.7)
     
+    static let powderGrayBackgroundColor = UIColor(named: "backgroundBookOverview")
+    
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width
