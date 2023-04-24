@@ -55,6 +55,30 @@ class CategoryViewController: BaseTableViewController {
         return cell
     }
     
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let category = category else { return UIView() }
+//
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+////        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
+//
+//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+//
+//        let tableSection = category.tableSections[section]
+//        sectionHeader.configureFor(section: tableSection)
+//
+//        // Respond to seeAllButton tap in section header
+//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+//            guard let self = self else { return }
+////            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
+//            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
+//
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        return sectionHeader
+//    }
+    
     override func configureNavBar() {
         super.configureNavBar()
         guard let category = category else { return }

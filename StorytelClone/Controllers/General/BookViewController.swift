@@ -13,7 +13,7 @@ class BookViewController: UIViewController {
     let book: Book
 //    private let book: Book
 
-    private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
+//    private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0
@@ -101,7 +101,7 @@ class BookViewController: UIViewController {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             print("bookTableHeight UPDATED")
             
-            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: similarTitlesTableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(section: TableSection.similarTitles, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         }
     }
     
@@ -135,11 +135,11 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
 
-        sectionHeader.configureFor(section: self.similarTitlesTableSection)
+        sectionHeader.configureFor(section: TableSection.similarTitles)
         
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-            let controller = AllTitlesViewController(tableSection: self.similarTitlesTableSection, titleModel: self.book)
+            let controller = AllTitlesViewController(tableSection: TableSection.similarTitles, titleModel: self.book)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         return sectionHeader
@@ -315,7 +315,7 @@ extension BookViewController {
     }
     
     private func calculateBookTableHeight() -> CGFloat {
-        let height = SectionHeaderView.calculateEstimatedHeightFor(section: similarTitlesTableSection, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        let height = SectionHeaderView.calculateEstimatedHeightFor(section: TableSection.similarTitles, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         return height
     }
     

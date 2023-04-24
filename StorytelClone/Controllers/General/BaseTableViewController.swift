@@ -175,7 +175,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         // Respond to seeAllButton tap in section header
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
+//            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
+            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         

@@ -124,6 +124,9 @@ class BottomSheetViewController: UIViewController {
     var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
     var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
     var tableViewDidSelectViewSeriesCellCallback: () -> () = {}
+//    var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: () -> () = {}
+    var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: (Category) -> () = {_ in}
+
     
     private var panGesture: UIPanGestureRecognizer?
     private var swipeGesture: UISwipeGestureRecognizer?
@@ -261,7 +264,7 @@ extension BottomSheetViewController {
             handleViewAuthorsOrNarrators(storytellers: narrators)
             
         case .showMoreTitlesLikeThis:
-            print("showMoreTitlesLikeThis tapped")
+            handleShowMoreTitlesLikeThis()
         case .share:
             print("share tapped")
         }
@@ -326,6 +329,40 @@ extension BottomSheetViewController {
                 self?.viewStorytellersDidTapCallback(storytellers)
             })
         }
+    }
+    
+    private func handleShowMoreTitlesLikeThis() {
+        self.dismiss(animated: false)
+        
+        var librosSimilaresTableSection = TableSection.librosSimilares
+        librosSimilaresTableSection.titleModel = book
+        var tableSections = [
+//            TableSection.librosSimilares
+            librosSimilaresTableSection
+        ]
+        
+        for author in book.authors {
+            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name)
+            tableSections.append(authorTableSection)
+        }
+        
+        for narrator in book.narrators {
+            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name)
+            tableSections.append(narratorTableSection)
+        }
+        
+        if let series = book.series {
+            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series)
+            tableSections.append(seriesTableSection)
+        }
+        
+        let categoryName = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName)
+        tableSections.append(categoryTableSection)
+        
+        let category = Category(title: "Libros similares", tableSections: tableSections)
+        
+        tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
     }
     
     private func applyConstraints() {

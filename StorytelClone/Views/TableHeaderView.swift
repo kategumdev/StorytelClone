@@ -12,7 +12,8 @@ class TableHeaderView: UIView {
     // MARK: - Instance properties
     private let headerLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 31), maximumPointSize: 50, numberOfLines: 4)
 
-    private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 13), maximumPointSize: 32, numberOfLines: 2)
+//    private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 13), maximumPointSize: 32, numberOfLines: 2)
+    private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
 
     private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
     

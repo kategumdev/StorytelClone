@@ -97,6 +97,12 @@ class AllTitlesViewController: BaseTableViewController {
                     let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
                     self?.navigationController?.pushViewController(controller, animated: true)
             }
+            
+            bookDetailsBottomSheetController.tableViewDidSelectShowMoreTitlesLikeThisCellCallback = { [weak self] category in
+//                let controller = CategoryViewController(categoryModel: Category.librosSimilares)
+                let controller = CategoryViewController(categoryModel: category)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
 
             bookDetailsBottomSheetController.tableViewDidSelectSaveBookCellCallback = { [weak self] in
                 self?.bookTable.reloadRows(at: [indexPath], with: .none)
