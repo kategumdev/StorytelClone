@@ -131,6 +131,19 @@ extension UINavigationController {
         return appearance
     }()
     
+    static let transparentNavBarAppearanceWithVisibleTitle: UINavigationBarAppearance = {
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+        appearance.configureWithTransparentBackground()
+        
+        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
+        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
+        
+        return appearance
+    }()
+    
     static let visibleNavBarAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -146,26 +159,97 @@ extension UINavigationController {
         return appearance
     }()
     
-    func makeNavbarAppearance(transparent: Bool) {
-        if transparent {
+//    func makeNavbarAppearance(transparent: Bool) {
+//        if transparent {
+//            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+//            // print("navBar made transparent")
+//        } else {
+//            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+//            // print("navBar made visible")
+//        }
+//    }
+    
+//    func makeNavbarAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
+//
+//        if transparent {
+//            let appearance = UINavigationController.transparentNavBarAppearance
+//            if withVisibleTitle {
+////                var attributes = appearance.titleTextAttributes
+//                appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
+////                self.navigationBar.standardAppearance = appearance
+//            }
+//            self.navigationBar.standardAppearance = appearance
+//
+////            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+//            // print("navBar made transparent")
+//        } else {
+//            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+//            // print("navBar made visible")
+//        }
+//    }
+    
+    func makeNavbarAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
+                
+        if transparent && withVisibleTitle {
+            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearanceWithVisibleTitle
+            // print("navBar made transparent with visible title")
+        } else if transparent {
             self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
             // print("navBar made transparent")
         } else {
             self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
             // print("navBar made visible")
         }
+        
     }
     
-    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
+//    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat) {
+//
+//        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
+//            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.transparentNavBarAppearance {
+//            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+////            print("to transparent")
+//        }
+//    }
+    
+    
+    
+    
+//    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat, withVisibleTitleWhenTransparent: Bool = false) {
+//
+//        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
+//            self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
+////            print("to visible")
+//        }
+//
+//        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.transparentNavBarAppearance {
+//            self.makeNavbarAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
+//
+////            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+////            print("to transparent")
+//        }
+//    }
+    
+    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat, withVisibleTitleWhenTransparent: Bool = false) {
         
         if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
             self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
 //            print("to visible")
         }
 
-        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.transparentNavBarAppearance {
-            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
-//            print("to transparent")
+        if currentOffsetY <= offsetYToCompareTo {
+            self.makeNavbarAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
         }
+        
+//        if currentOffsetY <= offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.transparentNavBarAppearance {
+//            self.makeNavbarAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
+
+//            self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
+//            print("to transparent")
+//        }
     }
 }

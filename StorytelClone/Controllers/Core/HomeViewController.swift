@@ -67,9 +67,9 @@ class HomeViewController: BaseTableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
     }
     
-    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
-    }
+//    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
+//    }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

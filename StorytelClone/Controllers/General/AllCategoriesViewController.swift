@@ -34,13 +34,6 @@ class AllCategoriesViewController: BaseTableViewController {
         navigationController?.makeNavbarAppearance(transparent: true)
         title = category.title
 
-        
-//        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
-//            headerView.configureWithDimView(andText: category.title)
-//        }
-//
-//        navigationController?.makeNavbarAppearance(transparent: true)
-//        title = category.title
     }
 
     //MARK: - Helper methods

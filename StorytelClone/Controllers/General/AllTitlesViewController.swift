@@ -213,9 +213,9 @@ class AllTitlesViewController: BaseTableViewController {
         extendedLayoutIncludesOpaqueBars = true
     }
     
-    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
-    }
+//    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY)
+//    }
     
     // MARK: - Helper methods
     private func configureBookTable() {

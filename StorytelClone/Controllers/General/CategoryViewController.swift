@@ -16,16 +16,33 @@ class CategoryViewController: BaseTableViewController {
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
         
-        headerView.configureWithDimView(andText: category.title)
-        navigationController?.makeNavbarAppearance(transparent: true)
+        if let book = category.bookForSimilar {
+//            headerView.backgroundColor = .magenta
+            headerView.configureFor(tableSection: TableSection.librosSimilares, titleModel: book)
+            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
+        } else {
+            headerView.configureWithDimView(andText: category.title)
+            navigationController?.makeNavbarAppearance(transparent: true)
+        }
+        
+        
+        
+        
+//        if category.forBooksSimilarTo {
+////            headerView.backgroundColor = .magenta
+//            headerView.configureFor(tableSection: TableSection.librosSimilares, titleModel: tableSection?.titleModel)
+//            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
+//        } else {
+//            headerView.configureWithDimView(andText: category.title)
+//            navigationController?.makeNavbarAppearance(transparent: true)
+//        }
+        
+        
+        
+//        headerView.configureWithDimView(andText: category.title)
+//        navigationController?.makeNavbarAppearance(transparent: true)
         extendedLayoutIncludesOpaqueBars = true
 
-        
-//        if let headerView = bookTable.tableHeaderView as? TableHeaderView {
-//            headerView.configureWithDimView(andText: category.title)
-//        }
-//        navigationController?.makeNavbarAppearance(transparent: true)
-//        extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,30 +72,6 @@ class CategoryViewController: BaseTableViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let category = category else { return UIView() }
-//
-//        let sectionKind = category.tableSections[section].sectionKind
-//
-////        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
-//
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//
-//        let tableSection = category.tableSections[section]
-//        sectionHeader.configureFor(section: tableSection)
-//
-//        // Respond to seeAllButton tap in section header
-//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
-//            guard let self = self else { return }
-////            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
-//            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
-//
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        return sectionHeader
-//    }
-    
     override func configureNavBar() {
         super.configureNavBar()
         guard let category = category else { return }
@@ -86,5 +79,17 @@ class CategoryViewController: BaseTableViewController {
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text
     }
+    
+    
+//    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+//        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+//
+//        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+//
+//        var offsetYToCompareTo = category?.bookForSimilar != nil ? tableViewInitialOffsetY : tableViewInitialOffsetY + tableHeaderHeight + 10
+//
+////        let offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+//    }
     
 }

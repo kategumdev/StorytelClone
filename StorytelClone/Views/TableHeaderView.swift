@@ -68,11 +68,17 @@ class TableHeaderView: UIView {
             headerLabel.text = tableSection.sectionTitle
         }
         
-        if tableSection.forSimilarBooks, let book = titleModel as? Book {
+//        if tableSection.forSimilarBooks, let book = titleModel as? Book {
+//            bookTitleForSimilarLabel.text = book.title
+//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
+//            stackView.spacing = 9
+//        }
+        if let book = titleModel as? Book {
             bookTitleForSimilarLabel.text = book.title
             stackView.addArrangedSubview(bookTitleForSimilarLabel)
             stackView.spacing = 9
         }
+        
         
         if let sectionDescription = tableSection.sectionDescription {
             sectionDescriptionLabel.text = sectionDescription

@@ -24,26 +24,28 @@ struct TableSection {
     let sectionKind: SectionKind
     let books: [Book]
     let sectionDescription: String?
-    let forSimilarBooks: Bool
+//    let forSimilarBooks: Bool
     var titleModel: Title?
     let canBeShared: Bool
     let canBeFiltered: Bool
     
-    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, forSimilarBooks: Bool = false, titleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true) {
+    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, titleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true) {
         self.sectionTitle = sectionTitle
         self.sectionSubtitle = sectionSubtitle
         self.sectionKind = sectionKind
         self.books = books
         self.sectionDescription = sectionDescription
-        self.forSimilarBooks = forSimilarBooks
+//        self.forSimilarBooks = forSimilarBooks
         self.titleModel = titleModel
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
     }
     
     static let generalForAllTitlesVC = TableSection(sectionTitle: "")
-    static let similarTitles = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
-    static let librosSimilares = TableSection(sectionTitle: "Libros similares", forSimilarBooks: true, canBeShared: false)
+    static let similarTitles = TableSection(sectionTitle: "Similar titles", canBeShared: false)
+    static let librosSimilares = TableSection(sectionTitle: "Libros similares", canBeShared: false)
+//    static let similarTitles = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
+//    static let librosSimilares = TableSection(sectionTitle: "Libros similares", forSimilarBooks: true, canBeShared: false)
 }
 
 enum ButtonCategory: String {
@@ -135,10 +137,12 @@ enum ButtonCategory: String {
 struct Category {
     let title: String
     let tableSections: [TableSection]
+    var bookForSimilar: Book?
     
-    init(title: String, tableSections: [TableSection]) {
+    init(title: String, tableSections: [TableSection], forBooksSimilarTo: Book? = nil) {
         self.title = title
         self.tableSections = tableSections
+        self.bookForSimilar = forBooksSimilarTo
     }
         
     static let series = Category(

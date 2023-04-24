@@ -92,13 +92,31 @@ class BaseTableViewController: UIViewController {
         navigationItem.backButtonTitle = ""
     }
     
+//    func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+//        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
+//
+//        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+//
+//        let offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+//    }
+    
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
-        guard let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height else { return }
         
-        changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+        var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
         
-        let offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+        if (self is CategoryViewController && category?.bookForSimilar == nil) || self is AllCategoriesViewController {
+            if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
+                offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
+                changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+            }
+        }
+        
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+        let visibleTitleWhenTransparent: Bool = category?.bookForSimilar != nil
+        
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: visibleTitleWhenTransparent)
+
     }
     
     func layoutHeaderView() {

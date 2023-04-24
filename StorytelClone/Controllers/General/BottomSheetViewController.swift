@@ -124,9 +124,7 @@ class BottomSheetViewController: UIViewController {
     var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
     var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
     var tableViewDidSelectViewSeriesCellCallback: () -> () = {}
-//    var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: () -> () = {}
     var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: (Category) -> () = {_ in}
-
     
     private var panGesture: UIPanGestureRecognizer?
     private var swipeGesture: UISwipeGestureRecognizer?
@@ -360,7 +358,8 @@ extension BottomSheetViewController {
         let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName)
         tableSections.append(categoryTableSection)
         
-        let category = Category(title: "Libros similares", tableSections: tableSections)
+//        let category = Category(title: "Libros similares", tableSections: tableSections, forSimilarBooks: true)
+        let category = Category(title: "Libros similares", tableSections: tableSections, forBooksSimilarTo: book)
         
         tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
     }

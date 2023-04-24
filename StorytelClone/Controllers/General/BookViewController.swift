@@ -258,7 +258,9 @@ extension BookViewController {
         #warning("Rewrite somehow simpler")
         
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
+//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
+
     }
     
     private func addSeeMoreButtonAction() {
