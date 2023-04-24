@@ -123,6 +123,7 @@ class BottomSheetViewController: UIViewController {
     var tableViewDidSelectSaveBookCellCallback: () -> () = {}
     var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
     var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
+    var tableViewDidSelectViewSeriesCellCallback: () -> () = {}
     
     private var panGesture: UIPanGestureRecognizer?
     private var swipeGesture: UISwipeGestureRecognizer?
@@ -249,7 +250,8 @@ extension BottomSheetViewController {
         case .download:
             print("download tapped")
         case .viewSeries:
-            print("viewSeries tapped")
+            self.dismiss(animated: false)
+            tableViewDidSelectViewSeriesCellCallback()
         case .viewAuthors:
             let authors = book.authors
             handleViewAuthorsOrNarrators(storytellers: authors)

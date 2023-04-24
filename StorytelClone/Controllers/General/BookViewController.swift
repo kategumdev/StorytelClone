@@ -205,15 +205,7 @@ extension BookViewController {
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        
-//        let bottomSheetTableViewDidSelectTitleCallback: (Title) -> () = { [weak self] selectedTitle in
-//            guard let self = self else { return }
-//            self.dismiss(animated: false)
-//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
-//            self .navigationController?.pushViewController(controller, animated:
-//            true)
-//        }
-        
+
         bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
             guard let self = self else { return }
             
@@ -225,9 +217,8 @@ extension BookViewController {
             
             if storytellers.count > 1 {
                 let bottomSheetKind: BottomSheetKind = storytellers.first is Author ? .authors : .narrators
-                let bottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
-//                bottomSheetController.tableViewDidSelectStorytellerCallback = bottomSheetTableViewDidSelectTitleCallback
-                bottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
+                let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+                storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
                     guard let self = self else { return }
                     self.dismiss(animated: false)
                     let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
@@ -235,8 +226,8 @@ extension BookViewController {
                     true)
                 }
 
-                bottomSheetController.modalPresentationStyle = .overFullScreen
-                self.present(bottomSheetController, animated: false)
+                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+                self.present(storytellersBottomSheetController, animated: false)
             }
         }
         
