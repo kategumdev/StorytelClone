@@ -34,7 +34,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
+        contentView.backgroundColor = Utils.customBackgroundColor
         contentView.addSubview(containerWithSubviews)
         containerWithSubviews.translatesAutoresizingMaskIntoConstraints = false
         containerWithSubviews.fillSuperview()

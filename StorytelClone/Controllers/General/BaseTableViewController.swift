@@ -44,6 +44,13 @@ class BaseTableViewController: UIViewController {
         table.tableFooterView?.frame.size.height = Constants.generalTopPaddingSectionHeader
         return table
     }()
+    
+//    lazy var similarBooksTopView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .purple
+////        view.backgroundColor = UIColor(named: "backgroundBookOverview")
+//        return view
+//    }()
  
     // MARK: - Initializers
     init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped) {
@@ -60,6 +67,10 @@ class BaseTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
+//        view.addSubview(similarBooksTopView)
+//        similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: view.bounds.width, height: 250))
+//        similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: view.bounds.width, height: bookTable.contentSize.height))
+        
         view.addSubview(bookTable)
         bookTable.delegate = self
         bookTable.dataSource = self
@@ -218,6 +229,7 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
+            print("isInitialOffsetYSet")
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
             return
