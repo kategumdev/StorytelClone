@@ -28,16 +28,15 @@ class CategoryViewController: BaseTableViewController {
             newHeaderView.translatesAutoresizingMaskIntoConstraints = false
             newHeaderView.fillSuperview()
             
-            bookTable.backgroundColor = .clear
-            
+            // Add stretching topView
             similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
             
             bookTable.addSubview(similarBooksTopView)
             let zPosition = bookTable.layer.zPosition - 1
             similarBooksTopView.layer.zPosition = zPosition
             similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
-
-//            topBackgroundView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
+            
+            bookTable.backgroundColor = .clear
             
             navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
         } else {
@@ -49,33 +48,6 @@ class CategoryViewController: BaseTableViewController {
 //        navigationController?.makeNavbarAppearance(transparent: true)
         extendedLayoutIncludesOpaqueBars = true
     }
-    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
-//
-//        if let book = category.bookForSimilar {
-//            headerView.configureFor(tableSection: TableSection.librosSimilares, titleModel: book)
-//            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
-//
-//            bookTable.backgroundColor = .clear
-////            headerView.backgroundColor = Utils.powderGrayBackgroundColor
-//            similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
-//
-//            bookTable.addSubview(similarBooksTopView)
-//            let zPosition = bookTable.layer.zPosition - 1
-//            similarBooksTopView.layer.zPosition = zPosition
-//            similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
-//        } else {
-//            headerView.configureWithDimView(andText: category.title)
-//            navigationController?.makeNavbarAppearance(transparent: true)
-//        }
-//
-////        headerView.configureWithDimView(andText: category.title)
-////        navigationController?.makeNavbarAppearance(transparent: true)
-//        extendedLayoutIncludesOpaqueBars = true
-//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
