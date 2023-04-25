@@ -319,7 +319,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
             
             let currentSection = model.tableSections[section]
-            sectionHeader.configureFor(section: currentSection)
+//            sectionHeader.configureFor(section: currentSection)
             return sectionHeader
         }
     }
@@ -337,7 +337,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             return Constants.generalTopPaddingSectionHeader
         } else {
             let currentSection = model.tableSections[section]
-            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(section: currentSection, superviewWidth: view.bounds.width)
+            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: currentSection, superviewWidth: view.bounds.width)
             return calculatedHeight
         }
     }

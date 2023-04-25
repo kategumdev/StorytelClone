@@ -19,7 +19,7 @@ class CategoryViewController: BaseTableViewController {
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
         
-        if let book = category.bookForSimilar {
+        if let book = category.bookToShowMoreTitlesLikeIt {
             // Replace tableHeaderView
             let newHeaderView = SimilarBooksTableHeaderView()
             newHeaderView.configureFor(book: book)
@@ -76,6 +76,18 @@ class CategoryViewController: BaseTableViewController {
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+//        guard let header = view as? SectionHeaderView else { return }
+//
+//        if section == 0 && category?.bookForSimilar != nil {
+//            header.changeTopAnchorConstant(toValue: 0)
+//        } else {
+//            header.changeTopAnchorConstant()
+//        }
+//
+////        header.changeTopAnchor()
+//    }
+    
     override func configureNavBar() {
         super.configureNavBar()
         guard let category = category else { return }
@@ -87,7 +99,7 @@ class CategoryViewController: BaseTableViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         super.scrollViewDidScroll(scrollView)
         
-        guard category?.bookForSimilar != nil else { return }
+        guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
         
         let contentOffsetY = scrollView.contentOffset.y
         if abs(contentOffsetY) > abs(tableViewInitialOffsetY) {

@@ -73,6 +73,9 @@ class SectionHeaderSubviewsContainer: UIView {
         return stack
     }()
     
+    private let defaultHorzStackTopPadding: CGFloat = Constants.generalTopPaddingSectionHeader
+    private lazy var horzStackTopAnchorConstraint =             horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: defaultHorzStackTopPadding)
+    
     var callback: SeeAllButtonDidTapCallback = {}
 
     // MARK: - Initializers
@@ -92,21 +95,21 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(section: TableSection) {
-        sectionTitleLabel.text = section.sectionTitle
+    func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?) {
+        sectionTitleLabel.text = tableSection.sectionTitle
         sectionTitleLabel.sizeToFit()
         
         // Show or hide sectionSubtitleLabel
-        if section.sectionSubtitle.isEmpty {
+        if tableSection.sectionSubtitle.isEmpty {
             sectionSubtitleLabel.isHidden = true
         } else {
             sectionSubtitleLabel.isHidden = false
         }
-        sectionSubtitleLabel.text = section.sectionSubtitle
+        sectionSubtitleLabel.text = tableSection.sectionSubtitle
         sectionTitleLabel.sizeToFit()
         
         // Show or hide seeAllButton
-        let sectionKind = section.sectionKind
+        let sectionKind = tableSection.sectionKind
         if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv || sectionKind == .searchVc {
             seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
             horzStackView.spacing = 0
@@ -115,7 +118,35 @@ class SectionHeaderSubviewsContainer: UIView {
             horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
         }
         
+        // Adjust top padding of first section header if vc is presented when "Show more titles like this" cell in book details bottom sheet is selected
+        guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
+        horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 10 : defaultHorzStackTopPadding
     }
+    
+//    func configureFor(section: TableSection) {
+//        sectionTitleLabel.text = section.sectionTitle
+//        sectionTitleLabel.sizeToFit()
+//
+//        // Show or hide sectionSubtitleLabel
+//        if section.sectionSubtitle.isEmpty {
+//            sectionSubtitleLabel.isHidden = true
+//        } else {
+//            sectionSubtitleLabel.isHidden = false
+//        }
+//        sectionSubtitleLabel.text = section.sectionSubtitle
+//        sectionTitleLabel.sizeToFit()
+//
+//        // Show or hide seeAllButton
+//        let sectionKind = section.sectionKind
+//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv || sectionKind == .searchVc {
+//            seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
+//            horzStackView.spacing = 0
+//        } else {
+//            seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
+//            horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
+//        }
+//
+//    }
     
     // MARK: - Helper methods
     private func configureButtonWithAction() {
@@ -137,9 +168,10 @@ class SectionHeaderSubviewsContainer: UIView {
         NSLayoutConstraint.activate([
             horzStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
             horzStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
-            horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.generalTopPaddingSectionHeader),
+//            horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.generalTopPaddingSectionHeader),
             horzStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        horzStackTopAnchorConstraint.isActive = true
     }
     
 }

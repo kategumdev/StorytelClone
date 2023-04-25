@@ -105,7 +105,7 @@ class BaseTableViewController: UIViewController {
         
         var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
         
-        if (self is CategoryViewController && category?.bookForSimilar == nil) || self is AllCategoriesViewController {
+        if (self is CategoryViewController && category?.bookToShowMoreTitlesLikeIt == nil) || self is AllCategoriesViewController {
             if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
                 offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
                 changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
@@ -113,7 +113,7 @@ class BaseTableViewController: UIViewController {
         }
         
 //        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
-        let visibleTitleWhenTransparent: Bool = category?.bookForSimilar != nil
+        let visibleTitleWhenTransparent: Bool = category?.bookToShowMoreTitlesLikeIt != nil
         
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: visibleTitleWhenTransparent)
 
@@ -188,7 +188,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
 
         let tableSection = category.tableSections[section]
-        sectionHeader.configureFor(section: tableSection)
+//        sectionHeader.configureFor(section: tableSection)
+        sectionHeader.configureFor(tableSection: tableSection, sectionNumber: section, category: category)
         
         // Respond to seeAllButton tap in section header
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
@@ -198,8 +199,38 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(controller, animated: true)
         }
         
+//        // Adjust top padding of first section header if vc is presented when "Show more titles like this" cell in book details bottom sheet is selected
+//        if category.bookForSimilar != nil, section == 0 {
+//            sectionHeader.changeTopAnchorConstant(toValue: 10)
+//        } else {
+//            sectionHeader.changeTopAnchorConstant()
+//        }
+        
         return sectionHeader
     }
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let category = category else { return UIView() }
+//
+//        let sectionKind = category.tableSections[section].sectionKind
+//
+//        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
+//
+//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+//
+//        let tableSection = category.tableSections[section]
+//        sectionHeader.configureFor(section: tableSection)
+//
+//        // Respond to seeAllButton tap in section header
+//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+//            guard let self = self else { return }
+////            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: nil)
+//            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        return sectionHeader
+//    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
@@ -210,7 +241,8 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         guard let category = category else { return 0 }
         if !category.tableSections.isEmpty {
             let tableSection = category.tableSections[section]
-            return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
+//            return SectionHeaderView.calculateEstimatedHeightFor(section: tableSection, superviewWidth: view.bounds.width)
+            return SectionHeaderView.calculateEstimatedHeightFor(tableSection: tableSection, sectionNumber: section, category: category, superviewWidth: view.bounds.width)
         }
         return 0
     }

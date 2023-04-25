@@ -359,7 +359,7 @@ extension BottomSheetViewController {
         tableSections.append(categoryTableSection)
         
 //        let category = Category(title: "Libros similares", tableSections: tableSections, forSimilarBooks: true)
-        let category = Category(title: "Libros similares", tableSections: tableSections, forBooksSimilarTo: book)
+        let category = Category(title: "Libros similares", tableSections: tableSections, bookToShowMoreTitlesLikeIt: book)
         
         tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
     }

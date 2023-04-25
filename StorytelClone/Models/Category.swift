@@ -137,12 +137,12 @@ enum ButtonCategory: String {
 struct Category {
     let title: String
     let tableSections: [TableSection]
-    var bookForSimilar: Book?
+    var bookToShowMoreTitlesLikeIt: Book?
     
-    init(title: String, tableSections: [TableSection], forBooksSimilarTo: Book? = nil) {
+    init(title: String, tableSections: [TableSection], bookToShowMoreTitlesLikeIt: Book? = nil) {
         self.title = title
         self.tableSections = tableSections
-        self.bookForSimilar = forBooksSimilarTo
+        self.bookToShowMoreTitlesLikeIt = bookToShowMoreTitlesLikeIt
     }
         
     static let series = Category(
