@@ -37,6 +37,8 @@ class TableHeaderView: UIView {
         return view
     }()
 
+//    var tableSection: TableSection?
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,6 +59,8 @@ class TableHeaderView: UIView {
     }
     
     func configureFor(tableSection: TableSection, titleModel: Title?) {
+//        self.tableSection = tableSection
+        
         if let series = titleModel as? Series {
             headerLabel.text = series.title
             followSeriesView.configureWith(series: series)

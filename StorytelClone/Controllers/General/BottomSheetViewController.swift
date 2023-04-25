@@ -332,35 +332,39 @@ extension BottomSheetViewController {
     private func handleShowMoreTitlesLikeThis() {
         self.dismiss(animated: false)
         
+        // Create table sections
         var librosSimilaresTableSection = TableSection.librosSimilares
         librosSimilaresTableSection.titleModel = book
         var tableSections = [
-//            TableSection.librosSimilares
             librosSimilaresTableSection
         ]
         
         for author in book.authors {
-            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name)
+            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name, titleModel: author)
             tableSections.append(authorTableSection)
         }
         
         for narrator in book.narrators {
-            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name)
+            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name, titleModel: narrator)
             tableSections.append(narratorTableSection)
         }
         
         if let series = book.series {
-            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series)
+//            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series)
+            #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesTableSection")
+            let seriesTitleModel = Series.series1
+            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series, titleModel: seriesTitleModel)
             tableSections.append(seriesTableSection)
         }
         
         let categoryName = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName)
+//        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName)
+        let categoryForTableSection = ButtonCategory.createModelFor(categoryButton: book.category)
+        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName, forCategory: categoryForTableSection)
         tableSections.append(categoryTableSection)
         
-//        let category = Category(title: "Libros similares", tableSections: tableSections, forSimilarBooks: true)
+        // Create category with created tableSections and pass it to callback
         let category = Category(title: "Libros similares", tableSections: tableSections, bookToShowMoreTitlesLikeIt: book)
-        
         tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
     }
     
