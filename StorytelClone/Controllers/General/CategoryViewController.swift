@@ -10,16 +10,9 @@ import UIKit
 // Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
 class CategoryViewController: BaseTableViewController {
     
-//    private lazy var similarBooksTopView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = UIColor(named: "backgroundBookOverview")
-//        return view
-//    }()
-     
     private lazy var similarBooksTopView = UIView()
-    
     private let similarBooksTopViewY: CGFloat = 1000
-
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +20,26 @@ class CategoryViewController: BaseTableViewController {
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
         
         if let book = category.bookForSimilar {
-            headerView.configureFor(tableSection: TableSection.librosSimilares, titleModel: book)
-            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
+            // Replace tableHeaderView
+            let newHeaderView = SimilarBooksTableHeaderView()
+            newHeaderView.configureFor(book: book)
+            bookTable.tableHeaderView = newHeaderView
+            // These two lines avoid constraints' conflict of header and its label when view just loaded
+            newHeaderView.translatesAutoresizingMaskIntoConstraints = false
+            newHeaderView.fillSuperview()
             
             bookTable.backgroundColor = .clear
-            headerView.backgroundColor = Utils.powderGrayBackgroundColor
+            
             similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
             
             bookTable.addSubview(similarBooksTopView)
             let zPosition = bookTable.layer.zPosition - 1
             similarBooksTopView.layer.zPosition = zPosition
             similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
+
+//            topBackgroundView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
+            
+            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
         } else {
             headerView.configureWithDimView(andText: category.title)
             navigationController?.makeNavbarAppearance(transparent: true)
@@ -47,6 +49,33 @@ class CategoryViewController: BaseTableViewController {
 //        navigationController?.makeNavbarAppearance(transparent: true)
         extendedLayoutIncludesOpaqueBars = true
     }
+    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
+//
+//        if let book = category.bookForSimilar {
+//            headerView.configureFor(tableSection: TableSection.librosSimilares, titleModel: book)
+//            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
+//
+//            bookTable.backgroundColor = .clear
+////            headerView.backgroundColor = Utils.powderGrayBackgroundColor
+//            similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
+//
+//            bookTable.addSubview(similarBooksTopView)
+//            let zPosition = bookTable.layer.zPosition - 1
+//            similarBooksTopView.layer.zPosition = zPosition
+//            similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
+//        } else {
+//            headerView.configureWithDimView(andText: category.title)
+//            navigationController?.makeNavbarAppearance(transparent: true)
+//        }
+//
+////        headerView.configureWithDimView(andText: category.title)
+////        navigationController?.makeNavbarAppearance(transparent: true)
+//        extendedLayoutIncludesOpaqueBars = true
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -85,6 +114,8 @@ class CategoryViewController: BaseTableViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         super.scrollViewDidScroll(scrollView)
+        
+        guard category?.bookForSimilar != nil else { return }
         
         let contentOffsetY = scrollView.contentOffset.y
         if abs(contentOffsetY) > abs(tableViewInitialOffsetY) {
