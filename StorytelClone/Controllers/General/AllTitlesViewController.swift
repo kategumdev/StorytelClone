@@ -237,7 +237,7 @@ class AllTitlesViewController: BaseTableViewController {
             headerView.configureFor(storyteller: titleModel!)
             bookTable.tableHeaderView = headerView
             
-            // These two lines avoid constraints' conflict of header and its label when view just loaded
+            // These two lines avoid constraints' conflict of header when vc's view just loaded
             headerView.translatesAutoresizingMaskIntoConstraints = false
             headerView.fillSuperview()
 //            layoutHeaderView()

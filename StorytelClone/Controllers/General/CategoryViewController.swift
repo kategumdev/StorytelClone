@@ -16,15 +16,17 @@ class CategoryViewController: BaseTableViewController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        extendedLayoutIncludesOpaqueBars = true
         
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
+        guard let category = category else { return }
         
+        // Set new table header and add stretching top view if vc is created when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected OR just configure existing table header with dim view for all other cases
         if let book = category.bookToShowMoreTitlesLikeIt {
             // Replace tableHeaderView
             let newHeaderView = SimilarBooksTableHeaderView()
             newHeaderView.configureFor(book: book)
             bookTable.tableHeaderView = newHeaderView
-            // These two lines avoid constraints' conflict of header and its label when view just loaded
+            // These two lines avoid constraints' conflict of header when vc's view just loaded
             newHeaderView.translatesAutoresizingMaskIntoConstraints = false
             newHeaderView.fillSuperview()
             
@@ -40,13 +42,11 @@ class CategoryViewController: BaseTableViewController {
             
             navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
         } else {
-            headerView.configureWithDimView(andText: category.title)
+            let headerView = bookTable.tableHeaderView as? TableHeaderView
+            headerView?.configureWithDimView(andText: category.title)
             navigationController?.makeNavbarAppearance(transparent: true)
         }
         
-//        headerView.configureWithDimView(andText: category.title)
-//        navigationController?.makeNavbarAppearance(transparent: true)
-        extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,18 +75,6 @@ class CategoryViewController: BaseTableViewController {
         
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//        guard let header = view as? SectionHeaderView else { return }
-//
-//        if section == 0 && category?.bookForSimilar != nil {
-//            header.changeTopAnchorConstant(toValue: 0)
-//        } else {
-//            header.changeTopAnchorConstant()
-//        }
-//
-////        header.changeTopAnchor()
-//    }
     
     override func configureNavBar() {
         super.configureNavBar()

@@ -12,22 +12,11 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Static properties and methods
     static let identifier = "SectionHeaderView"
     
-//    static func calculateEstimatedHeightFor(section: TableSection, superviewWidth: CGFloat) -> CGFloat {
-//        let headerContainer = SectionHeaderSubviewsContainer(addButtonAction: false)
-//        headerContainer.translatesAutoresizingMaskIntoConstraints = false
-//        headerContainer.widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
-//
-//        headerContainer.configureFor(section: section)
-//        let height = headerContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-//        return height
-//    }
-    
-    static func calculateEstimatedHeightFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, superviewWidth: CGFloat) -> CGFloat {
+    static func calculateEstimatedHeightFor(tableSection: TableSection, superviewWidth: CGFloat, sectionNumber: Int? = nil, category: Category? = nil) -> CGFloat {
         let headerContainer = SectionHeaderSubviewsContainer(addButtonAction: false)
         headerContainer.translatesAutoresizingMaskIntoConstraints = false
         headerContainer.widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
 
-//        headerContainer.configureFor(section: section)
         headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
         let height = headerContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
@@ -56,30 +45,8 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Instance methods
-//    func configureFor(section: TableSection) {
-//        containerWithSubviews.configureFor(section: section)
-//    }
-    
-    
-    
-    
-    
-    
-//    func configureFor(tableSection: TableSection, sectionNumber: Int, category: Category) {
-//        containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
-//    }
-    
-    // sectionNumber and category parameters are for use in CategoryViewController
     func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil) {
         containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
     }
-    
-    
-    
-    
-    
-//    func changeTopAnchorConstant(toValue value: CGFloat = Constants.generalTopPaddingSectionHeader) {
-//        containerWithSubviews.horzStackViewTopConstraint.constant = value
-//    }
     
 }

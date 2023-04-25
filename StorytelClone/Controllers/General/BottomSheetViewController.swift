@@ -96,7 +96,7 @@ class BottomSheetViewController: UIViewController {
         
         tableView.tableHeaderView = tableHeaderView
         
-        // These two lines avoid constraints' conflict of header when view just loaded
+        // These two lines avoid constraints' conflict of header when vc's view just loaded
         tableView.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableHeaderView?.fillSuperview()
         return tableView

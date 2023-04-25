@@ -7,8 +7,7 @@
 
 import UIKit
 
-// Create it as a separate class to make calculation of estimated section header height (and smooth scrolling experience, especially after dynamic font size change) possible
-
+// Create it as a separate class to make calculation of estimated section header height and smooth scrolling experience (especially after dynamic font size change) possible
 typealias SeeAllButtonDidTapCallback = () -> ()
 
 class SectionHeaderSubviewsContainer: UIView {
@@ -118,35 +117,10 @@ class SectionHeaderSubviewsContainer: UIView {
             horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
         }
         
-        // Adjust top padding of first section header if vc is presented when "Show more titles like this" cell in book details bottom sheet is selected
+       // Adjust top padding of first section header if vc is presented when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
         guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
         horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 10 : defaultHorzStackTopPadding
     }
-    
-//    func configureFor(section: TableSection) {
-//        sectionTitleLabel.text = section.sectionTitle
-//        sectionTitleLabel.sizeToFit()
-//
-//        // Show or hide sectionSubtitleLabel
-//        if section.sectionSubtitle.isEmpty {
-//            sectionSubtitleLabel.isHidden = true
-//        } else {
-//            sectionSubtitleLabel.isHidden = false
-//        }
-//        sectionSubtitleLabel.text = section.sectionSubtitle
-//        sectionTitleLabel.sizeToFit()
-//
-//        // Show or hide seeAllButton
-//        let sectionKind = section.sectionKind
-//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv || sectionKind == .searchVc {
-//            seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
-//            horzStackView.spacing = 0
-//        } else {
-//            seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
-//            horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
-//        }
-//
-//    }
     
     // MARK: - Helper methods
     private func configureButtonWithAction() {
@@ -168,7 +142,6 @@ class SectionHeaderSubviewsContainer: UIView {
         NSLayoutConstraint.activate([
             horzStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
             horzStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
-//            horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.generalTopPaddingSectionHeader),
             horzStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         horzStackTopAnchorConstraint.isActive = true
