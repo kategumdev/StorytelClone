@@ -118,7 +118,7 @@ class HomeViewController: BaseTableViewController {
         let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
-            return Constants.generalTopPaddingSectionHeader
+            return Constants.sectionHeaderViewTopPadding
         } else {
             return UITableView.automaticDimension
         }

@@ -221,7 +221,7 @@ class AllTitlesViewController: BaseTableViewController {
     private func configureBookTable() {
         bookTable.allowsSelection = true
         bookTable.separatorColor = UIColor.tertiaryLabel
-        bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
+        bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
         
         // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
         bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)

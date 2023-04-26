@@ -41,7 +41,7 @@ class BaseTableViewController: UIViewController {
         
         // Avoid gap at the very bottom of the table view
         table.tableFooterView = UIView()
-        table.tableFooterView?.frame.size.height = Constants.generalTopPaddingSectionHeader
+        table.tableFooterView?.frame.size.height = Constants.sectionHeaderViewTopPadding
         return table
     }()
  

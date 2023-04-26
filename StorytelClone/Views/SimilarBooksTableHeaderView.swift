@@ -61,7 +61,7 @@ class SimilarBooksTableHeaderView: UIView {
     private lazy var horzStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = Constants.cvPadding
+        stack.spacing = Constants.commonHorzPadding
         stack.addArrangedSubview(vertStackWithImage)
         stack.addArrangedSubview(vertStackWithLabels)
         return stack
@@ -122,7 +122,7 @@ class SimilarBooksTableHeaderView: UIView {
         vertStackWithImage.widthAnchor.constraint(equalTo: imageView.heightAnchor).isActive = true
 
         horzStack.translatesAutoresizingMaskIntoConstraints = false
-        horzStack.fillSuperview(withConstant: Constants.cvPadding)
+        horzStack.fillSuperview(withConstant: Constants.commonHorzPadding)
     }
 
 }

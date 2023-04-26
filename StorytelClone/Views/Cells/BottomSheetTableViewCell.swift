@@ -106,14 +106,14 @@ class BottomSheetTableViewCell: UITableViewCell {
             customImageView.heightAnchor.constraint(equalToConstant: constant),
             customImageView.widthAnchor.constraint(equalToConstant: constant),
             customImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            customImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding)
+            customImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding)
         ])
         
         customTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            customTitleLabel.leadingAnchor.constraint(equalTo: customImageView.trailingAnchor, constant: Constants.cvPadding - 4),
-            customTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.cvPadding)
+            customTitleLabel.leadingAnchor.constraint(equalTo: customImageView.trailingAnchor, constant: Constants.commonHorzPadding - 4),
+            customTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.commonHorzPadding)
         ])
     }
 }

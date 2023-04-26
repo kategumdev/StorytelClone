@@ -19,7 +19,7 @@ class TagsView: UIView {
         buttonConfig.attributedTitle = AttributedString(text)
         buttonConfig.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
         buttonConfig.titleAlignment = .center
-        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.cvPadding, bottom: 7, trailing: Constants.cvPadding)
+        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.commonHorzPadding, bottom: 7, trailing: Constants.commonHorzPadding)
         
         button.configuration = buttonConfig
         button.sizeToFit()
@@ -104,14 +104,14 @@ class TagsView: UIView {
     private func applyConstraints() {
         tagsLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tagsLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2),
+            tagsLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2),
             tagsLabel.topAnchor.constraint(equalTo: topAnchor),
             tagsLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
 
-        let containerWidth = superviewWidth - Constants.cvPadding * 2
+        let containerWidth = superviewWidth - Constants.commonHorzPadding * 2
         // Position the buttons
-        var currentLeadingConstant: CGFloat = Constants.cvPadding
+        var currentLeadingConstant: CGFloat = Constants.commonHorzPadding
         var numberOfRows: CGFloat = 1
         
         for (index, button) in tagButtons.enumerated() {
@@ -125,7 +125,7 @@ class TagsView: UIView {
                 
                 if currentLeadingConstant + button.frame.width > containerWidth {
                     // Move to the next row
-                    currentLeadingConstant = Constants.cvPadding
+                    currentLeadingConstant = Constants.commonHorzPadding
                     button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: currentLeadingConstant).isActive = true
                     button.topAnchor.constraint(equalTo: previousButton.bottomAnchor, constant: spacingBetweenRows).isActive = true
                     numberOfRows += 1

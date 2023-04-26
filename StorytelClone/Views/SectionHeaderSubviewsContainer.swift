@@ -72,7 +72,7 @@ class SectionHeaderSubviewsContainer: UIView {
         return stack
     }()
     
-    private let defaultHorzStackTopPadding: CGFloat = Constants.generalTopPaddingSectionHeader
+    private let defaultHorzStackTopPadding: CGFloat = Constants.sectionHeaderViewTopPadding
     private lazy var horzStackTopAnchorConstraint =             horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: defaultHorzStackTopPadding)
     
     var callback: SeeAllButtonDidTapCallback = {}
@@ -140,8 +140,8 @@ class SectionHeaderSubviewsContainer: UIView {
         
         horzStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            horzStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
-            horzStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding),
+            horzStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.commonHorzPadding),
+            horzStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.commonHorzPadding),
             horzStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         horzStackTopAnchorConstraint.isActive = true

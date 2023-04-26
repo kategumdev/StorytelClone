@@ -108,7 +108,7 @@ class BookOverviewStackView: UIStackView {
         
         for textView in textViews {
             textView.translatesAutoresizingMaskIntoConstraints = false
-            textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2).isActive = true
+            textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2).isActive = true
         }
         
         // Set stack view height

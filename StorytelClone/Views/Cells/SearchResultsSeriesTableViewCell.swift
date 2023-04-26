@@ -128,7 +128,7 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         viewWithImageViews.translatesAutoresizingMaskIntoConstraints = false
         let height = SearchResultsTableViewCell.imageHeight + SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
         NSLayoutConstraint.activate([
-            viewWithImageViews.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            viewWithImageViews.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
             viewWithImageViews.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.squareImageWidth),
             viewWithImageViews.heightAnchor.constraint(equalToConstant: height),
             viewWithImageViews.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
@@ -164,8 +164,8 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topConstant),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomConstant),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageViews.trailingAnchor, constant: Constants.cvPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding)
+            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageViews.trailingAnchor, constant: Constants.commonHorzPadding),
+            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding)
         ])
     }
 

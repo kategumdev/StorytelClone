@@ -25,22 +25,8 @@ class BottomSheetTableHeaderView: UIView {
     var closeButtonDidTapCallback: () -> () = {}
     
     // MARK: - Initializers
-//    init(titleText: String) {
-//        super.init(frame: .zero)
-////        backgroundColor = .green
-//        titleLabel.text = titleText
-//        addSubview(titleLabel)
-//        addSubview(closeButton)
-//        addButtonAction()
-//
-//        addSeparatorView()
-//
-//        applyConstraints()
-//    }
-    
     init(titleText: String, withSeparatorView: Bool) {
         super.init(frame: .zero)
-//        backgroundColor = .green
         titleLabel.text = titleText
         addSubview(titleLabel)
         addSubview(closeButton)
@@ -59,9 +45,7 @@ class BottomSheetTableHeaderView: UIView {
     
     private func addSeparatorView() {
         let view = UIView()
-        view.backgroundColor = UIColor.quaternaryLabel
-//        view.backgroundColor = UIColor(cgColor: BookViewController.lightBordersColor)
-        
+        view.backgroundColor = UIColor.quaternaryLabel        
         view.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(view)
@@ -84,8 +68,8 @@ class BottomSheetTableHeaderView: UIView {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: Constants.cvPadding),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -Constants.cvPadding)
+            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: Constants.commonHorzPadding),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -Constants.commonHorzPadding)
         ])
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +77,7 @@ class BottomSheetTableHeaderView: UIView {
             closeButton.heightAnchor.constraint(equalToConstant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: 20),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.cvPadding)
+            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.commonHorzPadding)
         ])
     }
 

@@ -48,7 +48,7 @@ class SearchResultsButtonsView: UIView {
             var config = UIButton.Configuration.plain()
 
             // Top inset makes visual x-position of button text in scrollView as if it's centered
-            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.cvPadding, bottom: 0, trailing: Constants.cvPadding)
+            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config

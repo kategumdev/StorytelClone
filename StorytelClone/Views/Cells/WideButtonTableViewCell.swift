@@ -69,19 +69,19 @@ class WideButtonTableViewCell: UITableViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        let buttonWidth = UIScreen.main.bounds.width - Constants.cvPadding * 2
+        let buttonWidth = UIScreen.main.bounds.width - Constants.commonHorzPadding * 2
         wideButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wideButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            wideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            wideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
             wideButton.widthAnchor.constraint(equalToConstant: buttonWidth),
             wideButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
         ])
         
         customLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            customLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.cvPadding),
-            customLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.cvPadding),
+            customLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.commonHorzPadding),
+            customLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.commonHorzPadding),
         ])
 
     }

@@ -63,10 +63,10 @@ struct Utils {
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width
-        let width = (contentViewWidth - Constants.cvPadding * Constants.visibleHorzCvItemsInRow) / Constants.visibleHorzCvItemsInRow
+        let width = (contentViewWidth - Constants.commonHorzPadding * Constants.visibleHorzCvItemsInRow) / Constants.visibleHorzCvItemsInRow
         
         let fullWidth = contentViewWidth + (width / 2)
-        let itemWidth = (fullWidth - Constants.cvPadding
+        let itemWidth = (fullWidth - Constants.commonHorzPadding
                          * Constants.visibleHorzCvItemsInRow) / Constants.visibleHorzCvItemsInRow
     
         let size = CGSize(width: round(itemWidth), height: round(itemWidth))
@@ -90,7 +90,7 @@ struct Utils {
         let contentViewWidth = UIScreen.main.bounds.width
         let visiblePartOfThirdCover = 14
         
-        let widthForContent = contentViewWidth - ((Constants.paddingForHorzCvLargeCovers * 2) + Constants.cvPadding + Constants.visiblePartOfThirdLargeCover)
+        let widthForContent = contentViewWidth - ((Constants.paddingForHorzCvLargeCovers * 2) + Constants.commonHorzPadding + Constants.visiblePartOfThirdLargeCover)
         let itemWidth = widthForContent / (Constants.visibleHorzCvItemsInRow - 1)
  
         let roundedItemWidth = round(itemWidth)

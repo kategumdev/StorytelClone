@@ -10,10 +10,15 @@ import UIKit
 // reusable in different controllers and views
 struct Constants {
     
-    static let cvPadding: CGFloat = 16
+//    static let cvPadding: CGFloat = 16
+    static let commonHorzPadding: CGFloat = 16
+    
     static let paddingForHorzCvLargeCovers: CGFloat = 8
     static let posterAndLargeCoversCellTopPadding: CGFloat = 10
-    static let generalTopPaddingSectionHeader: CGFloat = 31
+    
+//    static let generalTopPaddingSectionHeader: CGFloat = 31
+    static let sectionHeaderViewTopPadding: CGFloat = 31
+    
     static let visibleHorzCvItemsInRow: CGFloat = 3 // the 3rd one is only partly visible
     static let bookCoverCornerRadius: CGFloat = 4
     static let visiblePartOfThirdLargeCover: CGFloat = 14

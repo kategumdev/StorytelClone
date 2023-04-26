@@ -86,7 +86,7 @@ class BookDetailsScrollView: UIScrollView {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.distribution = .fillProportionally
-        stack.spacing = Constants.cvPadding
+        stack.spacing = Constants.commonHorzPadding
         return stack
     }()
     

@@ -115,7 +115,7 @@ class TableHeaderView: UIView {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        let stackLeadingAndTrailingConstant = Constants.cvPadding
+        let stackLeadingAndTrailingConstant = Constants.commonHorzPadding
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackLeadingAndTrailingConstant),

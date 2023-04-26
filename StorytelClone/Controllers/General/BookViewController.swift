@@ -484,7 +484,7 @@ extension BookViewController {
         }
         bookTable.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true
         bookTable.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
-        bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.cvPadding).isActive = true
+        bookTable.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -Constants.commonHorzPadding).isActive = true
         bookTableHeightConstraint.isActive = true
         
         // Configure hideView constraints

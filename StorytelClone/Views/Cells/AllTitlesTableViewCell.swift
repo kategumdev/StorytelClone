@@ -12,10 +12,10 @@ class AllTitlesTableViewCell: UITableViewCell {
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesTableViewCell"
     static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
-    static let minTopAndBottomPadding: CGFloat = Constants.cvPadding
+    static let minTopAndBottomPadding: CGFloat = Constants.commonHorzPadding
     static let minCellHeight: CGFloat = imageWidthAndHeight + (minTopAndBottomPadding * 2)
     static let maxSubtitleLabelCount: Int = 4
-    static let imageWidthPlusAllHorzPaddings: CGFloat = ( AllTitlesTableViewCell.imageWidthAndHeight + (Constants.cvPadding * 3))
+    static let imageWidthPlusAllHorzPaddings: CGFloat = ( AllTitlesTableViewCell.imageWidthAndHeight + (Constants.commonHorzPadding * 3))
     
     static func calculateLabelsHeight(forBook book: Book, andCellWidth cellWidth: CGFloat) -> CGFloat {
         // Height of titleLabel
@@ -47,7 +47,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         let ratingHorzStackViewHeight = StarHorzStackView.getHeight()
         
         // Get total height
-        var rowHeight: CGFloat = Constants.cvPadding * 3 + ratingHorzStackViewHeight
+        var rowHeight: CGFloat = Constants.commonHorzPadding * 3 + ratingHorzStackViewHeight
         if labelsHeight < imageWidthAndHeight {
             rowHeight += imageWidthAndHeight
         } else {
@@ -103,7 +103,7 @@ class AllTitlesTableViewCell: UITableViewCell {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = Constants.cvPadding
+        stack.spacing = Constants.commonHorzPadding
         [squareViewWithImageView, vertStackWithLabels].forEach { stack.addArrangedSubview($0) }
         return stack
     }()
@@ -113,7 +113,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     private lazy var mainVertStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = Constants.cvPadding
+        stack.spacing = Constants.commonHorzPadding
         [imageLabelsHorzStack, starHorzStackView].forEach { stack.addArrangedSubview($0) }
         return stack
     }()
@@ -189,7 +189,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     // MARK: - Helper methods
     private func applyConstraints() {
         mainVertStack.translatesAutoresizingMaskIntoConstraints = false
-        mainVertStack.fillSuperview(withConstant: Constants.cvPadding)
+        mainVertStack.fillSuperview(withConstant: Constants.commonHorzPadding)
 
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

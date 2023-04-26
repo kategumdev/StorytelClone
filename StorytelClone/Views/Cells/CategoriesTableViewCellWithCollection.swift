@@ -17,14 +17,14 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         let height = Constants.categoryCvItemHeight
         
         let contentViewWidth = UIScreen.main.bounds.size.width
-        let width = round(contentViewWidth - (Constants.cvPadding * 3)) / 2
+        let width = round(contentViewWidth - (Constants.commonHorzPadding * 3)) / 2
 
         let size = CGSize(width: width, height: height)
         return size
     }()
     
     static func calculateCellHeightFor(numberOfRows: CGFloat) -> CGFloat {
-        let paddings = (Constants.cvPadding * (numberOfRows - 1)) + gapBetweenHeaderAndCell
+        let paddings = (Constants.commonHorzPadding * (numberOfRows - 1)) + gapBetweenHeaderAndCell
         let height = (calculatedCvItemSizeCategory.height * numberOfRows) + paddings
         return height
     }
@@ -37,7 +37,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = Constants.cvPadding
+        layout.minimumLineSpacing = Constants.commonHorzPadding
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
@@ -100,7 +100,7 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegateFlowLay
         
         // This top inset is for cell in last section of SearchViewController
         // Add gapBetweenHeaderAndCell when calculating heightForRow for all CategoriesTableViewCellWithCollection cells
-        UIEdgeInsets(top: CategoriesTableViewCellWithCollection.gapBetweenHeaderAndCell, left: Constants.cvPadding, bottom: 0, right: Constants.cvPadding)
+        UIEdgeInsets(top: CategoriesTableViewCellWithCollection.gapBetweenHeaderAndCell, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
     }
      
 }

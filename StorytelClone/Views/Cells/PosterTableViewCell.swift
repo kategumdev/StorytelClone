@@ -12,7 +12,7 @@ class PosterTableViewCell: UITableViewCell {
     // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
         
-    static let calculatedWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.cvPadding * 2)
+    static let calculatedWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
     static let calculatedHeightForRow: CGFloat = calculatedHeight + Constants.posterAndLargeCoversCellTopPadding
     
     static let calculatedHeight: CGFloat = {

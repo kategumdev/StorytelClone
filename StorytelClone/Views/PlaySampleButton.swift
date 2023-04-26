@@ -58,7 +58,7 @@ class PlaySampleButtonContainer: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: PlaySampleButtonContainer.buttonHeight),
-            button.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.cvPadding * 2),
+            button.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2),
             button.topAnchor.constraint(equalTo: topAnchor),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])

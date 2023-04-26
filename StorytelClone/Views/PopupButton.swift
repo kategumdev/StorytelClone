@@ -16,8 +16,8 @@ class PopupButton: UIButton {
 
     
     // MARK: - Instance properties
-    private let leadingPadding: CGFloat = Constants.cvPadding
-    private let trailingPadding: CGFloat = Constants.cvPadding - 2
+    private let leadingPadding: CGFloat = Constants.commonHorzPadding
+    private let trailingPadding: CGFloat = Constants.commonHorzPadding - 2
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
 
@@ -161,8 +161,8 @@ class PopupButton: UIButton {
         // Configure popupButton constraints
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: Constants.cvPadding),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -Constants.cvPadding),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: Constants.commonHorzPadding),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -Constants.commonHorzPadding),
             heightAnchor.constraint(equalToConstant: PopupButton.buttonHeight)
 
         ])

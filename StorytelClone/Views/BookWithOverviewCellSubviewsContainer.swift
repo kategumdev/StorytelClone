@@ -114,8 +114,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         bookOverviewButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookOverviewButton.topAnchor.constraint(equalTo: topAnchor, constant: buttonTopConstant),
-            bookOverviewButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.cvPadding),
-            bookOverviewButton.widthAnchor.constraint(equalTo: widthAnchor, constant: -(Constants.cvPadding * 2)),
+            bookOverviewButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.commonHorzPadding),
+            bookOverviewButton.widthAnchor.constraint(equalTo: widthAnchor, constant: -(Constants.commonHorzPadding * 2)),
             bookOverviewButton.bottomAnchor.constraint(equalTo: vertStackView.bottomAnchor, constant: 14)
         ])
         

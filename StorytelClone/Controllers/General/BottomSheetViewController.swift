@@ -44,21 +44,7 @@ class BottomSheetViewController: UIViewController {
         return cells
     }()
     
-    private lazy var windowDimmedView: UIView? = {
-//        print("windowDimmedView created and added to view")
-        let view = UIView()
-        view.alpha = 0
-        view.backgroundColor = .black
-
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-
-        view.frame = window!.frame
-        window!.addSubview(view)
-        return view
-    }()
-    
-    private let maxDimmedViewAlpha: CGFloat = 0.35
+    private let maxAlphaForDimmedEffect: CGFloat = 0.35
     
     private lazy var tableHeaderView: BottomSheetTableHeaderView = {
         let addSeparatorView = kind == .bookDetails ? false : true
@@ -131,7 +117,7 @@ class BottomSheetViewController: UIViewController {
     
     // MARK: - Initializers
     init(book: Book, kind: BottomSheetKind) {
-        print("\n\nbottom sheet for \(kind) CREATED")
+        print("\n\n\(kind) bottom sheet CREATED")
         self.book = book
         self.kind = kind
         super.init(nibName: nil, bundle: nil)
@@ -142,26 +128,21 @@ class BottomSheetViewController: UIViewController {
     }
     
     deinit {
-        print("BottomSheetVC \(kind) DEINIT")
-        self.windowDimmedView?.removeFromSuperview()
-        self.windowDimmedView = nil
-//        print("nil out dimmedView: \(String(describing: self.windowDimmedView))")
+        print("\(kind) BottomSheetVC DEINIT")
     }
     
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setViewBackgroundColorAlphaTo(value: 0)
+
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         applyConstraints()
         
-        // Hide tableView and windowDimmedView
+        // Hide tableView
         tableViewHeightConstraint.constant = 0
-        windowDimmedView?.alpha = 0
-        
-//        setupPanGesture()
-//        setupTapGesture()
     }
     
     override func viewDidLayoutSubviews() {
@@ -175,6 +156,19 @@ class BottomSheetViewController: UIViewController {
         animateToFullTableViewHeight()
         setupPanGesture()
         setupTapGesture()
+    }
+    
+    // MARK: - Instance methods
+    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.tableViewHeightConstraint.constant = 0 // Hide tableView
+            self.view.layoutIfNeeded()
+            self.setViewBackgroundColorAlphaTo(value: 0)
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                completion?()
+            })
+        })
     }
 
 }
@@ -382,39 +376,33 @@ extension BottomSheetViewController {
     }
     
     private func animateToFullTableViewHeight() {
-        // Show tableView and windowDimmedView
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-
-            self.tableViewHeightConstraint.constant = self.fullTableViewHeight
-
+            self.tableViewHeightConstraint.constant = self.fullTableViewHeight // Show tableView
             self.view.layoutIfNeeded()
-            self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
+            self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
         }, completion: nil)
     }
     
-    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
-        // Hide tableView and windowDimmedView
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            
-            self.tableViewHeightConstraint.constant = 0
-            self.view.layoutIfNeeded()
-            self.windowDimmedView?.alpha = 0
-        }, completion: { _ in
-            self.dismiss(animated: false, completion: {
-                completion?()
-            })
-        })
-    }
+//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+//            self.tableViewHeightConstraint.constant = 0 // Hide tableView
+//            self.view.layoutIfNeeded()
+//            self.setViewBackgroundColorAlphaTo(value: 0)
+//        }, completion: { _ in
+//            self.dismiss(animated: false, completion: {
+//                completion?()
+//            })
+//        })
+//    }
     
     private func animateTableViewHeight(_ height: CGFloat) {
         UIView.animate(withDuration: 0.3, delay: 0) { [weak self] in
             guard let self = self else { return }
-            self.windowDimmedView?.alpha = self.maxDimmedViewAlpha
+            self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
             self.tableViewHeightConstraint.constant = height
             self.view.layoutIfNeeded()
         }
-        // Save current height
-        currentTableViewHeight = height
+        currentTableViewHeight = height // Save current height
     }
     
     private func setupTapGesture() {
@@ -447,12 +435,12 @@ extension BottomSheetViewController {
         
         // Calculations for smooth proportional change of alpha value of the dimmed view
         let percentageFromFullTableViewHeight = (newTableViewHeight * 100) / fullTableViewHeight
-        let newDimmedViewAlpha = (percentageFromFullTableViewHeight * maxDimmedViewAlpha) / 100
+        let newAlphaForDimmedEffect = (percentageFromFullTableViewHeight * maxAlphaForDimmedEffect) / 100
         
         switch gesture.state {
         case .changed:
             if isDraggingDown {
-                self.windowDimmedView?.alpha = newDimmedViewAlpha
+                setViewBackgroundColorAlphaTo(value: newAlphaForDimmedEffect)
                 tableViewHeightConstraint.constant = newTableViewHeight
                 
                 // If velocity of panGesture is less than 1500, it is a swipe
@@ -469,6 +457,10 @@ extension BottomSheetViewController {
         default:
             break
         }
+    }
+    
+    private func setViewBackgroundColorAlphaTo(value: CGFloat) {
+        view.backgroundColor = .black.withAlphaComponent(value)
     }
 }
 

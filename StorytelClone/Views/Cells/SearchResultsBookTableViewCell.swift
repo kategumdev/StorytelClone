@@ -148,7 +148,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     private func applyConstraints() {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            squareViewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            squareViewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
             squareViewWithImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.squareImageWidth),
             squareViewWithImageView.heightAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight),
             squareViewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
@@ -164,7 +164,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         
         detailButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            detailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
+            detailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
             detailButton.widthAnchor.constraint(equalToConstant: 30),
             detailButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
@@ -173,8 +173,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.cvPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.cvPadding)
+            vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.commonHorzPadding),
+            vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.commonHorzPadding)
         ])
     }
 

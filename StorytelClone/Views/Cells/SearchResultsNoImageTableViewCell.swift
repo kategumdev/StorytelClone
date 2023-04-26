@@ -113,7 +113,7 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
     private func applyConstraints() {
         viewWithRound.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            viewWithRound.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.cvPadding),
+            viewWithRound.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
             viewWithRound.widthAnchor.constraint(equalToConstant: SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight),
             viewWithRound.heightAnchor.constraint(equalToConstant: SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight),
             viewWithRound.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
@@ -130,8 +130,8 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithRound.trailingAnchor, constant: Constants.cvPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.cvPadding),
+            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithRound.trailingAnchor, constant: Constants.commonHorzPadding),
+            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
         ])
         
         // Trigger layoutSubview() to set roundView.layer.cornerRadius
