@@ -112,5 +112,15 @@ struct Utils {
         let height = width
         return CGSize(width: width, height: height)
     }()
+    
+    static func playHaptics(withStyle style: UIImpactFeedbackGenerator.FeedbackStyle = .light, andIntensity intensity: CGFloat? = nil) {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style)
+        
+        if let intensity = intensity {
+            impactFeedbackGenerator.impactOccurred(intensity: intensity)
+        } else {
+            impactFeedbackGenerator.impactOccurred()
+        }
+    }
 
 }

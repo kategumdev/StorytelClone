@@ -170,8 +170,10 @@ class RoundButtonsStackContainer: UIStackView {
             guard let self = self else { return }
             self.saveButton.isUserInteractionEnabled = false
             
-            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-            impactFeedbackGenerator.impactOccurred()
+//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+//            impactFeedbackGenerator.impactOccurred()
+            
+            Utils.playHaptics()
             
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.handleSaveButtonTapped()

@@ -82,6 +82,12 @@ class ShowSeriesButtonContainer: UIView {
     // MARK: - Helper methods
     private func addButtonAction() {
         showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
+            
+//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+//            impactFeedbackGenerator.impactOccurred()
+            
+            Utils.playHaptics()
+            
             self?.showSeriesButtonDidTapCallback()
         }), for: .touchUpInside)
     }

@@ -135,8 +135,11 @@ class StarHorzStackView: UIStackView {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             
-            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
-            impactFeedbackGenerator.impactOccurred(intensity: 0.7)
+//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
+//            impactFeedbackGenerator.impactOccurred(intensity: 0.7)
+            
+            
+            Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
             
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleSaveButtonImage()

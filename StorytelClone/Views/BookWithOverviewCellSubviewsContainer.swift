@@ -10,7 +10,7 @@ import UIKit
 class BookWithOverviewCellSubviewsContainer: UIView {
     // MARK: - Static properties
     static let borderColor = UIColor(named: "borderBookOverview")
-    static let backgroundColor = UIColor(named: "backgroundBookOverview")
+    static let backgroundColor = Utils.powderGrayBackgroundColor
     
     // MARK: - Instance properties
     let bookOverviewButton: DimViewCellButton = {
