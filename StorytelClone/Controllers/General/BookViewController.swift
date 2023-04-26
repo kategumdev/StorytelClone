@@ -455,17 +455,16 @@ extension BookViewController {
 }
 
 extension BookViewController: BottomSheetViewControllerDelegate {
- 
     // For .bookDetails BottomSheetKind of BottomSheetViewController
-    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell() {
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         self.bookDetailsStackView.updateSaveButtonAppearance()
     }
     
-    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell() {
+    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries series: String) {
         handleShowSeriesButtonTappedOrViewSeriesCellSelected()
     }
     
-    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title]) {
+    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book) {
         handleStorytellerButtonTappedOrStorytellerCellSelected(withStorytellers: storytellers)
     }
     

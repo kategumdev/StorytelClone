@@ -108,7 +108,8 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-    lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: true)
+//    lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: true)
+    private lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: true)
     
     private lazy var mainVertStack: UIStackView = {
         let stack = UIStackView()

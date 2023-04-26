@@ -10,17 +10,17 @@ import UIKit
 protocol BottomSheetViewControllerDelegate: AnyObject {
     
     // For .bookDetails BottomSheetKind of BottomSheetViewController
-    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book)
     
-    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell()
+    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries series: String)
     
     func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(
-        withStorytellers storytellers: [Title])
+        withStorytellers storytellers: [Title], andBook book: Book)
     
     func bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory category: Category)
     
     // For .authors or .narrators BottomSheetKind of BottomSheetViewController
-    func storytellersBottomSheetViewControllerDidSelect(storyteller storyteller: Title)
+    func storytellersBottomSheetViewControllerDidSelect(storyteller: Title)
     
 }
 
@@ -42,6 +42,25 @@ enum BottomSheetKind {
 }
 
 class BottomSheetViewController: UIViewController {
+    
+    // MARK: - Static methods
+//    private func showVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title]) {
+//        if storytellers.count == 1 {
+//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        if storytellers.count > 1 {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+//                guard let self = self else { return }
+//                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+//                let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+//                storytellersBottomSheetController.delegate = self
+//                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+//                self.present(storytellersBottomSheetController, animated: false)
+//            }
+//        }
+//    }
 
     // MARK: Instance properties
     private var book: Book
@@ -125,11 +144,11 @@ class BottomSheetViewController: UIViewController {
     
     private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
     
-    var tableViewDidSelectSaveBookCellCallback: () -> () = {}
-    var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
-    var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
-    var tableViewDidSelectViewSeriesCellCallback: () -> () = {}
-    var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: (Category) -> () = {_ in}
+//    var tableViewDidSelectSaveBookCellCallback: () -> () = {}
+//    var viewStorytellersDidTapCallback: ([Title]) -> () = {_ in}
+//    var tableViewDidSelectStorytellerCallback: (Title) -> () = {_ in}
+//    var tableViewDidSelectViewSeriesCellCallback: () -> () = {}
+//    var tableViewDidSelectShowMoreTitlesLikeThisCellCallback: (Category) -> () = {_ in}
     
     private var panGesture: UIPanGestureRecognizer?
     private var swipeGesture: UISwipeGestureRecognizer?
@@ -273,7 +292,8 @@ extension BottomSheetViewController {
 //            self.dismiss(animated: false)
 //            tableViewDidSelectViewSeriesCellCallback()
             self.dismiss(animated: false)
-            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell()
+            guard let series = book.series else { return }
+            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries: series)
             
         case .viewAuthors:
             let authors = book.authors
@@ -301,7 +321,7 @@ extension BottomSheetViewController {
         tableView.reloadRows(at: [indexPath], with: .none)
         
         // Update cell with this book in AllTitlesViewController
-        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: book)
 //        tableViewDidSelectSaveBookCellCallback()
     }
     
@@ -329,7 +349,7 @@ extension BottomSheetViewController {
                 self.book.update(isAddedToBookshelf: self.book.isAddedToBookshelf)
                 
                 // Update cell with this book in AllTitlesViewController
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
 //                self.tableViewDidSelectSaveBookCellCallback()
                 
                 // Dismiss this bottom sheet
@@ -344,12 +364,14 @@ extension BottomSheetViewController {
     private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
-                self?.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers)
+                guard let self = self else { return }
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
 //                self?.viewStorytellersDidTapCallback(storytellers)
             })
         } else {
             self.dismissWithCustomAnimation(completion: { [weak self] in
-                self?.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers)
+                guard let self = self else { return }
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
 //                self?.viewStorytellersDidTapCallback(storytellers)
             })
         }
