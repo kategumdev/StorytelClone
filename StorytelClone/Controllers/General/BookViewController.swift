@@ -203,39 +203,42 @@ extension BookViewController {
     
     private func configureBookDetailsStackView() {
         mainScrollView.addSubview(bookDetailsStackView)
-        if let series = book.series {
-            bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
-                let tableSection = TableSection(sectionTitle: series)
-                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
-                self?.navigationController?.pushViewController(controller, animated: true)
-            }
-        }
-
+        
         bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
-            guard let self = self else { return }
-            
-            if storytellers.count == 1 {
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-                self .navigationController?.pushViewController(controller, animated:
-                true)
-            }
-            
-            if storytellers.count > 1 {
-                let bottomSheetKind: BottomSheetKind = storytellers.first is Author ? .authors : .narrators
+            self?.handleStorytellerButtonTappedOrStorytellerCellSelected(withStorytellers: storytellers)
+        }
+        
+        guard book.series != nil else { return }
+        bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
+            self?.handleShowSeriesButtonTappedOrViewSeriesCellSelected()
+        }
+        
+    }
+    
+    private func handleShowSeriesButtonTappedOrViewSeriesCellSelected() {
+        guard let series = book.series else { return }
+        let tableSection = TableSection(sectionTitle: series)
+        let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    private func handleStorytellerButtonTappedOrStorytellerCellSelected(withStorytellers storytellers: [Title]) {
+        
+        if storytellers.count == 1 {
+            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        if storytellers.count > 1 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self = self else { return }
+                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
                 let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
-                storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
-                    guard let self = self else { return }
-//                    self.dismiss(animated: false)
-                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
-                    self.navigationController?.pushViewController(controller, animated:
-                    true)
-                }
-
+                storytellersBottomSheetController.delegate = self
                 storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
                 self.present(storytellersBottomSheetController, animated: false)
             }
         }
-        
     }
     
     private func configureBookDetailsScrollView() {
@@ -263,7 +266,6 @@ extension BookViewController {
         #warning("Rewrite somehow simpler")
         
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
-//        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
     }
     
@@ -326,8 +328,7 @@ extension BookViewController {
     }
     
     @objc func ellipsisButtonDidTap() {
-        // Get book from array to get correct data for saveBook cell
-        
+        // Get the latest updated book model object
         var updatedBook: Book = book
         for book in allTitlesBooks {
             if book.title == self.book.title {
@@ -335,54 +336,8 @@ extension BookViewController {
                 break
             }
         }
-//        let updatedBook = allTitlesBooks[book]
         let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
-        
-        bookDetailsBottomSheetController.tableViewDidSelectViewSeriesCellCallback = { [weak self] in
-            guard let series = self?.book.series else { return }
-            let tableSection = TableSection(sectionTitle: series)
-            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
-            self?.navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        bookDetailsBottomSheetController.tableViewDidSelectShowMoreTitlesLikeThisCellCallback = { [weak self] category in
-            //                let controller = CategoryViewController(categoryModel: Category.librosSimilares)
-            let controller = CategoryViewController(categoryModel: category)
-            self?.navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        bookDetailsBottomSheetController.tableViewDidSelectSaveBookCellCallback = { [weak self] in
-            self?.bookDetailsStackView.updateSaveButtonAppearance()
-//            self?.bookTable.reloadRows(at: [indexPath], with: .none)
-        }
-        
-        bookDetailsBottomSheetController.viewStorytellersDidTapCallback = { [weak self] storytellers in
-            
-            if storytellers.count == 1 {
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-                self?.navigationController?.pushViewController(controller, animated: true)
-            }
-            
-            if storytellers.count > 1 {
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                    guard let self = self else { return }
-                    let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-                    let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
-                    
-                    storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
-                        guard let self = self else { return }
-                        //                            self.dismiss(animated: false)
-                        let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
-                        self.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    
-                    storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
-                    self.present(storytellersBottomSheetController, animated: false)
-                }
-            }
-        }
-        
+        bookDetailsBottomSheetController.delegate = self
         bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
         self.present(bookDetailsBottomSheetController, animated: false)
     }
@@ -497,4 +452,32 @@ extension BookViewController {
             hideView.topAnchor.constraint(equalTo: bookTable.bottomAnchor)
         ])
     }
+}
+
+extension BookViewController: BottomSheetViewControllerDelegate {
+ 
+    // For .bookDetails BottomSheetKind of BottomSheetViewController
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell() {
+        self.bookDetailsStackView.updateSaveButtonAppearance()
+    }
+    
+    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell() {
+        handleShowSeriesButtonTappedOrViewSeriesCellSelected()
+    }
+    
+    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title]) {
+        handleStorytellerButtonTappedOrStorytellerCellSelected(withStorytellers: storytellers)
+    }
+    
+    func bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory category: Category) {
+        let controller = CategoryViewController(categoryModel: category)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // For .authors or .narrators BottomSheetKind of BottomSheetViewController
+    func storytellersBottomSheetViewControllerDidSelect(storyteller: Title) {
+        let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storyteller)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+
 }

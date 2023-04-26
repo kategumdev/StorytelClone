@@ -10,7 +10,7 @@ import UIKit
 class ShowSeriesButtonContainer: UIView {
     
     // MARK: - Instance properties
-    var showSeriesButtonDidTapCallback: ShowSeriesButtonDidTapCallback = {}
+    var showSeriesButtonDidTapCallback: () -> () = {}
     
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-typealias ShowSeriesButtonDidTapCallback = () -> ()
+//typealias ShowSeriesButtonDidTapCallback = () -> ()
 
 class BookDetailsStackView: UIStackView {
     // MARK: - Static properties
@@ -16,7 +16,7 @@ class BookDetailsStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
     
-    var showSeriesButtonDidTapCallback: ShowSeriesButtonDidTapCallback = {} {
+    var showSeriesButtonDidTapCallback: () -> () = {} {
         didSet {
             showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesButtonDidTapCallback
         }

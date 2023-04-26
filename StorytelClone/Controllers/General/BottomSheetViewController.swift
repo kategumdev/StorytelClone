@@ -7,6 +7,23 @@
 
 import UIKit
 
+protocol BottomSheetViewControllerDelegate: AnyObject {
+    
+    // For .bookDetails BottomSheetKind of BottomSheetViewController
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+    
+    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell()
+    
+    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(
+        withStorytellers storytellers: [Title])
+    
+    func bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory category: Category)
+    
+    // For .authors or .narrators BottomSheetKind of BottomSheetViewController
+    func storytellersBottomSheetViewControllerDidSelect(storyteller storyteller: Title)
+    
+}
+
 enum BookDetailsBottomSheetCell: String, CaseIterable {
     case saveBook = "heart"
     case markAsFinished = "checkmark"
@@ -30,6 +47,8 @@ class BottomSheetViewController: UIViewController {
     private var book: Book
     private var kind: BottomSheetKind = .bookDetails
     private var isSwiping = false
+    
+    weak var delegate: BottomSheetViewControllerDelegate?
 
     private lazy var bookDetailsBottomSheetCells: [BookDetailsBottomSheetCell] = {
         var cells = BookDetailsBottomSheetCell.allCases
@@ -206,14 +225,16 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
             let ellipsisButtonCell = bookDetailsBottomSheetCells[indexPath.row]
             handleSelection(ellipsisButtonCell: ellipsisButtonCell, withIndexPath: indexPath)
         case .authors:
-            let selectedTitle = book.authors[indexPath.row]
+            let selectedAuthor = book.authors[indexPath.row]
             self.dismiss(animated: false) { [weak self] in
-                self?.tableViewDidSelectStorytellerCallback(selectedTitle)
+                guard let self = self else { return}
+                self.delegate?.storytellersBottomSheetViewControllerDidSelect(storyteller: selectedAuthor)
             }
         case .narrators:
-            let selectedTitle = book.narrators[indexPath.row]
+            let selectedNarrator = book.narrators[indexPath.row]
             self.dismiss(animated: false) { [weak self] in
-                self?.tableViewDidSelectStorytellerCallback(selectedTitle)
+                guard let self = self else { return }
+                self.delegate?.storytellersBottomSheetViewControllerDidSelect(storyteller: selectedNarrator)
             }
         }
     }
@@ -249,8 +270,11 @@ extension BottomSheetViewController {
         case .download:
             print("download tapped")
         case .viewSeries:
+//            self.dismiss(animated: false)
+//            tableViewDidSelectViewSeriesCellCallback()
             self.dismiss(animated: false)
-            tableViewDidSelectViewSeriesCellCallback()
+            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell()
+            
         case .viewAuthors:
             let authors = book.authors
             handleViewAuthorsOrNarrators(storytellers: authors)
@@ -277,7 +301,8 @@ extension BottomSheetViewController {
         tableView.reloadRows(at: [indexPath], with: .none)
         
         // Update cell with this book in AllTitlesViewController
-        tableViewDidSelectSaveBookCellCallback()
+        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+//        tableViewDidSelectSaveBookCellCallback()
     }
     
     private func handleRemovingBookWith(indexPath: IndexPath) {
@@ -304,7 +329,8 @@ extension BottomSheetViewController {
                 self.book.update(isAddedToBookshelf: self.book.isAddedToBookshelf)
                 
                 // Update cell with this book in AllTitlesViewController
-                self.tableViewDidSelectSaveBookCellCallback()
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell()
+//                self.tableViewDidSelectSaveBookCellCallback()
                 
                 // Dismiss this bottom sheet
                 self.dismissWithCustomAnimation()
@@ -318,11 +344,13 @@ extension BottomSheetViewController {
     private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
-                self?.viewStorytellersDidTapCallback(storytellers)
+                self?.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers)
+//                self?.viewStorytellersDidTapCallback(storytellers)
             })
         } else {
             self.dismissWithCustomAnimation(completion: { [weak self] in
-                self?.viewStorytellersDidTapCallback(storytellers)
+                self?.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers)
+//                self?.viewStorytellersDidTapCallback(storytellers)
             })
         }
     }
@@ -362,7 +390,8 @@ extension BottomSheetViewController {
         
         // Create category with created tableSections and pass it to callback
         let category = Category(title: "Libros similares", tableSections: tableSections, bookToShowMoreTitlesLikeIt: book)
-        tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
+        self.delegate?.bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory: category)
+//        tableViewDidSelectShowMoreTitlesLikeThisCellCallback(category)
     }
     
     private func applyConstraints() {
