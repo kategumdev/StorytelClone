@@ -207,7 +207,6 @@ class AllTitlesViewController: BaseTableViewController {
 //            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
 //        ])
     }
-    
 
 }
 

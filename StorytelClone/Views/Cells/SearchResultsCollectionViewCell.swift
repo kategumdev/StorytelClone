@@ -21,9 +21,8 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     // MARK: - Instance properties
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
-    var selectedTitleCallback: SelectedTitleCallback = {_ in}
-//    var detailButtonDidTapCallback: () -> () = {}
-    var detailButtonDidTapCallback: (Book) -> () = {_ in}
+    var tableViewInSearchResultsCollectionViewCellDidSelectRowCallback: (Title) -> () = {_ in}
+    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
     
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     var buttonKind: ButtonKind?
@@ -106,7 +105,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
             
             cell.configureFor(book: book)
-            cell.detailButtonDidTapCallback = self.detailButtonDidTapCallback
+            cell.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback = self.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback
             
             return cell
         }
@@ -143,8 +142,8 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("didSelectRowAt \(indexPath.row)")
-        let selectedTitle = model[indexPath.row]
-        selectedTitleCallback(selectedTitle)
+        let selectedRowTitle = model[indexPath.row]
+        tableViewInSearchResultsCollectionViewCellDidSelectRowCallback(selectedRowTitle)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

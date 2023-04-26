@@ -8,12 +8,8 @@
 import UIKit
 
 class BookViewController: UIViewController {
-    
     // MARK: - Instance properties
     let book: Book
-//    private let book: Book
-
-//    private let similarTitlesTableSection = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
     
     private let mainScrollView = UIScrollView()
     private var scrollViewInitialOffsetY: CGFloat = 0.0

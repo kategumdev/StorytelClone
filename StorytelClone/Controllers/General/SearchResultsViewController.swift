@@ -7,17 +7,11 @@
 
 import UIKit
 
-//enum ScrollDirection {
-//    case forward
-//    case back
-//}
-
 class SearchResultsViewController: UIViewController {
-
     // MARK: - Instance properties
     private let buttonsView = SearchResultsButtonsView()
-    var selectedTitleCallback: SelectedTitleCallback = {_ in}
-    var detailButtonDidTapCallback: (Book) -> () = {_ in}
+    var tableViewInSearchResultsCollectionViewCellDidSelectRowCallback: (Title) -> () = {_ in}
+    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -139,8 +133,8 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
             cell.withSectionHeader = true
         }
         
-        cell.selectedTitleCallback = selectedTitleCallback
-        cell.detailButtonDidTapCallback = detailButtonDidTapCallback
+        cell.tableViewInSearchResultsCollectionViewCellDidSelectRowCallback = tableViewInSearchResultsCollectionViewCellDidSelectRowCallback
+        cell.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback = ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {

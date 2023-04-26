@@ -34,6 +34,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     }
     
     // MARK: - Instance properties
+    private var book: Book?
+    
     private let bookTitleLabel = SearchResultsTableViewCell.createTitleLabel()
     private let bookKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
     private let authorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
@@ -62,7 +64,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     
     private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
     
-    private let detailButton: UIButton = {
+    private let ellipsisButton: UIButton = {
         let button = UIButton()
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
@@ -75,17 +77,14 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
-    private var book: Book?
-    
-    var detailButtonDidTapCallback: (Book) -> () = {_ in}
-//    var detailButtonDidTapCallback: () -> () = {}
+    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(squareViewWithImageView)
         contentView.addSubview(vertStackWithLabels)
-        contentView.addSubview(detailButton)
+        contentView.addSubview(ellipsisButton)
         addDetailButtonAction()
         applyConstraints()
     }
@@ -138,10 +137,9 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     
     // MARK: - Helper methods
     private func addDetailButtonAction() {
-        detailButton.addAction(UIAction(handler: { [weak self] _ in
+        ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self, let book = self.book else { return }
-//            self.detailButtonDidTapCallback(self.book)
-            self.detailButtonDidTapCallback(book)
+            self.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback(book)
         }), for: .touchUpInside)
     }
     
@@ -162,11 +160,11 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         ])
         customImageViewWidthAnchor.isActive = true
         
-        detailButton.translatesAutoresizingMaskIntoConstraints = false
+        ellipsisButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            detailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
-            detailButton.widthAnchor.constraint(equalToConstant: 30),
-            detailButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            ellipsisButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
+            ellipsisButton.widthAnchor.constraint(equalToConstant: 30),
+            ellipsisButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
@@ -174,7 +172,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.commonHorzPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: detailButton.leadingAnchor, constant: -Constants.commonHorzPadding)
+            vertStackWithLabels.trailingAnchor.constraint(equalTo: ellipsisButton.leadingAnchor, constant: -Constants.commonHorzPadding)
         ])
     }
 
