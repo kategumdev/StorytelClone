@@ -207,6 +207,14 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
+    // MARK: - Instance methods
+    func updateSaveButtonAppearance() {
+        roundButtonsStackContainer.updateSaveButtonAppearance()
+    }
+//    func updateSaveButtonAppearanceFor(book: Book) {
+//
+//    }
+    
     // MARK: - Helper methods
     private func configureSelf() {
         axis = .vertical

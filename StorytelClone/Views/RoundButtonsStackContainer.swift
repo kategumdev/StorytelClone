@@ -135,6 +135,13 @@ class RoundButtonsStackContainer: UIStackView {
         }
     }
     
+    // MARK: - Instance methods
+    func updateSaveButtonAppearance() {
+        self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
+        self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+        self.toggleSaveLabelText()
+    }
+    
     // MARK: - Helper methods
     private func configureSelf() {
         axis = .horizontal

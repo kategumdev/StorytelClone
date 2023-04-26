@@ -89,6 +89,11 @@ class BookViewController: UIViewController {
         
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
+        
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .heavy, scale: .large)
+        let image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfig)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(ellipsisButtonDidTap))
+        
         extendedLayoutIncludesOpaqueBars = true
     }
     
@@ -260,7 +265,6 @@ extension BookViewController {
         let offsetYToCompareTo = scrollViewInitialOffsetY + maxYOfBookTitleLabel
 //        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo)
-
     }
     
     private func addSeeMoreButtonAction() {
@@ -319,6 +323,68 @@ extension BookViewController {
     private func calculateBookTableHeight() -> CGFloat {
         let height = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
         return height
+    }
+    
+    @objc func ellipsisButtonDidTap() {
+        // Get book from array to get correct data for saveBook cell
+        
+        var updatedBook: Book = book
+        for book in allTitlesBooks {
+            if book.title == self.book.title {
+                updatedBook = book
+                break
+            }
+        }
+//        let updatedBook = allTitlesBooks[book]
+        let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
+        
+        bookDetailsBottomSheetController.tableViewDidSelectViewSeriesCellCallback = { [weak self] in
+            guard let series = self?.book.series else { return }
+            let tableSection = TableSection(sectionTitle: series)
+            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        bookDetailsBottomSheetController.tableViewDidSelectShowMoreTitlesLikeThisCellCallback = { [weak self] category in
+            //                let controller = CategoryViewController(categoryModel: Category.librosSimilares)
+            let controller = CategoryViewController(categoryModel: category)
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        bookDetailsBottomSheetController.tableViewDidSelectSaveBookCellCallback = { [weak self] in
+            self?.bookDetailsStackView.updateSaveButtonAppearance()
+//            self?.bookTable.reloadRows(at: [indexPath], with: .none)
+        }
+        
+        bookDetailsBottomSheetController.viewStorytellersDidTapCallback = { [weak self] storytellers in
+            
+            if storytellers.count == 1 {
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+            
+            if storytellers.count > 1 {
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    guard let self = self else { return }
+                    let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+                    let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+                    
+                    storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
+                        guard let self = self else { return }
+                        //                            self.dismiss(animated: false)
+                        let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    
+                    storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+                    self.present(storytellersBottomSheetController, animated: false)
+                }
+            }
+        }
+        
+        bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+        self.present(bookDetailsBottomSheetController, animated: false)
     }
     
     private func applyConstraints() {
