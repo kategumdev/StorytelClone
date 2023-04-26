@@ -265,13 +265,7 @@ class BookDetailsStackView: UIStackView {
     private func addAuthorsButtonAction() {
         authorsButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-//            self?.authorsButtonDidTapCallback()
-            
-//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-//            impactFeedbackGenerator.impactOccurred()
-            
             Utils.playHaptics()
-            
             self.storytellerButtonDidTapCallback(self.book.authors)
         }), for: .touchUpInside)
     }
@@ -279,16 +273,11 @@ class BookDetailsStackView: UIStackView {
     private func addNarratorsButtonAction() {
         narratorsButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            
-//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-//            impactFeedbackGenerator.impactOccurred()
             Utils.playHaptics()
-            
-//            self?.narratorsButtonDidTapCallback()
             self.storytellerButtonDidTapCallback(self.book.narrators)
         }), for: .touchUpInside)
     }
-    
+        
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true

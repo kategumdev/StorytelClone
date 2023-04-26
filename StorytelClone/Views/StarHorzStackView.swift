@@ -118,7 +118,16 @@ class StarHorzStackView: UIStackView {
     // MARK: - Instance methods
     func configureWith(book: Book) {
         self.book = book
-        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+        
+        let ratingRelatedViews = [starView, ratingLabel, vertBarLabel]
+        if book.rating < 1 {
+            ratingRelatedViews.forEach { $0.isHidden = true }
+        } else {
+            ratingRelatedViews.forEach { $0.isHidden = false }
+            ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+        }
+        
+//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         
         guard hasSaveAndEllipsisButtons else { return }
@@ -129,6 +138,20 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(15, after: saveButton)
         toggleSaveButtonImage()
     }
+    
+//    func configureWith(book: Book) {
+//        self.book = book
+//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
+//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+//
+//        guard hasSaveAndEllipsisButtons else { return }
+//        isBookAddedToBookshelf = book.isAddedToBookshelf
+//        addArrangedSubview(saveButton)
+//        addArrangedSubview(ellipsisButton)
+//        setCustomSpacing(6, after: categoryLabel)
+//        setCustomSpacing(15, after: saveButton)
+//        toggleSaveButtonImage()
+//    }
 
     // MARK: - Helper methods
     private func addSaveButtonAction() {
