@@ -143,6 +143,75 @@ class SearchViewController: UIViewController {
         
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         searchResultsController.selectedTitleCallback = callbackClosure
+        
+        searchResultsController.detailButtonDidTapCallback = { [weak self] book in
+            // Get book from array to get correct data for saveBook cell
+//            let updatedBook = allTitlesBooks[indexPath.row]
+            let bookDetailsBottomSheetController = BottomSheetViewController(book: book, kind: .bookDetails)
+            
+            bookDetailsBottomSheetController.tableViewDidSelectViewSeriesCellCallback = { [weak self] in
+                guard let series = book.series else { return }
+                let tableSection = TableSection(sectionTitle: series)
+                    let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+                    self?.navigationController?.pushViewController(controller, animated: true)
+            }
+            
+            bookDetailsBottomSheetController.tableViewDidSelectShowMoreTitlesLikeThisCellCallback = { [weak self] category in
+//                let controller = CategoryViewController(categoryModel: Category.librosSimilares)
+                let controller = CategoryViewController(categoryModel: category)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+
+//            bookDetailsBottomSheetController.tableViewDidSelectSaveBookCellCallback = { [weak self] in
+//                self?.bookTable.reloadRows(at: [indexPath], with: .none)
+//            }
+            
+            bookDetailsBottomSheetController.viewStorytellersDidTapCallback = { [weak self] storytellers in
+                
+                if storytellers.count == 1 {
+                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                    self?.navigationController?.pushViewController(controller, animated: true)
+                }
+                
+                if storytellers.count > 1 {
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+
+                        let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+                        let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+
+                        storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
+                            guard let self = self else { return }
+//                            self.dismiss(animated: false)
+//                            storytellersBottomSheetController.dismiss(animated: false) {
+//
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                                    let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+//                                    self.navigationController?.pushViewController(controller, animated: true)
+//                                }
+//
+//                            }
+//                            self.dismiss(animated: false) {
+//                                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+//                                self.navigationController?.pushViewController(controller, animated: true)
+//                            }
+                            
+                            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
+
+                        storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+                        self?.present(storytellersBottomSheetController, animated: false)
+                    }
+                }
+            }
+            
+            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+            self?.present(bookDetailsBottomSheetController, animated: false)
+        }
+        
+        
+        
     }
     
     @objc func handleKeyboardDismissNotification(_ notification: Notification) {

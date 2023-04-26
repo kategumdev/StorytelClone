@@ -213,10 +213,14 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
             handleSelection(ellipsisButtonCell: ellipsisButtonCell, withIndexPath: indexPath)
         case .authors:
             let selectedTitle = book.authors[indexPath.row]
-            tableViewDidSelectStorytellerCallback(selectedTitle)
+            self.dismiss(animated: false) { [weak self] in
+                self?.tableViewDidSelectStorytellerCallback(selectedTitle)
+            }
         case .narrators:
             let selectedTitle = book.narrators[indexPath.row]
-            tableViewDidSelectStorytellerCallback(selectedTitle)
+            self.dismiss(animated: false) { [weak self] in
+                self?.tableViewDidSelectStorytellerCallback(selectedTitle)
+            }
         }
     }
     
@@ -330,37 +334,36 @@ extension BottomSheetViewController {
     }
     
     private func handleShowMoreTitlesLikeThis() {
+        
         self.dismiss(animated: false)
         
         // Create table sections
         var librosSimilaresTableSection = TableSection.librosSimilares
-        librosSimilaresTableSection.titleModel = book
+        librosSimilaresTableSection.toShowTitleModel = book
         var tableSections = [
             librosSimilaresTableSection
         ]
         
         for author in book.authors {
-            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name, titleModel: author)
+            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name, toShowTitleModel: author)
             tableSections.append(authorTableSection)
         }
         
         for narrator in book.narrators {
-            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name, titleModel: narrator)
+            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name, toShowTitleModel: narrator)
             tableSections.append(narratorTableSection)
         }
         
         if let series = book.series {
-//            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series)
             #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesTableSection")
             let seriesTitleModel = Series.series1
-            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series, titleModel: seriesTitleModel)
+            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series, toShowTitleModel: seriesTitleModel)
             tableSections.append(seriesTableSection)
         }
         
         let categoryName = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-//        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName)
         let categoryForTableSection = ButtonCategory.createModelFor(categoryButton: book.category)
-        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName, forCategory: categoryForTableSection)
+        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName, toShowCategory: categoryForTableSection)
         tableSections.append(categoryTableSection)
         
         // Create category with created tableSections and pass it to callback

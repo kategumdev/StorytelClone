@@ -25,22 +25,22 @@ struct TableSection {
     let books: [Book]
     let sectionDescription: String?
 //    let forSimilarBooks: Bool
-    var titleModel: Title?
+    var toShowTitleModel: Title?
     let canBeShared: Bool
     let canBeFiltered: Bool
-    let forCategory: Category?
+    let toShowCategory: Category?
     
-    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, titleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, forCategory: Category? = nil) {
+    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, toShowCategory: Category? = nil) {
         self.sectionTitle = sectionTitle
         self.sectionSubtitle = sectionSubtitle
         self.sectionKind = sectionKind
         self.books = books
         self.sectionDescription = sectionDescription
 //        self.forSimilarBooks = forSimilarBooks
-        self.titleModel = titleModel
+        self.toShowTitleModel = toShowTitleModel
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
-        self.forCategory = forCategory
+        self.toShowCategory = toShowCategory
     }
     
     static let generalForAllTitlesVC = TableSection(sectionTitle: "")

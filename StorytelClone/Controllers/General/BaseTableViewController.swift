@@ -179,22 +179,15 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         // Respond to seeAllButton tap in section header
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-            if let tableSectionCategory = tableSection.forCategory {
-//                let category = ButtonCategory.createModelFor(categoryButton: tableSectionCategory)
+            
+            if let tableSectionCategory = tableSection.toShowCategory {
                 let controller = CategoryViewController(categoryModel: tableSectionCategory)
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
-                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
+                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.toShowTitleModel)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        
-//        // Respond to seeAllButton tap in section header
-//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
-//            guard let self = self else { return }
-//            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.titleModel)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
 
         return sectionHeader
     }

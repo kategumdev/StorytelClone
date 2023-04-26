@@ -124,7 +124,7 @@ class AllTitlesViewController: BaseTableViewController {
 
                         storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
                             guard let self = self else { return }
-                            self.dismiss(animated: false)
+//                            self.dismiss(animated: false)
                             let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
                             self.navigationController?.pushViewController(controller, animated: true)
                         }

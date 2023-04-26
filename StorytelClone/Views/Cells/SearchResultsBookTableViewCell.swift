@@ -75,12 +75,18 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
+    private var book: Book?
+    
+    var detailButtonDidTapCallback: (Book) -> () = {_ in}
+//    var detailButtonDidTapCallback: () -> () = {}
+    
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(squareViewWithImageView)
         contentView.addSubview(vertStackWithLabels)
         contentView.addSubview(detailButton)
+        addDetailButtonAction()
         applyConstraints()
     }
     
@@ -99,6 +105,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     
     // MARK: - Instance methods
     func configureFor(book: Book) {
+        self.book = book
+        
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
 
@@ -129,6 +137,14 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     }
     
     // MARK: - Helper methods
+    private func addDetailButtonAction() {
+        detailButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self, let book = self.book else { return }
+//            self.detailButtonDidTapCallback(self.book)
+            self.detailButtonDidTapCallback(book)
+        }), for: .touchUpInside)
+    }
+    
     private func applyConstraints() {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

@@ -220,7 +220,7 @@ extension BookViewController {
                 let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
                 storytellersBottomSheetController.tableViewDidSelectStorytellerCallback = { [weak self] selectedStoryteller in
                     guard let self = self else { return }
-                    self.dismiss(animated: false)
+//                    self.dismiss(animated: false)
                     let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
                     self.navigationController?.pushViewController(controller, animated:
                     true)

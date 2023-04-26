@@ -17,6 +17,7 @@ class SearchResultsViewController: UIViewController {
     // MARK: - Instance properties
     private let buttonsView = SearchResultsButtonsView()
     var selectedTitleCallback: SelectedTitleCallback = {_ in}
+    var detailButtonDidTapCallback: (Book) -> () = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -139,6 +140,7 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         }
         
         cell.selectedTitleCallback = selectedTitleCallback
+        cell.detailButtonDidTapCallback = detailButtonDidTapCallback
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
@@ -152,6 +154,7 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
         
         cell.resultsTable.isHidden = false
         cell.resultsTable.reloadData()
+        
         
        // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
         DispatchQueue.main.async {
