@@ -365,44 +365,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
 //}
 
 extension SearchViewController: BottomSheetViewControllerDelegate {
-    // For .bookDetails BottomSheetKind of BottomSheetViewController
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         // Nothing needs to be done
+        #warning("Configure book model object in data model")
     }
-    
-    func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries series: String) {
-        let tableSection = TableSection(sectionTitle: series)
-        let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book) {
-        if storytellers.count == 1 {
-            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        if storytellers.count > 1 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                guard let self = self else { return }
-                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
-                storytellersBottomSheetController.delegate = self
-                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
-                self.present(storytellersBottomSheetController, animated: false)
-            }
-        }
-    }
-    
-    func bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory category: Category) {
-        let controller = CategoryViewController(categoryModel: category)
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    // For .authors or .narrators BottomSheetKind of BottomSheetViewController
-    func storytellersBottomSheetViewControllerDidSelect(storyteller: Title) {
-        let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storyteller)
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
 }
