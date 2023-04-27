@@ -37,9 +37,9 @@ class PosterTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
+    func configureFor(book: Book, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
         posterButton.book = book
-        posterButton.callback = callback
+        posterButton.dimViewCellButtoDidTapCallback = callback
         posterButton.configuration?.background.image = book.coverImage
     }
     

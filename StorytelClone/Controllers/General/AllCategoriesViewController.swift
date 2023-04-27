@@ -50,7 +50,7 @@ extension AllCategoriesViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
         // Respond to button tap in CategoryCollectionViewCell
-        cell.callbackClosure = { [weak self] buttonCategory in
+        cell.dimViewCellButtonDidTapCallback = { [weak self] buttonCategory in
             guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
             
             let categoryModel = self.getModelFor(buttonCategory: category)

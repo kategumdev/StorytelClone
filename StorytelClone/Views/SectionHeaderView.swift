@@ -25,9 +25,9 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Instance properties
     private let containerWithSubviews = SectionHeaderSubviewsContainer(addButtonAction: true)
     
-    var seeAllButtonDidTapCallback: SeeAllButtonDidTapCallback = {} {
+    var seeAllButtonDidTapCallback: () -> () = {} {
         didSet {
-            containerWithSubviews.callback = seeAllButtonDidTapCallback
+            containerWithSubviews.seeAllButtonDidTapCallback = seeAllButtonDidTapCallback
         }
     }
     

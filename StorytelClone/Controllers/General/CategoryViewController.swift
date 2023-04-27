@@ -66,7 +66,7 @@ class CategoryViewController: BaseTableViewController {
 //        cell.books = category.tableSections[indexPath.row].books
         
         // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        cell.callbackClosure = { [weak self] book in
+        cell.dimViewCellButtonDidTapCallback = { [weak self] book in
             guard let self = self else { return }
             let book = book as! Book
             let controller = BookViewController(book: book)

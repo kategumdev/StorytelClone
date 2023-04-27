@@ -8,8 +8,6 @@
 import UIKit
 
 // Create it as a separate class to make calculation of estimated section header height and smooth scrolling experience (especially after dynamic font size change) possible
-typealias SeeAllButtonDidTapCallback = () -> ()
-
 class SectionHeaderSubviewsContainer: UIView {
     
     private static let paddingBetweenLabelAndButton: CGFloat = 20
@@ -75,7 +73,7 @@ class SectionHeaderSubviewsContainer: UIView {
     private let defaultHorzStackTopPadding: CGFloat = Constants.sectionHeaderViewTopPadding
     private lazy var horzStackTopAnchorConstraint =             horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: defaultHorzStackTopPadding)
     
-    var callback: SeeAllButtonDidTapCallback = {}
+    var seeAllButtonDidTapCallback: () -> () = {}
 
     // MARK: - Initializers
     init(addButtonAction: Bool) {
@@ -125,9 +123,9 @@ class SectionHeaderSubviewsContainer: UIView {
     // MARK: - Helper methods
     private func configureButtonWithAction() {
 //        print("action is added to seeAllButton")
-        seeAllButton.addAction(UIAction(handler: { [weak self] action in
+        seeAllButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.callback()
+            self.seeAllButtonDidTapCallback()
         }), for: .touchUpInside)
     }
     

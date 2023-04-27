@@ -57,9 +57,9 @@ class WideButtonTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(sectionKind: SectionKind, withCallbackForButton callback: @escaping ButtonCallback) {
+    func configureFor(sectionKind: SectionKind, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
         wideButton.sectionKind = sectionKind
-        wideButton.callback = callback
+        wideButton.dimViewCellButtoDidTapCallback = callback
         if sectionKind == .seriesCategoryButton {
             customLabel.text = "Series"
         } else {

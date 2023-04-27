@@ -41,9 +41,9 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
+    func configureFor(book: Book, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
         bookButton.book = book
-        bookButton.callback = callback
+        bookButton.dimViewCellButtoDidTapCallback = callback
         bookButton.configuration?.background.image = book.largeCoverImage
     }
     

@@ -132,8 +132,7 @@ extension HomeViewController {
     private func wideButtonCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
         
-        // To respond to button tap in WideButtonTableViewCell
-        let callbackClosure: ButtonCallback = { [weak self] sectionKind in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] sectionKind in
             guard let self = self else { return }
             if sectionKind as? SectionKind == .seriesCategoryButton {
                 let controller = CategoryViewController(categoryModel: Category.series)
@@ -145,9 +144,8 @@ extension HomeViewController {
         }
         
         if let category = category {
-            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
+            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallback: callback)
         }
-//        cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallbackForButton: callbackClosure)
         return cell
     }
     
@@ -155,12 +153,12 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
         
         // To respond to button tap in PosterTableViewCell
-        let callbackClosure: ButtonCallback = { [weak self] book in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.configureFor(book: posterBook, withCallbackForButton: callbackClosure)
+        cell.configureFor(book: posterBook, withCallback: callback)
  
         return cell
     }
@@ -171,13 +169,13 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
         
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callbackClosure: ButtonCallback = { [weak self] book in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
-        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+        cell.configureWith(books: books, callback: callback)
         return cell
     }
     
@@ -187,12 +185,12 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
 
         // To respond to button tap in LargeBookCollectionViewCell of TableViewCellWithHorzCvLargeCovers
-        let callbackClosure: ButtonCallback = { [weak self] book in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+        cell.configureWith(books: books, callback: callback)
         return cell
     }
     
@@ -202,12 +200,12 @@ extension HomeViewController {
         let book = category.tableSections[indexPath.section].books[0]
         
         // To respond to button tap in BookWithOverviewTableViewCell
-        let callbackClosure: ButtonCallback = { [weak self] book in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.configureFor(book: book, withCallbackForButton: callbackClosure)
+        cell.configureFor(book: book, withCallback: callback)
          return cell
     }
 

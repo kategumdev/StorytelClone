@@ -35,9 +35,9 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallbackForButton callback: @escaping ButtonCallback) {
+    func configureFor(book: Book, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
         containerWithSubviews.configureFor(book: book)
-        containerWithSubviews.bookOverviewButton.callback = callback
+        containerWithSubviews.bookOverviewButton.dimViewCellButtoDidTapCallback = callback
     }
     
 }

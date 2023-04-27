@@ -47,10 +47,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping ButtonCallback ) {
+    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping DimViewCellButtonDidTapCallback ) {
         cellButton.backgroundColor = color
         cellButton.categoryButton = category
-        cellButton.callback = callback
+        cellButton.dimViewCellButtoDidTapCallback = callback
         categoryTitleLabel.text = category.rawValue
     }
     

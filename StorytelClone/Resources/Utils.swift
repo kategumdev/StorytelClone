@@ -7,8 +7,7 @@
 
 import UIKit
 
-typealias ButtonCallback = (_ item: Any) -> ()
-//typealias SelectedTitleCallback = (_ title: Title) -> ()
+//typealias ButtonCallback = (_ item: Any) -> ()
 
 enum ScrollDirection {
     case forward

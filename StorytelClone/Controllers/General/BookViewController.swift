@@ -65,7 +65,7 @@ class BookViewController: UIViewController {
     
     // MARK: - Initializers
     init(book: Book) {
-        print("BookViewController initialized")
+//        print("BookViewController initialized")
         self.book = book
         super.init(nibName: nil, bundle: nil)
     }
@@ -75,7 +75,7 @@ class BookViewController: UIViewController {
     }
     
     deinit {
-        print("BookViewController deinitialized")
+//        print("BookViewController deinitialized")
     }
     
     // MARK: - View life cycle
@@ -124,13 +124,13 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         
         let books = Book.books
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callbackClosure: ButtonCallback = { [weak self] book in
+        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
-        cell.configureWith(books: books, callbackForButtons: callbackClosure)
+        cell.configureWith(books: books, callback: callback)
         return cell
     }
     

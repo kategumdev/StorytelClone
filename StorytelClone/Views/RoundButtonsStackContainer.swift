@@ -169,12 +169,7 @@ class RoundButtonsStackContainer: UIStackView {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.saveButton.isUserInteractionEnabled = false
-            
-//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-//            impactFeedbackGenerator.impactOccurred()
-            
             Utils.playHaptics()
-            
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.handleSaveButtonTapped()
         }), for: .touchUpInside)
@@ -182,7 +177,6 @@ class RoundButtonsStackContainer: UIStackView {
 
     private func handleSaveButtonTapped() {
         self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
-
         if self.isBookAddedToBookshelf {
             self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
             self.toggleSaveLabelText()
