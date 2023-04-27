@@ -7,36 +7,6 @@
 
 import UIKit
 
-protocol BottomSheetViewControllerDelegate: AnyObject {
-    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book)
-
-    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book, parentVC: UIViewController?)
-}
-
-extension BottomSheetViewControllerDelegate {
-
-    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book, parentVC: UIViewController?) {
-        guard let parentVC = parentVC else { return }
-
-        if storytellers.count == 1 {
-            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-            parentVC.navigationController?.pushViewController(controller, animated: true)
-        }
-
-        if storytellers.count > 1 {
-            #warning("maybe [weak parentVC is needed here]")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
-                storytellersBottomSheetController.delegate = parentVC as? BottomSheetViewControllerDelegate
-                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
-                parentVC.present(storytellersBottomSheetController, animated: false)
-            }
-        }
-    }
-
-}
-
 enum BookDetailsBottomSheetCell: String, CaseIterable {
     case saveBook = "heart"
     case markAsFinished = "checkmark"
@@ -54,24 +24,11 @@ enum BottomSheetKind {
     case narrators
 }
 
-class BottomSheetViewController: UIViewController {
-    
-    // MARK: - Static methods
-//    static func createAllTitlesVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title], andBook book: Book) -> UIViewController {
-//        if storytellers.count == 1 {
-//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-//            return controller
-////            self.navigationController?.pushViewController(controller, animated: true)
-//        } else {
-//            // For cases when storytellers.count > 1
-//            let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-//            let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
-//            storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
-//            return storytellersBottomSheetController
-//        }
-//
-//    }
+protocol BottomSheetViewControllerDelegate: AnyObject {
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book)
+}
 
+class BottomSheetViewController: UIViewController {
     // MARK: Instance properties
     private var book: Book
     private var kind: BottomSheetKind = .bookDetails
@@ -254,7 +211,6 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return}
                 let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedAuthor)
                 delegate.navigationController?.pushViewController(controller, animated: true)
-//                self.delegate?.storytellersBottomSheetViewControllerDidSelect(storyteller: selectedAuthor)
             }
         case .narrators:
             let selectedNarrator = book.narrators[indexPath.row]
@@ -262,7 +218,6 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return }
                 let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedNarrator)
                 delegate.navigationController?.pushViewController(controller, animated: true)
-//                self.delegate?.storytellersBottomSheetViewControllerDidSelect(storyteller: selectedNarrator)
             }
         }
     }
@@ -284,7 +239,6 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
 extension BottomSheetViewController {
     
     private func handleSelection(ellipsisButtonCell: BookDetailsBottomSheetCell, withIndexPath indexPath: IndexPath) {
-        
         switch ellipsisButtonCell {
         case .saveBook:
             if book.isAddedToBookshelf {
@@ -298,16 +252,11 @@ extension BottomSheetViewController {
         case .download:
             print("download tapped")
         case .viewSeries:
-//            self.dismiss(animated: false)
-//            tableViewDidSelectViewSeriesCellCallback()
             self.dismiss(animated: false)
             guard let series = book.series, let delegate = self.delegate as? UIViewController else { return }
-//            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries: series)
-            
             let tableSection = TableSection(sectionTitle: series)
             let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
             delegate.navigationController?.pushViewController(controller, animated: true)
-//            (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
             
         case .viewAuthors:
             let authors = book.authors
@@ -391,44 +340,30 @@ extension BottomSheetViewController {
 ////        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: book, parentVC: delegate as? UIViewController)
 //    }
     
-//    private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
-//        let completion: () -> () = { [weak self] in
-//            guard let self = self, let delegate = self.delegate as? UIViewController else { return }
-//            let controller =  BottomSheetViewController.createAllTitlesVcWithStorytellerOrBottomSheet(withStorytellers: storytellers, andBook: self.book)
-//
-//            if let controller = controller as? BottomSheetViewController {
-//                controller.delegate = delegate as? BottomSheetViewControllerDelegate
-//                delegate.present(controller, animated: false)
-//            } else {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                    delegate.navigationController?.pushViewController(controller, animated: true)
-//                }
-//            }
-//        }
-//
-//        if storytellers.count == 1 {
-//            self.dismiss(animated: false, completion: completion)
-//        } else {
-//            self.dismissWithCustomAnimation(completion: completion)
-//        }
-//    }
-    
     private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book, parentVC: self.delegate as? UIViewController)
+                guard let self = self, let delegate = self.delegate as? UIViewController else { return }
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                delegate.navigationController?.pushViewController(controller, animated: true)
             })
-        } else {
-            self.dismissWithCustomAnimation(completion: { [weak self] in
-                guard let self = self else { return }
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book, parentVC: self.delegate as? UIViewController)
-            })
+            return
         }
+        
+        // For cases when storytellers.count > 1
+        self.dismissWithCustomAnimation(completion: { [weak self] in
+            guard let self = self, let delegate = self.delegate as? UIViewController else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+                let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+                storytellersBottomSheetController.delegate = delegate as? BottomSheetViewControllerDelegate
+                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+                delegate.present(storytellersBottomSheetController, animated: false)
+            }
+        })
     }
     
     private func handleShowMoreTitlesLikeThis() {
-        
         self.dismiss(animated: false)
         
         // Create table sections
@@ -462,7 +397,6 @@ extension BottomSheetViewController {
         
         // Create category with created tableSections and pass it to callback
         let category = Category(title: "Libros similares", tableSections: tableSections, bookToShowMoreTitlesLikeIt: book)
-//        self.delegate?.bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory: category)
         let controller = CategoryViewController(categoryModel: category)
         (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
     }
@@ -484,19 +418,7 @@ extension BottomSheetViewController {
             self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
         }, completion: nil)
     }
-    
-//    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
-//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-//            self.tableViewHeightConstraint.constant = 0 // Hide tableView
-//            self.view.layoutIfNeeded()
-//            self.setViewBackgroundColorAlphaTo(value: 0)
-//        }, completion: { _ in
-//            self.dismiss(animated: false, completion: {
-//                completion?()
-//            })
-//        })
-//    }
-    
+
     private func animateTableViewHeight(_ height: CGFloat) {
         UIView.animate(withDuration: 0.3, delay: 0) { [weak self] in
             guard let self = self else { return }

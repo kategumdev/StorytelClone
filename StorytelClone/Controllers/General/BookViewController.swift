@@ -207,14 +207,19 @@ extension BookViewController {
      
         bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
             guard let self = self else { return }
-            weak var weakSelf = self
-            self.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book, parentVC: weakSelf)
+            if storytellers.count == 1 {
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                self.navigationController?.pushViewController(controller, animated: true)
+                return
+            }
+            
+            // For cases when storytellers.count > 1
+            let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+            let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+            storytellersBottomSheetController.delegate = self
+            storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+            self.present(storytellersBottomSheetController, animated: false)
         }
-        
-//        guard let series = book.series else { return }
-//        bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
-//            self?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries: series)
-//        }
         
         guard book.series != nil else { return }
         bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
@@ -469,5 +474,4 @@ extension BookViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         self.bookDetailsStackView.updateSaveButtonAppearance()
     }
-
 }

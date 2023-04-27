@@ -30,7 +30,7 @@ class AllTitlesViewController: BaseTableViewController {
     
     // MARK: - Initializers
     init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
-        print("AllTitlesViewController INIT")
+//        print("AllTitlesViewController INIT")
         self.tableSection = tableSection
         self.titleModel = titleModel
         super.init(tableViewStyle: .plain)
@@ -41,7 +41,7 @@ class AllTitlesViewController: BaseTableViewController {
     }
     
     deinit {
-        print("AllTitlesViewController DEINIT")
+//        print("AllTitlesViewController DEINIT")
     }
     
     // MARK: - View life cycle
