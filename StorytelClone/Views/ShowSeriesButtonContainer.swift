@@ -11,6 +11,7 @@ class ShowSeriesButtonContainer: UIView {
     
     // MARK: - Instance properties
     var showSeriesButtonDidTapCallback: () -> () = {}
+//    weak var delegate: BottomSheetViewControllerDelegate?
     
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
@@ -84,6 +85,7 @@ class ShowSeriesButtonContainer: UIView {
         showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
             Utils.playHaptics()
             self?.showSeriesButtonDidTapCallback()
+//            self?.delegate.
         }), for: .touchUpInside)
     }
     

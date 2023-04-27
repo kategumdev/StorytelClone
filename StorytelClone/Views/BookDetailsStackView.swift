@@ -9,12 +9,22 @@ import UIKit
 
 //typealias ShowSeriesButtonDidTapCallback = () -> ()
 
+//protocol BookDetailsStackViewDelegate: AnyObject {
+//    func showSeriesButtonDidTap
+//}
+
 class BookDetailsStackView: UIStackView {
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
     
     // MARK: - Instance properties
     private let book: Book
+    
+//    weak var delegate: BottomSheetViewControllerDelegate? = nil {
+//        didSet {
+//            showSeriesButtonContainer.delegate = self.delegate
+//        }
+//    }
     
     var showSeriesButtonDidTapCallback: () -> () = {} {
         didSet {

@@ -14,14 +14,45 @@ protocol BottomSheetViewControllerDelegate: AnyObject {
     
     func bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries series: String)
     
-    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(
-        withStorytellers storytellers: [Title], andBook book: Book)
+//    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book)
+    
+    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book, parentVC: UIViewController?)
+
+    
+//    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book, completion: @escaping (UIViewController) -> ())
     
     func bookDetailsbottomSheetViewControllerDidSelectShowMoreTitlesLikeThisCell(withCategory category: Category)
     
     // For .authors or .narrators BottomSheetKind of BottomSheetViewController
     func storytellersBottomSheetViewControllerDidSelect(storyteller: Title)
     
+}
+
+extension BottomSheetViewControllerDelegate {
+
+    func bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers storytellers: [Title], andBook book: Book, parentVC: UIViewController?) {
+        guard let parentVC = parentVC else { return }
+//        guard parentVC is BottomSheetViewControllerDelegate, let parentVC = parentVC else { return }
+        
+        if storytellers.count == 1 {
+            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+            parentVC.navigationController?.pushViewController(controller, animated: true)
+        }
+
+        if storytellers.count > 1 {
+            #warning("maybe [weak parentVC is needed here]")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+                storytellersBottomSheetController.delegate = parentVC as? BottomSheetViewControllerDelegate
+                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+                parentVC.present(storytellersBottomSheetController, animated: false)
+            }
+        }
+            
+    }
+
+
 }
 
 enum BookDetailsBottomSheetCell: String, CaseIterable {
@@ -44,6 +75,82 @@ enum BottomSheetKind {
 class BottomSheetViewController: UIViewController {
     
     // MARK: - Static methods
+    static func createAllTitlesVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title], andBook book: Book) -> UIViewController {
+        if storytellers.count == 1 {
+            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+            return controller
+//            self.navigationController?.pushViewController(controller, animated: true)
+        } else {
+            // For cases when storytellers.count > 1
+            let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+            let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+            storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+            return storytellersBottomSheetController
+        }
+
+//        if storytellers.count > 1 {
+//            let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+//            let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+//            storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+//            return storytellersBottomSheetController
+//
+////            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//////                guard let self = self else { return }
+////                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+////                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+////                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+////
+//////                completion(storytellersBottomSheetController)
+//////                storytellersBottomSheetController.delegate = self
+//////                self.present(storytellersBottomSheetController, animated: false)
+////            }
+//        }
+    }
+    
+    
+//    static func showVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title], andBook book: Book, completion: @escaping (_ createdController: UIViewController) -> ()) {
+//        if storytellers.count == 1 {
+//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+//            completion(controller)
+////            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        if storytellers.count > 1 {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+////                guard let self = self else { return }
+//                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+//                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+//                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+//                completion(storytellersBottomSheetController)
+////                storytellersBottomSheetController.delegate = self
+////                self.present(storytellersBottomSheetController, animated: false)
+//            }
+//        }
+//    }
+    
+    
+    
+//    static func showVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title], andBook book: Book, viewController: UIViewController) {
+//        if storytellers.count == 1 {
+//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+////            self.navigationController?.pushViewController(controller, animated: true)
+//            viewController.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        if storytellers.count > 1 {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak viewController] in
+////                guard let self = self else { return }
+//                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
+//                let storytellersBottomSheetController = BottomSheetViewController(book: book, kind: bottomSheetKind)
+////                storytellersBottomSheetController.delegate = self
+//                storytellersBottomSheetController.delegate = viewController as? BottomSheetViewControllerDelegate
+//                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
+////                self.present(storytellersBottomSheetController, animated: false)
+//                viewController?.present(storytellersBottomSheetController, animated: false)
+//            }
+//        }
+//    }
+    
 //    private func showVcWithStorytellerOrBottomSheet(withStorytellers storytellers: [Title]) {
 //        if storytellers.count == 1 {
 //            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
@@ -293,7 +400,11 @@ extension BottomSheetViewController {
 //            tableViewDidSelectViewSeriesCellCallback()
             self.dismiss(animated: false)
             guard let series = book.series else { return }
-            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries: series)
+//            self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewSeriesCell(withSeries: series)
+            
+            let tableSection = TableSection(sectionTitle: series)
+            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+            (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
             
         case .viewAuthors:
             let authors = book.authors
@@ -365,13 +476,16 @@ extension BottomSheetViewController {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
+//                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book, parentVC: self.delegate as? UIViewController)
+                                
 //                self?.viewStorytellersDidTapCallback(storytellers)
             })
         } else {
             self.dismissWithCustomAnimation(completion: { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
+//                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book)
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: self.book, parentVC: self.delegate as? UIViewController)
 //                self?.viewStorytellersDidTapCallback(storytellers)
             })
         }
