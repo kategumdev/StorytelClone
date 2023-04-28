@@ -137,15 +137,26 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-        sectionHeader.configureFor(tableSection: TableSection.similarTitles)
         
-        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+        sectionHeader.configureFor(tableSection: TableSection.similarTitles, withSeeAllButtonDidTapCallback: { [weak self] in
             guard let self = self else { return }
             let controller = AllTitlesViewController(tableSection: TableSection.similarTitles, titleModel: self.book)
             self.navigationController?.pushViewController(controller, animated: true)
-        }
+        })
         return sectionHeader
     }
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+//        sectionHeader.configureFor(tableSection: TableSection.similarTitles)
+//
+//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
+//            guard let self = self else { return }
+//            let controller = AllTitlesViewController(tableSection: TableSection.similarTitles, titleModel: self.book)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//        return sectionHeader
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension

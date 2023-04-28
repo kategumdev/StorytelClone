@@ -8,6 +8,7 @@
 import UIKit
 
 // Create it as a separate class to make calculation of estimated section header height and smooth scrolling experience (especially after dynamic font size change) possible
+
 class SectionHeaderSubviewsContainer: UIView {
     
     private static let paddingBetweenLabelAndButton: CGFloat = 20
@@ -92,7 +93,7 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?) {
+    func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
         sectionTitleLabel.text = tableSection.sectionTitle
         sectionTitleLabel.sizeToFit()
         
@@ -105,7 +106,7 @@ class SectionHeaderSubviewsContainer: UIView {
         sectionSubtitleLabel.text = tableSection.sectionSubtitle
         sectionTitleLabel.sizeToFit()
         
-        // Show or hide seeAllButton
+        // Hide seeAllButton or show and assign/update callback
         let sectionKind = tableSection.sectionKind
         if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .searchVc {
             seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
@@ -113,12 +114,41 @@ class SectionHeaderSubviewsContainer: UIView {
         } else {
             seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
             horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
+            seeAllButtonDidTapCallback = callback
         }
 
        // Adjust top padding of first section header if vc is presented when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
         guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
         horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 10 : defaultHorzStackTopPadding
     }
+    
+//    func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?) {
+//        sectionTitleLabel.text = tableSection.sectionTitle
+//        sectionTitleLabel.sizeToFit()
+//
+//        // Show or hide sectionSubtitleLabel
+//        if tableSection.sectionSubtitle.isEmpty {
+//            sectionSubtitleLabel.isHidden = true
+//        } else {
+//            sectionSubtitleLabel.isHidden = false
+//        }
+//        sectionSubtitleLabel.text = tableSection.sectionSubtitle
+//        sectionTitleLabel.sizeToFit()
+//
+//        // Show or hide seeAllButton
+//        let sectionKind = tableSection.sectionKind
+//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .searchVc {
+//            seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
+//            horzStackView.spacing = 0
+//        } else {
+//            seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
+//            horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
+//        }
+//
+//       // Adjust top padding of first section header if vc is presented when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
+//        guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
+//        horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 10 : defaultHorzStackTopPadding
+//    }
     
     // MARK: - Helper methods
     private func configureButtonWithAction() {

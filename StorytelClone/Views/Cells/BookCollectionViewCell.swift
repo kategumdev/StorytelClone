@@ -28,7 +28,12 @@ class BookCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(dimmedAnimationButton)
         contentView.addSubview(badgeOne)
         contentView.addSubview(badgeTwo)
+//        weak var weakSelf = self
+//        if let weakSelf = weakSelf {
+//            dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: weakSelf)
+//        }
         dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        #warning("not sure if it's okay to pass strong self here")
         applyConstraints()
     }
     

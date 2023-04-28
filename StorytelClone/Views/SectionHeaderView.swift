@@ -17,7 +17,9 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         headerContainer.translatesAutoresizingMaskIntoConstraints = false
         headerContainer.widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
 
-        headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
+//        headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
+        headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: {})
+
         let height = headerContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
@@ -25,11 +27,11 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Instance properties
     private let containerWithSubviews = SectionHeaderSubviewsContainer(addButtonAction: true)
     
-    var seeAllButtonDidTapCallback: () -> () = {} {
-        didSet {
-            containerWithSubviews.seeAllButtonDidTapCallback = seeAllButtonDidTapCallback
-        }
-    }
+//    var seeAllButtonDidTapCallback: () -> () = {} {
+//        didSet {
+//            containerWithSubviews.seeAllButtonDidTapCallback = seeAllButtonDidTapCallback
+//        }
+//    }
     
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
@@ -45,8 +47,12 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Instance methods
-    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil) {
-        containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
+//    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil) {
+//        containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
+//    }
+    
+    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
+        containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: callback)
     }
     
 }
