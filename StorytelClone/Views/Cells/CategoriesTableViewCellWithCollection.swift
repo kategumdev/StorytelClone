@@ -31,7 +31,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     
     // MARK: - Instance properties
     var categoryButtons = [ButtonCategory]()
-    var dimViewCellButtonDidTapCallback: DimViewCellButtonDidTapCallback = {_ in}
+    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let categoryColors = [Utils.pinkCategoryColor, Utils.orangeCategoryColor, Utils.orangeCategoryColor, Utils.coralCategoryColor, Utils.darkBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.yellowCategoryColor, Utils.peachCategoryColor, Utils.lightBlueCategoryColor, Utils.pinkCategoryColor, Utils.greenCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor, Utils.orangeCategoryColor, Utils.yellowCategoryColor, Utils.greenCategoryColor, Utils.lightBlueCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor]
     
@@ -83,7 +83,7 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else { return UICollectionViewCell()}
         
         // Closure passed by AllCategoriesViewController. Pass it to CategoryCollectionViewCell
-        cell.configure(withColor: categoryColors[indexPath.row], categoryOfButton: categoryButtons[indexPath.row], callback: dimViewCellButtonDidTapCallback)
+        cell.configure(withColor: categoryColors[indexPath.row], categoryOfButton: categoryButtons[indexPath.row], callback: dimmedAnimationButtonDidTapCallback)
         
         return cell
     }

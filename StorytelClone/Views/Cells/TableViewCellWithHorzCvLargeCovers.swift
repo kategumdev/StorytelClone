@@ -14,7 +14,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     // MARK: - Instance properties
     // Actual value injected when cell is being configured in cellForRowAt
     var books: [Book] = [Book]() // It will contain 42 random audiobooks
-    var dimViewCellButtonDidTapCallback: DimViewCellButtonDidTapCallback = {_ in}
+    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -50,9 +50,9 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(books: [Book], callback: @escaping DimViewCellButtonDidTapCallback) {
+    func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
-        self.dimViewCellButtonDidTapCallback = callback
+        self.dimmedAnimationButtonDidTapCallback = callback
         collectionView.reloadData()
     }
 
@@ -70,7 +70,7 @@ extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegate, UICollec
         let book = books[indexPath.row]
         
         // Pass callback closure this TableViewCellWithCollection got from owning controller to BookCollectionViewCell
-        cell.configureFor(book: book, withCallback: dimViewCellButtonDidTapCallback)
+        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
 
         return cell
     }

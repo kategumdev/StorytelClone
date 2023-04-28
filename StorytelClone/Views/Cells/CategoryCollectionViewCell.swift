@@ -28,8 +28,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var cellButton: DimViewCellButton = {
-        let button = DimViewCellButton()
+    private lazy var dimmedAnimationButton: DimmedAnimationButton = {
+        let button = DimmedAnimationButton()
         button.addSubview(categoryTitleLabel)
         return button
     }()
@@ -37,8 +37,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(cellButton)
-        cellButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        contentView.addSubview(dimmedAnimationButton)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
     
@@ -47,23 +47,23 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping DimViewCellButtonDidTapCallback ) {
-        cellButton.backgroundColor = color
-        cellButton.categoryButton = category
-        cellButton.dimViewCellButtoDidTapCallback = callback
+    func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.backgroundColor = color
+        dimmedAnimationButton.categoryButton = category
+        dimmedAnimationButton.didTapCallback = callback
         categoryTitleLabel.text = category.rawValue
     }
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        cellButton.translatesAutoresizingMaskIntoConstraints = false
-        cellButton.fillSuperview()
+        dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
+        dimmedAnimationButton.fillSuperview()
         
         categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            categoryTitleLabel.leadingAnchor.constraint(equalTo: cellButton.leadingAnchor, constant: Constants.commonHorzPadding),
-            categoryTitleLabel.bottomAnchor.constraint(equalTo: cellButton.bottomAnchor, constant: -(Constants.commonHorzPadding - 4)),
-            categoryTitleLabel.trailingAnchor.constraint(equalTo: cellButton.trailingAnchor, constant: -Constants.commonHorzPadding)
+            categoryTitleLabel.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: Constants.commonHorzPadding),
+            categoryTitleLabel.bottomAnchor.constraint(equalTo: dimmedAnimationButton.bottomAnchor, constant: -(Constants.commonHorzPadding - 4)),
+            categoryTitleLabel.trailingAnchor.constraint(equalTo: dimmedAnimationButton.trailingAnchor, constant: -Constants.commonHorzPadding)
         ])
     }
     

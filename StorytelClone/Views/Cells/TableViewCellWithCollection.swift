@@ -14,7 +14,7 @@ class TableViewCellWithCollection: UITableViewCell {
     // Actual value injected when cell is being configured in cellForRowAt
     var books: [Book] = [Book]() // It will contain only 10 random books
     
-    var dimViewCellButtonDidTapCallback: DimViewCellButtonDidTapCallback = {_ in}
+    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -50,18 +50,12 @@ class TableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(books: [Book], callback: @escaping DimViewCellButtonDidTapCallback) {
+    func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
-        self.dimViewCellButtonDidTapCallback = callback
+        self.dimmedAnimationButtonDidTapCallback = callback
         collectionView.reloadData()
     }
     
-//    func configureWith(books: [Book], callbackForButtons: @escaping DimViewCellButtonDidTapCallback) {
-//        self.books = books
-//        self.dimViewCellButtonDidTapCallback = callbackForButtons
-//        collectionView.reloadData()
-//    }
-
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -74,7 +68,7 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
 
         guard let book = books.randomElement() else { return UICollectionViewCell()}
-        cell.configureFor(book: book, withCallback: dimViewCellButtonDidTapCallback)
+        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     

@@ -132,7 +132,7 @@ extension HomeViewController {
     private func wideButtonCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
         
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] sectionKind in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] sectionKind in
             guard let self = self else { return }
             if sectionKind as? SectionKind == .seriesCategoryButton {
                 let controller = CategoryViewController(categoryModel: Category.series)
@@ -153,7 +153,7 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
         
         // To respond to button tap in PosterTableViewCell
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
@@ -169,7 +169,7 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
         
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
@@ -185,7 +185,7 @@ extension HomeViewController {
         let books = category.tableSections[indexPath.section].books
 
         // To respond to button tap in LargeBookCollectionViewCell of TableViewCellWithHorzCvLargeCovers
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)
@@ -200,7 +200,7 @@ extension HomeViewController {
         let book = category.tableSections[indexPath.section].books[0]
         
         // To respond to button tap in BookWithOverviewTableViewCell
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)

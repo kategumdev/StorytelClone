@@ -7,25 +7,13 @@
 
 import UIKit
 
-//typealias ShowSeriesButtonDidTapCallback = () -> ()
-
-//protocol BookDetailsStackViewDelegate: AnyObject {
-//    func showSeriesButtonDidTap
-//}
-
 class BookDetailsStackView: UIStackView {
     // MARK: - Static properties
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
     
     // MARK: - Instance properties
     private let book: Book
-    
-//    weak var delegate: BottomSheetViewControllerDelegate? = nil {
-//        didSet {
-//            showSeriesButtonContainer.delegate = self.delegate
-//        }
-//    }
-    
+
     var showSeriesButtonDidTapCallback: () -> () = {} {
         didSet {
             showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesButtonDidTapCallback
@@ -37,10 +25,7 @@ class BookDetailsStackView: UIStackView {
             roundButtonsStackContainer.saveButtonDidTapCallback = saveButtonDidTapCallback
         }
     }
-    
-//    typealias AuthorsButtonDidTapCallback = () -> ()
-//    var authorsButtonDidTapCallback: () -> () = {}
-//    var narratorsButtonDidTapCallback: () -> () = {}
+
     var storytellerButtonDidTapCallback: ([Title]) -> () = {_ in}
     
     private let coverImageView: UIImageView = {
@@ -109,7 +94,6 @@ class BookDetailsStackView: UIStackView {
     private var hasNarratorsButton = true
     
     private func configureNarratorsLabel() {
-//        guard let narrators = book.narrators else { return }
         guard !book.narrators.isEmpty else { return }
         let narratorNames = book.narrators.map { $0.name }
         let narratorNamesString = narratorNames.joined(separator: ", ")
@@ -221,9 +205,6 @@ class BookDetailsStackView: UIStackView {
     func updateSaveButtonAppearance() {
         roundButtonsStackContainer.updateSaveButtonAppearance()
     }
-//    func updateSaveButtonAppearanceFor(book: Book) {
-//
-//    }
     
     // MARK: - Helper methods
     private func configureSelf() {

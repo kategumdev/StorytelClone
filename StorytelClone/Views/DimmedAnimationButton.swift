@@ -7,9 +7,9 @@
 
 import UIKit
 
-typealias DimViewCellButtonDidTapCallback = (Any) -> ()
+typealias DimmedAnimationButtonDidTapCallback = (Any) -> ()
 
-class DimViewCellButton: UIButton {
+class DimmedAnimationButton: UIButton {
     // MARK: - Instance properties
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
@@ -19,8 +19,7 @@ class DimViewCellButton: UIButton {
     var sectionKind: SectionKind?
     var categoryButton: ButtonCategory?
     
-//    var callback: ButtonCallback = {_ in}
-    var dimViewCellButtoDidTapCallback: DimViewCellButtonDidTapCallback = {_ in}
+    var didTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     #warning("Maybe replace Any with smth else")
     
     weak var viewToTransform: UIView?
@@ -101,11 +100,11 @@ class DimViewCellButton: UIButton {
                 self.buttonTimer?.invalidate()
 //                print("DO smth on touchUpInside")
                 if let book = self.book {
-                    self.dimViewCellButtoDidTapCallback(book)
+                    self.didTapCallback(book)
                 } else if let sectionKind = self.sectionKind {
-                    self.dimViewCellButtoDidTapCallback(sectionKind)
+                    self.didTapCallback(sectionKind)
                 } else if let categoryButton = self.categoryButton {
-                    self.dimViewCellButtoDidTapCallback(categoryButton)
+                    self.didTapCallback(categoryButton)
                 }
             }
 

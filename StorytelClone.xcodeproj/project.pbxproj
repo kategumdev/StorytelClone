@@ -45,7 +45,7 @@
 		5AA8006F29C8F4AD00198B8A /* Narrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006E29C8F4AD00198B8A /* Narrator.swift */; };
 		5AAA1AC229C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */; };
 		5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */; };
-		5AB1A29C29B3E32A001CC50A /* DimViewCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */; };
+		5AB1A29C29B3E32A001CC50A /* DimmedAnimationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */; };
 		5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCC629B21C090048A4FB /* BookViewController.swift */; };
 		5AB2CCCE29B2437D0048A4FB /* PosterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */; };
 		5AB86E6129B1723B005122A6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB86E6029B1723B005122A6 /* Book.swift */; };
@@ -136,7 +136,7 @@
 		5AA8006E29C8F4AD00198B8A /* Narrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Narrator.swift; sourceTree = "<group>"; };
 		5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsSectionHeaderView.swift; sourceTree = "<group>"; };
 		5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
-		5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimViewCellButton.swift; sourceTree = "<group>"; };
+		5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedAnimationButton.swift; sourceTree = "<group>"; };
 		5AB2CCC629B21C090048A4FB /* BookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterTableViewCell.swift; sourceTree = "<group>"; };
 		5AB86E6029B1723B005122A6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
@@ -319,7 +319,7 @@
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
 				5A8380BA299ED7E200611543 /* BadgeView.swift */,
-				5AB1A29B29B3E32A001CC50A /* DimViewCellButton.swift */,
+				5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */,
 				5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */,
 				5A36E03F29B804430096A032 /* SearchResultsButtonsView.swift */,
 				5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */,
@@ -572,7 +572,7 @@
 				5A8497FD29D4B4060047AB44 /* TagsView.swift in Sources */,
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 				5A5B878529C527AA001A7A64 /* SearchResultsNoImageTableViewCell.swift in Sources */,
-				5AB1A29C29B3E32A001CC50A /* DimViewCellButton.swift in Sources */,
+				5AB1A29C29B3E32A001CC50A /* DimmedAnimationButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

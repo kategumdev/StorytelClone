@@ -285,9 +285,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
         // Respond to button tap in CategoryCollectionViewCell
-        cell.dimViewCellButtonDidTapCallback = { [weak self] buttonCategory in
+        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
             guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
-            
             let categoryModel = self.getModelFor(buttonCategory: category)
             let controller = CategoryViewController(categoryModel: categoryModel)
             self.navigationController?.pushViewController(controller, animated: true)
@@ -325,8 +324,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             return UIView()
         } else {
             guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-            
-            let currentSection = model.tableSections[section]
+//            let currentSection = model.tableSections[section]
 //            sectionHeader.configureFor(section: currentSection)
             return sectionHeader
         }

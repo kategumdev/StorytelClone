@@ -124,7 +124,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         
         let books = Book.books
         // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callback: DimViewCellButtonDidTapCallback = { [weak self] book in
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
             let book = book as! Book
             let controller = BookViewController(book: book)
             self?.navigationController?.pushViewController(controller, animated: true)

@@ -13,8 +13,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     static let backgroundColor = Utils.powderGrayBackgroundColor
     
     // MARK: - Instance properties
-    let bookOverviewButton: DimViewCellButton = {
-        let button = DimViewCellButton()
+    let dimmedAnimationButton: DimmedAnimationButton = {
+        let button = DimmedAnimationButton()
         button.backgroundColor = backgroundColor
         button.layer.borderColor = borderColor?.cgColor
         button.layer.borderWidth = 0.9
@@ -57,10 +57,10 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(bookOverviewButton)
-        bookOverviewButton.addSubview(vertStackView)
+        addSubview(dimmedAnimationButton)
+        dimmedAnimationButton.addSubview(vertStackView)
         addSubview(squareImageView)
-        bookOverviewButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
     
@@ -73,7 +73,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            bookOverviewButton.layer.borderColor = BookWithOverviewCellSubviewsContainer.borderColor?.cgColor
+            dimmedAnimationButton.layer.borderColor = BookWithOverviewCellSubviewsContainer.borderColor?.cgColor
         }
     }
     
@@ -83,12 +83,12 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
         let overviewString = book.overview
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
-        
+
 //        starHorzStackView.configureForOverviewCellSubviewsContainerWith(book: book)
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage
-        
-        bookOverviewButton.book = book
+
+        dimmedAnimationButton.book = book
       }
     
     // MARK: - Helper methods
@@ -96,7 +96,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         // These two constraints are used only when creating container for calculation of row height for the cell using this container
         widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        heightAnchor.constraint(equalTo: bookOverviewButton.heightAnchor, constant: 15).isActive = true
+        heightAnchor.constraint(equalTo: dimmedAnimationButton.heightAnchor, constant: 15).isActive = true
         
         let leadingConstant: CGFloat = 24
         let imageTopConstant: CGFloat = 8
@@ -105,24 +105,24 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         vertStackView.translatesAutoresizingMaskIntoConstraints = false
         let topAnchorConstant: CGFloat = (Utils.calculatedSmallSquareImageCoverSize.height - imageTopConstant) + paddingBetweenImageAndStack
         NSLayoutConstraint.activate([
-            vertStackView.topAnchor.constraint(equalTo: bookOverviewButton.topAnchor, constant: topAnchorConstant),
-            vertStackView.leadingAnchor.constraint(equalTo: bookOverviewButton.leadingAnchor, constant: leadingConstant),
-            vertStackView.widthAnchor.constraint(equalTo: bookOverviewButton.widthAnchor, constant: -(leadingConstant * 2))
+            vertStackView.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: topAnchorConstant),
+            vertStackView.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: leadingConstant),
+            vertStackView.widthAnchor.constraint(equalTo: dimmedAnimationButton.widthAnchor, constant: -(leadingConstant * 2))
         ])
  
         let buttonTopConstant: CGFloat = 15 // Creates padding between section header label and this button
-        bookOverviewButton.translatesAutoresizingMaskIntoConstraints = false
+        dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookOverviewButton.topAnchor.constraint(equalTo: topAnchor, constant: buttonTopConstant),
-            bookOverviewButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.commonHorzPadding),
-            bookOverviewButton.widthAnchor.constraint(equalTo: widthAnchor, constant: -(Constants.commonHorzPadding * 2)),
-            bookOverviewButton.bottomAnchor.constraint(equalTo: vertStackView.bottomAnchor, constant: 14)
+            dimmedAnimationButton.topAnchor.constraint(equalTo: topAnchor, constant: buttonTopConstant),
+            dimmedAnimationButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.commonHorzPadding),
+            dimmedAnimationButton.widthAnchor.constraint(equalTo: widthAnchor, constant: -(Constants.commonHorzPadding * 2)),
+            dimmedAnimationButton.bottomAnchor.constraint(equalTo: vertStackView.bottomAnchor, constant: 14)
         ])
         
         squareImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            squareImageView.topAnchor.constraint(equalTo: bookOverviewButton.topAnchor, constant: -imageTopConstant),
-            squareImageView.leadingAnchor.constraint(equalTo: bookOverviewButton.leadingAnchor, constant: leadingConstant),
+            squareImageView.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: -imageTopConstant),
+            squareImageView.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: leadingConstant),
             squareImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.width),
             squareImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.height)
         ])

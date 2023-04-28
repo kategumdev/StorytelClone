@@ -12,8 +12,8 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     static let identifier = "LargeBookCollectionViewCell"
         
     // MARK: - Instance properties
-    private let bookButton: DimViewCellButton = {
-        let button = DimViewCellButton()
+    private let dimmedAnimationButton: DimmedAnimationButton = {
+        let button = DimmedAnimationButton()
         button.layer.borderColor = UIColor.tertiaryLabel.cgColor
         button.layer.borderWidth = 0.26
         return button
@@ -22,9 +22,9 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(bookButton)
-        bookButton.layer.cornerRadius = Constants.largeCoverCornerRadius
-        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        contentView.addSubview(dimmedAnimationButton)
+        dimmedAnimationButton.layer.cornerRadius = Constants.largeCoverCornerRadius
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
     
@@ -36,25 +36,25 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            bookButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
+            dimmedAnimationButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
-        bookButton.book = book
-        bookButton.dimViewCellButtoDidTapCallback = callback
-        bookButton.configuration?.background.image = book.largeCoverImage
+    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.book = book
+        dimmedAnimationButton.didTapCallback = callback
+        dimmedAnimationButton.configuration?.background.image = book.largeCoverImage
     }
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        bookButton.translatesAutoresizingMaskIntoConstraints = false
+        dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.posterAndLargeCoversCellTopPadding),
-            bookButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            bookButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bookButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.posterAndLargeCoversCellTopPadding),
+            dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
     

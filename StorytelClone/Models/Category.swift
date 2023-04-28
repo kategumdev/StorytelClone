@@ -172,8 +172,6 @@ struct Category {
             TableSection(sectionTitle: "Storytel Original - Todas las series")
         ])
     
-
-    
     static let zonaPodcast = Category(
         title: ButtonCategory.zonaPodcast.rawValue,
         tableSections: [

@@ -15,8 +15,8 @@ class BookCollectionViewCell: UICollectionViewCell {
     private let badgeOne = BadgeView()
     private let badgeTwo = BadgeView()
         
-    private let bookButton: DimViewCellButton = {
-        let button = DimViewCellButton()
+    private let dimmedAnimationButton: DimmedAnimationButton = {
+        let button = DimmedAnimationButton()
         button.layer.borderColor = UIColor.tertiaryLabel.cgColor
         button.layer.borderWidth = 0.26
         return button
@@ -25,10 +25,10 @@ class BookCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(bookButton)
+        contentView.addSubview(dimmedAnimationButton)
         contentView.addSubview(badgeOne)
         contentView.addSubview(badgeTwo)
-        bookButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
     
@@ -41,16 +41,16 @@ class BookCollectionViewCell: UICollectionViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            bookButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
+            dimmedAnimationButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
-        bookButton.book = book
-        bookButton.dimViewCellButtoDidTapCallback = callback
+    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.book = book
+        dimmedAnimationButton.didTapCallback = callback
         
-        bookButton.configuration?.background.image = book.coverImage
+        dimmedAnimationButton.configuration?.background.image = book.coverImage
 
         let bookKind = book.titleKind
         if bookKind == .audiobook {
@@ -73,18 +73,18 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Helper methods
     private func applyConstraints() {
-        bookButton.translatesAutoresizingMaskIntoConstraints = false
+        dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            bookButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bookButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
-            bookButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
+            dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
+            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
         
         badgeOne.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            badgeOne.trailingAnchor.constraint(equalTo: bookButton.trailingAnchor),
-            badgeOne.topAnchor.constraint(equalTo: bookButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeOne.trailingAnchor.constraint(equalTo: dimmedAnimationButton.trailingAnchor),
+            badgeOne.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
             badgeOne.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
             badgeOne.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
         ])
@@ -92,7 +92,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         badgeTwo.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             badgeTwo.trailingAnchor.constraint(equalTo: badgeOne.leadingAnchor, constant: -BadgeView.paddingBetweenBadges),
-            badgeTwo.topAnchor.constraint(equalTo: bookButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
+            badgeTwo.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: -BadgeView.badgeTopAnchorPoints),
             badgeTwo.widthAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight),
             badgeTwo.heightAnchor.constraint(equalToConstant: BadgeView.badgeWidthAndHeight)
         ])

@@ -14,8 +14,8 @@ class WideButtonTableViewCell: UITableViewCell {
     // MARK: - Instance properties
     private var timeLayoutSubviewsIsBeingCalled = 0
 
-    private lazy var wideButton: DimViewCellButton = {
-        let button = DimViewCellButton()
+    private lazy var dimmedAnimationButton: DimmedAnimationButton = {
+        let button = DimmedAnimationButton()
         button.backgroundColor = UIColor(red: 200/255, green: 217/255, blue: 228/255, alpha: 1)
         return button
     }()
@@ -36,9 +36,9 @@ class WideButtonTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = Utils.customBackgroundColor
-        contentView.addSubview(wideButton)
+        contentView.addSubview(dimmedAnimationButton)
         contentView.addSubview(customLabel)
-        wideButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
     
@@ -57,9 +57,9 @@ class WideButtonTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(sectionKind: SectionKind, withCallback callback: @escaping DimViewCellButtonDidTapCallback) {
-        wideButton.sectionKind = sectionKind
-        wideButton.dimViewCellButtoDidTapCallback = callback
+    func configureFor(sectionKind: SectionKind, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.sectionKind = sectionKind
+        dimmedAnimationButton.didTapCallback = callback
         if sectionKind == .seriesCategoryButton {
             customLabel.text = "Series"
         } else {
@@ -70,18 +70,18 @@ class WideButtonTableViewCell: UITableViewCell {
     // MARK: - Helper methods
     private func applyConstraints() {
         let buttonWidth = UIScreen.main.bounds.width - Constants.commonHorzPadding * 2
-        wideButton.translatesAutoresizingMaskIntoConstraints = false
+        dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            wideButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            wideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            wideButton.widthAnchor.constraint(equalToConstant: buttonWidth),
-            wideButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor),
+            dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
+            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: buttonWidth),
+            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
         ])
         
         customLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            customLabel.leadingAnchor.constraint(equalTo: wideButton.leadingAnchor, constant: Constants.commonHorzPadding),
-            customLabel.bottomAnchor.constraint(equalTo: wideButton.bottomAnchor, constant: -Constants.commonHorzPadding),
+            customLabel.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: Constants.commonHorzPadding),
+            customLabel.bottomAnchor.constraint(equalTo: dimmedAnimationButton.bottomAnchor, constant: -Constants.commonHorzPadding),
         ])
 
     }
@@ -93,8 +93,8 @@ class WideButtonTableViewCell: UITableViewCell {
             UIColor.black.withAlphaComponent(0.45).cgColor
         ]
         gradientLayer.locations = [0.4, 1]
-        gradientLayer.frame = wideButton.bounds
-        wideButton.layer.addSublayer(gradientLayer)
+        gradientLayer.frame = dimmedAnimationButton.bounds
+        dimmedAnimationButton.layer.addSublayer(gradientLayer)
     }
     
 }
