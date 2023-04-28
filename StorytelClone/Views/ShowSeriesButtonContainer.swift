@@ -11,7 +11,6 @@ class ShowSeriesButtonContainer: UIView {
     
     // MARK: - Instance properties
     var showSeriesButtonDidTapCallback: () -> () = {}
-//    weak var delegate: BottomSheetViewControllerDelegate?
     
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
@@ -54,8 +53,6 @@ class ShowSeriesButtonContainer: UIView {
         super.init(frame: frame)
         layer.borderColor = UIColor.quaternaryLabel.cgColor
         layer.borderWidth = 1
-//        layer.borderColor = BookViewController.lightBordersColor
-//        layer.borderWidth = BookViewController.lightBordersWidth
         addSubview(showSeriesButton)
         addButtonAction()
         applyConstraints()
@@ -68,7 +65,6 @@ class ShowSeriesButtonContainer: UIView {
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             layer.borderColor = UIColor.quaternaryLabel.cgColor
         }
@@ -85,7 +81,6 @@ class ShowSeriesButtonContainer: UIView {
         showSeriesButton.addAction(UIAction(handler: { [weak self] _ in
             Utils.playHaptics()
             self?.showSeriesButtonDidTapCallback()
-//            self?.delegate.
         }), for: .touchUpInside)
     }
     

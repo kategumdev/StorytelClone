@@ -7,7 +7,6 @@
 
 import UIKit
 
-//typealias DimmedAnimationButtonDidTapCallback = (Any) -> ()
 typealias DimmedAnimationButtonDidTapCallback = (UIViewController) -> ()
 
 class DimmedAnimationButton: UIButton {
@@ -105,40 +104,6 @@ class DimmedAnimationButton: UIButton {
 
         }), for: .touchUpInside)
     }
-    
-//    private func configureSelf() {
-//        layer.cornerRadius = Constants.bookCoverCornerRadius
-//        clipsToBounds = true
-//
-//        var config = UIButton.Configuration.plain()
-//        config.background.imageContentMode = .scaleAspectFill
-//
-//        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
-//        config.background.cornerRadius = 0
-//        configuration = config
-//
-//        self.addAction(UIAction(handler: { [weak self] _ in
-//            guard let self = self else { return }
-//
-//            if self.isButtonTooLongInHighlightedState {
-////                print("do nothing on touchUpInside")
-//                self.isButtonTooLongInHighlightedState = false
-//
-//            } else {
-//                // Invalidate the timer and perform the touchUpInside action
-//                self.buttonTimer?.invalidate()
-////                print("DO smth on touchUpInside")
-//                if let book = self.book {
-//                    self.didTapCallback(book)
-//                } else if let sectionKind = self.sectionKind {
-//                    self.didTapCallback(sectionKind)
-//                } else if let categoryButton = self.categoryButton {
-//                    self.didTapCallback(categoryButton)
-//                }
-//            }
-//
-//        }), for: .touchUpInside)
-//    }
     
     private func createControllerForCallback() -> UIViewController {
         var controller = UIViewController()

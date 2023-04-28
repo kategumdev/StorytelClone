@@ -8,7 +8,6 @@
 import UIKit
 
 class BottomSheetTableHeaderView: UIView {
-
     // MARK: - Instance properties
     private let titleLabel = UILabel.createLabel(withFont: Utils.navBarTitleFont, maximumPointSize: 18)
     
@@ -42,12 +41,10 @@ class BottomSheetTableHeaderView: UIView {
     }
     
     // MARK: - Helper methods
-    
     private func addSeparatorView() {
         let view = UIView()
         view.backgroundColor = UIColor.quaternaryLabel        
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         addSubview(view)
         NSLayoutConstraint.activate([
             view.heightAnchor.constraint(equalToConstant: 1),

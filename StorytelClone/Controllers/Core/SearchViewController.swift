@@ -127,12 +127,9 @@ class SearchViewController: UIViewController {
     
     //MARK: - Helper methods
     private func createAndPassItemSelectedCallback() {
-
-        
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         let callbackClosure: (Title) -> () = { [weak self] selectedSearchResultTitle in
-//            guard let self = self else { return }
             if let book = selectedSearchResultTitle as? Book {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
@@ -168,10 +165,6 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     
-    private func getModelFor(buttonCategory: ButtonCategory) -> Category {
-        return ButtonCategory.createModelFor(categoryButton: buttonCategory)
-    }
-    
     private func fetchTitlesFor(query: String) -> [ButtonKind : [Title]] {
         // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
         var newModel = [ButtonKind : [Title]]()
@@ -196,7 +189,6 @@ class SearchViewController: UIViewController {
 
 // MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
-
     // Called when searchResultsController becomes visible and unvisible (after tapping Cancel)
     func updateSearchResults(for searchController: UISearchController) {
         print("updateSearchResults")
@@ -296,29 +288,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         cell.configureWith(categoryButtons: buttonCategories, andCallback: callback)
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
-//
-//        // Respond to button tap in CategoryCollectionViewCell
-//        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
-//            guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
-//            let categoryModel = self.getModelFor(buttonCategory: category)
-//            let controller = CategoryViewController(categoryModel: categoryModel)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        var buttonCategories = [ButtonCategory]()
-//        if indexPath.section == 0 {
-//            buttonCategories += self.categoryButtons.prefix(upTo: 6)
-//        } else {
-//            buttonCategories += self.categoryButtons.dropFirst(6)
-//        }
-//        cell.categoryButtons = buttonCategories
-//
-//        return cell
-//    }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         let numberOfRowsInCell: CGFloat

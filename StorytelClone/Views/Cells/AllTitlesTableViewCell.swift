@@ -30,7 +30,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
 
         var subtitleLabelCount = maxSubtitleLabelCount
-//        if book.narrators == nil { subtitleLabelCount -= 1 }
         if book.narrators.isEmpty { subtitleLabelCount -= 1 }
         if book.series == nil { subtitleLabelCount -= 1 }
         
@@ -108,7 +107,6 @@ class AllTitlesTableViewCell: UITableViewCell {
         return stack
     }()
     
-//    lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: true)
     private lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: true)
     
     private lazy var mainVertStack: UIStackView = {

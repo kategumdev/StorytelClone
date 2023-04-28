@@ -8,8 +8,7 @@
 import UIKit
 
 class StarHorzStackView: UIStackView {
-    
-    // MARK: - Static method
+    // MARK: - Static methods
     static func createCategoryLabel() -> UILabel {
         let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
         let label = UILabel.createLabel(withFont: font, maximumPointSize: 45)
@@ -127,7 +126,6 @@ class StarHorzStackView: UIStackView {
             ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         }
         
-//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         
         guard hasSaveAndEllipsisButtons else { return }
@@ -138,32 +136,12 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(15, after: saveButton)
         toggleSaveButtonImage()
     }
-    
-//    func configureWith(book: Book) {
-//        self.book = book
-//        ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
-//        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-//
-//        guard hasSaveAndEllipsisButtons else { return }
-//        isBookAddedToBookshelf = book.isAddedToBookshelf
-//        addArrangedSubview(saveButton)
-//        addArrangedSubview(ellipsisButton)
-//        setCustomSpacing(6, after: categoryLabel)
-//        setCustomSpacing(15, after: saveButton)
-//        toggleSaveButtonImage()
-//    }
 
     // MARK: - Helper methods
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            
-//            let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
-//            impactFeedbackGenerator.impactOccurred(intensity: 0.7)
-            
-            
             Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
-            
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleSaveButtonImage()
             self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)

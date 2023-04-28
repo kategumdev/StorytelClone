@@ -59,37 +59,13 @@ class CategoryViewController: BaseTableViewController {
     // MARK: - Superclass overrides
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
-//        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
-//            self?.navigationController?.pushViewController(controller, animated: true)
-//        }
-        
         if let category = category {
             let books = category.tableSections[indexPath.row].books
             cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         }
         return cell
     }
-    
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-//
-//        if let category = category {
-//            cell.books = category.tableSections[indexPath.row].books
-//        }
-////        cell.books = category.tableSections[indexPath.row].books
-//
-//        // Respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-//        cell.dimmedAnimationButtonDidTapCallback = { [weak self] book in
-//            guard let self = self else { return }
-//            let book = book as! Book
-//            let controller = BookViewController(book: book)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        return cell
-//    }
-    
+
     override func configureNavBar() {
         super.configureNavBar()
         guard let category = category else { return }

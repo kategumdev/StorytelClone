@@ -12,7 +12,6 @@ class TableHeaderView: UIView {
     // MARK: - Instance properties
     private let headerLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 31), maximumPointSize: 50, numberOfLines: 4)
 
-//    private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 13), maximumPointSize: 32, numberOfLines: 2)
     private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
 
     private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
@@ -37,8 +36,6 @@ class TableHeaderView: UIView {
         return view
     }()
 
-//    var tableSection: TableSection?
-    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +56,6 @@ class TableHeaderView: UIView {
     }
     
     func configureFor(tableSection: TableSection, titleModel: Title?) {
-//        self.tableSection = tableSection
         
         if let series = titleModel as? Series {
             headerLabel.text = series.title
@@ -72,11 +68,6 @@ class TableHeaderView: UIView {
             headerLabel.text = tableSection.sectionTitle
         }
         
-//        if tableSection.forSimilarBooks, let book = titleModel as? Book {
-//            bookTitleForSimilarLabel.text = book.title
-//            stackView.addArrangedSubview(bookTitleForSimilarLabel)
-//            stackView.spacing = 9
-//        }
         if let book = titleModel as? Book {
             bookTitleForSimilarLabel.text = book.title
             stackView.addArrangedSubview(bookTitleForSimilarLabel)

@@ -285,7 +285,6 @@ extension BottomSheetViewController {
         
         // Update cell with this book in AllTitlesViewController
         self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: book)
-//        tableViewDidSelectSaveBookCellCallback()
     }
     
     private func handleRemovingBookWith(indexPath: IndexPath) {
@@ -313,7 +312,6 @@ extension BottomSheetViewController {
                 
                 // Update cell with this book in AllTitlesViewController
                 self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
-//                self.tableViewDidSelectSaveBookCellCallback()
                 
                 // Dismiss this bottom sheet
                 self.dismissWithCustomAnimation()
@@ -323,22 +321,6 @@ extension BottomSheetViewController {
         alert.addAction(removeAction)
         present(alert, animated: true, completion: nil)
     }
-    
-//    private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
-//        if storytellers.count == 1 {
-//            self.dismiss(animated: false) { [weak self] in
-//                guard let self = self else { return }
-//                self?.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: book, parentVC: delegate as? UIViewController)
-//            }
-//        } else {
-//            self.dismissWithCustomAnimation { [weak self] in
-//                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: book, parentVC: delegate as? UIViewController)
-//            }
-//        }
-//
-//
-////        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectViewAuthorsOrNarratorsCell(withStorytellers: storytellers, andBook: book, parentVC: delegate as? UIViewController)
-//    }
     
     private func handleViewAuthorsOrNarrators(storytellers: [Title]) {
         if storytellers.count == 1 {
@@ -487,9 +469,3 @@ extension BottomSheetViewController {
         view.backgroundColor = .black.withAlphaComponent(value)
     }
 }
-
-
-
-
-
-

@@ -8,7 +8,6 @@
 import UIKit
 
 class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
-    
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 23

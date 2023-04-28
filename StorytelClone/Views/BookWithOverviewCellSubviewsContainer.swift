@@ -39,7 +39,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     private let overviewLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
     
-//    private lazy var starHorzStackView = StarHorzStackView(withSaveButton: false)
     private lazy var starHorzStackView = StarHorzStackView(withSaveAndEllipsisButtons: false)
     
     private lazy var vertStackView: UIStackView = {
@@ -83,11 +82,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
         let overviewString = book.overview
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
-
-//        starHorzStackView.configureForOverviewCellSubviewsContainerWith(book: book)
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage
-
         dimmedAnimationButton.book = book
       }
     

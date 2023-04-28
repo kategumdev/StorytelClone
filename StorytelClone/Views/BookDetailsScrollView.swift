@@ -8,7 +8,6 @@
 import UIKit
 
 class BookDetailsScrollView: UIScrollView {
-
     // MARK: - Static methods
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
@@ -101,10 +100,8 @@ class BookDetailsScrollView: UIScrollView {
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-//        layer.borderColor = BookViewController.lightBordersColor
         layer.borderColor = UIColor.quaternaryLabel.cgColor
         layer.borderWidth = 1
-//        layer.borderWidth = BookViewController.lightBordersWidth
         showsHorizontalScrollIndicator = false
         configureMainStack()
         addSubview(mainStackView)

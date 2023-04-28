@@ -122,6 +122,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         let books = Book.books
+        
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
@@ -130,28 +131,12 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-//
-//        let books = Book.books
-//        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-//        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
-//            let book = book as! Book
-//            let controller = BookViewController(book: book)
-//            self?.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        cell.configureWith(books: books, callback: callback)
-//        return cell
-//    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Utils.heightForRowWithHorizontalCv
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-
         sectionHeader.configureFor(tableSection: TableSection.similarTitles)
         
         sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
@@ -241,32 +226,6 @@ extension BookViewController {
         }
         
     }
-    
-//    private func handleShowSeriesButtonTappedOrViewSeriesCellSelected() {
-//        guard let series = book.series else { return }
-//        let tableSection = TableSection(sectionTitle: series)
-//        let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
-//        self.navigationController?.pushViewController(controller, animated: true)
-//    }
-    
-//    private func handleStorytellerButtonTappedOrStorytellerCellSelected(withStorytellers storytellers: [Title]) {
-//
-//        if storytellers.count == 1 {
-//            let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//
-//        if storytellers.count > 1 {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-//                guard let self = self else { return }
-//                let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-//                let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
-//                storytellersBottomSheetController.delegate = self
-//                storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
-//                self.present(storytellersBottomSheetController, animated: false)
-//            }
-//        }
-//    }
     
     private func configureBookDetailsScrollView() {
         mainScrollView.addSubview(bookDetailsScrollView)
