@@ -9,7 +9,7 @@ import UIKit
 
 class SearchResultsViewController: UIViewController {
     // MARK: - Instance properties
-    private let buttonsView = SearchResultsButtonsView()
+    private let scopeButtonsView = SearchResultsScopeButtonsView()
     var tableViewInSearchResultsCollectionViewCellDidSelectRowCallback: (Title) -> () = {_ in}
     var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
     
@@ -41,7 +41,7 @@ class SearchResultsViewController: UIViewController {
         return view
     }()
     
-    private var rememberedOffsetsOfTablesInCells = [ButtonKind : CGPoint]()
+    private var rememberedOffsetsOfTablesInCells = [ScopeButtonKind : CGPoint]()
     private var tappedButtonIndex: Int? = nil
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
@@ -49,7 +49,7 @@ class SearchResultsViewController: UIViewController {
     private var cellsToHideContent = [Int]()
     private var indexPathsToUnhide = [IndexPath]()
     
-    var modelForSearchQuery: [ButtonKind : [Title]]?
+    var modelForSearchQuery: [ScopeButtonKind : [Title]]?
         
 //    private var previousContentSize: UIContentSizeCategory?
     
@@ -58,8 +58,8 @@ class SearchResultsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         view.addSubview(separatorLineView)
-        view.addSubview(buttonsView)
-        configureButtonsView()
+        view.addSubview(scopeButtonsView)
+        configureScopeButtonsView()
         view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -84,12 +84,12 @@ class SearchResultsViewController: UIViewController {
     
     // MARK: - Instance methods
     func setInitialOffsetsOfTablesInCells() {
-        let buttonKinds = buttonsView.buttonKinds
+        let buttonKinds = scopeButtonsView.buttonKinds
         buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
     }
     
     func revertToInitialAppearance() {
-        buttonsView.revertToInitialAppearance()
+        scopeButtonsView.revertToInitialAppearance()
         
         // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
         toggleIsButtonTriggeredScrollAndUnhideCells()
@@ -98,8 +98,8 @@ class SearchResultsViewController: UIViewController {
         setInitialOffsetsOfTablesInCells()
         collectionView.reloadData()
         
-        let firstButton = buttonsView.scopeButtons[0]
-        buttonsView.toggleButtonsColors(currentButton: firstButton)
+        let firstButton = scopeButtonsView.scopeButtons[0]
+        scopeButtonsView.toggleButtonsColors(currentButton: firstButton)
     }
     
 }
@@ -115,13 +115,13 @@ extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
 extension SearchResultsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return buttonsView.scopeButtons.count
+        return scopeButtonsView.scopeButtons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
-        let buttonKind = buttonsView.buttonKinds[indexPath.row]
+        let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
         cell.buttonKind = buttonKind
         
@@ -177,11 +177,11 @@ extension SearchResultsViewController {
 //        print("current contentOffset.x: \(scrollView.contentOffset.x)")
         let currentOffsetX = scrollView.contentOffset.x
         let pageWidth = collectionView.bounds.size.width
-        let currentButtonIndex = buttonsView.getCurrentButtonIndex()
-        let currentButton = buttonsView.scopeButtons[currentButtonIndex]
+        let currentButtonIndex = scopeButtonsView.getCurrentButtonIndex()
+        let currentButton = scopeButtonsView.scopeButtons[currentButtonIndex]
         
         // Adjust sliding line leading anchor constant
-        let ranges = buttonsView.rangesOfButtons
+        let ranges = scopeButtonsView.rangesOfButtons
         let previousButtonUpperBound = currentButtonIndex != 0 ? ranges[currentButtonIndex - 1].upperBound : 0.0
         
         let currentOffsetXInRangeOfPageWidth = currentButtonIndex == 0 ? currentOffsetX : currentOffsetX - (CGFloat(currentButtonIndex) * pageWidth)
@@ -191,26 +191,26 @@ extension SearchResultsViewController {
         
         let leadingConstant = previousButtonUpperBound + slidingLineXProportionalPart
         
-        buttonsView.slidingLineLeadingAnchor.constant = leadingConstant
+        scopeButtonsView.slidingLineLeadingAnchor.constant = leadingConstant
                 
         // Adjust contentOffset.x of scroll of buttonsView
-        buttonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)
+        scopeButtonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)
         
         let currentScrollDirection: ScrollDirection = currentOffsetX > previousOffsetX ? .forward : .back
         previousOffsetX = currentOffsetX
         
         // Toggle buttons' colors
         if currentScrollDirection == .back {
-            buttonsView.toggleButtonsColors(currentButton: currentButton)
+            scopeButtonsView.toggleButtonsColors(currentButton: currentButton)
         } else {
             // Determine current button, because the way of determining currentButton above uses half-open range and it doesn't work for this particular case
             let currentButtonIndex = Int(currentOffsetX / pageWidth)
-            let currentButton = buttonsView.scopeButtons[currentButtonIndex]
-            buttonsView.toggleButtonsColors(currentButton: currentButton)
+            let currentButton = scopeButtonsView.scopeButtons[currentButtonIndex]
+            scopeButtonsView.toggleButtonsColors(currentButton: currentButton)
         }
 
         // Adjust sliding line width
-        buttonsView.adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: currentScrollDirection, currentButtonIndex: currentButtonIndex, slidingLineXProportionalPart: slidingLineXProportionalPart, currentOffsetXOfCvInRangeOfOnePageWidth: currentOffsetXInRangeOfPageWidth, pageWidthOfCv: pageWidth)
+        scopeButtonsView.adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: currentScrollDirection, currentButtonIndex: currentButtonIndex, slidingLineXProportionalPart: slidingLineXProportionalPart, currentOffsetXOfCvInRangeOfOnePageWidth: currentOffsetXInRangeOfPageWidth, pageWidthOfCv: pageWidth)
     }
 
 }
@@ -228,7 +228,7 @@ extension SearchResultsViewController {
     }
     
     // This function should fetch needed initial objects when user haven't perform any search yet
-    private func getInitialModelFor(buttonKind: ButtonKind) -> [Title] {
+    private func getInitialModelFor(buttonKind: ScopeButtonKind) -> [Title] {
         switch buttonKind {
         case .top:            
             return [Author.tolkien, Book.book3, Series.series1, Book.book21,
@@ -248,9 +248,9 @@ extension SearchResultsViewController {
         }
     }
 
-    private func configureButtonsView() {
+    private func configureScopeButtonsView() {
         // Respond to button actions in buttonsView
-        buttonsView.callBack = { [weak self] buttonIndex in
+        scopeButtonsView.scopeButtonDidTapCallback = { [weak self] buttonIndex in
             guard let self = self else { return }
             // To avoid logic in didScroll to perform if scroll is triggered by button tap
             self.isButtonTriggeredScroll = true
@@ -294,12 +294,12 @@ extension SearchResultsViewController {
     }
     
     private func applyConstraints() {
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        scopeButtonsView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            buttonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SearchResultsButtonsView.viewHeight)
+            scopeButtonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scopeButtonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scopeButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scopeButtonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SearchResultsScopeButtonsView.viewHeight)
         ])
         
         separatorLineView.translatesAutoresizingMaskIntoConstraints = false
@@ -308,7 +308,7 @@ extension SearchResultsViewController {
             separatorLineView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             separatorLineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             separatorLineView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            separatorLineView.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: separatorWidth)
+            separatorLineView.heightAnchor.constraint(equalTo: scopeButtonsView.heightAnchor, constant: separatorWidth)
         ])
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -325,7 +325,7 @@ extension SearchResultsViewController {
 
 // MARK: - SearchResultsCollectionViewCellDelegate
 extension SearchResultsViewController: SearchResultsCollectionViewCellDelegate {
-    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint) {
+    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }
 }

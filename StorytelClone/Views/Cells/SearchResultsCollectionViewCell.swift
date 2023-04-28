@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SearchResultsCollectionViewCellDelegate: AnyObject {
-    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ButtonKind, hasOffset offset: CGPoint)
+    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint)
 }
 
 let tableDidRequestKeyboardDismiss = Notification.Name(
@@ -25,7 +25,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
     
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
-    var buttonKind: ButtonKind?
+    var buttonKind: ScopeButtonKind?
     var model = [Title]()
     var withSectionHeader = true
     

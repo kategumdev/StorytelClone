@@ -165,10 +165,10 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     
-    private func fetchTitlesFor(query: String) -> [ButtonKind : [Title]] {
+    private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {
         // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
-        var newModel = [ButtonKind : [Title]]()
-        let buttonKinds = ButtonKind.allCases
+        var newModel = [ScopeButtonKind : [Title]]()
+        let buttonKinds = ScopeButtonKind.allCases
         for buttonKind in buttonKinds {
             switch buttonKind {
             case .top:

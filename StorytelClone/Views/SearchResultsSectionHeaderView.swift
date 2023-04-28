@@ -48,7 +48,7 @@ class SearchResultsSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Instance methods
-    func configureFor(buttonKind: ButtonKind) {
+    func configureFor(buttonKind: ScopeButtonKind) {
         var titleText = ""
         switch buttonKind {
         case .top: titleText = "Trending searches"

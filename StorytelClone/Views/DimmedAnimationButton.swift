@@ -7,7 +7,8 @@
 
 import UIKit
 
-typealias DimmedAnimationButtonDidTapCallback = (UIViewController) -> ()
+//typealias DimmedAnimationButtonDidTapCallback = (UIViewController) -> ()
+typealias DimmedAnimationButtonDidTapCallback = (_ controllerToPush: UIViewController) -> ()
 
 class DimmedAnimationButton: UIButton {
     // MARK: - Instance properties

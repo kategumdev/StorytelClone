@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum ButtonKind: String, CaseIterable {
+enum ScopeButtonKind: String, CaseIterable {
     case top = "Top"
     case books = "Books"
     case authors = "Authors"
@@ -16,8 +16,7 @@ enum ButtonKind: String, CaseIterable {
     case tags = "Tags"
 }
 
-class SearchResultsButtonsView: UIView {
-    
+class SearchResultsScopeButtonsView: UIView {
     // MARK: - Static properties
     private static let slidingLineHeight: CGFloat = 3
     private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
@@ -25,7 +24,7 @@ class SearchResultsButtonsView: UIView {
 
 
     // MARK: - Instance properties
-    let buttonKinds: [ButtonKind] = ButtonKind.allCases
+    let buttonKinds: [ScopeButtonKind] = ScopeButtonKind.allCases
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -38,8 +37,7 @@ class SearchResultsButtonsView: UIView {
     
     private var firstTime = true
     
-    typealias SearchResultsButtonCallback = (_ buttonIndex: Int) -> ()
-    var callBack: SearchResultsButtonCallback = {_ in}
+    var scopeButtonDidTapCallback: (_ buttonIndex: Int) -> () = {_ in}
     
     lazy var scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
@@ -48,7 +46,7 @@ class SearchResultsButtonsView: UIView {
             var config = UIButton.Configuration.plain()
 
             // Top inset makes visual x-position of button text in scrollView as if it's centered
-            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
+            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config
@@ -85,7 +83,7 @@ class SearchResultsButtonsView: UIView {
         stack.distribution = .fillProportionally
         scopeButtons.forEach { stack.addArrangedSubview($0) }
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.heightForStackWithButtons).isActive = true
+        stack.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.heightForStackWithButtons).isActive = true
         return stack
     }()
 
@@ -237,7 +235,6 @@ class SearchResultsButtonsView: UIView {
         for button in scopeButtons {
             button.addAction(UIAction(handler: { [weak self] _ in
                 guard let self = self else { return }
-                
                 let buttonIndex = self.scopeButtons.firstIndex(of: button)
                 guard let buttonIndex = buttonIndex else { return }
                 let buttonIndexInt = buttonIndex + 0
@@ -246,11 +243,8 @@ class SearchResultsButtonsView: UIView {
                     self.toggleButtonsColors(currentButton: button)
                     self.setScrollViewOffsetX(currentButton: button)
                     self.adjustSlidingLinePosition(currentButton: button)
-
-                    self.callBack(buttonIndexInt)
-                    
-                    // It won't animate without this line
-                    self.layoutIfNeeded()
+                    self.scopeButtonDidTapCallback(buttonIndexInt)
+                    self.layoutIfNeeded() // It won't animate without this line
                 }
             }), for: .touchUpInside)
         }
@@ -288,7 +282,7 @@ class SearchResultsButtonsView: UIView {
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.viewHeight)
+            scrollView.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.viewHeight)
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -296,15 +290,15 @@ class SearchResultsButtonsView: UIView {
             stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2),
-            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsButtonsView.slidingLineHeight / 2)
+            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsScopeButtonsView.slidingLineHeight / 2),
+            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsScopeButtonsView.slidingLineHeight / 2)
         ])
 
         slidingLine.translatesAutoresizingMaskIntoConstraints = false
         slidingLineLeadingAnchor.isActive = true
         slidingLineWidthAnchor.isActive = true
-        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsButtonsView.slidingLineHeight).isActive = true
-        slidingLine.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: SearchResultsButtonsView.slidingLineHeight / 2).isActive = true
+        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.slidingLineHeight).isActive = true
+        slidingLine.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: SearchResultsScopeButtonsView.slidingLineHeight / 2).isActive = true
         
         // To force layoutSubviews() to apply correct slidingLine anchors' constants
         layoutIfNeeded()
