@@ -37,30 +37,58 @@ class AllCategoriesViewController: BaseTableViewController {
     }
 
     //MARK: - Helper methods
-    private func getModelFor(buttonCategory: ButtonCategory) -> Category {
-        return ButtonCategory.createModelFor(categoryButton: buttonCategory)
-    }
+//    private func getModelFor(buttonCategory: ButtonCategory) -> Category {
+//        return ButtonCategory.createModelFor(categoryButton: buttonCategory)
+//    }
 
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension AllCategoriesViewController {
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
         // Respond to button tap in CategoryCollectionViewCell
-        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
-            guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
-            
-            let categoryModel = self.getModelFor(buttonCategory: category)
-            let controller = CategoryViewController(categoryModel: categoryModel)
-            self.navigationController?.pushViewController(controller, animated: true)
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+            self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.categoryButtons = self.categoryButtons
-        
+        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: callback)
         return cell
     }
+    
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
+//
+//        // Respond to button tap in CategoryCollectionViewCell
+//        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
+//            guard let self = self, let buttonCategory = buttonCategory as? ButtonCategory else { return }
+//
+////            let categoryModel = self.getModelFor(buttonCategory: buttonCategory)
+//            let categoryModel = ButtonCategory.createModelFor(categoryButton: buttonCategory)
+//            let controller = CategoryViewController(categoryModel: categoryModel)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//        cell.categoryButtons = self.categoryButtons
+//
+//        return cell
+//    }
+    
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
+//
+//        // Respond to button tap in CategoryCollectionViewCell
+//        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
+//            guard let self = self, let buttonCategory = buttonCategory as? ButtonCategory else { return }
+//
+////            let categoryModel = self.getModelFor(buttonCategory: buttonCategory)
+//            let categoryModel = ButtonCategory.createModelFor(categoryButton: buttonCategory)
+//            let controller = CategoryViewController(categoryModel: categoryModel)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//        cell.categoryButtons = self.categoryButtons
+//
+//        return cell
+//    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         

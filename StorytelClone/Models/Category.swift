@@ -5,10 +5,21 @@
 //  Created by Kateryna Gumenna on 28/2/23.
 //
 
-import Foundation
+import UIKit
 
-enum SectionKind {
-    case horizontalCv
+//enum SectionKind {
+//    case horizontalCv
+//    case verticalCv
+//    case oneBookWithOverview
+//    case poster
+//    case largeCoversHorizontalCv
+//    case seriesCategoryButton
+//    case allCategoriesButton
+//    case searchVc
+//}
+
+enum SectionKind: String {
+    case horizontalCv 
     case verticalCv
     case oneBookWithOverview
     case poster
@@ -16,6 +27,21 @@ enum SectionKind {
     case seriesCategoryButton
     case allCategoriesButton
     case searchVc
+    
+//    static func getTableViewCellTypeFor(sectionKind: SectionKind) -> AnyClass {
+//        switch sectionKind {
+//        case .horizontalCv: return TableViewCellWithCollection.self
+//        case .verticalCv: return UITableViewCell.self
+//        case .oneBookWithOverview: return BookWithOverviewTableViewCell.self
+//        case .poster: return PosterTableViewCell.self
+//        case .largeCoversHorizontalCv: return TableViewCellWithHorzCvLargeCovers.self
+//        case .seriesCategoryButton: return WideButtonTableViewCell.self
+//        case .allCategoriesButton: return WideButtonTableViewCell.self
+//        case .searchVc: return UITableViewCell.self
+//        }
+//    }
+//    #warning("types for verticalCv and searchVc not needed, refactor them somewhere else")
+
 }
 
 struct TableSection {

@@ -284,24 +284,42 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
-        // Respond to button tap in CategoryCollectionViewCell
-        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
-            guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
-            let categoryModel = self.getModelFor(buttonCategory: category)
-            let controller = CategoryViewController(categoryModel: categoryModel)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-        
         var buttonCategories = [ButtonCategory]()
         if indexPath.section == 0 {
             buttonCategories += self.categoryButtons.prefix(upTo: 6)
         } else {
             buttonCategories += self.categoryButtons.dropFirst(6)
         }
-        cell.categoryButtons = buttonCategories
         
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
+        
+        cell.configureWith(categoryButtons: buttonCategories, andCallback: callback)
         return cell
     }
+    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
+//
+//        // Respond to button tap in CategoryCollectionViewCell
+//        cell.dimmedAnimationButtonDidTapCallback = { [weak self] buttonCategory in
+//            guard let self = self, let category = buttonCategory as? ButtonCategory else { return }
+//            let categoryModel = self.getModelFor(buttonCategory: category)
+//            let controller = CategoryViewController(categoryModel: categoryModel)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        var buttonCategories = [ButtonCategory]()
+//        if indexPath.section == 0 {
+//            buttonCategories += self.categoryButtons.prefix(upTo: 6)
+//        } else {
+//            buttonCategories += self.categoryButtons.dropFirst(6)
+//        }
+//        cell.categoryButtons = buttonCategories
+//
+//        return cell
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         

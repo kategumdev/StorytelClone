@@ -107,13 +107,21 @@ class SectionHeaderSubviewsContainer: UIView {
         
         // Show or hide seeAllButton
         let sectionKind = tableSection.sectionKind
-        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv || sectionKind == .searchVc {
+        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .searchVc {
             seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
             horzStackView.spacing = 0
         } else {
             seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
             horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
         }
+        
+//        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .verticalCv || sectionKind == .searchVc {
+//            seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
+//            horzStackView.spacing = 0
+//        } else {
+//            seeAllButtonWidthAnchorConstraint.isActive = false // Reset button to have its intrinsic width
+//            horzStackView.spacing = SectionHeaderSubviewsContainer.paddingBetweenLabelAndButton
+//        }
         
        // Adjust top padding of first section header if vc is presented when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
         guard category?.bookToShowMoreTitlesLikeIt != nil else { return }

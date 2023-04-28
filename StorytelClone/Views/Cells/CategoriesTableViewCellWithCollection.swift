@@ -30,8 +30,10 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance properties
-    var categoryButtons = [ButtonCategory]()
-    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    private var categoryButtons = [ButtonCategory]()
+    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+//    var categoryButtons = [ButtonCategory]()
+//    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let categoryColors = [Utils.pinkCategoryColor, Utils.orangeCategoryColor, Utils.orangeCategoryColor, Utils.coralCategoryColor, Utils.darkBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.lightBlueCategoryColor, Utils.yellowCategoryColor, Utils.peachCategoryColor, Utils.lightBlueCategoryColor, Utils.pinkCategoryColor, Utils.greenCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor, Utils.orangeCategoryColor, Utils.yellowCategoryColor, Utils.greenCategoryColor, Utils.lightBlueCategoryColor, Utils.greenCategoryColor, Utils.darkBlueCategoryColor]
     
@@ -67,9 +69,14 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(categoryButtons: [ButtonCategory]) {
+    func configureWith(categoryButtons: [ButtonCategory], andCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.categoryButtons = categoryButtons
+        self.dimmedAnimationButtonDidTapCallback = callback
     }
+    
+//    func configureWith(categoryButtons: [ButtonCategory]) {
+//        self.categoryButtons = categoryButtons
+//    }
 
 }
 

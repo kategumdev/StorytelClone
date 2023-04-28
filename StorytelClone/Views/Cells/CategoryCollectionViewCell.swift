@@ -49,7 +49,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Instance methods
     func configure(withColor color: UIColor, categoryOfButton category: ButtonCategory, callback: @escaping DimmedAnimationButtonDidTapCallback) {
         dimmedAnimationButton.backgroundColor = color
-        dimmedAnimationButton.categoryButton = category
+        dimmedAnimationButton.buttonCategory = category
         dimmedAnimationButton.didTapCallback = callback
         categoryTitleLabel.text = category.rawValue
     }
