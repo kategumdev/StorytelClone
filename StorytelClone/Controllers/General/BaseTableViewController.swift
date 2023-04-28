@@ -19,6 +19,10 @@ class BaseTableViewController: UIViewController {
     private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
     
+    lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+        self?.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     lazy var bookTable: UITableView = {
 //        let table = UITableView(frame: .zero, style: .grouped)
         let table = UITableView(frame: .zero, style: tableViewStyle)

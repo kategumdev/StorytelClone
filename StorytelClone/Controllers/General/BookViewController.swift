@@ -118,21 +118,32 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
         let books = Book.books
-        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
-        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
-            let book = book as! Book
-            let controller = BookViewController(book: book)
+        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
         cell.configureWith(books: books, callback: callback)
         return cell
     }
+
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+//
+//        let books = Book.books
+//        // To respond to button tap in BookCollectionViewCell of TableViewCellWithCollection
+//        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] book in
+//            let book = book as! Book
+//            let controller = BookViewController(book: book)
+//            self?.navigationController?.pushViewController(controller, animated: true)
+//        }
+//
+//        cell.configureWith(books: books, callback: callback)
+//        return cell
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Utils.heightForRowWithHorizontalCv

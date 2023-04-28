@@ -49,10 +49,10 @@ extension AllCategoriesViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
         // Respond to button tap in CategoryCollectionViewCell
-        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
-            self?.navigationController?.pushViewController(controller, animated: true)
-        }
-        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: callback)
+//        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+//            self?.navigationController?.pushViewController(controller, animated: true)
+//        }
+        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     

@@ -179,11 +179,9 @@ class SearchViewController: UIViewController {
         for buttonKind in buttonKinds {
             switch buttonKind {
             case .top:
-                newModel[buttonKind] = [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien,
-                                        Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
+                newModel[buttonKind] = [Book.book5, Author.neilGaiman, Series.series1, Author.tolkien, Author.author9, Book.book1, Book.book10, Author.author10, Author.author6]
             case .books:
-                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6,
-                                        Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
+                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
             case .authors:
                 newModel[buttonKind] = [Author.neilGaiman, Author.tolkien, Author.author1, Author.author2, Author.author3, Author.author4, Author.author5, Author.author6, Author.author7, Author.author8, Author.author9, Author.author10]
             case .narrators: newModel[buttonKind] = [Narrator.narrator10, Narrator.narrator3, Narrator.narrator5]

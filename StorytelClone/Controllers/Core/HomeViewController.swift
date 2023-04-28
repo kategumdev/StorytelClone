@@ -21,9 +21,9 @@ class HomeViewController: BaseTableViewController {
     
     private let posterBook: Book
     
-    private lazy var callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
-        self?.navigationController?.pushViewController(controller, animated: true)
-    }
+//    private lazy var callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+//        self?.navigationController?.pushViewController(controller, animated: true)
+//    }
     
     init(categoryModel: Category, posterBook: Book) {
         self.posterBook = posterBook
@@ -213,7 +213,7 @@ extension HomeViewController {
 //        }
         
         if let category = category {
-            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallback: callback)
+            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallback: dimmedAnimationButtonDidTapCallback)
         }
         return cell
     }
@@ -227,7 +227,7 @@ extension HomeViewController {
 //            let controller = BookViewController(book: book)
 //            self?.navigationController?.pushViewController(controller, animated: true)
 //        }
-        cell.configureFor(book: posterBook, withCallback: callback)
+        cell.configureFor(book: posterBook, withCallback: dimmedAnimationButtonDidTapCallback)
  
         return cell
     }
@@ -244,7 +244,7 @@ extension HomeViewController {
 //            self?.navigationController?.pushViewController(controller, animated: true)
 //        }
         
-        cell.configureWith(books: books, callback: callback)
+        cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
@@ -259,7 +259,7 @@ extension HomeViewController {
 //            let controller = BookViewController(book: book)
 //            self?.navigationController?.pushViewController(controller, animated: true)
 //        }
-        cell.configureWith(books: books, callback: callback)
+        cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
@@ -274,7 +274,7 @@ extension HomeViewController {
 //            let controller = BookViewController(book: book)
 //            self?.navigationController?.pushViewController(controller, animated: true)
 //        }
-        cell.configureFor(book: book, withCallback: callback)
+        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
          return cell
     }
 
