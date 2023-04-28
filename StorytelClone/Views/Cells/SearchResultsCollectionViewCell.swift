@@ -14,6 +14,8 @@ protocol SearchResultsCollectionViewCellDelegate: AnyObject {
 let tableDidRequestKeyboardDismiss = Notification.Name(
     rawValue: "tableDidRequestKeyboardDismiss")
 
+typealias SearchResultsDidSelectRowCallback = (_ selectedSearchResultTitle: Title) -> ()
+
 class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
@@ -21,8 +23,8 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     // MARK: - Instance properties
     weak var delegate: SearchResultsCollectionViewCellDelegate?
     
-    var tableViewInSearchResultsCollectionViewCellDidSelectRowCallback: (Title) -> () = {_ in}
-    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
+    var searchResultsDidSelectRowCallback: SearchResultsDidSelectRowCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
     
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     var buttonKind: ScopeButtonKind?
@@ -105,8 +107,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
             
             cell.configureFor(book: book)
-            cell.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback = self.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback
-            
+            cell.ellipsisButtonDidTapCallback = self.ellipsisButtonDidTapCallback
             return cell
         }
         
@@ -143,7 +144,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("didSelectRowAt \(indexPath.row)")
         let selectedRowTitle = model[indexPath.row]
-        tableViewInSearchResultsCollectionViewCellDidSelectRowCallback(selectedRowTitle)
+        searchResultsDidSelectRowCallback(selectedRowTitle)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

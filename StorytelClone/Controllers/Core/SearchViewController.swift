@@ -96,7 +96,7 @@ class SearchViewController: UIViewController {
 
         configureNavBar()
         
-        createAndPassItemSelectedCallback()
+        configureSearchResultsController()
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: tableDidRequestKeyboardDismiss, object: nil)
         
@@ -126,10 +126,10 @@ class SearchViewController: UIViewController {
     }
     
     //MARK: - Helper methods
-    private func createAndPassItemSelectedCallback() {
+    private func configureSearchResultsController() {
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
-        let callbackClosure: (Title) -> () = { [weak self] selectedSearchResultTitle in
+        searchResultsController.searchResultsDidSelectRowCallback = { [weak self] selectedSearchResultTitle in
             if let book = selectedSearchResultTitle as? Book {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
@@ -139,10 +139,8 @@ class SearchViewController: UIViewController {
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        
-        searchResultsController.tableViewInSearchResultsCollectionViewCellDidSelectRowCallback = callbackClosure
 
-        searchResultsController.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback = { [weak self] book in
+        searchResultsController.ellipsisButtonDidTapCallback = { [weak self] book in
             let bookDetailsBottomSheetController = BottomSheetViewController(book: book, kind: .bookDetails)
             bookDetailsBottomSheetController.delegate = self
             bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
@@ -284,7 +282,6 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        
         cell.configureWith(categoryButtons: buttonCategories, andCallback: callback)
         return cell
     }

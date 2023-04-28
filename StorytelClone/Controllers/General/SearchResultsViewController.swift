@@ -10,8 +10,8 @@ import UIKit
 class SearchResultsViewController: UIViewController {
     // MARK: - Instance properties
     private let scopeButtonsView = SearchResultsScopeButtonsView()
-    var tableViewInSearchResultsCollectionViewCellDidSelectRowCallback: (Title) -> () = {_ in}
-    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
+    var searchResultsDidSelectRowCallback: SearchResultsDidSelectRowCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -133,8 +133,8 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
             cell.withSectionHeader = true
         }
         
-        cell.tableViewInSearchResultsCollectionViewCellDidSelectRowCallback = tableViewInSearchResultsCollectionViewCellDidSelectRowCallback
-        cell.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback = ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback
+        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
+        cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         cell.delegate = self
         
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {

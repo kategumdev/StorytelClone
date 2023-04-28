@@ -12,8 +12,8 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
     static let identifier = "TableViewCellWithHorzCvLargeCovers"
     
     // MARK: - Instance properties
-    // Actual value injected when cell is being configured in cellForRowAt
-    var books: [Book] = [Book]() // It will contain 42 random audiobooks
+//    var books: [Book] = [Book]() // It will contain 42 random audiobooks
+    var books = [Book]() // It will contain 42 random audiobooks
     var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {

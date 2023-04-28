@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias EllipsisButtonInSearchResultsDidTapCallback = (Book) -> ()
+
 class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
 
     // MARK: - Static properties and methods
@@ -77,7 +79,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
-    var ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback: (Book) -> () = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -139,7 +141,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     private func addDetailButtonAction() {
         ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self, let book = self.book else { return }
-            self.ellipsisButtonInSearchResultsBookTableViewCellDidTapCallback(book)
+            self.ellipsisButtonDidTapCallback(book)
         }), for: .touchUpInside)
     }
     
