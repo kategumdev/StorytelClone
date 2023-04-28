@@ -88,7 +88,7 @@ class StarHorzStackView: UIStackView {
     }()
     
     private var hasSaveAndEllipsisButtons: Bool
-    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
     var ellipsisButtonDidTapCallback: () -> () = {}
         
     // MARK: - Initializers
@@ -144,7 +144,7 @@ class StarHorzStackView: UIStackView {
             Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.toggleSaveButtonImage()
-            self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
+            self.saveBookButtonDidTapCallback(self.isBookAddedToBookshelf)
             self.book?.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
         }), for: .touchUpInside)
     }

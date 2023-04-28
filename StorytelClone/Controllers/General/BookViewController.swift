@@ -299,7 +299,7 @@ extension BookViewController {
     private func addAndConfigurePopupButton() {
         view.addSubview(popupButton)
         // Pass popupButton callback to saveButton
-        bookDetailsStackView.saveButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
+        bookDetailsStackView.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
     }
     
     private func calculateBookTableHeight() -> CGFloat {

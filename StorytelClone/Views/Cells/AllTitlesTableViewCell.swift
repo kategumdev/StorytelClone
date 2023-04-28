@@ -123,9 +123,9 @@ class AllTitlesTableViewCell: UITableViewCell {
         }
     }
     
-    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in} {
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in} {
         didSet {
-            starHorzStackView.saveButtonDidTapCallback = saveButtonDidTapCallback
+            starHorzStackView.saveBookButtonDidTapCallback = saveBookButtonDidTapCallback
         }
     }
     

@@ -7,8 +7,6 @@
 
 import UIKit
 
-typealias SaveButtonDidTapCallback = (Bool) -> ()
-
 class PopupButton: UIButton {
     
     static let buttonHeight: CGFloat = 46
@@ -43,7 +41,7 @@ class PopupButton: UIButton {
         self?.hidePopupButton()
     }
 
-    lazy var reconfigureAndAnimateSelf: SaveButtonDidTapCallback = { [weak self]
+    lazy var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback = { [weak self]
         userAddedBookToBookshelf in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()

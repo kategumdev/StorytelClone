@@ -20,9 +20,9 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
-    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in} {
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in} {
         didSet {
-            roundButtonsStackContainer.saveButtonDidTapCallback = saveButtonDidTapCallback
+            roundButtonsStackContainer.saveBookButtonDidTapCallback = saveBookButtonDidTapCallback
         }
     }
 

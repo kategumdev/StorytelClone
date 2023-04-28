@@ -89,7 +89,7 @@ class AllTitlesViewController: BaseTableViewController {
         
         let book = allTitlesBooks[indexPath.row]
         cell.configureWith(book: book)
-        cell.saveButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
+        cell.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
 
         cell.ellipsisButtonDidTapCallback = { [weak self] in
             // Get the latest updated book model object

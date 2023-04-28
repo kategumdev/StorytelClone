@@ -7,9 +7,11 @@
 
 import UIKit
 
+typealias SaveBookButtonDidTapCallback = (Bool) -> ()
+
 class SaveBookButton: UIButton {
-    
     // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         tintColor = UIColor.label
@@ -20,6 +22,7 @@ class SaveBookButton: UIButton {
     }
     
     // MARK: - Instance methods
+    
     func toggleImage(isBookAdded: Bool) {
         let newImageName = isBookAdded ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)

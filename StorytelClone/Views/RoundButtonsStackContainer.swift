@@ -78,21 +78,21 @@ class RoundButtonsStackContainer: UIStackView {
     
     private lazy var viewWithSaveButton: UIView = {
         let view = UIView()
-        view.addSubview(saveButton)
+        view.addSubview(saveBookButton)
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.label.cgColor
         view.layer.cornerRadius = RoundButtonsStackContainer.roundWidth / 2
         return view
     }()
         
-    private let saveButton: SaveBookButton = {
+    private let saveBookButton: SaveBookButton = {
         let button = SaveBookButton()
         button.layer.cornerRadius = RoundButtonsStackContainer.roundWidth / 2
         return button
     }()
     
     private var isBookAddedToBookshelf = false
-    var saveButtonDidTapCallback: SaveButtonDidTapCallback = {_ in}
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
 
     private let saveLabel: UILabel = RoundButtonsStackContainer.createLabel(withText: "Save")
     
@@ -138,7 +138,7 @@ class RoundButtonsStackContainer: UIStackView {
     // MARK: - Instance methods
     func updateSaveButtonAppearance() {
         self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-        self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+        self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
         self.toggleSaveLabelText()
     }
     
@@ -151,7 +151,7 @@ class RoundButtonsStackContainer: UIStackView {
         isBookAddedToBookshelf = book.isAddedToBookshelf
         
         toggleSaveLabelText()
-        saveButton.toggleImage(isBookAdded: isBookAddedToBookshelf)
+        saveBookButton.toggleImage(isBookAdded: isBookAddedToBookshelf)
         addSaveButtonAction()
                 
         if hasListenButton {
@@ -166,9 +166,9 @@ class RoundButtonsStackContainer: UIStackView {
     }
 
     private func addSaveButtonAction() {
-        saveButton.addAction(UIAction(handler: { [weak self] _ in
+        saveBookButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.saveButton.isUserInteractionEnabled = false
+            self.saveBookButton.isUserInteractionEnabled = false
             Utils.playHaptics()
             self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.handleSaveButtonTapped()
@@ -176,21 +176,21 @@ class RoundButtonsStackContainer: UIStackView {
     }
 
     private func handleSaveButtonTapped() {
-        self.saveButtonDidTapCallback(self.isBookAddedToBookshelf)
+        self.saveBookButtonDidTapCallback(self.isBookAddedToBookshelf)
         if self.isBookAddedToBookshelf {
-            self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+            self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
             self.toggleSaveLabelText()
             self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
-            self.saveButton.animateImageView(withCompletion: { [weak self] _ in
-                self?.saveButton.isUserInteractionEnabled = true
+            self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
+                self?.saveBookButton.isUserInteractionEnabled = true
             })
         } else {
-            self.saveButton.animateImageView(withCompletion: { [weak self] _ in
+            self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
                 guard let self = self else { return }
-                self.saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
+                self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
                 self.toggleSaveLabelText()
                 self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
-                self.saveButton.isUserInteractionEnabled = true
+                self.saveBookButton.isUserInteractionEnabled = true
             })
         }
     }
@@ -204,12 +204,12 @@ class RoundButtonsStackContainer: UIStackView {
         let labelPadding: CGFloat = 15
 
         // Save button
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        saveBookButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveButton.widthAnchor.constraint(equalTo: viewWithSaveButton.widthAnchor),
-            saveButton.heightAnchor.constraint(equalTo: viewWithSaveButton.heightAnchor),
-            saveButton.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor, constant: 1),
-            saveButton.centerYAnchor.constraint(equalTo: viewWithSaveButton.centerYAnchor, constant: 0.5)
+            saveBookButton.widthAnchor.constraint(equalTo: viewWithSaveButton.widthAnchor),
+            saveBookButton.heightAnchor.constraint(equalTo: viewWithSaveButton.heightAnchor),
+            saveBookButton.centerXAnchor.constraint(equalTo: viewWithSaveButton.centerXAnchor, constant: 1),
+            saveBookButton.centerYAnchor.constraint(equalTo: viewWithSaveButton.centerYAnchor, constant: 0.5)
         ])
 
         viewWithSaveButton.translatesAutoresizingMaskIntoConstraints = false
