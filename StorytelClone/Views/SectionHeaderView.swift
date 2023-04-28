@@ -16,23 +16,14 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         let headerContainer = SectionHeaderSubviewsContainer(addButtonAction: false)
         headerContainer.translatesAutoresizingMaskIntoConstraints = false
         headerContainer.widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
-
-//        headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
         headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: {})
-
         let height = headerContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
 
     // MARK: - Instance properties
     private let containerWithSubviews = SectionHeaderSubviewsContainer(addButtonAction: true)
-    
-//    var seeAllButtonDidTapCallback: () -> () = {} {
-//        didSet {
-//            containerWithSubviews.seeAllButtonDidTapCallback = seeAllButtonDidTapCallback
-//        }
-//    }
-    
+
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -47,10 +38,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Instance methods
-//    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil) {
-//        containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category)
-//    }
-    
     func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
         containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: callback)
     }

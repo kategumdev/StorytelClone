@@ -65,7 +65,6 @@ class BookViewController: UIViewController {
     
     // MARK: - Initializers
     init(book: Book) {
-//        print("BookViewController initialized")
         self.book = book
         super.init(nibName: nil, bundle: nil)
     }
@@ -73,11 +72,7 @@ class BookViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-//        print("BookViewController deinitialized")
-    }
-    
+
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,19 +140,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         })
         return sectionHeader
     }
-    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//        sectionHeader.configureFor(tableSection: TableSection.similarTitles)
-//
-//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
-//            guard let self = self else { return }
-//            let controller = AllTitlesViewController(tableSection: TableSection.similarTitles, titleModel: self.book)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//        return sectionHeader
-//    }
-    
+ 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }

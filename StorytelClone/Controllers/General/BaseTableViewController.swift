@@ -8,7 +8,6 @@
 import UIKit
 
 class BaseTableViewController: UIViewController {
-    
     // MARK: - Instance properties
     var category: Category?
     let tableViewStyle: UITableView.Style
@@ -24,7 +23,6 @@ class BaseTableViewController: UIViewController {
     }
     
     lazy var bookTable: UITableView = {
-//        let table = UITableView(frame: .zero, style: .grouped)
         let table = UITableView(frame: .zero, style: tableViewStyle)
         table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
@@ -150,7 +148,6 @@ class BaseTableViewController: UIViewController {
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -187,34 +184,6 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
         })
         return sectionHeader
     }
-    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let category = category else { return UIView() }
-//
-//        let sectionKind = category.tableSections[section].sectionKind
-//
-//        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
-//
-//        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//
-//        let tableSection = category.tableSections[section]
-//        sectionHeader.configureFor(tableSection: tableSection, sectionNumber: section, category: category)
-//
-//        // Respond to seeAllButton tap in section header
-//        sectionHeader.seeAllButtonDidTapCallback = { [weak self] in
-//            guard let self = self else { return }
-//
-//            if let tableSectionCategory = tableSection.toShowCategory {
-//                let controller = CategoryViewController(categoryModel: tableSectionCategory)
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            } else {
-//                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.toShowTitleModel)
-//                self.navigationController?.pushViewController(controller, animated: true)
-//            }
-//        }
-//
-//        return sectionHeader
-//    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
@@ -233,12 +202,10 @@ extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
-//            print("isInitialOffsetYSet")
             tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
             return
         }
-        
         // Toggle navbar from transparent to visible at calculated contentOffset
         adjustNavBarAppearanceTo(currentOffsetY: currentOffsetY)
     }
