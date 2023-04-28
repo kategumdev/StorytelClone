@@ -68,10 +68,7 @@ extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegate, UICollec
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LargeBookCollectionViewCell.identifier, for: indexPath) as? LargeBookCollectionViewCell else { return UICollectionViewCell()}
 
         let book = books[indexPath.row]
-        
-        // Pass callback closure this TableViewCellWithCollection got from owning controller to BookCollectionViewCell
         cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
-
         return cell
     }
     

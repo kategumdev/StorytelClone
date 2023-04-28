@@ -298,7 +298,6 @@ extension BookViewController {
     
     private func addAndConfigurePopupButton() {
         view.addSubview(popupButton)
-        // Pass popupButton callback to saveButton
         bookDetailsStackView.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
     }
     

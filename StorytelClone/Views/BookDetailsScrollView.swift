@@ -93,8 +93,7 @@ class BookDetailsScrollView: UIScrollView {
     
     private lazy var categoryStackWidthAnchor =         categoryStack.widthAnchor.constraint(equalToConstant: categoryButton.bounds.width)
         
-    typealias CategoryButtonDidTapCallback = () -> ()
-    var categoryButtonDidTapCallback: CategoryButtonDidTapCallback = {}
+    var categoryButtonDidTapCallback: () -> () = {}
     
     // MARK: - Initializers
     init(book: Book) {

@@ -8,7 +8,6 @@
 import UIKit
 
 class ShowSeriesButtonContainer: UIView {
-    
     // MARK: - Instance properties
     var showSeriesButtonDidTapCallback: () -> () = {}
     
