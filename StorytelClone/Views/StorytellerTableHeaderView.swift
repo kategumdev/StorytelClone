@@ -12,7 +12,6 @@ class StorytellerTableHeaderView: UIView {
     static let lighterLabelColor = UIColor.label.withAlphaComponent(0.75)
 
     // MARK: - Instance properties
-    private var storyteller: Title?
     private let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
         
     private lazy var roundLabelWithLetters: UILabel = {
@@ -102,25 +101,16 @@ class StorytellerTableHeaderView: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(storyteller: Title) {
-        self.storyteller = storyteller
+    func configureFor(storyteller: Storyteller) {
         titleKindLabel.text = storyteller.titleKind.rawValue
                 
-        if let author = storyteller as? Author {
-            nameLabel.text = author.name
-            configureRoundLabelWithLettersFrom(name: author.name)
-            
-            let numberOfFollowers = author.numberOfFollowers.shorted()
-            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
-        } else if let narrator = storyteller as? Narrator {
-            nameLabel.text = narrator.name
-            configureRoundLabelWithLettersFrom(name: narrator.name)
-            
-            let numberOfFollowers = narrator.numberOfFollowers.shorted()
-            numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
-        }
-        numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
+        nameLabel.text = storyteller.name
+        configureRoundLabelWithLettersFrom(name: storyteller.name)
         
+        let numberOfFollowers = storyteller.numberOfFollowers.shorted()
+        numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
+        
+        numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
     }
     
     // MARK: - Helper methods

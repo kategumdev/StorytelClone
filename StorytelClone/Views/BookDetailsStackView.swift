@@ -26,7 +26,7 @@ class BookDetailsStackView: UIStackView {
         }
     }
 
-    var storytellerButtonDidTapCallback: ([Title]) -> () = {_ in}
+    var storytellerButtonDidTapCallback: ([Storyteller]) -> () = {_ in}
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -252,7 +252,7 @@ class BookDetailsStackView: UIStackView {
 
         addArrangedSubview(roundButtonsStackContainer)
     }
-    
+
     private func addAuthorsButtonAction() {
         authorsButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }

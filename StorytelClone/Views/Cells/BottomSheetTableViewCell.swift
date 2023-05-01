@@ -42,16 +42,8 @@ class BottomSheetTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(storyteller: Title) {
-        var text = ""
-        if let author = storyteller as? Author {
-            text = author.name
-        }
-        
-        if let narrator = storyteller as? Narrator {
-            text = narrator.name
-        }
-        customTitleLabel.text = text
+    func configureWith(storyteller: Storyteller) {
+        customTitleLabel.text = storyteller.name
     }
     
     func configureFor(book: Book, ellipsisButtonCell: BookDetailsBottomSheetCell) {

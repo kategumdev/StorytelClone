@@ -28,7 +28,6 @@
 		5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */; };
 		5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE405299FBA7E00FA4EDB /* Constants.swift */; };
 		5A5B878529C527AA001A7A64 /* SearchResultsNoImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878429C527AA001A7A64 /* SearchResultsNoImageTableViewCell.swift */; };
-		5A5B878729C527EB001A7A64 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878629C527EB001A7A64 /* Author.swift */; };
 		5A5B878929C52C45001A7A64 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878829C52C45001A7A64 /* Tag.swift */; };
 		5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878A29C52F2C001A7A64 /* Title.swift */; };
 		5A630F4E29D8BA5600A690EF /* FollowSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */; };
@@ -43,7 +42,6 @@
 		5AA8006929C8DD5100198B8A /* SearchResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006829C8DD5100198B8A /* SearchResultsTableViewCell.swift */; };
 		5AA8006B29C8EFDC00198B8A /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006A29C8EFDC00198B8A /* Series.swift */; };
 		5AA8006D29C8F2F700198B8A /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006C29C8F2F700198B8A /* Language.swift */; };
-		5AA8006F29C8F4AD00198B8A /* Narrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006E29C8F4AD00198B8A /* Narrator.swift */; };
 		5AAA1AC229C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */; };
 		5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */; };
 		5AB1A29C29B3E32A001CC50A /* DimmedAnimationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */; };
@@ -120,7 +118,6 @@
 		5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButtonTableViewCell.swift; sourceTree = "<group>"; };
 		5A5AE405299FBA7E00FA4EDB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5A5B878429C527AA001A7A64 /* SearchResultsNoImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsNoImageTableViewCell.swift; sourceTree = "<group>"; };
-		5A5B878629C527EB001A7A64 /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5A5B878829C52C45001A7A64 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		5A5B878A29C52F2C001A7A64 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowSeriesView.swift; sourceTree = "<group>"; };
@@ -135,7 +132,6 @@
 		5AA8006829C8DD5100198B8A /* SearchResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsTableViewCell.swift; sourceTree = "<group>"; };
 		5AA8006A29C8EFDC00198B8A /* Series.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
 		5AA8006C29C8F2F700198B8A /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
-		5AA8006E29C8F4AD00198B8A /* Narrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Narrator.swift; sourceTree = "<group>"; };
 		5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsSectionHeaderView.swift; sourceTree = "<group>"; };
 		5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedAnimationButton.swift; sourceTree = "<group>"; };
@@ -302,12 +298,10 @@
 				5A041BD929AE70D3002539CF /* Category.swift */,
 				5A5B878A29C52F2C001A7A64 /* Title.swift */,
 				5AB86E6029B1723B005122A6 /* Book.swift */,
-				5A5B878629C527EB001A7A64 /* Author.swift */,
-				5AA8006E29C8F4AD00198B8A /* Narrator.swift */,
-				5A5B878829C52C45001A7A64 /* Tag.swift */,
-				5AA8006A29C8EFDC00198B8A /* Series.swift */,
-				5AA8006C29C8F2F700198B8A /* Language.swift */,
 				5A00A61729FFBE75002B2364 /* Storyteller.swift */,
+				5AA8006A29C8EFDC00198B8A /* Series.swift */,
+				5A5B878829C52C45001A7A64 /* Tag.swift */,
+				5AA8006C29C8F2F700198B8A /* Language.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -528,7 +522,6 @@
 				5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */,
 				5A630F4E29D8BA5600A690EF /* FollowSeriesView.swift in Sources */,
 				5A5AE406299FBA7E00FA4EDB /* Constants.swift in Sources */,
-				5AA8006F29C8F4AD00198B8A /* Narrator.swift in Sources */,
 				5ABBA395299C09A700D0E0F4 /* StorytelClone.xcdatamodeld in Sources */,
 				5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */,
 				5ABFA11829CD0E6800F7474C /* BookDetailsScrollView.swift in Sources */,
@@ -536,7 +529,6 @@
 				5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */,
 				5AA8006429C8D21100198B8A /* SearchResultsSeriesTableViewCell.swift in Sources */,
 				5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */,
-				5A5B878729C527EB001A7A64 /* Author.swift in Sources */,
 				5A50AD1A29CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift in Sources */,
 				5A8497FB29D49B530047AB44 /* PlaySampleButton.swift in Sources */,
 				5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */,

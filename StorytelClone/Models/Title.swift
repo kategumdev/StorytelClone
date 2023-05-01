@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Title {
-    var titleKind: TitleKind { get }
+    var titleKind: TitleKind { get set}
 }
 
 enum TitleKind: String {
@@ -20,10 +20,3 @@ enum TitleKind: String {
     case tag = "Tag"
     case series = "Series"
 }
-//
-//// For Author and Narrator types
-//protocol Storyteller {
-//
-//}
-
-

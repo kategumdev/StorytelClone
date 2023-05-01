@@ -9,7 +9,7 @@ import Foundation
 
 struct Tag: Title {
     let tagTitle: String
-    let titleKind: TitleKind = .tag
+    var titleKind: TitleKind = .tag
     
     init(tagTitle: String) {
         self.tagTitle = tagTitle

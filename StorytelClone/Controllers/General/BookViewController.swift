@@ -21,7 +21,6 @@ class BookViewController: UIViewController {
     private lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
     private lazy var overviewStackView = BookOverviewStackView(book: book)
     
-//    private let seeMoreOverviewButton = SeeMoreButton(forOverview: true)
     private let seeMoreOverviewButton = SeeMoreButton(buttonKind: .seeMoreOverview)
     private lazy var seeMoreOverviewButtonTopAnchorFullSizeAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreOverviewButton.seeMoreOverviewButtonHeight / 2)
     private lazy var seeMoreOverviewButtonTopAnchorCompressedAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
@@ -31,7 +30,6 @@ class BookViewController: UIViewController {
     
     private lazy var hasTags = !book.tags.isEmpty ? true : false
     private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: view.bounds.width)
-//    private lazy var showAllTagsButton = SeeMoreButton(forOverview: false)
     private lazy var showAllTagsButton = SeeMoreButton(buttonKind: .seeMoreTags)
     private lazy var showAllTagsButtonTopAnchorCompressedAppearance = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.compressedViewHeight)
     private lazy var showAllTagsButtonTopAnchorFullSizeAppearance = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
@@ -198,6 +196,7 @@ extension BookViewController {
         mainScrollView.addSubview(bookDetailsStackView)
      
         bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
+//            print("storytellerButtonDidTapCallback with \(storytellers)")
             guard let self = self else { return }
             if storytellers.count == 1 {
                 let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
@@ -206,8 +205,7 @@ extension BookViewController {
             }
             
             // For cases when storytellers.count > 1
-            let bottomSheetKind: BottomSheetKind = storytellers.first as? Author != nil ? .authors : .narrators
-            let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: bottomSheetKind)
+            let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: .storytellers(storytellers: storytellers))
             storytellersBottomSheetController.delegate = self
             storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
             self.present(storytellersBottomSheetController, animated: false)

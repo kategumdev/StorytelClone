@@ -90,24 +90,75 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
     func configureFor(title: Title) {
         subtitleLabel.text = title.titleKind.rawValue
         
-        if let author = title as? Author {
-            titleLabel.text = author.name
-            let config = UIImage.SymbolConfiguration(weight: .semibold)
-            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+        guard let storyteller = title as? Storyteller else {
+            if let tag  = title as? Tag {
+                titleLabel.text = tag.tagTitle
+                symbolView.image = UIImage(systemName: "number")
+            }
+            return
         }
         
-        if let narrator = title as? Narrator {
-            titleLabel.text = narrator.name
+        titleLabel.text = storyteller.name
+        
+        if storyteller.titleKind == .author {
+            let config = UIImage.SymbolConfiguration(weight: .semibold)
+            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+        } else {
             let config = UIImage.SymbolConfiguration(weight: .medium)
             symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
         }
         
-        if let tag  = title as? Tag {
-            titleLabel.text = tag.tagTitle
-            symbolView.image = UIImage(systemName: "number")
-        }
+        let config = UIImage.SymbolConfiguration(weight: .semibold)
+        symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
         
     }
+    
+//    func configureFor(title: Title) {
+//        subtitleLabel.text = title.titleKind.rawValue
+//
+//        if let storyteller = title as? Storyteller {
+//            titleLabel.text = storyteller.name
+//
+//            if storyteller.titleKind == .author {
+//                let config = UIImage.SymbolConfiguration(weight: .semibold)
+//                symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+//            } else {
+//                let config = UIImage.SymbolConfiguration(weight: .medium)
+//                symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
+//            }
+//
+//            let config = UIImage.SymbolConfiguration(weight: .semibold)
+//            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+//        }
+//
+//        if let tag  = title as? Tag {
+//            titleLabel.text = tag.tagTitle
+//            symbolView.image = UIImage(systemName: "number")
+//        }
+//
+//    }
+    
+//    func configureFor(title: Title) {
+//        subtitleLabel.text = title.titleKind.rawValue
+//
+//        if let author = title as? Author {
+//            titleLabel.text = author.name
+//            let config = UIImage.SymbolConfiguration(weight: .semibold)
+//            symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
+//        }
+//
+//        if let narrator = title as? Narrator {
+//            titleLabel.text = narrator.name
+//            let config = UIImage.SymbolConfiguration(weight: .medium)
+//            symbolView.image = UIImage(systemName: "mic")?.withConfiguration(config)
+//        }
+//
+//        if let tag  = title as? Tag {
+//            titleLabel.text = tag.tagTitle
+//            symbolView.image = UIImage(systemName: "number")
+//        }
+//
+//    }
     
     // MARK: - Helper methods
     private func applyConstraints() {

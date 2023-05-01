@@ -152,12 +152,10 @@ class AllTitlesViewController: BaseViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-        
+
         var text = ""
-        if let author = titleModel as? Author {
-            text = author.name
-        } else if let narrator = titleModel as? Narrator {
-            text = narrator.name
+        if let storyteller = titleModel as? Storyteller {
+            text = storyteller.name
         } else if let series = titleModel as? Series {
             text = series.title
         } else if let tag = titleModel as? Tag {
@@ -187,9 +185,9 @@ class AllTitlesViewController: BaseViewController {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
                 
-        if titleModel?.titleKind == .author || titleModel?.titleKind == .narrator {
+        if let storyteller = titleModel as? Storyteller {
             let headerView = StorytellerTableHeaderView()
-            headerView.configureFor(storyteller: titleModel!)
+            headerView.configureFor(storyteller: storyteller)
             bookTable.tableHeaderView = headerView
             
             // These two lines avoid constraints' conflict of header when vc's view just loaded
