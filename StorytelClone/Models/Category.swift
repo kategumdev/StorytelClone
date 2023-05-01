@@ -136,7 +136,12 @@ enum ButtonCategory: String {
     }
 }
 
-struct Category {
+struct Category: Equatable {
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        return lhs.title == rhs.title
+    }
+    #warning("Equatable implemention has to check id or smth like that, not title")
+    
     let title: String
     let tableSections: [TableSection]
     var bookToShowMoreTitlesLikeIt: Book?

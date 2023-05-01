@@ -7,15 +7,13 @@
 
 import UIKit
 
-//enum BookKind: String {
-//    case audiobook = "Audiobook"
-//    case ebook = "Ebook"
-//    case audioBookAndEbook = "Audiobook & Ebook"
-//}
-
-struct Book: Title {
+struct Book: Title, Equatable {
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        return lhs.title == rhs.title
+    }
+    #warning("Equatable implemention has to check id, not title")
+    
     let title: String
-//    let authors: [Author]
     let authors: [Storyteller]
     let coverImage: UIImage?
     let largeCoverImage: UIImage?
@@ -26,7 +24,6 @@ struct Book: Title {
     let reviewsNumber: Int
     let duration: String
     let language: Language
-//    let narrators: [Narrator]
     let narrators: [Storyteller]
     let series: String?
     let seriesPart: Int?
@@ -34,7 +31,6 @@ struct Book: Title {
     let publisher: String
     let translators: [String]?
     let tags: [Tag]
-//    let isAddedToBookshelf: Bool
     var isAddedToBookshelf: Bool
     var isFinished: Bool
     var isDownloaded: Bool
@@ -93,22 +89,6 @@ struct Book: Title {
             }
         }
     }
-    
-//    func update(isAddedToBookshelf: Bool) {
-////        guard let self = self else { return }
-//        if isAddedToBookshelf {
-//            // Add book only if it's not already in the array
-//            if !toReadBooks.contains(where: { $0.title == self.title }) {
-//                toReadBooks.append(self)
-//                // With real data, update book object here
-//            }
-//        } else {
-//            if let bookIndex = toReadBooks.firstIndex(where: { $0.title == self.title }) {
-//                toReadBooks.remove(at: bookIndex)
-//                // With real data, update book object here
-//            }
-//        }
-//    }
     
     static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
     

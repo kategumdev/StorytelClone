@@ -84,7 +84,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage
-        dimmedAnimationButton.book = book
+        dimmedAnimationButton.kind = .toPushBookVcWith(book)
       }
     
     // MARK: - Helper methods

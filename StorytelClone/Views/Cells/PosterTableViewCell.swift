@@ -38,7 +38,7 @@ class PosterTableViewCell: UITableViewCell {
     
     // MARK: - Instance methods
     func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        dimmedAnimationButton.book = book
+        dimmedAnimationButton.kind = .toPushBookVcWith(book)
         dimmedAnimationButton.didTapCallback = callback
         dimmedAnimationButton.configuration?.background.image = book.coverImage
     }

@@ -7,19 +7,22 @@
 
 import UIKit
 
-//typealias DimmedAnimationButtonDidTapCallback = (UIViewController) -> ()
 typealias DimmedAnimationButtonDidTapCallback = (_ controllerToPush: UIViewController) -> ()
 
 class DimmedAnimationButton: UIButton {
+    
+    enum ButtonKind: Equatable {
+        case toPushBookVcWith(Book)
+        case toPushAllCategoriesVc
+        case toPushCategoryVcForSeriesCategory
+        case toPushCategoryVcForCategory(Category)
+    }
+    
     // MARK: - Instance properties
+    var kind: ButtonKind?
+    
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
-
-    // Owning view injects one of these 3 dependencies as needed
-    var book: Book?
-    var sectionKind: SectionKind?
-    var buttonCategory: ButtonCategory?
-    
     var didTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     weak var viewToTransform: UIView?
@@ -107,24 +110,24 @@ class DimmedAnimationButton: UIButton {
     }
     
     private func createControllerForCallback() -> UIViewController {
+        guard let buttonKind = kind else { return UIViewController() }
         var controller = UIViewController()
-        if let book = self.book {
+        
+        switch buttonKind {
+        case .toPushBookVcWith(let book):
             controller = BookViewController(book: book)
-        }
-        
-        if let sectionKind = self.sectionKind {
-            if sectionKind == .seriesCategoryButton {
-                controller = CategoryViewController(categoryModel: Category.series)
-            } else {
-                controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: ButtonCategory.categoriesForAllCategories)
-            }
-        }
-        
-        if let buttonCategory = self.buttonCategory {
-            let categoryModel = ButtonCategory.createModelFor(categoryButton: buttonCategory)
-            controller = CategoryViewController(categoryModel: categoryModel)
+
+        case .toPushAllCategoriesVc:
+            controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: ButtonCategory.categoriesForAllCategories)
+            
+        case .toPushCategoryVcForSeriesCategory:
+            controller = CategoryViewController(categoryModel: Category.series)
+            
+        case .toPushCategoryVcForCategory(let category):
+            controller = CategoryViewController(categoryModel: category)
         }
         
         return controller
     }
+    
 }
