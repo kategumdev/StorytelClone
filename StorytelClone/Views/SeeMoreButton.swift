@@ -9,6 +9,12 @@ import UIKit
 
 // For SeeMoreOverviewButton and showAllTagsButton in BookViewController
 class SeeMoreButton: UIButton {
+    
+    enum ButtonKind {
+        case seeMoreOverview
+        case seeMoreTags
+    }
+    
     // MARK: - Instance properties
     let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
     let seeMoreOverviewButtonHeight: CGFloat = 110
@@ -21,8 +27,7 @@ class SeeMoreButton: UIButton {
     
     private lazy var buttonConfig: UIButton.Configuration = {
         var buttonConfig = UIButton.Configuration.plain()
-        let text = forOverview == true ? "See more" : "Show all tags"
-        buttonConfig.attributedTitle = AttributedString(text)
+        buttonConfig.attributedTitle = AttributedString(buttonText)
         buttonConfig.attributedTitle?.font = font
         buttonConfig.titleAlignment = .center
         
@@ -61,16 +66,17 @@ class SeeMoreButton: UIButton {
     
     private var currentTransform = CGAffineTransform.identity
     
-    // true if initializing seeMoreOverviewButton, false if initializing showAllTagsButton in BookViewController
-    private let forOverview: Bool
+    private let buttonKind: ButtonKind
+
+    private lazy var buttonText = buttonKind == .seeMoreOverview ? "See more" : "Show all tags"
     
     // MARK: - Initializers
-    init(forOverview: Bool) {
-        self.forOverview = forOverview
+    init(buttonKind: ButtonKind) {
+        self.buttonKind = buttonKind
         super.init(frame: .zero)
         configureSelf()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -78,17 +84,15 @@ class SeeMoreButton: UIButton {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        if !gradientIsAdded && forOverview {
+        if !gradientIsAdded && buttonKind == .seeMoreOverview {
             addGradient()
             gradientIsAdded = true
         }
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        guard forOverview else { return }
-        
+        guard buttonKind == .seeMoreOverview else { return }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             gradientLayer.colors = gradientColors
         }
@@ -121,7 +125,7 @@ class SeeMoreButton: UIButton {
         self.tintColor = .label
         var config = buttonConfig
         
-        if forOverview {
+        if buttonKind == .seeMoreOverview {
             // Position button text y-centered in the lower half of the button height
             let bottomInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
             let topInset = seeMoreOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
