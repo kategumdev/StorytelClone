@@ -9,7 +9,7 @@ import UIKit
 
 var allTitlesBooks = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 
-class AllTitlesViewController: BaseTableViewController {
+class AllTitlesViewController: BaseViewController {
 
     var tableSection: TableSection?
     let titleModel: Title?

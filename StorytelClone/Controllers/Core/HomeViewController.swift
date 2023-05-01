@@ -17,7 +17,7 @@ import UIKit
 //    case TodasLasCategoriasImageButton = 6
 //}
 
-class HomeViewController: BaseTableViewController {
+class HomeViewController: BaseViewController {
     
     private let posterBook: Book
 

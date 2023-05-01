@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AllCategoriesViewController: BaseTableViewController {
+class AllCategoriesViewController: BaseViewController {
     
     private let categoryButtons: [ButtonCategory]
     

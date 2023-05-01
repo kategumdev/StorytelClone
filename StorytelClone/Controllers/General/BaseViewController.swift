@@ -1,5 +1,5 @@
 //
-//  BaseTableVIewController.swift
+//  BaseViewController.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 27/2/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BaseTableViewController: UIViewController {
+class BaseViewController: UIViewController {
     // MARK: - Instance properties
     var category: Category?
     let tableViewStyle: UITableView.Style
@@ -147,7 +147,7 @@ class BaseTableViewController: UIViewController {
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
-extension BaseTableViewController: UITableViewDelegate, UITableViewDataSource {
+extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }

@@ -21,7 +21,7 @@
 		5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */; };
 		5A50AD1A29CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */; };
 		5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* CategoryViewController.swift */; };
-		5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseTableViewController.swift */; };
+		5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseViewController.swift */; };
 		5A54A5F229DC446D003BB8D4 /* StorytellerTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A54A5F129DC446D003BB8D4 /* StorytellerTableHeaderView.swift */; };
 		5A5A1FDB29D3235600AA08BB /* SeeMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5A1FDA29D3235600AA08BB /* SeeMoreButton.swift */; };
 		5A5AE402299FB3D100FA4EDB /* WideButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */; };
@@ -112,7 +112,7 @@
 		5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBookButton.swift; sourceTree = "<group>"; };
 		5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSeriesButtonContainer.swift; sourceTree = "<group>"; };
 		5A52321529AC24F30058DD73 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
-		5A52321729AC30B30058DD73 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		5A52321729AC30B30058DD73 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		5A54A5F129DC446D003BB8D4 /* StorytellerTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorytellerTableHeaderView.swift; sourceTree = "<group>"; };
 		5A5A1FDA29D3235600AA08BB /* SeeMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeMoreButton.swift; sourceTree = "<group>"; };
 		5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButtonTableViewCell.swift; sourceTree = "<group>"; };
@@ -356,7 +356,7 @@
 		5ABBA400299C0F4400D0E0F4 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				5A52321729AC30B30058DD73 /* BaseTableViewController.swift */,
+				5A52321729AC30B30058DD73 /* BaseViewController.swift */,
 				5A52321529AC24F30058DD73 /* CategoryViewController.swift */,
 				5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */,
 				5AB2CCC629B21C090048A4FB /* BookViewController.swift */,
@@ -513,7 +513,7 @@
 				5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */,
 				5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */,
 				5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */,
-				5A52321829AC30B30058DD73 /* BaseTableViewController.swift in Sources */,
+				5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */,
 				5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
 				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift in Sources */,

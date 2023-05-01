@@ -8,7 +8,7 @@
 import UIKit
 
 // Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
-class CategoryViewController: BaseTableViewController {
+class CategoryViewController: BaseViewController {
     
     private lazy var similarBooksTopView = UIView()
     private let similarBooksTopViewY: CGFloat = 1000
