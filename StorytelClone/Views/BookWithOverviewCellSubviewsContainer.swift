@@ -13,6 +13,8 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     static let backgroundColor = Utils.powderGrayBackgroundColor
     
     // MARK: - Instance properties
+    private var book: Book?
+        
     let dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
         button.backgroundColor = backgroundColor
@@ -28,6 +30,10 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
+    
+    private lazy var saveButton = SaveBookButton()
+    
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
     
     private let bookTitleLabel: UILabel = {
         let label = UILabel()
@@ -59,6 +65,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         addSubview(dimmedAnimationButton)
         dimmedAnimationButton.addSubview(vertStackView)
         addSubview(squareImageView)
+        addSubview(saveButton)
         dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
@@ -78,6 +85,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     // MARK: - Instance methods
     func configureFor(book: Book) {
+        self.book = book
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
         let overviewString = book.overview
@@ -85,9 +93,28 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage
         dimmedAnimationButton.kind = .toPushBookVcWith(book)
+        saveButton.toggleImage(isBookAdded: book.isAddedToBookshelf)
+        addSaveButtonAction()
       }
     
     // MARK: - Helper methods
+    private func addSaveButtonAction() {
+        saveButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self, let unwrappedBook = self.book else { return }
+            Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
+            self.book?.isAddedToBookshelf = !unwrappedBook.isAddedToBookshelf
+            unwrappedBook.update(isAddedToBookshelf: !unwrappedBook.isAddedToBookshelf)
+            self.toggleSaveButtonImage()
+            self.saveBookButtonDidTapCallback(!unwrappedBook.isAddedToBookshelf)
+        }), for: .touchUpInside)
+    }
+    
+    private func toggleSaveButtonImage() {
+        guard let book = book else { return }
+        saveButton.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
+        saveButton.toggleImage(isBookAdded: book.isAddedToBookshelf)
+    }
+        
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         // These two constraints are used only when creating container for calculation of row height for the cell using this container
@@ -121,6 +148,12 @@ class BookWithOverviewCellSubviewsContainer: UIView {
             squareImageView.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: leadingConstant),
             squareImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.width),
             squareImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.height)
+        ])
+        
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            saveButton.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: 23),
+            saveButton.trailingAnchor.constraint(equalTo: dimmedAnimationButton.trailingAnchor, constant: -23)
         ])
     }
 

@@ -21,6 +21,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     
     // MARK: - Instance properties
     private let containerWithSubviews = BookWithOverviewCellSubviewsContainer()
+    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
         
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -34,10 +35,11 @@ class BookWithOverviewTableViewCell: UITableViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Instance methods
-    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    // MARK: - Instance methods 
+    func configureFor(book: Book, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
         containerWithSubviews.configureFor(book: book)
-        containerWithSubviews.dimmedAnimationButton.didTapCallback = callback
+        containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
+        containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
     }
     
 }

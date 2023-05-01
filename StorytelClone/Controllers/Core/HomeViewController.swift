@@ -20,6 +20,7 @@ import UIKit
 class HomeViewController: BaseViewController {
     
     private let posterBook: Book
+    private let popupButton = PopupButton()
 
     init(categoryModel: Category, posterBook: Book) {
         self.posterBook = posterBook
@@ -37,6 +38,11 @@ class HomeViewController: BaseViewController {
         bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
         bookTable.register(TableViewCellWithHorzCvLargeCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeCovers.identifier)
         bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
+        
+        // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
+        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
+        
+        view.addSubview(popupButton)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +70,8 @@ class HomeViewController: BaseViewController {
         let configuration = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
         let image = UIImage(systemName: "bell", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        
+        extendedLayoutIncludesOpaqueBars = true
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -151,7 +159,8 @@ extension HomeViewController {
     private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
         let book = category.tableSections[indexPath.section].books[0]
-        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
+        
+        cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
          return cell
     }
 

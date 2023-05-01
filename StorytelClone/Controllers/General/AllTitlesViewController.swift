@@ -13,6 +13,8 @@ class AllTitlesViewController: BaseViewController {
 
     var tableSection: TableSection?
     let titleModel: Title?
+    private var currentSelectedBook: Book?
+    private let popupButton = PopupButton()
             
 //    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 //    private var books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
@@ -23,14 +25,8 @@ class AllTitlesViewController: BaseViewController {
 //                         Book.book1, Book.book1, Book.book1, Book.book1,
 //                         Book.book1, Book.book1, Book.book1, Book.book1]
     
-    private let popupButton = PopupButton()
-    private let viewWithPopupButton = UIView()
-    
-    private var currentSelectedBook: Book?
-    
     // MARK: - Initializers
     init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
-//        print("AllTitlesViewController INIT")
         self.tableSection = tableSection
         self.titleModel = titleModel
         super.init(tableViewStyle: .plain)
@@ -40,9 +36,9 @@ class AllTitlesViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
+//    deinit {
 //        print("AllTitlesViewController DEINIT")
-    }
+//    }
     
     // MARK: - View life cycle
     override func viewDidLoad() {

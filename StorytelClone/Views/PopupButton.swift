@@ -164,7 +164,6 @@ class PopupButton: UIButton {
             heightAnchor.constraint(equalToConstant: PopupButton.buttonHeight)
 
         ])
-
         bottomAnchorConstraint = bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
         bottomAnchorConstraint?.isActive = true
     }

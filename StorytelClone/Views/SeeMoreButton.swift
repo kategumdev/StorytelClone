@@ -7,7 +7,6 @@
 
 import UIKit
 
-// For SeeMoreOverviewButton and showAllTagsButton in BookViewController
 class SeeMoreButton: UIButton {
     
     enum ButtonKind {
