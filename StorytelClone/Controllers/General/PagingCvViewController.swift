@@ -1,19 +1,31 @@
 //
-//  SearchResultsViewController.swift
+//  PagingCvViewController.swift
 //  StorytelClone
 //
-//  Created by Kateryna Gumenna on 7/3/23.
+//  Created by Kateryna Gumenna on 2/5/23.
 //
 
 import UIKit
 
-class SearchResultsViewController: UIViewController {
+typealias PagingCvViewControllerDidSelectRowCallback = (_ selectedTitle: Title) -> ()
+typealias EllipsisButtonInPagingCvViewControllerDidTapCallback = (Book) -> ()
+
+class PagingCvViewController: UIViewController {
     // MARK: - Instance properties
 //    private let scopeButtonsView = SearchResultsScopeButtonsView()
-    private let scopeButtonsView = ScopeButtonsView(withButtonKinds: ScopeButtonKind.kindsForSearchResults)
+    private let scopeButtonKinds: [ScopeButtonKind]
+    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
+    
+//    private let sectionHeaderTopAndBottomPadding: SectionHeaderTopAndBottomPadding
+    private let pagingCollectionViewCellKind: PagingCollectionViewCellKind
 
-    var searchResultsDidSelectRowCallback: SearchResultsDidSelectRowCallback = {_ in}
-    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
+//    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: ScopeButtonKind.kindsForSearchResults)
+
+//    private let scopeButtonsView = ScopeButtonsView(withButtonKinds: ScopeButtonKind.kindsForSearchResults)
+
+    var didSelectRowCallback: PagingCvViewControllerDidSelectRowCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInPagingCvViewControllerDidTapCallback = {_ in}
+//    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -26,6 +38,8 @@ class SearchResultsViewController: UIViewController {
         collectionView.isPagingEnabled = true
         return collectionView
     }()
+    
+    lazy var collectionViewBottomAnchor = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
     
     private lazy var separatorWidth: CGFloat = {
         let scale = UIScreen.main.scale
@@ -52,10 +66,29 @@ class SearchResultsViewController: UIViewController {
     private var indexPathsToUnhide = [IndexPath]()
     
     var modelForSearchQuery: [ScopeButtonKind : [Title]]?
-        
-//    private var previousContentSize: UIContentSizeCategory?
-    
+            
     // MARK: - Initializers
+    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], pagingCollectionViewCellKind: PagingCollectionViewCellKind) {
+        self.scopeButtonKinds = scopeButtonKinds
+        self.pagingCollectionViewCellKind = pagingCollectionViewCellKind
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+//    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], sectionHeaderPadding: SectionHeaderTopAndBottomPadding) {
+//        self.scopeButtonKinds = scopeButtonKinds
+//        self.sectionHeaderTopAndBottomPadding = sectionHeaderPadding
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+//    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind]) {
+//        self.scopeButtonKinds = scopeButtonKinds
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
@@ -67,13 +100,11 @@ class SearchResultsViewController: UIViewController {
         collectionView.delegate = self
         applyConstraints()
         setInitialOffsetsOfTablesInCells()
-//        previousContentSize = traitCollection.preferredContentSizeCategory
     }
     
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-//        print("traitCollectionDidChange")
         
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             collectionView.collectionViewLayout.invalidateLayout()
@@ -107,14 +138,14 @@ class SearchResultsViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension SearchResultsViewController: UICollectionViewDelegateFlowLayout {
+extension PagingCvViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.bounds.size
     }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension SearchResultsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return scopeButtonsView.scopeButtons.count
@@ -122,6 +153,9 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.kind = pagingCollectionViewCellKind
+//        cell.sectionHeaderTopAndBottomPadding = sectionHeaderTopAndBottomPadding.rawValue
         
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
@@ -135,7 +169,8 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
             cell.withSectionHeader = true
         }
         
-        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
+//        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
+        cell.searchResultsDidSelectRowCallback = didSelectRowCallback
         cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         cell.delegate = self
         
@@ -164,7 +199,7 @@ extension SearchResultsViewController: UICollectionViewDataSource, UICollectionV
 }
 
 // MARK: - UIScrollViewDelegate
-extension SearchResultsViewController {
+extension PagingCvViewController {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         toggleIsButtonTriggeredScrollAndUnhideCells()
     }
@@ -218,7 +253,7 @@ extension SearchResultsViewController {
 }
 
 // MARK: - Helper methods
-extension SearchResultsViewController {
+extension PagingCvViewController {
     private func toggleIsButtonTriggeredScrollAndUnhideCells() {
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
@@ -231,28 +266,36 @@ extension SearchResultsViewController {
     
     // This function should fetch needed initial objects when user haven't perform any search yet
     private func getInitialModelFor(buttonKind: ScopeButtonKind) -> [Title] {
-        var model = [Title]()
-        if buttonKind == .top {
-            model = [Storyteller.tolkien, Book.book3, Series.series1, Book.book21,
-                    Book.book15, Storyteller.author3, Storyteller.neilGaiman, Book.book18, Book.book20,
-                    Storyteller.author9, Storyteller.author5]
-        } else if buttonKind == .books {
-            model = [Book.book1, Book.book23, Book.senorDeLosAnillos1, Book.book2, Book.book22, Book.book5, Book.book20,
+        switch buttonKind {
+        case .top:
+            return [Storyteller.tolkien, Book.book3, Series.series1, Book.book21,
+                            Book.book15, Storyteller.author3, Storyteller.neilGaiman, Book.book18, Book.book20,
+                            Storyteller.author9, Storyteller.author5]
+            
+        case .books:
+            return [Book.book1, Book.book23, Book.senorDeLosAnillos1, Book.book2, Book.book22, Book.book5, Book.book20,
                     Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
                     Book.book15, Book.book4, Book.book6, Book.book19]
-        } else if buttonKind == .authors {
-            model = Storyteller.authors
-        } else if buttonKind == .narrators {
-            model = Storyteller.narrators
-        } else if buttonKind == .series {
-            model = [Series.series1, Series.series3, Series.series3, Series.series1, Series.series1,
+            
+        case .authors: return Storyteller.authors
+        case .narrators: return Storyteller.narrators
+        case .series:
+            return [Series.series1, Series.series3, Series.series3, Series.series1, Series.series1,
                     Series.series3, Series.series2, Series.series1, Series.series2, Series.series2,
                     Series.series3, Series.series3, Series.series1, Series.series1, Series.series1]
-        } else if buttonKind == .tags {
-            model = Tag.tags
+        case .tags:
+            return Tag.tags
+        case .toRead:
+//                return allTitlesBooks
+            return toReadBooks
+        case .started:
+            return [Book]()
+        case .finished:
+            return [Book]()
+        case .downloaded:
+            return [Book]()
         }
-        
-        return model
+        #warning("started, finished and dowloaded cases have to return values")
     }
     
 //    private func getInitialModelFor(buttonKind: ScopeButtonKind) -> [Title] {
@@ -281,7 +324,6 @@ extension SearchResultsViewController {
             guard let self = self else { return }
             // To avoid logic in didScroll to perform if scroll is triggered by button tap
             self.isButtonTriggeredScroll = true
-            
             self.scrollToCell(buttonIndex)
         }
     }
@@ -339,20 +381,21 @@ extension SearchResultsViewController {
         ])
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
         ])
+        collectionViewBottomAnchor.isActive = true
     }
     
 }
 
 // MARK: - SearchResultsCollectionViewCellDelegate
-extension SearchResultsViewController: SearchResultsCollectionViewCellDelegate {
+extension PagingCvViewController: SearchResultsCollectionViewCellDelegate {
     func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }
 }
+

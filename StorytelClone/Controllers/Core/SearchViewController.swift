@@ -166,22 +166,56 @@ class SearchViewController: UIViewController {
     private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {
         // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
         var newModel = [ScopeButtonKind : [Title]]()
-        let buttonKinds = ScopeButtonKind.allCases
+//        let buttonKinds = ScopeButtonKind.allCases
+        let buttonKinds = ScopeButtonKind.kindsForSearchResults
         for buttonKind in buttonKinds {
-            switch buttonKind {
-            case .top:
+            if buttonKind == .top {
                 newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
-            case .books:
-                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
-            case .authors:
-                newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
-            case .narrators: newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
-            case .series: newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
-            case .tags: newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
             }
+            
+            if buttonKind == .books {
+                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
+            }
+            
+            if buttonKind == .authors {
+                newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
+            }
+            
+            if buttonKind == .narrators {
+                newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
+            }
+            
+            if buttonKind == .series {
+                newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
+            }
+            
+            if buttonKind == .tags {
+                newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
+            }
+ 
         }
         return newModel
     }
+    
+//    private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {
+//        // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
+//        var newModel = [ScopeButtonKind : [Title]]()
+//        let buttonKinds = ScopeButtonKind.allCases
+//        for buttonKind in buttonKinds {
+//            switch buttonKind {
+//            case .top:
+//                newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
+//            case .books:
+//                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
+//            case .authors:
+//                newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
+//            case .narrators: newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
+//            case .series: newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
+//            case .tags: newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
+//            }
+//        }
+//        return newModel
+//    }
     
 }
 

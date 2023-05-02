@@ -16,10 +16,12 @@
 		5A23BEF329D7656F0038D132 /* AllTitlesSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */; };
 		5A34351029BD005E00178CDA /* SearchResultsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A34350F29BD005E00178CDA /* SearchResultsCollectionViewCell.swift */; };
 		5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */; };
-		5A36E04029B804430096A032 /* SearchResultsScopeButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03F29B804430096A032 /* SearchResultsScopeButtonsView.swift */; };
+		5A36E04029B804430096A032 /* ScopeButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03F29B804430096A032 /* ScopeButtonsView.swift */; };
 		5A37EB2129DD83710053F6A7 /* PopupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37EB2029DD83710053F6A7 /* PopupButton.swift */; };
 		5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */; };
 		5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */; };
+		5A4B017E2A011A1B00228AC4 /* PagingCvViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4B017D2A011A1B00228AC4 /* PagingCvViewController.swift */; };
+		5A4B01802A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4B017F2A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift */; };
 		5A50AD1A29CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */; };
 		5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* CategoryViewController.swift */; };
 		5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseViewController.swift */; };
@@ -106,10 +108,12 @@
 		5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesSectionHeaderView.swift; sourceTree = "<group>"; };
 		5A34350F29BD005E00178CDA /* SearchResultsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
-		5A36E03F29B804430096A032 /* SearchResultsScopeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsScopeButtonsView.swift; sourceTree = "<group>"; };
+		5A36E03F29B804430096A032 /* ScopeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeButtonsView.swift; sourceTree = "<group>"; };
 		5A37EB2029DD83710053F6A7 /* PopupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupButton.swift; sourceTree = "<group>"; };
 		5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookOverviewStackView.swift; sourceTree = "<group>"; };
 		5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBookButton.swift; sourceTree = "<group>"; };
+		5A4B017D2A011A1B00228AC4 /* PagingCvViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingCvViewController.swift; sourceTree = "<group>"; };
+		5A4B017F2A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfTableSectionHeaderView.swift; sourceTree = "<group>"; };
 		5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSeriesButtonContainer.swift; sourceTree = "<group>"; };
 		5A52321529AC24F30058DD73 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5A52321729AC30B30058DD73 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -318,7 +322,7 @@
 				5A8380BA299ED7E200611543 /* BadgeView.swift */,
 				5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */,
 				5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */,
-				5A36E03F29B804430096A032 /* SearchResultsScopeButtonsView.swift */,
+				5A36E03F29B804430096A032 /* ScopeButtonsView.swift */,
 				5AAA1AC129C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift */,
 				5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */,
 				5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */,
@@ -333,6 +337,7 @@
 				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
 				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
+				5A4B017F2A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
 			path = Views;
@@ -360,6 +365,7 @@
 				5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */,
 				5A23BEF029D747B80038D132 /* AllTitlesViewController.swift */,
 				5AB9524329EF179B001EA8DA /* BottomSheetViewController.swift */,
+				5A4B017D2A011A1B00228AC4 /* PagingCvViewController.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -531,6 +537,7 @@
 				5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */,
 				5A50AD1A29CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift in Sources */,
 				5A8497FB29D49B530047AB44 /* PlaySampleButton.swift in Sources */,
+				5A4B017E2A011A1B00228AC4 /* PagingCvViewController.swift in Sources */,
 				5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */,
 				5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */,
 				5AA8006D29C8F2F700198B8A /* Language.swift in Sources */,
@@ -549,7 +556,7 @@
 				5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */,
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,
 				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,
-				5A36E04029B804430096A032 /* SearchResultsScopeButtonsView.swift in Sources */,
+				5A36E04029B804430096A032 /* ScopeButtonsView.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5A5B878929C52C45001A7A64 /* Tag.swift in Sources */,
 				5AB9524429EF179B001EA8DA /* BottomSheetViewController.swift in Sources */,
@@ -561,6 +568,7 @@
 				5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */,
 				5AAA1AC229C33A6C00B22B7F /* SearchResultsSectionHeaderView.swift in Sources */,
 				5ADC083229CB2DC20042A432 /* RoundButtonsStackContainer.swift in Sources */,
+				5A4B01802A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,
 				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,
 				5A0F8A2129CA681B004FAB36 /* BookDetailsStackView.swift in Sources */,

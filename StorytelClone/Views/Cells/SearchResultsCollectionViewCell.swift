@@ -16,6 +16,11 @@ let tableDidRequestKeyboardDismiss = Notification.Name(
 
 typealias SearchResultsDidSelectRowCallback = (_ selectedSearchResultTitle: Title) -> ()
 
+enum PagingCollectionViewCellKind {
+    case forSearchResults
+    case forBookshelf
+}
+
 class SearchResultsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchResultsCollectionViewCell"
@@ -31,6 +36,9 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
     var model = [Title]()
     var withSectionHeader = true
     
+    var kind: PagingCollectionViewCellKind = .forSearchResults
+//    var sectionHeaderTopAndBottomPadding: CGFloat = 0
+    
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
         table.backgroundColor = Utils.customBackgroundColor
@@ -40,6 +48,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
         table.register(SearchResultsNoImageTableViewCell.self, forCellReuseIdentifier: SearchResultsNoImageTableViewCell.identifier)
         table.register(SearchResultsSeriesTableViewCell.self, forCellReuseIdentifier: SearchResultsSeriesTableViewCell.identifier)
         table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
+        table.register(BookshelfTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: BookshelfTableSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
         
@@ -148,15 +157,34 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard withSectionHeader else { return UIView() }
+        guard withSectionHeader, let buttonKind = buttonKind else { return UIView() }
+//        guard let buttonKind = buttonKind else { return UIView() }
         
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
-
-        if let buttonKind = buttonKind {
-            header.configureFor(buttonKind: buttonKind)
+        switch kind {
+        case .forSearchResults:
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
+            header.configurefor(buttonKind: buttonKind)
+            print("returning header forSearchResults")
+            return header
+        case .forBookshelf:
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookshelfTableSectionHeaderView.identifier) as? BookshelfTableSectionHeaderView else { return UIView() }
+            header.configurefor(buttonKind: buttonKind)
+            print("returning header forBookshelf")
+            return header
         }
-        return header
     }
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard withSectionHeader else { return UIView() }
+//
+//        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
+//
+//        if let buttonKind = buttonKind {
+//            header.configure(buttonKind: buttonKind)
+////            header.configureWith(topAndBottomPadding: sectionHeaderTopAndBottomPadding, forButtonKind: buttonKind)
+//        }
+//        return header
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if withSectionHeader {
@@ -167,12 +195,24 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        if withSectionHeader {
+        guard withSectionHeader else { return 0 }
+        
+        switch kind {
+        case .forSearchResults:
             return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
-        } else {
-            return 0
+        case .forBookshelf:
+            return BookshelfTableSectionHeaderView.calculateEstimatedHeaderHeight()
         }
     }
+    
+//    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        if withSectionHeader {
+////            return SearchResultsSectionHeaderView.calculateEstimatedHeighWith()
+//            return SearchResultsSectionHeaderView.calculateEstimatedHeighWith(topAndBottomPadding: sectionHeaderTopAndBottomPadding)
+//        } else {
+//            return 0
+//        }
+//    }
 
 }
 

@@ -10,7 +10,7 @@ import UIKit
 class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesSectionHeaderView"
-    static let topAndBottomPadding: CGFloat = 23
+    static let topAndBottomPadding: CGFloat = 16
     
     static func createLabel() -> UILabel {
         let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45)
@@ -106,9 +106,9 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsSectionHeaderView.topAndBottomPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AllTitlesSectionHeaderView.topAndBottomPadding),
             titleLabel.trailingAnchor.constraint(equalTo: shareFilterStack.leadingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsSectionHeaderView.topAndBottomPadding)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AllTitlesSectionHeaderView.topAndBottomPadding)
         ])
         
         shareFilterStack.translatesAutoresizingMaskIntoConstraints = false

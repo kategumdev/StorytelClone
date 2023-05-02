@@ -14,9 +14,32 @@ enum ScopeButtonKind: String, CaseIterable {
     case narrators = "Narrators"
     case series = "Series"
     case tags = "Tags"
+    case toRead = "To read"
+    case started = "Started"
+    case finished = "Finished"
+    case downloaded = "Downloaded"
+    
+    static let kindsForSearchResults: [ScopeButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+    
+    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
+    
+    static func getSectionHeaderTitleFor(kind: ScopeButtonKind) -> String {
+        switch kind {
+        case .top: return "Trending searches"
+        case .books: return "Trending books"
+        case .authors: return "Trending authors"
+        case .narrators: return "Trending narrators"
+        case .series: return "Trending series"
+        case .tags: return "Trending tags"
+        case .toRead: return "Past 7 days"
+        case .started: return ""
+        case .finished: return ""
+        case .downloaded: return ""
+        }
+    }
 }
 
-class SearchResultsScopeButtonsView: UIView {
+class ScopeButtonsView: UIView {
     // MARK: - Static properties
     private static let slidingLineHeight: CGFloat = 3
     private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
@@ -24,7 +47,8 @@ class SearchResultsScopeButtonsView: UIView {
 
 
     // MARK: - Instance properties
-    let buttonKinds: [ScopeButtonKind] = ScopeButtonKind.allCases
+//    let buttonKinds: [ScopeButtonKind] = ScopeButtonKind.allCases
+    var buttonKinds = [ScopeButtonKind]()
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -32,8 +56,19 @@ class SearchResultsScopeButtonsView: UIView {
         
         // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
         let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-        return partOfUnvisiblePart
+        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
+        return partOfUnvisiblePart > 0 ? partOfUnvisiblePart : 0 // If partOfUnvisiblePart == 0 or is less than 0, that means that scrollViewContentWidth is less than scrollView width and no adjustments of scrollView's contentOffset.x is needed
     }()
+    
+//    lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
+//        let scrollViewContentWidth = scrollView.contentSize.width
+//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+//
+//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+//        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
+//        return partOfUnvisiblePart
+//    }()
     
     private var firstTime = true
     
@@ -46,7 +81,9 @@ class SearchResultsScopeButtonsView: UIView {
             var config = UIButton.Configuration.plain()
 
             // Top inset makes visual x-position of button text in scrollView as if it's centered
-            config.contentInsets = NSDirectionalEdgeInsets(top: SearchResultsScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
+//            config.contentInsets = NSDirectionalEdgeInsets(top: ScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
+            config.contentInsets = NSDirectionalEdgeInsets(top: ScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding + 1, bottom: 0, trailing: Constants.commonHorzPadding + 1)
+
             config.attributedTitle = AttributedString(kind.rawValue)
             config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config
@@ -83,7 +120,7 @@ class SearchResultsScopeButtonsView: UIView {
         stack.distribution = .fillProportionally
         scopeButtons.forEach { stack.addArrangedSubview($0) }
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.heightForStackWithButtons).isActive = true
+        stack.heightAnchor.constraint(equalToConstant: ScopeButtonsView.heightForStackWithButtons).isActive = true
         return stack
     }()
 
@@ -101,14 +138,24 @@ class SearchResultsScopeButtonsView: UIView {
     lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
     // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(withButtonKinds buttonKinds: [ScopeButtonKind]) {
+        self.buttonKinds = buttonKinds
+        super.init(frame: .zero)
         addSubview(scrollView)
         addButtonActions()
         applyConstraints()
         // Set initial color of buttons' text
         toggleButtonsColors(currentButton: scopeButtons[0])
     }
+    
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        addSubview(scrollView)
+//        addButtonActions()
+//        applyConstraints()
+//        // Set initial color of buttons' text
+//        toggleButtonsColors(currentButton: scopeButtons[0])
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -259,19 +306,35 @@ class SearchResultsScopeButtonsView: UIView {
     }
     
     private func setScrollViewOffsetX(currentButton: UIButton) {
-        let scrollViewContentWidth = scrollView.contentSize.width
-        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-        
-        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+//        let scrollViewContentWidth = scrollView.contentSize.width
+//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+//
+//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
 
         guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
         let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
         
         // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
-        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
+//        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
+        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePartOfScrollView
         scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
     }
+    
+//    private func setScrollViewOffsetX(currentButton: UIButton) {
+//        let scrollViewContentWidth = scrollView.contentSize.width
+//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
+//
+//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
+//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
+//
+//        guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
+//        let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
+//
+//        // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
+//        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
+//        scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
+//    }
     
     private func applyConstraints() {
         let contentG = scrollView.contentLayoutGuide
@@ -282,7 +345,7 @@ class SearchResultsScopeButtonsView: UIView {
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.viewHeight)
+            scrollView.heightAnchor.constraint(equalToConstant: ScopeButtonsView.viewHeight)
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -290,15 +353,15 @@ class SearchResultsScopeButtonsView: UIView {
             stackView.topAnchor.constraint(equalTo: contentG.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -SearchResultsScopeButtonsView.slidingLineHeight / 2),
-            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -SearchResultsScopeButtonsView.slidingLineHeight / 2)
+            stackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -ScopeButtonsView.slidingLineHeight / 2),
+            stackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -ScopeButtonsView.slidingLineHeight / 2)
         ])
 
         slidingLine.translatesAutoresizingMaskIntoConstraints = false
         slidingLineLeadingAnchor.isActive = true
         slidingLineWidthAnchor.isActive = true
-        slidingLine.heightAnchor.constraint(equalToConstant: SearchResultsScopeButtonsView.slidingLineHeight).isActive = true
-        slidingLine.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: SearchResultsScopeButtonsView.slidingLineHeight / 2).isActive = true
+        slidingLine.heightAnchor.constraint(equalToConstant: ScopeButtonsView.slidingLineHeight).isActive = true
+        slidingLine.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: ScopeButtonsView.slidingLineHeight / 2).isActive = true
         
         // To force layoutSubviews() to apply correct slidingLine anchors' constants
         layoutIfNeeded()
