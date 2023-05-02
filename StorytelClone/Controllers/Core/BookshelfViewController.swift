@@ -13,7 +13,7 @@ class BookshelfViewController: ScopeViewController {
     
     // MARK: - Initializers
     init() {
-        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForBookshelf, pagingCollectionViewCellKind: ScopeCollectionViewCellKind.forBookshelf)
+        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForBookshelf, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forBookshelf)
     }
 
     required init?(coder: NSCoder) {
@@ -57,6 +57,7 @@ class BookshelfViewController: ScopeViewController {
             print("\nTBR: \(bookTitlesString)")
         }
     }
+
     
     // MARK: - Configuration
     private func configureNavBar() {
@@ -72,7 +73,19 @@ class BookshelfViewController: ScopeViewController {
 
 extension BookshelfViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
-        // Nothing needs to be done
-        #warning("Configure book model object in data model")
+        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let books = currentCell.model as? [Book], let buttonKind = currentCell.buttonKind else { return }
+        
+        var bookIndex: Int = 0
+        var indexPathOfRowWithRemovedBook = IndexPath(row: 0, section: 0)
+        for (index, arrayBook) in books.enumerated() {
+            if arrayBook.title == book.title {
+                indexPathOfRowWithRemovedBook.row = index
+                bookIndex = index
+                break
+            }
+        }
+        
+        currentCell.model = getModelFor(buttonKind: buttonKind)
+        currentCell.resultsTable.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
     }
 }

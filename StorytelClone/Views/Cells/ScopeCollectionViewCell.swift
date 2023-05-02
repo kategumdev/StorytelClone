@@ -56,6 +56,10 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         return table
     }()
     
+    lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
+    
+    private var isBackgroundViewAdded = false
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -78,6 +82,21 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
         }
+        
+        guard kind == .forBookshelf else { return }
+        
+        if !isBackgroundViewAdded {
+            contentView.addSubview(noBooksBackgroundView)
+            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+            noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+            noBooksBackgroundView.fillSuperview()
+            isBackgroundViewAdded = true
+            noBooksBackgroundView.isHidden = model.count > 0
+        } else {
+            noBooksBackgroundView.isHidden = model.count > 0
+            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+        }
+        
     }
     
     // MARK: - Helper methods
@@ -190,11 +209,6 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return hasSectionHeader ? UITableView.automaticDimension : 0
-//        if hasSectionHeader {
-//            return UITableView.automaticDimension
-//        } else {
-//            return 0
-//        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {

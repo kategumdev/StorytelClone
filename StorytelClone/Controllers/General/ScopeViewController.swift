@@ -11,8 +11,14 @@ class ScopeViewController: UIViewController {
     // MARK: - Instance properties
     private let scopeButtonKinds: [ScopeButtonKind]
     lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
-    private let pagingCollectionViewCellKind: ScopeCollectionViewCellKind
-
+    private let scopeCollectionViewCellKind: ScopeCollectionViewCellKind
+    
+//    var currentPageIndexPath: IndexPath {
+//        let contentOffsetX = collectionView.contentOffset.x
+//        let currentCellIndex = Int(collectionView.bounds.width / contentOffsetX) - 1
+//        return IndexPath(item: currentCellIndex, section: 0)
+//    }
+    
     var didSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
     var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
@@ -47,7 +53,7 @@ class ScopeViewController: UIViewController {
     }()
     
     private var rememberedOffsetsOfTablesInCells = [ScopeButtonKind : CGPoint]()
-    private var tappedButtonIndex: Int? = nil
+//    private var tappedButtonIndex: Int? = nil
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     
@@ -57,9 +63,9 @@ class ScopeViewController: UIViewController {
     var modelForSearchQuery: [ScopeButtonKind : [Title]]?
             
     // MARK: - Initializers
-    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], pagingCollectionViewCellKind: ScopeCollectionViewCellKind) {
+    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], scopeCollectionViewCellKind: ScopeCollectionViewCellKind) {
         self.scopeButtonKinds = scopeButtonKinds
-        self.pagingCollectionViewCellKind = pagingCollectionViewCellKind
+        self.scopeCollectionViewCellKind = scopeCollectionViewCellKind
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -116,7 +122,7 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.kind = pagingCollectionViewCellKind
+        cell.kind = scopeCollectionViewCellKind
         
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
@@ -140,7 +146,7 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
             cell.model = cellModel
             cell.hasSectionHeader = false
         } else {
-            cell.model = getInitialModelFor(buttonKind: buttonKind)
+            cell.model = getModelFor(buttonKind: buttonKind)
             cell.hasSectionHeader = true
         }
         
@@ -159,6 +165,12 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         cell.resultsTable.isHidden = false
         cell.resultsTable.reloadData()
+        
+//        if cell.kind == .forBookshelf {
+//            cell.resultsTable.addSubview(cell.noBooksBackgroundView)
+//            cell.noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+//            cell.noBooksBackgroundView.fillSuperview()
+//        }
         
         
        // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
@@ -238,8 +250,8 @@ extension ScopeViewController {
         }
     }
     
-    // This function should fetch needed initial objects when user haven't perform any search yet
-    private func getInitialModelFor(buttonKind: ScopeButtonKind) -> [Title] {
+    // For SearchResultsController, this function should fetch needed initial objects when user haven't perform any search yet. For BookshelfViewController: fetch the needed objects
+    func getModelFor(buttonKind: ScopeButtonKind) -> [Title] {
         switch buttonKind {
         case .top:
             return [Storyteller.tolkien, Book.book3, Series.series1, Book.book21,

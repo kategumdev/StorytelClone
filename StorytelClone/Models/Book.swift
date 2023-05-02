@@ -79,7 +79,8 @@ struct Book: Title, Equatable {
         if isAddedToBookshelf {
             // Add book only if it's not already in the array
             if !toReadBooks.contains(where: { $0.title == self.title }) {
-                toReadBooks.append(self)
+//                toReadBooks.append(self)
+                toReadBooks.append(updatedBook)
                 // With real data, update book object here
             }
         } else {

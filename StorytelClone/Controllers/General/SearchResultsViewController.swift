@@ -14,7 +14,7 @@ class SearchResultsViewController: ScopeViewController {
     
     // MARK: - Initializers
     init() {
-        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForSearchResults, pagingCollectionViewCellKind: ScopeCollectionViewCellKind.forSearchResults)
+        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForSearchResults, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forSearchResults)
     }
     
     required init?(coder: NSCoder) {

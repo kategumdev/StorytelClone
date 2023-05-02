@@ -53,8 +53,7 @@ extension NSAttributedString {
 }
 
 extension UILabel {
-    
-    #warning("Refactor to have only maximumPointSize and no withScaledFont")
+    #warning("Refactor to have only maximumPointSize and no withScaledFont. Fix: creating label and passing nil as maximumPointSize doesn't let custom font to apply")
     static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat?, numberOfLines: Int = 1, withScaledFont: Bool = true, textColor: UIColor = .label, text: String = "") -> UILabel {
         let label = UILabel()
         label.numberOfLines = numberOfLines
@@ -72,7 +71,6 @@ extension UILabel {
         }
         return label
     }
-    
 }
 
 extension UIImage {
