@@ -129,7 +129,7 @@ class SearchViewController: UIViewController {
     private func configureSearchResultsController() {
         guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
-        searchResultsController.searchResultsDidSelectRowCallback = { [weak self] selectedSearchResultTitle in
+        searchResultsController.didSelectRowCallback = { [weak self] selectedSearchResultTitle in
             if let book = selectedSearchResultTitle as? Book {
                 print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
@@ -147,6 +147,28 @@ class SearchViewController: UIViewController {
             self?.present(bookDetailsBottomSheetController, animated: false)
         }
     }
+    
+//    private func configureSearchResultsController() {
+//        guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+//
+//        searchResultsController.searchResultsDidSelectRowCallback = { [weak self] selectedSearchResultTitle in
+//            if let book = selectedSearchResultTitle as? Book {
+//                print("SearchViewController handles selected book \(book.title)")
+//                let controller = BookViewController(book: book)
+//                self?.navigationController?.pushViewController(controller, animated: true)
+//            } else {
+//                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedSearchResultTitle)
+//                self?.navigationController?.pushViewController(controller, animated: true)
+//            }
+//        }
+//
+//        searchResultsController.ellipsisButtonDidTapCallback = { [weak self] book in
+//            let bookDetailsBottomSheetController = BottomSheetViewController(book: book, kind: .bookDetails)
+//            bookDetailsBottomSheetController.delegate = self
+//            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+//            self?.present(bookDetailsBottomSheetController, animated: false)
+//        }
+//    }
     
     @objc func handleKeyboardDismissNotification(_ notification: Notification) {
         if searchController.searchBar.isFirstResponder {

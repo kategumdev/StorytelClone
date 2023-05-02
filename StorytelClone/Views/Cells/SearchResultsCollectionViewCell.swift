@@ -102,6 +102,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("MODEL.COUNT = \(model.count)")
         return model.count
     }
     
@@ -110,6 +111,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard model.count > 0 else { return }
         let title = model[indexPath.row]
         
         if let book = title as? Book {
@@ -164,12 +166,12 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         case .forSearchResults:
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
             header.configurefor(buttonKind: buttonKind)
-            print("returning header forSearchResults")
+//            print("returning header forSearchResults")
             return header
         case .forBookshelf:
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookshelfTableSectionHeaderView.identifier) as? BookshelfTableSectionHeaderView else { return UIView() }
             header.configurefor(buttonKind: buttonKind)
-            print("returning header forBookshelf")
+//            print("returning header forBookshelf")
             return header
         }
     }

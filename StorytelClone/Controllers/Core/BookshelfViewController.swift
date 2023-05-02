@@ -29,6 +29,24 @@ class BookshelfViewController: PagingCvViewController {
         view.backgroundColor = Utils.customBackgroundColor
         configureNavBar()
         collectionViewBottomAnchor.constant = 0
+        
+        didSelectRowCallback = { [weak self] selectedSearchResultTitle in
+            if let book = selectedSearchResultTitle as? Book {
+                print("BookshelfViewController handles selected book \(book.title)")
+                let controller = BookViewController(book: book)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedSearchResultTitle)
+                self?.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+
+        ellipsisButtonDidTapCallback = { [weak self] book in
+            let bookDetailsBottomSheetController = BottomSheetViewController(book: book, kind: .bookDetails)
+            bookDetailsBottomSheetController.delegate = self
+            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+            self?.present(bookDetailsBottomSheetController, animated: false)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +70,13 @@ class BookshelfViewController: PagingCvViewController {
         navigationController?.navigationBar.barTintColor = Utils.tintColor
     }
     
+}
+
+extension BookshelfViewController: BottomSheetViewControllerDelegate {
+    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
+        // Nothing needs to be done
+        #warning("Configure book model object in data model")
+    }
 }
 
 

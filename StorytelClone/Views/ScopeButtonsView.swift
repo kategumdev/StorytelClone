@@ -286,16 +286,42 @@ class ScopeButtonsView: UIView {
                 guard let buttonIndex = buttonIndex else { return }
                 let buttonIndexInt = buttonIndex + 0
 
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
                     self.toggleButtonsColors(currentButton: button)
                     self.setScrollViewOffsetX(currentButton: button)
                     self.adjustSlidingLinePosition(currentButton: button)
                     self.scopeButtonDidTapCallback(buttonIndexInt)
                     self.layoutIfNeeded() // It won't animate without this line
                 }
+//                UIView.animate(withDuration: 0.2) {
+//                    self.toggleButtonsColors(currentButton: button)
+//                    self.setScrollViewOffsetX(currentButton: button)
+//                    self.adjustSlidingLinePosition(currentButton: button)
+//                    self.scopeButtonDidTapCallback(buttonIndexInt)
+//                    self.layoutIfNeeded() // It won't animate without this line
+//                }
             }), for: .touchUpInside)
         }
     }
+    
+//    private func addButtonActions() {
+//        for button in scopeButtons {
+//            button.addAction(UIAction(handler: { [weak self] _ in
+//                guard let self = self else { return }
+//                let buttonIndex = self.scopeButtons.firstIndex(of: button)
+//                guard let buttonIndex = buttonIndex else { return }
+//                let buttonIndexInt = buttonIndex + 0
+//
+//                UIView.animate(withDuration: 0.2) {
+//                    self.toggleButtonsColors(currentButton: button)
+//                    self.setScrollViewOffsetX(currentButton: button)
+//                    self.adjustSlidingLinePosition(currentButton: button)
+//                    self.scopeButtonDidTapCallback(buttonIndexInt)
+//                    self.layoutIfNeeded() // It won't animate without this line
+//                }
+//            }), for: .touchUpInside)
+//        }
+//    }
     
     private func adjustSlidingLinePosition(currentButton: UIButton) {
         let leadingConstant: CGFloat = currentButton.frame.origin.x

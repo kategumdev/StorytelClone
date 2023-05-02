@@ -13,8 +13,10 @@ typealias EllipsisButtonInPagingCvViewControllerDidTapCallback = (Book) -> ()
 class PagingCvViewController: UIViewController {
     // MARK: - Instance properties
 //    private let scopeButtonsView = SearchResultsScopeButtonsView()
+//    private let scopeButtonKinds: [ScopeButtonKind]
     private let scopeButtonKinds: [ScopeButtonKind]
-    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
+//    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
+    lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
     
 //    private let sectionHeaderTopAndBottomPadding: SectionHeaderTopAndBottomPadding
     private let pagingCollectionViewCellKind: PagingCollectionViewCellKind
@@ -121,19 +123,19 @@ class PagingCvViewController: UIViewController {
         buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
     }
     
-    func revertToInitialAppearance() {
-        scopeButtonsView.revertToInitialAppearance()
-        
-        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
-        toggleIsButtonTriggeredScrollAndUnhideCells()
-        
-        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
-        setInitialOffsetsOfTablesInCells()
-        collectionView.reloadData()
-        
-        let firstButton = scopeButtonsView.scopeButtons[0]
-        scopeButtonsView.toggleButtonsColors(currentButton: firstButton)
-    }
+//    func revertToInitialAppearance() {
+//        scopeButtonsView.revertToInitialAppearance()
+//
+//        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
+//        toggleIsButtonTriggeredScrollAndUnhideCells()
+//
+//        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
+//        setInitialOffsetsOfTablesInCells()
+//        collectionView.reloadData()
+//
+//        let firstButton = scopeButtonsView.scopeButtons[0]
+//        scopeButtonsView.toggleButtonsColors(currentButton: firstButton)
+//    }
     
 }
 
@@ -152,6 +154,9 @@ extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
         
         cell.kind = pagingCollectionViewCellKind
@@ -160,6 +165,20 @@ extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDe
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
         cell.buttonKind = buttonKind
+        
+//        switch pagingCollectionViewCellKind {
+//        case .forSearchResults:
+//            if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
+//                cell.model = cellModel
+//                cell.withSectionHeader = false
+//            } else {
+//                cell.model = getInitialModelFor(buttonKind: buttonKind)
+//                cell.withSectionHeader = true
+//            }
+//        case .forBookshelf:
+//            cell.model = getInitialModelFor(buttonKind: buttonKind)
+//            cell.withSectionHeader = true
+//        }
         
         if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
             cell.model = cellModel
@@ -195,6 +214,51 @@ extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDe
         
         return cell
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+//
+//        cell.kind = pagingCollectionViewCellKind
+////        cell.sectionHeaderTopAndBottomPadding = sectionHeaderTopAndBottomPadding.rawValue
+//
+//        let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
+//        print("cell \(buttonKind) is configured")
+//        cell.buttonKind = buttonKind
+//
+//        if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
+//            cell.model = cellModel
+//            cell.withSectionHeader = false
+//        } else {
+//            cell.model = getInitialModelFor(buttonKind: buttonKind)
+//            cell.withSectionHeader = true
+//        }
+//
+////        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
+//        cell.searchResultsDidSelectRowCallback = didSelectRowCallback
+//        cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
+//        cell.delegate = self
+//
+//        if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
+//            cell.rememberedOffset = offset
+//        }
+//
+//        if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
+//            cell.resultsTable.isHidden = true
+//            return cell
+//        }
+//
+//        cell.resultsTable.isHidden = false
+//        cell.resultsTable.reloadData()
+//
+//
+//       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
+//        DispatchQueue.main.async {
+////            print("offset set in async block")
+//            cell.resultsTable.contentOffset = cell.rememberedOffset
+//        }
+//
+//        return cell
+//    }
     
 }
 
@@ -254,7 +318,7 @@ extension PagingCvViewController {
 
 // MARK: - Helper methods
 extension PagingCvViewController {
-    private func toggleIsButtonTriggeredScrollAndUnhideCells() {
+    func toggleIsButtonTriggeredScrollAndUnhideCells() {
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
             isButtonTriggeredScroll = false
