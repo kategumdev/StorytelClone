@@ -58,6 +58,8 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     
     lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
     
+    var backgroundViewNeedsToBeHidden = false
+    
     private var isBackgroundViewAdded = false
     
     // MARK: - Initializers
@@ -87,15 +89,43 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         
         if !isBackgroundViewAdded {
             contentView.addSubview(noBooksBackgroundView)
-            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
             noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
             noBooksBackgroundView.fillSuperview()
             isBackgroundViewAdded = true
             noBooksBackgroundView.isHidden = model.count > 0
+            
+            if backgroundViewNeedsToBeHidden {
+                noBooksBackgroundView.isHidden = true
+            } else {
+                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+            }
+            
         } else {
+            print("noBooksBackgroundView.isHidden set in layoutSubviews")
             noBooksBackgroundView.isHidden = model.count > 0
-            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+            
+            if backgroundViewNeedsToBeHidden {
+                noBooksBackgroundView.isHidden = true
+            } else {
+                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+            }
+            
+//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
         }
+        
+//        if !isBackgroundViewAdded {
+//            contentView.addSubview(noBooksBackgroundView)
+//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//            noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+//            noBooksBackgroundView.fillSuperview()
+//            isBackgroundViewAdded = true
+//            noBooksBackgroundView.isHidden = model.count > 0
+//        } else {
+//            print("noBooksBackgroundView.isHidden set in layoutSubviews")
+//            noBooksBackgroundView.isHidden = model.count > 0
+//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//        }
         
     }
     

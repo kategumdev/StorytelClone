@@ -118,30 +118,16 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return scopeButtonsView.scopeButtons.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
-        
+
         cell.kind = scopeCollectionViewCellKind
-        
+
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
         cell.buttonKind = buttonKind
-        
-//        switch pagingCollectionViewCellKind {
-//        case .forSearchResults:
-//            if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
-//                cell.model = cellModel
-//                cell.withSectionHeader = false
-//            } else {
-//                cell.model = getInitialModelFor(buttonKind: buttonKind)
-//                cell.withSectionHeader = true
-//            }
-//        case .forBookshelf:
-//            cell.model = getInitialModelFor(buttonKind: buttonKind)
-//            cell.withSectionHeader = true
-//        }
-        
+
         if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
             cell.model = cellModel
             cell.hasSectionHeader = false
@@ -149,36 +135,30 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
             cell.model = getModelFor(buttonKind: buttonKind)
             cell.hasSectionHeader = true
         }
-        
+
         cell.tableViewDidSelectRowCallback = didSelectRowCallback
         cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         cell.delegate = self
-        
+
         if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
             cell.rememberedOffset = offset
         }
-        
+
         if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
             cell.resultsTable.isHidden = true
+            cell.backgroundViewNeedsToBeHidden = true
             return cell
         }
-        
+
         cell.resultsTable.isHidden = false
+        cell.backgroundViewNeedsToBeHidden = false
         cell.resultsTable.reloadData()
-        
-//        if cell.kind == .forBookshelf {
-//            cell.resultsTable.addSubview(cell.noBooksBackgroundView)
-//            cell.noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-//            cell.noBooksBackgroundView.fillSuperview()
-//        }
-        
-        
+
        // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
         DispatchQueue.main.async {
 //            print("offset set in async block")
             cell.resultsTable.contentOffset = cell.rememberedOffset
         }
-        
         return cell
     }
     
