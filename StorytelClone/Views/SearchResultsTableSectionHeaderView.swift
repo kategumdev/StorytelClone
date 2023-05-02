@@ -1,16 +1,16 @@
 //
-//  BookshelfTableSectionHeaderView.swift
+//  SearchResultsSectionHeaderView.swift
 //  StorytelClone
 //
-//  Created by Kateryna Gumenna on 2/5/23.
+//  Created by Kateryna Gumenna on 16/3/23.
 //
 
 import UIKit
 
-class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
+class SearchResultsTableSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Static properties and methods
-    static let identifier = "BookshelfTableSectionHeaderView"
-    static let topAndBottomPadding: CGFloat = 6
+    static let identifier = "SearchResultsTableSectionHeaderView"
+    static let topAndBottomPadding: CGFloat = 15
     
     static func createLabel() -> UILabel {
         let label = UILabel()
@@ -27,13 +27,12 @@ class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
         let label = createLabel()
         label.text = "Placeholder"
         label.sizeToFit()
-
         let height = label.bounds.height + (topAndBottomPadding * 2)
         return height
     }
     
     // MARK: - Instance properties
-    let titleLabel = createLabel()
+    private let titleLabel = createLabel()
     
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
@@ -51,16 +50,16 @@ class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
     func configurefor(buttonKind: ScopeButtonKind) {
         titleLabel.text = ScopeButtonKind.getSectionHeaderTitleFor(kind: buttonKind)
     }
-    
+
     // MARK: - Helper methods
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: BookshelfTableSectionHeaderView.topAndBottomPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsTableSectionHeaderView.topAndBottomPadding),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -BookshelfTableSectionHeaderView.topAndBottomPadding)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsTableSectionHeaderView.topAndBottomPadding)
         ])
     }
-
+    
 }

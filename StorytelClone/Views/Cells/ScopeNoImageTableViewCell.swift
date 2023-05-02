@@ -1,5 +1,5 @@
 //
-//  SearchResultsNoImageTableViewCell.swift
+//  ScopeNoImageTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 17/3/23.
@@ -7,11 +7,10 @@
 
 import UIKit
 
-class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
-    
+class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
     // MARK: - Static properties and methods
-    static let identifier = "SearchResultsNoImageTableViewCell"
-    static let viewWithRoundWidthAndHeight: CGFloat = SearchResultsTableViewCell.imageHeight
+    static let identifier = "ScopeNoImageTableViewCell"
+    static let viewWithRoundWidthAndHeight: CGFloat = BaseScopeTableViewCell.imageHeight
     static let minCellHeight = viewWithRoundWidthAndHeight
           
     static let calculatedTopAndBottomPadding: CGFloat = {
@@ -35,8 +34,8 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
     }
     
     // MARK: - Instance properties
-    private let titleLabel = SearchResultsTableViewCell.createTitleLabel()
-    private let subtitleLabel = SearchResultsTableViewCell.createSubtitleLabel()
+    private let titleLabel = BaseScopeTableViewCell.createTitleLabel()
+    private let subtitleLabel = BaseScopeTableViewCell.createSubtitleLabel()
     
     private let symbolView: UIImageView = {
         let imageView = UIImageView()
@@ -165,13 +164,13 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         viewWithRound.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             viewWithRound.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            viewWithRound.widthAnchor.constraint(equalToConstant: SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight),
-            viewWithRound.heightAnchor.constraint(equalToConstant: SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight),
+            viewWithRound.widthAnchor.constraint(equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
+            viewWithRound.heightAnchor.constraint(equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
             viewWithRound.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         roundView.translatesAutoresizingMaskIntoConstraints = false
-        let roundViewConstant = SearchResultsNoImageTableViewCell.viewWithRoundWidthAndHeight * 0.14
+        let roundViewConstant = ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight * 0.14
         roundView.fillSuperview(withConstant: roundViewConstant)
         
         symbolView.translatesAutoresizingMaskIntoConstraints = false
@@ -179,8 +178,8 @@ class SearchResultsNoImageTableViewCell: SearchResultsTableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsNoImageTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithRound.trailingAnchor, constant: Constants.commonHorzPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
         ])

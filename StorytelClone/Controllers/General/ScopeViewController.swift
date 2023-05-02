@@ -7,34 +7,21 @@
 
 import UIKit
 
-typealias PagingCvViewControllerDidSelectRowCallback = (_ selectedTitle: Title) -> ()
-typealias EllipsisButtonInPagingCvViewControllerDidTapCallback = (Book) -> ()
-
 class ScopeViewController: UIViewController {
     // MARK: - Instance properties
-//    private let scopeButtonsView = SearchResultsScopeButtonsView()
-//    private let scopeButtonKinds: [ScopeButtonKind]
     private let scopeButtonKinds: [ScopeButtonKind]
-//    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
     lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
-    
-//    private let sectionHeaderTopAndBottomPadding: SectionHeaderTopAndBottomPadding
-    private let pagingCollectionViewCellKind: PagingCollectionViewCellKind
+    private let pagingCollectionViewCellKind: ScopeCollectionViewCellKind
 
-//    private lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: ScopeButtonKind.kindsForSearchResults)
-
-//    private let scopeButtonsView = ScopeButtonsView(withButtonKinds: ScopeButtonKind.kindsForSearchResults)
-
-    var didSelectRowCallback: PagingCvViewControllerDidSelectRowCallback = {_ in}
-    var ellipsisButtonDidTapCallback: EllipsisButtonInPagingCvViewControllerDidTapCallback = {_ in}
-//    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
+    var didSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(SearchResultsCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultsCollectionViewCell.identifier)
+        collectionView.register(ScopeCollectionViewCell.self, forCellWithReuseIdentifier: ScopeCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = Utils.customBackgroundColor
         collectionView.isPagingEnabled = true
@@ -70,23 +57,12 @@ class ScopeViewController: UIViewController {
     var modelForSearchQuery: [ScopeButtonKind : [Title]]?
             
     // MARK: - Initializers
-    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], pagingCollectionViewCellKind: PagingCollectionViewCellKind) {
+    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], pagingCollectionViewCellKind: ScopeCollectionViewCellKind) {
         self.scopeButtonKinds = scopeButtonKinds
         self.pagingCollectionViewCellKind = pagingCollectionViewCellKind
         super.init(nibName: nil, bundle: nil)
     }
-    
-//    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], sectionHeaderPadding: SectionHeaderTopAndBottomPadding) {
-//        self.scopeButtonKinds = scopeButtonKinds
-//        self.sectionHeaderTopAndBottomPadding = sectionHeaderPadding
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
-//    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind]) {
-//        self.scopeButtonKinds = scopeButtonKinds
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -122,21 +98,6 @@ class ScopeViewController: UIViewController {
         let buttonKinds = scopeButtonsView.buttonKinds
         buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
     }
-    
-//    func revertToInitialAppearance() {
-//        scopeButtonsView.revertToInitialAppearance()
-//
-//        // For rare cases if user taps on button and immediately taps Cancel button, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
-//        toggleIsButtonTriggeredScrollAndUnhideCells()
-//
-//        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
-//        setInitialOffsetsOfTablesInCells()
-//        collectionView.reloadData()
-//
-//        let firstButton = scopeButtonsView.scopeButtons[0]
-//        scopeButtonsView.toggleButtonsColors(currentButton: firstButton)
-//    }
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -148,19 +109,14 @@ extension ScopeViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return scopeButtonsView.scopeButtons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
         
         cell.kind = pagingCollectionViewCellKind
-//        cell.sectionHeaderTopAndBottomPadding = sectionHeaderTopAndBottomPadding.rawValue
         
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")
@@ -182,14 +138,13 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
             cell.model = cellModel
-            cell.withSectionHeader = false
+            cell.hasSectionHeader = false
         } else {
             cell.model = getInitialModelFor(buttonKind: buttonKind)
-            cell.withSectionHeader = true
+            cell.hasSectionHeader = true
         }
         
-//        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
-        cell.searchResultsDidSelectRowCallback = didSelectRowCallback
+        cell.tableViewDidSelectRowCallback = didSelectRowCallback
         cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         cell.delegate = self
         
@@ -214,51 +169,6 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultsCollectionViewCell.identifier, for: indexPath) as? SearchResultsCollectionViewCell else { return UICollectionViewCell() }
-//
-//        cell.kind = pagingCollectionViewCellKind
-////        cell.sectionHeaderTopAndBottomPadding = sectionHeaderTopAndBottomPadding.rawValue
-//
-//        let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
-//        print("cell \(buttonKind) is configured")
-//        cell.buttonKind = buttonKind
-//
-//        if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
-//            cell.model = cellModel
-//            cell.withSectionHeader = false
-//        } else {
-//            cell.model = getInitialModelFor(buttonKind: buttonKind)
-//            cell.withSectionHeader = true
-//        }
-//
-////        cell.searchResultsDidSelectRowCallback = searchResultsDidSelectRowCallback
-//        cell.searchResultsDidSelectRowCallback = didSelectRowCallback
-//        cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
-//        cell.delegate = self
-//
-//        if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
-//            cell.rememberedOffset = offset
-//        }
-//
-//        if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
-//            cell.resultsTable.isHidden = true
-//            return cell
-//        }
-//
-//        cell.resultsTable.isHidden = false
-//        cell.resultsTable.reloadData()
-//
-//
-//       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
-//        DispatchQueue.main.async {
-////            print("offset set in async block")
-//            cell.resultsTable.contentOffset = cell.rememberedOffset
-//        }
-//
-//        return cell
-//    }
     
 }
 
@@ -350,7 +260,6 @@ extension ScopeViewController {
         case .tags:
             return Tag.tags
         case .toRead:
-//                return allTitlesBooks
             return toReadBooks
         case .started:
             return [Book]()
@@ -362,26 +271,6 @@ extension ScopeViewController {
         #warning("started, finished and dowloaded cases have to return values")
     }
     
-//    private func getInitialModelFor(buttonKind: ScopeButtonKind) -> [Title] {
-//        switch buttonKind {
-//        case .top:
-//            return [Storyteller.tolkien, Book.book3, Series.series1, Book.book21,
-//                    Book.book15, Storyteller.author3, Storyteller.neilGaiman, Book.book18, Book.book20,
-//                    Storyteller.author9, Storyteller.author5]
-//        case .books:
-//            return [Book.book1, Book.book23, Book.senorDeLosAnillos1, Book.book2, Book.book22, Book.book5, Book.book20,
-//                    Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
-//                    Book.book15, Book.book4, Book.book6, Book.book19]
-//        case .authors: return Storyteller.authors
-//        case .narrators: return Storyteller.narrators
-//        case .series:
-//            return [Series.series1, Series.series3, Series.series3, Series.series1, Series.series1,
-//                    Series.series3, Series.series2, Series.series1, Series.series2, Series.series2,
-//                    Series.series3, Series.series3, Series.series1, Series.series1, Series.series1,]
-//        case .tags: return Tag.tags
-//        }
-//    }
-
     private func configureScopeButtonsView() {
         // Respond to button actions in buttonsView
         scopeButtonsView.scopeButtonDidTapCallback = { [weak self] buttonIndex in
@@ -456,9 +345,9 @@ extension ScopeViewController {
     
 }
 
-// MARK: - SearchResultsCollectionViewCellDelegate
-extension ScopeViewController: SearchResultsCollectionViewCellDelegate {
-    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
+// MARK: - ScopeCollectionViewCellDelegate
+extension ScopeViewController: ScopeCollectionViewCellDelegate {
+    func scopeCollectionViewCell(withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }
 }

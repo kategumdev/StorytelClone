@@ -1,5 +1,5 @@
 //
-//  SearchResultsSeriesTableViewCell.swift
+//  ScopeSeriesTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 20/3/23.
@@ -7,11 +7,10 @@
 
 import UIKit
 
-class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
-    
+class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
     // MARK: - Static properties and methods
-    static let identifier = "SearchResultsSeriesTableViewCell"
-    static let minTopBottomPadding = SearchResultsTableViewCell.minTopAndBottomPadding - 2
+    static let identifier = "ScopeSeriesTableViewCell"
+    static let minTopBottomPadding = BaseScopeTableViewCell.minTopAndBottomPadding - 2
     static let oneTransparentImageVisiblePartHeight: CGFloat = 4
     static let minCellHeight: CGFloat = imageHeight + minTopBottomPadding * 2 + oneTransparentImageVisiblePartHeight * 2
 
@@ -36,10 +35,10 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
     }
     
     // MARK: - Instance properties
-    private let seriesTitleLabel = SearchResultsTableViewCell.createTitleLabel()
-    private let titleKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
-    private let languageLabel = SearchResultsTableViewCell.createSubtitleLabel()
-    private let authorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
+    private let seriesTitleLabel = BaseScopeTableViewCell.createTitleLabel()
+    private let titleKindLabel = BaseScopeTableViewCell.createSubtitleLabel()
+    private let languageLabel = BaseScopeTableViewCell.createSubtitleLabel()
+    private let authorsLabel = BaseScopeTableViewCell.createSubtitleLabel()
     
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
@@ -49,13 +48,13 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         return stack
     }()
     
-    private let mainImageView = SearchResultsTableViewCell.createImageView()
-    private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
+    private let mainImageView = BaseScopeTableViewCell.createImageView()
+    private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
     
-    private let transparentImageViewOne = SearchResultsTableViewCell.createImageView()
-    private let transparentImageViewTwo = SearchResultsTableViewCell.createImageView()
-    private let transparentImageOneHeight = SearchResultsTableViewCell.imageHeight - SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4
-    private let transparentImageTwoHeight = SearchResultsTableViewCell.imageHeight - SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
+    private let transparentImageViewOne = BaseScopeTableViewCell.createImageView()
+    private let transparentImageViewTwo = BaseScopeTableViewCell.createImageView()
+    private let transparentImageOneHeight = BaseScopeTableViewCell.imageHeight - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4
+    private let transparentImageTwoHeight = BaseScopeTableViewCell.imageHeight - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
     
     private lazy var viewWithImageViews: UIView = {
         let view = UIView()
@@ -93,15 +92,15 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
                 transparentImageViewOne.layer.cornerRadius = 0
                 transparentImageViewTwo.layer.cornerRadius = 0
             } else {
-                mainImageView.layer.cornerRadius = SearchResultsTableViewCell.cornerRadius
-                transparentImageViewOne.layer.cornerRadius = SearchResultsTableViewCell.cornerRadius
-                transparentImageViewTwo.layer.cornerRadius = SearchResultsTableViewCell.cornerRadius
+                mainImageView.layer.cornerRadius = BaseScopeTableViewCell.cornerRadius
+                transparentImageViewOne.layer.cornerRadius = BaseScopeTableViewCell.cornerRadius
+                transparentImageViewTwo.layer.cornerRadius = BaseScopeTableViewCell.cornerRadius
             }
         }
         
         // Resize and set mainImage
         if let image = series.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: SearchResultsTableViewCell.imageHeight)
+            let resizedImage = image.resizeFor(targetHeight: BaseScopeTableViewCell.imageHeight)
             
             if mainImageView.bounds.width != image.size.width {
                 mainImageViewWidthAnchor.constant = resizedImage.size.width
@@ -126,10 +125,10 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
     // MARK: - Helper methods
     private func applyConstraints() {
         viewWithImageViews.translatesAutoresizingMaskIntoConstraints = false
-        let height = SearchResultsTableViewCell.imageHeight + SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
+        let height = BaseScopeTableViewCell.imageHeight + ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
         NSLayoutConstraint.activate([
             viewWithImageViews.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            viewWithImageViews.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.squareImageWidth),
+            viewWithImageViews.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.squareImageWidth),
             viewWithImageViews.heightAnchor.constraint(equalToConstant: height),
             viewWithImageViews.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
@@ -137,7 +136,7 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
         mainImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainImageView.bottomAnchor.constraint(equalTo: viewWithImageViews.bottomAnchor),
-            mainImageView.heightAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight),
+            mainImageView.heightAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight),
             mainImageView.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
         ])
         mainImageViewWidthAnchor.isActive = true
@@ -147,20 +146,20 @@ class SearchResultsSeriesTableViewCell: SearchResultsTableViewCell {
             transparentImageViewOne.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor),
             transparentImageViewOne.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
             transparentImageViewOne.heightAnchor.constraint(equalToConstant: transparentImageOneHeight),
-            transparentImageViewOne.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4)
+            transparentImageViewOne.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4)
         ])
         
         transparentImageViewTwo.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            transparentImageViewTwo.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor, constant: SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
+            transparentImageViewTwo.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor, constant: ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
             transparentImageViewTwo.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
             transparentImageViewTwo.heightAnchor.constraint(equalToConstant: transparentImageTwoHeight),
-            transparentImageViewTwo.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2)
+            transparentImageViewTwo.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2)
         ])
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
-        let topConstant = SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding / 2 + SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight
-        let bottomConstant = SearchResultsSeriesTableViewCell.calculatedTopAndBottomPadding / 2 - SearchResultsSeriesTableViewCell.oneTransparentImageVisiblePartHeight
+        let topConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 + ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
+        let bottomConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topConstant),
             vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomConstant),

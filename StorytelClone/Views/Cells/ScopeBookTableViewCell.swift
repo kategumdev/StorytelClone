@@ -7,12 +7,12 @@
 
 import UIKit
 
-typealias EllipsisButtonInSearchResultsDidTapCallback = (Book) -> ()
+typealias EllipsisButtonInScopeBookTableViewCellDidTapCallback = (Book) -> ()
 
-class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
+class ScopeBookTableViewCell: BaseScopeTableViewCell {
 
     // MARK: - Static properties and methods
-    static let identifier = "ResultsTableViewCell"
+    static let identifier = "ScopeBookTableViewCell"
     static let minCellHeight: CGFloat = imageHeight + (minTopAndBottomPadding * 2)
     
     static let calculatedTopAndBottomPadding: CGFloat = {
@@ -38,10 +38,10 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     // MARK: - Instance properties
     private var book: Book?
     
-    private let bookTitleLabel = SearchResultsTableViewCell.createTitleLabel()
-    private let bookKindLabel = SearchResultsTableViewCell.createSubtitleLabel()
-    private let authorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
-    private let narratorsLabel = SearchResultsTableViewCell.createSubtitleLabel()
+    private let bookTitleLabel = BaseScopeTableViewCell.createTitleLabel()
+    private let bookKindLabel = BaseScopeTableViewCell.createSubtitleLabel()
+    private let authorsLabel = BaseScopeTableViewCell.createSubtitleLabel()
+    private let narratorsLabel = BaseScopeTableViewCell.createSubtitleLabel()
 
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
@@ -58,13 +58,13 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
     }()
     
     private let customImageView: UIImageView = {
-        let imageView = SearchResultsTableViewCell.createImageView()
+        let imageView = BaseScopeTableViewCell.createImageView()
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.26
         return imageView
     }()
     
-    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight)
+    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
     
     private let ellipsisButton: UIButton = {
         let button = UIButton()
@@ -79,7 +79,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         return button
     }()
     
-    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -127,7 +127,7 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         }
         
         if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: SearchResultsTableViewCell.imageHeight)
+            let resizedImage = image.resizeFor(targetHeight: BaseScopeTableViewCell.imageHeight)
             
             if customImageView.bounds.width != image.size.width {
                 customImageViewWidthAnchor.constant = resizedImage.size.width
@@ -149,8 +149,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             squareViewWithImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            squareViewWithImageView.widthAnchor.constraint(equalToConstant: SearchResultsTableViewCell.squareImageWidth),
-            squareViewWithImageView.heightAnchor.constraint(equalToConstant: SearchResultsTableViewCell.imageHeight),
+            squareViewWithImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.squareImageWidth),
+            squareViewWithImageView.heightAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight),
             squareViewWithImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
@@ -171,8 +171,8 @@ class SearchResultsBookTableViewCell: SearchResultsTableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsBookTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ScopeBookTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ScopeBookTableViewCell.calculatedTopAndBottomPadding),
             vertStackWithLabels.leadingAnchor.constraint(equalTo: squareViewWithImageView.trailingAnchor, constant: Constants.commonHorzPadding),
             vertStackWithLabels.trailingAnchor.constraint(equalTo: ellipsisButton.leadingAnchor, constant: -Constants.commonHorzPadding)
         ])

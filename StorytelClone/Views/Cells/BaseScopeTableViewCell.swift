@@ -1,5 +1,5 @@
 //
-//  SearchResultsTableViewCell.swift
+//  BaseScopeTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 20/3/23.
@@ -7,8 +7,7 @@
 
 import UIKit
 
-class SearchResultsTableViewCell: UITableViewCell {
-    
+class BaseScopeTableViewCell: UITableViewCell {
     // MARK: - Static properties and methods
     static let cornerRadius: CGFloat = 2
     static let minTopAndBottomPadding: CGFloat = 13

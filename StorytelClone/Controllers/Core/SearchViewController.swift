@@ -389,18 +389,6 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     
 }
 
-//extension SearchViewController: SearchResultsCollectionViewCellDelegate {
-//    func searchResultsCollectionViewCellDidRequestKeyboardDismiss(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell) {
-//        if searchController.searchBar.isFirstResponder {
-//            searchController.searchBar.endEditing(true)
-//        }
-//    }
-//
-//    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, didSelectItem: Book) {
-//        print("SearchViewController knows that item was selected")
-//    }
-//}
-
 extension SearchViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         // Nothing needs to be done

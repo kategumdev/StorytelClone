@@ -1,5 +1,5 @@
 //
-//  SearchResultsButtonsView.swift
+//  ScopeButtonsView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 8/3/23.
@@ -186,14 +186,12 @@ class ScopeButtonsView: UIView {
         return currentButtonIndex
     }
     
-    // Use it in SearchResultsViewController in didScroll
     func adjustScrollViewOffsetX(currentOffsetXOfCollectionView: CGFloat, withPageWidth pageWidth: CGFloat) {
         let scrollViewWidthToMove = partOfUnvisiblePartOfScrollView
         let newOffset = currentOffsetXOfCollectionView / pageWidth * scrollViewWidthToMove
         scrollView.setContentOffset(CGPoint(x: newOffset, y: 0), animated: false)
     }
     
-    // Use it in SearchResultsViewController in didScroll
     func adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: ScrollDirection, currentButtonIndex: Int, slidingLineXProportionalPart: CGFloat, currentOffsetXOfCvInRangeOfOnePageWidth: CGFloat, pageWidthOfCv pageWidth: CGFloat) {
 
         let currentButton = scopeButtons[currentButtonIndex]

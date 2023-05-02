@@ -1,5 +1,5 @@
 //
-//  SearchResultsCollectionViewCell.swift
+//  ScopeCollectionViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 11/3/23.
@@ -7,47 +7,46 @@
 
 import UIKit
 
-protocol SearchResultsCollectionViewCellDelegate: AnyObject {
-    func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint)
+protocol ScopeCollectionViewCellDelegate: AnyObject {
+    func scopeCollectionViewCell(withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint)
 }
 
 let tableDidRequestKeyboardDismiss = Notification.Name(
     rawValue: "tableDidRequestKeyboardDismiss")
 
-typealias SearchResultsDidSelectRowCallback = (_ selectedSearchResultTitle: Title) -> ()
+typealias TableViewInScopeCollectionViewCellDidSelectRowCallback = (_ selectedTitle: Title) -> ()
 
-enum PagingCollectionViewCellKind {
+enum ScopeCollectionViewCellKind {
     case forSearchResults
     case forBookshelf
 }
 
-class SearchResultsCollectionViewCell: UICollectionViewCell {
+class ScopeCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "SearchResultsCollectionViewCell"
+    static let identifier = "ScopeCollectionViewCell"
     
     // MARK: - Instance properties
-    weak var delegate: SearchResultsCollectionViewCellDelegate?
+    weak var delegate: ScopeCollectionViewCellDelegate?
     
-    var searchResultsDidSelectRowCallback: SearchResultsDidSelectRowCallback = {_ in}
-    var ellipsisButtonDidTapCallback: EllipsisButtonInSearchResultsDidTapCallback = {_ in}
+    var tableViewDidSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
     var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
     var buttonKind: ScopeButtonKind?
     var model = [Title]()
-    var withSectionHeader = true
+    var hasSectionHeader = true
     
-    var kind: PagingCollectionViewCellKind = .forSearchResults
-//    var sectionHeaderTopAndBottomPadding: CGFloat = 0
+    var kind: ScopeCollectionViewCellKind = .forSearchResults
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
         table.backgroundColor = Utils.customBackgroundColor
         table.separatorColor = UIColor.clear
         
-        table.register(SearchResultsBookTableViewCell.self, forCellReuseIdentifier: SearchResultsBookTableViewCell.identifier)
-        table.register(SearchResultsNoImageTableViewCell.self, forCellReuseIdentifier: SearchResultsNoImageTableViewCell.identifier)
-        table.register(SearchResultsSeriesTableViewCell.self, forCellReuseIdentifier: SearchResultsSeriesTableViewCell.identifier)
-        table.register(SearchResultsSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsSectionHeaderView.identifier)
+        table.register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
+        table.register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
+        table.register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
+        table.register(SearchResultsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsTableSectionHeaderView.identifier)
         table.register(BookshelfTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: BookshelfTableSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
@@ -100,7 +99,7 @@ class SearchResultsCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
+extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("MODEL.COUNT = \(model.count)")
         return model.count
@@ -115,7 +114,7 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         let title = model[indexPath.row]
         
         if let book = title as? Book {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsBookTableViewCell.identifier, for: indexPath) as? SearchResultsBookTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeBookTableViewCell.identifier, for: indexPath) as? ScopeBookTableViewCell else { return UITableViewCell() }
             
             cell.configureFor(book: book)
             cell.ellipsisButtonDidTapCallback = self.ellipsisButtonDidTapCallback
@@ -123,13 +122,13 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         }
         
         if let series = title as? Series {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsSeriesTableViewCell.identifier, for: indexPath) as? SearchResultsSeriesTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeSeriesTableViewCell.identifier, for: indexPath) as? ScopeSeriesTableViewCell else { return UITableViewCell() }
             
             cell.configureFor(series: series)
             return cell
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultsNoImageTableViewCell.identifier, for: indexPath) as? SearchResultsNoImageTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeNoImageTableViewCell.identifier, for: indexPath) as? ScopeNoImageTableViewCell else { return UITableViewCell() }
         
         cell.configureFor(title: title)
         return cell
@@ -137,34 +136,47 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let title = model[indexPath.row]
+//        let book = title as? Book
+//        let series = title as? Series
         
-        let book = title as? Book
-        let series = title as? Series
-        
-        if book != nil {
-            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
-        } else if series != nil {
-            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
+        if title is Book {
+            return ScopeBookTableViewCell.getEstimatedHeightForRow()
+        } else if title is Series {
+            return ScopeSeriesTableViewCell.getEstimatedHeightForRow()
         } else {
-            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
-
+            return ScopeNoImageTableViewCell.getEstimatedHeightForRow()
         }
 
     }
     
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let title = model[indexPath.row]
+//        let book = title as? Book
+//        let series = title as? Series
+//
+//        if book != nil {
+//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
+//        } else if series != nil {
+//            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
+//        } else {
+//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
+//        }
+//
+//    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("didSelectRowAt \(indexPath.row)")
         let selectedRowTitle = model[indexPath.row]
-        searchResultsDidSelectRowCallback(selectedRowTitle)
+        tableViewDidSelectRowCallback(selectedRowTitle)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard withSectionHeader, let buttonKind = buttonKind else { return UIView() }
+        guard hasSectionHeader, let buttonKind = buttonKind else { return UIView() }
 //        guard let buttonKind = buttonKind else { return UIView() }
         
         switch kind {
         case .forSearchResults:
-            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsTableSectionHeaderView.identifier) as? SearchResultsTableSectionHeaderView else { return UIView() }
             header.configurefor(buttonKind: buttonKind)
 //            print("returning header forSearchResults")
             return header
@@ -176,50 +188,30 @@ extension SearchResultsCollectionViewCell: UITableViewDataSource, UITableViewDel
         }
     }
     
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard withSectionHeader else { return UIView() }
-//
-//        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsSectionHeaderView.identifier) as? SearchResultsSectionHeaderView else { return UIView() }
-//
-//        if let buttonKind = buttonKind {
-//            header.configure(buttonKind: buttonKind)
-////            header.configureWith(topAndBottomPadding: sectionHeaderTopAndBottomPadding, forButtonKind: buttonKind)
-//        }
-//        return header
-//    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if withSectionHeader {
-            return UITableView.automaticDimension
-        } else {
-            return 0
-        }
+        return hasSectionHeader ? UITableView.automaticDimension : 0
+//        if hasSectionHeader {
+//            return UITableView.automaticDimension
+//        } else {
+//            return 0
+//        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard withSectionHeader else { return 0 }
+        guard hasSectionHeader else { return 0 }
         
         switch kind {
         case .forSearchResults:
-            return SearchResultsSectionHeaderView.calculateEstimatedHeaderHeight()
+            return SearchResultsTableSectionHeaderView.calculateEstimatedHeaderHeight()
         case .forBookshelf:
             return BookshelfTableSectionHeaderView.calculateEstimatedHeaderHeight()
         }
     }
     
-//    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-//        if withSectionHeader {
-////            return SearchResultsSectionHeaderView.calculateEstimatedHeighWith()
-//            return SearchResultsSectionHeaderView.calculateEstimatedHeighWith(topAndBottomPadding: sectionHeaderTopAndBottomPadding)
-//        } else {
-//            return 0
-//        }
-//    }
-
 }
 
 // MARK: - UIScrollViewDelegate
-extension SearchResultsCollectionViewCell {
+extension ScopeCollectionViewCell {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
     }
@@ -227,7 +219,7 @@ extension SearchResultsCollectionViewCell {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isDragging || scrollView.isDecelerating {
             guard let buttonKind = buttonKind else { return }
-            delegate?.searchResultsCollectionViewCell(self, withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
+            delegate?.scopeCollectionViewCell(withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
         }
     }
     
