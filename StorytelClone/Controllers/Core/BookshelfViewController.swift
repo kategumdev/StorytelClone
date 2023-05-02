@@ -9,7 +9,7 @@ import UIKit
 
 var toReadBooks = [Book]()
 
-class BookshelfViewController: PagingCvViewController {
+class BookshelfViewController: ScopeViewController {
     
     // MARK: - Initializers
     init() {

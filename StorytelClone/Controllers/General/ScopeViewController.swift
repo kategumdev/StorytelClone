@@ -1,5 +1,5 @@
 //
-//  PagingCvViewController.swift
+//  ScopeViewController.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 2/5/23.
@@ -10,7 +10,7 @@ import UIKit
 typealias PagingCvViewControllerDidSelectRowCallback = (_ selectedTitle: Title) -> ()
 typealias EllipsisButtonInPagingCvViewControllerDidTapCallback = (Book) -> ()
 
-class PagingCvViewController: UIViewController {
+class ScopeViewController: UIViewController {
     // MARK: - Instance properties
 //    private let scopeButtonsView = SearchResultsScopeButtonsView()
 //    private let scopeButtonKinds: [ScopeButtonKind]
@@ -140,14 +140,14 @@ class PagingCvViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension PagingCvViewController: UICollectionViewDelegateFlowLayout {
+extension ScopeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.bounds.size
     }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return scopeButtonsView.scopeButtons.count
@@ -263,7 +263,7 @@ extension PagingCvViewController: UICollectionViewDataSource, UICollectionViewDe
 }
 
 // MARK: - UIScrollViewDelegate
-extension PagingCvViewController {
+extension ScopeViewController {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         toggleIsButtonTriggeredScrollAndUnhideCells()
     }
@@ -317,7 +317,7 @@ extension PagingCvViewController {
 }
 
 // MARK: - Helper methods
-extension PagingCvViewController {
+extension ScopeViewController {
     func toggleIsButtonTriggeredScrollAndUnhideCells() {
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
@@ -457,7 +457,7 @@ extension PagingCvViewController {
 }
 
 // MARK: - SearchResultsCollectionViewCellDelegate
-extension PagingCvViewController: SearchResultsCollectionViewCellDelegate {
+extension ScopeViewController: SearchResultsCollectionViewCellDelegate {
     func searchResultsCollectionViewCell(_ searchResultsCollectionViewCell: SearchResultsCollectionViewCell, withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
         rememberedOffsetsOfTablesInCells[buttonKind] = offset
     }

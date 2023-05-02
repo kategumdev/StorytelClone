@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchResultsViewController: PagingCvViewController {
+class SearchResultsViewController: ScopeViewController {
     // MARK: - Instance properties
 //    var modelForSearchQuery: [ScopeButtonKind : [Title]]?
         
