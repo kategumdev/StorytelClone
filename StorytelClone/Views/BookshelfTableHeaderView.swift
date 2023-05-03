@@ -11,7 +11,8 @@ class BookshelfTableHeaderView: UIView {
     // MARK: - Instance properties
     private let label: UILabel = {
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 34)
+//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 34)
+        let label = UILabel.createLabel(withFont: font, maximumPointSize: 34, numberOfLines: 2)
         label.text = "Sorted by: Latest changed"
 //        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 //        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -61,6 +62,13 @@ class BookshelfTableHeaderView: UIView {
 //        applyConstraints()
         horzStackView.translatesAutoresizingMaskIntoConstraints = false
         horzStackView.fillSuperview(withConstant: Constants.commonHorzPadding)
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        // Avoid constraint's conflict when header is added 
+        for constraint in constraints {
+            constraint.priority = UILayoutPriority(750)
+        }
 //        backgroundColor = .green
 //        horzStackView.backgroundColor = .blue
 //        filterButton.backgroundColor = .yellow
@@ -69,6 +77,17 @@ class BookshelfTableHeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//        
+//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+////            resultsTable.setNeedsLayout()
+////            resultsTable.layoutIfNeeded()
+//            setNeedsLayout()
+//            layoutIfNeeded()
+//        }
+//    }
     
 //    private func applyConstraints() {
 //        horzStackView.translatesAutoresizingMaskIntoConstraints = false

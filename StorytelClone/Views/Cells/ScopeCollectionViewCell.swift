@@ -53,6 +53,16 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         
         // Avoid gap above custom section header
         table.sectionHeaderTopPadding = 0
+        
+//        if kind == .forBookshelf {
+//            resultsTable.tableHeaderView = filterTableHeader
+//            // These two lines avoid constraints' conflict of header when it is added to
+//            filterTableHeader.translatesAutoresizingMaskIntoConstraints = false
+//            filterTableHeader.fillSuperview()
+//        }
+        
+        table.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        
         return table
     }()
     
@@ -62,6 +72,9 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
     var backgroundViewNeedsToBeHidden = false
     private var isBackgroundViewAdded = false
+    
+    private var layoutSubviewsFirstTime = true
+    private var timeLayoutSubviewsIsCalled = 0
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -81,24 +94,26 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
+        timeLayoutSubviewsIsCalled += 1
+        print("\nlayoutSubviews of ScopeCollectionViewCell \(buttonKind) called \(timeLayoutSubviewsIsCalled) times \n")
         // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
         }
         
         guard kind == .forBookshelf else { return }
-        
         if !isFilterTableHeaderAdded {
+            print("header is ADDED")
             resultsTable.tableHeaderView = filterTableHeader
-            filterTableHeader.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                filterTableHeader.widthAnchor.constraint(equalTo: resultsTable.widthAnchor),
-                filterTableHeader.centerXAnchor.constraint(equalTo: resultsTable.centerXAnchor),
-                filterTableHeader.topAnchor.constraint(equalTo: resultsTable.topAnchor)
-            ])
+            // These two lines avoid constraints' conflict of header when it is added to
+//            filterTableHeader.translatesAutoresizingMaskIntoConstraints = false
+//            filterTableHeader.fillSuperview()
             isFilterTableHeaderAdded = true
+        } else {
+            layoutTableHeaderView()
         }
         
+
         if !isBackgroundViewAdded {
             contentView.addSubview(noBooksBackgroundView)
 //            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
@@ -106,7 +121,8 @@ class ScopeCollectionViewCell: UICollectionViewCell {
             noBooksBackgroundView.fillSuperview()
             isBackgroundViewAdded = true
             noBooksBackgroundView.isHidden = model.count > 0
-            filterTableHeader.isHidden = model.count == 0
+//            filterTableHeader.isHidden = model.count == 0
+            resultsTable.isHidden = model.count == 0
             
             if backgroundViewNeedsToBeHidden {
                 noBooksBackgroundView.isHidden = true
@@ -115,13 +131,25 @@ class ScopeCollectionViewCell: UICollectionViewCell {
             }
         } else {
             noBooksBackgroundView.isHidden = model.count > 0
-            filterTableHeader.isHidden = model.count == 0
+//            filterTableHeader.isHidden = model.count == 0
+            resultsTable.isHidden = model.count == 0
             
             if backgroundViewNeedsToBeHidden {
                 noBooksBackgroundView.isHidden = true
             } else {
                 noBooksBackgroundView.configureFor(buttonKind: buttonKind)
             }
+        }
+        
+//        if timeLayoutSubviewsIsCalled < 2 {
+//            setNeedsLayout()
+//            layoutIfNeeded()
+//        }
+        
+        if layoutSubviewsFirstTime {
+            layoutSubviewsFirstTime = false
+            setNeedsLayout()
+            layoutIfNeeded()
         }
         
 //        if !isBackgroundViewAdded {
@@ -169,7 +197,29 @@ class ScopeCollectionViewCell: UICollectionViewCell {
 //            }
 //        }
         
+//        if layoutSubviewsFirstTime {
+//            layoutSubviewsFirstTime = false
+//            setNeedsLayout()
+//            layoutIfNeeded()
+//        }
+        
     }
+    
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//
+//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+////            resultsTable.setNeedsLayout()
+////            resultsTable.layoutIfNeeded()
+//            setNeedsLayout()
+//            layoutIfNeeded()
+//        }
+//    }
+    
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        print("BEING REUSED")
+//    }
     
     // MARK: - Helper methods
     private func setupTapGesture() {
@@ -185,6 +235,24 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         resultsTable.translatesAutoresizingMaskIntoConstraints = false
         resultsTable.fillSuperview()
+    }
+    
+    private func layoutTableHeaderView() {
+        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+//        filterTableHeader.translatesAutoresizingMaskIntoConstraints = true
+        let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        if filterTableHeader.frame.size.height != size.height {
+            print("header frame adjusted")
+            filterTableHeader.frame.size.height = size.height
+            filterTableHeader.frame.size.width = resultsTable.bounds.width
+            resultsTable.tableHeaderView = filterTableHeader
+
+//            if layoutSubviewsFirstTime {
+//                layoutSubviewsFirstTime = false
+//                setNeedsLayout()
+//                layoutIfNeeded()
+//            }
+        }
     }
 
 }
