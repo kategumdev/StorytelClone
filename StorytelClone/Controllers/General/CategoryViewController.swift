@@ -27,8 +27,8 @@ class CategoryViewController: BaseViewController {
             newHeaderView.configureFor(book: book)
             bookTable.tableHeaderView = newHeaderView
             // These two lines avoid constraints' conflict of header when vc's view just loaded
-            newHeaderView.translatesAutoresizingMaskIntoConstraints = false
-            newHeaderView.fillSuperview()
+//            newHeaderView.translatesAutoresizingMaskIntoConstraints = false
+//            newHeaderView.fillSuperview()
             
             // Add stretching topView
             similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor

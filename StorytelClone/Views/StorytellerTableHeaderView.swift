@@ -147,5 +147,11 @@ class StorytellerTableHeaderView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
             stack.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        // Avoid constraint's conflict when header is added to table view
+        for constraint in constraints {
+            constraint.priority = UILayoutPriority(750)
+        }
     }
 }

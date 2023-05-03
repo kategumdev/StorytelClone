@@ -123,6 +123,12 @@ class SimilarBooksTableHeaderView: UIView {
 
         horzStack.translatesAutoresizingMaskIntoConstraints = false
         horzStack.fillSuperview(withConstant: Constants.commonHorzPadding)
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        // Avoid constraint's conflict when header is added to table view
+        for constraint in constraints {
+            constraint.priority = UILayoutPriority(750)
+        }
     }
 
 }
