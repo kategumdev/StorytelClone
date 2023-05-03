@@ -45,6 +45,7 @@ class BookshelfViewController: ScopeViewController {
             bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
             self?.present(bookDetailsBottomSheetController, animated: false)
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

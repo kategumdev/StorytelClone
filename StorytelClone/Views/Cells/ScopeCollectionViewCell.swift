@@ -56,10 +56,11 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         return table
     }()
     
+    private lazy var filterTableHeader = BookshelfTableHeaderView()
+    private var isFilterTableHeaderAdded = false
+    
     lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
-    
     var backgroundViewNeedsToBeHidden = false
-    
     private var isBackgroundViewAdded = false
     
     // MARK: - Initializers
@@ -87,6 +88,17 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         
         guard kind == .forBookshelf else { return }
         
+        if !isFilterTableHeaderAdded {
+            resultsTable.tableHeaderView = filterTableHeader
+            filterTableHeader.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                filterTableHeader.widthAnchor.constraint(equalTo: resultsTable.widthAnchor),
+                filterTableHeader.centerXAnchor.constraint(equalTo: resultsTable.centerXAnchor),
+                filterTableHeader.topAnchor.constraint(equalTo: resultsTable.topAnchor)
+            ])
+            isFilterTableHeaderAdded = true
+        }
+        
         if !isBackgroundViewAdded {
             contentView.addSubview(noBooksBackgroundView)
 //            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
@@ -94,37 +106,67 @@ class ScopeCollectionViewCell: UICollectionViewCell {
             noBooksBackgroundView.fillSuperview()
             isBackgroundViewAdded = true
             noBooksBackgroundView.isHidden = model.count > 0
+            filterTableHeader.isHidden = model.count == 0
             
             if backgroundViewNeedsToBeHidden {
                 noBooksBackgroundView.isHidden = true
             } else {
                 noBooksBackgroundView.configureFor(buttonKind: buttonKind)
             }
-            
         } else {
-            print("noBooksBackgroundView.isHidden set in layoutSubviews")
             noBooksBackgroundView.isHidden = model.count > 0
+            filterTableHeader.isHidden = model.count == 0
             
             if backgroundViewNeedsToBeHidden {
                 noBooksBackgroundView.isHidden = true
             } else {
                 noBooksBackgroundView.configureFor(buttonKind: buttonKind)
             }
-            
-//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
         }
         
 //        if !isBackgroundViewAdded {
 //            contentView.addSubview(noBooksBackgroundView)
-//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+////            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
 //            noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
 //            noBooksBackgroundView.fillSuperview()
 //            isBackgroundViewAdded = true
 //            noBooksBackgroundView.isHidden = model.count > 0
+//
+//            if backgroundViewNeedsToBeHidden {
+//                noBooksBackgroundView.isHidden = true
+//            } else {
+//                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//            }
 //        } else {
-//            print("noBooksBackgroundView.isHidden set in layoutSubviews")
 //            noBooksBackgroundView.isHidden = model.count > 0
-//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//
+//            if backgroundViewNeedsToBeHidden {
+//                noBooksBackgroundView.isHidden = true
+//            } else {
+//                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
+//            }
+//        }
+        
+
+        
+//        if !isFilterTableHeaderAdded {
+//            resultsTable.tableHeaderView = filterTableHeader
+//            filterTableHeader.translatesAutoresizingMaskIntoConstraints = false
+//            filterTableHeader.fillSuperview()
+//            isFilterTableHeaderAdded = true
+//
+//            resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+//
+//            let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//            if filterTableHeader.frame.size.height != size.height {
+//    //            print("header frame adjusted")
+//                filterTableHeader.frame.size.height = size.height
+//                resultsTable.tableHeaderView = filterTableHeader
+//
+//                // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+////                setNeedsLayout()
+////                layoutIfNeeded()
+//            }
 //        }
         
     }
