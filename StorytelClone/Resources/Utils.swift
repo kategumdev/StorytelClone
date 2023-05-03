@@ -119,5 +119,18 @@ struct Utils {
             impactFeedbackGenerator.impactOccurred()
         }
     }
+    
+     static func layoutTableHeaderView(_ tableHeader: UIView, inTableView tableView: UITableView) {
+//        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+        tableHeader.translatesAutoresizingMaskIntoConstraints = true
+        let size = tableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        
+        if tableHeader.frame.size.height != size.height {
+//            print("header frame adjusted")
+            tableHeader.frame.size.height = size.height
+//            filterTableHeader.frame.size.width = resultsTable.bounds.width
+            tableView.tableHeaderView = tableHeader
+        }
+    }
 
 }

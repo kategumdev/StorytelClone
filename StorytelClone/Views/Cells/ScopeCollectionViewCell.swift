@@ -94,9 +94,11 @@ class ScopeCollectionViewCell: UICollectionViewCell {
             print("header is ADDED")
             resultsTable.tableHeaderView = filterTableHeader
             isFilterTableHeaderAdded = true
-            layoutTableHeaderView()
+            Utils.layoutTableHeaderView(filterTableHeader, inTableView: resultsTable)
+//            layoutTableHeaderView()
         } else {
-            layoutTableHeaderView()
+            Utils.layoutTableHeaderView(filterTableHeader, inTableView: resultsTable)
+//            layoutTableHeaderView()
         }
 
         if !isBackgroundViewAdded {
@@ -143,18 +145,18 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         resultsTable.fillSuperview()
     }
     
-    private func layoutTableHeaderView() {
-//        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
-        filterTableHeader.translatesAutoresizingMaskIntoConstraints = true
-        let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        
-        if filterTableHeader.frame.size.height != size.height {
-            print("header frame adjusted")
-            filterTableHeader.frame.size.height = size.height
-//            filterTableHeader.frame.size.width = resultsTable.bounds.width
-            resultsTable.tableHeaderView = filterTableHeader
-        }
-    }
+//    private func layoutTableHeaderView() {
+////        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+//        filterTableHeader.translatesAutoresizingMaskIntoConstraints = true
+//        let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//
+//        if filterTableHeader.frame.size.height != size.height {
+//            print("header frame adjusted")
+//            filterTableHeader.frame.size.height = size.height
+////            filterTableHeader.frame.size.width = resultsTable.bounds.width
+//            resultsTable.tableHeaderView = filterTableHeader
+//        }
+//    }
 
 }
 

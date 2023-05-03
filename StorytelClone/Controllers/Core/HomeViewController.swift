@@ -60,17 +60,18 @@ class HomeViewController: BaseViewController {
         tableHeader.stackTopAnchorConstraint.constant = 15
         tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
-        layoutHeaderView()
+        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
+//        layoutHeaderView()
     }
     
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-        title = "Home"
-        let configuration = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-        let image = UIImage(systemName: "bell", withConfiguration: configuration)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let image = UIImage(systemName: "bell", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         
+        title = "Home"
         extendedLayoutIncludesOpaqueBars = true
     }
     

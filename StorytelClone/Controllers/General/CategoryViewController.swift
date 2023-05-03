@@ -13,6 +13,8 @@ class CategoryViewController: BaseViewController {
     private lazy var similarBooksTopView = UIView()
     private let similarBooksTopViewY: CGFloat = 1000
     
+    private var isFirstTime = true
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +25,9 @@ class CategoryViewController: BaseViewController {
         // Set new table header and add stretching top view if vc is created when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected OR just configure existing table header with dim view for all other cases
         if let book = category.bookToShowMoreTitlesLikeIt {
             // Replace tableHeaderView
-            let newHeaderView = SimilarBooksTableHeaderView()
-            newHeaderView.configureFor(book: book)
-            bookTable.tableHeaderView = newHeaderView
-            // These two lines avoid constraints' conflict of header when vc's view just loaded
-//            newHeaderView.translatesAutoresizingMaskIntoConstraints = false
-//            newHeaderView.fillSuperview()
+            let headerView = SimilarBooksTableHeaderView()
+            headerView.configureFor(book: book)
+            bookTable.tableHeaderView = headerView
             
             // Add stretching topView
             similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
@@ -48,12 +47,21 @@ class CategoryViewController: BaseViewController {
         }
         
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frame = view.bounds
         frame.size.height -= Utils.tabBarHeight
         bookTable.frame = frame
+        
+        guard isFirstTime == true else { return }
+        isFirstTime = false
+        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+        
+//        guard let tableHeader = bookTable.tableHeaderView else { return }
+//        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
 
     // MARK: - Superclass overrides
