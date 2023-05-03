@@ -61,6 +61,8 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     private lazy var filterTableHeader = BookshelfTableHeaderView()
     private var isFilterTableHeaderAdded = false
     
+    private var isFirstTime = true
+    
     private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
     private var isBackgroundViewAdded = false
     var backgroundViewNeedsToBeHidden = false
@@ -83,7 +85,6 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
         if resultsTable.contentOffset != rememberedOffset {
             resultsTable.contentOffset = rememberedOffset
@@ -148,12 +149,20 @@ class ScopeCollectionViewCell: UICollectionViewCell {
 //        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
         filterTableHeader.translatesAutoresizingMaskIntoConstraints = true
         let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        
         if filterTableHeader.frame.size.height != size.height {
             print("header frame adjusted")
             filterTableHeader.frame.size.height = size.height
 //            filterTableHeader.frame.size.width = resultsTable.bounds.width
             resultsTable.tableHeaderView = filterTableHeader
         }
+        
+        if isFirstTime {
+            isFirstTime = false
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+        
     }
 
 }
@@ -196,8 +205,6 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let title = model[indexPath.row]
-//        let book = title as? Book
-//        let series = title as? Series
         
         if title is Book {
             return ScopeBookTableViewCell.getEstimatedHeightForRow()
@@ -208,21 +215,6 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
         }
 
     }
-    
-//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let title = model[indexPath.row]
-//        let book = title as? Book
-//        let series = title as? Series
-//
-//        if book != nil {
-//            return SearchResultsBookTableViewCell.getEstimatedHeightForRow()
-//        } else if series != nil {
-//            return SearchResultsSeriesTableViewCell.getEstimatedHeightForRow()
-//        } else {
-//            return SearchResultsNoImageTableViewCell.getEstimatedHeightForRow()
-//        }
-//
-//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("didSelectRowAt \(indexPath.row)")

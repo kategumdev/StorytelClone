@@ -53,7 +53,6 @@ class ScopeViewController: UIViewController {
     }()
     
     private var rememberedOffsetsOfTablesInCells = [ScopeButtonKind : CGPoint]()
-//    private var tappedButtonIndex: Int? = nil
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     

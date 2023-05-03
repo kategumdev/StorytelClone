@@ -59,7 +59,7 @@ class ScopeButtonsView: UIView {
         
         // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
         let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
+//        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
         return partOfUnvisiblePart > 0 ? partOfUnvisiblePart : 0 // If partOfUnvisiblePart == 0 or is less than 0, that means that scrollViewContentWidth is less than scrollView width and no adjustments of scrollView's contentOffset.x is needed
     }()
     

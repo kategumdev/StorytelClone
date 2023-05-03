@@ -11,10 +11,6 @@ var toReadBooks = [Book]()
 
 class BookshelfViewController: ScopeViewController {
     
-//    private var viewWillAppearCalledFirstTime = true
-//    private var didLayoutSubviewsCalledFirstTime = true
-//    private var timeDidLayoutSubviewsIsCalled = 0
-    
     // MARK: - Initializers
     init() {
         super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForBookshelf, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forBookshelf)
@@ -55,56 +51,13 @@ class BookshelfViewController: ScopeViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.makeNavbarAppearance(transparent: false)
-        
-//        if viewWillAppearCalledFirstTime {
-//            viewWillAppearCalledFirstTime = false
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        } else {
-//            collectionView.reloadData()
-//        }
-        
         collectionView.reloadData()
-        
-        if !toReadBooks.isEmpty {
-            let bookTitles = toReadBooks.map { $0.title }
-            let bookTitlesString = bookTitles.joined(separator: ", ")
-            print("\nTBR: \(bookTitlesString)")
-        }
+//        if !toReadBooks.isEmpty {
+//            let bookTitles = toReadBooks.map { $0.title }
+//            let bookTitlesString = bookTitles.joined(separator: ", ")
+//            print("\nTBR: \(bookTitlesString)")
+//        }
     }
-    
-//    override func viewWillLayoutSubviews() {
-//        super.viewWillLayoutSubviews()
-//        print("viewWillLayoutSubviews")
-//        timeDidLayoutSubviewsIsCalled += 1
-//
-//        if timeDidLayoutSubviewsIsCalled <= 2 {
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        }
-//    }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews")
-//        timeDidLayoutSubviewsIsCalled += 1
-//
-//        if timeDidLayoutSubviewsIsCalled <= 2 {
-//            collectionView.setNeedsLayout()
-//            collectionView.layoutIfNeeded()
-//        }
-//    }
-    
-//    override func viewWillLayoutSubviews() {
-//        super.viewWillLayoutSubviews()
-//        print("viewWillLayoutSubviews")
-//        if didLayoutSubviewsCalledFirstTime {
-//            didLayoutSubviewsCalledFirstTime = false
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        }
-//    }
-
     
     // MARK: - Configuration
     private func configureNavBar() {
