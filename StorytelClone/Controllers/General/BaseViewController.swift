@@ -83,10 +83,14 @@ class BaseViewController: UIViewController {
     // MARK: - Instance methods
     func addTableHeaderView() {
         bookTable.tableHeaderView = TableHeaderView()
-        // These two lines avoid constraints' conflict of header when vc's view just loaded
-        bookTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
-        bookTable.tableHeaderView?.fillSuperview()
     }
+    
+//    func addTableHeaderView() {
+//        bookTable.tableHeaderView = TableHeaderView()
+//        // These two lines avoid constraints' conflict of header when vc's view just loaded
+//        bookTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+//        bookTable.tableHeaderView?.fillSuperview()
+//    }
 
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
@@ -109,14 +113,16 @@ class BaseViewController: UIViewController {
     
     func layoutHeaderView() {
         guard let headerView = bookTable.tableHeaderView else { return }
-        if headerView.translatesAutoresizingMaskIntoConstraints != true {
-            headerView.translatesAutoresizingMaskIntoConstraints = true
-        }
         
+        headerView.translatesAutoresizingMaskIntoConstraints = true
+        headerView.frame.size.width = bookTable.bounds.width
+
         let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         if headerView.frame.size.height != size.height {
 //            print("header frame adjusted")
             headerView.frame.size.height = size.height
+//            headerView.frame.size.width = size.width
+//            headerView.frame.size.width = bookTable.bounds.width
             bookTable.tableHeaderView = headerView
 
             guard isFirstTime == true else { return }
@@ -126,6 +132,26 @@ class BaseViewController: UIViewController {
             view.layoutIfNeeded()
         }
     }
+    
+//    func layoutHeaderView() {
+//        guard let headerView = bookTable.tableHeaderView else { return }
+//        if headerView.translatesAutoresizingMaskIntoConstraints != true {
+//            headerView.translatesAutoresizingMaskIntoConstraints = true
+//        }
+//
+//        let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+//        if headerView.frame.size.height != size.height {
+////            print("header frame adjusted")
+//            headerView.frame.size.height = size.height
+//            bookTable.tableHeaderView = headerView
+//
+//            guard isFirstTime == true else { return }
+//            isFirstTime = false
+//            // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+//            view.setNeedsLayout()
+//            view.layoutIfNeeded()
+//        }
+//    }
     
     // MARK: - Helper methods
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {

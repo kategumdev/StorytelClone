@@ -60,9 +60,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     
     private lazy var filterTableHeader = BookshelfTableHeaderView()
     private var isFilterTableHeaderAdded = false
-    
-    private var isFirstTime = true
-    
+        
     private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
     private var isBackgroundViewAdded = false
     var backgroundViewNeedsToBeHidden = false
@@ -156,13 +154,6 @@ class ScopeCollectionViewCell: UICollectionViewCell {
 //            filterTableHeader.frame.size.width = resultsTable.bounds.width
             resultsTable.tableHeaderView = filterTableHeader
         }
-        
-        if isFirstTime {
-            isFirstTime = false
-            setNeedsLayout()
-            layoutIfNeeded()
-        }
-        
     }
 
 }
