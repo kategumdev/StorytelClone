@@ -12,7 +12,6 @@ class CategoryViewController: BaseViewController {
     
     private lazy var similarBooksTopView = UIView()
     private let similarBooksTopViewY: CGFloat = 1000
-    
     private var isFirstTime = true
     
     // MARK: - View Life Cycle
@@ -59,9 +58,6 @@ class CategoryViewController: BaseViewController {
         // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        
-//        guard let tableHeader = bookTable.tableHeaderView else { return }
-//        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
 
     // MARK: - Superclass overrides

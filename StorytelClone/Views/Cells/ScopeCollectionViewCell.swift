@@ -89,16 +89,28 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         }
         
         guard kind == .forBookshelf else { return }
-        
+        configureTableHeaderAndBackgroundView()
+    }
+    
+    // MARK: - Helper methods
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        tapGesture.cancelsTouchesInView = false
+        resultsTable.addGestureRecognizer(tapGesture)
+    }
+
+    @objc func handleTapGesure() {
+        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
+    }
+    
+    private func configureTableHeaderAndBackgroundView() {
         if !isFilterTableHeaderAdded {
             print("header is ADDED")
             resultsTable.tableHeaderView = filterTableHeader
             isFilterTableHeaderAdded = true
             Utils.layoutTableHeaderView(filterTableHeader, inTableView: resultsTable)
-//            layoutTableHeaderView()
         } else {
             Utils.layoutTableHeaderView(filterTableHeader, inTableView: resultsTable)
-//            layoutTableHeaderView()
         }
 
         if !isBackgroundViewAdded {
@@ -126,37 +138,12 @@ class ScopeCollectionViewCell: UICollectionViewCell {
                 noBooksBackgroundView.configureFor(buttonKind: buttonKind)
             }
         }
-        
-    }
-    
-    // MARK: - Helper methods
-    private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
-        tapGesture.cancelsTouchesInView = false
-        resultsTable.addGestureRecognizer(tapGesture)
-    }
-
-    @objc func handleTapGesure() {
-        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
     }
     
     private func applyConstraints() {
         resultsTable.translatesAutoresizingMaskIntoConstraints = false
         resultsTable.fillSuperview()
     }
-    
-//    private func layoutTableHeaderView() {
-////        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
-//        filterTableHeader.translatesAutoresizingMaskIntoConstraints = true
-//        let size = filterTableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//
-//        if filterTableHeader.frame.size.height != size.height {
-//            print("header frame adjusted")
-//            filterTableHeader.frame.size.height = size.height
-////            filterTableHeader.frame.size.width = resultsTable.bounds.width
-//            resultsTable.tableHeaderView = filterTableHeader
-//        }
-//    }
 
 }
 

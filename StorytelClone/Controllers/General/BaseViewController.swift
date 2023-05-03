@@ -15,7 +15,6 @@ class BaseViewController: UIViewController {
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
-    private var isFirstTime = true
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
     
     lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
@@ -32,15 +31,10 @@ class BaseViewController: UIViewController {
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
-        // Avoid gaps between sections and custom section headers
-        table.sectionFooterHeight = 0
+        table.sectionFooterHeight = 0 // Avoid gaps between sections and custom section headers
         
-        // Avoid gap above custom section header
-        table.sectionHeaderTopPadding = 0
-        
-        // Enable self-sizing of section headers according to their subviews auto layout (must not be 0)
-//        table.estimatedSectionHeaderHeight = 60
-        
+        table.sectionHeaderTopPadding = 0 // Avoid gap above custom section header
+
         // Avoid gap at the very bottom of the table view
         table.tableFooterView = UIView()
         table.tableFooterView?.frame.size.height = Constants.sectionHeaderViewTopPadding
@@ -66,7 +60,6 @@ class BaseViewController: UIViewController {
         bookTable.delegate = self
         bookTable.dataSource = self
         bookTable.tableHeaderView = TableHeaderView()
-//        addTableHeaderView()
         configureNavBar()
     }
     
@@ -75,7 +68,6 @@ class BaseViewController: UIViewController {
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView else { return }
         Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
-//        layoutHeaderView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,10 +76,6 @@ class BaseViewController: UIViewController {
     }
     
     // MARK: - Instance methods
-//    func addTableHeaderView() {
-//        bookTable.tableHeaderView = TableHeaderView()
-//    }
-
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.makeNavbarAppearance(transparent: true)
@@ -106,29 +94,7 @@ class BaseViewController: UIViewController {
         let visibleTitleWhenTransparent: Bool = category?.bookToShowMoreTitlesLikeIt != nil
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: visibleTitleWhenTransparent)
     }
-    
-//    func layoutHeaderView() {
-//        guard let headerView = bookTable.tableHeaderView else { return }
-//
-//        headerView.translatesAutoresizingMaskIntoConstraints = true
-////        headerView.frame.size.width = bookTable.bounds.width
-//
-//        let size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//        if headerView.frame.size.height != size.height {
-////            print("header frame adjusted")
-//            headerView.frame.size.height = size.height
-////            headerView.frame.size.width = size.width
-////            headerView.frame.size.width = bookTable.bounds.width
-//            bookTable.tableHeaderView = headerView
-//
-////            guard isFirstTime == true else { return }
-////            isFirstTime = false
-////            // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
-////            view.setNeedsLayout()
-////            view.layoutIfNeeded()
-//        }
-//    }
-    
+
     // MARK: - Helper methods
     private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
