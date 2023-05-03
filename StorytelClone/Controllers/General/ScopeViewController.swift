@@ -90,9 +90,9 @@ class ScopeViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
+//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+//            collectionView.collectionViewLayout.invalidateLayout()
+//        }
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             separatorLineView.layer.borderColor = UIColor.label.cgColor

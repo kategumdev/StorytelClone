@@ -26,6 +26,16 @@ class SearchResultsViewController: ScopeViewController {
         super.viewDidLoad()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // Search field becomes larger/smaller and collectonView needs to calculate new size for itself
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+
+    }
+    
     // MARK: - Instance methods
     func revertToInitialAppearance() {
         scopeButtonsView.revertToInitialAppearance()

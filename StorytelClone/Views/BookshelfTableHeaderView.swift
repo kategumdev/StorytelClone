@@ -69,9 +69,7 @@ class BookshelfTableHeaderView: UIView {
         for constraint in constraints {
             constraint.priority = UILayoutPriority(750)
         }
-//        backgroundColor = .green
-//        horzStackView.backgroundColor = .blue
-//        filterButton.backgroundColor = .yellow
+
     }
     
     required init?(coder: NSCoder) {
