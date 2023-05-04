@@ -8,7 +8,6 @@
 import UIKit
 
 class FollowSeriesView: UIView {
-        
     // MARK: - Instance properties
     private let imageHeightAndWidth: CGFloat = 50
     private var seriesIsFollowed = false

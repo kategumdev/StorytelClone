@@ -81,6 +81,7 @@
 		5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */; };
 		5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93322299D689F00DF17C7 /* TableHeaderView.swift */; };
 		5AF93326299D722100DF17C7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93325299D722100DF17C7 /* Extensions.swift */; };
+		5AFCEF772A03D958001BA635 /* PersonTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFCEF762A03D958001BA635 /* PersonTableHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +180,7 @@
 		5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderSubviewsContainer.swift; sourceTree = "<group>"; };
 		5AF93322299D689F00DF17C7 /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
 		5AF93325299D722100DF17C7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5AFCEF762A03D958001BA635 /* PersonTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTableHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,6 +323,7 @@
 				5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */,
 				5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */,
 				5A54A5F129DC446D003BB8D4 /* StorytellerTableHeaderView.swift */,
+				5AFCEF762A03D958001BA635 /* PersonTableHeaderView.swift */,
 				5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
@@ -560,6 +563,7 @@
 				5A23BEF329D7656F0038D132 /* AllTitlesSectionHeaderView.swift in Sources */,
 				5ABBA402299C0FD000D0E0F4 /* TabBarViewController.swift in Sources */,
 				5AA8006929C8DD5100198B8A /* BaseScopeTableViewCell.swift in Sources */,
+				5AFCEF772A03D958001BA635 /* PersonTableHeaderView.swift in Sources */,
 				5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */,
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,
 				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,

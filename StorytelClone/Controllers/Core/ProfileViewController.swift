@@ -24,7 +24,7 @@ enum ProfileCell: String, CaseIterable {
 }
 
 class ProfileViewController: UIViewController {
-    
+    // MARK: - Static properties
     static let cellLabelFont = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
     static let maximumPointSizeForScaledCellLabelFont: CGFloat = 39
     
@@ -34,6 +34,10 @@ class ProfileViewController: UIViewController {
     private var isInitialOffsetYSet = false
     private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     
+//    private var tableHeader = PersonTableHeaderView()
+    private var contentSizeCategoryChanged = false
+    private var timeExtraLayout = 0
+    
     private let profileTable: UITableView = {
         let table = UITableView()
         table.backgroundColor = Utils.customBackgroundColor
@@ -42,6 +46,10 @@ class ProfileViewController: UIViewController {
         table.allowsSelection = false
         
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
+        
+//        table.tableHeaderView = PersonTableHeaderView()
+//        table.tableHeaderView = tableHeader
+
         return table
     }()
 
@@ -52,15 +60,33 @@ class ProfileViewController: UIViewController {
         configureNavBar()
         
         view.addSubview(profileTable)
+//        profileTable.translatesAutoresizingMaskIntoConstraints = false
+//        profileTable.fillSuperview()
+//        profileTable.tableHeaderView = PersonTableHeaderView()
+//        profileTable.tableHeaderView = tableHeader
         profileTable.delegate = self
         profileTable.dataSource = self
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        print("viewDidLayoutSubviews of ProfileVC")
         profileTable.frame = view.bounds
-//        guard let tableHeader = bookTable.tableHeaderView else { return }
-//        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
+        
+        
+        profileTable.tableHeaderView = PersonTableHeaderView()
+        guard let tableHeader = profileTable.tableHeaderView else { return }
+        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
+//        if timeExtraLayout != 0 && timeExtraLayout <= 3 {
+//            print("\n LAYOUT")
+//            timeExtraLayout -= 1
+////            profileTable.frame = view.bounds
+//
+//            view.setNeedsLayout()
+//            view.layoutIfNeeded()
+//        }
+//        guard let tableHeader = profileTable.tableHeaderView else { return }
+//        Utils.layoutTableHeader(tableHeader, inTableView: profileTable)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,9 +98,10 @@ class ProfileViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-//            scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: 50)
             scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: ProfileViewController.maximumPointSizeForScaledCellLabelFont)
-
+//            print("TRAIT")
+//            contentSizeCategoryChanged = true
+//            timeExtraLayout = 3
         }
     }
 
@@ -86,23 +113,10 @@ class ProfileViewController: UIViewController {
         navigationItem.backButtonTitle = ""
     }
     
-//    private func getCell(inTableView tableView: UITableView, forIndexPath indexPath: IndexPath) -> UITableViewCell {
-//        print("getting cell")
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier") else { return UITableViewCell() }
-//        cell.backgroundColor = .clear
-//        cell.tintColor = Utils.unactiveElementColor
-//        cell.accessoryType = .disclosureIndicator
-//
-//        let profileCell = profileCells[indexPath.row]
-//        var content = cell.defaultContentConfiguration()
-//        content.image = profileCell.image
-//        content.text = profileCell.rawValue
-//        content.textProperties.font = scaledCellLabelFont
-//        content.textProperties.color = Utils.unactiveElementColor
-//        cell.contentConfiguration = content
-//        return cell
+//    private func layoutTableHeader() {
+//       
 //    }
-
+    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -112,7 +126,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        return getCell(inTableView: tableView, forIndexPath: indexPath)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier") else { return UITableViewCell() }
         cell.backgroundColor = .clear
         cell.tintColor = Utils.unactiveElementColor
@@ -127,38 +140,16 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.contentConfiguration = content
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier") else { return 0 }
-//        let profileCell = profileCells[indexPath.row]
-//        var content = cell.defaultContentConfiguration()
-//        content.text = profileCell.rawValue
-//        content.textProperties.font = scaledCellLabelFont
-//        cell.contentConfiguration = content
-//
-//        let labelWidth = cell.textLabel?.frame.size.width ?? 0
-//        let labelSize = (cell.textLabel?.text ?? "").boundingRect(with: CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [.font: scaledCellLabelFont], context: nil).size
-//
-//        let padding: CGFloat = 30
-//        return labelSize.height + padding
-//    }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let cell = getCell(inTableView: tableView, forIndexPath: indexPath)
-//        let height = cell.bounds.height
-//        print("cell bounds \(cell.bounds)")
-        
         let profileCell = profileCells[indexPath.row]
         let label = UILabel()
         label.font = scaledCellLabelFont
         label.text = profileCell.rawValue
         
-        let height = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).height
-//        let labelWidth = cell.textLabel?.frame.size.width ?? 0
-//        let labelSize = (cell.textLabel?.text ?? "").boundingRect(with: CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [.font: scaledCellLabelFont], context: nil).size
-
+        let labelHeight = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).height
         let padding: CGFloat = 30
-        return height + padding
+        return labelHeight + padding
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

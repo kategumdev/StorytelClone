@@ -10,15 +10,17 @@ import UIKit
 class StorytellerTableHeaderView: UIView {
     // MARK: - Static property
     static let lighterLabelColor = UIColor.label.withAlphaComponent(0.75)
+    static let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
+    static let roundBackgroundColor = UIColor.systemGray5
 
     // MARK: - Instance properties
-    private let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
+//    private let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
         
     private lazy var roundLabelWithLetters: UILabel = {
         let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 35), maximumPointSize: nil, withScaledFont: false, textColor: StorytellerTableHeaderView.lighterLabelColor, text: "NS")
         label.textAlignment = .center
-        label.backgroundColor = .systemGray5
-        label.layer.cornerRadius = roundWidthAndHeight / 2
+        label.backgroundColor = StorytellerTableHeaderView.roundBackgroundColor
+        label.layer.cornerRadius = StorytellerTableHeaderView.roundWidthAndHeight / 2
         label.clipsToBounds = true
         return label
     }()
@@ -137,14 +139,15 @@ class StorytellerTableHeaderView: UIView {
     private func applyConstraints() {
         roundLabelWithLetters.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            roundLabelWithLetters.widthAnchor.constraint(equalToConstant: roundWidthAndHeight),
-            roundLabelWithLetters.heightAnchor.constraint(equalToConstant: roundWidthAndHeight)
+            roundLabelWithLetters.widthAnchor.constraint(equalToConstant: StorytellerTableHeaderView.roundWidthAndHeight),
+            roundLabelWithLetters.heightAnchor.constraint(equalToConstant: StorytellerTableHeaderView.roundWidthAndHeight)
         ])
         
         stack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+//            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -17),
             stack.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
         

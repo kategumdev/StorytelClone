@@ -122,15 +122,15 @@ struct Utils {
         }
     }
     
-     static func layoutTableHeaderView(_ tableHeader: UIView, inTableView tableView: UITableView) {
-//        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+    static func layoutTableHeaderView(_ tableHeader: UIView, inTableView tableView: UITableView) {
+        //        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
         tableHeader.translatesAutoresizingMaskIntoConstraints = true
         let size = tableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        
+
         if tableHeader.frame.size.height != size.height {
-//            print("header frame adjusted")
+//                        print("header frame adjusted, height \(size.height)")
             tableHeader.frame.size.height = size.height
-//            filterTableHeader.frame.size.width = resultsTable.bounds.width
+            //            filterTableHeader.frame.size.width = resultsTable.bounds.width
             tableView.tableHeaderView = tableHeader
         }
     }
