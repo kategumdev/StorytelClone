@@ -34,22 +34,13 @@ class ProfileViewController: UIViewController {
     private var isInitialOffsetYSet = false
     private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     
-//    private var tableHeader = PersonTableHeaderView()
-    private var contentSizeCategoryChanged = false
-    private var timeExtraLayout = 0
-    
     private let profileTable: UITableView = {
         let table = UITableView()
         table.backgroundColor = Utils.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
-        
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
-        
-//        table.tableHeaderView = PersonTableHeaderView()
-//        table.tableHeaderView = tableHeader
-
         return table
     }()
 
@@ -58,12 +49,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = Utils.customBackgroundColor
         configureNavBar()
-        
         view.addSubview(profileTable)
-//        profileTable.translatesAutoresizingMaskIntoConstraints = false
-//        profileTable.fillSuperview()
-//        profileTable.tableHeaderView = PersonTableHeaderView()
-//        profileTable.tableHeaderView = tableHeader
         profileTable.delegate = self
         profileTable.dataSource = self
     }
@@ -73,20 +59,11 @@ class ProfileViewController: UIViewController {
         print("viewDidLayoutSubviews of ProfileVC")
         profileTable.frame = view.bounds
         
-        
-        profileTable.tableHeaderView = PersonTableHeaderView()
-        guard let tableHeader = profileTable.tableHeaderView else { return }
-        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
-//        if timeExtraLayout != 0 && timeExtraLayout <= 3 {
-//            print("\n LAYOUT")
-//            timeExtraLayout -= 1
-////            profileTable.frame = view.bounds
-//
-//            view.setNeedsLayout()
-//            view.layoutIfNeeded()
-//        }
+        let tableHeader = PersonTableHeaderView()
+        profileTable.tableHeaderView = tableHeader
+//        profileTable.tableHeaderView = PersonTableHeaderView()
 //        guard let tableHeader = profileTable.tableHeaderView else { return }
-//        Utils.layoutTableHeader(tableHeader, inTableView: profileTable)
+        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,9 +76,6 @@ class ProfileViewController: UIViewController {
 
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: ProfileViewController.maximumPointSizeForScaledCellLabelFont)
-//            print("TRAIT")
-//            contentSizeCategoryChanged = true
-//            timeExtraLayout = 3
         }
     }
 
@@ -112,11 +86,7 @@ class ProfileViewController: UIViewController {
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
     }
-    
-//    private func layoutTableHeader() {
-//       
-//    }
-    
+
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
