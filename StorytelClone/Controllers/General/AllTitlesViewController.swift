@@ -46,7 +46,7 @@ class AllTitlesViewController: BaseViewController {
         configureBookTable()
         view.addSubview(popupButton)
     }
-    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        print("viewWillAppear of AllTitlesViewController")
@@ -68,6 +68,14 @@ class AllTitlesViewController: BaseViewController {
         }
         #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow.")
     }
+    
+//    override func viewDidLayoutSubviews() {
+////        super.viewDidLayoutSubviews()
+//        bookTable.frame = view.bounds
+//        print("viewDidLayoutSubviews of AllTitlesVC")
+//        configureTableHeader()
+//    }
+    
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,7 +156,6 @@ class AllTitlesViewController: BaseViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-
         var text = ""
         if let storyteller = titleModel as? Storyteller {
             text = storyteller.name
@@ -162,8 +169,11 @@ class AllTitlesViewController: BaseViewController {
 
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text
-
         extendedLayoutIncludesOpaqueBars = true
+    }
+    
+    override func layoutTableHeader() {
+        configureAndLayoutTableHeader()
     }
 
     // MARK: - Helper methods
@@ -181,16 +191,17 @@ class AllTitlesViewController: BaseViewController {
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
                 
-        if let storyteller = titleModel as? Storyteller {
-            let headerView = StorytellerTableHeaderView()
-            headerView.configureFor(storyteller: storyteller)
-            bookTable.tableHeaderView = headerView
-            return
-        }
-        
-        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
-            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-        }
+//        if let storyteller = titleModel as? Storyteller {
+//            let headerView = StorytellerTableHeaderView()
+//            headerView.configureFor(storyteller: storyteller)
+//            bookTable.tableHeaderView = headerView
+//            return
+//        }
+//
+//        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
+//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+//        }
+//        configureTableHeader()
                 
 //        print("   bookTable cosntraints are set")
 //        bookTable.translatesAutoresizingMaskIntoConstraints = false
@@ -201,6 +212,36 @@ class AllTitlesViewController: BaseViewController {
 //            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
 //        ])
     }
+    
+    private func configureAndLayoutTableHeader() {
+        if let storyteller = titleModel as? Storyteller {
+            let headerView = StorytellerTableHeaderView()
+            headerView.configureFor(storyteller: storyteller)
+            bookTable.tableHeaderView = headerView
+            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+            return
+        }
+
+        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
+            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+        }
+    }
+    
+//    private func configureTableHeader() {
+//        if let storyteller = titleModel as? Storyteller {
+//            let headerView = StorytellerTableHeaderView()
+//            headerView.configureFor(storyteller: storyteller)
+//            bookTable.tableHeaderView = headerView
+//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+//            return
+//        }
+//
+//        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
+//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+//        }
+//    }
 
 }
 

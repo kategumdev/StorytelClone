@@ -17,7 +17,8 @@ class StorytellerTableHeaderView: UIView {
 //    private let roundWidthAndHeight: CGFloat = floor(UIScreen.main.bounds.width / 3)
         
     private lazy var roundLabelWithLetters: UILabel = {
-        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 35), maximumPointSize: nil, withScaledFont: false, textColor: StorytellerTableHeaderView.lighterLabelColor, text: "NS")
+//        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 35), maximumPointSize: nil, withScaledFont: false, textColor: StorytellerTableHeaderView.lighterLabelColor, text: "NS")
+        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 35), maximumPointSize: 60, textColor: StorytellerTableHeaderView.lighterLabelColor)
         label.textAlignment = .center
         label.backgroundColor = StorytellerTableHeaderView.roundBackgroundColor
         label.layer.cornerRadius = StorytellerTableHeaderView.roundWidthAndHeight / 2
@@ -26,14 +27,16 @@ class StorytellerTableHeaderView: UIView {
     }()
     
     private let nameLabel: UILabel = {
-        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "Name Surname")
-        label.sizeToFit()
+//        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "Name Surname")
+        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: 48)
+//        label.sizeToFit()
         return label
     }()
     
     private let titleKindLabel: UILabel = {
-        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label, text: "titleKind")
-        label.sizeToFit()
+//        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: nil, withScaledFont: false, textColor: .label)
+        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
+//        label.sizeToFit()
         return label
     }()
     
@@ -73,7 +76,12 @@ class StorytellerTableHeaderView: UIView {
         config.imagePadding = 8
         
         config.attributedTitle = "100 Followers"
-        config.attributedTitle?.font = Utils.sectionSubtitleFont
+        
+        let font = Utils.sectionSubtitleFont
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 34)
+        config.attributedTitle?.font = scaledFont
+//        config.attributedTitle?.font = Utils.sectionSubtitleFont
+        
         config.attributedTitle?.foregroundColor = lighterLabelColor
 
         button.configuration = config

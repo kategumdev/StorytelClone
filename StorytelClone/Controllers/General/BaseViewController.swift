@@ -66,8 +66,9 @@ class BaseViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         bookTable.frame = view.bounds
-        guard let tableHeader = bookTable.tableHeaderView else { return }
-        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
+        layoutTableHeader()
+//        guard let tableHeader = bookTable.tableHeaderView else { return }
+//        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,6 +111,11 @@ class BaseViewController: UIViewController {
             let alpha = (offsetY + abs(tableViewInitialOffsetY)) / height
             tableHeader.dimView.alpha = alpha
         }
+    }
+    
+    func layoutTableHeader() {
+        guard let tableHeader = bookTable.tableHeaderView else { return }
+        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
     
 }
