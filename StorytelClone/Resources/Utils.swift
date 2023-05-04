@@ -57,6 +57,8 @@ struct Utils {
     
     static let powderGrayBackgroundColor = UIColor(named: "backgroundBookOverview")
     
+    static let unactiveElementColor: UIColor = .secondaryLabel.withAlphaComponent(0.4)
+    
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width

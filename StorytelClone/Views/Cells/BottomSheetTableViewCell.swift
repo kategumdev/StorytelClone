@@ -59,13 +59,15 @@ class BottomSheetTableViewCell: UITableViewCell {
             customImageView.image = UIImage(systemName: newImageName)
             
         case .markAsFinished:
-            let color: UIColor = book.isFinished ? .label : .secondaryLabel.withAlphaComponent(0.4)
+//            let color: UIColor = book.isFinished ? .label : .secondaryLabel.withAlphaComponent(0.4)
+            let color: UIColor = book.isFinished ? .label : Utils.unactiveElementColor
             customTitleLabel.textColor = color
             customImageView.tintColor = color
             text = "Mark as finished"
             
         case .download:
-            let color: UIColor = book.isDownloaded ? .label : .secondaryLabel.withAlphaComponent(0.4)
+//            let color: UIColor = book.isDownloaded ? .label : .secondaryLabel.withAlphaComponent(0.4)
+            let color: UIColor = book.isDownloaded ? .label : Utils.unactiveElementColor
             customTitleLabel.textColor = color
             customImageView.tintColor = color
             text = "Download"
