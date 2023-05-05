@@ -184,9 +184,40 @@ class AllTitlesViewController: BaseViewController {
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
     }
     
+//    private func configureAndLayoutTableHeader() {
+//        if let storyteller = titleModel as? Storyteller {
+////            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller))
+////            bookTable.tableHeaderView = headerView
+//
+//            for constraint in bookTable.tableHeaderView!.constraints {
+//                constraint.priority = UILayoutPriority(750)
+//            }
+//
+//            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller))
+//            bookTable.tableHeaderView = headerView
+//
+//
+//
+//
+//
+////            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+////            Utils.layoutHeader(headerView, inTableView: bookTable)
+//
+//            return
+//        }
+//
+//        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
+//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+//        }
+//    }
+    
     private func configureAndLayoutTableHeader() {
         if let storyteller = titleModel as? Storyteller {
-            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller))
+//            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller))
+            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
+//            headerView.setNeedsLayout()
+//            headerView.layoutIfNeeded()
             bookTable.tableHeaderView = headerView
             Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
             return
@@ -197,21 +228,6 @@ class AllTitlesViewController: BaseViewController {
             Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
         }
     }
-    
-//    private func configureAndLayoutTableHeader() {
-//        if let storyteller = titleModel as? Storyteller {
-//            let headerView = StorytellerTableHeaderView()
-//            headerView.configureFor(storyteller: storyteller)
-//            bookTable.tableHeaderView = headerView
-//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
-//            return
-//        }
-//
-//        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
-//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
-//        }
-//    }
 
 }
 

@@ -134,5 +134,19 @@ struct Utils {
             tableView.tableHeaderView = tableHeader
         }
     }
+    
+//    static func layoutHeader(_ tableHeader: UIView, inTableView tableView: UITableView) {
+//        //        resultsTable.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = true
+//        tableHeader.translatesAutoresizingMaskIntoConstraints = true
+//        let size = tableHeader.systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
+////        let size = tableHeader.sizeThatFits(CGSize(width: tableView.bounds.width, height: CGFloat.greatestFiniteMagnitude))
+//
+//        if tableHeader.frame.size.height != size.height {
+////                        print("header frame adjusted, height \(size.height)")
+//            tableHeader.frame.size.height = size.height
+//            //            filterTableHeader.frame.size.width = resultsTable.bounds.width
+//            tableView.tableHeaderView = tableHeader
+//        }
+//    }
 
 }
