@@ -59,27 +59,51 @@ class PersonTableHeaderView: UIView {
         button.configuration = config
         return button
     }()
-    
-    private lazy var numberOfFollowersButton: UIButton = {
-        let button = UIButton()
-        button.isUserInteractionEnabled = false
-        button.tintColor = lighterLabelColor
-        var config = UIButton.Configuration.plain()
         
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+    private lazy var numberOfFollowersStack: UIStackView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = lighterLabelColor
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
         let image = UIImage(systemName: "person.2.fill", withConfiguration: symbolConfig)
-        config.image = image
-        config.imagePadding = 8
-        
-        config.attributedTitle = "100 Followers"
-        let font = Utils.sectionSubtitleFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 34)
-        config.attributedTitle?.font = scaledFont
-        config.attributedTitle?.foregroundColor = lighterLabelColor
+        imageView.image = image
 
-        button.configuration = config
-        return button
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 7
+//        stack.alignment = .firstBaseline
+        stack.addArrangedSubview(imageView)
+        stack.addArrangedSubview(numberOfFollowersLabel)
+        return stack
     }()
+    
+    private lazy var numberOfFollowersLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 34, textColor: lighterLabelColor)
+    
+//    private lazy var numberOfFollowersLabel: UILabel = {
+//        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 34, textColor: lighterLabelColor)
+//        return label
+//    }()
+    
+//    private lazy var numberOfFollowersButton: UIButton = {
+//        let button = UIButton()
+//        button.isUserInteractionEnabled = false
+//        button.tintColor = lighterLabelColor
+//        var config = UIButton.Configuration.plain()
+//
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+//        let image = UIImage(systemName: "person.2.fill", withConfiguration: symbolConfig)
+//        config.image = image
+//        config.imagePadding = 8
+//
+//        config.attributedTitle = "100 Followers"
+//        let font = Utils.sectionSubtitleFont
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 34)
+//        config.attributedTitle?.font = scaledFont
+//        config.attributedTitle?.foregroundColor = lighterLabelColor
+//
+//        button.configuration = config
+//        return button
+//    }()
     
     private lazy var greetingsLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 19), maximumPointSize: 48, withScaledFont: true, textColor: .label, text: "Hi!")
     
@@ -136,9 +160,6 @@ class PersonTableHeaderView: UIView {
         configureSelf()
         addSubview(stack)
         applyConstraints()
-        storytellerNameLabel.backgroundColor = .systemPink
-        stack.backgroundColor = .green
-        backgroundColor = .blue
     }
 
     required init?(coder: NSCoder) {
@@ -166,7 +187,9 @@ class PersonTableHeaderView: UIView {
     private func configureFor(storyteller: Storyteller, superviewWidth: CGFloat) {
         // Configure stack itself
         stack.spacing = 20
-        [roundLabel, storytellerNameLabel, storytellerKindLabel, followButton, numberOfFollowersButton].forEach { stack.addArrangedSubview($0) }
+//        [roundLabel, storytellerNameLabel, storytellerKindLabel, followButton, numberOfFollowersButton].forEach { stack.addArrangedSubview($0) }
+        [roundLabel, storytellerNameLabel, storytellerKindLabel, followButton, numberOfFollowersStack].forEach { stack.addArrangedSubview($0) }
+
         stack.setCustomSpacing(7, after: storytellerNameLabel)
 
         // Configure stack subviews
@@ -178,9 +201,10 @@ class PersonTableHeaderView: UIView {
         configureRoundLabelWithLettersFrom(name: storyteller.name)
 
         let numberOfFollowers = storyteller.numberOfFollowers.shorted()
-        numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
+//        numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
+        numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
 
-        numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
+//        numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
     }
     
     private func configureForProfile() {
@@ -221,12 +245,12 @@ class PersonTableHeaderView: UIView {
         roundLabel.text = letters.uppercased()
     }
     
-    private func convertNumber(number: Int) {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .scientific
-        let scientificNumber = formatter.string(for: number)!
-        print("\(number) spelled out is \(scientificNumber).")
-    }
+//    private func convertNumber(number: Int) {
+//        let formatter = NumberFormatter()
+//        formatter.numberStyle = .scientific
+//        let scientificNumber = formatter.string(for: number)!
+//        print("\(number) spelled out is \(scientificNumber).")
+//    }
     
     private func applyConstraints() {
         roundLabel.translatesAutoresizingMaskIntoConstraints = false
