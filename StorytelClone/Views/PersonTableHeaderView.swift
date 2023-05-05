@@ -8,12 +8,7 @@
 import UIKit
 
 class PersonTableHeaderView: UIView {
-    
-//    enum HeaderKind: Equatable {
-//        case forStoryteller(storyteller: Storyteller)
-//        case forProfile
-//    }
-    
+
     enum HeaderKind: Equatable {
         case forStoryteller(storyteller: Storyteller, superviewWidth: CGFloat)
         case forProfile
@@ -34,16 +29,11 @@ class PersonTableHeaderView: UIView {
         return label
     }()
 
-//    private lazy var storytellerNameLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: 48, numberOfLines: 2)
-    
     private lazy var storytellerNameLabel: UILabel = {
        let label = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: 48, numberOfLines: 2)
         label.textAlignment = .center
         return label
     }()
-    
-//    private lazy var storytellerNameLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 17), maximumPointSize: 48, numberOfLines: 0)
-
     
     private lazy var storytellerKindLabel = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38)
     
@@ -139,12 +129,6 @@ class PersonTableHeaderView: UIView {
         return stack
     }()
     
-//    private var stackViewWidth
-    
-//    private var previousStackHeight: CGFloat = 0
-    
-    private var isNotConfigured = true
-    
     // MARK: - Initializers
     init(kind: HeaderKind) {
         self.kind = kind
@@ -152,8 +136,6 @@ class PersonTableHeaderView: UIView {
         configureSelf()
         addSubview(stack)
         applyConstraints()
-//        configureSelf()
-        
         storytellerNameLabel.backgroundColor = .systemPink
         stack.backgroundColor = .green
         backgroundColor = .blue
@@ -164,64 +146,6 @@ class PersonTableHeaderView: UIView {
     }
     
     // MARK: - View life cycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
-//        print("stack width = \(stack.bounds.width)")
-//        storytellerNameLabel.preferredMaxLayoutWidth = stack.bounds.width
-//        layoutIfNeeded()
-
-//        guard isNotConfigured else { return }
-//        configureSelf()
-
-//        if isNotConfigured {
-//            print("isNotConfigured")
-//            configureSelf()
-////            setNeedsLayout()
-////            layoutIfNeeded()
-////            isNotConfigured = false
-//        }
-        
-//        if storytellerNameLabel.preferredMaxLayoutWidth != stack.bounds.width {
-//            let label = storytellerNameLabel
-//            label.preferredMaxLayoutWidth = stack.bounds.width
-//            storytellerNameLabel = label
-////            storytellerNameLabel.preferredMaxLayoutWidth = stack.bounds.width
-//            setNeedsLayout()
-//            layoutIfNeeded()
-//        }
-//         print("storytellerNameLabel.bounds.height \(storytellerNameLabel.bounds.height)")
-//        storytellerNameLabel.preferredMaxLayoutWidth = stack.frame.size.width
-//        storytellerNameLabel.sizeToFit()
-//        print("storytellerNameLabel.bounds.height \(storytellerNameLabel.bounds.height)")
-
-//        if storytellerNameLabel.bounds.height == 0 {
-//            setNeedsLayout()
-//            layoutIfNeeded()
-//        }
-//        if previousStackHeight != stack.bounds.height {
-//            setNeedsLayout()
-//            layoutIfNeeded()
-////            previousStackHeight = stack.bounds.height
-//        }
-//        previousStackHeight = stack.bounds.height
-        
-//        print("storytellerNameLabel height BEFORE: \(storytellerNameLabel.bounds.height)")
-//        let height = storytellerNameLabel.sizeThatFits(CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)).height
-//        storytellerNameLabel.frame.size.height = height
-//        print("storytellerNameLabel height AFTER: \(storytellerNameLabel.bounds.height)")
-//
-//        if storytellerNameLabel.frame.size.height != height {
-//            storytellerNameLabel.frame.size.height = height
-//            stack.setNeedsLayout()
-//            stack.layoutIfNeeded()
-//        }
-
-//        if storytellerNameLabel.frame.size.height != size.height {
-//            storytellerNameLabel.frame.size.height = size.height
-//        }
-//        storytellerNameLabel.sizeToFit()
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -229,18 +153,12 @@ class PersonTableHeaderView: UIView {
                 logInButton.layer.borderColor = UIColor.label.cgColor
             }
         }
-        
-//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-//            stack.setNeedsLayout()
-//            stack.layoutIfNeeded()
-//        }
     }
     
     // MARK: - Helper methods
     private func configureSelf() {
         switch kind {
         case .forStoryteller(let storyteller, let superviewWidth): configureFor(storyteller: storyteller, superviewWidth: superviewWidth)
-//        case .forStoryteller(let storyteller): configureFor(storyteller: storyteller)
         case .forProfile: configureForProfile()
         }
     }
@@ -264,32 +182,6 @@ class PersonTableHeaderView: UIView {
 
         numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
     }
-    
-//    private func configureFor(storyteller: Storyteller) {
-//        // Configure stack itself
-//        stack.spacing = 20
-//        [roundLabel, storytellerNameLabel, storytellerKindLabel, followButton, numberOfFollowersButton].forEach { stack.addArrangedSubview($0) }
-//        stack.setCustomSpacing(7, after: storytellerNameLabel)
-//
-//        // Configure stack subviews
-//        storytellerKindLabel.text = storyteller.titleKind.rawValue
-//
-//        storytellerNameLabel.text = storyteller.name
-////        let stackWidth = stack.bounds.width
-////        storytellerNameLabel.preferredMaxLayoutWidth = stackWidth
-//        storytellerNameLabel.preferredMaxLayoutWidth = stack.bounds.width
-////        storytellerNameLabel.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 20
-//        storytellerNameLabel.textAlignment = .center
-////        storytellerNameLabel.translatesAutoresizingMaskIntoConstraints = false
-////        storytellerNameLabel.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-////        storytellerNameLabel.sizeToFit()
-//        configureRoundLabelWithLettersFrom(name: storyteller.name)
-//
-//        let numberOfFollowers = storyteller.numberOfFollowers.shorted()
-//        numberOfFollowersButton.configuration?.attributedTitle = AttributedString("\(numberOfFollowers) Followers")
-//
-//        numberOfFollowersButton.configuration?.attributedTitle?.font = Utils.sectionSubtitleFont
-//    }
     
     private func configureForProfile() {
         // Configure stack itself
@@ -344,24 +236,14 @@ class PersonTableHeaderView: UIView {
         ])
         
         stack.translatesAutoresizingMaskIntoConstraints = false
-//        let leadingTrailingConstant: CGFloat = 10
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -17),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackHorzPadding / 2),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackHorzPadding / 2),
+            stack.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackHorzPadding / 2),
+//            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackHorzPadding / 2),
             stack.widthAnchor.constraint(equalTo: widthAnchor, constant: -stackHorzPadding)
         ])
-        
-//        stack.translatesAutoresizingMaskIntoConstraints = false
-//        let leadingTrailingConstant: CGFloat = 10
-//        NSLayoutConstraint.activate([
-//            stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-//            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -17),
-//            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingTrailingConstant),
-//            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -leadingTrailingConstant),
-//            stack.widthAnchor.constraint(equalTo: widthAnchor, constant: -leadingTrailingConstant * 2)
-//        ])
         
         translatesAutoresizingMaskIntoConstraints = false
         // Avoid constraint's conflict when header is added to table view

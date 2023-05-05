@@ -63,19 +63,7 @@ class ProfileViewController: UIViewController {
         profileTable.tableHeaderView = tableHeader
         Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        print("viewDidLayoutSubviews of ProfileVC")
-//        profileTable.frame = view.bounds
-//
-//        let tableHeader = PersonTableHeaderView()
-//        profileTable.tableHeaderView = tableHeader
-////        profileTable.tableHeaderView = PersonTableHeaderView()
-////        guard let tableHeader = profileTable.tableHeaderView else { return }
-//        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
-//    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.adjustAppearanceTo(currentOffsetY: profileTable.contentOffset.y, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
