@@ -56,7 +56,6 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("viewDidLayoutSubviews of ProfileVC")
         profileTable.frame = view.bounds
         
         let tableHeader = PersonTableHeaderView(kind: .forProfile)
@@ -83,11 +82,20 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
+        
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize - 2, weight: .semibold, scale: .large)
+        let image = UIImage(systemName: "gearshape", withConfiguration: symbolConfig)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(handleGearButtonTapped))
+    }
+    
+    @objc func handleGearButtonTapped() {
+        let controller = SettingsViewController()
+        navigationController?.pushViewController(controller, animated: true)
     }
 
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate, UITableViewDataSource
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return profileCells.count
