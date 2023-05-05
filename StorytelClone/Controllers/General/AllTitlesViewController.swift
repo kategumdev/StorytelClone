@@ -69,14 +69,6 @@ class AllTitlesViewController: BaseViewController {
         #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow.")
     }
     
-//    override func viewDidLayoutSubviews() {
-////        super.viewDidLayoutSubviews()
-//        bookTable.frame = view.bounds
-//        print("viewDidLayoutSubviews of AllTitlesVC")
-//        configureTableHeader()
-//    }
-    
-    
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return tableSection.books.count
@@ -190,33 +182,11 @@ class AllTitlesViewController: BaseViewController {
 
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
-                
-//        if let storyteller = titleModel as? Storyteller {
-//            let headerView = StorytellerTableHeaderView()
-//            headerView.configureFor(storyteller: storyteller)
-//            bookTable.tableHeaderView = headerView
-//            return
-//        }
-//
-//        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
-//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-//        }
-//        configureTableHeader()
-                
-//        print("   bookTable cosntraints are set")
-//        bookTable.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            bookTable.topAnchor.constraint(equalTo: view.topAnchor),
-//            bookTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            bookTable.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-//            bookTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
-//        ])
     }
     
     private func configureAndLayoutTableHeader() {
         if let storyteller = titleModel as? Storyteller {
-            let headerView = StorytellerTableHeaderView()
-            headerView.configureFor(storyteller: storyteller)
+            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller))
             bookTable.tableHeaderView = headerView
             Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
             return
@@ -228,7 +198,7 @@ class AllTitlesViewController: BaseViewController {
         }
     }
     
-//    private func configureTableHeader() {
+//    private func configureAndLayoutTableHeader() {
 //        if let storyteller = titleModel as? Storyteller {
 //            let headerView = StorytellerTableHeaderView()
 //            headerView.configureFor(storyteller: storyteller)
