@@ -22,6 +22,8 @@ class BookCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var dimmedAnimationButtonWidthAnchor = dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,10 +53,9 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureFor(book: Book, resizedImage: UIImage, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
         dimmedAnimationButton.kind = .toPushBookVcWith(book)
         dimmedAnimationButton.didTapCallback = callback
-        dimmedAnimationButton.configuration?.background.image = book.coverImage
 
         let bookKind = book.titleKind
         if bookKind == .audiobook {
@@ -73,6 +74,10 @@ class BookCollectionViewCell: UICollectionViewCell {
             badgeTwo.badgeImageView.image = UIImage(named: "glasses")
         }
         
+        if dimmedAnimationButton.bounds.width != resizedImage.size.width {
+            dimmedAnimationButtonWidthAnchor.constant = resizedImage.size.width
+        }
+        dimmedAnimationButton.configuration?.background.image = resizedImage
     }
     
     // MARK: - Helper methods
@@ -81,9 +86,10 @@ class BookCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
+//            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
             dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
+        dimmedAnimationButtonWidthAnchor.isActive = true
         
         badgeOne.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

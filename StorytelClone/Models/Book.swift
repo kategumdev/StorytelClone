@@ -91,7 +91,8 @@ struct Book: Title, Equatable {
         }
     }
     
-    static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
+//    static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
+    static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
     
     static let booksWithLargeCovers = [book11, book12, book13, book14, book15, book16, book17, book18, book19]
     

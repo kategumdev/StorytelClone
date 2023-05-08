@@ -12,7 +12,9 @@ class TableViewCellWithCollection: UITableViewCell {
     static let identifier = "TableViewCellWithCollection"
     
     // Actual value injected when cell is being configured in cellForRowAt
-    var books: [Book] = [Book]() // It will contain only 10 random books
+    var books: [Book] = [Book]() // It will contain only 10 books
+    private var resizedImages = [UIImage]()
+    private var itemSizes = [CGSize]()
     
     var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
@@ -53,6 +55,17 @@ class TableViewCellWithCollection: UITableViewCell {
     func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
         self.dimmedAnimationButtonDidTapCallback = callback
+        
+        // Resize images for use in cv cells and in sizeForItemAt method of cv
+        for book in books {
+            let height = Utils.calculatedSquareCoverSize.height
+            if let image = book.coverImage {
+                let resizedImage = image.resizeFor(targetHeight: height)
+                resizedImages.append(resizedImage)
+                let itemSize = CGSize(width: resizedImage.size.width, height: height)
+                itemSizes.append(itemSize)
+            }
+        }
         collectionView.reloadData()
     }
     
@@ -67,8 +80,9 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
 
-        guard let book = books.randomElement() else { return UICollectionViewCell()}
-        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
+        let book = books[indexPath.row]
+        let resizedImage = resizedImages[indexPath.row]
+        cell.configureFor(book: book, resizedImage: resizedImage, withCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
@@ -77,7 +91,9 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
 //MARK: - UICollectionViewDelegateFlowLayout
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return Utils.calculatedCvItemSizeSquareCovers
+        return itemSizes[indexPath.row]
+//        return CGSize(width: resizedImages[indexPath.row].size.width, height: Utils.calculatedCvItemSizeSquareCovers.height)
+//        return Utils.calculatedCvItemSizeSquareCovers
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
