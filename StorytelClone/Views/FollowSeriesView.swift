@@ -83,6 +83,7 @@ class FollowSeriesView: UIView {
     
     // MARK: - Helper methods
     private func addButtonAction() {
+        print("addButtonAction")
         followButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.seriesIsFollowed = !self.seriesIsFollowed
@@ -90,7 +91,6 @@ class FollowSeriesView: UIView {
             // Also new isFollowed value of series model object must be saved here and series added to things user follows
         }), for: .touchUpInside)
     }
-    
     
     private func toggleButton() {
         toggleFollowLabelText()

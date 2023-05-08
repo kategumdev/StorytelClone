@@ -15,6 +15,7 @@ class AllTitlesViewController: BaseViewController {
     let titleModel: Title?
     private var currentSelectedBook: Book?
     private let popupButton = PopupButton()
+    private var isHeaderConfigured = false
             
 //    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
 //    private var books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
@@ -184,6 +185,7 @@ class AllTitlesViewController: BaseViewController {
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
     }
     
+    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout). Checking isHeaderConfigured ensures that TableHeaderView is configured only once
     private func configureAndLayoutTableHeader() {
         if let storyteller = titleModel as? Storyteller {
             let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
@@ -191,11 +193,13 @@ class AllTitlesViewController: BaseViewController {
             Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
             return
         }
-
-        if let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection {
+        
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection else { return }
+        if !isHeaderConfigured {
             headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+            isHeaderConfigured = true
         }
+        Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
     }
 
 }

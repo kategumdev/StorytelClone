@@ -86,7 +86,6 @@ class BookCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width),
             dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
         ])
         dimmedAnimationButtonWidthAnchor.isActive = true
