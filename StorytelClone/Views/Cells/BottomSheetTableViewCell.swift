@@ -8,106 +8,78 @@
 import UIKit
 
 class BottomSheetTableViewCell: UITableViewCell {
-    
-    static let identifier = "BottomSheetTableViewCell"
-    
-    // MARK: - Instance properties
-    
-    let customTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.preferredCustomFontWith(weight: .regular, size: 17)
-        return label
-    }()
 
-    let customImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.label.withAlphaComponent(0.8)
-        imageView.image = UIImage(systemName: "person.circle.fill")
-        return imageView
-    }()
+    static let identifier = "BottomSheetTableViewCell"
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectedBackgroundView = UIView() // avoid gray color when cell is selected
         backgroundColor = .clear
-        contentView.addSubview(customImageView)
-        contentView.addSubview(customTitleLabel)
-        applyConstraints()
+        tintColor = Utils.tintColor
+        contentView.preservesSuperviewLayoutMargins = false
+        
+        var content = self.defaultContentConfiguration()
+        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 17)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        content.textProperties.font = scaledFont
+        content.textProperties.color = .label
+        content.imageProperties.maximumSize = CGSize(width: 22, height: 22)
+        content.imageProperties.tintColor = .label
+//        content.axesPreservingSuperviewLayoutMargins = UIAxis.vertical
+        content.axesPreservingSuperviewLayoutMargins = []
+        content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: Constants.commonHorzPadding - 1, bottom: 0, trailing: Constants.commonHorzPadding)
+        self.contentConfiguration = content
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Instance methods
     func configureWith(storyteller: Storyteller) {
-        customTitleLabel.text = storyteller.name
+        guard var content = self.contentConfiguration as? UIListContentConfiguration else { return }
+        content.image = UIImage(systemName: "person.circle.fill")
+        content.imageProperties.tintColor = UIColor.label.withAlphaComponent(0.8)
+        content.text = storyteller.name
+        self.contentConfiguration = content
     }
-    
-    func configureFor(book: Book, ellipsisButtonCell: BookDetailsBottomSheetCell) {
-        let imageName = ellipsisButtonCell.rawValue
-        customImageView.image = UIImage(systemName: imageName)
-        
+
+    func configureFor(book: Book, bookDetailsBottomSheetCell: BookDetailsBottomSheetCell) {
+        guard var content = self.contentConfiguration as? UIListContentConfiguration else { return }
+        let bookDetailsCell = bookDetailsBottomSheetCell
+        content.image = bookDetailsCell.image
+                    
         var text = ""
-        switch ellipsisButtonCell {
+        switch bookDetailsCell {
         case .saveBook:
             text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
-            customImageView.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
             let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
-            customImageView.image = UIImage(systemName: newImageName)
+            content.image = UIImage(systemName: newImageName)
+            let color = book.isAddedToBookshelf ? Utils.tintColor : .label
+            content.imageProperties.tintColor = color
             
         case .markAsFinished:
-//            let color: UIColor = book.isFinished ? .label : .secondaryLabel.withAlphaComponent(0.4)
             let color: UIColor = book.isFinished ? .label : Utils.unactiveElementColor
-            customTitleLabel.textColor = color
-            customImageView.tintColor = color
+            content.textProperties.color = color
+            content.imageProperties.tintColor = color
             text = "Mark as finished"
             
         case .download:
-//            let color: UIColor = book.isDownloaded ? .label : .secondaryLabel.withAlphaComponent(0.4)
             let color: UIColor = book.isDownloaded ? .label : Utils.unactiveElementColor
-            customTitleLabel.textColor = color
-            customImageView.tintColor = color
+            content.textProperties.color = color
+            content.imageProperties.tintColor = color
             text = "Download"
             
-        case .viewSeries:
-            text = "View series"
-            
-        case .viewAuthors:
-            text = book.authors.count == 1 ? "View author" : "View authors"
-            
-        case .viewNarrators:
-            text = book.narrators.count == 1 ? "View narrator" : "View narrators"
-
-        case .showMoreTitlesLikeThis:
-            text = "Show more titles like this"
-            
-        case .share:
-            text = "Share"
+        case .viewSeries: text = "View series"
+        case .viewAuthors: text = book.authors.count == 1 ? "View author" : "View authors"
+        case .viewNarrators: text = book.narrators.count == 1 ? "View narrator" : "View narrators"
+        case .showMoreTitlesLikeThis: text = "Show more titles like this"
+        case .share: text = "Share"
         }
         
-        customTitleLabel.text = text
+        content.text = text
+        self.contentConfiguration = content
     }
-    
-    // MARK: - Helper methods
-    private func applyConstraints() {
-        let constant: CGFloat = 22
-        
-        customImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            customImageView.heightAnchor.constraint(equalToConstant: constant),
-            customImageView.widthAnchor.constraint(equalToConstant: constant),
-            customImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            customImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding)
-        ])
-        
-        customTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            customTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            customTitleLabel.leadingAnchor.constraint(equalTo: customImageView.trailingAnchor, constant: Constants.commonHorzPadding - 4),
-            customTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.commonHorzPadding)
-        ])
-    }
+
 }

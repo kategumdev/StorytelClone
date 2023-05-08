@@ -7,15 +7,29 @@
 
 import UIKit
 
-enum BookDetailsBottomSheetCell: String, CaseIterable {
-    case saveBook = "heart"
-    case markAsFinished = "checkmark"
-    case download = "arrow.down.circle"
-    case viewSeries = "rectangle.stack"
-    case viewAuthors = "pencil"
-    case viewNarrators = "mic"
-    case showMoreTitlesLikeThis = "square.grid.3x2"
-    case share = "paperplane"
+enum BookDetailsBottomSheetCell: CaseIterable {
+    case saveBook
+    case markAsFinished
+    case download
+    case viewSeries
+    case viewAuthors
+    case viewNarrators
+    case showMoreTitlesLikeThis
+    case share
+    
+    var image: UIImage? {
+        switch self {
+        case .saveBook: return UIImage(systemName: "heart")
+        case .markAsFinished: return UIImage(systemName: "checkmark")
+        case .download: return UIImage(systemName: "arrow.down.circle")
+        case .viewSeries: return UIImage(systemName: "rectangle.stack")
+        case .viewAuthors: return UIImage(systemName: "pencil")
+        case .viewNarrators: return UIImage(systemName: "mic")
+        case .showMoreTitlesLikeThis: return UIImage(systemName: "square.grid.3x2")
+        case .share: return UIImage(systemName: "paperplane")
+        }
+    }
+    
 }
 
 enum BottomSheetKind: Equatable {
@@ -79,12 +93,9 @@ class BottomSheetViewController: UIViewController {
         tableView.clipsToBounds = true
         tableView.separatorColor = .clear
         tableView.layer.cornerRadius = 10
-        
         tableView.register(BottomSheetTableViewCell.self, forCellReuseIdentifier: BottomSheetTableViewCell.identifier)
-        
         tableView.estimatedRowHeight = tableRowHeight
         tableView.rowHeight = tableRowHeight
-        
         tableView.tableHeaderView = tableHeaderView
         
         // These two lines avoid constraints' conflict of header when vc's view just loaded
@@ -188,11 +199,11 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         
         switch kind {
         case .bookDetails:
-            cell.configureFor(book: book, ellipsisButtonCell: bookDetailsBottomSheetCells[indexPath.row])
+            cell.configureFor(book: book, bookDetailsBottomSheetCell: bookDetailsBottomSheetCells[indexPath.row])
         case let .storytellers(storytellers: storytellers):
             cell.configureWith(storyteller: storytellers[indexPath.row])
-
         }
+        
         return cell
     }
     
@@ -200,7 +211,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         switch kind {
         case .bookDetails:
             let ellipsisButtonCell = bookDetailsBottomSheetCells[indexPath.row]
-            handleSelection(ellipsisButtonCell: ellipsisButtonCell, withIndexPath: indexPath)
+            handleSelection(bookDetailsBottomSheetCell: ellipsisButtonCell, withIndexPath: indexPath)
         case let .storytellers(storytellers: storytellers):
             let selectedStoryteller = storytellers[indexPath.row]
             self.dismiss(animated: false) { [weak self] in
@@ -227,8 +238,8 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
 // MARK: - Helper methods
 extension BottomSheetViewController {
     
-    private func handleSelection(ellipsisButtonCell: BookDetailsBottomSheetCell, withIndexPath indexPath: IndexPath) {
-        switch ellipsisButtonCell {
+    private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCell, withIndexPath indexPath: IndexPath) {
+        switch bookDetailsBottomSheetCell {
         case .saveBook:
             if book.isAddedToBookshelf {
                 handleRemovingBookWith(indexPath: indexPath)
