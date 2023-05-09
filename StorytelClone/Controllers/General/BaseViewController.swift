@@ -32,7 +32,6 @@ class BaseViewController: UIViewController {
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         table.sectionFooterHeight = 0 // Avoid gaps between sections and custom section headers
-        
         table.sectionHeaderTopPadding = 0 // Avoid gap above custom section header
 
         // Avoid gap at the very bottom of the table view

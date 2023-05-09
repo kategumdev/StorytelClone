@@ -8,7 +8,6 @@
 import UIKit
 
 class BookContainerScrollView: UIScrollView {
-    
     // MARK: - Instance properties
     private let book: Book
     private let superviewWidth: CGFloat
@@ -27,8 +26,8 @@ class BookContainerScrollView: UIScrollView {
     }()
 
 //    private let seeMoreOverviewButton = SeeMoreButton(buttonKind: .seeMoreOverview)
-    private lazy var seeMoreOverviewButton: SeeMoreButton = {
-        let button = SeeMoreButton(buttonKind: .seeMoreOverview)
+    private lazy var seeOverviewButton: SeeMoreButton = {
+        let button = SeeMoreButton(buttonKind: .forOverview)
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.handleSeeMoreOverviewButtonTapped()
@@ -36,8 +35,8 @@ class BookContainerScrollView: UIScrollView {
         return button
     }()
     
-    private lazy var seeMoreOverviewButtonTopAnchorFullSizeAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeMoreOverviewButton.seeMoreOverviewButtonHeight / 2)
-    private lazy var seeMoreOverviewButtonTopAnchorCompressedAppearance = seeMoreOverviewButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.visiblePartInSeeMoreAppearance)
+    private lazy var seeOverviewButtonAnchorForFullSizeOverview = seeOverviewButton.topAnchor.constraint(equalTo: overviewStackView.bottomAnchor, constant: -seeOverviewButton.heightConstant / 2)
+    private lazy var seeOverviewButtonAnchorToCompressOverview = seeOverviewButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.defaultVisiblePartWhenCompressed)
     
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
@@ -46,8 +45,8 @@ class BookContainerScrollView: UIScrollView {
     private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
     #warning("Maybe redo somehow without passing superviewWidth")
 //    private lazy var showAllTagsButton = SeeMoreButton(buttonKind: .seeMoreTags)
-    private lazy var showAllTagsButton: SeeMoreButton = {
-        let button = SeeMoreButton(buttonKind: .seeMoreTags)
+    private lazy var seeTagsButton: SeeMoreButton = {
+        let button = SeeMoreButton(buttonKind: .forTags)
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.handleShowAllTagsButtonTapped()
@@ -55,8 +54,8 @@ class BookContainerScrollView: UIScrollView {
         return button
     }()
     
-    private lazy var showAllTagsButtonTopAnchorCompressedAppearance = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.compressedViewHeight)
-    private lazy var showAllTagsButtonTopAnchorFullSizeAppearance = showAllTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
+    private lazy var seeTagsButtonAnchorToCompressTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.compressedViewHeight)
+    private lazy var seeTagsButtonAnchorForFullSizeTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
     
     lazy var maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
     
@@ -69,7 +68,6 @@ class BookContainerScrollView: UIScrollView {
         table.isScrollEnabled = false
         table.rowHeight = Utils.heightForRowWithHorizontalCv
         table.sectionHeaderHeight = UITableView.automaticDimension
-        
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         return table
@@ -106,21 +104,22 @@ class BookContainerScrollView: UIScrollView {
     // MARK: - Instance methods
     func hideSeeMoreOverviewButtonAsNeeded() {
         let overviewStackViewHeight = overviewStackView.bounds.height
-        if  overviewStackViewHeight < overviewStackView.visiblePartInSeeMoreAppearance {
-            seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = false
-            seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = true
-            seeMoreOverviewButtonTopAnchorFullSizeAppearance.constant -= seeMoreOverviewButton.bounds.height / 4
-            seeMoreOverviewButton.isHidden = true
+        if  overviewStackViewHeight < overviewStackView.defaultVisiblePartWhenCompressed {
+            seeOverviewButtonAnchorToCompressOverview.isActive = false
+            seeOverviewButtonAnchorForFullSizeOverview.isActive = true
+            seeOverviewButtonAnchorForFullSizeOverview.constant -= seeOverviewButton.bounds.height / 4
+            seeOverviewButton.isHidden = true
         }
     }
     
     func showSeeMoreOverviewButtonAsNeeded() {
         let overviewStackViewHeight = overviewStackView.bounds.height
-        if overviewStackViewHeight >= overviewStackView.visiblePartInSeeMoreAppearance && seeMoreOverviewButton.isHidden {
-            seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = true
-            seeMoreOverviewButtonTopAnchorFullSizeAppearance.constant = -seeMoreOverviewButton.seeMoreOverviewButtonHeight / 2
-            seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = false
-            seeMoreOverviewButton.isHidden = false
+        if overviewStackViewHeight >= overviewStackView.defaultVisiblePartWhenCompressed && seeOverviewButton.isHidden {
+            seeOverviewButtonAnchorToCompressOverview.isActive = true
+//            seeOverviewButtonAnchorForFullSizeOverview.constant = -seeOverviewButton.seeOverviewButtonHeight / 2
+            seeOverviewButtonAnchorForFullSizeOverview.constant = -seeOverviewButton.heightConstant / 2
+            seeOverviewButtonAnchorForFullSizeOverview.isActive = false
+            seeOverviewButton.isHidden = false
         }
     }
     
@@ -130,7 +129,7 @@ class BookContainerScrollView: UIScrollView {
         addSubview(bookDetailsStackView)
         addSubview(bookDetailsScrollView)
         addSubview(overviewStackView)
-        addSubview(seeMoreOverviewButton)
+        addSubview(seeOverviewButton)
         
         if hasAudio {
             addSubview(playSampleButtonContainer)
@@ -139,7 +138,7 @@ class BookContainerScrollView: UIScrollView {
         if hasTags {
             addSubview(tagsView)
             if tagsView.needsShowAllButton {
-                addSubview(showAllTagsButton)
+                addSubview(seeTagsButton)
             }
         }
         
@@ -147,40 +146,40 @@ class BookContainerScrollView: UIScrollView {
     }
     
     @objc func handleOverviewTapGesture() {
-        guard !seeMoreOverviewButton.isHidden else { return }
+        guard !seeOverviewButton.isHidden else { return }
         handleSeeMoreOverviewButtonTapped()
     }
 
     private func handleSeeMoreOverviewButtonTapped() {
-        if seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive {
-            seeMoreOverviewButton.rotateImage()
-            seeMoreOverviewButton.gradientLayer.isHidden = true
-            seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = false
-            seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = true
-            seeMoreOverviewButton.setButtonTextTo(text: "See less")
+        if seeOverviewButtonAnchorToCompressOverview.isActive {
+            seeOverviewButton.rotateImage()
+            seeOverviewButton.gradientLayer.isHidden = true
+            seeOverviewButtonAnchorToCompressOverview.isActive = false
+            seeOverviewButtonAnchorForFullSizeOverview.isActive = true
+            seeOverviewButton.setButtonTextTo(text: "See less")
         } else {
-            seeMoreOverviewButton.gradientLayer.isHidden = false
+            seeOverviewButton.gradientLayer.isHidden = false
             // Avoid blinking of overviewStackView's text beneath seeMorebutton ensuring that gradientLayer of seeMoreButton is fully drawn before other adjustements are done
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
-                self?.seeMoreOverviewButton.rotateImage()
-                self?.seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = true
-                self?.seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = false
-                self?.seeMoreOverviewButton.setButtonTextTo(text: "See more")
+                self?.seeOverviewButton.rotateImage()
+                self?.seeOverviewButtonAnchorToCompressOverview.isActive = true
+                self?.seeOverviewButtonAnchorForFullSizeOverview.isActive = false
+                self?.seeOverviewButton.setButtonTextTo(text: "See more")
             }
         }
     }
   
     private func handleShowAllTagsButtonTapped() {
-        if showAllTagsButtonTopAnchorCompressedAppearance.isActive {
-            showAllTagsButton.rotateImage()
-            showAllTagsButtonTopAnchorCompressedAppearance.isActive = false
-            showAllTagsButtonTopAnchorFullSizeAppearance.isActive = true
-            showAllTagsButton.setButtonTextTo(text: "See less")
+        if seeTagsButtonAnchorToCompressTagsView.isActive {
+            seeTagsButton.rotateImage()
+            seeTagsButtonAnchorToCompressTagsView.isActive = false
+            seeTagsButtonAnchorForFullSizeTagsView.isActive = true
+            seeTagsButton.setButtonTextTo(text: "See less")
         } else {
-            showAllTagsButton.rotateImage()
-            showAllTagsButtonTopAnchorCompressedAppearance.isActive = true
-            showAllTagsButtonTopAnchorFullSizeAppearance.isActive = false
-            showAllTagsButton.setButtonTextTo(text: "Show all tags")
+            seeTagsButton.rotateImage()
+            seeTagsButtonAnchorToCompressTagsView.isActive = true
+            seeTagsButtonAnchorForFullSizeTagsView.isActive = false
+            seeTagsButton.setButtonTextTo(text: "Show all tags")
         }
     }
     
@@ -224,20 +223,21 @@ class BookContainerScrollView: UIScrollView {
             overviewStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
         ])
         
-        seeMoreOverviewButton.translatesAutoresizingMaskIntoConstraints = false
+        seeOverviewButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            seeMoreOverviewButton.heightAnchor.constraint(equalToConstant: seeMoreOverviewButton.seeMoreOverviewButtonHeight),
-            seeMoreOverviewButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor),
-            seeMoreOverviewButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
+//            seeOverviewButton.heightAnchor.constraint(equalToConstant: seeOverviewButton.seeOverviewButtonHeight),
+            seeOverviewButton.heightAnchor.constraint(equalToConstant: seeOverviewButton.heightConstant),
+            seeOverviewButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor),
+            seeOverviewButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
         ])
-        seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = true
+        seeOverviewButtonAnchorToCompressOverview.isActive = true
         
         // Configure playSampleButtonContainer constraints
         if hasAudio {
             playSampleButtonContainer.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 playSampleButtonContainer.widthAnchor.constraint(equalTo: contentG.widthAnchor),
-                playSampleButtonContainer.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor),
+                playSampleButtonContainer.topAnchor.constraint(equalTo: seeOverviewButton.bottomAnchor),
                 playSampleButtonContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             ])
             
@@ -258,17 +258,17 @@ class BookContainerScrollView: UIScrollView {
             if hasAudio {
                 tagsView.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
             } else {
-                tagsView.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor).isActive = true
+                tagsView.topAnchor.constraint(equalTo: seeOverviewButton.bottomAnchor).isActive = true
             }
             
             if tagsView.needsShowAllButton {
-                showAllTagsButton.translatesAutoresizingMaskIntoConstraints = false
-                showAllTagsButton.heightAnchor.constraint(equalToConstant: showAllTagsButton.showAllTagsButtonHeight).isActive = true
+                seeTagsButton.translatesAutoresizingMaskIntoConstraints = false
+//                seeTagsButton.heightAnchor.constraint(equalToConstant: seeTagsButton.showAllTagsButtonHeight).isActive = true
+                seeTagsButton.heightAnchor.constraint(equalToConstant: seeTagsButton.heightConstant).isActive = true
+                seeTagsButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor).isActive = true
+                seeTagsButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor).isActive = true
 
-                showAllTagsButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor).isActive = true
-                showAllTagsButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor).isActive = true
-
-                showAllTagsButtonTopAnchorCompressedAppearance.isActive = true
+                seeTagsButtonAnchorToCompressTagsView.isActive = true
             }
         }
                         
@@ -276,14 +276,14 @@ class BookContainerScrollView: UIScrollView {
         bookTable.translatesAutoresizingMaskIntoConstraints = false
         if !book.tags.isEmpty {
             if tagsView.needsShowAllButton {
-                bookTable.topAnchor.constraint(equalTo: showAllTagsButton.bottomAnchor).isActive = true
+                bookTable.topAnchor.constraint(equalTo: seeTagsButton.bottomAnchor).isActive = true
             } else {
                 bookTable.topAnchor.constraint(equalTo: tagsView.bottomAnchor).isActive = true
             }
         } else if hasAudio {
             bookTable.topAnchor.constraint(equalTo: playSampleButtonContainer.bottomAnchor).isActive = true
         } else {
-            bookTable.topAnchor.constraint(equalTo: seeMoreOverviewButton.bottomAnchor).isActive = true
+            bookTable.topAnchor.constraint(equalTo: seeOverviewButton.bottomAnchor).isActive = true
         }
         bookTable.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         bookTable.widthAnchor.constraint(equalTo: widthAnchor).isActive = true

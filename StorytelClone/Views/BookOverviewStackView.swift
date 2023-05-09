@@ -46,7 +46,8 @@ class BookOverviewStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
     
-    let visiblePartInSeeMoreAppearance: CGFloat = 120
+//    let visiblePartInSeeMoreAppearance: CGFloat = 120
+    let defaultVisiblePartWhenCompressed: CGFloat = 120
 //    let defaultVisiblePartInSeeMoreAppearance: CGFloat = 120
 //    lazy var visiblePartInSeeMoreAppearance: CGFloat = defaultVisiblePartInSeeMoreAppearance
 

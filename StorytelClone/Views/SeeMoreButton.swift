@@ -10,26 +10,55 @@ import UIKit
 class SeeMoreButton: UIButton {
     
     enum ButtonKind {
-        case seeMoreOverview
-        case seeMoreTags
+        case forOverview
+        case forTags
     }
     
     // MARK: - Instance properties
-    let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-    let fontMaximumPointSize: CGFloat = 40
-    let seeMoreOverviewButtonHeight: CGFloat = 110
+    private let buttonKind: ButtonKind
     
-    lazy var showAllTagsButtonHeight: CGFloat = {
-        let topInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
-        let height = intrinsicButtonHeight + topInset
-        return height
-    }()
+//    private let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//    let fontMaximumPointSize: CGFloat = 40
+    
+    private let seeOverviewButtonHeight: CGFloat = 110
+    
+//    lazy var heightConstant: CGFloat = {
+//        switch buttonKind {
+//        case .forOverview: return seeOverviewButtonHeight
+//        case .forTags:
+//            let topInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+//            let height = intrinsicButtonHeight + topInset
+//            return height
+//        }
+//    }()
+    
+//    lazy var heightConstant: CGFloat = {
+//        switch buttonKind {
+//        case .forOverview: return seeOverviewButtonHeight
+//        case .forTags:
+//            let intrinsicButtonHeight = self.getIntrinsicButtonHeight()
+//            let topInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+//            let height = intrinsicButtonHeight + topInset
+//            return height
+//        }
+//    }()
+    
+    lazy var heightConstant: CGFloat = getHeightConstant()
+    
+//    lazy var showAllTagsButtonHeight: CGFloat = {
+//        let topInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+//        let height = intrinsicButtonHeight + topInset
+//        return height
+//    }()
     
     private lazy var buttonConfig: UIButton.Configuration = {
         var buttonConfig = UIButton.Configuration.plain()
-        buttonConfig.attributedTitle = AttributedString(buttonText)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
-        buttonConfig.attributedTitle?.font = scaledFont
+        let text = buttonKind == .forOverview ? "See more" : "Show all tags"
+        buttonConfig.attributedTitle = AttributedString(text)
+//        buttonConfig.attributedTitle = AttributedString(buttonText)
+        buttonConfig.attributedTitle?.font = self.getScaledFont()
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
+//        buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
@@ -55,21 +84,19 @@ class SeeMoreButton: UIButton {
         return colors
     }
     
-    private lazy var intrinsicButtonHeight: CGFloat = {
-        let button = UIButton()
-        var config = buttonConfig
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        button.configuration = config
-        button.sizeToFit()
-        let height = button.bounds.size.height
-        return height
-    }()
+//    private lazy var intrinsicButtonHeight: CGFloat = {
+//        let button = UIButton()
+//        var config = buttonConfig
+////        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+//        config.contentInsets = .zero
+//        button.configuration = config
+//        button.sizeToFit()
+////        let height = button.bounds.size.height
+//        let height = button.bounds.height
+//        return height
+//    }()
     
     private var currentTransform = CGAffineTransform.identity
-    
-    private let buttonKind: ButtonKind
-
-    private lazy var buttonText = buttonKind == .seeMoreOverview ? "See more" : "Show all tags"
     
     // MARK: - Initializers
     init(buttonKind: ButtonKind) {
@@ -85,25 +112,34 @@ class SeeMoreButton: UIButton {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        if !gradientIsAdded && buttonKind == .seeMoreOverview {
+        if !gradientIsAdded && buttonKind == .forOverview {
             addGradient()
             gradientIsAdded = true
         }
     }
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        guard buttonKind == .seeMoreOverview else { return }
+        
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            buttonConfig.attributedTitle?.font = getScaledFont()
+            heightConstant = getHeightConstant()
+            layoutIfNeeded()
+        }
+        
+        guard buttonKind == .forOverview else { return }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             gradientLayer.colors = gradientColors
         }
+        
     }
     
     // MARK: - Instance methods
     func setButtonTextTo(text: String) {
         configuration?.attributedTitle = AttributedString(text)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
-        configuration?.attributedTitle?.font = scaledFont
+        configuration?.attributedTitle?.font = getScaledFont()
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
+//        configuration?.attributedTitle?.font = scaledFont
     }
     
     func rotateImage() {
@@ -126,20 +162,63 @@ class SeeMoreButton: UIButton {
     private func configureSelf() {
         self.tintColor = .label
         var config = buttonConfig
+        let intrinsicButtonHeight = self.getIntrinsicButtonHeight()
         
-        if buttonKind == .seeMoreOverview {
+        switch buttonKind {
+        case .forOverview:
             // Position button text y-centered in the lower half of the button height
-            let bottomInset = ((seeMoreOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
-            let topInset = seeMoreOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
+            let bottomInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+            let topInset = seeOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
-        } else {
+            
+        case .forTags:
             // Position button text at the bottom of the button
-            let topInset = showAllTagsButtonHeight - intrinsicButtonHeight
+            let topInset = heightConstant - intrinsicButtonHeight
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
-            backgroundColor = Utils.customBackgroundColor
+//            backgroundColor = Utils.customBackgroundColor
+            backgroundColor = .orange
         }
-               
+        
+//        if buttonKind == .forOverview {
+//            // Position button text y-centered in the lower half of the button height
+//            let bottomInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+//            let topInset = seeOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
+//            config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
+//        } else {
+//            // Position button text at the bottom of the button
+//            let topInset = heightConstant - intrinsicButtonHeight
+//            config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
+//            backgroundColor = Utils.customBackgroundColor
+//        }
+//
         self.configuration = config
+    }
+    
+    private func getScaledFont() -> UIFont {
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
+        return scaledFont
+    }
+    
+    private func getIntrinsicButtonHeight() -> CGFloat {
+        let button = UIButton()
+        var config = buttonConfig
+        config.contentInsets = .zero
+        button.configuration = config
+        button.sizeToFit()
+        let height = button.bounds.height
+        return height
+    }
+    
+    private func getHeightConstant() -> CGFloat {
+        switch buttonKind {
+        case .forOverview: return seeOverviewButtonHeight
+        case .forTags:
+            let intrinsicButtonHeight = self.getIntrinsicButtonHeight()
+            let topInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
+            let height = intrinsicButtonHeight + topInset
+            return height
+        }
     }
     
     private func addGradient() {
