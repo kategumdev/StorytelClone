@@ -92,8 +92,19 @@ class BookContainerScrollView: UIScrollView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View life cycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // In case when user opens BookVC with one content size category, then changes it to another one, tags view height also changes and seeTagsButton anchor for 'compressed' appearance of tagsView has to be updated. This avoids unnecessary gaps between views and strange layout
+        if tagsView.bounds.height != tagsView.fullViewHeight {
+//            tagsView.compressedViewHeight = tagsView.calculateViewHeightFor(numberOfRows: 3)
+            tagsView.updateCompressedViewHeight()
+            seeTagsButtonAnchorToCompressTagsView.constant = tagsView.compressedViewHeight
+            layoutIfNeeded()
+        }
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
 //            print("bookTableHeight UPDATED")

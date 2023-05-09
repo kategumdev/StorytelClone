@@ -15,7 +15,7 @@ class BookOverviewStackView: UIStackView {
         textView.isEditable = false
         textView.backgroundColor = .clear
         let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
         textView.font = scaledFont
         textView.isScrollEnabled = false
         textView.textColor = .label
@@ -32,7 +32,7 @@ class BookOverviewStackView: UIStackView {
         textView.isEditable = false
         textView.backgroundColor = .clear
         let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
         textView.font = scaledFont
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
