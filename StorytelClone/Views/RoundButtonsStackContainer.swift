@@ -113,7 +113,7 @@ class RoundButtonsStackContainer: UIStackView {
         }
         return hasButton
     }()
-    
+        
     // MARK: - Initializers
     init(forBook book: Book) {
         self.book = book

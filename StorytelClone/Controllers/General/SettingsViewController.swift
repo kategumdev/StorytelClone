@@ -63,7 +63,7 @@ enum SettingsSection: String, CaseIterable {
 class SettingsViewController: UITableViewController {
     // MARK: - Instance properties
     private let sections = SettingsSection.allCases
-    private var tableViewInitialOffsetY: Double = 0
+    private var tableViewInitialOffsetY: CGFloat = 0
     private var isInitialOffsetYSet = false
 //    private let switchView = UISwitch()
 
@@ -177,12 +177,11 @@ extension SettingsViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
-            tableViewInitialOffsetY = scrollView.contentOffset.y
+            tableViewInitialOffsetY = currentOffsetY
             isInitialOffsetYSet = true
             return
         }
-        
-        // Toggle navbar from transparent to visible depending on current contentOffset.y
+        // Toggle navbar from transparent to visible as needed depending on current contentOffset.y
         navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
     }
 }

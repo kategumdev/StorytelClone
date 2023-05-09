@@ -150,7 +150,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("MODEL.COUNT = \(model.count)")
+//        print("MODEL.COUNT = \(model.count)")
         return model.count
     }
     

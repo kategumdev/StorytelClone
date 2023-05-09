@@ -159,7 +159,7 @@ class BookDetailsStackView: UIStackView {
         let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
     }
-    
+        
     // MARK: - Initializers
     init(forBook book: Book) {
         self.book = book
