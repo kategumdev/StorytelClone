@@ -7,31 +7,6 @@
 
 import UIKit
 
-enum BookDetailsBottomSheetCell: CaseIterable {
-    case saveBook
-    case markAsFinished
-    case download
-    case viewSeries
-    case viewAuthors
-    case viewNarrators
-    case showMoreTitlesLikeThis
-    case share
-    
-    var image: UIImage? {
-        switch self {
-        case .saveBook: return UIImage(systemName: "heart")
-        case .markAsFinished: return UIImage(systemName: "checkmark")
-        case .download: return UIImage(systemName: "arrow.down.circle")
-        case .viewSeries: return UIImage(systemName: "rectangle.stack")
-        case .viewAuthors: return UIImage(systemName: "pencil")
-        case .viewNarrators: return UIImage(systemName: "mic")
-        case .showMoreTitlesLikeThis: return UIImage(systemName: "square.grid.3x2")
-        case .share: return UIImage(systemName: "paperplane")
-        }
-    }
-    
-}
-
 enum BottomSheetKind: Equatable {
     case bookDetails
     case storytellers(storytellers: [Storyteller])
@@ -49,8 +24,8 @@ class BottomSheetViewController: UIViewController {
     
     weak var delegate: BottomSheetViewControllerDelegate?
 
-    private lazy var bookDetailsBottomSheetCells: [BookDetailsBottomSheetCell] = {
-        var cells = BookDetailsBottomSheetCell.allCases
+    private lazy var bookDetailsBottomSheetCells: [BookDetailsBottomSheetCellKind] = {
+        var cells = BookDetailsBottomSheetCellKind.allCases
         
         if book.series == nil {
             cells = cells.filter { $0 != .viewSeries }
@@ -199,7 +174,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
         
         switch kind {
         case .bookDetails:
-            cell.configureFor(book: book, bookDetailsBottomSheetCell: bookDetailsBottomSheetCells[indexPath.row])
+            cell.configureFor(book: book, bookDetailsBottomSheetCellKind: bookDetailsBottomSheetCells[indexPath.row])
         case let .storytellers(storytellers: storytellers):
             cell.configureWith(storyteller: storytellers[indexPath.row])
         }
@@ -238,7 +213,7 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
 // MARK: - Helper methods
 extension BottomSheetViewController {
     
-    private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCell, withIndexPath indexPath: IndexPath) {
+    private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind, withIndexPath indexPath: IndexPath) {
         switch bookDetailsBottomSheetCell {
         case .saveBook:
             if book.isAddedToBookshelf {

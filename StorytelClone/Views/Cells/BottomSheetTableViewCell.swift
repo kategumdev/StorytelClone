@@ -7,6 +7,31 @@
 
 import UIKit
 
+enum BookDetailsBottomSheetCellKind: CaseIterable {
+    case saveBook
+    case markAsFinished
+    case download
+    case viewSeries
+    case viewAuthors
+    case viewNarrators
+    case showMoreTitlesLikeThis
+    case share
+    
+    var image: UIImage? {
+        switch self {
+        case .saveBook: return UIImage(systemName: "heart")
+        case .markAsFinished: return UIImage(systemName: "checkmark")
+        case .download: return UIImage(systemName: "arrow.down.circle")
+        case .viewSeries: return UIImage(systemName: "rectangle.stack")
+        case .viewAuthors: return UIImage(systemName: "pencil")
+        case .viewNarrators: return UIImage(systemName: "mic")
+        case .showMoreTitlesLikeThis: return UIImage(systemName: "square.grid.3x2")
+        case .share: return UIImage(systemName: "paperplane")
+        }
+    }
+    
+}
+
 class BottomSheetTableViewCell: UITableViewCell {
 
     static let identifier = "BottomSheetTableViewCell"
@@ -45,9 +70,9 @@ class BottomSheetTableViewCell: UITableViewCell {
         self.contentConfiguration = content
     }
 
-    func configureFor(book: Book, bookDetailsBottomSheetCell: BookDetailsBottomSheetCell) {
+    func configureFor(book: Book, bookDetailsBottomSheetCellKind: BookDetailsBottomSheetCellKind) {
         guard var content = self.contentConfiguration as? UIListContentConfiguration else { return }
-        let bookDetailsCell = bookDetailsBottomSheetCell
+        let bookDetailsCell = bookDetailsBottomSheetCellKind
         content.image = bookDetailsCell.image
                     
         var text = ""

@@ -324,6 +324,7 @@
 				5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */,
 				5A54A5F129DC446D003BB8D4 /* PersonTableHeaderView.swift */,
 				5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */,
+				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
 				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
 				5A8380BA299ED7E200611543 /* BadgeView.swift */,
@@ -344,7 +345,6 @@
 				5A37EB2029DD83710053F6A7 /* PopupButton.swift */,
 				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
-				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
 				5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);

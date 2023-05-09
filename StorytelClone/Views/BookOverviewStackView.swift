@@ -14,7 +14,9 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        textView.font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
+        textView.font = scaledFont
         textView.isScrollEnabled = false
         textView.textColor = .label
         textView.textAlignment = .left
@@ -29,7 +31,9 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        textView.font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        textView.font = scaledFont
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
         textView.textAlignment = .left
@@ -43,6 +47,8 @@ class BookOverviewStackView: UIStackView {
     private let book: Book
     
     let visiblePartInSeeMoreAppearance: CGFloat = 120
+//    let defaultVisiblePartInSeeMoreAppearance: CGFloat = 120
+//    lazy var visiblePartInSeeMoreAppearance: CGFloat = defaultVisiblePartInSeeMoreAppearance
 
     private let mainTextView = BookOverviewStackView.createMainTextView()
     
@@ -51,7 +57,7 @@ class BookOverviewStackView: UIStackView {
     private lazy var ebookTextView = BookOverviewStackView.createSecondaryTextView()
     
     private lazy var translatorsTextView = BookOverviewStackView.createSecondaryTextView()
-    private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
+//    private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
     
     private var textViews = [UITextView]()
     

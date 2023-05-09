@@ -16,6 +16,7 @@ class SeeMoreButton: UIButton {
     
     // MARK: - Instance properties
     let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+    let fontMaximumPointSize: CGFloat = 40
     let seeMoreOverviewButtonHeight: CGFloat = 110
     
     lazy var showAllTagsButtonHeight: CGFloat = {
@@ -27,7 +28,8 @@ class SeeMoreButton: UIButton {
     private lazy var buttonConfig: UIButton.Configuration = {
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(buttonText)
-        buttonConfig.attributedTitle?.font = font
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
+        buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
@@ -100,7 +102,8 @@ class SeeMoreButton: UIButton {
     // MARK: - Instance methods
     func setButtonTextTo(text: String) {
         configuration?.attributedTitle = AttributedString(text)
-        configuration?.attributedTitle?.font = font
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: fontMaximumPointSize)
+        configuration?.attributedTitle?.font = scaledFont
     }
     
     func rotateImage() {

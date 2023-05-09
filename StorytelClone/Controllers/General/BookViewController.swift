@@ -63,6 +63,8 @@ class BookViewController: UIViewController {
     
     private let popupButton = PopupButton()
     
+    private var timeDidLayoutSubviewsTriggered = 0
+    
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
@@ -85,12 +87,11 @@ class BookViewController: UIViewController {
         
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
+        extendedLayoutIncludesOpaqueBars = true
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .heavy, scale: .large)
         let image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(ellipsisButtonDidTap))
-        
-        extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +104,33 @@ class BookViewController: UIViewController {
             print("bookTableHeight UPDATED")
             
             bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: view.bounds.width) + Utils.heightForRowWithHorizontalCv
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let overviewStackViewHeight = overviewStackView.bounds.height
+
+        timeDidLayoutSubviewsTriggered += 1
+        if timeDidLayoutSubviewsTriggered == 2 {
+            if overviewStackViewHeight < overviewStackView.visiblePartInSeeMoreAppearance {
+                seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = false
+                seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = true
+                seeMoreOverviewButtonTopAnchorFullSizeAppearance.constant -= seeMoreOverviewButton.bounds.height / 4
+                seeMoreOverviewButton.isHidden = true
+            }
+            
+            // This would be needed if constant of constraint was not set
+//            view.setNeedsLayout()
+//            view.layoutIfNeeded()
+        }
+        
+        #warning("It works without this, because overviewStackView doesn't change font size until back button tapped")
+        if overviewStackViewHeight >= overviewStackView.visiblePartInSeeMoreAppearance && seeMoreOverviewButton.isHidden {
+            seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = true
+            seeMoreOverviewButtonTopAnchorFullSizeAppearance.constant = -seeMoreOverviewButton.seeMoreOverviewButtonHeight / 2
+            seeMoreOverviewButtonTopAnchorFullSizeAppearance.isActive = false
+            seeMoreOverviewButton.isHidden = false
         }
     }
     
@@ -238,6 +266,7 @@ extension BookViewController {
     }
 
     @objc func handleTapGesure() {
+        guard !seeMoreOverviewButton.isHidden else { return }
         handleSeeMoreOverviewButtonTapped()
     }
     
@@ -274,7 +303,7 @@ extension BookViewController {
             }
         }
     }
-    
+        
     private func addShowAllTagsButtonAction() {
         showAllTagsButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
@@ -362,6 +391,7 @@ extension BookViewController {
             seeMoreOverviewButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         ])
         seeMoreOverviewButtonTopAnchorCompressedAppearance.isActive = true
+        print("constraint ACTIVATED")
         
         // Configure playSampleButtonContainer constraints
         if hasAudio {
