@@ -14,16 +14,16 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
-        textView.font = scaledFont
+//        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+//        textView.font = scaledFont
+        textView.font = getScaledFontForMainTextView()
         textView.isScrollEnabled = false
         textView.textColor = .label
         textView.textAlignment = .left
         textView.textContainerInset = .zero
         // Ensure that the text is aligned with the left edge of the text view.
         textView.textContainer.lineFragmentPadding = 0
-
         return textView
     }
     
@@ -31,9 +31,10 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
-        textView.font = scaledFont
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
+//        textView.font = scaledFont
+        textView.font = getScaledFontForSecondaryTextView()
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
         textView.textAlignment = .left
@@ -43,25 +44,35 @@ class BookOverviewStackView: UIStackView {
         return textView
     }
     
+    static func getScaledFontForMainTextView() -> UIFont {
+        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        return scaledFont
+    }
+    
+    static func getScaledFontForSecondaryTextView() -> UIFont {
+        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
+        return scaledFont
+    }
+    
     // MARK: - Instance properties
     private let book: Book
-    
-//    let visiblePartInSeeMoreAppearance: CGFloat = 120
     let defaultVisiblePartWhenCompressed: CGFloat = 120
-//    let defaultVisiblePartInSeeMoreAppearance: CGFloat = 120
-//    lazy var visiblePartInSeeMoreAppearance: CGFloat = defaultVisiblePartInSeeMoreAppearance
-
     private let mainTextView = BookOverviewStackView.createMainTextView()
+    private let audiobookTextView = BookOverviewStackView.createSecondaryTextView()
+    private let ebookTextView = BookOverviewStackView.createSecondaryTextView()
+    private let translatorsTextView = BookOverviewStackView.createSecondaryTextView()
     
-    private lazy var audiobookTextView = BookOverviewStackView.createSecondaryTextView()
-    
-    private lazy var ebookTextView = BookOverviewStackView.createSecondaryTextView()
-    
-    private lazy var translatorsTextView = BookOverviewStackView.createSecondaryTextView()
+//    private lazy var audiobookTextView = BookOverviewStackView.createSecondaryTextView()
+//
+//    private lazy var ebookTextView = BookOverviewStackView.createSecondaryTextView()
+//
+//    private lazy var translatorsTextView = BookOverviewStackView.createSecondaryTextView()
 //    private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
     
     private var textViews = [UITextView]()
-    
+        
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
@@ -76,6 +87,20 @@ class BookOverviewStackView: UIStackView {
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            
+            mainTextView.font = BookOverviewStackView.getScaledFontForMainTextView()
+            for view in textViews {
+                if view !== mainTextView {
+                    view.font = BookOverviewStackView.getScaledFontForSecondaryTextView()
+                }
+            }
+        }
     }
     
     // MARK: - Helper methods
