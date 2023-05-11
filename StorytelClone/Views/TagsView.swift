@@ -11,34 +11,7 @@ class TagsView: UIView {
     // MARK: - Instance properties
     private let tags: [Tag]
     private let superviewWidth: CGFloat
-    
-//    private let font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
-//    private let tagButtonFont = UIFontMetrics.default.scaledFont(for: Utils.sectionTitleFont, maximumPointSize: 40)
-//    private let tagButtonFont = UIFontMetrics.default.scaledFont(for: UIFont.preferredCustomFontWith(weight: .medium, size: 13), maximumPointSize: 36)
-
-    
-    // Needed to prevent buttons from getting higher right after content size category change (because it causes strange layout)
-//    private lazy var buttonHeight: CGFloat = {
-//        let button = createButtonWith(text: "Lorem ipsum")
-//        button.sizeToFit()
-//        return button.bounds.height
-//    }()
-    
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-//        let font = Utils.sectionTitleFont
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for:  Utils.sectionTitleFont, maximumPointSize: 40)
-//        label.font = scaledFont
-        
-        label.font = getTitleLabelScaledFont()
-//        label.font = Utils.sectionTitleFont
-        label.text = "Tags"
-        label.textAlignment = .left
-        label.sizeToFit()
-        return label
-    }()
-    
+    private lazy var titleLabel = createTitleLabel()
     private var tagButtons = [UIButton]()
     
     private lazy var compressedViewHeight: CGFloat = {
@@ -92,16 +65,14 @@ class TagsView: UIView {
     }
     
     // MARK: - Instance methods
-    // Update compressedViewHeight accounting to correspond to current content size category
-//    func updateCompressedViewHeight() {
-//        compressedViewHeight = calculateViewHeightFor(numberOfRows: 3)
-//    }
+    func calculateCurrentCompressedViewHeight() -> CGFloat {
+        return calculateViewHeightFor(numberOfRows: 3)
+    }
     
     // MARK: - Helper methods
     private func createTagButtons() {
         let tagTitles = tags.map { $0.tagTitle }
         for title in tagTitles {
-//            let button = TagsView.createButtonWith(text: title)
             let button = createButtonWith(text: title)
             button.layer.cornerRadius = button.frame.height / 2
             tagButtons.append(button)
@@ -119,7 +90,6 @@ class TagsView: UIView {
         let font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
         let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 36)
         buttonConfig.attributedTitle?.font = scaledFont
-//        buttonConfig.attributedTitle?.font = tagButtonFont
         buttonConfig.titleAlignment = .center
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.commonHorzPadding, bottom: 7, trailing: Constants.commonHorzPadding)
         
@@ -128,58 +98,33 @@ class TagsView: UIView {
         return button
     }
     
+    private func createTitleLabel() -> UILabel {
+        let label = UILabel()
+        label.font = getTitleLabelScaledFont()
+        label.text = "Tags"
+        label.textAlignment = .left
+        label.sizeToFit()
+        return label
+    }
+    
     private func getTitleLabelScaledFont() -> UIFont {
         return UIFontMetrics.default.scaledFont(for:  Utils.sectionTitleFont, maximumPointSize: 40)
     }
-//    private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
-//        let spacings = firstButtonTopConstant + CGFloat(spacingBetweenRows) * (numberOfRows - 1)
-//        let tagButton = createButtonWith(text: "Lorem ipsum")
-//        tagButton.configuration?.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
-//        tagButton.sizeToFit()
-//        let heightOfButtonWithNotScaledFont = tagButton.bounds.height
-//        let viewHeight = tagsLabel.frame.height + numberOfRows * heightOfButtonWithNotScaledFont + spacings
-//
-////        let viewHeight = tagsLabel.frame.height + numberOfRows * buttonHeight + spacings
-//        return viewHeight
-//    }
-    
-    func calculateCompressedViewHeight() -> CGFloat {
-        return calculateViewHeightFor(numberOfRows: 3)
-    }
-    
+
     private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
         let spacings = firstButtonTopConstant + CGFloat(spacingBetweenRows) * (numberOfRows - 1)
-//        let viewHeight = tagsLabel.frame.height + numberOfRows * buttonHeight + spacings
-//         guard let buttonHeight = tagButtons.first?.bounds.height else { return 0 }
+        
+        // Create buttonTag and titleLabel to account for scaled font according to current content size category
         let button = createButtonWith(text: "Lorem ipsum")
-        button.sizeToFit()
         let buttonHeight = button.bounds.height
 
-        let titleLabel = UILabel()
-        titleLabel.font = getTitleLabelScaledFont()
-        titleLabel.text = "Tags"
-        titleLabel.sizeToFit()
-//         let viewHeight = titleLabel.frame.height + numberOfRows * buttonHeight + spacings
-        let viewHeight = titleLabel.bounds.height + numberOfRows * buttonHeight + spacings
-//         let viewHeight = 50 + numberOfRows * buttonHeight + spacings
-
+        let titleLabel = createTitleLabel()
+        let titleLabelHeight = titleLabel.bounds.height
+        
+        let viewHeight = titleLabelHeight + numberOfRows * buttonHeight + spacings
+//        let viewHeight = titleLabel.bounds.height + numberOfRows * buttonHeight + spacings
         return viewHeight
     }
-    
-//    private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
-//        let spacings = firstButtonTopConstant + CGFloat(spacingBetweenRows) * (numberOfRows - 1)
-////        let viewHeight = tagsLabel.frame.height + numberOfRows * buttonHeight + spacings
-//         guard let buttonHeight = tagButtons.first?.bounds.height else { return 0 }
-////         let button = createButtonWith(text: "Lorem ipsum")
-////         button.sizeToFit()
-////         let buttonHeight = button.bounds.height
-//
-////         let viewHeight = titleLabel.frame.height + numberOfRows * buttonHeight + spacings
-//        let viewHeight = titleLabel.bounds.height + numberOfRows * buttonHeight + spacings
-////         let viewHeight = 50 + numberOfRows * buttonHeight + spacings
-//
-//        return viewHeight
-//    }
 
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
