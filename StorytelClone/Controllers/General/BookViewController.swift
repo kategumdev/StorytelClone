@@ -31,7 +31,7 @@ class BookViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad of BookVC")
+//        print("viewDidLoad of BookVC")
         view.backgroundColor = Utils.customBackgroundColor
         addBookContainerScrollView()
         configureNavBar()
@@ -39,6 +39,7 @@ class BookViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        print("viewWillAppear of BookVc")
         adjustNavBarAppearanceFor(currentOffsetY: bookContainerScrollView.bookTable.contentOffset.y)
     }
 
@@ -54,6 +55,7 @@ class BookViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+//        print("viewDidLayoutSubviews of BookVc")
         timeDidLayoutSubviewsIsTriggered += 1
         if timeDidLayoutSubviewsIsTriggered == 2 {
             // Handle cases when book overview is very short
