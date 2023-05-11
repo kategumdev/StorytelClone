@@ -18,6 +18,8 @@ class BookViewController: UIViewController {
     private var timeDidLayoutSubviewsIsTriggered = 0
     private var isDidAppearTriggeredFirstTime = true
     
+    private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+    
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
@@ -39,22 +41,102 @@ class BookViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("viewWillAppear of BookVc")
+//        print("viewWillAppear of BookVc \(book.title)")
+//        print("Constant calculated = \(bookContainerScrollView.tagsView.calculateCompressedViewHeight()), current constant = \(bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant)")
         adjustNavBarAppearanceFor(currentOffsetY: bookContainerScrollView.bookTable.contentOffset.y)
+//        bookContainerScrollView.setNeedsLayout()
+//        bookContainerScrollView.layoutIfNeeded()
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        print("viewWillAppear of BookVc \(book.title)")
+//        print("Constant calculated = \(bookContainerScrollView.tagsView.calculateCompressedViewHeight()), current constant = \(bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant)")
+//
+//        if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
+//            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//            print("update update update")
+//            bookContainerScrollView.setNeedsLayout()
+////            bookContainerScrollView.layoutIfNeeded()
+////                view.setNeedsLayout()
+////                view.layoutIfNeeded()
+//        }
+        
+        
 
+//        adjustNavBarAppearanceFor(currentOffsetY: bookContainerScrollView.bookTable.contentOffset.y)
+        
+//        bookContainerScrollView.setNeedsLayout()
+//        bookContainerScrollView.layoutIfNeeded()
+//    }
+
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        print("\nviewDidAppear of BookVc \(book.title)")
+////        print("tagsView height = \(bookContainerScrollView.tagsView.bounds.height), saved height = \(bookContainerScrollView.tagsViewHeight)")
+//        print("Constant calculated = \(bookContainerScrollView.tagsView.calculateCompressedViewHeight()), current constant = \(bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant)")
+//        guard isDidAppearTriggeredFirstTime else { return }
+//        isDidAppearTriggeredFirstTime = false
+//        addPopupButton()
+//        passCallbacksToBookContainerScrollView()
+//        #warning("Maybe pass callbacks on the background thread")
+//        addHideView()
+//    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard isDidAppearTriggeredFirstTime else { return }
+        print("\nviewDidAppear of BookVc \(book.title)")
+//        print("tagsView height = \(bookContainerScrollView.tagsView.bounds.height), saved height = \(bookContainerScrollView.tagsViewHeight)")
+        print("Constant calculated = \(bookContainerScrollView.tagsView.calculateCompressedViewHeight()), current constant = \(bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant)")
+        
+        guard isDidAppearTriggeredFirstTime else {
+//            if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
+//                previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//                print("update update update")
+//                bookContainerScrollView.setNeedsLayout()
+//                bookContainerScrollView.layoutIfNeeded()
+////                view.setNeedsLayout()
+////                view.layoutIfNeeded()
+//            }
+            return
+        }
         isDidAppearTriggeredFirstTime = false
         addPopupButton()
         passCallbacksToBookContainerScrollView()
         #warning("Maybe pass callbacks on the background thread")
         addHideView()
+        
+        previousContentSizeCategory = traitCollection.preferredContentSizeCategory
     }
+    
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+//        print("viewDidLayoutSubviews of \(book.title)")
+        print("Constant calculated = \(bookContainerScrollView.tagsView.calculateCompressedViewHeight()), current constant = \(bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant)")
+        
+//        if bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant != bookContainerScrollView.tagsView.calculateCompressedViewHeight() {
+//            print("          ENTERED")
+//            bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant = bookContainerScrollView.tagsView.calculateCompressedViewHeight()
+//            bookContainerScrollView.setNeedsLayout()
+//            bookContainerScrollView.layoutIfNeeded()
+//        }
+        
+//        if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
+//            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//            print("entered")
+////            if bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant != bookContainerScrollView.tagsView.calculateCompressedViewHeight() {
+////                bookContainerScrollView.seeTagsButtonAnchorToCompressTagsView.constant = bookContainerScrollView.tagsView.calculateCompressedViewHeight()
+////                bookContainerScrollView.setNeedsLayout()
+////                bookContainerScrollView.layoutIfNeeded()
+////            }
+////            bookContainerScrollView.setNeedsLayout()
+////            bookContainerScrollView.layoutIfNeeded()
+//        } else {
+//            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//        }
+        
 //        print("viewDidLayoutSubviews of BookVc")
         timeDidLayoutSubviewsIsTriggered += 1
         if timeDidLayoutSubviewsIsTriggered == 2 {

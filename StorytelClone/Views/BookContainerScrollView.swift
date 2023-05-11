@@ -42,7 +42,7 @@ class BookContainerScrollView: UIScrollView {
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
     
     private lazy var hasTags = !book.tags.isEmpty ? true : false
-    private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
+    lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
     #warning("Maybe redo somehow without passing superviewWidth")
 //    private lazy var showAllTagsButton = SeeMoreButton(buttonKind: .seeMoreTags)
     private lazy var seeTagsButton: SeeMoreButton = {
@@ -55,7 +55,7 @@ class BookContainerScrollView: UIScrollView {
     }()
     
 //    private lazy var seeTagsButtonAnchorToCompressTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.compressedViewHeight)
-    private lazy var seeTagsButtonAnchorToCompressTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.calculateCompressedViewHeight())
+    lazy var seeTagsButtonAnchorToCompressTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.topAnchor, constant: tagsView.calculateCompressedViewHeight())
 
     private lazy var seeTagsButtonAnchorForFullSizeTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
     
@@ -81,58 +81,37 @@ class BookContainerScrollView: UIScrollView {
         }
     }
     
-    // In case when user opens BookVC with one content size category, then changes it to another one, tags view height also changes and seeTagsButton anchor for 'compressed' appearance of tagsView has to be updated. This avoids unnecessary gaps between views and strange layout
-    private lazy var tagsViewHeight: CGFloat = 0 {
-        didSet {
-//            if tagsViewHeight != oldValue && oldValue != 0 {
+    // In case when user opens BookVC with one content size category, then changes it to another one, tags view height also changes and seeTagsButton anchor for 'compressed' appearance of tagsView has to be updated. This avoids unnecessary gaps between views or strange layout
+//    lazy var tagsViewHeight: CGFloat = 0 {
+//        didSet {
+////            print("\(book.title) didSet, tagsViewHeight = \(tagsViewHeight), old value = \(seeTagsButtonAnchorToCompressTagsView.constant)")
+//            if tagsViewHeight != oldValue && seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
+//                print("   UPDATING constraint \(book.title)")
 //                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
 //                setNeedsLayout()
 //                layoutIfNeeded()
 //            }
-            print("didSet triggered, value is \(tagsViewHeight)")
-//            if tagsViewHeight != oldValue {
-//
-////                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
+//        }
+//    }
+    
+//    lazy var tagsViewHeight: CGFloat = 0 {
+//        didSet {
+//            print("didSet of \(book.title)")
+////            print("\(book.title) didSet, tagsViewHeight = \(tagsViewHeight), old value = \(seeTagsButtonAnchorToCompressTagsView.constant)")
+//            if seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
+//                print("   UPDATING constraint \(book.title)")
 //                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
 //                setNeedsLayout()
-//                setNeedsUpdateConstraints()
 //                layoutIfNeeded()
 //            }
-
-//            if tagsViewHeight != oldValue && oldValue != 0 && seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
-//                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
-//                setNeedsLayout()
-////                setNeedsUpdateConstraints()
-//                layoutIfNeeded()
-//
-//            }
-            if tagsViewHeight != oldValue && seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
-                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
-                setNeedsLayout()
-//                setNeedsUpdateConstraints()
-                layoutIfNeeded()
-
-            }
-            
-            
-            
-            
-            
-            
-//            if tagsViewHeight != oldValue {
-//                print("constant BEFORE update \(seeTagsButtonAnchorToCompressTagsView.constant)")
-//                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
-//                print("constant AFTER update \(seeTagsButtonAnchorToCompressTagsView.constant)")
-////                setNeedsLayout()
-//                setNeedsUpdateConstraints()
-//                layoutIfNeeded()
-//
-//            }
-        }
-    }
+//        }
+//    }
     
     private lazy var bookTableHeightConstraint = bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight)
     
+//    private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//    private lazy var previousTagsViewHeight: CGFloat = tagsView.bounds.height
+
     // MARK: - Initializers
     init(book: Book, superviewWidth: CGFloat) {
         self.book = book
@@ -146,50 +125,42 @@ class BookContainerScrollView: UIScrollView {
     }
 
     // MARK: - View life cycle
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+////        print("layoutSubviews of BookContainerScrollView \(book.title)")
+////        print("tagsView.bounds.height = \(tagsView.bounds.height)")
+//        guard hasTags else { return }
+//        // Track changes in tagsViewHeight to adjust layout accordingly
+//        tagsViewHeight = tagsView.bounds.height
+//    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-//        print("layoutSubviews of BookContainerScrollView")
-        
+//        print("layoutSubviews of \(book.title)")
+//        print("tagsView.bounds.height = \(tagsView.bounds.height)")
         guard hasTags else { return }
-        print("passed hasTags guard")
-        tagsViewHeight = tagsView.bounds.height
-        
-        
-//        seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
-        
-        // In case when user opens BookVC with one content size category, then changes it to another one, tags view height also changes and seeTagsButton anchor for 'compressed' appearance of tagsView has to be updated. This avoids unnecessary gaps between views and strange layout
-//        print("tagsView.fullViewHeight BEFORE \(tagsView.fullViewHeight)")
-        if hasTags && tagsView.bounds.height != tagsView.fullViewHeight {
-//            print("updating compressed height")
-            tagsView.fullViewHeight = tagsView.bounds.height
-//            tagsView.setNeedsLayout()
-//            tagsView.layoutIfNeeded()
-//            print("tagsView.fullViewHeight AFTER \(tagsView.fullViewHeight)")
-//            tagsView.compressedViewHeight = tagsView.calculateViewHeightFor(numberOfRows: 3)
-//            tagsView.updateCompressedViewHeight()
-//            tagsView.compressedViewHeight = 200
-//            seeTagsButtonAnchorToCompressTagsView.constant = tagsView.compressedViewHeight
-//            seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateViewHeightFor(numberOfRows: 3)
-//            seeTagsButtonAnchorToCompressTagsView.constant = 200
-
-
-
-            if seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
-                seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
-//                updateConstraintsIfNeeded()
-                setNeedsLayout()
-                layoutIfNeeded()
-            }
-
-
+        // Track changes in tagsViewHeight to adjust layout accordingly
+        print("calculated constant = \(tagsView.calculateCompressedViewHeight()), current constant = \(seeTagsButtonAnchorToCompressTagsView.constant)")
+        if seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
+            print("   UPDATING constraint \(book.title) to \(tagsView.calculateCompressedViewHeight())")
+            seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+    
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        print("layoutSubviews of BookContainerScrollView \(book.title)")
+//        print("tagsView.bounds.height = \(tagsView.bounds.height)")
+//        if hasTags &&
+//            previousContentSizeCategory != traitCollection.preferredContentSizeCategory && seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCompressedViewHeight() {
+//            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
 //            seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCompressedViewHeight()
 //            setNeedsLayout()
 //            layoutIfNeeded()
-//            updateConstraintsIfNeeded()
-//            invalidateIntrinsicContentSize()
-//            layoutIfNeeded()
-        }
-    }
+//        }
+//    }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
