@@ -75,7 +75,7 @@
 		5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* StarHorzStackView.swift */; };
 		5AD2CB012A0253CB004FE55D /* BookshelfTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */; };
 		5ADA577F29C23BE7004BC23B /* ScopeBookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */; };
-		5ADC083229CB2DC20042A432 /* RoundButtonsStackContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADC083129CB2DC20042A432 /* RoundButtonsStackContainer.swift */; };
+		5ADC083229CB2DC20042A432 /* RoundButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */; };
 		5AE36A3829F7D173003F60E5 /* SimilarBooksTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */; };
 		5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */; };
 		5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */; };
@@ -175,7 +175,7 @@
 		5ACD558429E092C400097B40 /* StarHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHorzStackView.swift; sourceTree = "<group>"; };
 		5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfTableHeaderView.swift; sourceTree = "<group>"; };
 		5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeBookTableViewCell.swift; sourceTree = "<group>"; };
-		5ADC083129CB2DC20042A432 /* RoundButtonsStackContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButtonsStackContainer.swift; sourceTree = "<group>"; };
+		5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButtonsStack.swift; sourceTree = "<group>"; };
 		5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarBooksTableHeaderView.swift; sourceTree = "<group>"; };
 		5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoriesViewController.swift; sourceTree = "<group>"; };
 		5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -337,7 +337,7 @@
 				5A4B017F2A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift */,
 				5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */,
 				5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */,
-				5ADC083129CB2DC20042A432 /* RoundButtonsStackContainer.swift */,
+				5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */,
 				5ABFA11729CD0E6800F7474C /* BookDetailsScrollView.swift */,
 				5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */,
 				5A5A1FDA29D3235600AA08BB /* SeeMoreButton.swift */,
@@ -583,7 +583,7 @@
 				5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */,
 				5AAA1AC229C33A6C00B22B7F /* SearchResultsTableSectionHeaderView.swift in Sources */,
 				5AD2CB012A0253CB004FE55D /* BookshelfTableHeaderView.swift in Sources */,
-				5ADC083229CB2DC20042A432 /* RoundButtonsStackContainer.swift in Sources */,
+				5ADC083229CB2DC20042A432 /* RoundButtonsStack.swift in Sources */,
 				5A4B01802A01281E00228AC4 /* BookshelfTableSectionHeaderView.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,
 				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,

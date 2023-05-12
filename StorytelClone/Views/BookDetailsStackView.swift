@@ -121,7 +121,7 @@ class BookDetailsStackView: UIStackView {
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
     
-    lazy var roundButtonsStackContainer = RoundButtonsStackContainer(forBook: book)
+    lazy var roundButtonsStackContainer = RoundButtonsStack(forBook: book)
     
     private lazy var leadingViewWithGradient: UIView = {
         let view = UIView()

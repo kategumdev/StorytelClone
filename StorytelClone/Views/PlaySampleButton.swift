@@ -9,7 +9,7 @@ import UIKit
 
 class PlaySampleButtonContainer: UIView {
     // MARK: - Static properties
-    static let buttonHeight: CGFloat = RoundButtonsStackContainer.roundWidth
+    static let buttonHeight: CGFloat = RoundButtonsStack.roundWidth
     
     static func getLabelScaledFont() -> UIFont {
         return UIFontMetrics.default.scaledFont(for: Utils.navBarTitleFont, maximumPointSize: 40)
