@@ -23,7 +23,6 @@ class BookDetailsScrollView: UIScrollView {
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.textAlignment = .left
-        label.sizeToFit()
         return label
     }
     
@@ -85,6 +84,7 @@ class BookDetailsScrollView: UIScrollView {
         let width = (bounds.width - contentSize.width) + 1
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: width).isActive = true
+        view.backgroundColor = .blue
         return view
     }()
     
@@ -202,7 +202,6 @@ class BookDetailsScrollView: UIScrollView {
     private func configureMainStack() {
         // Configure labels and buttons with text
         ratingsLabel.text = "\(book.reviewsNumber) Ratings"
-        ratingsLabel.sizeToFit()
         configure(button: ratingButton, withText: "\(book.rating)")
  
         if hasAudio {
@@ -216,6 +215,10 @@ class BookDetailsScrollView: UIScrollView {
         addCategoryButtonAction()
         
         // Add arrangedSubviews
+        let leadingSpacerViewForPadding = createSpacerViewForPadding()
+        mainStackView.addArrangedSubview(leadingSpacerViewForPadding)
+        mainStackView.setCustomSpacing(0, after: leadingSpacerViewForPadding)
+        
         mainStackView.addArrangedSubview(ratingVertStack)
         let vertBar1 = createVertBarView()
         vertBarViews.append(vertBar1)
@@ -235,8 +238,17 @@ class BookDetailsScrollView: UIScrollView {
         
         mainStackView.addArrangedSubview(categoryVertStack)
         
-        // Add this to avoid padding between categoryVertStack and extraSpacerView if it's added
-        mainStackView.setCustomSpacing(0, after: categoryVertStack)
+        let trailingSpacerViewForPadding = createSpacerViewForPadding()
+        mainStackView.addArrangedSubview(trailingSpacerViewForPadding)
+        // Add this to avoid padding between trailingSpacerViewForPadding and extraSpacerView if it's added
+        mainStackView.setCustomSpacing(0, after: trailingSpacerViewForPadding)
+    }
+    
+    private func createSpacerViewForPadding() -> UIView {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        return view
     }
     
     private func addCategoryButtonAction() {
@@ -253,50 +265,23 @@ class BookDetailsScrollView: UIScrollView {
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         let topPadding: CGFloat = 20
         let bottomPadding: CGFloat = 14
-        let xPadding: CGFloat = 25
 
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: topPadding),
-            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: xPadding),
-            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -xPadding),
+            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -bottomPadding),
             mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(topPadding + bottomPadding))
         ])
         
         for vertStack in allVertStacks {
             vertStack.translatesAutoresizingMaskIntoConstraints = false
-            
+
             if let label = vertStack.arrangedSubviews.first as? UILabel, let button = vertStack.arrangedSubviews.last as? UIButton {
                 vertStack.topAnchor.constraint(equalTo: label.topAnchor).isActive = true
                 vertStack.bottomAnchor.constraint(equalTo: button.bottomAnchor).isActive = true
             }
         }
-        
-//        ratingVertStack.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            ratingVertStack.topAnchor.constraint(equalTo: ratingsLabel.topAnchor),
-//            ratingVertStack.bottomAnchor.constraint(equalTo: ratingButton.bottomAnchor)
-//        ])
-//
-//        if hasAudio {
-//            durationVertStack.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                durationVertStack.topAnchor.constraint(equalTo: durationLabel.topAnchor),
-//                durationVertStack.bottomAnchor.constraint(equalTo: durationButton.bottomAnchor)
-//            ])
-//        }
-//
-//        languageVertStack.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            languageVertStack.topAnchor.constraint(equalTo: languageLabel.topAnchor),
-//            languageVertStack.bottomAnchor.constraint(equalTo: languageButton.bottomAnchor)
-//        ])
-//
-//        categoryVertStack.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            categoryVertStack.topAnchor.constraint(equalTo: categoryLabel.topAnchor),
-//            categoryVertStack.bottomAnchor.constraint(equalTo: categoryButton.bottomAnchor)
-//        ])
         
         for vertBarView in vertBarViews {
             vertBarView.translatesAutoresizingMaskIntoConstraints = false
