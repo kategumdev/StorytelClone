@@ -23,7 +23,7 @@ class BookDetailsScrollView: UIScrollView {
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.textAlignment = .left
-//        label.sizeToFit()
+        label.sizeToFit()
         return label
     }
     
@@ -77,6 +77,7 @@ class BookDetailsScrollView: UIScrollView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
+//        stack.distribution = .fillProportionally
         stack.spacing = Constants.commonHorzPadding
 //        stack.sizeToFit()
         return stack
@@ -110,7 +111,7 @@ class BookDetailsScrollView: UIScrollView {
         }
         return labels
     }()
-    
+
     private lazy var allVertStacks: [UIStackView] = {
         var stacks = [ratingVertStack, languageVertStack, categoryVertStack]
         if hasAudio {
@@ -143,11 +144,11 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        if layoutSubviewsIsTriggeredFirstTime {
-            layoutSubviewsIsTriggeredFirstTime = false
-            mainStackView.setNeedsLayout()
-            mainStackView.layoutIfNeeded()
-        }
+//        if layoutSubviewsIsTriggeredFirstTime {
+//            layoutSubviewsIsTriggeredFirstTime = false
+//            mainStackView.setNeedsLayout()
+//            mainStackView.layoutIfNeeded()
+//        }
          
         for (index, stack) in allVertStacks.enumerated() {
 //            stack.sizeToFit()
@@ -181,12 +182,13 @@ class BookDetailsScrollView: UIScrollView {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
+//        stack.alignment = .center
         #warning("maybe this causes bug")
         stack.spacing = 3
         [label, button].forEach { stack.addArrangedSubview($0) }
-//        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        stack.sizeToFit()
+        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
+//        stack.sizeToFit()
         return stack
     }
     
@@ -265,6 +267,14 @@ class BookDetailsScrollView: UIScrollView {
         mainStackView.addArrangedSubview(trailingSpacerViewForPadding)
         // Add this to avoid padding between trailingSpacerViewForPadding and extraSpacerView if it's added
         mainStackView.setCustomSpacing(0, after: trailingSpacerViewForPadding)
+        
+        for label in allLabels {
+            label.sizeToFit()
+        }
+        
+        for button in allButtons {
+            button.sizeToFit()
+        }
     }
     
     private func createSpacerViewForPadding() -> UIView {
@@ -301,7 +311,7 @@ class BookDetailsScrollView: UIScrollView {
         
         for stack in allVertStacks {
             stack.backgroundColor = .orange
-//            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.translatesAutoresizingMaskIntoConstraints = false
 
         }
         
