@@ -15,7 +15,6 @@ class BookViewController: UIViewController {
     private let popupButton = PopupButton()
 
     private var scrollViewInitialOffsetY: CGFloat?
-    private var timeDidLayoutSubviewsIsTriggered = 0
     private var isDidAppearTriggeredFirstTime = true
         
     // MARK: - Initializers
@@ -49,19 +48,6 @@ class BookViewController: UIViewController {
         passCallbacksToBookContainerScrollView()
         #warning("Maybe pass callbacks on the background thread, because they are not needed right away")
         addHideView()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        timeDidLayoutSubviewsIsTriggered += 1
-        if timeDidLayoutSubviewsIsTriggered == 2 {
-            // Handle cases when book overview is very short
-            bookContainerScrollView.hideSeeMoreOverviewButtonAsNeeded()
-        }
-        
-        // Handle cases when book overview was short but became high enough (after user changes font size to larger on the device)
-        bookContainerScrollView.showSeeMoreOverviewButtonAsNeeded()
-        #warning("It works without this, because overviewStackView doesn't change font size until back button tapped")
     }
     
 }
