@@ -23,6 +23,7 @@ class BookDetailsScrollView: UIScrollView {
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.textAlignment = .left
+//        label.sizeToFit()
         return label
     }
     
@@ -42,6 +43,7 @@ class BookDetailsScrollView: UIScrollView {
         }
         
         button.configuration = buttonConfig
+//        button.sizeToFit()
         return button
     }
     
@@ -76,6 +78,7 @@ class BookDetailsScrollView: UIScrollView {
         stack.axis = .horizontal
         stack.alignment = .center
         stack.spacing = Constants.commonHorzPadding
+//        stack.sizeToFit()
         return stack
     }()
     
@@ -84,6 +87,7 @@ class BookDetailsScrollView: UIScrollView {
         let width = (bounds.width - contentSize.width) + 1
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: width).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
         view.backgroundColor = .blue
         return view
     }()
@@ -118,6 +122,8 @@ class BookDetailsScrollView: UIScrollView {
     var categoryButtonDidTapCallback: () -> () = {}
     private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
     
+    private var layoutSubviewsIsTriggeredFirstTime = true
+    
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
@@ -137,12 +143,23 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
+        if layoutSubviewsIsTriggeredFirstTime {
+            layoutSubviewsIsTriggeredFirstTime = false
+            mainStackView.setNeedsLayout()
+            mainStackView.layoutIfNeeded()
+        }
+         
+        for (index, stack) in allVertStacks.enumerated() {
+//            stack.sizeToFit()
+            print("stack \(index + 1) has width \(stack.bounds.width)")
+        }
+        print("contentSize.width \(contentSize.width), bounds.width \(bounds.width)")
+        
         if contentSize.width < bounds.width && !extraSpacerViewIsAdded {
             print("adding spacer view")
             // Add extraSpacerView to make scroll view contentSize 1 point wider than scroll view width and enable scrolling
-            mainStackView.addArrangedSubview(extraSpacerView)
             extraSpacerViewIsAdded = true
-
+            mainStackView.addArrangedSubview(extraSpacerView)
         }
 
         if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
@@ -150,8 +167,8 @@ class BookDetailsScrollView: UIScrollView {
             
             if contentSize.width > bounds.width && extraSpacerViewIsAdded {
                 print("removing spacer view")
-                extraSpacerView.removeFromSuperview()
                 extraSpacerViewIsAdded = false
+                extraSpacerView.removeFromSuperview()
             }
 //            mainStackView.setNeedsLayout()
 //            mainStackView.layoutIfNeeded()
@@ -164,8 +181,12 @@ class BookDetailsScrollView: UIScrollView {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
+        #warning("maybe this causes bug")
         stack.spacing = 3
-        [label, button].forEach { stack.addArrangedSubview($0)}
+        [label, button].forEach { stack.addArrangedSubview($0) }
+//        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        stack.sizeToFit()
         return stack
     }
     
@@ -197,6 +218,7 @@ class BookDetailsScrollView: UIScrollView {
     private func configure(button: UIButton, withText text: String) {
         button.configuration?.attributedTitle = AttributedString("\(text)")
         button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
+        button.sizeToFit()
     }
     
     private func configureMainStack() {
@@ -237,6 +259,7 @@ class BookDetailsScrollView: UIScrollView {
         mainStackView.addArrangedSubview(vertBar3)
         
         mainStackView.addArrangedSubview(categoryVertStack)
+        mainStackView.setCustomSpacing(0, after: categoryVertStack)
         
         let trailingSpacerViewForPadding = createSpacerViewForPadding()
         mainStackView.addArrangedSubview(trailingSpacerViewForPadding)
@@ -246,8 +269,10 @@ class BookDetailsScrollView: UIScrollView {
     
     private func createSpacerViewForPadding() -> UIView {
         let view = UIView()
+        view.backgroundColor = .magenta
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 25).isActive = true
         return view
     }
     
@@ -261,7 +286,7 @@ class BookDetailsScrollView: UIScrollView {
     private func applyConstraints() {
         let contentG = contentLayoutGuide
         let frameG = frameLayoutGuide
-        
+
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         let topPadding: CGFloat = 20
         let bottomPadding: CGFloat = 14
@@ -274,14 +299,21 @@ class BookDetailsScrollView: UIScrollView {
             mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(topPadding + bottomPadding))
         ])
         
-        for vertStack in allVertStacks {
-            vertStack.translatesAutoresizingMaskIntoConstraints = false
+        for stack in allVertStacks {
+            stack.backgroundColor = .orange
+//            stack.translatesAutoresizingMaskIntoConstraints = false
 
-            if let label = vertStack.arrangedSubviews.first as? UILabel, let button = vertStack.arrangedSubviews.last as? UIButton {
-                vertStack.topAnchor.constraint(equalTo: label.topAnchor).isActive = true
-                vertStack.bottomAnchor.constraint(equalTo: button.bottomAnchor).isActive = true
-            }
         }
+        
+//        for vertStack in allVertStacks {
+//            vertStack.backgroundColor = .orange
+//            vertStack.translatesAutoresizingMaskIntoConstraints = false
+//
+//            if let label = vertStack.arrangedSubviews.first as? UILabel, let button = vertStack.arrangedSubviews.last as? UIButton {
+//                vertStack.topAnchor.constraint(equalTo: label.topAnchor).isActive = true
+//                vertStack.bottomAnchor.constraint(equalTo: button.bottomAnchor).isActive = true
+//            }
+//        }
         
         for vertBarView in vertBarViews {
             vertBarView.translatesAutoresizingMaskIntoConstraints = false
@@ -290,6 +322,7 @@ class BookDetailsScrollView: UIScrollView {
                 vertBarView.widthAnchor.constraint(equalToConstant: 1)
             ])
         }
+        
     }
 
 }

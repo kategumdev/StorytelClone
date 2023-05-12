@@ -14,6 +14,7 @@ class RoundButtonsStack: UIStackView {
     private static func createVertStack(view1: UIView, view2: UILabel) -> UIStackView {
         let stack = UIStackView()
         stack.axis = .vertical
+        stack.spacing = 15
         stack.addArrangedSubview(view1)
         stack.addArrangedSubview(view2)
         return stack
@@ -23,7 +24,7 @@ class RoundButtonsStack: UIStackView {
     private let book: Book
     private lazy var bookKind = book.titleKind
 
-    private lazy var hasListenButton = bookKind == .audiobook || bookKind == .audioBookAndEbook ? true : false
+    private lazy var hasListenButton = bookKind == .audiobook || bookKind == .audioBookAndEbook
     private lazy var listenVertStack = RoundButtonsStack.createVertStack(view1: listenButton, view2: listenLabel)
     private lazy var listenLabel: UILabel = createLabel(withText: "Listen")
 
@@ -40,7 +41,7 @@ class RoundButtonsStack: UIStackView {
         return button
     }()
     
-    private lazy var hasReadButton = bookKind == .ebook || bookKind == .audioBookAndEbook ? true : false
+    private lazy var hasReadButton = bookKind == .ebook || bookKind == .audioBookAndEbook
     private lazy var readVertStack = RoundButtonsStack.createVertStack(view1: readButton, view2: readLabel)
     private lazy var readLabel: UILabel = createLabel(withText: "Read")
     
@@ -219,14 +220,15 @@ class RoundButtonsStack: UIStackView {
         ])
         
         for vertStack in allVertStacks {
-            guard let firstView = vertStack.arrangedSubviews.first, let secondView = vertStack.arrangedSubviews.last else { return }
-            let labelPadding: CGFloat = 15
+//            guard let firstView = vertStack.arrangedSubviews.first, let secondView = vertStack.arrangedSubviews.last else { return }
+            guard let firstView = vertStack.arrangedSubviews.first else { return }
+//            let labelPadding: CGFloat = 15
             
             firstView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 firstView.heightAnchor.constraint(equalToConstant: RoundButtonsStack.roundWidth),
                 firstView.widthAnchor.constraint(equalToConstant: RoundButtonsStack.roundWidth),
-                firstView.bottomAnchor.constraint(equalTo: secondView.topAnchor, constant: -labelPadding)
+//                firstView.bottomAnchor.constraint(equalTo: secondView.topAnchor, constant: -labelPadding)
             ])
             
             vertStack.translatesAutoresizingMaskIntoConstraints = false
