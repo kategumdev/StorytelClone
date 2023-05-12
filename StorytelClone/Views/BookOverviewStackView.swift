@@ -14,9 +14,6 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-//        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
-//        textView.font = scaledFont
         textView.font = getScaledFontForMainTextView()
         textView.isScrollEnabled = false
         textView.textColor = .label
@@ -31,9 +28,6 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 40)
-//        textView.font = scaledFont
         textView.font = getScaledFontForSecondaryTextView()
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)
@@ -63,14 +57,6 @@ class BookOverviewStackView: UIStackView {
     private let audiobookTextView = BookOverviewStackView.createSecondaryTextView()
     private let ebookTextView = BookOverviewStackView.createSecondaryTextView()
     private let translatorsTextView = BookOverviewStackView.createSecondaryTextView()
-    
-//    private lazy var audiobookTextView = BookOverviewStackView.createSecondaryTextView()
-//
-//    private lazy var ebookTextView = BookOverviewStackView.createSecondaryTextView()
-//
-//    private lazy var translatorsTextView = BookOverviewStackView.createSecondaryTextView()
-//    private lazy var translatorsTextViewHeightAnchor  = translatorsTextView.heightAnchor.constraint(equalToConstant: 100)
-    
     private var textViews = [UITextView]()
         
     // MARK: - Initializers
