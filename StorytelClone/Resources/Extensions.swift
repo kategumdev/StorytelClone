@@ -45,6 +45,7 @@ extension NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
         paragraphStyle.lineHeightMultiple = multiple
+//        paragraphStyle.maximumLineHeight = 5
         attributedString.addAttribute(.paragraphStyle,
                                       value: paragraphStyle,
                                       range: NSRange(location: 0, length: string.count))
