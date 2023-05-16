@@ -228,8 +228,11 @@ class BookContainerScrollView: UIScrollView {
         bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStackView.bottomAnchor, constant: 33),
-            bookDetailsScrollView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: -1),
-            bookDetailsScrollView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: 1),
+//            bookDetailsScrollView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: -1),
+//            bookDetailsScrollView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: 1),
+//            bookDetailsScrollView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
+            bookDetailsScrollView.widthAnchor.constraint(equalTo: frameG.widthAnchor, constant: 2),
+            bookDetailsScrollView.centerXAnchor.constraint(equalTo: frameG.centerXAnchor)
         ])
         
 //        bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
