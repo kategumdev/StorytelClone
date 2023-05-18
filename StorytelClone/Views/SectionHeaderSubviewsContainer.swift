@@ -16,13 +16,13 @@ class SectionHeaderSubviewsContainer: UIView {
     
     // MARK: - Instance properties
     private let sectionTitleLabel: UILabel = {
-        let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
+        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
     private let sectionSubtitleLabel: UILabel = {
-        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, numberOfLines: 2)
+        let label = UILabel.createLabelWith(font: UIFont.sectionSubtitle, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
@@ -30,9 +30,8 @@ class SectionHeaderSubviewsContainer: UIView {
     private lazy var seeAllButton: UIButton = {
         let button = UIButton()
         button.setTitle(SectionHeaderSubviewsContainer.seeAllButtonTitle, for: .normal)
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font)
-        button.titleLabel?.font = scaledFont
+        button.titleLabel?.font = UIFont.sectionSubtitleSemibold
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentHorizontalAlignment = .right
         button.setTitleColor(Utils.seeAllButtonColor, for: .normal)
         button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)

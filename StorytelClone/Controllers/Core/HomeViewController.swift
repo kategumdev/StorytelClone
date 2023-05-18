@@ -67,7 +67,8 @@ class HomeViewController: BaseViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
+        let pointSize = UIFont.navBarTitle.fontDescriptor.pointSize
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold, scale: .large)
         let image = UIImage(systemName: "bell", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         
