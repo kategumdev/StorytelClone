@@ -23,14 +23,13 @@ class BookDetailsScrollView: UIScrollView {
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.adjustsFontForContentSizeCategory = true
-        label.backgroundColor = .yellow
         return label
     }
     
-    static func createButtonWith(symbolImageName: String?, imagePlacement: NSDirectionalRectEdge = .leading) -> UIButton {
+    static func createButtonWith(symbolImageName: String?, imagePlacement: NSDirectionalRectEdge = .leading, enableInteraction: Bool = false) -> UIButton {
         let button = UIButton()
-        button.backgroundColor = .orange
         button.tintColor = .label.withAlphaComponent(0.8)
+        button.isUserInteractionEnabled = enableInteraction
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.contentInsets = .zero
@@ -64,11 +63,10 @@ class BookDetailsScrollView: UIScrollView {
     private lazy var languageVertStack = createVertStackWith(label: languageLabel, button: languageButton)
 
     private let categoryLabel = createLabelWith(text: "Category")
-        private let categoryButton = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing)
+        private let categoryButton = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing, enableInteraction: true)
     var categoryButtonDidTapCallback: () -> () = {}
     private lazy var categoryVertStack = createVertStackWith(label: categoryLabel, button: categoryButton)
 
-    
     private lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -78,21 +76,8 @@ class BookDetailsScrollView: UIScrollView {
         return stack
     }()
     
-    private lazy var extraSpacerView: UIView = {
-        let view = UIView()
-        let width = (bounds.width - contentSize.width) + 1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: width).isActive = true
-//        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
-//        view.backgroundColor = .blue
-        return view
-    }()
-    
-    private lazy var extraSpacerViewIsAdded = false
-    
     private var vertBarViews = [UIView]()
     private var allButtons = [UIButton]()
-    private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
     
     // MARK: - Initializers
     init(book: Book) {
@@ -111,25 +96,6 @@ class BookDetailsScrollView: UIScrollView {
     }
     
     // MARK: - View life cycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if contentSize.width < bounds.width && !extraSpacerViewIsAdded {
-            print("adding spacer view")
-            // Add extraSpacerView to make scroll view contentSize 1 point wider than scroll view width and enable scrolling
-            extraSpacerViewIsAdded = true
-            mainStackView.addArrangedSubview(extraSpacerView)
-        }
-
-        if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
-            if contentSize.width > bounds.width && extraSpacerViewIsAdded {
-                print("removing spacer view")
-                extraSpacerViewIsAdded = false
-                extraSpacerView.removeFromSuperview()
-            }
-        }
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
