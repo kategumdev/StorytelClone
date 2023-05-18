@@ -168,11 +168,7 @@ class BookDetailsScrollView: UIScrollView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
-//        stack.distribution = .fillProportionally
-//        stack.distribution = .fill
         stack.spacing = Constants.commonHorzPadding
-//        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        stack.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return stack
     }()
     
@@ -189,16 +185,25 @@ class BookDetailsScrollView: UIScrollView {
     private lazy var extraSpacerViewIsAdded = false
     
     private var vertBarViews = [UIView]()
-    private lazy var allVertStacks = [UIStackView]()
-    private lazy var buttonCopies = [UIButton]() // Used for calculating widths of vertStacks
-
-//    private lazy var allVertStacks: [UIStackView] = {
-//        var stacks = [ratingVertStack, languageVertStack, categoryVertStack]
+    private var allButtons = [UIButton]()
+//    private lazy var allVertStacks = [UIStackView]()
+//    private lazy var buttonCopies = [UIButton]() // Used for calculating widths of vertStacks
+    
+//    private lazy var allButtons: [UIButton] = {
+//        var buttons = [ratingButton, languageButton, categoryButton]
 //        if hasAudio {
-//            stacks.append(durationVertStack)
+//            buttons.append(durationButton)
 //        }
-//        return stacks
+//        return buttons
 //    }()
+
+    private lazy var allVertStacks: [UIStackView] = {
+        var stacks = [ratingVertStack, languageVertStack, categoryVertStack]
+        if hasAudio {
+            stacks.append(durationVertStack)
+        }
+        return stacks
+    }()
 //
 //    private lazy var copiesOfButtons: [UIButton] = {
 //        var copies = []
@@ -206,6 +211,7 @@ class BookDetailsScrollView: UIScrollView {
     
     private var vertStackWidthConstraints = [NSLayoutConstraint]()
 //    private var vertStackHeightConstraints = [NSLayoutConstraint]()
+//    private var buttonsWidthConstraints = [NSLayoutConstraint]()
     
     var categoryButtonDidTapCallback: () -> () = {}
     private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
@@ -235,175 +241,117 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-//        print("layoutSubviews")
-        
-//        for (index, stack) in allVertStacks.enumerated() {
-//            if let label = stack.arrangedSubviews.first as? UILabel {
-//                label.sizeToFit()
-////                print("\n\n")
-////                print("label width \(label.bounds.width), button width \(button.bounds.width)")
-////                print("button intrinsic size: \(button.intrinsicContentSize)")
-//
-//                let buttonCopy = buttonCopies[index]
-//                buttonCopy.sizeToFit()
-//
-//                let width = max(label.bounds.width, buttonCopy.bounds.width)
-////                let width = max(label.bounds.width, button.intrinsicContentSize.width)
-//
-//                let constraint = vertStackWidthConstraints[index]
-//                if constraint.constant != width {
-//                    constraint.constant = width
-//                    print("new constant set to \(width)")
-////                    print("stack width \(stack.bounds.width)")
-////                    stack.setNeedsLayout()
-////                    stack.layoutIfNeeded()
-//                    needsLayout = true
-////                    setNeedsLayout()
-////                    layoutIfNeeded()
-//                }
-//            }
-//        }
 
-//        for (index, stack) in allVertStacks.enumerated() {
-//            if let label = stack.arrangedSubviews.first, let button = stack.arrangedSubviews.last as? UIButton {
-//                label.sizeToFit()
-////                print("\n\n")
-////                print("label width \(label.bounds.width), button width \(button.bounds.width)")
-////                print("button intrinsic size: \(button.intrinsicContentSize)")
-//
-//                let width = max(label.bounds.width, button.bounds.width)
-////                let width = max(label.bounds.width, button.intrinsicContentSize.width)
-//
-//                let constraint = vertStackWidthConstraints[index]
-//                if constraint.constant != width {
-//                    constraint.constant = width
-//                    print("new constant set to \(width)")
-////                    print("stack width \(stack.bounds.width)")
-////                    stack.setNeedsLayout()
-////                    stack.layoutIfNeeded()
-//                    needsLayout = true
-////                    setNeedsLayout()
-////                    layoutIfNeeded()
-//                }
-//            }
-//        }
+//        print("\n")
+        for button in allButtons {
+            button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
+            let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
+            let buttonWidth = button.systemLayoutSizeFitting(fittingSize).width
+
+            if button.bounds.width != buttonWidth {
+                button.frame.size.width = buttonWidth
+            }
+            print("BUTTON WIDTH: \(buttonWidth)")
+        }
         
-    
-        
+//        print("\n")
 //        for (index, stack) in allVertStacks.enumerated() {
-//            if let label = stack.arrangedSubviews.first, let button = stack.arrangedSubviews.last as? UIButton {
-//                label.sizeToFit()
-////                print("\n\n")
-//                print("label width \(label.bounds.width), button width \(button.bounds.width)")
-////                print("button intrinsic size: \(button.intrinsicContentSize)")
+//            guard let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton else { return }
+//            button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
+//            let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
+//            let buttonWidth = button.systemLayoutSizeFitting(fittingSize).width
 //
-//                var buttonWidth = button.bounds.width
-//                if index == 1 {
-//                    let buttonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .duration)
-//
-//                    var config = buttonCopy.configuration
-//                    config?.title = button.title(for: .normal)
-//                    buttonCopy.configuration = config
-////                    buttonCopy.setTitle(button.title(for: .normal), for: .normal)
-////                    buttonCopy.sizeToFit()
-//
-////                    let fittingSize = CGSize(width: UIView.layoutFittingCompressedSize.width, height: UIView.layoutFittingCompressedSize.height)
-//                    let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
-//
-//                    let buttonSize = buttonCopy.systemLayoutSizeFitting(fittingSize)
-//
-////                    let buttonSize = buttonCopy.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-//
-////                    buttonCopy.sizeToFit()
-////                    buttonWidth = buttonCopy.bounds.size.width
-////                    buttonWidth = buttonCopy.frame.width
-//
-/////                    buttonWidth = buttonCopy.intrinsicContentSize.width
-//                    print("button copy width: \(buttonWidth)")
-//
-////                    let buttonCopy = buttonCopies[index]
-////                    let size = buttonCopy.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-////                    buttonCopy.sizeToFit()
-////                    buttonWidth = buttonCopy.bounds.width
-////                    buttonWidth = size.width
-//                }
-//
-//                let width = max(label.bounds.width, buttonWidth)
-//
-////                let width = max(label.bounds.width, button.bounds.width)
-////                let width = max(label.bounds.width, button.intrinsicContentSize.width)
-//
-//                let constraint = vertStackWidthConstraints[index]
-//                if constraint.constant != width {
-//                    constraint.constant = width
-//                    print("new constant set to \(width)")
-////                    print("stack width \(stack.bounds.width)")
-////                    stack.setNeedsLayout()
-////                    stack.layoutIfNeeded()
-//                    needsLayout = true
-////                    setNeedsLayout()
-////                    layoutIfNeeded()
-//                }
+//            if button.bounds.width != buttonWidth {
+//                button.frame.size.width = buttonWidth
+////                if stack.frame.size.width !=
+////                stack.frame.size.width =
 //            }
+//
+//            label.sizeToFit()
+//            let labelWidth = label.bounds.width
+//
+//            let stackWidth = max(labelWidth, buttonWidth)
+//
+//            let constraint = vertStackWidthConstraints[index]
+//
+//            if constraint.constant != stackWidth {
+//                constraint.constant = stackWidth
+//            }
+//
+////            if stack.bounds.width != stackWidth {
+////                stack.frame.size.width = stackWidth
+////            }
+//
+//            print("BUTTON WIDTH: \(buttonWidth)")
 //        }
         
         print("\n")
-        for (index, stack) in allVertStacks.enumerated() {
-            guard let button = stack.arrangedSubviews.first else { return }
-            let buttonCopy = buttonCopies[index]
-            
-//            button.configuration?.attributedTitle = AttributedString("\(text)")
-            buttonCopy.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
-//            buttonCopy.sizeToFit()
-//            buttonCopy.layoutIfNeeded()
-            let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
-            //
-            let buttonSize = buttonCopy.systemLayoutSizeFitting(fittingSize)
-//            print("button copy width: \(buttonCopy.bounds.width)")
-            print("button copy width: \(buttonSize.width)")
-        }
-
-        if contentSize.width < bounds.width && !extraSpacerViewIsAdded {
-            print("adding spacer view")
-            // Add extraSpacerView to make scroll view contentSize 1 point wider than scroll view width and enable scrolling
-            extraSpacerViewIsAdded = true
-            mainStackView.addArrangedSubview(extraSpacerView)
-        }
-
-        if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
-            if contentSize.width > bounds.width && extraSpacerViewIsAdded {
-                print("removing spacer view")
-                extraSpacerViewIsAdded = false
-                extraSpacerView.removeFromSuperview()
-            }
-            
-//            print("\n\n")
-//            for (index, stack) in allVertStacks.enumerated() {
-//                if let label = stack.arrangedSubviews.first, let button = stack.arrangedSubviews.last as? UIButton {
-//                    label.sizeToFit()
-//                    print("label width \(label.bounds.width), button width \(button.bounds.width)")
-//                    print("button intrinsic size: \(button.intrinsicContentSize.width)")
-//                    let width = max(label.bounds.width, button.bounds.width)
-//    //                let width = max(label.bounds.width, button.intrinsicContentSize.width)
+//        for (index, stack) in allVertStacks.enumerated() {
+//            guard let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton else { return }
+//            button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
+//            let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
+//            let buttonWidth = button.systemLayoutSizeFitting(fittingSize).width
 //
-//                    let constraint = vertStackWidthConstraints[index]
-//                    if constraint.constant != width {
-//                        constraint.constant = width
-//                        print("new constant set to \(width)")
-//                        print("stack width \(stack.bounds.width)")
-//    //                    stack.setNeedsLayout()
-//    //                    stack.layoutIfNeeded()
-//                        needsLayout = true
-//    //                    setNeedsLayout()
-//    //                    layoutIfNeeded()
-//                    }
+////                if button.bounds.width != buttonWidth {
+////                    button.frame.size.width = buttonWidth
+////    //                if stack.frame.size.width !=
+////    //                stack.frame.size.width =
+////                }
 //
-//                }
+//            label.sizeToFit()
+//            let labelWidth = label.bounds.width
+//
+//            let stackWidth = max(labelWidth, buttonWidth)
+//
+//            let constraint = vertStackWidthConstraints[index]
+////
+////                if constraint.constant != stackWidth {
+////                    constraint.constant = stackWidth
+////                }
+//
+//            if button.bounds.width != buttonWidth {
+//                button.frame.size.width = buttonWidth
+////                    stack.sizeToFit()
+////                if stack.frame.size.width !=
+////                stack.frame.size.width =
 //            }
-            
+//
+////                button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
+//////                let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
+////                let newButtonWidth = button.systemLayoutSizeFitting(fittingSize).width
+////
+////                label.sizeToFit()
+////                let newLabelWidth = label.bounds.width
+////                let stackWidth = max(newLabelWidth, newButtonWidth)
+////
+////
+////                if stack.bounds.width != stackWidth {
+////
+////
+////
+////                    stack.frame.size.width = stackWidth
+////                }
+//
+//            print("BUTTON WIDTH: \(buttonWidth)")
+//        }
+        
+//        if contentSize.width < bounds.width && !extraSpacerViewIsAdded {
+//            print("adding spacer view")
+//            // Add extraSpacerView to make scroll view contentSize 1 point wider than scroll view width and enable scrolling
+//            extraSpacerViewIsAdded = true
+//            mainStackView.addArrangedSubview(extraSpacerView)
+//        }
 
-        }
+//        if previousContentSizeCategory != traitCollection.preferredContentSizeCategory {
+//            previousContentSizeCategory = traitCollection.preferredContentSizeCategory
+//            if contentSize.width > bounds.width && extraSpacerViewIsAdded {
+//                print("removing spacer view")
+//                extraSpacerViewIsAdded = false
+//                extraSpacerView.removeFromSuperview()
+//            }
+//
+//
+//        }
         
         if needsLayout {
             needsLayout = false
@@ -414,8 +362,6 @@ class BookDetailsScrollView: UIScrollView {
         }
     }
     
-
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -424,29 +370,12 @@ class BookDetailsScrollView: UIScrollView {
         }
         
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-//            for (index, stack) in allVertStacks.enumerated() {
-//                if let label = stack.arrangedSubviews.first, let button = stack.arrangedSubviews.last as? UIButton {
-//                    label.sizeToFit()
-//                    button.sizeToFit()
-////                    let buttonWidth = button.titleLabel!.bounds.width
-//                    let width = max(label.bounds.width, button.bounds.width)
-////                    let width = max(label.bounds.width, buttonWidth)
-//
-//                    print("max width = \(width)")
-//                    if vertStackWidthConstraints[index].constant != width {
-//                        vertStackWidthConstraints[index].constant = width
-//                        setNeedsLayout()
-//                        layoutIfNeeded()
-//                    }
-//                }
-//            }
         }
     }
     
     // MARK: - Helper methods
 
     private func configure(button: UIButton, withText text: String) {
-
         var config = button.configuration
         config?.title = text
         button.configuration = config
@@ -462,27 +391,31 @@ class BookDetailsScrollView: UIScrollView {
         // Configure labels and buttons with text
         ratingsLabel.text = "\(book.reviewsNumber) Ratings"
         configure(button: ratingButton, withText: "\(book.rating)")
-        let ratingButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .rating)
-        ratingButtonCopy.setTitle("\(book.rating)", for: .normal)
-        buttonCopies.append(ratingButtonCopy)
+        allButtons.append(ratingButton)
+//        let ratingButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .rating)
+//        ratingButtonCopy.setTitle("\(book.rating)", for: .normal)
+//        buttonCopies.append(ratingButtonCopy)
  
         if hasAudio {
             configure(button: durationButton, withText: "\(book.duration)")
-            let durationButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
-            durationButtonCopy.setTitle("\(book.duration)", for: .normal)
-            buttonCopies.append(durationButtonCopy)
+            allButtons.append(durationButton)
+//            let durationButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
+//            durationButtonCopy.setTitle("\(book.duration)", for: .normal)
+//            buttonCopies.append(durationButtonCopy)
         }
         
         configure(button: languageButton, withText: "\(book.language.rawValue)")
-        let languageButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
-        languageButtonCopy.setTitle("\(book.language.rawValue)", for: .normal)
-        buttonCopies.append(languageButtonCopy)
+        allButtons.append(languageButton)
+//        let languageButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
+//        languageButtonCopy.setTitle("\(book.language.rawValue)", for: .normal)
+//        buttonCopies.append(languageButtonCopy)
 
         let categoryText = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
         configure(button: categoryButton, withText: categoryText)
-        let categoryButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
-        categoryButtonCopy.setTitle(categoryText, for: .normal)
-        buttonCopies.append(categoryButtonCopy)
+        allButtons.append(categoryButton)
+//        let categoryButtonCopy = BookDetailsScrollView.createButtonFor(buttonKind: .language)
+//        categoryButtonCopy.setTitle(categoryText, for: .normal)
+//        buttonCopies.append(categoryButtonCopy)
         addCategoryButtonAction()
         
         // Add arrangedSubviews
@@ -544,15 +477,14 @@ class BookDetailsScrollView: UIScrollView {
         stack.alignment = .leading
 //        stack.distribution = .fill
 //        stack.alignment = .center
-        #warning("maybe this causes bug")
         stack.spacing = 3
-        stack.addArrangedSubview(button)
+//        stack.addArrangedSubview(button)
 
-//        [label, button].forEach { stack.addArrangedSubview($0) }
+        [label, button].forEach { stack.addArrangedSubview($0) }
         
 //        stack.translatesAutoresizingMaskIntoConstraints = false
-//        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        stack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        stack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
 //        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 //        stack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -611,52 +543,16 @@ class BookDetailsScrollView: UIScrollView {
         }
         
 //        for (index, stack) in allVertStacks.enumerated() {
+//            guard let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton else { return }
 //            stack.translatesAutoresizingMaskIntoConstraints = false
-//            if let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton {
-//                label.sizeToFit()
-//
-//                let buttonCopy = buttonCopies[index]
-//
-//                buttonCopy.sizeToFit()
-//                print("label \(label.bounds.width), buttonCopy \(buttonCopy.bounds.width), button \(button.bounds.width)")
-//
-//                let size = buttonCopy.systemLayoutSizeFitting(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-//                print("label \(label.bounds.width), buttonCopy OTHER \(size.width), button \(button.bounds.width)")
-//
-//                let width = max(label.bounds.width, buttonCopy.bounds.width)
-//                let widthConstraint = stack.widthAnchor.constraint(equalToConstant: width)
-//                widthConstraint.isActive = true
-//                vertStackWidthConstraints.append(widthConstraint)
-//
-//            }
-//        }
-        
-//        for stack in allVertStacks {
-//            stack.translatesAutoresizingMaskIntoConstraints = false
-//            if let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton {
-//                label.sizeToFit()
-////                button.widthAnchor.constraint(lessThanOrEqualToConstant: 400).isActive = true
-//                button.sizeToFit()
-////                print("label \(label.bounds.width), button \(button.bounds.width)")
-//                let width = max(label.bounds.width, button.bounds.width)
-//                let widthConstraint = stack.widthAnchor.constraint(equalToConstant: width)
-//                widthConstraint.isActive = true
-//                vertStackWidthConstraints.append(widthConstraint)
-//
-//            }
-//        }
-        
-//        for stack in allVertStacks {
-//            stack.translatesAutoresizingMaskIntoConstraints = false
-//            if let label = stack.arrangedSubviews.first as? UILabel, let button = stack.arrangedSubviews.last as? UIButton {
-//                label.sizeToFit()
-//                button.sizeToFit()
-////                print("label \(label.bounds.width), button \(button.bounds.width)")
-//                let width = max(label.bounds.width, button.bounds.width)
-//                let widthConstraint = stack.widthAnchor.constraint(equalToConstant: width)
-//                widthConstraint.isActive = true
-//                vertStackWidthConstraints.append(widthConstraint)
-//            }
+//            label.sizeToFit()
+//            button.sizeToFit()
+//            let labelWidth = label.bounds.width
+//            let buttonWidth = button.bounds.width
+//            let stackWidth = max(labelWidth, buttonWidth)
+//            let constraint = stack.widthAnchor.constraint(equalToConstant: stackWidth)
+//            constraint.isActive = true
+//            vertStackWidthConstraints.append(constraint)
 //        }
     }
 
