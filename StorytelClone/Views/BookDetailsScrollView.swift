@@ -8,14 +8,6 @@
 import UIKit
 
 class BookDetailsScrollView: UIScrollView {
-    enum ButtonKind {
-        case rating, duration, language, category
-//        case rating
-//        case duration
-//        case language
-//        case category
-    }
-    
     // MARK: - Static methods
     static func getScaledFontForLabel() -> UIFont {
         return UIFontMetrics.default.scaledFont(for: Utils.sectionSubtitleFont, maximumPointSize: 42)
@@ -31,63 +23,14 @@ class BookDetailsScrollView: UIScrollView {
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.adjustsFontForContentSizeCategory = true
-        
-//        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-//        label.setContentHuggingPriority(.defaultLow, for: .vertical)
-//        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.backgroundColor = .yellow
         return label
     }
-    
-//    static func createButtonFor(buttonKind: ButtonKind) -> UIButton {
-//        let button = UIButton()
-//        button.backgroundColor = .orange
-//        button.tintColor = .label.withAlphaComponent(0.8)
-////        button.titleLabel?.preferredMaxLayoutWidth = CGFloat.greatestFiniteMagnitude
-//
-//        var buttonConfig = UIButton.Configuration.plain()
-//        buttonConfig.contentInsets = .zero
-//        buttonConfig.titleAlignment = .leading
-//
-//        var symbolImageName: String?
-//        var imagePlacement: NSDirectionalRectEdge = .leading
-//        switch buttonKind {
-//        case .rating:
-//            symbolImageName = "star.fill"
-//        case .duration:
-//            symbolImageName = "clock"
-//        case .language:
-//            symbolImageName = nil
-//        case .category:
-//            symbolImageName = "chevron.forward"
-//            imagePlacement = .trailing
-//        }
-//
-//        if let symbolImageName = symbolImageName {
-//            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
-//            let image = UIImage(systemName: symbolImageName, withConfiguration: symbolConfig)
-//            buttonConfig.image = image
-//            buttonConfig.imagePlacement = imagePlacement
-//            buttonConfig.imagePadding = 4
-//        }
-////        buttonConfig.attributedTitle?.font = getScaledFontForButton()
-//        buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-//            var outgoing = incoming
-//            outgoing.font = getScaledFontForButton()
-//            return outgoing
-//        }
-//
-//        #warning("Enable or disable receiving touches")
-//        button.configuration = buttonConfig
-//        return button
-//    }
     
     static func createButtonWith(symbolImageName: String?, imagePlacement: NSDirectionalRectEdge = .leading) -> UIButton {
         let button = UIButton()
         button.backgroundColor = .orange
         button.tintColor = .label.withAlphaComponent(0.8)
-//        button.titleLabel?.adjustsFontForContentSizeCategory = true
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.contentInsets = .zero
@@ -97,23 +40,10 @@ class BookDetailsScrollView: UIScrollView {
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
             let image = UIImage(systemName: symbolImageName, withConfiguration: symbolConfig)
             buttonConfig.image = image
-//            buttonConfig.imagePlacement = .leading
             buttonConfig.imagePlacement = imagePlacement
             buttonConfig.imagePadding = 4
         }
-//        buttonConfig.attributedTitle?.font = getScaledFontForButton()
-
-//        buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-//            var outgoing = incoming
-//            outgoing.font = getScaledFontForButton()
-//            return outgoing
-//        }
         button.configuration = buttonConfig
-        
-//        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-//        button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-//        button.setContentHuggingPriority(.defaultHigh, for: .vertical)
-//        button.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return button
     }
     
@@ -121,23 +51,19 @@ class BookDetailsScrollView: UIScrollView {
     private let book: Book
     
     private let ratingsLabel = createLabelWith(text: "80 Ratings")
-//    private let ratingButton = createButtonFor(buttonKind: .rating)
     private let ratingButton = createButtonWith(symbolImageName: "star.fill")
     private lazy var ratingVertStack = createVertStackWith(label: ratingsLabel, button: ratingButton)
     
     private lazy var hasAudio = book.titleKind == .audioBookAndEbook || book.titleKind == .audiobook
     private lazy var durationLabel = BookDetailsScrollView.createLabelWith(text: "Duration")
-//    private lazy var durationButton = BookDetailsScrollView.createButtonFor(buttonKind: .duration)
     private let durationButton = createButtonWith(symbolImageName: "clock")
     private lazy var durationVertStack = createVertStackWith(label: durationLabel, button: durationButton)
     
     private let languageLabel = createLabelWith(text: "Language")
-//    private let languageButton = createButtonFor(buttonKind: .language)
     private let languageButton = createButtonWith(symbolImageName: nil)
     private lazy var languageVertStack = createVertStackWith(label: languageLabel, button: languageButton)
 
     private let categoryLabel = createLabelWith(text: "Category")
-//    private let categoryButton = createButtonFor(buttonKind: .category)
         private let categoryButton = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing)
     var categoryButtonDidTapCallback: () -> () = {}
     private lazy var categoryVertStack = createVertStackWith(label: categoryLabel, button: categoryButton)
@@ -157,8 +83,8 @@ class BookDetailsScrollView: UIScrollView {
         let width = (bounds.width - contentSize.width) + 1
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: width).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        view.backgroundColor = .blue
+//        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
+//        view.backgroundColor = .blue
         return view
     }()
     
@@ -187,20 +113,6 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        print("layoutSubviews")
-//        print("\n")
-//        for button in allButtons {
-//            button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
-//            let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
-//            let buttonWidth = button.systemLayoutSizeFitting(fittingSize).width
-//
-//            if button.bounds.width != buttonWidth {
-//                button.frame.size.width = buttonWidth
-//                print("BUTTON WIDTH set to: \(buttonWidth)")
-//            }
-////            print("BUTTON WIDTH: \(buttonWidth)")
-//        }
-        
         if contentSize.width < bounds.width && !extraSpacerViewIsAdded {
             print("adding spacer view")
             // Add extraSpacerView to make scroll view contentSize 1 point wider than scroll view width and enable scrolling
@@ -229,32 +141,12 @@ class BookDetailsScrollView: UIScrollView {
             print("\n")
             for button in allButtons {
                 button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
-//                button.sizeToFit()
             }
-            
-//            for button in allButtons {
-//                button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
-//                let fittingSize = CGSize(width: UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingExpandedSize.height)
-//                let buttonWidth = button.systemLayoutSizeFitting(fittingSize).width
-//
-//                if button.bounds.width != buttonWidth {
-//                    button.frame.size.width = buttonWidth
-//                    print("BUTTON WIDTH set to: \(buttonWidth)")
-//                }
-//            }
-            
         }
     }
     
     // MARK: - Helper methods
-
     private func configure(button: UIButton, withText text: String) {
-//        var config = button.configuration
-//        config?.title = text
-//        config?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
-//        button.configuration = config
-        
-//        button.configuration?.title = text
         button.configuration?.attributedTitle = AttributedString(text)
         button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
     }
@@ -310,24 +202,12 @@ class BookDetailsScrollView: UIScrollView {
         stack.alignment = .leading
         stack.spacing = 3
         [label, button].forEach { stack.addArrangedSubview($0) }
-//        stack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        stack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        stack.backgroundColor = .green
         return stack
     }
     
     private func createVertBarView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemGray3
-        return view
-    }
-    
-    private func createSpacerViewForPadding() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .magenta
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 25).isActive = true
         return view
     }
     
@@ -343,28 +223,16 @@ class BookDetailsScrollView: UIScrollView {
         let frameG = frameLayoutGuide
         
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        let extraPaddingTop: CGFloat = 20
-        let extraPaddingBottom: CGFloat = 14
-        let extraPaddingsX: CGFloat = 50
+        let topPadding: CGFloat = 20
+        let bottomPadding: CGFloat = 14
+        let leadingTrailingPadding: CGFloat = 25
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: extraPaddingTop),
-            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: extraPaddingsX / 2),
-            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -extraPaddingsX / 2),
-            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -extraPaddingBottom),
-            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(extraPaddingTop + extraPaddingBottom))
+            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: topPadding),
+            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: leadingTrailingPadding),
+            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -leadingTrailingPadding),
+            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -bottomPadding),
+            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(topPadding + bottomPadding))
         ])
-
-//        mainStackView.translatesAutoresizingMaskIntoConstraints = false
-//        let topPadding: CGFloat = 20
-//        let bottomPadding: CGFloat = 14
-//
-//        NSLayoutConstraint.activate([
-//            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: topPadding),
-//            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-//            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-//            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -bottomPadding),
-//            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(topPadding + bottomPadding))
-//        ])
         
         for vertBarView in vertBarViews {
             vertBarView.translatesAutoresizingMaskIntoConstraints = false
