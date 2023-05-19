@@ -16,19 +16,17 @@ class WideButtonTableViewCell: UITableViewCell {
 
     private lazy var dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
-        button.backgroundColor = UIColor(red: 200/255, green: 217/255, blue: 228/255, alpha: 1)
+        button.backgroundColor = UIColor(red: 5/255, green: 163/255, blue: 173/255, alpha: 1)
         return button
     }()
     
     let customLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        let font = Utils.wideButtonLabelFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 24)
-        label.font = scaledFont
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowOffset = CGSize(width: 0, height: 1)
-        label.layer.shadowOpacity = 0.6// Increase opacity for a stronger shadow effect
+        label.font = UIFont.getScaledFontWith(textStyle: .title1, weight: .bold, basePointSize: 32, maximumPointSize: 36)
+        label.numberOfLines = 2
+        label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     
@@ -44,16 +42,6 @@ class WideButtonTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - View life cycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        timeLayoutSubviewsIsBeingCalled += 1
-        if timeLayoutSubviewsIsBeingCalled == 2 {
-            addGradient()
-        }
     }
     
     // MARK: - Instance methods
@@ -85,20 +73,9 @@ class WideButtonTableViewCell: UITableViewCell {
         customLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             customLabel.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: Constants.commonHorzPadding),
-            customLabel.bottomAnchor.constraint(equalTo: dimmedAnimationButton.bottomAnchor, constant: -Constants.commonHorzPadding),
+            customLabel.trailingAnchor.constraint(equalTo: dimmedAnimationButton.trailingAnchor, constant: -Constants.commonHorzPadding),
+            customLabel.bottomAnchor.constraint(equalTo: dimmedAnimationButton.bottomAnchor, constant: -Constants.commonHorzPadding)
         ])
-
-    }
-    
-    private func addGradient() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [
-            UIColor.clear.cgColor,
-            UIColor.black.withAlphaComponent(0.45).cgColor
-        ]
-        gradientLayer.locations = [0.4, 1]
-        gradientLayer.frame = dimmedAnimationButton.bounds
-        dimmedAnimationButton.layer.addSublayer(gradientLayer)
     }
     
 }

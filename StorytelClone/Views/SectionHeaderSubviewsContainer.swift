@@ -16,6 +16,7 @@ class SectionHeaderSubviewsContainer: UIView {
     
     // MARK: - Instance properties
     private let sectionTitleLabel: UILabel = {
+//        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
         let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
@@ -89,6 +90,11 @@ class SectionHeaderSubviewsContainer: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        print("pointSize: \(sectionTitleLabel.font.pointSize)")
+//    }
     
     // MARK: - Instance methods
     func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
