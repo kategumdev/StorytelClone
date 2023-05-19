@@ -47,9 +47,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configure(withColor color: UIColor, categoryOfButton: ButtonCategory, callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        dimmedAnimationButton.backgroundColor = color
-        let category = ButtonCategory.createModelFor(categoryButton: categoryOfButton)
+    func configureFor(categoryOfButton: ButtonCategory, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.backgroundColor = categoryOfButton.colorForBackground
+        let category = categoryOfButton.category
         dimmedAnimationButton.kind = .toPushCategoryVcForCategory(category)
         dimmedAnimationButton.didTapCallback = callback
         categoryTitleLabel.text = categoryOfButton.rawValue

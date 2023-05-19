@@ -14,7 +14,7 @@ class TabBarViewController: UITabBarController {
         view.backgroundColor = Utils.customBackgroundColor
         
         let vc1 = UINavigationController(rootViewController: HomeViewController(categoryModel: Category.home, posterBook: Book.posterBook))
-        let vc2 = UINavigationController(rootViewController: SearchViewController(categoryModel: Category.searchVc, categoryButtons: ButtonCategory.categoriesForSearchVc))
+        let vc2 = UINavigationController(rootViewController: SearchViewController(categoryModel: Category.searchVc, categoryButtons: ButtonCategory.buttonCategoriesForSearchVc))
         let vc3 = UINavigationController(rootViewController: BookshelfViewController())
         let vc4 = UINavigationController(rootViewController: ProfileViewController())
         

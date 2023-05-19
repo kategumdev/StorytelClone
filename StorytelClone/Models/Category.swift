@@ -52,27 +52,6 @@ struct TableSection {
 
 enum ButtonCategory: String {
     
-    static let categoriesForAllCategories: [ButtonCategory] = [
-        novela, zonaPodcast, novelaNegra, romantica,
-        thrillerYHorror, fantasiaYCienciaFiccion,
-        crecimientoPersonalYLifestyle, infantil,
-        clasicos, juvenilYYoungAdult, erotica, noFiccion,
-        economiaYNegocios, relatosCortos, historia,
-        espiritualidadYReligion, biografias, poesiaYTeatro,
-        aprenderIdiomas, inEnglish
-    ]
-    
-    static let categoriesForSearchVc: [ButtonCategory] = [
-        series, zonaPodcast, soloEnStorytel, losMasPopulares,
-        soloParaTi, ebooks, novela, novelaNegra, romantica,
-        thrillerYHorror, fantasiaYCienciaFiccion, infantil,
-        juvenilYYoungAdult, crecimientoPersonalYLifestyle,
-        historia, noFiccion, erotica, relatosCortos,
-        economiaYNegocios, espiritualidadYReligion, biografias,
-        poesiaYTeatro, historiasParaCadaEmocion, aprenderIdiomas,
-        inEnglish
-    ]
-    
     case series = "Series"
     case soloEnStorytel = "Solo en Storytel"
     case losMasPopulares = "Los más populares"
@@ -102,38 +81,90 @@ enum ButtonCategory: String {
     case aprenderIdiomas = "Aprender idiomas"
     case inEnglish = "In English"
     
-    static func createModelFor(categoryButton: ButtonCategory) -> Category {
+    static let buttonCategoriesForAllCategories: [ButtonCategory] = [
+        novela, zonaPodcast, novelaNegra, romantica,
+        thrillerYHorror, fantasiaYCienciaFiccion,
+        crecimientoPersonalYLifestyle, infantil,
+        clasicos, juvenilYYoungAdult, erotica, noFiccion,
+        economiaYNegocios, relatosCortos, historia,
+        espiritualidadYReligion, biografias, poesiaYTeatro,
+        aprenderIdiomas, inEnglish
+    ]
+    
+    static let buttonCategoriesForSearchVc: [ButtonCategory] = [
+        series, zonaPodcast, soloEnStorytel, losMasPopulares,
+        soloParaTi, ebooks, novela, novelaNegra, romantica,
+        thrillerYHorror, fantasiaYCienciaFiccion, infantil,
+        juvenilYYoungAdult, crecimientoPersonalYLifestyle,
+        historia, noFiccion, erotica, relatosCortos,
+        economiaYNegocios, espiritualidadYReligion, biografias,
+        poesiaYTeatro, historiasParaCadaEmocion, aprenderIdiomas,
+        inEnglish
+    ]
+    
+    var category: Category {
+        switch self {
+        case .series: return Category.series
+        case .soloEnStorytel: return Category.soloEnStorytel
+        case .losMasPopulares: return Category.losMasPopulares
+        case .soloParaTi: return Category.soloParaTi
+        case .ebooks: return Category.eBooks
+        case .historiasParaCadaEmocion: return Category.historiasParaCadaEmocion
         
-        switch categoryButton {
-        case series: return Category.series
-        case soloEnStorytel: return Category.soloEnStorytel
-        case losMasPopulares: return Category.losMasPopulares
-        case soloParaTi: return Category.soloParaTi
-        case ebooks: return Category.eBooks
-        case historiasParaCadaEmocion: return Category.historiasParaCadaEmocion
-        
-        case novela: return Category.novela
-        case zonaPodcast: return Category.zonaPodcast
-        case novelaNegra: return Category.novelaNegra
-        case romantica: return Category.romantica
-        case thrillerYHorror: return Category.thrillerYHorror
-        case fantasiaYCienciaFiccion: return Category.fantasiaYCienciaFiccion
-        case crecimientoPersonalYLifestyle: return Category.crecimientoPersonalYLifestyle
-        case infantil: return Category.infantil
-        case clasicos: return Category.clasicos
-        case juvenilYYoungAdult: return Category.juvenilYYoungAdult
-        case erotica: return Category.erotica
-        case noFiccion: return Category.noFiccion
-        case economiaYNegocios: return Category.economiaYNegocios
-        case relatosCortos: return Category.relatosCortos
-        case historia: return Category.historia
-        case espiritualidadYReligion: return Category.espiritualidadYReligion
-        case biografias: return Category.biografias
-        case poesiaYTeatro: return Category.poesiaYTeatro
-        case aprenderIdiomas: return Category.aprenderIdiomas
-        case inEnglish: return Category.inEnglish
+        case .novela: return Category.novela
+        case .zonaPodcast: return Category.zonaPodcast
+        case .novelaNegra: return Category.novelaNegra
+        case .romantica: return Category.romantica
+        case .thrillerYHorror: return Category.thrillerYHorror
+        case .fantasiaYCienciaFiccion: return Category.fantasiaYCienciaFiccion
+        case .crecimientoPersonalYLifestyle: return Category.crecimientoPersonalYLifestyle
+        case .infantil: return Category.infantil
+        case .clasicos: return Category.clasicos
+        case .juvenilYYoungAdult: return Category.juvenilYYoungAdult
+        case .erotica: return Category.erotica
+        case .noFiccion: return Category.noFiccion
+        case .economiaYNegocios: return Category.economiaYNegocios
+        case .relatosCortos: return Category.relatosCortos
+        case .historia: return Category.historia
+        case .espiritualidadYReligion: return Category.espiritualidadYReligion
+        case .biografias: return Category.biografias
+        case .poesiaYTeatro: return Category.poesiaYTeatro
+        case .aprenderIdiomas: return Category.aprenderIdiomas
+        case .inEnglish: return Category.inEnglish
         }
     }
+    
+    var colorForBackground: UIColor {
+        switch self {
+        case .series: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
+        case .soloEnStorytel: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
+        case .losMasPopulares: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
+        case .soloParaTi: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
+        case .ebooks: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
+        case .historiasParaCadaEmocion: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
+        case .novela: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
+        case .zonaPodcast: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
+        case .novelaNegra: return UIColor(red: 69/255, green: 25/255, blue: 162/255, alpha: 1)
+        case .romantica: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
+        case .thrillerYHorror: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
+        case .fantasiaYCienciaFiccion: return UIColor(red: 69/255, green: 25/255, blue: 162/255, alpha: 1)
+        case .crecimientoPersonalYLifestyle: return UIColor(red: 39/255, green: 149/255, blue: 213/255, alpha: 1)
+        case .infantil: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
+        case .clasicos: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
+        case .juvenilYYoungAdult: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
+        case .erotica: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
+        case .noFiccion: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
+        case .economiaYNegocios: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
+        case .relatosCortos: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
+        case .historia: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
+        case .espiritualidadYReligion: return UIColor(red: 39/255, green: 149/255, blue: 213/255, alpha: 1)
+        case .biografias: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
+        case .poesiaYTeatro: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
+        case .aprenderIdiomas: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
+        case .inEnglish: return UIColor(red: 0, green: 54/255, blue: 195/255, alpha: 1)
+        }
+    }
+    
 }
 
 struct Category: Equatable {

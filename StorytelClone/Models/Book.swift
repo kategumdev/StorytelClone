@@ -19,7 +19,7 @@ struct Book: Title, Equatable {
     let largeCoverImage: UIImage?
     var titleKind: TitleKind
     let overview: String
-    let category: ButtonCategory
+    let buttonCategory: ButtonCategory
     let rating: Double
     let reviewsNumber: Int
     let duration: String
@@ -42,7 +42,7 @@ struct Book: Title, Equatable {
         self.largeCoverImage = largeCoverImage
         self.titleKind = titleKind
         self.overview = overview
-        self.category = category
+        self.buttonCategory = category
         self.rating = rating
         self.reviewsNumber = reviewsNumber
         self.duration = duration

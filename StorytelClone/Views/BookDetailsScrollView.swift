@@ -9,17 +9,8 @@ import UIKit
 
 class BookDetailsScrollView: UIScrollView {
     // MARK: - Static methods
-//    static func getScaledFontForLabel() -> UIFont {
-//        return UIFontMetrics.default.scaledFont(for: Utils.sectionSubtitleFont, maximumPointSize: 42)
-//    }
-    
-//    static func getScaledFontForButton() -> UIFont {
-//        return UIFontMetrics.default.scaledFont(for: Utils.navBarTitleFont, maximumPointSize: 45)
-//    }
-    
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
-//        label.font = getScaledFontForLabel()
         label.font = UIFont.sectionSubtitle
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
@@ -107,7 +98,6 @@ class BookDetailsScrollView: UIScrollView {
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             print("\n")
             for button in allButtons {
-//                button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
                 button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
             }
         }
@@ -117,7 +107,6 @@ class BookDetailsScrollView: UIScrollView {
     private func configure(button: UIButton, withText text: String) {
         button.configuration?.attributedTitle = AttributedString(text)
         button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
-//        button.configuration?.attributedTitle?.font = BookDetailsScrollView.getScaledFontForButton()
     }
     
     private func configureMainStack() {
@@ -134,7 +123,7 @@ class BookDetailsScrollView: UIScrollView {
         configure(button: languageButton, withText: "\(book.language.rawValue)")
         allButtons.append(languageButton)
 
-        let categoryText = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+        let categoryText = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
         configure(button: categoryButton, withText: categoryText)
         allButtons.append(categoryButton)
         addCategoryButtonAction()

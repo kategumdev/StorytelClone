@@ -10,12 +10,8 @@ import UIKit
 class StarHorzStackView: UIStackView {
     // MARK: - Static methods
     static func createCategoryLabel() -> UILabel {
-//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 45)
         let font = UIFont.getScaledFontWith(textStyle: .caption2, weight: .medium, basePointSize: 11, maximumPointSize: 16)
         let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor, text: "Lorem ipsum")
-//        label.text = "Lorem ipsum"
-//        label.textColor = Utils.seeAllButtonColor
         label.sizeToFit()
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
@@ -58,7 +54,6 @@ class StarHorzStackView: UIStackView {
     private lazy var ratingLabel: UILabel = {
         let font = UIFont.getScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 16)
         let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor)
-//        label.textColor = Utils.seeAllButtonColor
         label.sizeToFit()
         return label
     }()
@@ -128,7 +123,7 @@ class StarHorzStackView: UIStackView {
             ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         }
         
-        categoryLabel.text = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
+        categoryLabel.text = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
         
         guard hasSaveAndEllipsisButtons else { return }
         isBookAddedToBookshelf = book.isAddedToBookshelf

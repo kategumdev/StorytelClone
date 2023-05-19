@@ -346,8 +346,8 @@ extension BottomSheetViewController {
             tableSections.append(seriesTableSection)
         }
         
-        let categoryName = book.category.rawValue.replacingOccurrences(of: "\n", with: " ")
-        let categoryForTableSection = ButtonCategory.createModelFor(categoryButton: book.category)
+        let categoryName = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
+        let categoryForTableSection = book.buttonCategory.category
         let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName, toShowCategory: categoryForTableSection)
         tableSections.append(categoryTableSection)
         
