@@ -11,9 +11,6 @@ class PlaySampleButtonContainer: UIView {
     // MARK: - Static properties
     static let buttonHeight: CGFloat = RoundButtonsStack.roundWidth
     
-    static func getLabelScaledFont() -> UIFont {
-        return UIFontMetrics.default.scaledFont(for: Utils.navBarTitleFont, maximumPointSize: 40)
-    }
     // MARK: - Instance properties
     private let button: UIButton = {
         let button = UIButton()
@@ -32,16 +29,13 @@ class PlaySampleButtonContainer: UIView {
         imageView.image = image
         return imageView
     }()
-    
+
     private let customTitleLabel: UILabel = {
-        let label = UILabel()
-        label.lineBreakMode = .byTruncatingTail
-        label.text = "Play a sample"
-        label.textAlignment = .left
-        label.font = getLabelScaledFont()
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 40)
+        let label = UILabel.createLabelWith(font: scaledFont, text: "Play a sample")
         return label
     }()
-    
+
     private lazy var horzStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -70,10 +64,6 @@ class PlaySampleButtonContainer: UIView {
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             button.layer.borderColor = UIColor.label.cgColor
-        }
-        
-        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            customTitleLabel.font = PlaySampleButtonContainer.getLabelScaledFont()
         }
     }
     
