@@ -69,7 +69,7 @@ struct Utils {
     
     static let sectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
 
-    static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
+//    static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     
     static let sectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
 //    static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)

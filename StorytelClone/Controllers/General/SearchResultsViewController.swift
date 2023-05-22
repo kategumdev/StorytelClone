@@ -10,7 +10,6 @@ import UIKit
 class SearchResultsViewController: ScopeViewController {
     // MARK: - Instance properties
 //    var modelForSearchQuery: [ScopeButtonKind : [Title]]?
-        
     
     // MARK: - Initializers
     init() {

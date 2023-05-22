@@ -13,21 +13,14 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         
     // MARK: - Instance properties
     private var categoryOfButton: ButtonCategory?
-
+    
     private lazy var categoryTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.numberOfLines = 0
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 20)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 0, textColor: .white)
         label.lineBreakMode = .byWordWrapping
-        let font = Utils.categoryButtonLabelFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 20)
-        label.font = scaledFont
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowOffset = CGSize(width: 0, height: 1)
-        label.layer.shadowOpacity = 0.6// Increase opacity for a stronger shadow effect
         return label
     }()
-    
+
     private lazy var dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
         button.addSubview(categoryTitleLabel)
