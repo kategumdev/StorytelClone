@@ -19,6 +19,8 @@ extension UIFont {
     static let navBarTitle = createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
     static let navBarTitleLargeMaxSize = createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16)
     
+    static let customCalloutRegular = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16)
+    
 //    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
 //    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16)
 

@@ -58,71 +58,18 @@ class BookDetailsStackView: UIStackView {
         return button
     }()
     
-    private lazy var authorsButtonHeightConstraint = authorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value, it is set when button is being configured
+    private lazy var authorsButtonHeightConstraint = authorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value
     
-    private func configureAuthorsButton() {
-        let authorNames = book.authors.map { $0.name }
-        let authorNamesString = authorNames.joined(separator: ", ")
+    private lazy var hasNarratorsButton = !book.narrators.isEmpty
 
-        let attributedString = NSMutableAttributedString(string: "By: \(authorNamesString)")
-//        let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-//        let scaledFont1 = UIFontMetrics.default.scaledFont(for: font1, maximumPointSize: 45)
-        let scaledFont1 = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16)
-        let byAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont1, .foregroundColor: UIColor.label]
-
-//        let font2 = Utils.navBarTitleFont
-//        let scaledFont2 = UIFontMetrics.default.scaledFont(for: font2, maximumPointSize: 45)
-        let scaledFont2 = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16)
-        let authorNameAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont2, .foregroundColor: Utils.tintColor]
-
-        attributedString.addAttributes(byAttributes, range: NSRange(location: 0, length: 3))
-        attributedString.addAttributes(authorNameAttributes, range: NSRange(location: 3, length: attributedString.length - 3))
-
-        authorsButton.setAttributedTitle(attributedString, for: .normal)
-        authorsButton.titleLabel?.adjustsFontForContentSizeCategory = true
-
-        // Avoid top and bottom content insets
-        authorsButton.titleLabel?.sizeToFit()
-        guard let buttonTitleLabel = authorsButton.titleLabel else { return }
-        authorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
-    }
-        
-    private let narratorsButton: UIButton = {
+    private lazy var narratorsButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         return button
     }()
     
-    private lazy var narratorsButtonHeightConstraint = narratorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value, it is set when button is being configured
-    
-    private var hasNarratorsButton = true
-    
-    private func configureNarratorsButton() {
-        guard !book.narrators.isEmpty else { return }
-        let narratorNames = book.narrators.map { $0.name }
-        let narratorNamesString = narratorNames.joined(separator: ", ")
-        
-        let attributedString = NSMutableAttributedString(string: "With: \(narratorNamesString)")
-        let font1 = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-        let scaledFont1 = UIFontMetrics.default.scaledFont(for: font1, maximumPointSize: 45)
-        let byAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont1, .foregroundColor: UIColor.label]
-        
-        let font2 = Utils.navBarTitleFont
-        let scaledFont2 = UIFontMetrics.default.scaledFont(for: font2, maximumPointSize: 45)
-        let authorNameAttributes: [NSAttributedString.Key: Any] = [.font: scaledFont2, .foregroundColor: Utils.tintColor]
+    private lazy var narratorsButtonHeightConstraint = narratorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value
 
-        attributedString.addAttributes(byAttributes, range: NSRange(location: 0, length: 5))
-        attributedString.addAttributes(authorNameAttributes, range: NSRange(location: 5, length: attributedString.length - 5))
-        
-        narratorsButton.setAttributedTitle(attributedString, for: .normal)
-        narratorsButton.titleLabel?.adjustsFontForContentSizeCategory = true
-
-        // Avoid top and bottom content insets
-        narratorsButton.titleLabel?.sizeToFit()
-        guard let buttonTitleLabel = narratorsButton.titleLabel else { return }
-        narratorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
-    }
-    
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
     
@@ -132,6 +79,15 @@ class BookDetailsStackView: UIStackView {
         let view = UIView()
         view.layer.addSublayer(leadingGradientLayer)
         return view
+    }()
+    
+    private lazy var leadingGradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = [0, 0.5]
+        gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
+        return gradientLayer
     }()
     
     private lazy var trailingViewWithGradient: UIView = {
@@ -148,22 +104,13 @@ class BookDetailsStackView: UIStackView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         return gradientLayer
     }()
-    
-    private lazy var leadingGradientLayer: CAGradientLayer = {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = gradientColors
-        gradientLayer.locations = [0, 0.5]
-        gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
-        return gradientLayer
-    }()
-    
-    private var gradientIsAdded = false
 
     private var gradientColors: [CGColor] {
         let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
     }
+    
+    private var gradientIsAdded = false
         
     // MARK: - Initializers
     init(forBook book: Book) {
@@ -232,16 +179,19 @@ class BookDetailsStackView: UIStackView {
         configureAuthorsButton()
         addArrangedSubview(authorsButton)
         setCustomSpacing(8.0, after: authorsButton)
-        addAuthorsButtonAction()
-                
-        if !book.narrators.isEmpty {
-           configureNarratorsButton()
-            addArrangedSubview(narratorsButton)
-            setCustomSpacing(23.0, after: narratorsButton)
-            addNarratorsButtonAction()
+        
+        let authors = self.book.authors
+        addActionTo(button: authorsButton, toShowStorytellers: authors)
+        
+        if hasNarratorsButton {
+            configureNarratorsButton()
+             addArrangedSubview(narratorsButton)
+             setCustomSpacing(23.0, after: narratorsButton)
+            let narrators = self.book.narrators
+            addActionTo(button: narratorsButton, toShowStorytellers: narrators)
         } else {
-            hasNarratorsButton = false
             setCustomSpacing(33.0, after: authorsButton)
+
         }
                     
         if let seriesTitle = book.series, let seriesPart = book.seriesPart {
@@ -259,20 +209,49 @@ class BookDetailsStackView: UIStackView {
         addArrangedSubview(roundButtonsStackContainer)
     }
 
-    private func addAuthorsButtonAction() {
-        authorsButton.addAction(UIAction(handler: { [weak self] _ in
+    private func addActionTo(button: UIButton, toShowStorytellers storytellers: [Storyteller]) {
+        button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             Utils.playHaptics()
-            self.storytellerButtonDidTapCallback(self.book.authors)
+            self.storytellerButtonDidTapCallback(storytellers)
         }), for: .touchUpInside)
     }
+
+    private func configureAuthorsButton() {
+        let authorNames = book.authors.map { $0.name }
+        configure(button: authorsButton, withStaticString: "By:", andNames: authorNames)
+        
+        // Avoid top and bottom content insets
+        authorsButton.titleLabel?.sizeToFit()
+        guard let buttonTitleLabel = authorsButton.titleLabel else { return }
+        authorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
+    }
     
-    private func addNarratorsButtonAction() {
-        narratorsButton.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            Utils.playHaptics()
-            self.storytellerButtonDidTapCallback(self.book.narrators)
-        }), for: .touchUpInside)
+    private func configureNarratorsButton() {
+        let narratorNames = book.narrators.map { $0.name }
+        configure(button: narratorsButton, withStaticString: "With:", andNames: narratorNames)
+        
+        // Avoid top and bottom content insets
+        narratorsButton.titleLabel?.sizeToFit()
+        guard let buttonTitleLabel = narratorsButton.titleLabel else { return }
+        narratorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
+    }
+    
+    private func configure(button: UIButton, withStaticString staticString: String, andNames names: [String]) {
+        let namesString = names.joined(separator: ", ")
+
+        let attributedString = NSMutableAttributedString(string: "\(staticString) \(namesString)")
+        let staticStringScaledFont1 = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16) // This is UIFont.customCalloutRegular, but in this case it needs to be created at runtime
+        let staticStringAttributes: [NSAttributedString.Key: Any] = [.font: staticStringScaledFont1, .foregroundColor: UIColor.label]
+
+        let nameScaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16) // This is UIFont.navBarTitleLargeMaxSize, but in this case it needs to be created at runtime
+        let nameAttributes: [NSAttributedString.Key: Any] = [.font: nameScaledFont, .foregroundColor: Utils.tintColor]
+
+        let staticStringCount = staticString.count
+        attributedString.addAttributes(staticStringAttributes, range: NSRange(location: 0, length: staticStringCount))
+        attributedString.addAttributes(nameAttributes, range: NSRange(location: staticStringCount, length: attributedString.length - staticStringCount))
+
+        button.setAttributedTitle(attributedString, for: .normal)
     }
         
     private func applyConstraints() {
