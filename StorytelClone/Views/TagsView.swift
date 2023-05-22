@@ -25,7 +25,6 @@ class TagsView: UIView {
     private let firstButtonTopConstant: CGFloat = 18
     private let spacingBetweenButtons: CGFloat = 7
     private let spacingBetweenRows: CGFloat = 11
-    private lazy var previousContentSizeCategory = traitCollection.preferredContentSizeCategory
         
     // MARK: - Initializers
     init(tags: [Tag], superviewWidth: CGFloat) {
@@ -43,17 +42,14 @@ class TagsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard previousContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
-        previousContentSizeCategory = traitCollection.preferredContentSizeCategory
         for button in tagButtons {
             button.layer.cornerRadius = button.bounds.height / 2
-            titleLabel.font = getTitleLabelScaledFont()
         }
     }
     
-    // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -87,8 +83,7 @@ class TagsView: UIView {
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)
-        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 36)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .medium, basePointSize: 13, maximumPointSize: 36)
         buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.commonHorzPadding, bottom: 7, trailing: Constants.commonHorzPadding)
@@ -99,22 +94,15 @@ class TagsView: UIView {
     }
     
     private func createTitleLabel() -> UILabel {
-        let label = UILabel()
-        label.font = getTitleLabelScaledFont()
-        label.text = "Tags"
-        label.textAlignment = .left
+        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, text: "Tags")
         label.sizeToFit()
         return label
-    }
-    
-    private func getTitleLabelScaledFont() -> UIFont {
-        return UIFontMetrics.default.scaledFont(for:  Utils.sectionTitleFont, maximumPointSize: 40)
     }
 
     private func calculateViewHeightFor(numberOfRows: CGFloat) -> CGFloat {
         let spacings = firstButtonTopConstant + CGFloat(spacingBetweenRows) * (numberOfRows - 1)
         
-        // Create buttonTag and titleLabel to account for scaled font according to current content size category
+        // Create buttonTag and titleLabel to account for current content size category
         let button = createButtonWith(text: "Lorem ipsum")
         let buttonHeight = button.bounds.height
 
@@ -122,7 +110,6 @@ class TagsView: UIView {
         let titleLabelHeight = titleLabel.bounds.height
         
         let viewHeight = titleLabelHeight + numberOfRows * buttonHeight + spacings
-//        let viewHeight = titleLabel.bounds.height + numberOfRows * buttonHeight + spacings
         return viewHeight
     }
 
