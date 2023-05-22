@@ -121,12 +121,6 @@ class RoundButtonsStack: UIStackView {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             viewWithSaveButton.layer.borderColor = UIColor.label.cgColor
         }
-        
-        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            for label in allLabels {
-                label.font = getScaledFontForLabel()
-            }
-        }
     }
     
     // MARK: - Instance methods
@@ -197,15 +191,10 @@ class RoundButtonsStack: UIStackView {
     }
     
     private func createLabel(withText text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = getScaledFontForLabel()
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 17)
+        let label = UILabel.createLabelWith(font: scaledFont, text: text)
         label.textAlignment = .center
         return label
-    }
-    
-    private func getScaledFontForLabel() -> UIFont {
-        return UIFontMetrics.default.scaledFont(for: Utils.sectionSubtitleFont, maximumPointSize: 17)
     }
 
     private func applyConstraints() {
@@ -220,15 +209,11 @@ class RoundButtonsStack: UIStackView {
         ])
         
         for vertStack in allVertStacks {
-//            guard let firstView = vertStack.arrangedSubviews.first, let secondView = vertStack.arrangedSubviews.last else { return }
             guard let firstView = vertStack.arrangedSubviews.first else { return }
-//            let labelPadding: CGFloat = 15
-            
             firstView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 firstView.heightAnchor.constraint(equalToConstant: RoundButtonsStack.roundWidth),
                 firstView.widthAnchor.constraint(equalToConstant: RoundButtonsStack.roundWidth),
-//                firstView.bottomAnchor.constraint(equalTo: secondView.topAnchor, constant: -labelPadding)
             ])
             
             vertStack.translatesAutoresizingMaskIntoConstraints = false
