@@ -52,7 +52,7 @@ class SearchViewController: UIViewController {
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16), .foregroundColor: UIColor.gray
+                .font: UIFont.customCalloutRegular, .foregroundColor: UIColor.gray
             ]
             
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
@@ -61,7 +61,7 @@ class SearchViewController: UIViewController {
         
         // Configure cancel button
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.preferredCustomFontWith(weight: .regular, size: 16),
+            .font: UIFont.customCalloutRegular,
             .foregroundColor: Utils.tintColor
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
@@ -322,8 +322,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             return UIView()
         } else {
             guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-//            let currentSection = model.tableSections[section]
-//            sectionHeader.configureFor(section: currentSection)
+            let currentSection = model.tableSections[section]
+            sectionHeader.configureFor(tableSection: currentSection, withSeeAllButtonDidTapCallback: {})
             return sectionHeader
         }
     }

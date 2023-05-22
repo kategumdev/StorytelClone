@@ -15,15 +15,22 @@ class BaseScopeTableViewCell: UITableViewCell {
     static let imageHeight: CGFloat = squareImageWidth
     
     static func createTitleLabel(withScaledFont: Bool = true) -> UILabel {
-        let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: withScaledFont)
-        return label
+        if withScaledFont {
+            return UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize)
+        }
+        let font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
+        return UILabel.createLabelWith(font: font)
     }
     
     static func createSubtitleLabel(withScaledFont: Bool = true) -> UILabel {
-        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: withScaledFont)
-        return label
+        if withScaledFont {
+            let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+            return UILabel.createLabelWith(font: scaledFont)
+        }
+        let font = UIFont.createStaticFontWith(weight: .semibold, size: 13)
+        return UILabel.createLabelWith(font: font)
     }
-    
+
     static func calculateLabelsHeightWith(subtitleLabelNumber: Int) -> CGFloat {
         let titleLabel = createTitleLabel()
         let subtitleLabel = createSubtitleLabel()
@@ -33,7 +40,6 @@ class BaseScopeTableViewCell: UITableViewCell {
         subtitleLabel.sizeToFit()
         
         let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height * CGFloat(subtitleLabelNumber)
-        
         return labelsHeight
     }
     

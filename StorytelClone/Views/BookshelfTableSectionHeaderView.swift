@@ -11,15 +11,10 @@ class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Static properties and methods
     static let identifier = "BookshelfTableSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 6
-    
+
     static func createLabel() -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontForContentSizeCategory = true
-        let font = Utils.sectionTitleFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
-        label.font = scaledFont
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+        let label = UILabel.createLabelWith(font: scaledFont)
         return label
     }
 

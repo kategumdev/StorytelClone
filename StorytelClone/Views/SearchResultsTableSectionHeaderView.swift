@@ -13,13 +13,8 @@ class SearchResultsTableSectionHeaderView: UITableViewHeaderFooterView {
     static let topAndBottomPadding: CGFloat = 15
     
     static func createLabel() -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontForContentSizeCategory = true
-        let font = Utils.sectionTitleFont
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
-        label.font = scaledFont
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+        let label = UILabel.createLabelWith(font: scaledFont)
         return label
     }
 
