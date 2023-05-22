@@ -38,13 +38,13 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     private let bookTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 4
-        let font = UIFont.getStaticFontWith(weight: .semibold, size: 31)
+        let font = UIFont.createStaticFontWith(weight: .semibold, size: 31)
         label.font = font
         return label
     }()
     
     private let overviewLabel: UILabel = {
-        let font = UIFont.getScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 21)
+        let font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 21)
         let label = UILabel.createLabelWith(font: font, numberOfLines: 5)
 //        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 21, numberOfLines: 5)
         return label

@@ -169,7 +169,8 @@ extension BookViewController {
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
         
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .heavy, scale: .large)
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .heavy, scale: .large)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .heavy, scale: .large)
         let image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(ellipsisButtonDidTap))
     }

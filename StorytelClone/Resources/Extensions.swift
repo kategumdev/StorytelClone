@@ -13,20 +13,24 @@ extension UIFont {
     
 //    static let sectionSubtitle = getScaledFontWith(textStyle: .footnote, weight: .regular)
 //    static let sectionSubtitleSemibold = getScaledFontWith(textStyle: .footnote, weight: .semibold)
-    static let sectionSubtitle = getScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 34)
-    static let sectionSubtitleSemibold = getScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 38)
+    static let sectionSubtitle = createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 34)
+    static let sectionSubtitleSemibold = createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 38)
     
-    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
-    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16)
+    static let navBarTitle = createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
+    static let navBarTitleLargeMaxSize = createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16)
+    
+//    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
+//    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16)
 
 //    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16, maximumPointSize: 18)
 //    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16)
     #warning("Substitute usage of Utils.sectionTitleFont for UIFont.navBarTitleLargeMaxSize")
 //    static let sectionTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16)
+    
 
     
-    static func getScaledFontWith(textStyle: UIFont.TextStyle, weight: UIFont.Weight, basePointSize: CGFloat, maximumPointSize: CGFloat? = nil) -> UIFont {
-        
+    static func createScaledFontWith(textStyle: UIFont.TextStyle, weight: UIFont.Weight, basePointSize: CGFloat, maximumPointSize: CGFloat? = nil) -> UIFont {
+
         let fontDescriptor = UIFontDescriptor(fontAttributes: [
             UIFontDescriptor.AttributeName.size: basePointSize,
             UIFontDescriptor.AttributeName.family: "Avenir Next",
@@ -34,9 +38,9 @@ extension UIFont {
                 UIFontDescriptor.TraitKey.weight: weight
             ]
         ])
-        
+
         let fontToScale = UIFont(descriptor: fontDescriptor, size: 0)
-        
+
         if let maximumPointSize = maximumPointSize {
             let scaledFont = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToScale, maximumPointSize: maximumPointSize)
             return scaledFont
@@ -47,7 +51,7 @@ extension UIFont {
 
     }
     
-    static func getStaticFontWith(weight: UIFont.Weight, size: CGFloat) -> UIFont {
+    static func createStaticFontWith(weight: UIFont.Weight, size: CGFloat) -> UIFont {
 
         let fontDescriptor = UIFontDescriptor(fontAttributes: [
 //            UIFontDescriptor.AttributeName.size: size,

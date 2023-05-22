@@ -224,23 +224,13 @@ class BookContainerScrollView: UIScrollView {
             bookDetailsStackView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
         ])
         
-        // Leading and trailing constants are used to hide border on those sides
+        // Width is 2 points wider to hide border on leading and trailing edges
         bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStackView.bottomAnchor, constant: 33),
-//            bookDetailsScrollView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: -1),
-//            bookDetailsScrollView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: 1),
-//            bookDetailsScrollView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
             bookDetailsScrollView.widthAnchor.constraint(equalTo: frameG.widthAnchor, constant: 2),
             bookDetailsScrollView.centerXAnchor.constraint(equalTo: frameG.centerXAnchor)
         ])
-        
-//        bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStackView.bottomAnchor, constant: 33),
-//            bookDetailsScrollView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: -1),
-//            bookDetailsScrollView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: 1),
-//        ])
         
         NSLayoutConstraint.activate([
             overviewStackView.topAnchor.constraint(equalTo: bookDetailsScrollView.bottomAnchor, constant: 18),

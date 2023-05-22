@@ -72,7 +72,7 @@ struct Utils {
     static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
     
     static let sectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
-    static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
+//    static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
     
     static let tabBarHeight: CGFloat = {
         var height: CGFloat = 0.0
