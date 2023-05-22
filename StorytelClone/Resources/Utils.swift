@@ -12,67 +12,7 @@ enum ScrollDirection {
     case back
 }
 
-//enum CustomFont: CustomStringConvertible {
-//
-//    case robotoMono(weight: RobotoMonoWeight)
-//    case playfairDisplay(weight: PlayfairDisplayWeight)
-//
-//    var description: String {
-//        switch self {
-//        case .robotoMono: return "RobotoMono"
-//        case .playfairDisplay: return "PlayfairDisplay"
-//        }
-//    }
-//
-//    var weight: String {
-//        switch self {
-//        case .robotoMono(let weight): return weight.rawValue
-//        case .playfairDisplay(let weight): return weight.rawValue
-//        }
-//    }
-//
-//    // exclusive weights for PlayfairDisplay
-//    enum PlayfairDisplayWeight: String {
-//        case Regular, Italic
-//        case Medium, SemiBold, Bold, ExtraBold, Black
-//        case MediumItalic, SemiBoldItalic, BoldItalic, ExtraBoldItalic, BlackItalic
-//    }
-//
-//    // exlusive weights for RobotoMono
-//    enum RobotoMonoWeight: String {
-//        case ExtraLight, Thin, Light
-//        case ExtraLightItalic, ThinItalic, LightItalic
-//        case Regular, Italic
-//        case Medium, Bold, SemiBold
-//        case MediumItalic, BoldItalic, SemiBoldItalic
-//    }
-//
-//    func font(textStyle: UIFont.TextStyle, defaultSize: CGFloat? = nil) -> UIFont {
-//        // 1
-//        let fontName = [description, weight].joined(separator: "-")
-//        // 2
-//        let size = defaultSize ?? UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle).pointSize
-//        // 3
-//        let fontToScale = UIFont(name: fontName, size: size) ?? .systemFont(ofSize: size)
-//        // 4
-//        return textStyle.metrics.scaledFont(for: fontToScale)
-//    }
-//
-//}
-
 struct Utils {
-    
-    //MARK: - Fonts
-    static let navBarTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
-
-    static let navBarTitleFontScaled = UIFontMetrics.default.scaledFont(for: navBarTitleFont, maximumPointSize: 18)
-    
-    static let sectionTitleFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
-
-//    static let categoryButtonLabelFont = UIFont.preferredCustomFontWith(weight: .semibold, size: 16)
-    
-    static let sectionSubtitleFont = UIFont.preferredCustomFontWith(weight: .regular, size: 13)
-//    static let wideButtonLabelFont = UIFont.preferredCustomFontWith(weight: .bold, size: 19)
     
     static let tabBarHeight: CGFloat = {
         var height: CGFloat = 0.0

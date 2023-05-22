@@ -129,8 +129,9 @@ extension SettingsViewController {
         var content = cell.defaultContentConfiguration()
         content.image = settingCell.image
         content.text = settingCell.rawValue
-        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 50)
+//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 50)
         content.textProperties.font = scaledFont
         content.textProperties.color = settingCell.tintColor
         cell.contentConfiguration = content
@@ -168,8 +169,9 @@ extension SettingsViewController {
         var content = headerView.defaultContentConfiguration()
         content.text = sections[section].rawValue
         content.textProperties.color = .label
-        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .caption1, weight: .medium, basePointSize: 11, maximumPointSize: 38)
+//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 11)
+//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 38)
         content.textProperties.font = scaledFont
         headerView.contentConfiguration = content
     }

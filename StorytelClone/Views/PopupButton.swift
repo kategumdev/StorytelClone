@@ -19,7 +19,17 @@ class PopupButton: UIButton {
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
 
-    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
+//    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
+    
+    private let customLabel: UILabel = {
+        let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
+        let label = UILabel.createLabelWith(font: font)
+        
+        if let customBackgroundColor = Utils.customBackgroundColor {
+            label.textColor = customBackgroundColor
+        }
+        return label
+    }()
 
     private let customImageView: UIImageView = {
         let imageView = UIImageView()

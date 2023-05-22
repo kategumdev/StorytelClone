@@ -53,7 +53,8 @@ class TabBarViewController: UITabBarController {
     private func setTabBarItemColors(_ itemAppearances: [UITabBarItemAppearance]) {
         let normalColor = UIColor.label
         let selectedColor = Utils.tintColor
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 11)
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 11)
+        let font = UIFont.createStaticFontWith(weight: .semibold, size: 11)
         
         for appearance in itemAppearances {
             appearance.normal.iconColor = normalColor

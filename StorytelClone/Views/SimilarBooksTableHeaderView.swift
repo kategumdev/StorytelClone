@@ -37,16 +37,24 @@ class SimilarBooksTableHeaderView: UIView {
         return stack
     }()
 
-    private let similarBooksLabel: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 40)
-        label.text = "Libros similares"
-        return label
-    }()
+//    private let similarBooksLabel: UILabel = {
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 40)
+//        label.text = "Libros similares"
+//        return label
+//    }()
+//
+//    private let bookTitleLabel: UILabel = {
+//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
+//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 45, numberOfLines: 2)
+//        return label
+//    }()
+    
+    private let similarBooksLabel = UILabel.createLabelWith(font: UIFont.sectionSubtitleSemibold, text: "Libros similares")
 
     private let bookTitleLabel: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 45, numberOfLines: 2)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .medium, basePointSize: 16, maximumPointSize: 45)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         return label
     }()
 

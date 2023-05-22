@@ -25,14 +25,16 @@ enum ProfileCell: String, CaseIterable {
 
 class ProfileViewController: UIViewController {
     // MARK: - Static properties
-    static let cellLabelFont = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
-    static let maximumPointSizeForScaledCellLabelFont: CGFloat = 39
+//    static let cellLabelFont = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
+//    static let maximumPointSizeForScaledCellLabelFont: CGFloat = 39
     
     // MARK: - Instance properties
     private let profileCells = ProfileCell.allCases
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-    private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
+    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 39)
+
+//    private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     
     private let profileTable: UITableView = {
         let table = UITableView()
@@ -68,13 +70,13 @@ class ProfileViewController: UIViewController {
         navigationController?.adjustAppearanceTo(currentOffsetY: profileTable.contentOffset.y, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-            scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: ProfileViewController.maximumPointSizeForScaledCellLabelFont)
-        }
-    }
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//
+//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+//            scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: ProfileViewController.maximumPointSizeForScaledCellLabelFont)
+//        }
+//    }
 
    // MARK: - Helper methods
     private func configureNavBar() {
@@ -83,7 +85,7 @@ class ProfileViewController: UIViewController {
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
         
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize - 2, weight: .semibold, scale: .large)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .large)
         let image = UIImage(systemName: "gearshape", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(handleGearButtonTapped))
     }
@@ -111,7 +113,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         var content = cell.defaultContentConfiguration()
         content.image = profileCell.image
         content.text = profileCell.rawValue
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 39)
         content.textProperties.font = scaledCellLabelFont
+//        content.textProperties.font = scaledCellLabelFont
         content.textProperties.color = Utils.unactiveElementColor
         cell.contentConfiguration = content
         return cell
@@ -120,6 +124,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let profileCell = profileCells[indexPath.row]
         let label = UILabel()
+//        label.font = scaledCellLabelFont
         label.font = scaledCellLabelFont
         label.text = profileCell.rawValue
         

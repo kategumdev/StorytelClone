@@ -17,8 +17,9 @@ class ShowSeriesButtonContainer: UIView {
         var config = UIButton.Configuration.plain()
         button.setTitle("Part 1 in Cazadores de sombras. Las últimas horas", for: .normal)
         button.titleLabel?.lineBreakMode = .byTruncatingTail
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        button.titleLabel?.font = font
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        button.titleLabel?.font = font
+        button.titleLabel?.font = UIFont.sectionSubtitleSemibold
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.adjustsFontForContentSizeCategory = true

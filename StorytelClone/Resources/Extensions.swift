@@ -8,11 +8,6 @@
 import UIKit
 
 extension UIFont {
-    
-    //    static let sectionSubtitleFont = getCustomScaledFontWith(textStyle: .footnote, weight: .regular, defaultSize: 13, maximumPointSize: 28)
-    
-//    static let sectionSubtitle = getScaledFontWith(textStyle: .footnote, weight: .regular)
-//    static let sectionSubtitleSemibold = getScaledFontWith(textStyle: .footnote, weight: .semibold)
     static let sectionSubtitle = createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 34)
     static let sectionSubtitleSemibold = createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 38)
     
@@ -20,16 +15,6 @@ extension UIFont {
     static let navBarTitleLargeMaxSize = createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16)
     
     static let customCalloutRegular = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16)
-    
-//    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16, maximumPointSize: 18)
-//    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, basePointSize: 16)
-
-//    static let navBarTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16, maximumPointSize: 18)
-//    static let navBarTitleLargeMaxSize = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16)
-    #warning("Substitute usage of Utils.sectionTitleFont for UIFont.navBarTitleLargeMaxSize")
-//    static let sectionTitle = getScaledFontWith(textStyle: .subheadline, weight: .semibold, defaultSize: 16)
-    
-
     
     static func createScaledFontWith(textStyle: UIFont.TextStyle, weight: UIFont.Weight, basePointSize: CGFloat, maximumPointSize: CGFloat? = nil) -> UIFont {
 
@@ -54,57 +39,14 @@ extension UIFont {
     }
     
     static func createStaticFontWith(weight: UIFont.Weight, size: CGFloat) -> UIFont {
-
         let fontDescriptor = UIFontDescriptor(fontAttributes: [
-//            UIFontDescriptor.AttributeName.size: size,
             UIFontDescriptor.AttributeName.family: "Avenir Next",
             UIFontDescriptor.AttributeName.traits: [
                 UIFontDescriptor.TraitKey.weight: weight
             ]
         ])
-//        let fontToScale = UIFont(descriptor: fontDescriptor, size: 0)
         let font = UIFont(descriptor: fontDescriptor, size: size)
         return font
-    }
-    
-//    static func getScaledFontWith(textStyle: UIFont.TextStyle, weight: UIFont.Weight, defaultSize: CGFloat? = nil, maximumPointSize: CGFloat? = nil) -> UIFont {
-//
-//        let size = defaultSize ?? UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle).pointSize
-//
-//        let fontDescriptor = UIFontDescriptor(fontAttributes: [
-//            UIFontDescriptor.AttributeName.size: size,
-//            UIFontDescriptor.AttributeName.family: "Avenir Next",
-//            UIFontDescriptor.AttributeName.traits: [
-//                UIFontDescriptor.TraitKey.weight: weight
-//            ]
-//        ])
-//
-//        let fontToScale = UIFont(descriptor: fontDescriptor, size: 0)
-//
-//        if let maximumPointSize = maximumPointSize {
-//            let scaledFont = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToScale, maximumPointSize: maximumPointSize)
-//            return scaledFont
-//        } else {
-//            let scaledFont = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToScale)
-//            return scaledFont
-//        }
-//
-//    }
-    
-    static func preferredCustomFontWith(weight: UIFont.Weight, size: CGFloat) -> UIFont {
-        
-        let fontDescriptor = UIFontDescriptor(fontAttributes: [
-            UIFontDescriptor.AttributeName.size: size,
-            UIFontDescriptor.AttributeName.family: "Avenir Next"
-        ])
-
-        let weightedFontDescriptor = fontDescriptor.addingAttributes([
-            UIFontDescriptor.AttributeName.traits: [
-                UIFontDescriptor.TraitKey.weight: weight
-            ]
-        ])
-        
-        return UIFont(descriptor: weightedFontDescriptor, size: 0)
     }
 }
 
@@ -122,6 +64,7 @@ extension UIView {
 }
 
 extension NSAttributedString {
+    
     func withLineHeightMultiple(_ multiple: CGFloat) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(attributedString: self)
         let paragraphStyle = NSMutableParagraphStyle()
@@ -136,24 +79,6 @@ extension NSAttributedString {
 }
 
 extension UILabel {
-    #warning("Refactor to have only maximumPointSize and no withScaledFont. Fix: creating label and passing nil as maximumPointSize doesn't let custom font to apply")
-    static func createLabel(withFont font: UIFont, maximumPointSize: CGFloat?, numberOfLines: Int = 1, withScaledFont: Bool = true, textColor: UIColor = .label, text: String = "") -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = numberOfLines
-        label.lineBreakMode = .byTruncatingTail
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = textColor
-        label.text = text
-        
-        if withScaledFont {
-            guard let maximumPointSize = maximumPointSize else { return label }
-            let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: maximumPointSize)
-            label.font = scaledFont
-        } else {
-            label.font = font
-        }
-        return label
-    }
     
     static func createLabelWith(font: UIFont, numberOfLines: Int = 1, textColor: UIColor = .label, text: String = "") -> UILabel {
         let label = UILabel()
@@ -255,48 +180,6 @@ extension UINavigationController {
         
         return appearance
     }()
-    
-//    static let transparentNavBarAppearance: UINavigationBarAppearance = {
-//        let appearance = UINavigationBarAppearance()
-////        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : UIFont.navBarTitle]
-//        appearance.configureWithTransparentBackground()
-//
-//        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
-//        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-//        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-//        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-//
-//        return appearance
-//    }()
-    
-//    static let transparentNavBarAppearanceWithVisibleTitle: UINavigationBarAppearance = {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-//        appearance.configureWithTransparentBackground()
-//
-//        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
-//        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-//        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-//        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-//
-//        return appearance
-//    }()
-//
-//    static let visibleNavBarAppearance: UINavigationBarAppearance = {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithDefaultBackground()
-//        appearance.shadowColor = .tertiaryLabel
-//        appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : Utils.navBarTitleFontScaled]
-//
-//        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
-//        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-//        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-//        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-//
-//        return appearance
-//    }()
     
     func makeNavbarAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
                 

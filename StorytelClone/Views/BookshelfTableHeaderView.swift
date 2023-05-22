@@ -10,9 +10,11 @@ import UIKit
 class BookshelfTableHeaderView: UIView {
     // MARK: - Instance properties
     private let label: UILabel = {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let label = UILabel.createLabel(withFont: font, maximumPointSize: 34, numberOfLines: 2)
-        label.text = "Sorted by: Latest changed"
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 34)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2, text: "Sorted by: Latest changed")
+//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
+//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 34, numberOfLines: 2)
+//        label.text = "Sorted by: Latest changed"
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
