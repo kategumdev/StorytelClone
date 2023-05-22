@@ -9,11 +9,19 @@ import UIKit
 
 class TableHeaderView: UIView {
     // MARK: - Instance properties
-    private let headerLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .semibold, size: 31), maximumPointSize: 50, numberOfLines: 4)
+    private let headerLabel: UILabel = {
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .title1, weight: .semibold, basePointSize: 31, maximumPointSize: 50)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 4)
+        return label
+    }()
 
-    private lazy var bookTitleForSimilarLabel = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2)
+    private lazy var bookTitleForSimilarLabel = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
 
-    private lazy var sectionDescriptionLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .regular, size: 13), maximumPointSize: 32, numberOfLines: 3)
+    private lazy var sectionDescriptionLabel: UILabel = {
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 32)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
+        return label
+    }()
 
     private lazy var followSeriesView = FollowSeriesView()
 
