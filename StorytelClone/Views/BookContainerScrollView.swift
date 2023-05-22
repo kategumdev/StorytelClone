@@ -170,7 +170,7 @@ class BookContainerScrollView: UIScrollView {
             seeOverviewButton.gradientLayer.isHidden = true
             seeOverviewButtonAnchorToCompressOverview.isActive = false
             seeOverviewButtonAnchorForFullSizeOverview.isActive = true
-            seeOverviewButton.setButtonTextTo(text: "See less")
+            seeOverviewButton.updateButtonTextWith(newText: "See less")
         } else {
             seeOverviewButton.gradientLayer.isHidden = false
             // Avoid blinking of overviewStackView's text beneath seeMorebutton ensuring that gradientLayer of seeMoreButton is fully drawn before other adjustements are done
@@ -178,7 +178,7 @@ class BookContainerScrollView: UIScrollView {
                 self?.seeOverviewButton.rotateImage()
                 self?.seeOverviewButtonAnchorToCompressOverview.isActive = true
                 self?.seeOverviewButtonAnchorForFullSizeOverview.isActive = false
-                self?.seeOverviewButton.setButtonTextTo(text: "See more")
+                self?.seeOverviewButton.updateButtonTextWith(newText: "See more")
             }
         }
     }
@@ -188,13 +188,13 @@ class BookContainerScrollView: UIScrollView {
             seeTagsButton.rotateImage()
             seeTagsButtonAnchorToCompressTagsView.isActive = false
             seeTagsButtonAnchorForFullSizeTagsView.isActive = true
-            seeTagsButton.setButtonTextTo(text: "See less")
+            seeTagsButton.updateButtonTextWith(newText: "See less")
         } else {
             seeTagsButton.rotateImage()
             seeTagsButtonAnchorForFullSizeTagsView.isActive = false
             seeTagsButtonAnchorToCompressTagsView.isActive = true
 //            seeTagsButtonAnchorForFullSizeTagsView.isActive = false
-            seeTagsButton.setButtonTextTo(text: "Show all tags")
+            seeTagsButton.updateButtonTextWith(newText: "Show all tags")
         }
     }
     

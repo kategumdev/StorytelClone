@@ -17,6 +17,7 @@ class SeeMoreButton: UIButton {
     // MARK: - Instance properties
     private let buttonKind: ButtonKind
     private let seeOverviewButtonHeight: CGFloat = 110
+    private let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 34)
     
     lazy var heightConstant: CGFloat = {
         switch buttonKind {
@@ -42,7 +43,7 @@ class SeeMoreButton: UIButton {
         var buttonConfig = UIButton.Configuration.plain()
         let text = buttonKind == .forOverview ? "See more" : "Show all tags"
         buttonConfig.attributedTitle = AttributedString(text)
-        buttonConfig.attributedTitle?.font = getScaledFont()
+        buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
         let image = UIImage(systemName: "chevron.down", withConfiguration: symbolConfig)
@@ -98,9 +99,9 @@ class SeeMoreButton: UIButton {
     }
     
     // MARK: - Instance methods
-    func setButtonTextTo(text: String) {
-        configuration?.attributedTitle = AttributedString(text)
-        configuration?.attributedTitle?.font = getScaledFont()
+    func updateButtonTextWith(newText: String) {
+        configuration?.attributedTitle = AttributedString(newText)
+        configuration?.attributedTitle?.font = scaledFont
     }
     
     func rotateImage() {
@@ -138,12 +139,6 @@ class SeeMoreButton: UIButton {
             backgroundColor = Utils.customBackgroundColor
         }
         self.configuration = config
-    }
-    
-    private func getScaledFont() -> UIFont {
-        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 34)
-        return scaledFont
     }
     
     private func addGradient() {
