@@ -151,12 +151,24 @@ class FollowSeriesView: UIView {
     }
         
     private func createFollowLabel(withScaledFont: Bool) -> UILabel {
-        let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, withScaledFont: withScaledFont, text: "Follow")
+        var font: UIFont
+        if withScaledFont {
+            font = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+        } else {
+            font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
+        }
+        let label = UILabel.createLabelWith(font: font, text: "Follow")
         return label
     }
     
     private func createNumberOfFollowersLabel(withScaledFont: Bool) -> UILabel {
-        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 45, withScaledFont: withScaledFont, textColor: Utils.seeAllButtonColor, text: "100 Followers")
+        var font: UIFont
+        if withScaledFont {
+            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 45)
+        } else {
+            font = UIFont.createStaticFontWith(weight: .regular, size: 13)
+        }
+        let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor, text: "100 Followers")
         return label
     }
     

@@ -23,12 +23,14 @@ class BaseScopeTableViewCell: UITableViewCell {
     }
     
     static func createSubtitleLabel(withScaledFont: Bool = true) -> UILabel {
+        var font: UIFont
         if withScaledFont {
-            let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
-            return UILabel.createLabelWith(font: scaledFont)
+            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+        } else {
+            font = UIFont.createStaticFontWith(weight: .semibold, size: 13)
         }
-        let font = UIFont.createStaticFontWith(weight: .semibold, size: 13)
-        return UILabel.createLabelWith(font: font)
+        let label = UILabel.createLabelWith(font: font)
+        return label
     }
 
     static func calculateLabelsHeightWith(subtitleLabelNumber: Int) -> CGFloat {
