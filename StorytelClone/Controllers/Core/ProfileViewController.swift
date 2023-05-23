@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
     private let profileCells = ProfileCell.allCases
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
+//    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
 
 //    private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     
@@ -94,6 +94,10 @@ class ProfileViewController: UIViewController {
         let controller = SettingsViewController()
         navigationController?.pushViewController(controller, animated: true)
     }
+    
+    private func getScaledCellLabelFont() -> UIFont {
+        return UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
+    }
 
 }
 
@@ -114,8 +118,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         content.image = profileCell.image
         content.text = profileCell.rawValue
 //        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 39)
-        content.textProperties.font = scaledCellLabelFont
 //        content.textProperties.font = scaledCellLabelFont
+        content.textProperties.font = getScaledCellLabelFont()
         content.textProperties.color = Utils.unactiveElementColor
         cell.contentConfiguration = content
         return cell
@@ -125,7 +129,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         let profileCell = profileCells[indexPath.row]
         let label = UILabel()
 //        label.font = scaledCellLabelFont
-        label.font = scaledCellLabelFont
+        label.font = getScaledCellLabelFont()
         label.text = profileCell.rawValue
         
         let labelHeight = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).height
