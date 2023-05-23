@@ -56,26 +56,18 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     static func createTitleLabel() -> UILabel {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
+        let scaledFont = UIFont.customCalloutSemibold
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         return label
     }
     
     static func createSubtitleLabel() -> UILabel {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont)
         return label
     }
-
-//    static func createTitleLabel(withScaledFont: Bool = true) -> UILabel {
-//        let label = UILabel.createLabel(withFont: Utils.sectionTitleFont, maximumPointSize: 45, numberOfLines: 2, withScaledFont: withScaledFont)
-//        return label
-//    }
-//
-//    static func createSubtitleLabel(withScaledFont: Bool = true) -> UILabel {
-//        let label = UILabel.createLabel(withFont: Utils.sectionSubtitleFont, maximumPointSize: 38, withScaledFont: withScaledFont)
-//        return label
-//    }
 
     // MARK: - Instance properties
     private let bookTitleLabel = AllTitlesTableViewCell.createTitleLabel()

@@ -19,7 +19,7 @@ class ShowSeriesButtonContainer: UIView {
         button.titleLabel?.lineBreakMode = .byTruncatingTail
 //        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
 //        button.titleLabel?.font = font
-        button.titleLabel?.font = UIFont.sectionSubtitleSemibold
+        button.titleLabel?.font = UIFont.customFootnoteSemibold
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.adjustsFontForContentSizeCategory = true

@@ -21,6 +21,7 @@ class PersonTableHeaderView: UIView {
     private let kind: HeaderKind
     
     private lazy var roundLabel: UILabel = {
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .largeTitle, weight: .semibold, basePointSize: 35)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .largeTitle, weight: .semibold, basePointSize: 35)
         let label = UILabel.createLabelWith(font: scaledFont)
         label.textAlignment = .center
@@ -31,14 +32,15 @@ class PersonTableHeaderView: UIView {
     }()
     
     private lazy var storytellerNameLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .headline, weight: .semibold, basePointSize: 17, maximumPointSize: 48)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .headline, weight: .semibold, basePointSize: 17, maxPointSize: 48)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         label.textAlignment = .center
         return label
     }()
     
     private lazy var storytellerKindLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont)
         return label
     }()
@@ -56,7 +58,8 @@ class PersonTableHeaderView: UIView {
         config.imagePadding = 10
         
         config.attributedTitle = "Follow"
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
+        let scaledFont = UIFont.customCalloutSemibold
         config.attributedTitle?.font = scaledFont
         config.attributedTitle?.foregroundColor = Utils.customBackgroundLight
         
@@ -84,10 +87,10 @@ class PersonTableHeaderView: UIView {
         return stack
     }()
         
-    private lazy var numberOfFollowersLabel = UILabel.createLabelWith(font: UIFont.sectionSubtitle, textColor: lighterLabelColor)
+    private lazy var numberOfFollowersLabel = UILabel.createLabelWith(font: UIFont.customFootnoteRegular, textColor: lighterLabelColor)
     
     private lazy var greetingsLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, basePointSize: 19, maximumPointSize: 48)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, basePointSize: 19, maxPointSize: 48)
         let label = UILabel.createLabelWith(font: scaledFont, text: "Hi!")
         return label
     }()
@@ -99,7 +102,8 @@ class PersonTableHeaderView: UIView {
         config.background.backgroundColor = Utils.tintColor
         
         config.attributedTitle = "Get started"
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
+        let scaledFont = UIFont.customCalloutSemibold
         config.attributedTitle?.font = scaledFont
         config.attributedTitle?.foregroundColor = UIColor.white
         
@@ -110,14 +114,14 @@ class PersonTableHeaderView: UIView {
         return button
     }()
     
-    private lazy var questionLabel = UILabel.createLabelWith(font: UIFont.sectionSubtitle, text: "Already have an account?")
+    private lazy var questionLabel = UILabel.createLabelWith(font: UIFont.customFootnoteRegular, text: "Already have an account?")
     
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         button.tintColor = .label
         var config = UIButton.Configuration.plain()
         config.attributedTitle = "Log in"
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 34)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maxPointSize: 34)
         config.attributedTitle?.font = scaledFont
         config.attributedTitle?.foregroundColor = .label
         config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 32, bottom: 7, trailing: 32)

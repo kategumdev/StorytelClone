@@ -16,7 +16,8 @@ class BaseScopeTableViewCell: UITableViewCell {
     
     static func createTitleLabel(withScaledFont: Bool = true) -> UILabel {
         if withScaledFont {
-            return UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize)
+//            return UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize)
+            return UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
         }
         let font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
         return UILabel.createLabelWith(font: font)
@@ -25,7 +26,8 @@ class BaseScopeTableViewCell: UITableViewCell {
     static func createSubtitleLabel(withScaledFont: Bool = true) -> UILabel {
         var font: UIFont
         if withScaledFont {
-            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+//            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
+            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 38)
         } else {
             font = UIFont.createStaticFontWith(weight: .semibold, size: 13)
         }

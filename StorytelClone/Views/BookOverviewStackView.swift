@@ -17,7 +17,8 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        let scaledFont = UIFont.customCalloutRegular
+//        let scaledFont = UIFont.customCalloutRegular
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular)
         textView.font = scaledFont
         textView.adjustsFontForContentSizeCategory = true
         textView.isScrollEnabled = false
@@ -86,7 +87,7 @@ class BookOverviewStackView: UIStackView {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-        textView.font = UIFont.sectionSubtitleSemibold
+        textView.font = UIFont.customFootnoteSemibold
         textView.adjustsFontForContentSizeCategory = true
         textView.isScrollEnabled = false
         textView.textColor = .label.withAlphaComponent(0.8)

@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
     private let profileCells = ProfileCell.allCases
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 39)
+    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
 
 //    private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     

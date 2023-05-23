@@ -191,7 +191,8 @@ class RoundButtonsStack: UIStackView {
     }
     
     private func createLabel(withText text: String) -> UILabel {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 17)
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 17)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 17)
         let label = UILabel.createLabelWith(font: scaledFont, text: text)
         label.textAlignment = .center
         return label

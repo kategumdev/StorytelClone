@@ -45,7 +45,7 @@ class BottomSheetTableViewCell: UITableViewCell {
         contentView.preservesSuperviewLayoutMargins = false
         
         var content = self.defaultContentConfiguration()
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .regular, basePointSize: 17, maximumPointSize: 45)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .regular, basePointSize: 17, maxPointSize: 45)
 //        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 17)
 //        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
         content.textProperties.font = scaledFont

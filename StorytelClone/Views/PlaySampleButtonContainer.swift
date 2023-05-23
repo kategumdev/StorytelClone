@@ -31,7 +31,8 @@ class PlaySampleButtonContainer: UIView {
     }()
 
     private let customTitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 40)
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 40)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
         let label = UILabel.createLabelWith(font: scaledFont, text: "Play a sample")
         return label
     }()

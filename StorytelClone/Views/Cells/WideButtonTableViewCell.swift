@@ -23,7 +23,7 @@ class WideButtonTableViewCell: UITableViewCell {
     let customLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.createScaledFontWith(textStyle: .title1, weight: .bold, basePointSize: 32, maximumPointSize: 36)
+        label.font = UIFont.createScaledFontWith(textStyle: .title1, weight: .bold, basePointSize: 32, maxPointSize: 36)
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontForContentSizeCategory = true

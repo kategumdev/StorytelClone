@@ -15,7 +15,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     private var categoryOfButton: ButtonCategory?
     
     private lazy var categoryTitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 20)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maxPointSize: 20)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 0, textColor: .white)
         label.lineBreakMode = .byWordWrapping
         return label

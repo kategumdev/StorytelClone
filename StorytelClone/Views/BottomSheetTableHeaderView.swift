@@ -9,7 +9,7 @@ import UIKit
 
 class BottomSheetTableHeaderView: UIView {
     // MARK: - Instance properties
-    private let titleLabel = UILabel.createLabelWith(font: UIFont.navBarTitle)
+    private let titleLabel = UILabel.createLabelWith(font: UIFont.customNavBarTitle)
     
     private let closeButton: UIButton = {
         let button = UIButton()

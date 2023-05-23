@@ -10,7 +10,7 @@ import UIKit
 class StarHorzStackView: UIStackView {
     // MARK: - Static methods
     static func createCategoryLabel() -> UILabel {
-        let font = UIFont.createScaledFontWith(textStyle: .caption2, weight: .medium, basePointSize: 11, maximumPointSize: 16)
+        let font = UIFont.createScaledFontWith(textStyle: .caption2, weight: .medium, basePointSize: 11, maxPointSize: 16)
         let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor, text: "Lorem ipsum")
         label.sizeToFit()
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -52,7 +52,7 @@ class StarHorzStackView: UIStackView {
     }()
     
     private lazy var ratingLabel: UILabel = {
-        let font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 16)
+        let font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maxPointSize: 16)
         let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor)
         label.sizeToFit()
         return label

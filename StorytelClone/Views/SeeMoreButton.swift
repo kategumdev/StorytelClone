@@ -17,7 +17,8 @@ class SeeMoreButton: UIButton {
     // MARK: - Instance properties
     private let buttonKind: ButtonKind
     private let seeOverviewButtonHeight: CGFloat = 110
-    private let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maximumPointSize: 34)
+//    private let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maxPointSize: 34)
+    private let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 34)
     
     lazy var heightConstant: CGFloat = {
         switch buttonKind {

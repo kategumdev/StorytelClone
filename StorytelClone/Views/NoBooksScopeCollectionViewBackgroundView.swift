@@ -53,16 +53,16 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
 //    }()
     
     private let titleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, basePointSize: 20, maximumPointSize: 38)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, basePointSize: 20, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
         label.textAlignment = .center
         return label
     }()
     
     private let subtitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16, maximumPointSize: 30)
+//        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16, maximumPointSize: 30)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, maxPointSize: 30)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 30, numberOfLines: 2, text: "Once you do, you will find them here.")
         label.text = "Once you do, you will find them here."
         label.textAlignment = .center
         return label

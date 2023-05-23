@@ -52,7 +52,7 @@ class SearchViewController: UIViewController {
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.customCalloutRegular, .foregroundColor: UIColor.gray
+                .font: UIFont.createScaledFontWith(textStyle: .callout, weight: .regular), .foregroundColor: UIColor.gray
             ]
             
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
@@ -61,7 +61,7 @@ class SearchViewController: UIViewController {
         
         // Configure cancel button
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.customCalloutRegular,
+            .font: UIFont.createScaledFontWith(textStyle: .callout, weight: .regular),
             .foregroundColor: Utils.tintColor
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)

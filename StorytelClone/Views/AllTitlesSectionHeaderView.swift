@@ -13,7 +13,8 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     static let topAndBottomPadding: CGFloat = 16
     
     static func createLabel() -> UILabel {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maximumPointSize: 45)
+//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
+        let scaledFont = UIFont.customCalloutSemibold
         let label = UILabel.createLabelWith(font: scaledFont)
         return label
     }

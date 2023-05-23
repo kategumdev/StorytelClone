@@ -11,7 +11,7 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - Static methods
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
-        label.font = UIFont.sectionSubtitle
+        label.font = UIFont.customFootnoteRegular
         label.textColor = .label.withAlphaComponent(0.9)
         label.text = text
         label.adjustsFontForContentSizeCategory = true
@@ -70,6 +70,7 @@ class BookDetailsScrollView: UIScrollView {
     
     private var vertBarViews = [UIView]()
     private var allButtons = [UIButton]()
+    private let scaledButtonFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
     
     // MARK: - Initializers
     init(book: Book) {
@@ -98,7 +99,8 @@ class BookDetailsScrollView: UIScrollView {
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             print("\n")
             for button in allButtons {
-                button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
+//                button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
+                button.configuration?.attributedTitle?.font = scaledButtonFont
             }
         }
     }
@@ -106,7 +108,8 @@ class BookDetailsScrollView: UIScrollView {
     // MARK: - Helper methods
     private func configure(button: UIButton, withText text: String) {
         button.configuration?.attributedTitle = AttributedString(text)
-        button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
+//        button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
+        button.configuration?.attributedTitle?.font = scaledButtonFont
     }
     
     private func configureMainStack() {
