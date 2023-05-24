@@ -64,7 +64,7 @@ class SeeMoreButton: UIButton {
     private var gradientIsAdded = false
 
     private var gradientColors: [CGColor] {
-        let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
+        let colors = [UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,      UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
     }
     
@@ -136,7 +136,7 @@ class SeeMoreButton: UIButton {
             // Position button text at the bottom of the button
             let topInset = heightConstant - intrinsicButtonHeight
             config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
-            backgroundColor = Utils.customBackgroundColor
+            backgroundColor = UIColor.customBackgroundColor
         }
         self.configuration = config
     }

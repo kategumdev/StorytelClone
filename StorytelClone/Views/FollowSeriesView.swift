@@ -121,8 +121,8 @@ class FollowSeriesView: UIView {
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
             let image = UIImage(systemName: "plus", withConfiguration: symbolConfig)
             config.image = image
-            followButton.tintColor = Utils.customBackgroundLight
-            followButton.backgroundColor = Utils.tintColor
+            followButton.tintColor = UIColor.customBackgroundLight
+            followButton.backgroundColor = UIColor.customTintColor
             followButton.layer.borderColor = UIColor.clear.cgColor
         } else {
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
@@ -169,7 +169,7 @@ class FollowSeriesView: UIView {
         } else {
             font = UIFont.createStaticFontWith(weight: .regular, size: 13)
         }
-        let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor, text: "100 Followers")
+        let label = UILabel.createLabelWith(font: font, textColor: UIColor.seeAllButtonColor, text: "100 Followers")
         return label
     }
     

@@ -29,7 +29,7 @@ class CategoryViewController: BaseViewController {
             bookTable.tableHeaderView = headerView
             
             // Add stretching topView
-            similarBooksTopView.backgroundColor = Utils.powderGrayBackgroundColor
+            similarBooksTopView.backgroundColor = UIColor.powderGrayBackgroundColor
             
             bookTable.addSubview(similarBooksTopView)
             let zPosition = bookTable.layer.zPosition - 1

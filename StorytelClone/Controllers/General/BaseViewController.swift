@@ -23,7 +23,7 @@ class BaseViewController: UIViewController {
     
     lazy var bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: tableViewStyle)
-        table.backgroundColor = Utils.customBackgroundColor
+        table.backgroundColor = UIColor.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
@@ -54,7 +54,7 @@ class BaseViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(bookTable)
         bookTable.delegate = self
         bookTable.dataSource = self

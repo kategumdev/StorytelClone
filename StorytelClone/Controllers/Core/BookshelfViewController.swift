@@ -23,7 +23,7 @@ class BookshelfViewController: ScopeViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         configureNavBar()
         collectionViewBottomAnchor.constant = 0
         
@@ -66,7 +66,7 @@ class BookshelfViewController: ScopeViewController {
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.makeNavbarAppearance(transparent: false)
-        navigationController?.navigationBar.barTintColor = Utils.tintColor
+        navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
 }

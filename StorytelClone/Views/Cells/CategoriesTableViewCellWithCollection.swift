@@ -39,7 +39,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = Utils.customBackgroundColor
+        collectionView.backgroundColor = UIColor.customBackgroundColor
         collectionView.isScrollEnabled = false
 
         return collectionView

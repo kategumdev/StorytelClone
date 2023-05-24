@@ -16,7 +16,7 @@ class WideButtonTableViewCell: UITableViewCell {
 
     private lazy var dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
-        button.backgroundColor = UIColor(red: 5/255, green: 163/255, blue: 173/255, alpha: 1)
+        button.backgroundColor = UIColor.customCyan
         return button
     }()
     
@@ -33,7 +33,7 @@ class WideButtonTableViewCell: UITableViewCell {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = Utils.customBackgroundColor
+        contentView.backgroundColor = UIColor.customBackgroundColor
         contentView.addSubview(dimmedAnimationButton)
         contentView.addSubview(customLabel)
         dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)

@@ -105,7 +105,7 @@ class ScopeButtonsView: UIView {
     
     private let slidingLine: UIView = {
         let view = UIView()
-        view.backgroundColor = Utils.tintColor
+        view.backgroundColor = UIColor.customTintColor
         view.isOpaque = true
         return view
     }()
@@ -126,7 +126,7 @@ class ScopeButtonsView: UIView {
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = Utils.customBackgroundColor
+        scrollView.backgroundColor = UIColor.customBackgroundColor
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.clipsToBounds = false
         scrollView.addSubview(stackView)
@@ -265,7 +265,7 @@ class ScopeButtonsView: UIView {
         for button in scopeButtons {
             button.configuration?.attributedTitle?.foregroundColor = UIColor.label
         }
-        currentButton.configuration?.attributedTitle?.foregroundColor = Utils.tintColor
+        currentButton.configuration?.attributedTitle?.foregroundColor = UIColor.customTintColor
     }
     
     func revertToInitialAppearance() {

@@ -78,7 +78,7 @@ class SimilarBooksTableHeaderView: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Utils.powderGrayBackgroundColor
+        backgroundColor = UIColor.powderGrayBackgroundColor
         addSubview(horzStack)
         applyConstraints()
     }

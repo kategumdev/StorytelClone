@@ -22,7 +22,7 @@ class SearchViewController: UIViewController {
         
     let categoriesTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-        table.backgroundColor = Utils.customBackgroundColor
+        table.backgroundColor = UIColor.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
@@ -47,7 +47,7 @@ class SearchViewController: UIViewController {
 //        controller.automaticallyShowsSearchResultsController
         controller.showsSearchResultsController = true
         // To set color of the prompt
-        controller.searchBar.tintColor = Utils.tintColor
+        controller.searchBar.tintColor = UIColor.customTintColor
                 
         // Configure placeholder string
         if let textField = controller.searchBar.value(forKey: "searchField") as? UITextField {
@@ -62,7 +62,7 @@ class SearchViewController: UIViewController {
         // Configure cancel button
         let cancelButtonAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.createScaledFontWith(textStyle: .callout, weight: .regular),
-            .foregroundColor: Utils.tintColor
+            .foregroundColor: UIColor.customTintColor
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
 
@@ -83,7 +83,7 @@ class SearchViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(categoriesTable)
         categoriesTable.delegate = self
         categoriesTable.dataSource = self
@@ -161,7 +161,7 @@ class SearchViewController: UIViewController {
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.makeNavbarAppearance(transparent: false)
-        navigationController?.navigationBar.barTintColor = Utils.tintColor
+        navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
     private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {

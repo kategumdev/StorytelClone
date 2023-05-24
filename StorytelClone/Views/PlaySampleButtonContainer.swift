@@ -48,7 +48,7 @@ class PlaySampleButtonContainer: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Utils.customBackgroundColor
+        backgroundColor = UIColor.customBackgroundColor
         addSubview(button)
         button.addSubview(horzStack)
         applyConstraints()

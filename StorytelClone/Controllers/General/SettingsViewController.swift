@@ -34,12 +34,12 @@ enum SettingsCell: String {
     
     var tintColor: UIColor {
         switch self {
-        case .account: return Utils.unactiveElementColor
+        case .account: return UIColor.unactiveElementColor
         case .app: return .label
-        case .subscription: return Utils.unactiveElementColor
-        case .privacy: return Utils.unactiveElementColor
+        case .subscription: return UIColor.unactiveElementColor
+        case .privacy: return UIColor.unactiveElementColor
         case .kidsMode: return .label
-        case .changePasscode: return Utils.unactiveElementColor
+        case .changePasscode: return UIColor.unactiveElementColor
         case .helpCenter: return .label
         case .signUp: return .label
         }
@@ -70,7 +70,7 @@ class SettingsViewController: UITableViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         configureNavBar()
         configureTableView()
     }
@@ -146,7 +146,7 @@ extension SettingsViewController {
         }
         
         // Avoid changing tableView backgroundColor after adding switchView
-        tableView.backgroundColor = Utils.customBackgroundColor
+        tableView.backgroundColor = UIColor.customBackgroundColor
         return cell
     }
     

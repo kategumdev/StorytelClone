@@ -30,10 +30,10 @@ class RoundButtonsStack: UIStackView {
 
     private lazy var listenButton: UIButton = {
         let button = UIButton()
-        button.tintColor = Utils.tintColor
+        button.tintColor = UIColor.customTintColor
         var config = UIButton.Configuration.filled()
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
-        let image = UIImage(systemName: "headphones", withConfiguration: symbolConfig)?.withTintColor(Utils.customBackgroundLight)
+        let image = UIImage(systemName: "headphones", withConfiguration: symbolConfig)?.withTintColor(UIColor.customBackgroundLight)
         config.image = image
         config.cornerStyle = .capsule
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 9.5, bottom: 10, trailing: 8.5)
@@ -47,9 +47,9 @@ class RoundButtonsStack: UIStackView {
     
     private lazy var readButton: UIButton = {
         let button = UIButton()
-        button.tintColor = Utils.tintColor
+        button.tintColor = UIColor.customTintColor
         var config = UIButton.Configuration.filled()
-        let image = UIImage(named: "glasses")?.withTintColor(Utils.customBackgroundLight)
+        let image = UIImage(named: "glasses")?.withTintColor(UIColor.customBackgroundLight)
         
         // Resize image
         if let image = image {

@@ -13,18 +13,6 @@ enum ScrollDirection {
 }
 
 struct Utils {
-
-    //MARK: - Colors
-    static let customBackgroundColor = UIColor(named: "customBackground")
-    static let customBackgroundLight = UIColor(red: 253/255, green: 251/255, blue: 250/255, alpha: 1)
-    
-    static let tintColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
-  
-    static let seeAllButtonColor = UIColor.label.withAlphaComponent(0.7)
-    
-    static let powderGrayBackgroundColor = UIColor(named: "backgroundBookOverview")
-    
-    static let unactiveElementColor: UIColor = .secondaryLabel.withAlphaComponent(0.4)
     
     //MARK: - Calculated Values
     static let calculatedSquareCoverSize: CGSize = {

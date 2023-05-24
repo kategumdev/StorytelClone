@@ -35,7 +35,7 @@ class SectionHeaderSubviewsContainer: UIView {
         button.titleLabel?.font = UIFont.customFootnoteSemibold
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentHorizontalAlignment = .right
-        button.setTitleColor(Utils.seeAllButtonColor, for: .normal)
+        button.setTitleColor(UIColor.seeAllButtonColor, for: .normal)
         button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return button
     }()

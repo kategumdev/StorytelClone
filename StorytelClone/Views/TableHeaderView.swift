@@ -38,7 +38,7 @@ class TableHeaderView: UIView {
 
     lazy var dimView: UIView = {
         let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         view.alpha = 0
         return view
     }()

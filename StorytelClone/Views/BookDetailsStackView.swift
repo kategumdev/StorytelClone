@@ -106,7 +106,7 @@ class BookDetailsStackView: UIStackView {
     }()
 
     private var gradientColors: [CGColor] {
-        let colors = [Utils.customBackgroundColor!.withAlphaComponent(0).cgColor,      Utils.customBackgroundColor!.withAlphaComponent(1).cgColor]
+        let colors = [UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,      UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
     }
     
@@ -245,7 +245,7 @@ class BookDetailsStackView: UIStackView {
         let staticStringAttributes: [NSAttributedString.Key: Any] = [.font: staticStringScaledFont1, .foregroundColor: UIColor.label]
 
         let nameScaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
-        let nameAttributes: [NSAttributedString.Key: Any] = [.font: nameScaledFont, .foregroundColor: Utils.tintColor]
+        let nameAttributes: [NSAttributedString.Key: Any] = [.font: nameScaledFont, .foregroundColor: UIColor.customTintColor]
 
         let staticStringCount = staticString.count
         attributedString.addAttributes(staticStringAttributes, range: NSRange(location: 0, length: staticStringCount))

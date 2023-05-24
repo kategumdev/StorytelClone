@@ -26,7 +26,7 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = Utils.customBackgroundColor        
+        contentView.backgroundColor = UIColor.customBackgroundColor        
         contentView.addSubview(containerWithSubviews)
         containerWithSubviews.fillSuperview()
     }

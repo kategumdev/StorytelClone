@@ -8,9 +8,9 @@
 import UIKit
 
 class BookViewController: UIViewController {
+    
     // MARK: - Instance properties
     let book: Book
-//    private let bookContainerScrollView = BookContainerScrollView(book: book)
     private lazy var bookContainerScrollView = BookContainerScrollView(book: book, superviewWidth: view.bounds.width)
     private let popupButton = PopupButton()
 
@@ -30,7 +30,7 @@ class BookViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         addBookContainerScrollView()
         configureNavBar()
     }
@@ -152,7 +152,7 @@ extension BookViewController {
     private func addHideView() {
         let hideView = UIView()
         view.addSubview(hideView)
-        hideView.backgroundColor = Utils.customBackgroundColor
+        hideView.backgroundColor = UIColor.customBackgroundColor
         hideView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             // 1000 ensures that hidden parts of overviewStackView and tagsView (if present) are fully covered by hideView
@@ -169,7 +169,6 @@ extension BookViewController {
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
         
-//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .heavy, scale: .large)
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .heavy, scale: .large)
         let image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(ellipsisButtonDidTap))

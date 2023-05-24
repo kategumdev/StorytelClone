@@ -25,7 +25,7 @@ class TableViewCellWithCollection: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = Utils.customBackgroundColor
+        collectionView.backgroundColor = UIColor.customBackgroundColor
         return collectionView
     }()
  

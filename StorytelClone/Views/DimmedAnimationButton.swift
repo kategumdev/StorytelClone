@@ -29,7 +29,7 @@ class DimmedAnimationButton: UIButton {
     
     private lazy var dimViewForAnimation: UIView = {
         let view = UIView()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         return view
     }()
 

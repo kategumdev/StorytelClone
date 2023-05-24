@@ -231,8 +231,23 @@ extension UINavigationController {
 
 extension UIColor {
     
-    static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
-
+    static let customBackgroundColor = UIColor(named: "customBackground")
+    static let customBackgroundLight = UIColor(red: 253/255, green: 251/255, blue: 250/255, alpha: 1)
+    static let customTintColor = UIColor(cgColor: CGColor(red: 255/255, green: 56/255, blue: 0/255, alpha: 1))
+    static let seeAllButtonColor = UIColor.label.withAlphaComponent(0.7)
+    static let powderGrayBackgroundColor = UIColor(named: "backgroundBookOverview")
+    static let unactiveElementColor: UIColor = .secondaryLabel.withAlphaComponent(0.4)
+    
+    // For category buttons and WideButtonTableViewCell
+    static let customCyan = UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
+    static let customDarkGray = UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
+    static let customOrange = UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
+    static let appleGreen = UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
+    static let pineGreen = UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
+    static let purpleBlue = UIColor(red: 69/255, green: 25/255, blue: 162/255, alpha: 1)
+    static let skyBlue = UIColor(red: 39/255, green: 149/255, blue: 213/255, alpha: 1)
+    static let electricBlue = UIColor(red: 0, green: 54/255, blue: 195/255, alpha: 1)
+    static let fuchsia = UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
 }
 
 extension UITabBar {

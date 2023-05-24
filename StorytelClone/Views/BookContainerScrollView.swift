@@ -61,7 +61,7 @@ class BookContainerScrollView: UIScrollView {
     
     let bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-        table.backgroundColor = Utils.customBackgroundColor
+        table.backgroundColor = UIColor.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         table.allowsSelection = false

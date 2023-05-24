@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
     
     private let profileTable: UITableView = {
         let table = UITableView()
-        table.backgroundColor = Utils.customBackgroundColor
+        table.backgroundColor = UIColor.customBackgroundColor
         table.showsVerticalScrollIndicator = false
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
@@ -43,7 +43,7 @@ class ProfileViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         configureNavBar()
         view.addSubview(profileTable)
         profileTable.delegate = self
@@ -96,7 +96,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier") else { return UITableViewCell() }
         cell.backgroundColor = .clear
-        cell.tintColor = Utils.unactiveElementColor
+        cell.tintColor = UIColor.unactiveElementColor
         cell.accessoryType = .disclosureIndicator
 
         let profileCell = profileCells[indexPath.row]
@@ -104,7 +104,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         content.image = profileCell.image
         content.text = profileCell.rawValue
         content.textProperties.font = getScaledCellLabelFont()
-        content.textProperties.color = Utils.unactiveElementColor
+        content.textProperties.color = UIColor.unactiveElementColor
         cell.contentConfiguration = content
         return cell
     }

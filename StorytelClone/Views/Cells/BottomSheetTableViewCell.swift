@@ -37,7 +37,7 @@ class BottomSheetTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectedBackgroundView = UIView() // avoid gray color when cell is selected
         backgroundColor = .clear
-        tintColor = Utils.tintColor
+        tintColor = UIColor.customTintColor
         contentView.preservesSuperviewLayoutMargins = false
         
         var content = self.defaultContentConfiguration()
@@ -75,17 +75,17 @@ class BottomSheetTableViewCell: UITableViewCell {
             text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
             let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
             content.image = UIImage(systemName: newImageName)
-            let color = book.isAddedToBookshelf ? Utils.tintColor : .label
+            let color = book.isAddedToBookshelf ? UIColor.customTintColor : .label
             content.imageProperties.tintColor = color
             
         case .markAsFinished:
-            let color: UIColor = book.isFinished ? .label : Utils.unactiveElementColor
+            let color: UIColor = book.isFinished ? .label : UIColor.unactiveElementColor
             content.textProperties.color = color
             content.imageProperties.tintColor = color
             text = "Mark as finished"
             
         case .download:
-            let color: UIColor = book.isDownloaded ? .label : Utils.unactiveElementColor
+            let color: UIColor = book.isDownloaded ? .label : UIColor.unactiveElementColor
             content.textProperties.color = color
             content.imageProperties.tintColor = color
             text = "Download"

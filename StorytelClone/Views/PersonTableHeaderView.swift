@@ -59,7 +59,7 @@ class PersonTableHeaderView: UIView {
 //        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
         let scaledFont = UIFont.customCalloutSemibold
         config.attributedTitle?.font = scaledFont
-        config.attributedTitle?.foregroundColor = Utils.customBackgroundLight
+        config.attributedTitle?.foregroundColor = UIColor.customBackgroundLight
         
         config.contentInsets = NSDirectionalEdgeInsets(top: 13, leading: 44, bottom: 13, trailing: 44)
         button.configuration = config
@@ -97,7 +97,7 @@ class PersonTableHeaderView: UIView {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         config.cornerStyle = .capsule
-        config.background.backgroundColor = Utils.tintColor
+        config.background.backgroundColor = UIColor.customTintColor
         
         config.attributedTitle = "Get started"
 //        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)

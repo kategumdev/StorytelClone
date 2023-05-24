@@ -11,7 +11,7 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         
         let vc1 = UINavigationController(rootViewController: HomeViewController(categoryModel: Category.home, posterBook: Book.posterBook))
         let vc2 = UINavigationController(rootViewController: SearchViewController(categoryModel: Category.searchVc, categoryButtons: ButtonCategory.buttonCategoriesForSearchVc))
@@ -37,7 +37,7 @@ class TabBarViewController: UITabBarController {
         tabBar.isTranslucent = false
         
         // This line avoid tab bar blinking gray when next vc is being pushed
-        tabBar.backgroundColor = Utils.customBackgroundColor
+        tabBar.backgroundColor = UIColor.customBackgroundColor
         
         tabBar.standardAppearance.backgroundEffect = nil
         tabBar.standardAppearance.shadowColor = .tertiaryLabel
@@ -52,8 +52,7 @@ class TabBarViewController: UITabBarController {
     // MARK: - Helper methods
     private func setTabBarItemColors(_ itemAppearances: [UITabBarItemAppearance]) {
         let normalColor = UIColor.label
-        let selectedColor = Utils.tintColor
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 11)
+        let selectedColor = UIColor.customTintColor
         let font = UIFont.createStaticFontWith(weight: .semibold, size: 11)
         
         for appearance in itemAppearances {

@@ -80,8 +80,8 @@ enum ButtonCategory: String {
         novela, zonaPodcast, novelaNegra, romantica,
         thrillerYHorror, fantasiaYCienciaFiccion,
         crecimientoPersonalYLifestyle, infantil,
-        clasicos, juvenilYYoungAdult, erotica, noFiccion,
-        economiaYNegocios, relatosCortos, historia,
+        juvenilYYoungAdult, clasicos, historia, noFiccion, erotica,
+        relatosCortos, economiaYNegocios,
         espiritualidadYReligion, biografias, poesiaYTeatro,
         aprenderIdiomas, inEnglish
     ]
@@ -131,32 +131,15 @@ enum ButtonCategory: String {
     
     var colorForBackground: UIColor {
         switch self {
-        case .series: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
-        case .soloEnStorytel: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
-        case .losMasPopulares: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
-        case .soloParaTi: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
-        case .ebooks: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
-        case .historiasParaCadaEmocion: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
-        case .novela: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
-        case .zonaPodcast: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
-        case .novelaNegra: return UIColor(red: 69/255, green: 25/255, blue: 162/255, alpha: 1)
-        case .romantica: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
-        case .thrillerYHorror: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
-        case .fantasiaYCienciaFiccion: return UIColor(red: 69/255, green: 25/255, blue: 162/255, alpha: 1)
-        case .crecimientoPersonalYLifestyle: return UIColor(red: 39/255, green: 149/255, blue: 213/255, alpha: 1)
-        case .infantil: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
-        case .clasicos: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
-        case .juvenilYYoungAdult: return UIColor(red: 243/255, green: 101/255, blue: 0, alpha: 1)
-        case .erotica: return UIColor(red: 195/255, green: 1/255, blue: 121/255, alpha: 1)
-        case .noFiccion: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
-        case .economiaYNegocios: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
-        case .relatosCortos: return UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
-        case .historia: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
-        case .espiritualidadYReligion: return UIColor(red: 39/255, green: 149/255, blue: 213/255, alpha: 1)
-        case .biografias: return UIColor(red: 63/255, green: 148/255, blue: 78/255, alpha: 1)
-        case .poesiaYTeatro: return UIColor(red: 0, green: 163/255, blue: 173/255, alpha: 1)
-        case .aprenderIdiomas: return UIColor(red: 111/255, green: 152/255, blue: 11/255, alpha: 1)
-        case .inEnglish: return UIColor(red: 0, green: 54/255, blue: 195/255, alpha: 1)
+        case .series, .novela, .clasicos, .poesiaYTeatro: return UIColor.customCyan
+        case .soloEnStorytel, .infantil, .juvenilYYoungAdult: return UIColor.customOrange
+        case .losMasPopulares, .historiasParaCadaEmocion, .romantica, .erotica: return UIColor.fuchsia
+        case .soloParaTi, .historia, .biografias: return UIColor.pineGreen
+        case .ebooks, .thrillerYHorror, .relatosCortos: return UIColor.customDarkGray
+        case .zonaPodcast, .noFiccion, .aprenderIdiomas, .economiaYNegocios: return UIColor.appleGreen
+        case .novelaNegra, .fantasiaYCienciaFiccion: return UIColor.purpleBlue
+        case .crecimientoPersonalYLifestyle, .espiritualidadYReligion: return UIColor.skyBlue
+        case .inEnglish: return UIColor.electricBlue
         }
     }
     
@@ -323,8 +306,6 @@ struct Category: Equatable {
             TableSection(sectionTitle: "Nuevas histotias de amor")
         ]
     )
-//        tableSections: [TableSection]()
-    
     
     static let crecimientoPersonalYLifestyle = Category(
         title: ButtonCategory.crecimientoPersonalYLifestyle.rawValue,

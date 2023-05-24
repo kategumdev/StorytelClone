@@ -25,7 +25,7 @@ class PopupButton: UIButton {
         let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
         let label = UILabel.createLabelWith(font: font)
         
-        if let customBackgroundColor = Utils.customBackgroundColor {
+        if let customBackgroundColor = UIColor.customBackgroundColor {
             label.textColor = customBackgroundColor
         }
         return label
@@ -34,7 +34,7 @@ class PopupButton: UIButton {
     private let customImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = Utils.customBackgroundColor
+        imageView.tintColor = UIColor.customBackgroundColor
         let symbolConfig = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "xmark")?.withConfiguration(symbolConfig)
         imageView.image = image

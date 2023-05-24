@@ -31,7 +31,7 @@ class TagsView: UIView {
         self.tags = tags
         self.superviewWidth = superviewWidth
         super.init(frame: .zero)
-        backgroundColor = Utils.customBackgroundColor
+        backgroundColor = UIColor.customBackgroundColor
         addSubview(titleLabel)
         createTagButtons()
         tagButtons.forEach { addSubview($0) }

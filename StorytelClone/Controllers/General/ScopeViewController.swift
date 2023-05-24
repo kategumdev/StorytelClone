@@ -29,7 +29,7 @@ class ScopeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ScopeCollectionViewCell.self, forCellWithReuseIdentifier: ScopeCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = Utils.customBackgroundColor
+        collectionView.backgroundColor = UIColor.customBackgroundColor
         collectionView.isPagingEnabled = true
         return collectionView
     }()
@@ -74,7 +74,7 @@ class ScopeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Utils.customBackgroundColor
+        view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(separatorLineView)
         view.addSubview(scopeButtonsView)
         configureScopeButtonsView()

@@ -23,7 +23,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(LargeBookCollectionViewCell.self, forCellWithReuseIdentifier: LargeBookCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = Utils.customBackgroundColor
+        collectionView.backgroundColor = UIColor.customBackgroundColor
         return collectionView
     }()
  

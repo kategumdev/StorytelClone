@@ -11,7 +11,7 @@ class StarHorzStackView: UIStackView {
     // MARK: - Static methods
     static func createCategoryLabel() -> UILabel {
         let font = UIFont.createScaledFontWith(textStyle: .caption2, weight: .medium, maxPointSize: 16)
-        let label = UILabel.createLabelWith(font: font, textColor: Utils.seeAllButtonColor, text: "Lorem ipsum")
+        let label = UILabel.createLabelWith(font: font, textColor: UIColor.seeAllButtonColor, text: "Lorem ipsum")
         label.sizeToFit()
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
@@ -36,7 +36,7 @@ class StarHorzStackView: UIStackView {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "star.fill")
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = Utils.seeAllButtonColor
+        imageView.tintColor = UIColor.seeAllButtonColor
        
         view.addSubview(imageView)
         
@@ -53,7 +53,7 @@ class StarHorzStackView: UIStackView {
     
     private lazy var ratingLabel: UILabel = {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 16)
-        let label = UILabel.createLabelWith(font: scaledFont, textColor: Utils.seeAllButtonColor)
+        let label = UILabel.createLabelWith(font: scaledFont, textColor: UIColor.seeAllButtonColor)
         label.sizeToFit()
         return label
     }()
@@ -153,7 +153,7 @@ class StarHorzStackView: UIStackView {
     }
     
     private func toggleSaveButtonImage() {
-        saveButton.tintColor = self.isBookAddedToBookshelf ? Utils.tintColor : .label
+        saveButton.tintColor = self.isBookAddedToBookshelf ? UIColor.customTintColor : .label
         saveButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
     }
 

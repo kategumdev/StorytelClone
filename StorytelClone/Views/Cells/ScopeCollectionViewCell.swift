@@ -40,7 +40,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
-        table.backgroundColor = Utils.customBackgroundColor
+        table.backgroundColor = UIColor.customBackgroundColor
         table.separatorColor = UIColor.clear
         
         table.register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
@@ -68,7 +68,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = Utils.customBackgroundColor
+        contentView.backgroundColor = UIColor.customBackgroundColor
         contentView.addSubview(resultsTable)
         resultsTable.dataSource = self
         resultsTable.delegate = self

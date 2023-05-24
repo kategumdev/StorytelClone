@@ -10,7 +10,7 @@ import UIKit
 class BookWithOverviewCellSubviewsContainer: UIView {
     // MARK: - Static properties
     static let borderColor = UIColor(named: "borderBookOverview")
-    static let backgroundColor = Utils.powderGrayBackgroundColor
+    static let backgroundColor = UIColor.powderGrayBackgroundColor
     
     // MARK: - Instance properties
     private var book: Book?
@@ -115,7 +115,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     private func toggleSaveButtonImage() {
         guard let book = book else { return }
-        saveButton.tintColor = book.isAddedToBookshelf ? Utils.tintColor : .label
+        saveButton.tintColor = book.isAddedToBookshelf ? UIColor.customTintColor : .label
         saveButton.toggleImage(isBookAdded: book.isAddedToBookshelf)
     }
         
