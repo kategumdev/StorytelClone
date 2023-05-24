@@ -81,6 +81,8 @@ class BookContainerScrollView: UIScrollView {
 
     private lazy var bookTableHeightConstraint = bookTable.heightAnchor.constraint(equalToConstant: bookTableHeight)
     
+    private var viewNeedsLayout = false
+    
     // MARK: - Initializers
     init(book: Book, superviewWidth: CGFloat) {
         self.book = book
@@ -98,10 +100,13 @@ class BookContainerScrollView: UIScrollView {
         super.layoutSubviews()
         hideOrShowSeeMoreOverviewButton()
         
-        guard hasTags else { return }
-        // Adjust seeTagButton position for 'compressed' appearance of tagsView if content size category was changed
-        if seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCurrentCompressedViewHeight() {
+        if hasTags && seeTagsButtonAnchorToCompressTagsView.constant != tagsView.calculateCurrentCompressedViewHeight() {
             seeTagsButtonAnchorToCompressTagsView.constant = tagsView.calculateCurrentCompressedViewHeight()
+            viewNeedsLayout = true
+        }
+        
+        if viewNeedsLayout {
+            viewNeedsLayout = false
             setNeedsLayout()
             layoutIfNeeded()
         }
@@ -124,16 +129,13 @@ class BookContainerScrollView: UIScrollView {
             seeOverviewButtonAnchorForFullSizeOverview.isActive = true
             seeOverviewButtonAnchorForFullSizeOverview.constant -= seeOverviewButton.bounds.height / 4
             seeOverviewButton.isHidden = true
-            setNeedsLayout()
-            layoutIfNeeded()
+            viewNeedsLayout = true
         } else if overviewStackViewHeight >= overviewStackView.defaultVisiblePartWhenCompressed && seeOverviewButton.isHidden {
             // Show
             seeOverviewButtonAnchorForFullSizeOverview.constant = -seeOverviewButton.heightConstant / 2
             seeOverviewButtonAnchorForFullSizeOverview.isActive = false
             seeOverviewButtonAnchorToCompressOverview.isActive = true
             seeOverviewButton.isHidden = false
-//            setNeedsLayout()
-//            layoutIfNeeded()
         }
     }
     

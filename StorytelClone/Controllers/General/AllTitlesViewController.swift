@@ -185,7 +185,7 @@ class AllTitlesViewController: BaseViewController {
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
     }
     
-    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout). Checking isHeaderConfigured ensures that TableHeaderView is configured only once
+    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
     private func configureAndLayoutTableHeader() {
         if let storyteller = titleModel as? Storyteller {
             let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
