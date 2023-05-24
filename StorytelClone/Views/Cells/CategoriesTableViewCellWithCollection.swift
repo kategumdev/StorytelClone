@@ -11,9 +11,10 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     // MARK: - Static properties and methods
     static let identifier = "CategoriesTableViewCellWithCollection"
     static let gapBetweenHeaderAndCell: CGFloat = 9
+    static let cvItemHeight: CGFloat = 120
     
     static let calculatedCvItemSizeCategory: CGSize = {
-        let height = Constants.categoryCvItemHeight
+        let height = cvItemHeight
         
         let contentViewWidth = UIScreen.main.bounds.size.width
         let width = round(contentViewWidth - (Constants.commonHorzPadding * 3)) / 2

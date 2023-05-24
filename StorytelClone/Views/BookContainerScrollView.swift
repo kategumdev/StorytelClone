@@ -16,7 +16,7 @@ class BookContainerScrollView: UIScrollView {
     private let bookDetailsStackViewTopPadding: CGFloat = 12
     
     lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
-//    private lazy var overviewStackView = BookOverviewStackView(book: book)
+    
     private lazy var overviewStackView: BookOverviewStackView = {
         let view = BookOverviewStackView(book: book)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleOverviewTapGesture))
@@ -66,7 +66,7 @@ class BookContainerScrollView: UIScrollView {
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
         table.isScrollEnabled = false
-        table.rowHeight = Utils.heightForRowWithHorizontalCv
+        table.rowHeight = TableViewCellWithCollection.rowHeight
         table.sectionHeaderHeight = UITableView.automaticDimension
         table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
         table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
@@ -110,7 +110,7 @@ class BookContainerScrollView: UIScrollView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
 //            print("bookTableHeight UPDATED")
-            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + Utils.heightForRowWithHorizontalCv
+            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
         }
     }
     
@@ -198,7 +198,7 @@ class BookContainerScrollView: UIScrollView {
     }
     
     private func calculateBookTableHeight() -> CGFloat {
-        let height = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + Utils.heightForRowWithHorizontalCv
+        let height = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
         return height
     }
     

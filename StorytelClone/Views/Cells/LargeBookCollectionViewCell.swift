@@ -18,12 +18,14 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
         button.layer.borderWidth = 0.26
         return button
     }()
+    
+    private let coverCornerRadius: CGFloat = 7
         
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(dimmedAnimationButton)
-        dimmedAnimationButton.layer.cornerRadius = Constants.largeCoverCornerRadius
+        dimmedAnimationButton.layer.cornerRadius = coverCornerRadius
         dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
         applyConstraints()
     }
@@ -51,7 +53,7 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.posterAndLargeCoversCellTopPadding),
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers),
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)

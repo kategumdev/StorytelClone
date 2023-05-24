@@ -7,18 +7,38 @@
 
 import UIKit
 
-class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
+class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
     
     static let identifier = "TableViewCellWithHorzCvLargeCovers"
     
+    static let visiblePartOfThirdCover: CGFloat = 14
+    static let horzPadding: CGFloat = 8
+    
+    static let itemSize: CGSize = {
+        let contentViewWidth = UIScreen.main.bounds.width
+        let visiblePartOfThirdCover = 14
+        
+        let widthForContent = contentViewWidth - ((horzPadding * 2) + Constants.commonHorzPadding + CGFloat(visiblePartOfThirdCover))
+        let itemWidth = widthForContent / (Constants.numberOfVisibleCvItemsInRow - 1)
+        let roundedItemWidth = round(itemWidth)
+
+        // Get height for 2:3 aspect ratio
+        let height = ((3/2) * roundedItemWidth) + Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers
+        let size = CGSize(width: roundedItemWidth, height: height)
+        return size
+    }()
+    
+    static let rowHeight: CGFloat = {
+        return itemSize.height
+    }()
+    
     // MARK: - Instance properties
-//    var books: [Book] = [Book]() // It will contain 42 random audiobooks
     var books = [Book]() // It will contain 42 random audiobooks
     var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = Constants.paddingForHorzCvLargeCovers
+        layout.minimumLineSpacing = horzPadding
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(LargeBookCollectionViewCell.self, forCellWithReuseIdentifier: LargeBookCollectionViewCell.identifier)
@@ -59,7 +79,7 @@ class TableViewCellWithHorzCvLargeCovers: UITableViewCell {
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegate, UICollectionViewDataSource {
+extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return books.count
     }
@@ -75,9 +95,9 @@ extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegate, UICollec
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
-extension TableViewCellWithHorzCvLargeCovers: UICollectionViewDelegateFlowLayout {
+extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return Utils.calculatedHorzCvItemSizeLargeCovers
+        return TableViewCellWithHorzCvLargeRectangleCovers.itemSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -11,12 +11,13 @@ class PosterTableViewCell: UITableViewCell {
     
     // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
-        
-    static let calculatedWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
-    static let calculatedHeightForRow: CGFloat = calculatedHeight + Constants.posterAndLargeCoversCellTopPadding
     
-    static let calculatedHeight: CGFloat = {
-        let height = round(calculatedWidth + (calculatedWidth / 6))
+    static let heightForRow: CGFloat = calculatedButtonHeight + Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers
+        
+    static let calculatedButtonWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
+    
+    static let calculatedButtonHeight: CGFloat = {
+        let height = round(calculatedButtonWidth + (calculatedButtonWidth / 6))
         return height
     }()
     
@@ -47,9 +48,9 @@ class PosterTableViewCell: UITableViewCell {
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedWidth),
-            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedHeight),
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.posterAndLargeCoversCellTopPadding),
+            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonWidth),
+            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonHeight),
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers),
             dimmedAnimationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])
     }

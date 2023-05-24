@@ -12,8 +12,8 @@ class BaseScopeTableViewCell: UITableViewCell {
     // MARK: - Static properties and methods
     static let cornerRadius: CGFloat = 2
     static let minTopAndBottomPadding: CGFloat = 13
-    static let squareImageWidth: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
-    static let imageHeight: CGFloat = squareImageWidth
+    static let squareImageWidth: CGFloat = Constants.smallSquareBookCoverSize.width
+    static let imageHeight: CGFloat = Constants.smallSquareBookCoverSize.height
     
     static func createTitleLabel(withScaledFont: Bool = true) -> UILabel {
         if withScaledFont {

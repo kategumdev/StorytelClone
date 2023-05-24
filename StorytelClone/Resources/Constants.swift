@@ -7,22 +7,33 @@
 
 import UIKit
 
-// reusable in different controllers and views
 struct Constants {
     
-//    static let cvPadding: CGFloat = 16
     static let commonHorzPadding: CGFloat = 16
+    static let commonBookCoverCornerRadius: CGFloat = 4
+    static let topPaddingForCellsWithPosterAndLargeRectangleCovers: CGFloat = 10
+    static let numberOfVisibleCvItemsInRow: CGFloat = 3 // the 3rd one is only partly visible
     
-    static let paddingForHorzCvLargeCovers: CGFloat = 8
-    static let posterAndLargeCoversCellTopPadding: CGFloat = 10
+    static let largeSquareBookCoverSize: CGSize = {
+        let contentViewWidth = UIScreen.main.bounds.width
+        let width = (contentViewWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
+
+        let fullWidth = contentViewWidth + (width / 2)
+        let itemWidth = (fullWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
+
+        let size = CGSize(width: round(itemWidth), height: round(itemWidth))
+        return size
+    }()
     
-//    static let generalTopPaddingSectionHeader: CGFloat = 31
-    static let sectionHeaderViewTopPadding: CGFloat = 31
+    static let mediumSquareBookCoverSize: CGSize = {
+        let width = round(4/5 * largeSquareBookCoverSize.width)
+        let height = width
+        return CGSize(width: width, height: height)
+    }()
     
-    static let visibleHorzCvItemsInRow: CGFloat = 3 // the 3rd one is only partly visible
-    static let bookCoverCornerRadius: CGFloat = 4
-    static let visiblePartOfThirdLargeCover: CGFloat = 14
-    static let largeCoverCornerRadius: CGFloat = 7
-    static let categoryCvItemHeight: CGFloat = 120
-    
+    static let smallSquareBookCoverSize: CGSize = {
+        let width: CGFloat = ceil(UIScreen.main.bounds.width * 0.19)
+        let size = CGSize(width: width, height: width)
+        return size
+    }()
 }

@@ -11,6 +11,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Static properties and methods
     static let identifier = "SectionHeaderView"
+    static let topPadding: CGFloat = 31
     
     static func calculateEstimatedHeightFor(tableSection: TableSection, superviewWidth: CGFloat, sectionNumber: Int? = nil, category: Category? = nil) -> CGFloat {
         let headerContainer = SectionHeaderSubviewsContainer(addButtonAction: false)
@@ -27,7 +28,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.customBackgroundColor
         contentView.addSubview(containerWithSubviews)
         containerWithSubviews.translatesAutoresizingMaskIntoConstraints = false
         containerWithSubviews.fillSuperview()

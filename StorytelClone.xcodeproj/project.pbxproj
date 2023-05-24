@@ -40,7 +40,7 @@
 		5A8497FB29D49B530047AB44 /* PlaySampleButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */; };
 		5A8497FD29D4B4060047AB44 /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8497FC29D4B4060047AB44 /* TagsView.swift */; };
 		5A9916482A0A587C00CB6B8A /* BookContainerScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */; };
-		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift */; };
+		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */; };
 		5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */; };
 		5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */; };
 		5AA8006429C8D21100198B8A /* ScopeSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */; };
@@ -136,7 +136,7 @@
 		5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySampleButtonContainer.swift; sourceTree = "<group>"; };
 		5A8497FC29D4B4060047AB44 /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
 		5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContainerScrollView.swift; sourceTree = "<group>"; };
-		5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithHorzCvLargeCovers.swift; sourceTree = "<group>"; };
+		5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithHorzCvLargeRectangleCovers.swift; sourceTree = "<group>"; };
 		5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeBookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBooksScopeCollectionViewBackgroundView.swift; sourceTree = "<group>"; };
 		5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeSeriesTableViewCell.swift; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
 				5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */,
 				5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */,
-				5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift */,
+				5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */,
 				5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */,
 				5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */,
 				5A34350F29BD005E00178CDA /* ScopeCollectionViewCell.swift */,
@@ -532,7 +532,7 @@
 				5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */,
 				5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
-				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeCovers.swift in Sources */,
+				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */,
 				5A5A1FDB29D3235600AA08BB /* SeeMoreButton.swift in Sources */,
 				5A54A5F229DC446D003BB8D4 /* PersonTableHeaderView.swift in Sources */,
 				5AB2CCCE29B2437D0048A4FB /* PosterTableViewCell.swift in Sources */,

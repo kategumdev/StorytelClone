@@ -25,7 +25,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     private let squareImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
+        imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -130,7 +130,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         let paddingBetweenImageAndStack: CGFloat = 17
         
         vertStackView.translatesAutoresizingMaskIntoConstraints = false
-        let topAnchorConstant: CGFloat = (Utils.calculatedSmallSquareImageCoverSize.height - imageTopConstant) + paddingBetweenImageAndStack
+        let topAnchorConstant: CGFloat = (Constants.mediumSquareBookCoverSize.height - imageTopConstant) + paddingBetweenImageAndStack
         NSLayoutConstraint.activate([
             vertStackView.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: topAnchorConstant),
             vertStackView.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: leadingConstant),
@@ -147,11 +147,12 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         ])
         
         squareImageView.translatesAutoresizingMaskIntoConstraints = false
+        let imageWidthAndHeight: CGFloat = Constants.mediumSquareBookCoverSize.width
         NSLayoutConstraint.activate([
             squareImageView.topAnchor.constraint(equalTo: dimmedAnimationButton.topAnchor, constant: -imageTopConstant),
             squareImageView.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: leadingConstant),
-            squareImageView.widthAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.width),
-            squareImageView.heightAnchor.constraint(equalToConstant: Utils.calculatedSmallSquareImageCoverSize.height)
+            squareImageView.widthAnchor.constraint(equalToConstant: imageWidthAndHeight),
+            squareImageView.heightAnchor.constraint(equalToConstant: imageWidthAndHeight)
         ])
         
         saveButton.translatesAutoresizingMaskIntoConstraints = false

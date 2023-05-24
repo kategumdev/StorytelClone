@@ -34,8 +34,7 @@ class SearchViewController: UIViewController {
         table.sectionFooterHeight = 0
         
         table.tableFooterView = UIView()
-        table.tableFooterView?.frame.size.height = Constants.sectionHeaderViewTopPadding
-
+        table.tableFooterView?.frame.size.height = SectionHeaderView.topPadding
         return table
     }()
     
@@ -338,7 +337,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return Constants.sectionHeaderViewTopPadding
+            return SectionHeaderView.topPadding
         } else {
             let currentSection = model.tableSections[section]
             let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: currentSection, superviewWidth: view.bounds.width)

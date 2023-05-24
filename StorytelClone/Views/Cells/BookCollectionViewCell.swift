@@ -22,7 +22,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    private lazy var dimmedAnimationButtonWidthAnchor = dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
+    private lazy var dimmedAnimationButtonWidthAnchor = dimmedAnimationButton.widthAnchor.constraint(equalToConstant: Constants.largeSquareBookCoverSize.width)
     
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -86,7 +86,7 @@ class BookCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.height)
+            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Constants.largeSquareBookCoverSize.height)
         ])
         dimmedAnimationButtonWidthAnchor.isActive = true
         

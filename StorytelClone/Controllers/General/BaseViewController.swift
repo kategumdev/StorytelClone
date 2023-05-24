@@ -36,7 +36,7 @@ class BaseViewController: UIViewController {
 
         // Avoid gap at the very bottom of the table view
         table.tableFooterView = UIView()
-        table.tableFooterView?.frame.size.height = Constants.sectionHeaderViewTopPadding
+        table.tableFooterView?.frame.size.height = SectionHeaderView.topPadding
         return table
     }()
  
@@ -135,7 +135,7 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Utils.heightForRowWithHorizontalCv
+        return TableViewCellWithCollection.rowHeight
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

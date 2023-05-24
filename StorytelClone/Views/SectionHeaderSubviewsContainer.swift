@@ -7,18 +7,17 @@
 
 import UIKit
 
-// Created as a separate class to make calculation of estimated section header height and smooth scrolling experience (especially after dynamic font size change) possible
+// Created as a separate class to enable calculation of estimated section header height and smooth scrolling experience after dynamic font size change
 class SectionHeaderSubviewsContainer: UIView {
     
+    // Static properties
     private static let paddingBetweenLabelAndButton: CGFloat = 20
     private static let seeAllButtonTitle = "See all"
     private static let paddingBetweenLabels: CGFloat = 1
     
     // MARK: - Instance properties
     private let sectionTitleLabel: UILabel = {
-//        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
-//        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
-        let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
+        let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold, numberOfLines: 2)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
@@ -71,9 +70,8 @@ class SectionHeaderSubviewsContainer: UIView {
         return stack
     }()
     
-    private let defaultHorzStackTopPadding: CGFloat = Constants.sectionHeaderViewTopPadding
+    private let defaultHorzStackTopPadding: CGFloat = SectionHeaderView.topPadding
     private lazy var horzStackTopAnchorConstraint =             horzStackView.topAnchor.constraint(equalTo: topAnchor, constant: defaultHorzStackTopPadding)
-    
     private var seeAllButtonDidTapCallback: () -> () = {}
 
     // MARK: - Initializers
@@ -91,11 +89,6 @@ class SectionHeaderSubviewsContainer: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        print("pointSize: \(sectionTitleLabel.font.pointSize)")
-//    }
     
     // MARK: - Instance methods
     func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {

@@ -10,6 +10,7 @@ import UIKit
 class WideButtonTableViewCell: UITableViewCell {
 
     static let identifier = "WideImageTableViewCell"
+    static let rowHeight: CGFloat = Constants.largeSquareBookCoverSize.height
         
     // MARK: - Instance properties
     private var timeLayoutSubviewsIsBeingCalled = 0
@@ -67,7 +68,7 @@ class WideButtonTableViewCell: UITableViewCell {
             dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
             dimmedAnimationButton.widthAnchor.constraint(equalToConstant: buttonWidth),
-            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Utils.calculatedSquareCoverSize.width)
+            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: Constants.largeSquareBookCoverSize.height)
         ])
         
         customLabel.translatesAutoresizingMaskIntoConstraints = false

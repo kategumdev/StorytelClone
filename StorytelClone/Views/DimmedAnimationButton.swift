@@ -81,7 +81,7 @@ class DimmedAnimationButton: UIButton {
     
     // MARK: - Helper methods
     private func configureSelf() {
-        layer.cornerRadius = Constants.bookCoverCornerRadius
+        layer.cornerRadius = Constants.commonBookCoverCornerRadius
         clipsToBounds = true
 
         var config = UIButton.Configuration.plain()

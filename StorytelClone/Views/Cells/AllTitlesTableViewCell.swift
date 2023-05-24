@@ -11,7 +11,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     
     // MARK: - Static properties and methods
     static let identifier = "AllTitlesTableViewCell"
-    static let imageWidthAndHeight: CGFloat = Utils.calculatedSmallSquareImageCoverSize.width
+    static let imageWidthAndHeight: CGFloat = Constants.mediumSquareBookCoverSize.width
     static let minTopAndBottomPadding: CGFloat = Constants.commonHorzPadding
     static let minCellHeight: CGFloat = imageWidthAndHeight + (minTopAndBottomPadding * 2)
     static let maxSubtitleLabelCount: Int = 4
@@ -91,7 +91,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     private let customImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = Constants.bookCoverCornerRadius
+        imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.clipsToBounds = true
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.26

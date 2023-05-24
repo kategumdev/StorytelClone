@@ -9,10 +9,16 @@ import UIKit
 
 class TableViewCellWithCollection: UITableViewCell {
 
+    // MARK: - Static properties
     static let identifier = "TableViewCellWithCollection"
     
-    // Actual value injected when cell is being configured in cellForRowAt
-    var books: [Book] = [Book]() // It will contain only 10 books
+    static let rowHeight: CGFloat = {
+        let topPadding: CGFloat = BadgeView.badgeTopAnchorPoints + 3
+        return Constants.largeSquareBookCoverSize.height + topPadding
+    }()
+    
+    // MARK: - Instance properties
+    var books = [Book]() // It will contain only 10 books
     private var resizedImages = [UIImage]()
     private var itemSizes = [CGSize]()
     
@@ -58,11 +64,11 @@ class TableViewCellWithCollection: UITableViewCell {
         
         // Resize images for use in cv cells and in sizeForItemAt method of cv
         for book in books {
-            let height = Utils.calculatedSquareCoverSize.height
+            let height = Constants.largeSquareBookCoverSize.height
             if let image = book.coverImage {
                 let resizedImage = image.resizeFor(targetHeight: height)
                 resizedImages.append(resizedImage)
-                let itemSize = CGSize(width: resizedImage.size.width, height: height)
+                let itemSize = CGSize(width: resizedImage.size.width, height: TableViewCellWithCollection.rowHeight)
                 itemSizes.append(itemSize)
             }
         }
@@ -92,8 +98,6 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return itemSizes[indexPath.row]
-//        return CGSize(width: resizedImages[indexPath.row].size.width, height: Utils.calculatedCvItemSizeSquareCovers.height)
-//        return Utils.calculatedCvItemSizeSquareCovers
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

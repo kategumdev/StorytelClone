@@ -26,7 +26,7 @@ class HomeViewController: BaseViewController {
         super.viewDidLoad()
         bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
         bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
-        bookTable.register(TableViewCellWithHorzCvLargeCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeCovers.identifier)
+        bookTable.register(TableViewCellWithHorzCvLargeRectangleCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier)
         bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
         
         // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
@@ -57,7 +57,7 @@ class HomeViewController: BaseViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold, scale: .large)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "bell", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         
@@ -89,16 +89,16 @@ class HomeViewController: BaseViewController {
         let sectionKind = category.tableSections[indexPath.section].sectionKind
         
         switch sectionKind {
-        case .horizontalCv: return Utils.heightForRowWithHorizontalCv
+        case .horizontalCv: return TableViewCellWithCollection.rowHeight
         case .verticalCv: return 0
         case .oneBookWithOverview:
             let book = category.tableSections[indexPath.section].books[0]
             return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
             
-        case .poster: return PosterTableViewCell.calculatedHeightForRow
-        case .largeCoversHorizontalCv: return Utils.heightForRowWithHorzCvLargeCovers
-        case .seriesCategoryButton: return Utils.heightForRowWithWideButton
-        case .allCategoriesButton: return Utils.heightForRowWithWideButton
+        case .poster: return PosterTableViewCell.heightForRow
+        case .largeCoversHorizontalCv: return TableViewCellWithHorzCvLargeRectangleCovers.rowHeight
+        case .seriesCategoryButton: return WideButtonTableViewCell.rowHeight
+        case .allCategoriesButton: return WideButtonTableViewCell.rowHeight
         case .searchVc: return 0
         }
         #warning("cases verticalCv and searchVc not needed here, refactor them somewhere else")
@@ -109,7 +109,7 @@ class HomeViewController: BaseViewController {
         let sectionKind = category.tableSections[section].sectionKind
         
         if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
-            return Constants.sectionHeaderViewTopPadding
+            return SectionHeaderView.topPadding
         } else {
             return UITableView.automaticDimension
         }
@@ -141,7 +141,7 @@ extension HomeViewController {
     }
     
     private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeCovers, let category = category else { return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers, let category = category else { return UITableViewCell()}
         let books = category.tableSections[indexPath.section].books
         cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         return cell

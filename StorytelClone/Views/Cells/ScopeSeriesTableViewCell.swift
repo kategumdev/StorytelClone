@@ -10,7 +10,7 @@ import UIKit
 class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
     // MARK: - Static properties and methods
     static let identifier = "ScopeSeriesTableViewCell"
-    static let minTopBottomPadding = BaseScopeTableViewCell.minTopAndBottomPadding - 2
+    static let minTopBottomPadding = minTopAndBottomPadding - 2
     static let oneTransparentImageVisiblePartHeight: CGFloat = 4
     static let minCellHeight: CGFloat = imageHeight + minTopBottomPadding * 2 + oneTransparentImageVisiblePartHeight * 2
 

@@ -71,7 +71,7 @@ class ProfileViewController: UIViewController {
         navigationController?.makeNavbarAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
         
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .large)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
         let image = UIImage(systemName: "gearshape", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(handleGearButtonTapped))
     }

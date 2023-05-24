@@ -9,17 +9,15 @@ import UIKit
 
 class PopupButton: UIButton {
     
+    // Static properties
     static let buttonHeight: CGFloat = 46
-    static let bottomAnchorConstantForVisibleState: CGFloat = PopupButton.buttonHeight + 11
-
+    static let bottomAnchorConstantForVisibleState: CGFloat = buttonHeight + 11
     
     // MARK: - Instance properties
     private let leadingPadding: CGFloat = Constants.commonHorzPadding
     private let trailingPadding: CGFloat = Constants.commonHorzPadding - 2
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
-
-//    private let customLabel = UILabel.createLabel(withFont: UIFont.preferredCustomFontWith(weight: .medium, size: 16), maximumPointSize: nil, withScaledFont: false, textColor: Utils.customBackgroundColor!, text: "")
     
     private let customLabel: UILabel = {
         let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
@@ -74,7 +72,7 @@ class PopupButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(named: "popupBackground")
-        layer.cornerRadius = Constants.bookCoverCornerRadius
+        layer.cornerRadius = Constants.commonBookCoverCornerRadius
         tintColor = UIColor.label.withAlphaComponent(0.7)
         alpha = 0
         addSubview(customLabel)

@@ -124,10 +124,10 @@ extension UIImage {
         let resizedImage = renderer.image { _ in
             
             self.draw(in: CGRect(origin: .zero, size: targetSize), blendMode: .normal, alpha: targetAlpha)
-//            self.draw(in: CGRect(origin: .zero, size: targetSize))
         }
         return resizedImage
     }
+    
 }
 
 extension Int {
@@ -154,19 +154,20 @@ extension Int {
 
 extension UINavigationController {
     
+    static let customBackButtonImage: UIImage? = {
+//        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold, scale: .large)
+        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+        let image = UIImage(systemName: "chevron.backward", withConfiguration: config)
+        return image
+    }()
+    
     static let transparentNavBarAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : UIFont.customNavBarTitle]
         appearance.configureWithTransparentBackground()
         
-        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
-        
-        let pointSize = UIFont.customNavBarTitle.fontDescriptor.pointSize
-        let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold, scale: .large)
-//        let config = UIImage.SymbolConfiguration(pointSize: Utils.navBarTitleFont.pointSize, weight: .semibold, scale: .large)
-        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-        
+        // Use custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
     
@@ -175,12 +176,8 @@ extension UINavigationController {
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : UIFont.customNavBarTitle]
         appearance.configureWithTransparentBackground()
         
-        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is se to the largest one
-        let pointSize = UIFont.customNavBarTitle.fontDescriptor.pointSize
-        let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold, scale: .large)
-        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-        
+        // Use custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
     
@@ -192,11 +189,7 @@ extension UINavigationController {
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font: UIFont.customNavBarTitle]
         
         // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
-        let pointSize = UIFont.customNavBarTitle.fontDescriptor.pointSize
-        let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold, scale: .large)
-        let backButtonImage = UIImage(systemName: "chevron.backward", withConfiguration: config)
-        appearance.setBackIndicatorImage(backButtonImage, transitionMaskImage: backButtonImage)
-        
+        appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
     
