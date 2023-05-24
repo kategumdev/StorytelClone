@@ -169,18 +169,18 @@ class RoundButtonsStack: UIStackView {
     private func handleSaveButtonTapped() {
         self.saveBookButtonDidTapCallback(self.isBookAddedToBookshelf)
         if self.isBookAddedToBookshelf {
+            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
             self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
             self.toggleSaveLabelText()
-            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
             self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
                 self?.saveBookButton.isUserInteractionEnabled = true
             })
         } else {
+            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
             self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
                 guard let self = self else { return }
                 self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
                 self.toggleSaveLabelText()
-                self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
                 self.saveBookButton.isUserInteractionEnabled = true
             })
         }

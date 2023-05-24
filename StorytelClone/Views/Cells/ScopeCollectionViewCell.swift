@@ -105,7 +105,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     
     private func configureTableHeaderAndBackgroundView() {
         if !isFilterTableHeaderAdded {
-            print("header is ADDED")
+//            print("header is ADDED")
             resultsTable.tableHeaderView = filterTableHeader
             isFilterTableHeaderAdded = true
             Utils.layoutTableHeaderView(filterTableHeader, inTableView: resultsTable)
