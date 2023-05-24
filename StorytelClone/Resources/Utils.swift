@@ -13,18 +13,6 @@ enum ScrollDirection {
 }
 
 struct Utils {
-    
-    static let tabBarHeight: CGFloat = {
-        var height: CGFloat = 0.0
-        if let scene = UIApplication.shared.connectedScenes.first,
-           let windowScene = scene as? UIWindowScene,
-           let mainWindow = windowScene.windows.first
-        {
-            height = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
-        }
-        return height
-    }()
-    
 
     //MARK: - Colors
     static let customBackgroundColor = UIColor(named: "customBackground")

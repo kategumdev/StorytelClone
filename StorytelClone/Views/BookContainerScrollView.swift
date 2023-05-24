@@ -193,7 +193,6 @@ class BookContainerScrollView: UIScrollView {
             seeTagsButton.rotateImage()
             seeTagsButtonAnchorForFullSizeTagsView.isActive = false
             seeTagsButtonAnchorToCompressTagsView.isActive = true
-//            seeTagsButtonAnchorForFullSizeTagsView.isActive = false
             seeTagsButton.updateButtonTextWith(newText: "Show all tags")
         }
     }
@@ -210,7 +209,7 @@ class BookContainerScrollView: UIScrollView {
             topAnchor.constraint(equalTo: superview.topAnchor),
             leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
             widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor),
-            bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -Utils.tabBarHeight)
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -UITabBar.tabBarHeight)
         ])
         
         let contentG = contentLayoutGuide
@@ -240,7 +239,6 @@ class BookContainerScrollView: UIScrollView {
         
         seeOverviewButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            seeOverviewButton.heightAnchor.constraint(equalToConstant: seeOverviewButton.seeOverviewButtonHeight),
             seeOverviewButton.heightAnchor.constraint(equalToConstant: seeOverviewButton.heightConstant),
             seeOverviewButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor),
             seeOverviewButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
@@ -278,7 +276,6 @@ class BookContainerScrollView: UIScrollView {
             
             if tagsView.needsShowAllButton {
                 seeTagsButton.translatesAutoresizingMaskIntoConstraints = false
-//                seeTagsButton.heightAnchor.constraint(equalToConstant: seeTagsButton.showAllTagsButtonHeight).isActive = true
                 seeTagsButton.heightAnchor.constraint(equalToConstant: seeTagsButton.heightConstant).isActive = true
                 seeTagsButton.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor).isActive = true
                 seeTagsButton.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor).isActive = true

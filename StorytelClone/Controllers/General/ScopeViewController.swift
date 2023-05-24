@@ -34,7 +34,7 @@ class ScopeViewController: UIViewController {
         return collectionView
     }()
     
-    lazy var collectionViewBottomAnchor = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
+    lazy var collectionViewBottomAnchor = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UITabBar.tabBarHeight)
     
     private lazy var separatorWidth: CGFloat = {
         let scale = UIScreen.main.scale
@@ -329,7 +329,6 @@ extension ScopeViewController {
             collectionView.topAnchor.constraint(equalTo: separatorLineView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Utils.tabBarHeight)
         ])
         collectionViewBottomAnchor.isActive = true
     }

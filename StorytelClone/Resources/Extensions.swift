@@ -234,3 +234,17 @@ extension UIColor {
     static let pinkCategoryColor = UIColor(red: 234/255, green: 131/255, blue: 136/255, alpha: 1)
 
 }
+
+extension UITabBar {
+    
+    static let tabBarHeight: CGFloat = {
+        var height: CGFloat = 0.0
+        if let scene = UIApplication.shared.connectedScenes.first,
+           let windowScene = scene as? UIWindowScene,
+           let mainWindow = windowScene.windows.first
+        {
+            height = mainWindow.safeAreaInsets.bottom + UITabBarController().tabBar.frame.size.height
+        }
+        return height
+    }()
+}

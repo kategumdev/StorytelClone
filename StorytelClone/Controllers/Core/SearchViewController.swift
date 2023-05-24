@@ -113,7 +113,7 @@ class SearchViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frame = view.bounds
-        frame.size.height = view.bounds.height - Utils.tabBarHeight
+        frame.size.height = view.bounds.height - UITabBar.tabBarHeight
         categoriesTable.frame = frame
         
         if firstTime {

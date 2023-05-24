@@ -50,7 +50,7 @@ class CategoryViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frame = view.bounds
-        frame.size.height -= Utils.tabBarHeight
+        frame.size.height -= UITabBar.tabBarHeight
         bookTable.frame = frame
         
         guard isFirstTime == true else { return }
