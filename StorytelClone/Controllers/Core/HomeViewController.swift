@@ -50,8 +50,7 @@ class HomeViewController: BaseViewController {
         tableHeader.stackTopAnchorConstraint.constant = 15
         tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
-        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
-//        layoutHeaderView()
+        layoutTableHeader()
     }
     
     // MARK: - Superclass overrides

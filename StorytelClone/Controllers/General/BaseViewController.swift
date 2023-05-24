@@ -40,6 +40,8 @@ class BaseViewController: UIViewController {
         return table
     }()
  
+    private var isFirstTime = true
+
     // MARK: - Initializers
     init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped) {
         self.category = categoryModel
@@ -66,8 +68,12 @@ class BaseViewController: UIViewController {
         super.viewDidLayoutSubviews()
         bookTable.frame = view.bounds
         layoutTableHeader()
-//        guard let tableHeader = bookTable.tableHeaderView else { return }
-//        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
+        
+        guard isFirstTime == true else { return }
+        isFirstTime = false
+        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -52,12 +52,6 @@ class CategoryViewController: BaseViewController {
         var frame = view.bounds
         frame.size.height -= UITabBar.tabBarHeight
         bookTable.frame = frame
-        
-        guard isFirstTime == true else { return }
-        isFirstTime = false
-        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
     }
 
     // MARK: - Superclass overrides
