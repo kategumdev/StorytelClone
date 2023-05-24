@@ -83,7 +83,7 @@ class TagsView: UIView {
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .medium, basePointSize: 13, maxPointSize: 36)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .medium, maxPointSize: 36)
         buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.commonHorzPadding, bottom: 7, trailing: Constants.commonHorzPadding)
@@ -94,7 +94,6 @@ class TagsView: UIView {
     }
     
     private func createTitleLabel() -> UILabel {
-//        let label = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, text: "Tags")
         let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold, text: "Tags")
         label.sizeToFit()
         return label

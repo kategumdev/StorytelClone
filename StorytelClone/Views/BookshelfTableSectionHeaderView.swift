@@ -13,8 +13,7 @@ class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
     static let topAndBottomPadding: CGFloat = 6
 
     static func createLabel() -> UILabel {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16, maxPointSize: 45)
-        let label = UILabel.createLabelWith(font: scaledFont)
+        let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
         return label
     }
 

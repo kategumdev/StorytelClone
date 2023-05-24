@@ -8,6 +8,7 @@
 import UIKit
 
 class FollowSeriesView: UIView {
+    
     // MARK: - Instance properties
     private let imageHeightAndWidth: CGFloat = 50
     private var seriesIsFollowed = false
@@ -153,7 +154,6 @@ class FollowSeriesView: UIView {
     private func createFollowLabel(withScaledFont: Bool) -> UILabel {
         var font: UIFont
         if withScaledFont {
-//            font = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
             font = UIFont.customCalloutSemibold
         } else {
             font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
@@ -165,7 +165,6 @@ class FollowSeriesView: UIView {
     private func createNumberOfFollowersLabel(withScaledFont: Bool) -> UILabel {
         var font: UIFont
         if withScaledFont {
-//            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 45)
             font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 45)
         } else {
             font = UIFont.createStaticFontWith(weight: .regular, size: 13)

@@ -56,14 +56,12 @@ class AllTitlesTableViewCell: UITableViewCell {
     }
     
     static func createTitleLabel() -> UILabel {
-//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
         let scaledFont = UIFont.customCalloutSemibold
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         return label
     }
     
     static func createSubtitleLabel() -> UILabel {
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont)
         return label

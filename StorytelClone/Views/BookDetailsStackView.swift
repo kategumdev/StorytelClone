@@ -241,11 +241,9 @@ class BookDetailsStackView: UIStackView {
         let namesString = names.joined(separator: ", ")
 
         let attributedString = NSMutableAttributedString(string: "\(staticString) \(namesString)")
-//        let staticStringScaledFont1 = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16) // This is UIFont.customCalloutRegular, but in this case it needs to be created at runtime
         let staticStringScaledFont1 = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular)
         let staticStringAttributes: [NSAttributedString.Key: Any] = [.font: staticStringScaledFont1, .foregroundColor: UIColor.label]
 
-//        let nameScaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, basePointSize: 16) // This is UIFont.navBarTitleLargeMaxSize, but in this case it needs to be created at runtime
         let nameScaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
         let nameAttributes: [NSAttributedString.Key: Any] = [.font: nameScaledFont, .foregroundColor: Utils.tintColor]
 

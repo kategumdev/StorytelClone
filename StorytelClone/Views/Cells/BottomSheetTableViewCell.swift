@@ -8,14 +8,10 @@
 import UIKit
 
 enum BookDetailsBottomSheetCellKind: CaseIterable {
-    case saveBook
-    case markAsFinished
-    case download
-    case viewSeries
-    case viewAuthors
-    case viewNarrators
-    case showMoreTitlesLikeThis
-    case share
+    
+    case saveBook, markAsFinished, download
+    case viewSeries, viewAuthors, viewNarrators
+    case showMoreTitlesLikeThis, share
     
     var image: UIImage? {
         switch self {
@@ -45,14 +41,11 @@ class BottomSheetTableViewCell: UITableViewCell {
         contentView.preservesSuperviewLayoutMargins = false
         
         var content = self.defaultContentConfiguration()
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .regular, basePointSize: 17, maxPointSize: 45)
-//        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 17)
-//        let scaledFont = UIFontMetrics.default.scaledFont(for: font, maximumPointSize: 45)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .regular, maxPointSize: 45)
         content.textProperties.font = scaledFont
         content.textProperties.color = .label
         content.imageProperties.maximumSize = CGSize(width: 22, height: 22)
         content.imageProperties.tintColor = .label
-//        content.axesPreservingSuperviewLayoutMargins = UIAxis.vertical
         content.axesPreservingSuperviewLayoutMargins = []
         content.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: Constants.commonHorzPadding - 1, bottom: 0, trailing: Constants.commonHorzPadding)
         self.contentConfiguration = content

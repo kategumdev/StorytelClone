@@ -17,12 +17,10 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         view.tintColor = .black
         let image = UIImage(systemName: "books.vertical")
         view.image = image
-//        view.backgroundColor = .blue
         return view
     }()
     
     private lazy var roundViewWithImage: UIView = {
-//        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: roundViewHeight, height: roundViewHeight)))
         let view = UIView()
         view.backgroundColor = UIColor(named: "noBooksScopeRoundBackground")
         view.layer.cornerRadius = roundViewHeight / 2
@@ -38,29 +36,14 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         return view
     }()
     
-//    private let titleLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 20)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 38, numberOfLines: 3)
-//        label.textAlignment = .center
-//        return label
-//    }()
-//
-//    private let subtitleLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .regular, size: 16)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 30, numberOfLines: 2, text: "Once you do, you will find them here.")
-//        label.textAlignment = .center
-//        return label
-//    }()
-    
     private let titleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, basePointSize: 20, maxPointSize: 38)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
         label.textAlignment = .center
         return label
     }()
     
     private let subtitleLabel: UILabel = {
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, basePointSize: 16, maximumPointSize: 30)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, maxPointSize: 30)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         label.text = "Once you do, you will find them here."

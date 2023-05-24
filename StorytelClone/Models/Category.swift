@@ -24,7 +24,6 @@ struct TableSection {
     let sectionKind: SectionKind
     let books: [Book]
     let sectionDescription: String?
-//    let forSimilarBooks: Bool
     var toShowTitleModel: Title?
     let canBeShared: Bool
     let canBeFiltered: Bool
@@ -36,7 +35,6 @@ struct TableSection {
         self.sectionKind = sectionKind
         self.books = books
         self.sectionDescription = sectionDescription
-//        self.forSimilarBooks = forSimilarBooks
         self.toShowTitleModel = toShowTitleModel
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
@@ -46,8 +44,6 @@ struct TableSection {
     static let generalForAllTitlesVC = TableSection(sectionTitle: "")
     static let similarTitles = TableSection(sectionTitle: "Similar titles", canBeShared: false)
     static let librosSimilares = TableSection(sectionTitle: "Libros similares", canBeShared: false)
-//    static let similarTitles = TableSection(sectionTitle: "Similar titles", forSimilarBooks: true, canBeShared: false)
-//    static let librosSimilares = TableSection(sectionTitle: "Libros similares", forSimilarBooks: true, canBeShared: false)
 }
 
 enum ButtonCategory: String {
@@ -66,7 +62,6 @@ enum ButtonCategory: String {
     case thrillerYHorror = "Thriller y Horror"
     case fantasiaYCienciaFiccion = "Fantasía y\nCiencia ficción"
     case crecimientoPersonalYLifestyle = "Crecimiento\npersonal y Lifestyle"
-//    case crecimientoPersonalYLifestyle = "Crecimiento\npersonal y Lifestyle and Lifestyle"
     case infantil = "Infantil"
     case clasicos = "Clásicos"
     case juvenilYYoungAdult = "Juvenil y\nYoung Adult"

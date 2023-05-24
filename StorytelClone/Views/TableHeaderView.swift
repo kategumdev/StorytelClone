@@ -15,11 +15,9 @@ class TableHeaderView: UIView {
         return label
     }()
 
-//    private lazy var bookTitleForSimilarLabel = UILabel.createLabelWith(font: UIFont.navBarTitleLargeMaxSize, numberOfLines: 2)
     private lazy var bookTitleForSimilarLabel = UILabel.createLabelWith(font: UIFont.customCalloutSemibold, numberOfLines: 2)
 
     private lazy var sectionDescriptionLabel: UILabel = {
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 32)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 32)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
         return label

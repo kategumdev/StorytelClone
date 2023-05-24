@@ -21,7 +21,6 @@ class PersonTableHeaderView: UIView {
     private let kind: HeaderKind
     
     private lazy var roundLabel: UILabel = {
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .largeTitle, weight: .semibold, basePointSize: 35)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .largeTitle, weight: .semibold, basePointSize: 35)
         let label = UILabel.createLabelWith(font: scaledFont)
         label.textAlignment = .center
@@ -32,14 +31,13 @@ class PersonTableHeaderView: UIView {
     }()
     
     private lazy var storytellerNameLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .headline, weight: .semibold, basePointSize: 17, maxPointSize: 48)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .headline, weight: .semibold, maxPointSize: 48)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         label.textAlignment = .center
         return label
     }()
     
     private lazy var storytellerKindLabel: UILabel = {
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maximumPointSize: 38)
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 38)
         let label = UILabel.createLabelWith(font: scaledFont)
         return label
@@ -121,7 +119,7 @@ class PersonTableHeaderView: UIView {
         button.tintColor = .label
         var config = UIButton.Configuration.plain()
         config.attributedTitle = "Log in"
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maxPointSize: 34)
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 34)
         config.attributedTitle?.font = scaledFont
         config.attributedTitle?.foregroundColor = .label
         config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 32, bottom: 7, trailing: 32)

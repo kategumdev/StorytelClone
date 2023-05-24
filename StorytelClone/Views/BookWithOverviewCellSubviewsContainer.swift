@@ -44,7 +44,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }()
     
     private let overviewLabel: UILabel = {
-//        let font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maxPointSize: 21)
         let font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 21)
         let label = UILabel.createLabelWith(font: font, numberOfLines: 5)
         return label

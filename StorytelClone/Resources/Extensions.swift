@@ -9,8 +9,6 @@ import UIKit
 
 extension UIFont {
     
-//    static let sectionSubtitle = createScaledFontWith(textStyle: .footnote, weight: .regular, basePointSize: 13, maxPointSize: 34)
-//    static let sectionSubtitleSemibold = createScaledFontWith(textStyle: .footnote, weight: .semibold, basePointSize: 13, maxPointSize: 38)
     static let customFootnoteRegular = createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 34)
     static let customFootnoteSemibold = createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 38)
     static let customCalloutSemibold = createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 45)

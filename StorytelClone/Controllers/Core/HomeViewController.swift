@@ -7,16 +7,6 @@
 
 import UIKit
 
-//enum Sections: Int {
-//    case SoloParaTi = 0
-//    case CrecimientoPersonalRecomendados = 1
-//    case CrecimientoPersonalPopulares = 2
-//    case PorqueTeInteresa = 3
-//    case NovelaRecomendados = 4
-//    case SeriesImageButton = 5
-//    case TodasLasCategoriasImageButton = 6
-//}
-
 class HomeViewController: BaseViewController {
     
     private let posterBook: Book
@@ -67,7 +57,6 @@ class HomeViewController: BaseViewController {
     // MARK: - Superclass overrides
     override func configureNavBar() {
         super.configureNavBar()
-//        let pointSize = UIFont.navBarTitle.fontDescriptor.pointSize
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold, scale: .large)
         let image = UIImage(systemName: "bell", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)

@@ -24,17 +24,11 @@ enum ProfileCell: String, CaseIterable {
 }
 
 class ProfileViewController: UIViewController {
-    // MARK: - Static properties
-//    static let cellLabelFont = UIFont.preferredCustomFontWith(weight: .medium, size: 17)
-//    static let maximumPointSizeForScaledCellLabelFont: CGFloat = 39
     
     // MARK: - Instance properties
     private let profileCells = ProfileCell.allCases
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
-//    private let scaledCellLabelFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
-
-//    private var scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: maximumPointSizeForScaledCellLabelFont)
     
     private let profileTable: UITableView = {
         let table = UITableView()
@@ -69,14 +63,6 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.adjustAppearanceTo(currentOffsetY: profileTable.contentOffset.y, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
     }
-    
-//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-//        super.traitCollectionDidChange(previousTraitCollection)
-//
-//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-//            scaledCellLabelFont = UIFontMetrics.default.scaledFont(for: ProfileViewController.cellLabelFont, maximumPointSize: ProfileViewController.maximumPointSizeForScaledCellLabelFont)
-//        }
-//    }
 
    // MARK: - Helper methods
     private func configureNavBar() {
@@ -96,7 +82,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func getScaledCellLabelFont() -> UIFont {
-        return UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maxPointSize: 39)
+        return UIFont.createScaledFontWith(textStyle: .body, weight: .medium, maxPointSize: 39)
     }
 
 }
@@ -117,8 +103,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         var content = cell.defaultContentConfiguration()
         content.image = profileCell.image
         content.text = profileCell.rawValue
-//        let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, basePointSize: 17, maximumPointSize: 39)
-//        content.textProperties.font = scaledCellLabelFont
         content.textProperties.font = getScaledCellLabelFont()
         content.textProperties.color = Utils.unactiveElementColor
         cell.contentConfiguration = content
@@ -128,7 +112,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let profileCell = profileCells[indexPath.row]
         let label = UILabel()
-//        label.font = scaledCellLabelFont
         label.font = getScaledCellLabelFont()
         label.text = profileCell.rawValue
         

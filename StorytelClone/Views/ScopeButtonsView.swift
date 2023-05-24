@@ -83,14 +83,10 @@ class ScopeButtonsView: UIView {
             let button = UIButton()
             var config = UIButton.Configuration.plain()
             // Top inset makes visual x-position of button text in scrollView as if it's centered
-//            config.contentInsets = NSDirectionalEdgeInsets(top: ScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding, bottom: 0, trailing: Constants.commonHorzPadding)
             config.contentInsets = NSDirectionalEdgeInsets(top: ScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding + 1, bottom: 0, trailing: Constants.commonHorzPadding + 1)
-
             config.attributedTitle = AttributedString(kind.rawValue)
-//            let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .medium, basePointSize: 16, maximumPointSize: 42)
             let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
             config.attributedTitle?.font = font
-//            config.attributedTitle?.font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
             button.configuration = config
             buttons.append(button)
         }
