@@ -87,5 +87,8 @@ extension BookshelfViewController: BottomSheetViewControllerDelegate {
         
         currentCell.model = getModelFor(buttonKind: buttonKind)
         currentCell.resultsTable.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
+        if currentCell.model.isEmpty {
+            collectionView.reloadData()
+        }
     }
 }
