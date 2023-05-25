@@ -41,7 +41,6 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         table.register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
         table.register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
         table.register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
-//        table.register(BookshelfTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: BookshelfTableSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
         

@@ -21,14 +21,13 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
         let label = createLabel()
         label.text = "Placeholder"
         label.sizeToFit()
-        let topAndBottomPadding = buttonKind.sectionHeaderTopAndBottomPadding
-        let height = label.bounds.height + (topAndBottomPadding * 2)
+        let height = label.bounds.height + buttonKind.sectionHeaderPaddingY
         return height
     }
     
     // MARK: - Instance properties
     private let titleLabel = createLabel()
-    private var topAndBottomPadding: CGFloat = 0
+    private var paddingY: CGFloat = 0
     private var constraintsApplied = false
     
     // MARK: - Initializers
@@ -45,7 +44,7 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Instance methods
     func configureFor(buttonKind: ScopeButtonKind) {
         titleLabel.text = buttonKind.sectionHeaderTitle
-        topAndBottomPadding = buttonKind.sectionHeaderTopAndBottomPadding
+        paddingY = buttonKind.sectionHeaderPaddingY
         if !constraintsApplied {
             constraintsApplied = true
             applyConstraints()
@@ -57,9 +56,9 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topAndBottomPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: paddingY / 2),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -topAndBottomPadding)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -paddingY / 2)
         ])
     }
 }

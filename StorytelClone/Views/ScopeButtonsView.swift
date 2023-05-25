@@ -39,13 +39,14 @@ enum ScopeButtonKind: String, CaseIterable {
         }
     }
     
-    var sectionHeaderTopAndBottomPadding: CGFloat {
+    var sectionHeaderPaddingY: CGFloat {
         if ScopeButtonKind.kindsForSearchResults.contains(self) {
-            return 15
+            return 30
         } else {
-            return 6
+            return 12
         }
     }
+    
 }
 
 enum ScopeButtonsViewKind {
@@ -59,18 +60,6 @@ enum ScopeButtonsViewKind {
         }
     }
 }
-
-//enum ScopeButtonsViewKind {
-//    case forSearchResultsVc
-//    case forBookshelfVc
-//
-//    var buttonKinds: [ScopeButtonKind] {
-//        switch self {
-//        case .forSearchResultsVc: return [.top, .books, .authors, .narrators, .series, .tags]
-//        case .forBookshelfVc: return [.toRead, .started, .finished, .downloaded]
-//        }
-//    }
-//}
 
 class ScopeButtonsView: UIView {
     
@@ -98,12 +87,12 @@ class ScopeButtonsView: UIView {
     
     lazy var scopeButtons: [UIButton] = {
        var buttons = [UIButton]()
-        for kind in buttonKinds {
+        for buttonKind in buttonKinds {
             let button = UIButton()
             var config = UIButton.Configuration.plain()
             // Top inset makes visual x-position of button text in scrollView as if it's centered
             config.contentInsets = NSDirectionalEdgeInsets(top: ScopeButtonsView.slidingLineHeight, leading: Constants.commonHorzPadding + 1, bottom: 0, trailing: Constants.commonHorzPadding + 1)
-            config.attributedTitle = AttributedString(kind.rawValue)
+            config.attributedTitle = AttributedString(buttonKind.rawValue)
             let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
             config.attributedTitle?.font = font
             button.configuration = config
