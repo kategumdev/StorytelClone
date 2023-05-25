@@ -36,7 +36,6 @@ class BookshelfTableHeaderView: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("BookshelfTableHeaderView INITIALIZED")
         addSubview(horzStackView)
         applyConstraints()
     }

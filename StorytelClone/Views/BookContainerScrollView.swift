@@ -42,7 +42,6 @@ class BookContainerScrollView: UIScrollView {
     
     lazy var hasTags = !book.tags.isEmpty ? true : false
     lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
-    #warning("Maybe redo somehow without passing superviewWidth")
     
     private lazy var seeTagsButton: SeeMoreButton = {
         let button = SeeMoreButton(buttonKind: .forTags)

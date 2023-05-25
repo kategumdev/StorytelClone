@@ -32,11 +32,7 @@ class BookshelfViewController: ScopeViewController {
                 print("BookshelfViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
                 self?.navigationController?.pushViewController(controller, animated: true)
-            } else {
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedTitle)
-                self?.navigationController?.pushViewController(controller, animated: true)
-            }
-            #warning("In BookshelfViewController are only books. Maybe pushing AllTitlesViewController is not needed at all here")
+            } 
         }
 
         ellipsisButtonDidTapCallback = { [weak self] book in

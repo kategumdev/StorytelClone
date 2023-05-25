@@ -357,16 +357,6 @@ extension BottomSheetViewController {
         (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
     }
     
-    private func applyConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        tableViewHeightConstraint.isActive = true
-    }
-    
     private func animateToFullTableViewHeight() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.tableViewHeightConstraint.constant = self.fullTableViewHeight // Show tableView
@@ -442,4 +432,15 @@ extension BottomSheetViewController {
     private func setViewBackgroundColorAlphaTo(value: CGFloat) {
         view.backgroundColor = .black.withAlphaComponent(value)
     }
+    
+    private func applyConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        tableViewHeightConstraint.isActive = true
+    }
+
 }
