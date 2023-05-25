@@ -13,12 +13,8 @@ class SearchResultsViewController: ScopeViewController {
     
     // MARK: - Initializers
     init() {
-        super.init(withScopeButtonsViewKind: .forSearchResults, scopeCollectionViewCellKind: .forSearchResults)
+        super.init(withScopeButtonsViewKind: .forSearchResultsVc)
     }
-    
-//    init() {
-//        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForSearchResults, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forSearchResults)
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -7,25 +7,10 @@
 
 import UIKit
 
-//enum ScopeViewControllerKind {
-//    case searchResults
-//    case bookshelf
-//
-//    var scopeButtonKinds: [ScopeButtonKind] {
-//        switch self {
-//        case .searchResults: return [.top, .books, .authors, .narrators, .series, .tags]
-//        case .bookshelf: return [.toRead, .started, .finished, .downloaded]
-//        }
-//    }
-//}
-
 class ScopeViewController: UIViewController {
     // MARK: - Instance properties
-//    private let scopeButtonKinds: [ScopeButtonKind]
-//    lazy var scopeButtonsView = ScopeButtonsView(withButtonKinds: scopeButtonKinds)
     private let scopeButtonsViewKind: ScopeButtonsViewKind
     lazy var scopeButtonsView = ScopeButtonsView(kind: scopeButtonsViewKind)
-    private let scopeCollectionViewCellKind: ScopeCollectionViewCellKind
     
 //    var currentPageIndexPath: IndexPath {
 //        let contentOffsetX = collectionView.contentOffset.x
@@ -76,17 +61,10 @@ class ScopeViewController: UIViewController {
     var modelForSearchQuery: [ScopeButtonKind : [Title]]?
             
     // MARK: - Initializers
-    init(withScopeButtonsViewKind scopeButtonsViewKind: ScopeButtonsViewKind, scopeCollectionViewCellKind: ScopeCollectionViewCellKind) {
+    init(withScopeButtonsViewKind scopeButtonsViewKind: ScopeButtonsViewKind) {
         self.scopeButtonsViewKind = scopeButtonsViewKind
-        self.scopeCollectionViewCellKind = scopeCollectionViewCellKind
         super.init(nibName: nil, bundle: nil)
     }
-    
-//    init(withScopeButtonsKinds scopeButtonKinds: [ScopeButtonKind], scopeCollectionViewCellKind: ScopeCollectionViewCellKind) {
-//        self.scopeButtonKinds = scopeButtonKinds
-//        self.scopeCollectionViewCellKind = scopeCollectionViewCellKind
-//        super.init(nibName: nil, bundle: nil)
-//    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -141,7 +119,8 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
 
-        cell.kind = scopeCollectionViewCellKind
+//        cell.kind = scopeCollectionViewCellKind
+        cell.scopeButtonsViewKind = scopeButtonsViewKind
 
         let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
         print("cell \(buttonKind) is configured")

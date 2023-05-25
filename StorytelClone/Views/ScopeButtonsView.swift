@@ -19,28 +19,7 @@ enum ScopeButtonKind: String, CaseIterable {
     case started = "Started"
     case finished = "Finished"
     case downloaded = "Downloaded"
-    
-//    static let kindsForSearchResults: [ScopeButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
-//    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
-    
-//    static func getSectionHeaderTitleFor(kind: ScopeButtonKind) -> String {
-//        switch kind {
-//        case .top: return "Trending searches"
-//        case .books: return "Trending books"
-//        case .authors: return "Trending authors"
-//        case .narrators: return "Trending narrators"
-//        case .series: return "Trending series"
-//        case .tags: return "Trending tags"
-//
-//        case .toRead:
-//            return toReadBooks.isEmpty ? "" : "Past 7 days"
-//
-//        case .started: return ""
-//        case .finished: return ""
-//        case .downloaded: return ""
-//        }
-//    }
-    
+
     var sectionHeaderTitle: String {
         switch self {
         case .top: return "Trending searches"
@@ -59,13 +38,13 @@ enum ScopeButtonKind: String, CaseIterable {
 }
 
 enum ScopeButtonsViewKind {
-    case forSearchResults
-    case forBookshelf
-    
+    case forSearchResultsVc
+    case forBookshelfVc
+
     var buttonKinds: [ScopeButtonKind] {
         switch self {
-        case .forSearchResults: return [.top, .books, .authors, .narrators, .series, .tags]
-        case .forBookshelf: return [.toRead, .started, .finished, .downloaded]
+        case .forSearchResultsVc: return [.top, .books, .authors, .narrators, .series, .tags]
+        case .forBookshelfVc: return [.toRead, .started, .finished, .downloaded]
         }
     }
 }
@@ -78,9 +57,10 @@ class ScopeButtonsView: UIView {
     static let viewHeight = heightForStackWithButtons + slidingLineHeight / 2
 
     // MARK: - Instance properties
-    let kind: ScopeButtonsViewKind
+    private let kind: ScopeButtonsViewKind
     let buttonKinds: [ScopeButtonKind]
-//    var buttonKinds = [ScopeButtonKind]()
+    var scopeButtonDidTapCallback: (_ buttonIndex: Int) -> () = {_ in}
+    private var firstTime = true
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -92,9 +72,6 @@ class ScopeButtonsView: UIView {
         return partOfUnvisiblePart > 0 ? partOfUnvisiblePart : 0 // If partOfUnvisiblePart == 0 or is less than 0, that means that scrollViewContentWidth is less than scrollView width and no adjustments of scrollView's contentOffset.x is needed
     }()
     
-    private var firstTime = true
-    
-    var scopeButtonDidTapCallback: (_ buttonIndex: Int) -> () = {_ in}
     
     lazy var scopeButtons: [UIButton] = {
        var buttons = [UIButton]()

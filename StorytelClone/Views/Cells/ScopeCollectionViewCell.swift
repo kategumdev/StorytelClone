@@ -16,11 +16,6 @@ let tableDidRequestKeyboardDismiss = Notification.Name(
 
 typealias TableViewInScopeCollectionViewCellDidSelectRowCallback = (_ selectedTitle: Title) -> ()
 
-enum ScopeCollectionViewCellKind {
-    case forSearchResults
-    case forBookshelf
-}
-
 class ScopeCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "ScopeCollectionViewCell"
@@ -35,9 +30,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     var buttonKind: ScopeButtonKind?
     var model = [Title]()
     var hasSectionHeader = true
-    
-    var kind: ScopeCollectionViewCellKind = .forSearchResults
-//    var isForScopeButtonsVCKind: ScopeCollectionViewCellKind = .forSearchResults
+    var scopeButtonsViewKind: ScopeButtonsViewKind = .forSearchResultsVc // placeholder value
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
@@ -89,7 +82,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
             resultsTable.contentOffset = rememberedOffset
         }
         
-        guard kind == .forBookshelf else { return }
+        guard scopeButtonsViewKind == .forBookshelfVc else { return }
         configureTableHeaderAndBackgroundView()
     }
     
@@ -205,18 +198,15 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard hasSectionHeader, let buttonKind = buttonKind else { return UIView() }
-//        guard let buttonKind = buttonKind else { return UIView() }
         
-        switch kind {
-        case .forSearchResults:
+        switch scopeButtonsViewKind {
+        case .forSearchResultsVc:
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsTableSectionHeaderView.identifier) as? SearchResultsTableSectionHeaderView else { return UIView() }
             header.configurefor(buttonKind: buttonKind)
-//            print("returning header forSearchResults")
             return header
-        case .forBookshelf:
+        case .forBookshelfVc:
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookshelfTableSectionHeaderView.identifier) as? BookshelfTableSectionHeaderView else { return UIView() }
             header.configurefor(buttonKind: buttonKind)
-//            print("returning header forBookshelf")
             return header
         }
     }
@@ -228,10 +218,10 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         guard hasSectionHeader else { return 0 }
         
-        switch kind {
-        case .forSearchResults:
+        switch scopeButtonsViewKind {
+        case .forSearchResultsVc:
             return SearchResultsTableSectionHeaderView.calculateEstimatedHeaderHeight()
-        case .forBookshelf:
+        case .forBookshelfVc:
             return BookshelfTableSectionHeaderView.calculateEstimatedHeaderHeight()
         }
     }

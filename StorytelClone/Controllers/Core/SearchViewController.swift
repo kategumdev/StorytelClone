@@ -166,8 +166,7 @@ class SearchViewController: UIViewController {
     private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {
         // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
         var newModel = [ScopeButtonKind : [Title]]()
-//        let buttonKinds = ScopeButtonKind.kindsForSearchResults
-        let buttonKinds = ScopeButtonsViewKind.forSearchResults.buttonKinds
+        let buttonKinds = ScopeButtonsViewKind.forSearchResultsVc.buttonKinds
         for buttonKind in buttonKinds {
             if buttonKind == .top {
                 newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
