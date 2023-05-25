@@ -40,8 +40,8 @@ class BookContainerScrollView: UIScrollView {
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
     private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
     
-    private lazy var hasTags = !book.tags.isEmpty ? true : false
-    private lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
+    lazy var hasTags = !book.tags.isEmpty ? true : false
+    lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
     #warning("Maybe redo somehow without passing superviewWidth")
     
     private lazy var seeTagsButton: SeeMoreButton = {

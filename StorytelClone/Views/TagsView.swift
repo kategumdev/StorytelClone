@@ -25,6 +25,8 @@ class TagsView: UIView {
     private let firstButtonTopConstant: CGFloat = 18
     private let spacingBetweenButtons: CGFloat = 7
     private let spacingBetweenRows: CGFloat = 11
+    
+    var tagButtonDidTapCallback: (Tag) -> () = {_ in}
         
     // MARK: - Initializers
     init(tags: [Tag], superviewWidth: CGFloat) {
@@ -67,10 +69,15 @@ class TagsView: UIView {
     
     // MARK: - Helper methods
     private func createTagButtons() {
-        let tagTitles = tags.map { $0.tagTitle }
-        for title in tagTitles {
-            let button = createButtonWith(text: title)
+        for tag in tags {
+            let button = createButtonWith(text: tag.tagTitle)
             button.layer.cornerRadius = button.frame.height / 2
+            
+            button.addAction(UIAction(handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.tagButtonDidTapCallback(tag)
+            }), for: .touchUpInside)
+            
             tagButtons.append(button)
         }
     }

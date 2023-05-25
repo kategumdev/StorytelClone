@@ -14,6 +14,7 @@ enum ScopeButtonKind: String, CaseIterable {
     case narrators = "Narrators"
     case series = "Series"
     case tags = "Tags"
+    
     case toRead = "To read"
     case started = "Started"
     case finished = "Finished"
@@ -31,6 +32,7 @@ enum ScopeButtonKind: String, CaseIterable {
         case .narrators: return "Trending narrators"
         case .series: return "Trending series"
         case .tags: return "Trending tags"
+            
         case .toRead:
 //            return "Past 7 days"
             return toReadBooks.isEmpty ? "" : "Past 7 days"

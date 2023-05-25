@@ -127,6 +127,14 @@ extension BookViewController {
             self.present(storytellersBottomSheetController, animated: false)
         }
         
+        if bookContainerScrollView.hasTags {
+            bookContainerScrollView.tagsView.tagButtonDidTapCallback = { [weak self] tag in
+                guard let self = self else { return }
+                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: tag)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+        
         guard book.series != nil else { return }
         bookContainerScrollView.bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
             guard let self = self, let series = self.book.series else { return }
