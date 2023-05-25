@@ -37,6 +37,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     var hasSectionHeader = true
     
     var kind: ScopeCollectionViewCellKind = .forSearchResults
+//    var isForScopeButtonsVCKind: ScopeCollectionViewCellKind = .forSearchResults
     
     let resultsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)

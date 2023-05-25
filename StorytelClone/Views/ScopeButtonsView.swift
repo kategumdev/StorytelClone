@@ -20,12 +20,29 @@ enum ScopeButtonKind: String, CaseIterable {
     case finished = "Finished"
     case downloaded = "Downloaded"
     
-    static let kindsForSearchResults: [ScopeButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+//    static let kindsForSearchResults: [ScopeButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+//    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
     
-    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
+//    static func getSectionHeaderTitleFor(kind: ScopeButtonKind) -> String {
+//        switch kind {
+//        case .top: return "Trending searches"
+//        case .books: return "Trending books"
+//        case .authors: return "Trending authors"
+//        case .narrators: return "Trending narrators"
+//        case .series: return "Trending series"
+//        case .tags: return "Trending tags"
+//
+//        case .toRead:
+//            return toReadBooks.isEmpty ? "" : "Past 7 days"
+//
+//        case .started: return ""
+//        case .finished: return ""
+//        case .downloaded: return ""
+//        }
+//    }
     
-    static func getSectionHeaderTitleFor(kind: ScopeButtonKind) -> String {
-        switch kind {
+    var sectionHeaderTitle: String {
+        switch self {
         case .top: return "Trending searches"
         case .books: return "Trending books"
         case .authors: return "Trending authors"
@@ -33,10 +50,7 @@ enum ScopeButtonKind: String, CaseIterable {
         case .series: return "Trending series"
         case .tags: return "Trending tags"
             
-        case .toRead:
-//            return "Past 7 days"
-            return toReadBooks.isEmpty ? "" : "Past 7 days"
-            
+        case .toRead: return toReadBooks.isEmpty ? "" : "Past 7 days"
         case .started: return ""
         case .finished: return ""
         case .downloaded: return ""
@@ -44,16 +58,29 @@ enum ScopeButtonKind: String, CaseIterable {
     }
 }
 
+enum ScopeButtonsViewKind {
+    case forSearchResults
+    case forBookshelf
+    
+    var buttonKinds: [ScopeButtonKind] {
+        switch self {
+        case .forSearchResults: return [.top, .books, .authors, .narrators, .series, .tags]
+        case .forBookshelf: return [.toRead, .started, .finished, .downloaded]
+        }
+    }
+}
+
 class ScopeButtonsView: UIView {
+    
     // MARK: - Static properties
     private static let slidingLineHeight: CGFloat = 3
     private static let heightForStackWithButtons: CGFloat = 44 // Button height is less, extra points here are added for top and bottom paddings
     static let viewHeight = heightForStackWithButtons + slidingLineHeight / 2
 
-
     // MARK: - Instance properties
-//    let buttonKinds: [ScopeButtonKind] = ScopeButtonKind.allCases
-    var buttonKinds = [ScopeButtonKind]()
+    let kind: ScopeButtonsViewKind
+    let buttonKinds: [ScopeButtonKind]
+//    var buttonKinds = [ScopeButtonKind]()
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -64,16 +91,6 @@ class ScopeButtonsView: UIView {
 //        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
         return partOfUnvisiblePart > 0 ? partOfUnvisiblePart : 0 // If partOfUnvisiblePart == 0 or is less than 0, that means that scrollViewContentWidth is less than scrollView width and no adjustments of scrollView's contentOffset.x is needed
     }()
-    
-//    lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
-//        let scrollViewContentWidth = scrollView.contentSize.width
-//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-//
-//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-//        print("partOfUnvisiblePart: \(partOfUnvisiblePart)")
-//        return partOfUnvisiblePart
-//    }()
     
     private var firstTime = true
     
@@ -140,8 +157,9 @@ class ScopeButtonsView: UIView {
     lazy var slidingLineWidthAnchor = slidingLine.widthAnchor.constraint(equalToConstant: 15)
     
     // MARK: - Initializers
-    init(withButtonKinds buttonKinds: [ScopeButtonKind]) {
-        self.buttonKinds = buttonKinds
+    init(kind: ScopeButtonsViewKind) {
+        self.kind = kind
+        buttonKinds = kind.buttonKinds
         super.init(frame: .zero)
         addSubview(scrollView)
         addButtonActions()
@@ -150,8 +168,9 @@ class ScopeButtonsView: UIView {
         toggleButtonsColors(currentButton: scopeButtons[0])
     }
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
+//    init(withButtonKinds buttonKinds: [ScopeButtonKind]) {
+//        self.buttonKinds = buttonKinds
+//        super.init(frame: .zero)
 //        addSubview(scrollView)
 //        addButtonActions()
 //        applyConstraints()
@@ -293,35 +312,9 @@ class ScopeButtonsView: UIView {
                     self.scopeButtonDidTapCallback(buttonIndexInt)
                     self.layoutIfNeeded() // It won't animate without this line
                 }
-//                UIView.animate(withDuration: 0.2) {
-//                    self.toggleButtonsColors(currentButton: button)
-//                    self.setScrollViewOffsetX(currentButton: button)
-//                    self.adjustSlidingLinePosition(currentButton: button)
-//                    self.scopeButtonDidTapCallback(buttonIndexInt)
-//                    self.layoutIfNeeded() // It won't animate without this line
-//                }
             }), for: .touchUpInside)
         }
     }
-    
-//    private func addButtonActions() {
-//        for button in scopeButtons {
-//            button.addAction(UIAction(handler: { [weak self] _ in
-//                guard let self = self else { return }
-//                let buttonIndex = self.scopeButtons.firstIndex(of: button)
-//                guard let buttonIndex = buttonIndex else { return }
-//                let buttonIndexInt = buttonIndex + 0
-//
-//                UIView.animate(withDuration: 0.2) {
-//                    self.toggleButtonsColors(currentButton: button)
-//                    self.setScrollViewOffsetX(currentButton: button)
-//                    self.adjustSlidingLinePosition(currentButton: button)
-//                    self.scopeButtonDidTapCallback(buttonIndexInt)
-//                    self.layoutIfNeeded() // It won't animate without this line
-//                }
-//            }), for: .touchUpInside)
-//        }
-//    }
     
     private func adjustSlidingLinePosition(currentButton: UIButton) {
         let leadingConstant: CGFloat = currentButton.frame.origin.x
@@ -332,35 +325,14 @@ class ScopeButtonsView: UIView {
     }
     
     private func setScrollViewOffsetX(currentButton: UIButton) {
-//        let scrollViewContentWidth = scrollView.contentSize.width
-//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-//
-//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
 
         guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
         let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
         
         // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
-//        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
         let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePartOfScrollView
         scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
     }
-    
-//    private func setScrollViewOffsetX(currentButton: UIButton) {
-//        let scrollViewContentWidth = scrollView.contentSize.width
-//        let unvisiblePartOfScrollView: CGFloat = scrollViewContentWidth - scrollView.bounds.size.width
-//
-//        // Every time button is tapped, contentOffset.x of scroll view should change to this button's index mupltiplied by this partOfUnvisiblePart, so that if last button is tapped, scroll view's contentOffset.x is the maximum one and fully shows the last button
-//        let partOfUnvisiblePart: CGFloat = unvisiblePartOfScrollView / CGFloat((scopeButtons.count - 1))
-//
-//        guard let currentButtonIndex = scopeButtons.firstIndex(of: currentButton) else { return }
-//        let currentButtonIndexConvertedIntoFloat: CGFloat = CGFloat(currentButtonIndex + 0)
-//
-//        // E.g. If button with index 3 is tapped, then contentOffsetX has to be (3 * partOfUnvisiblePart)
-//        let newOffsetX = currentButtonIndexConvertedIntoFloat * partOfUnvisiblePart
-//        scrollView.setContentOffset(CGPoint(x: newOffsetX, y: 0), animated: true)
-//    }
     
     private func applyConstraints() {
         let contentG = scrollView.contentLayoutGuide

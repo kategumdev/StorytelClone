@@ -13,8 +13,12 @@ class BookshelfViewController: ScopeViewController {
     
     // MARK: - Initializers
     init() {
-        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForBookshelf, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forBookshelf)
+        super.init(withScopeButtonsViewKind: .forBookshelf, scopeCollectionViewCellKind: .forBookshelf)
     }
+    
+//    init() {
+//        super.init(withScopeButtonsKinds: ScopeButtonKind.kindsForBookshelf, scopeCollectionViewCellKind: ScopeCollectionViewCellKind.forBookshelf)
+//    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -43,7 +43,8 @@ class BookshelfTableSectionHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Instance methods
     func configurefor(buttonKind: ScopeButtonKind) {
-        titleLabel.text = ScopeButtonKind.getSectionHeaderTitleFor(kind: buttonKind)
+        titleLabel.text = buttonKind.sectionHeaderTitle
+//        titleLabel.text = ScopeButtonKind.getSectionHeaderTitleFor(kind: buttonKind)
     }
     
     // MARK: - Helper methods
