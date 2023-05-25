@@ -118,7 +118,6 @@ class AllTitlesViewController: BaseViewController {
         } else {
             sectionHeader.configureWith(title: "All titles")
         }
-        #warning("write it shorter")
 
         guard let tableSection = tableSection else { return UIView() }
         

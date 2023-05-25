@@ -45,9 +45,9 @@ class BookViewController: UIViewController {
         guard isDidAppearTriggeredFirstTime else { return }
          isDidAppearTriggeredFirstTime = false
         addPopupButton()
-        passCallbacksToBookContainerScrollView()
-        #warning("Maybe pass callbacks on the background thread, because they are not needed right away")
+//        passCallbacksToBookContainerScrollView()
         addHideView()
+        passCallbacksToBookContainerScrollView()
     }
     
 }

@@ -72,7 +72,8 @@ class ScopeButtonsView: UIView {
     private let kind: ScopeButtonsViewKind
     let buttonKinds: [ScopeButtonKind]
     var scopeButtonDidTapCallback: (_ buttonIndex: Int) -> () = {_ in}
-    private var firstTime = true
+//    private var firstTime = true
+    private var timeLayoutSubviewsIsTriggered = 0
     
     lazy var partOfUnvisiblePartOfScrollView: CGFloat = {
         let scrollViewContentWidth = scrollView.contentSize.width
@@ -157,16 +158,6 @@ class ScopeButtonsView: UIView {
         toggleButtonsColors(currentButton: scopeButtons[0])
     }
     
-//    init(withButtonKinds buttonKinds: [ScopeButtonKind]) {
-//        self.buttonKinds = buttonKinds
-//        super.init(frame: .zero)
-//        addSubview(scrollView)
-//        addButtonActions()
-//        applyConstraints()
-//        // Set initial color of buttons' text
-//        toggleButtonsColors(currentButton: scopeButtons[0])
-//    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -174,12 +165,11 @@ class ScopeButtonsView: UIView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard firstTime == false else {
-            firstTime = false
-            return
+        timeLayoutSubviewsIsTriggered += 1
+        if timeLayoutSubviewsIsTriggered == 2 {
+            // Set initial position and size of slidingLine
+            adjustSlidingLinePosition(currentButton: scopeButtons[0])
         }
-        // Set initial position and size of slidingLine
-        adjustSlidingLinePosition(currentButton: scopeButtons[0])  
     }
     
     // MARK: - Instance methods
