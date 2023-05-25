@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BookDetailsScrollView: UIScrollView {
+class BookDetailsHorzScrollView: UIScrollView {
     // MARK: - Static methods
     static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
@@ -46,7 +46,7 @@ class BookDetailsScrollView: UIScrollView {
     private lazy var ratingVertStack = createVertStackWith(label: ratingsLabel, button: ratingButton)
     
     private lazy var hasAudio = book.titleKind == .audioBookAndEbook || book.titleKind == .audiobook
-    private lazy var durationLabel = BookDetailsScrollView.createLabelWith(text: "Duration")
+    private lazy var durationLabel = BookDetailsHorzScrollView.createLabelWith(text: "Duration")
     private let durationButton = createButtonWith(symbolImageName: "clock")
     private lazy var durationVertStack = createVertStackWith(label: durationLabel, button: durationButton)
     

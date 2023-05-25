@@ -15,7 +15,7 @@ class BookContainerScrollView: UIScrollView {
     lazy var bookDetailsStackView = BookDetailsStackView(forBook: book)
     private let bookDetailsStackViewTopPadding: CGFloat = 12
     
-    lazy var bookDetailsScrollView = BookDetailsScrollView(book: book)
+    lazy var bookDetailsScrollView = BookDetailsHorzScrollView(book: book)
     
     private lazy var overviewStackView: BookOverviewStackView = {
         let view = BookOverviewStackView(book: book)
