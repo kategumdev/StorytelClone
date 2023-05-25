@@ -19,6 +19,9 @@ enum ScopeButtonKind: String, CaseIterable {
     case started = "Started"
     case finished = "Finished"
     case downloaded = "Downloaded"
+    
+    static let kindsForSearchResults: [ScopeButtonKind] = [.top, .books, .authors, .narrators, .series, .tags]
+    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
 
     var sectionHeaderTitle: String {
         switch self {
@@ -35,6 +38,14 @@ enum ScopeButtonKind: String, CaseIterable {
         case .downloaded: return ""
         }
     }
+    
+    var sectionHeaderTopAndBottomPadding: CGFloat {
+        if ScopeButtonKind.kindsForSearchResults.contains(self) {
+            return 15
+        } else {
+            return 6
+        }
+    }
 }
 
 enum ScopeButtonsViewKind {
@@ -43,11 +54,23 @@ enum ScopeButtonsViewKind {
 
     var buttonKinds: [ScopeButtonKind] {
         switch self {
-        case .forSearchResultsVc: return [.top, .books, .authors, .narrators, .series, .tags]
-        case .forBookshelfVc: return [.toRead, .started, .finished, .downloaded]
+        case .forSearchResultsVc: return ScopeButtonKind.kindsForSearchResults
+        case .forBookshelfVc: return ScopeButtonKind.kindsForBookshelf
         }
     }
 }
+
+//enum ScopeButtonsViewKind {
+//    case forSearchResultsVc
+//    case forBookshelfVc
+//
+//    var buttonKinds: [ScopeButtonKind] {
+//        switch self {
+//        case .forSearchResultsVc: return [.top, .books, .authors, .narrators, .series, .tags]
+//        case .forBookshelfVc: return [.toRead, .started, .finished, .downloaded]
+//        }
+//    }
+//}
 
 class ScopeButtonsView: UIView {
     

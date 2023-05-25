@@ -40,8 +40,8 @@ class ScopeCollectionViewCell: UICollectionViewCell {
         table.register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
         table.register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
         table.register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
-        table.register(SearchResultsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchResultsTableSectionHeaderView.identifier)
-        table.register(BookshelfTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: BookshelfTableSectionHeaderView.identifier)
+        table.register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
+//        table.register(BookshelfTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: BookshelfTableSectionHeaderView.identifier)
         
         table.rowHeight = UITableView.automaticDimension
         
@@ -197,33 +197,21 @@ extension ScopeCollectionViewCell: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard hasSectionHeader, let buttonKind = buttonKind else { return UIView() }
-        
-        switch scopeButtonsViewKind {
-        case .forSearchResultsVc:
-            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SearchResultsTableSectionHeaderView.identifier) as? SearchResultsTableSectionHeaderView else { return UIView() }
-            header.configurefor(buttonKind: buttonKind)
-            return header
-        case .forBookshelfVc:
-            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookshelfTableSectionHeaderView.identifier) as? BookshelfTableSectionHeaderView else { return UIView() }
-            header.configurefor(buttonKind: buttonKind)
-            return header
+        guard hasSectionHeader, let buttonKind = buttonKind,
+              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ScopeTableSectionHeaderView.identifier) as? ScopeTableSectionHeaderView else {
+            return UIView()
         }
+        header.configureFor(buttonKind: buttonKind)
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        guard hasSectionHeader, let buttonKind = buttonKind else { return 0 }
+        return ScopeTableSectionHeaderView.calculateEstimatedHeaderHeight(buttonKind: buttonKind)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return hasSectionHeader ? UITableView.automaticDimension : 0
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard hasSectionHeader else { return 0 }
-        
-        switch scopeButtonsViewKind {
-        case .forSearchResultsVc:
-            return SearchResultsTableSectionHeaderView.calculateEstimatedHeaderHeight()
-        case .forBookshelfVc:
-            return BookshelfTableSectionHeaderView.calculateEstimatedHeaderHeight()
-        }
     }
     
 }

@@ -7,33 +7,35 @@
 
 import UIKit
 
-class SearchResultsTableSectionHeaderView: UITableViewHeaderFooterView {
+class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
+    
     // MARK: - Static properties and methods
     static let identifier = "SearchResultsTableSectionHeaderView"
-    static let topAndBottomPadding: CGFloat = 15
     
     static func createLabel() -> UILabel {
         let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
         return label
     }
-
-    static func calculateEstimatedHeaderHeight() -> CGFloat {
+    
+    static func calculateEstimatedHeaderHeight(buttonKind: ScopeButtonKind) -> CGFloat {
         let label = createLabel()
         label.text = "Placeholder"
         label.sizeToFit()
+        let topAndBottomPadding = buttonKind.sectionHeaderTopAndBottomPadding
         let height = label.bounds.height + (topAndBottomPadding * 2)
         return height
     }
     
     // MARK: - Instance properties
     private let titleLabel = createLabel()
+    private var topAndBottomPadding: CGFloat = 0
+    private var constraintsApplied = false
     
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.customBackgroundColor
         contentView.addSubview(titleLabel)
-        applyConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -41,9 +43,13 @@ class SearchResultsTableSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Instance methods
-    func configurefor(buttonKind: ScopeButtonKind) {
+    func configureFor(buttonKind: ScopeButtonKind) {
         titleLabel.text = buttonKind.sectionHeaderTitle
-//        titleLabel.text = ScopeButtonKind.getSectionHeaderTitleFor(kind: buttonKind)
+        topAndBottomPadding = buttonKind.sectionHeaderTopAndBottomPadding
+        if !constraintsApplied {
+            constraintsApplied = true
+            applyConstraints()
+        }
     }
 
     // MARK: - Helper methods
@@ -51,10 +57,9 @@ class SearchResultsTableSectionHeaderView: UITableViewHeaderFooterView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SearchResultsTableSectionHeaderView.topAndBottomPadding),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topAndBottomPadding),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchResultsTableSectionHeaderView.topAndBottomPadding)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -topAndBottomPadding)
         ])
     }
-    
 }
