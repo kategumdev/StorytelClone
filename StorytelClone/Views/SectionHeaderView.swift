@@ -13,11 +13,11 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     static let identifier = "SectionHeaderView"
     static let topPadding: CGFloat = 31
     
-    static func calculateEstimatedHeightFor(tableSection: TableSection, superviewWidth: CGFloat, sectionNumber: Int? = nil, category: Category? = nil) -> CGFloat {
+    static func calculateEstimatedHeightFor(tableSection: TableSection, superviewWidth: CGFloat) -> CGFloat {
         let headerContainer = SectionHeaderSubviewsContainer(addButtonAction: false)
         headerContainer.translatesAutoresizingMaskIntoConstraints = false
         headerContainer.widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
-        headerContainer.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: {})
+        headerContainer.configureFor(tableSection: tableSection)
         let height = headerContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
@@ -38,7 +38,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Instance methods
-    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
+    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
         containerWithSubviews.configureFor(tableSection: tableSection, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: callback)
     }
     

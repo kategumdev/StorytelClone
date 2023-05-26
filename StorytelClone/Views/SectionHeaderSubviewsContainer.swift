@@ -91,7 +91,7 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(tableSection: TableSection, sectionNumber: Int?, category: Category?, withSeeAllButtonDidTapCallback callback: @escaping () -> ()) {
+    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
         sectionTitleLabel.text = tableSection.sectionTitle
         sectionTitleLabel.sizeToFit()
         

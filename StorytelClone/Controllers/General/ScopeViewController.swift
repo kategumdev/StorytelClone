@@ -8,25 +8,22 @@
 import UIKit
 
 class ScopeViewController: UIViewController {
+    
     // MARK: - Instance properties
     private let scopeButtonsViewKind: ScopeButtonsViewKind
     lazy var scopeButtonsView = ScopeButtonsView(kind: scopeButtonsViewKind)
     
-//    var currentPageIndexPath: IndexPath {
-//        let contentOffsetX = collectionView.contentOffset.x
-//        let currentCellIndex = Int(collectionView.bounds.width / contentOffsetX) - 1
-//        return IndexPath(item: currentCellIndex, section: 0)
-//    }
-    
-    var didSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
+    var didSelectRowCallback: ScopeTableViewDidSelectRowCallback = {_ in}
     var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
+    
+    private let cellIdentifier = "cellIdentifier"
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(ScopeCollectionViewCell.self, forCellWithReuseIdentifier: ScopeCollectionViewCell.identifier)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = UIColor.customBackgroundColor
         collectionView.isPagingEnabled = true
@@ -37,11 +34,9 @@ class ScopeViewController: UIViewController {
     
     private lazy var separatorWidth: CGFloat = {
         let scale = UIScreen.main.scale
-        if scale == 2.0 {
-            return 0.25
-        } else {
-            return 0.35
-        }
+        // Ensure separator is visible on devices with different scales
+        let width = scale == 2.0 ? 0.25 : 0.35
+        return width
     }()
         
     private lazy var separatorLineView: UIView = {
@@ -51,7 +46,6 @@ class ScopeViewController: UIViewController {
         return view
     }()
     
-//    private var rememberedOffsetsOfTablesInCells = [ScopeButtonKind : CGPoint]()
     private var previousOffsetX: CGFloat = 0
     private var isButtonTriggeredScroll = false
     
@@ -78,41 +72,23 @@ class ScopeViewController: UIViewController {
         view.addSubview(separatorLineView)
         view.addSubview(scopeButtonsView)
         configureScopeButtonsView()
-        
         configureScopeTableViews()
         
         view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
         applyConstraints()
-        setInitialOffsetsOfTablesInCells()
     }
     
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-//        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-//            collectionView.collectionViewLayout.invalidateLayout()
-//        }
-        
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             separatorLineView.layer.borderColor = UIColor.label.cgColor
         }
     }
     
-    // MARK: - Instance methods
-    func setInitialOffsetsOfTablesInCells() {
-//        for table in scopeTablesForCvCells {
-//            table.contentOffset = CGPoint(x: 0.0, y: 0.0)
-//        }
-        scopeTablesForCvCells.forEach { $0.contentOffset = CGPoint(x: 0.0, y: 0.0) }
-    }
-    
-//    func setInitialOffsetsOfTablesInCells() {
-//        let buttonKinds = scopeButtonsView.buttonKinds
-//        buttonKinds.forEach { rememberedOffsetsOfTablesInCells[$0] = CGPoint(x: 0.0, y: 0.0) }
-//    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -129,20 +105,20 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
 
         if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
             cell.isHidden = true
-//            scopeTableViewForCell.backgroundViewNeedsToBeHidden = true
             return cell
         }
+        
+        cell.isHidden = false
 
         let scopeTableViewForCell = scopeTablesForCvCells[indexPath.row]
         let buttonKind = scopeTableViewForCell.buttonKind
 
         if let collectionModel = modelForSearchQuery, let tableViewModel = collectionModel[buttonKind] {
             scopeTableViewForCell.model = tableViewModel
-//            scopeTableViewForCell.contentOffset = CGPoint(x: 0.0, y: 0.0)
             scopeTableViewForCell.hasSectionHeader = false
         } else {
             scopeTableViewForCell.model = getModelFor(buttonKind: buttonKind)
@@ -152,122 +128,11 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         scopeTableViewForCell.tableViewDidSelectRowCallback = didSelectRowCallback
         scopeTableViewForCell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
         
-//        cell.scopeTableView = scopeTableViewForCell
         cell.addSubview(scopeTableViewForCell)
         scopeTableViewForCell.frame = cell.bounds
-//        scopeTableViewForCell.isHidden = false
-        cell.isHidden = false
-//        scopeTableViewForCell.backgroundViewNeedsToBeHidden = false
         scopeTableViewForCell.reloadData()
-
-       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
-//        DispatchQueue.main.async {
-////            print("offset set in async block")
-//            cell.resultsTable.contentOffset = cell.rememberedOffset
-//        }
         return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
-//
-//        let scopeTableViewForCell = scopeTablesForCvCells[indexPath.row]
-//        let buttonKind = scopeTableViewForCell.buttonKind
-////        cell.kind = scopeCollectionViewCellKind
-////        cell.scopeButtonsViewKind = scopeButtonsViewKind
-////
-////        let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
-////        print("cell \(buttonKind) is configured")
-////        cell.buttonKind = buttonKind
-//
-//
-//        if let collectionModel = modelForSearchQuery, let tableViewModel = collectionModel[buttonKind] {
-//            scopeTableViewForCell.model = tableViewModel
-////            scopeTableViewForCell.contentOffset = CGPoint(x: 0.0, y: 0.0)
-//            scopeTableViewForCell.hasSectionHeader = false
-//        } else {
-//            scopeTableViewForCell.model = getModelFor(buttonKind: buttonKind)
-//            scopeTableViewForCell.hasSectionHeader = true
-//        }
-//
-//        scopeTableViewForCell.tableViewDidSelectRowCallback = didSelectRowCallback
-//        scopeTableViewForCell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
-////        cell.delegate = self
-//
-////        if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
-////            cell.rememberedOffset = offset
-////        }
-//
-//        if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
-//            cell.scopeTableView = scopeTableViewForCell
-//            cell.addSubview(scopeTableViewForCell)
-//            scopeTableViewForCell.frame = cell.bounds
-//            cell.isHidden = true
-////            scopeTableViewForCell.isHidden = true
-////            scopeTableViewForCell.backgroundColor = .green
-//            scopeTableViewForCell.backgroundViewNeedsToBeHidden = true
-//            return cell
-//        }
-//
-//        cell.scopeTableView = scopeTableViewForCell
-//        cell.addSubview(scopeTableViewForCell)
-//        scopeTableViewForCell.frame = cell.bounds
-////        scopeTableViewForCell.isHidden = false
-//        cell.isHidden = false
-//        scopeTableViewForCell.backgroundViewNeedsToBeHidden = false
-//        scopeTableViewForCell.reloadData()
-//
-//       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
-////        DispatchQueue.main.async {
-//////            print("offset set in async block")
-////            cell.resultsTable.contentOffset = cell.rememberedOffset
-////        }
-//        return cell
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScopeCollectionViewCell.identifier, for: indexPath) as? ScopeCollectionViewCell else { return UICollectionViewCell() }
-//
-////        cell.kind = scopeCollectionViewCellKind
-//        cell.scopeButtonsViewKind = scopeButtonsViewKind
-//
-//        let buttonKind = scopeButtonsView.buttonKinds[indexPath.row]
-//        print("cell \(buttonKind) is configured")
-//        cell.buttonKind = buttonKind
-//
-//        if let model = modelForSearchQuery, let cellModel = model[buttonKind] {
-//            cell.model = cellModel
-//            cell.hasSectionHeader = false
-//        } else {
-//            cell.model = getModelFor(buttonKind: buttonKind)
-//            cell.hasSectionHeader = true
-//        }
-//
-//        cell.tableViewDidSelectRowCallback = didSelectRowCallback
-//        cell.ellipsisButtonDidTapCallback = ellipsisButtonDidTapCallback
-//        cell.delegate = self
-//
-//        if let offset = rememberedOffsetsOfTablesInCells[buttonKind] {
-//            cell.rememberedOffset = offset
-//        }
-//
-//        if isButtonTriggeredScroll && cellsToHideContent.contains(indexPath.row) {
-//            cell.resultsTable.isHidden = true
-//            cell.backgroundViewNeedsToBeHidden = true
-//            return cell
-//        }
-//
-//        cell.resultsTable.isHidden = false
-//        cell.backgroundViewNeedsToBeHidden = false
-//        cell.resultsTable.reloadData()
-//
-//       // To ensure that it will be called only after the reloadData() method has finished its previous layout pass and updated the UI on the main thread
-//        DispatchQueue.main.async {
-////            print("offset set in async block")
-//            cell.resultsTable.contentOffset = cell.rememberedOffset
-//        }
-//        return cell
-//    }
     
 }
 
@@ -284,7 +149,6 @@ extension ScopeViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         guard !isButtonTriggeredScroll else { return }
-//        print("current contentOffset.x: \(scrollView.contentOffset.x)")
         let currentOffsetX = scrollView.contentOffset.x
         let pageWidth = collectionView.bounds.size.width
         let currentButtonIndex = scopeButtonsView.getCurrentButtonIndex()
@@ -325,8 +189,13 @@ extension ScopeViewController {
 
 }
 
-// MARK: - Helper methods
 extension ScopeViewController {
+    
+    // MARK: - Instance methods
+    func setInitialOffsetsOfTablesInCells() {
+        scopeTablesForCvCells.forEach { $0.contentOffset = CGPoint(x: 0.0, y: 0.0) }
+    }
+    
     func toggleIsButtonTriggeredScrollAndUnhideCells() {
         // When button on buttonsView is tapped, this property is set to true. It's needed for use in guard in didScroll to avoid executing logic for adjusting buttonsView. Toggling it to false lets that logic to execute when didScroll is triggered by user's swiping
         if isButtonTriggeredScroll == true {
@@ -370,6 +239,7 @@ extension ScopeViewController {
         #warning("started, finished and dowloaded cases have to return values")
     }
     
+    // MARK: - Helper methods
     private func configureScopeButtonsView() {
         // Respond to button actions in buttonsView
         scopeButtonsView.scopeButtonDidTapCallback = { [weak self] buttonIndex in
@@ -380,12 +250,19 @@ extension ScopeViewController {
         }
     }
     
+    private func configureScopeTableViews() {
+        for buttonKind in scopeButtonsViewKind.buttonKinds {
+            let table = ScopeTableView(buttonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
+            scopeTablesForCvCells.append(table)
+        }
+    }
+    
     private func scrollToCell(_ cellIndex: Int) {
         let tappedButtonIndex = cellIndex
         let currentButtonIndex = Int(collectionView.contentOffset.x / collectionView.bounds.width)
         
+        // Handle case when same button is tapped two times in a row
         guard tappedButtonIndex != currentButtonIndex else {
-//            print("same indices, same cell is tapped two times in a row")
             // To avoid behavior when it is set to true, because code below in this method won't be triggered and therefore no cells need to be hidden
             isButtonTriggeredScroll = false
             return
@@ -412,15 +289,6 @@ extension ScopeViewController {
     
         let indexPath = IndexPath(item: tappedButtonIndex, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    }
-    
-    private func configureScopeTableViews() {
-        for buttonKind in scopeButtonsViewKind.buttonKinds {
-            let table = ScopeTableView(buttonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
-//            table.translatesAutoresizingMaskIntoConstraints = false
-//            table.fillSuperview()
-            scopeTablesForCvCells.append(table)
-        }
     }
     
     private func applyConstraints() {
@@ -451,11 +319,3 @@ extension ScopeViewController {
     }
     
 }
-
-// MARK: - ScopeCollectionViewCellDelegate
-//extension ScopeViewController: ScopeCollectionViewCellDelegate {
-//    func scopeCollectionViewCell(withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint) {
-//        rememberedOffsetsOfTablesInCells[buttonKind] = offset
-//    }
-//}
-

@@ -173,7 +173,7 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
         guard let category = category else { return 0 }
         if !category.tableSections.isEmpty {
             let tableSection = category.tableSections[section]
-            return SectionHeaderView.calculateEstimatedHeightFor(tableSection: tableSection, superviewWidth: view.bounds.width, sectionNumber: section, category: category)
+            return SectionHeaderView.calculateEstimatedHeightFor(tableSection: tableSection, superviewWidth: view.bounds.width)
         }
         return 0
     }

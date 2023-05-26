@@ -17,9 +17,7 @@ class SearchViewController: UIViewController {
     
     private var initialTableOffsetY: CGFloat = 0
     private var firstTime = true
-    
-//    private var previousSize: UIContentSizeCategory?
-        
+            
     let categoriesTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.backgroundColor = UIColor.customBackgroundColor
@@ -42,10 +40,9 @@ class SearchViewController: UIViewController {
         let controller = UISearchController(searchResultsController: SearchResultsViewController())
         controller.searchBar.searchBarStyle = .minimal
         controller.hidesNavigationBarDuringPresentation = false
-//        controller.obscuresBackgroundDuringPresentation = false
-//        controller.automaticallyShowsSearchResultsController
         controller.showsSearchResultsController = true
-        // To set color of the prompt
+        
+        // Set color of the prompt
         controller.searchBar.tintColor = UIColor.customTintColor
                 
         // Configure placeholder string
@@ -53,7 +50,6 @@ class SearchViewController: UIViewController {
             let placeholderAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.createScaledFontWith(textStyle: .callout, weight: .regular), .foregroundColor: UIColor.gray
             ]
-            
             let attributedPlaceholder = NSAttributedString(string: "Search", attributes: placeholderAttributes)
             textField.attributedPlaceholder = attributedPlaceholder
         }
@@ -91,17 +87,13 @@ class SearchViewController: UIViewController {
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.delegate = self
-//        searchController.definesPresentationContext = true
 
         configureNavBar()
-        
         configureSearchResultsController()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: tableDidRequestKeyboardDismiss, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
         
         extendedLayoutIncludesOpaqueBars = true
-        
-//        previousSize = traitCollection.preferredContentSizeCategory
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -200,7 +192,7 @@ class SearchViewController: UIViewController {
 
 // MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
 extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
-    // Called when searchResultsController becomes visible and unvisible (after tapping Cancel)
+    
     func updateSearchResults(for searchController: UISearchController) {
         print("updateSearchResults")
         let searchBar = searchController.searchBar
@@ -211,37 +203,29 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         let queryString = query.trimmingCharacters(in: .whitespaces)
         if !queryString.isEmpty {
             // Fetch model objects for search query and create models for all buttonKinds. HARDCODED FOR NOW
-            print("setting newModel")
             let newModel = fetchTitlesFor(query: query)
             resultsController.modelForSearchQuery = newModel
             resultsController.setInitialOffsetsOfTablesInCells()
             resultsController.collectionView.reloadData()
         } else {
-//            print("revert to initial model")
+            // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             if resultsController.modelForSearchQuery != nil {
-                print("revert to initial model")
                 resultsController.modelForSearchQuery = nil
                 resultsController.setInitialOffsetsOfTablesInCells()
                 resultsController.collectionView.reloadData()
             }
         }
-
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        // Make some changes when the search bar begins editing
+        
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {
-        print("willPresentSearchController")
                 
-        // To avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
+        // Avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
         
-        // Change navbar appearance if currentOffset.y != initialTableOffsetY
         let currentTableOffsetY = categoriesTable.contentOffset.y
         if currentTableOffsetY != initialTableOffsetY {
-            // While table view bounces and user taps into the search bar, currentOffset.y checked here can differ a bit from inital value. This check difference > 5 avoids changing navbar appearance in such cases
+            // While table view bounces and user taps into the search bar, currentOffset.y checked here can differ a bit from inital value. This check avoids changing navbar appearance in such cases
             let difference = (currentTableOffsetY - initialTableOffsetY)
             guard difference > 5 else { return }
             navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
@@ -249,25 +233,18 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        print("willDismissSearchController")
         // Revert back to the original appearance of the navigation bar
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.scrollEdgeAppearance = nil
         
     }
-    
-//    func didDismissSearchController(_ searchController: UISearchController) {
-////        print("didDismissSearchController")
-//        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-//    }
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             resultsController.revertToInitialAppearance()
         }
-        #warning("This revert must be done only after cancel button is tapped, but now it also executes if app goes to background and then back to foreground")
     }
      
 }
@@ -316,32 +293,25 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return UIView()
-        } else {
-            guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-            let currentSection = model.tableSections[section]
-            sectionHeader.configureFor(tableSection: currentSection, withSeeAllButtonDidTapCallback: {})
-            return sectionHeader
-        }
+        if section == 0 { return UIView() }
+                
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+        let currentSection = model.tableSections[section]
+        sectionHeader.configureFor(tableSection: currentSection)
+        return sectionHeader
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 23
-        } else {
-            return UITableView.automaticDimension
-        }
+        let height = section == 0 ? 23 : UITableView.automaticDimension
+        return height
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return SectionHeaderView.topPadding
-        } else {
-            let currentSection = model.tableSections[section]
-            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: currentSection, superviewWidth: view.bounds.width)
-            return calculatedHeight
-        }
+        if section == 0 { return SectionHeaderView.topPadding }
+        
+        let currentSection = model.tableSections[section]
+        let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: currentSection, superviewWidth: view.bounds.width)
+        return calculatedHeight
     }
     
 }

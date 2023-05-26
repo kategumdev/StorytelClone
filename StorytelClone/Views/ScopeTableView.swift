@@ -1,5 +1,5 @@
 //
-//  ScopeCollectionViewWithTableView.swift
+//  ScopeTableView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 26/5/23.
@@ -7,30 +7,26 @@
 
 import UIKit
 
-let tableDidRequestKeyboardDismiss = Notification.Name(
-    rawValue: "tableDidRequestKeyboardDismiss")
+let scopeTableViewDidRequestKeyboardDismiss = Notification.Name(
+    rawValue: "scopeTableViewDidRequestKeyboardDismiss")
 
-typealias TableViewInScopeCollectionViewCellDidSelectRowCallback = (_ selectedTitle: Title) -> ()
+typealias ScopeTableViewDidSelectRowCallback = (_ selectedTitle: Title) -> ()
 
 class ScopeTableView: UITableView {
     
-    var tableViewDidSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
+    var tableViewDidSelectRowCallback: ScopeTableViewDidSelectRowCallback = {_ in}
     var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
-//    var rememberedOffset: CGPoint = CGPoint(x: 0, y: 0)
-//    var buttonKind: ScopeButtonKind?
     let buttonKind: ScopeButtonKind
     var model = [Title]()
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
-//    var scopeButtonsViewKind: ScopeButtonsViewKind = .forSearchResultsVc // placeholder value
     
-    private lazy var filterTableHeader = BookshelfTableHeaderView()
-    private var isFilterTableHeaderAdded = false
-        
+    private lazy var customTableHeader = BookshelfTableHeaderView()
+    private var isCustomTableHeaderAdded = false
+    
     private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
     private var isBackgroundViewAdded = false
-//    var backgroundViewNeedsToBeHidden = false // When button in scopeButtonsView is tapped, collectionView scrolls and
     
     // MARK: - Initializers
     init(buttonKind: ScopeButtonKind, scopeButtonsViewKind: ScopeButtonsViewKind) {
@@ -42,14 +38,7 @@ class ScopeTableView: UITableView {
         delegate = self
         setupTapGesture()
     }
-    
-//    override init(frame: CGRect, style: UITableView.Style) {
-//        super.init(frame: .zero, style: .plain)
-//        dataSource = self
-//        delegate = self
-//        setupTapGesture()
-//    }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,27 +46,20 @@ class ScopeTableView: UITableView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Offset is already set in cellForRowAt, but it may be set wrong. This check ensures setting correct offset
-//        if resultsTable.contentOffset != rememberedOffset {
-//            resultsTable.contentOffset = rememberedOffset
-//        }
-        
         guard scopeButtonsViewKind == .forBookshelfVc else { return }
-        configureTableHeaderAndBackgroundView()
+        configureTableHeader()
+        configureNoBooksBackgroundView()
     }
     
     // MARK: - Helper methods
-//    private func configureWith(model: [Title], )
-    
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
         tapGesture.cancelsTouchesInView = false
         addGestureRecognizer(tapGesture)
-//        resultsTable.addGestureRecognizer(tapGesture)
     }
 
     @objc func handleTapGesure() {
-        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
+        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
     }
     
     private func configureSelf() {
@@ -87,24 +69,27 @@ class ScopeTableView: UITableView {
         register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
         register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
         register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
-        register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
         
-        rowHeight = UITableView.automaticDimension
+        register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
         
         // Avoid gap above custom section header
         sectionHeaderTopPadding = 0
         
+        rowHeight = UITableView.automaticDimension
+        
         tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func configureTableHeaderAndBackgroundView() {
-        if !isFilterTableHeaderAdded {
-            tableHeaderView = filterTableHeader
-            isFilterTableHeaderAdded = true
+    private func configureTableHeader() {
+        if !isCustomTableHeaderAdded {
+            tableHeaderView = customTableHeader
+            isCustomTableHeaderAdded = true
         }
-        Utils.layoutTableHeaderView(filterTableHeader, inTableView: self)
-        filterTableHeader.isHidden = model.count == 0
-
+        Utils.layoutTableHeaderView(customTableHeader, inTableView: self)
+        customTableHeader.isHidden = model.count == 0
+    }
+    
+    private func configureNoBooksBackgroundView() {
         if !isBackgroundViewAdded && model.isEmpty {
             addSubview(noBooksBackgroundView)
             noBooksBackgroundView.frame = bounds
@@ -118,91 +103,8 @@ class ScopeTableView: UITableView {
             // Avoid bouncing only when backgroundView is onscreen
             alwaysBounceVertical = noBooksBackgroundView.isHidden
         }
-        
-//        filterTableHeader.isHidden = model.count == 0
-        
-        
-        
-        
-//        noBooksBackgroundView.isHidden = model.count > 0
-//
-//        // Avoid bouncing only when backgroundView is onscreen
-//        alwaysBounceVertical = noBooksBackgroundView.isHidden
     }
     
-//    private func configureTableHeaderAndBackgroundView() {
-//        if !isFilterTableHeaderAdded {
-//            tableHeaderView = filterTableHeader
-//            isFilterTableHeaderAdded = true
-//            Utils.layoutTableHeaderView(filterTableHeader, inTableView: self)
-//        } else {
-//            Utils.layoutTableHeaderView(filterTableHeader, inTableView: self)
-//        }
-//
-//        if !isBackgroundViewAdded {
-//            addSubview(noBooksBackgroundView)
-//            noBooksBackgroundView.frame = bounds
-//            isBackgroundViewAdded = true
-//            noBooksBackgroundView.isHidden = model.count > 0
-//            filterTableHeader.isHidden = model.count == 0
-//            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
-//        } else {
-//            noBooksBackgroundView.isHidden = model.count > 0
-//            filterTableHeader.isHidden = model.count == 0
-////            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
-//        }
-//
-//        // Avoid bouncing only when backgroundView is onscreen
-//        alwaysBounceVertical = noBooksBackgroundView.isHidden
-//    }
-    
-//    private func configureTableHeaderAndBackgroundView() {
-//        if !isFilterTableHeaderAdded {
-////            print("header is ADDED")
-//            tableHeaderView = filterTableHeader
-//            isFilterTableHeaderAdded = true
-//            Utils.layoutTableHeaderView(filterTableHeader, inTableView: self)
-//        } else {
-//            Utils.layoutTableHeaderView(filterTableHeader, inTableView: self)
-//        }
-//
-//        if !isBackgroundViewAdded {
-////            contentView.addSubview(noBooksBackgroundView)
-//            addSubview(noBooksBackgroundView)
-//            noBooksBackgroundView.frame = bounds
-////            noBooksBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-////            noBooksBackgroundView.fillSuperview()
-//            isBackgroundViewAdded = true
-//            noBooksBackgroundView.isHidden = model.count > 0
-//            filterTableHeader.isHidden = model.count == 0
-////            resultsTable.isHidden = model.count == 0
-//
-//            if backgroundViewNeedsToBeHidden {
-//                noBooksBackgroundView.isHidden = true
-//            } else {
-//                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
-//            }
-//        } else {
-//            noBooksBackgroundView.isHidden = model.count > 0
-//            filterTableHeader.isHidden = model.count == 0
-////            resultsTable.isHidden = model.count == 0
-//
-//            if backgroundViewNeedsToBeHidden {
-//                noBooksBackgroundView.isHidden = true
-//            } else {
-//                noBooksBackgroundView.configureFor(buttonKind: buttonKind)
-//            }
-//        }
-//
-//        // Avoid bouncing only when backgroundView is onscreen
-//        alwaysBounceVertical = noBooksBackgroundView.isHidden
-//    }
-    
-//    private func applyConstraints() {
-//        resultsTable.translatesAutoresizingMaskIntoConstraints = false
-//        resultsTable.fillSuperview()
-//    }
-
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -283,14 +185,7 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
 // MARK: - UIScrollViewDelegate
 extension ScopeTableView {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        NotificationCenter.default.post(name: tableDidRequestKeyboardDismiss, object: nil)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.isDragging || scrollView.isDecelerating {
-//            guard let buttonKind = buttonKind else { return }
-//            delegate?.scopeCollectionViewCell(withButtonKind: buttonKind, hasOffset: scrollView.contentOffset)
-        }
+        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
     }
     
 }
