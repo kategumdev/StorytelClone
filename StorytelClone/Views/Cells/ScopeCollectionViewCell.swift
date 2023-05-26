@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol ScopeCollectionViewCellDelegate: AnyObject {
-    func scopeCollectionViewCell(withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint)
-}
+//protocol ScopeCollectionViewCellDelegate: AnyObject {
+//    func scopeCollectionViewCell(withButtonKind buttonKind: ScopeButtonKind, hasOffset offset: CGPoint)
+//}
 
 //let tableDidRequestKeyboardDismiss = Notification.Name(
 //    rawValue: "tableDidRequestKeyboardDismiss")
@@ -21,7 +21,7 @@ class ScopeCollectionViewCell: UICollectionViewCell {
     static let identifier = "ScopeCollectionViewCell"
     
     // MARK: - Instance properties
-    weak var delegate: ScopeCollectionViewCellDelegate?
+//    weak var delegate: ScopeCollectionViewCellDelegate?
     
 //    var tableViewDidSelectRowCallback: TableViewInScopeCollectionViewCellDidSelectRowCallback = {_ in}
 //    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
@@ -54,11 +54,11 @@ class ScopeCollectionViewCell: UICollectionViewCell {
 //    private lazy var filterTableHeader = BookshelfTableHeaderView()
 //    private var isFilterTableHeaderAdded = false
         
-    private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
-    private var isBackgroundViewAdded = false
-    var backgroundViewNeedsToBeHidden = false
+//    private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
+//    private var isBackgroundViewAdded = false
+//    var backgroundViewNeedsToBeHidden = false
     
-    var scopeTableView: ScopeTableView?
+//    var scopeTableView: ScopeTableView?
     
     // MARK: - Initializers
     override init(frame: CGRect) {

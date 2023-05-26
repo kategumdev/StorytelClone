@@ -69,11 +69,11 @@ class BookshelfViewController: ScopeViewController {
 
 extension BookshelfViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
-        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let scopeTableView = currentCell.scopeTableView, let books = scopeTableView.model as? [Book] else { return }
+        guard let tableViewWithSavedBooks = scopeTablesForCvCells.first, let booksInTable = tableViewWithSavedBooks.model as? [Book] else { return }
         
         var bookIndex: Int = 0
         var indexPathOfRowWithRemovedBook = IndexPath(row: 0, section: 0)
-        for (index, arrayBook) in books.enumerated() {
+        for (index, arrayBook) in booksInTable.enumerated() {
             if arrayBook.title == book.title {
                 indexPathOfRowWithRemovedBook.row = index
                 bookIndex = index
@@ -81,13 +81,41 @@ extension BookshelfViewController: BottomSheetViewControllerDelegate {
             }
         }
         
-        scopeTableView.model = getModelFor(buttonKind: scopeTableView.buttonKind)
-        scopeTableView.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
-        if scopeTableView.model.isEmpty {
-            collectionView.reloadData()
+        tableViewWithSavedBooks.model = getModelFor(buttonKind: tableViewWithSavedBooks.buttonKind)
+        tableViewWithSavedBooks.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
+
+//        if tableViewWithSavedBooks.model.isEmpty {
+//            let indexPath = IndexPath(item: 0, section: 0)
+//            collectionView.reloadItems(at: [indexPath])
+//        }
+        
+        if tableViewWithSavedBooks.model.isEmpty {
+            tableViewWithSavedBooks.reloadData()
         }
     }
 }
+
+//extension BookshelfViewController: BottomSheetViewControllerDelegate {
+//    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
+//        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let scopeTableView = currentCell.scopeTableView, let books = scopeTableView.model as? [Book] else { return }
+//
+//        var bookIndex: Int = 0
+//        var indexPathOfRowWithRemovedBook = IndexPath(row: 0, section: 0)
+//        for (index, arrayBook) in books.enumerated() {
+//            if arrayBook.title == book.title {
+//                indexPathOfRowWithRemovedBook.row = index
+//                bookIndex = index
+//                break
+//            }
+//        }
+//
+//        scopeTableView.model = getModelFor(buttonKind: scopeTableView.buttonKind)
+//        scopeTableView.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
+//        if scopeTableView.model.isEmpty {
+//            collectionView.reloadData()
+//        }
+//    }
+//}
 
 //extension BookshelfViewController: BottomSheetViewControllerDelegate {
 //    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
