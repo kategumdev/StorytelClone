@@ -80,6 +80,7 @@
 		5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */; };
 		5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */; };
 		5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */; };
+		5AF352312A20BE8400E50394 /* ScopeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF352302A20BE8400E50394 /* ScopeTableView.swift */; };
 		5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93322299D689F00DF17C7 /* TableHeaderView.swift */; };
 		5AF93326299D722100DF17C7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93325299D722100DF17C7 /* Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -179,6 +180,7 @@
 		5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCellWithCollection.swift; sourceTree = "<group>"; };
 		5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderSubviewsContainer.swift; sourceTree = "<group>"; };
+		5AF352302A20BE8400E50394 /* ScopeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeTableView.swift; sourceTree = "<group>"; };
 		5AF93322299D689F00DF17C7 /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
 		5AF93325299D722100DF17C7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -346,6 +348,7 @@
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
 				5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */,
 				5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */,
+				5AF352302A20BE8400E50394 /* ScopeTableView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
 			);
 			path = Views;
@@ -541,6 +544,7 @@
 				5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */,
 				5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */,
 				5AE36A3829F7D173003F60E5 /* SimilarBooksTableHeaderView.swift in Sources */,
+				5AF352312A20BE8400E50394 /* ScopeTableView.swift in Sources */,
 				5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */,
 				5A2EE2472A057D9D00DFFCA5 /* SettingsViewController.swift in Sources */,
 				5AA8006429C8D21100198B8A /* ScopeSeriesTableViewCell.swift in Sources */,

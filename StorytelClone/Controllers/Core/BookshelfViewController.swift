@@ -69,7 +69,7 @@ class BookshelfViewController: ScopeViewController {
 
 extension BookshelfViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
-        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let books = currentCell.model as? [Book], let buttonKind = currentCell.buttonKind else { return }
+        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let scopeTableView = currentCell.scopeTableView, let books = scopeTableView.model as? [Book] else { return }
         
         var bookIndex: Int = 0
         var indexPathOfRowWithRemovedBook = IndexPath(row: 0, section: 0)
@@ -81,10 +81,32 @@ extension BookshelfViewController: BottomSheetViewControllerDelegate {
             }
         }
         
-        currentCell.model = getModelFor(buttonKind: buttonKind)
-        currentCell.resultsTable.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
-        if currentCell.model.isEmpty {
+        scopeTableView.model = getModelFor(buttonKind: scopeTableView.buttonKind)
+        scopeTableView.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
+        if scopeTableView.model.isEmpty {
             collectionView.reloadData()
         }
     }
 }
+
+//extension BookshelfViewController: BottomSheetViewControllerDelegate {
+//    func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
+//        guard let currentCell = collectionView.visibleCells.first as? ScopeCollectionViewCell, let books = currentCell.model as? [Book], let buttonKind = currentCell.buttonKind else { return }
+//
+//        var bookIndex: Int = 0
+//        var indexPathOfRowWithRemovedBook = IndexPath(row: 0, section: 0)
+//        for (index, arrayBook) in books.enumerated() {
+//            if arrayBook.title == book.title {
+//                indexPathOfRowWithRemovedBook.row = index
+//                bookIndex = index
+//                break
+//            }
+//        }
+//
+//        currentCell.model = getModelFor(buttonKind: buttonKind)
+//        currentCell.resultsTable.deleteRows(at: [IndexPath(row: bookIndex, section: 0)], with: .automatic)
+//        if currentCell.model.isEmpty {
+//            collectionView.reloadData()
+//        }
+//    }
+//}
