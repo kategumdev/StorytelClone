@@ -216,7 +216,36 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             }
         }
         
+        
+        guard !queryString.isEmpty else { return }
+        
+        guard query.count >= 6 else { return }
+        APICaller.shared.getBooks(with: queryString) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let books):
+                    print("COUNT: \(books.count)")
+                    print("BOOKS: \(books)")
+                    let bookTitles = books.map { $0.volumeInfo.title }
+                    print("GOOGLE BOOKS titles: \(bookTitles)")
+                    
+                    let firstBook = books[0]
+                    if firstBook.volumeInfo.imageLinks?[ImageLink.smallThumbnail.rawValue] != nil {
+                        print("book \(firstBook.volumeInfo.title) has small thumbnail image")
+                    }
+//                    resultsController.titles = titles
+//                    resultsController.searchResultsCollectionView.reloadData()
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
     }
+    
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        print("searchBarTextDidEndEditing")
+//    }
     
     func willPresentSearchController(_ searchController: UISearchController) {
                 

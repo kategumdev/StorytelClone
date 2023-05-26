@@ -69,6 +69,8 @@
 		5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */; };
 		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */; };
+		5AC824212A21296B00CF337D /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824202A21296B00CF337D /* APICaller.swift */; };
+		5AC824232A212A2300CF337D /* GoogleBooksSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */; };
 		5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */; };
 		5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* StarHorzStackView.swift */; };
 		5AD2CB012A0253CB004FE55D /* BookshelfTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */; };
@@ -168,6 +170,8 @@
 		5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewTableViewCell.swift; sourceTree = "<group>"; };
 		5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
 		5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsHorzScrollView.swift; sourceTree = "<group>"; };
+		5AC824202A21296B00CF337D /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksSearchResponse.swift; sourceTree = "<group>"; };
 		5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesTableViewCell.swift; sourceTree = "<group>"; };
 		5ACD558429E092C400097B40 /* StarHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHorzStackView.swift; sourceTree = "<group>"; };
 		5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfTableHeaderView.swift; sourceTree = "<group>"; };
@@ -260,6 +264,7 @@
 		5ABBA389299C09A700D0E0F4 /* StorytelClone */ = {
 			isa = PBXGroup;
 			children = (
+				5AC8241F2A21294E00CF337D /* Managers */,
 				5AA8006529C8D59300198B8A /* Protocols */,
 				5AF93324299D71EC00DF17C7 /* Resources */,
 				5ABBA3FD299C0F0600D0E0F4 /* Models */,
@@ -311,6 +316,7 @@
 				5AA8006A29C8EFDC00198B8A /* Series.swift */,
 				5A5B878829C52C45001A7A64 /* Tag.swift */,
 				5AA8006C29C8F2F700198B8A /* Language.swift */,
+				5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -377,6 +383,14 @@
 				5A2EE2462A057D9D00DFFCA5 /* SettingsViewController.swift */,
 			);
 			path = General;
+			sourceTree = "<group>";
+		};
+		5AC8241F2A21294E00CF337D /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				5AC824202A21296B00CF337D /* APICaller.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		5AF93324299D71EC00DF17C7 /* Resources */ = {
@@ -552,6 +566,7 @@
 				5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */,
 				5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */,
 				5AA8006D29C8F2F700198B8A /* Language.swift in Sources */,
+				5AC824212A21296B00CF337D /* APICaller.swift in Sources */,
 				5AB9524629EF1F06001EA8DA /* BottomSheetTableViewCell.swift in Sources */,
 				5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */,
 				5AA8006B29C8EFDC00198B8A /* Series.swift in Sources */,
@@ -568,6 +583,7 @@
 				5A0A426429A583340000EE64 /* Utils.swift in Sources */,
 				5A041BDA29AE70D3002539CF /* Category.swift in Sources */,
 				5A36E04029B804430096A032 /* ScopeButtonsView.swift in Sources */,
+				5AC824232A212A2300CF337D /* GoogleBooksSearchResponse.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
 				5A5B878929C52C45001A7A64 /* Tag.swift in Sources */,
 				5AB9524429EF179B001EA8DA /* BottomSheetViewController.swift in Sources */,
