@@ -48,11 +48,14 @@ class BaseScopeTableViewCell: UITableViewCell {
     
     static func createImageView() -> UIImageView {
         let imageView = UIImageView()
+        imageView.tintColor = .systemGray
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = cornerRadius
         imageView.clipsToBounds = true
         return imageView
     }
+    
+    var downloadTask: URLSessionDownloadTask?
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -62,6 +65,12 @@ class BaseScopeTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        downloadTask?.cancel()
+        downloadTask = nil
     }
 
 }

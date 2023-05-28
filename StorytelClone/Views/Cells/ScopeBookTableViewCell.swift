@@ -59,12 +59,13 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     
     private let customImageView: UIImageView = {
         let imageView = BaseScopeTableViewCell.createImageView()
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.26
         return imageView
     }()
     
-    private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
+    private lazy var customImageViewWidthConstraint = customImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
     
     private let ellipsisButton: UIButton = {
         let button = UIButton()
@@ -104,17 +105,22 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        customImageView.image = nil
+    }
+    
     // MARK: - Instance methods
     func configureFor(book: Book) {
         self.book = book
-        
+
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
 
         let authorNames = book.authors.map { $0.name }
         let authorNamesString = authorNames.joined(separator: ", ")
         authorsLabel.text = "By: \(authorNamesString)"
-        
+
         if !book.narrators.isEmpty {
             let narratorNames = book.narrators.map { $0.name }
             let narratorNamesString = narratorNames.joined(separator: ", ")
@@ -126,17 +132,16 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
             narratorsLabel.textColor = UIColor.clear
         }
         
-        if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: BaseScopeTableViewCell.imageHeight)
-            
-            if customImageView.bounds.width != image.size.width {
-                customImageViewWidthAnchor.constant = resizedImage.size.width
-            }
-            customImageView.image = resizedImage
+        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+            downloadTask = customImageView.loadImage(url: imageURL, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
+        } else if let coverImage = book.coverImage {
+            customImageView.setImage(coverImage, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
+        } else {
+            customImageView.image = UIImage.placeholderBookCoverImage
         }
-
+        
     }
-    
+        
     // MARK: - Helper methods
     private func addDetailButtonAction() {
         ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
@@ -144,7 +149,7 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
             self.ellipsisButtonDidTapCallback(book)
         }), for: .touchUpInside)
     }
-    
+
     private func applyConstraints() {
         squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -160,7 +165,7 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
             customImageView.heightAnchor.constraint(equalTo: squareViewWithImageView.heightAnchor),
             customImageView.centerXAnchor.constraint(equalTo: squareViewWithImageView.centerXAnchor),
         ])
-        customImageViewWidthAnchor.isActive = true
+        customImageViewWidthConstraint.isActive = true
         
         ellipsisButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

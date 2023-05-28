@@ -5,7 +5,7 @@
 //  Created by Kateryna Gumenna on 26/5/23.
 //
 
-import Foundation
+import UIKit
 
 struct GoogleBooksSearchResponse: Codable {
     let items: [BookModel]
@@ -25,7 +25,6 @@ struct VolumeInfo: Codable {
     let pageCount: Int?
     let averageRating: Double?
     let ratingsCount: Int?
-//    let imageLinks: [ImageLink]
     let imageLinks: [String : String]?
     let language: String?
 }
@@ -33,29 +32,8 @@ struct VolumeInfo: Codable {
 enum ImageLink: String {
     case smallThumbnail
     case thumbnail
+    case small
+    case medium
+    case large
+    case extraLarge
 }
-
-
-//struct ImageLink: Codable {
-//    let smallThumbnail: String?
-//    let thumbnail: String?
-//    let small: String?
-//    let medium: String?
-//    let large: String?
-//    let extraLarge: String?
-//}
-
-
-
-//struct GoogleBooksSearchResponse: Codable {
-//    let items: [VideoElement]
-//}
-//
-//struct VideoElement: Codable {
-//    let id: IdVideoElement
-//}
-//
-//struct IdVideoElement: Codable {
-//    let kind: String
-//    let videoId: String
-//}

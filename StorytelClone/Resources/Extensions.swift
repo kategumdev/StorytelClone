@@ -116,7 +116,7 @@ extension UIImage {
     // Resize image accounting for its ratio
     func resizeFor(targetHeight: CGFloat, andSetAlphaTo targetAlpha: CGFloat = 1) -> UIImage {
         let imageRatio = self.size.width / self.size.height
-        let targetHeight: CGFloat = targetHeight
+//        let targetHeight: CGFloat = targetHeight
         let targetWidth = targetHeight * imageRatio
         let targetSize = CGSize(width: targetWidth, height: targetHeight)
         
@@ -127,6 +127,11 @@ extension UIImage {
         }
         return resizedImage
     }
+    
+    static let placeholderBookCoverImage: UIImage? = {
+        let image = UIImage(systemName: "book")
+        return image
+    }()
     
 }
 
@@ -256,3 +261,45 @@ extension UITabBar {
         return height
     }()
 }
+
+extension UIImageView {
+    
+    func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
+        guard let image = image else { return }
+        let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
+        let defaultImageViewWidth = defaultImageViewHeight
+
+        let resizedImageWidth = resizedImage.size.width
+
+        if resizedImageWidth < defaultImageViewWidth {
+            if imageViewWidthConstraint.constant != resizedImageWidth {
+                imageViewWidthConstraint.constant = resizedImageWidth
+            }
+        } else if imageViewWidthConstraint.constant != defaultImageViewWidth {
+            imageViewWidthConstraint.constant = defaultImageViewWidth
+        }
+
+        self.image = resizedImage
+    }
+    
+    func loadImage(url: URL, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) -> URLSessionDownloadTask {
+        let session = URLSession.shared
+        let downloadTask = session.downloadTask(with: url) {
+            [weak self] url, _, error in
+            guard let self = self else { return }
+
+            if error == nil, let url = url,
+               let data = try? Data(contentsOf: url),
+               let image = UIImage(data: data) {
+
+                DispatchQueue.main.async {
+                    self.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint)
+                }
+            }
+        }
+        downloadTask.resume()
+        return downloadTask
+    }
+    
+}
+

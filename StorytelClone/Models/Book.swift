@@ -13,9 +13,11 @@ struct Book: Title, Equatable {
     }
     #warning("Equatable implemention has to check id, not title")
     
+    #warning("coverImage needed only for hardcoded book objects")
     let title: String
     let authors: [Storyteller]
-    let coverImage: UIImage?
+//    let coverImage: UIImage?
+    var coverImage: UIImage?
     let largeCoverImage: UIImage?
     var titleKind: TitleKind
     let overview: String
@@ -34,8 +36,9 @@ struct Book: Title, Equatable {
     var isAddedToBookshelf: Bool
     var isFinished: Bool
     var isDownloaded: Bool
+    var imageURLString: String?
     
-    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false) {
+    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
@@ -57,6 +60,7 @@ struct Book: Title, Equatable {
         self.isAddedToBookshelf = isAddedToBookshelf
         self.isFinished = isFinished
         self.isDownloaded = isDownloaded
+        self.imageURLString = imageURLString
     }
     
     func update(isAddedToBookshelf: Bool) {
@@ -89,6 +93,42 @@ struct Book: Title, Equatable {
                 // With real data, update book object here
             }
         }
+    }
+    
+    static func createBooksFrom(bookModels: [BookModel]) -> [Book] {
+        var books = [Book]()
+        
+        for bookModel in bookModels {
+            
+            var authors = [Storyteller]()
+            if let authorNames = bookModel.volumeInfo.authors {
+                for name in authorNames {
+                    let author = Storyteller(storytellerKind: .author, name: name, numberOfFollowers: 350)
+                    authors.append(author)
+                }
+            }
+            
+            let imageLinks = bookModel.volumeInfo.imageLinks
+            let imageURLString = imageLinks?[ImageLink.large.rawValue] ?? imageLinks?[ImageLink.medium.rawValue] ?? imageLinks?[ImageLink.small.rawValue] ?? imageLinks?[ImageLink.thumbnail.rawValue] ?? ""
+            
+            let book = Book(
+                title: bookModel.volumeInfo.title,
+                authors: authors,
+                coverImage: nil,
+//                coverImage: UIImage(systemName: "book"),
+//                coverImage: UIImage(systemName: "square"),
+                titleKind: .ebook,
+                overview: bookModel.volumeInfo.description ?? "This book has no description",
+                category: .ebooks,
+                rating: bookModel.volumeInfo.averageRating ?? 0.0,
+                reviewsNumber: bookModel.volumeInfo.ratingsCount ?? 0,
+                publisher: bookModel.volumeInfo.publisher ?? "Unknown",
+                imageURLString: imageURLString
+            )
+            #warning("check isEbook in json for titleKind, check smth else for category")
+            books.append(book)
+        }
+        return books
     }
     
 //    static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]

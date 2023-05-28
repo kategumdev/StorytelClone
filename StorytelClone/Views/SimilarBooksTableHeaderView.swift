@@ -36,19 +36,6 @@ class SimilarBooksTableHeaderView: UIView {
         stack.addArrangedSubview(UIView())
         return stack
     }()
-
-//    private let similarBooksLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 40)
-//        label.text = "Libros similares"
-//        return label
-//    }()
-//
-//    private let bookTitleLabel: UILabel = {
-//        let font = UIFont.preferredCustomFontWith(weight: .medium, size: 16)
-//        let label = UILabel.createLabel(withFont: font, maximumPointSize: 45, numberOfLines: 2)
-//        return label
-//    }()
     
     private let similarBooksLabel = UILabel.createLabelWith(font: UIFont.customFootnoteSemibold, text: "Libros similares")
 
@@ -103,7 +90,7 @@ class SimilarBooksTableHeaderView: UIView {
         if let image = book.coverImage {
             let resizedImage = image.resizeFor(targetHeight: imageHeight)
 
-            if imageView.bounds.width != image.size.width {
+            if imageView.bounds.width != resizedImage.size.width {
                 imageViewWidthConstraint.constant = resizedImage.size.width
             }
             imageView.image = resizedImage

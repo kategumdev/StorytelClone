@@ -183,7 +183,6 @@ class SearchViewController: UIViewController {
             if buttonKind == .tags {
                 newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
             }
- 
         }
         return newModel
     }
@@ -201,12 +200,31 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
               let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         let queryString = query.trimmingCharacters(in: .whitespaces)
-        if !queryString.isEmpty {
+        if queryString.count >= 6 {
             // Fetch model objects for search query and create models for all buttonKinds. HARDCODED FOR NOW
             let newModel = fetchTitlesFor(query: query)
             resultsController.modelForSearchQuery = newModel
             resultsController.setInitialOffsetsOfTablesInCells()
             resultsController.collectionView.reloadData()
+            
+            APICaller.shared.getBooks(with: query) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let bookModels):
+//                        print("COUNT: \(bookModels.count)")
+//                        print("BOOKS: \(bookModels)")
+//                        let imageLinks = bookModels.map {$0.volumeInfo.imageLinks}
+//                        print("\(imageLinks)")
+                        
+                        let books = Book.createBooksFrom(bookModels: bookModels)
+                        resultsController.modelForSearchQuery?[.books] = books
+                        resultsController.setInitialOffsetsOfTablesInCells()
+                        resultsController.collectionView.reloadData()
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
         } else {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             if resultsController.modelForSearchQuery != nil {
@@ -215,32 +233,6 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                 resultsController.collectionView.reloadData()
             }
         }
-        
-        
-        guard !queryString.isEmpty else { return }
-        
-        guard query.count >= 6 else { return }
-        APICaller.shared.getBooks(with: queryString) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let books):
-                    print("COUNT: \(books.count)")
-                    print("BOOKS: \(books)")
-                    let bookTitles = books.map { $0.volumeInfo.title }
-                    print("GOOGLE BOOKS titles: \(bookTitles)")
-                    
-                    let firstBook = books[0]
-                    if firstBook.volumeInfo.imageLinks?[ImageLink.smallThumbnail.rawValue] != nil {
-                        print("book \(firstBook.volumeInfo.title) has small thumbnail image")
-                    }
-//                    resultsController.titles = titles
-//                    resultsController.searchResultsCollectionView.reloadData()
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        
     }
     
 //    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {

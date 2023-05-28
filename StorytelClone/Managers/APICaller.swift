@@ -12,11 +12,9 @@ struct APIConstants {
     static let GoogleBooksBaseURL = "https://www.googleapis.com/books/v1/volumes?"
 }
 
-//AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM
-
-enum APIError: Error {
-    case failedToGetData
-}
+//enum APIError: Error {
+//    case failedToGetData
+//}
 
 class APICaller {
     static let shared = APICaller()
@@ -31,6 +29,10 @@ class APICaller {
             
             do {
                 let results = try JSONDecoder().decode(GoogleBooksSearchResponse.self, from: data)
+                
+//                let jsonString = try String(contentsOf: url, encoding: .utf8)
+//                print("\(jsonString)")
+                
                 completion(.success(results.items))
             } catch {
                 completion(.failure(error))
@@ -39,4 +41,5 @@ class APICaller {
         }
         task.resume()
     }
+    
 }

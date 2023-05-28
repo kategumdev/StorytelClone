@@ -19,6 +19,7 @@ class ScopeTableView: UITableView {
     
     let buttonKind: ScopeButtonKind
     var model = [Title]()
+    
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
     
@@ -104,7 +105,7 @@ class ScopeTableView: UITableView {
             alwaysBounceVertical = noBooksBackgroundView.isHidden
         }
     }
-    
+        
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -124,7 +125,7 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
         
         if let book = title as? Book {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeBookTableViewCell.identifier, for: indexPath) as? ScopeBookTableViewCell else { return UITableViewCell() }
-            
+
             cell.configureFor(book: book)
             cell.ellipsisButtonDidTapCallback = self.ellipsisButtonDidTapCallback
             return cell

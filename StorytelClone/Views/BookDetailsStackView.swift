@@ -30,16 +30,17 @@ class BookDetailsStackView: UIStackView {
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.tintColor = .systemGray
         imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.6
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "image1")
         return imageView
     }()
     
-    private lazy var coverImageWidthAnchor = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
+    private lazy var coverImageWidthConstraint = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
+//    private lazy var coverImageHeightAnchor = coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
     
     let spacingAfterCoverImageView: CGFloat = 24.0
 
@@ -111,6 +112,8 @@ class BookDetailsStackView: UIStackView {
     }
     
     private var gradientIsAdded = false
+    
+    var imageDownloadTask: URLSessionDownloadTask?
         
     // MARK: - Initializers
     init(forBook book: Book) {
@@ -123,6 +126,13 @@ class BookDetailsStackView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        print("BookDetailsStackView DEINIT. Canceling download task in case it's active")
+        imageDownloadTask?.cancel()
+        imageDownloadTask = nil
+    }
+    #warning("Check if it's really needed to manually cancel tasks in deinit, maybe they cancel automatically when self deinitializes")
     
     // MARK: - View life cycle
     override func layoutSubviews() {
@@ -163,12 +173,18 @@ class BookDetailsStackView: UIStackView {
     private func configureSelf() {
         axis = .vertical
         alignment = .center
-                
-        if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: BookDetailsStackView.imageHeight)
-            coverImageView.image = resizedImage
-            coverImageWidthAnchor.constant = resizedImage.size.width
+        
+        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+            imageDownloadTask = coverImageView.loadImage(
+                url: imageURL,
+                defaultImageViewHeight: BookDetailsStackView.imageHeight,
+                imageViewWidthConstraint: coverImageWidthConstraint)
+        } else if let coverImage = book.coverImage {
+            coverImageView.setImage(coverImage, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
+        } else {
+            coverImageView.image = UIImage.placeholderBookCoverImage
         }
+        
         addArrangedSubview(coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)
 
@@ -208,7 +224,7 @@ class BookDetailsStackView: UIStackView {
 
         addArrangedSubview(roundButtonsStackContainer)
     }
-
+                
     private func addActionTo(button: UIButton, toShowStorytellers storytellers: [Storyteller]) {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
@@ -257,7 +273,8 @@ class BookDetailsStackView: UIStackView {
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
-        coverImageWidthAnchor.isActive = true
+//        coverImageHeightAnchor.isActive = true
+        coverImageWidthConstraint.isActive = true
         
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true

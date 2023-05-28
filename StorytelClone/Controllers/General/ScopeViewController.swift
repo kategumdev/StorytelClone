@@ -72,7 +72,7 @@ class ScopeViewController: UIViewController {
         view.addSubview(separatorLineView)
         view.addSubview(scopeButtonsView)
         configureScopeButtonsView()
-        configureScopeTableViews()
+        createScopeTableViews()
         
         view.addSubview(collectionView)
         collectionView.dataSource = self
@@ -119,6 +119,8 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
 
         if let collectionModel = modelForSearchQuery, let tableViewModel = collectionModel[buttonKind] {
             scopeTableViewForCell.model = tableViewModel
+//            scopeTableViewForCell.downloadCoverImages()
+            
             scopeTableViewForCell.hasSectionHeader = false
         } else {
             scopeTableViewForCell.model = getModelFor(buttonKind: buttonKind)
@@ -250,7 +252,7 @@ extension ScopeViewController {
         }
     }
     
-    private func configureScopeTableViews() {
+    private func createScopeTableViews() {
         for buttonKind in scopeButtonsViewKind.buttonKinds {
             let table = ScopeTableView(buttonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
             scopeTablesForCvCells.append(table)
