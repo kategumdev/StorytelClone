@@ -174,16 +174,7 @@ class BookDetailsStackView: UIStackView {
         axis = .vertical
         alignment = .center
         
-        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-            imageDownloadTask = coverImageView.loadImage(
-                url: imageURL,
-                defaultImageViewHeight: BookDetailsStackView.imageHeight,
-                imageViewWidthConstraint: coverImageWidthConstraint)
-        } else if let coverImage = book.coverImage {
-            coverImageView.setImage(coverImage, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
-        } else {
-            coverImageView.image = UIImage.placeholderBookCoverImage
-        }
+        imageDownloadTask = coverImageView.setImageForBook(book, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
         
         addArrangedSubview(coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)

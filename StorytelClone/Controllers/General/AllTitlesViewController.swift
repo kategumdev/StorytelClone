@@ -26,6 +26,8 @@ class AllTitlesViewController: BaseViewController {
 //                         Book.book1, Book.book1, Book.book1, Book.book1,
 //                         Book.book1, Book.book1, Book.book1, Book.book1]
     
+    private var books = [Book]()
+    
     // MARK: - Initializers
     init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
         self.tableSection = tableSection
@@ -46,6 +48,8 @@ class AllTitlesViewController: BaseViewController {
         super.viewDidLoad()
         configureBookTable()
         view.addSubview(popupButton)
+//        books = allTitlesBooks
+        loadBooks()
     }
         
     override func viewWillAppear(_ animated: Bool) {
@@ -55,12 +59,19 @@ class AllTitlesViewController: BaseViewController {
         guard let currentSelectedBook = currentSelectedBook else { return }
 
         var selectedBookIndexPath = IndexPath(row: 0, section: 0)
-        for (index, book) in allTitlesBooks.enumerated() {
+        for (index, book) in books.enumerated() {
             if book.title == currentSelectedBook.title {
                 selectedBookIndexPath.row = index
                 break
             }
         }
+        #warning("check using books id not title")
+//        for (index, book) in allTitlesBooks.enumerated() {
+//            if book.title == currentSelectedBook.title {
+//                selectedBookIndexPath.row = index
+//                break
+//            }
+//        }
 
         // This delay avoids warning that "UITableView was told to layout its visible cells and other contents without being in the view hierarchy"
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -72,9 +83,8 @@ class AllTitlesViewController: BaseViewController {
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return tableSection.books.count
-//        return books.count
-        return allTitlesBooks.count
+//        return allTitlesBooks.count
+        return books.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -84,23 +94,28 @@ class AllTitlesViewController: BaseViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
-        let book = allTitlesBooks[indexPath.row]
+//        let book = allTitlesBooks[indexPath.row]
+        let book = books[indexPath.row]
         cell.configureWith(book: book)
         cell.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
 
         cell.ellipsisButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
             // Get the latest updated book model object
-            let updatedBook = allTitlesBooks[indexPath.row]
+//            let updatedBook = allTitlesBooks[indexPath.row]
+            let updatedBook = self.books[indexPath.row]
+            
             let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
             bookDetailsBottomSheetController.delegate = self
             bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
-            self?.present(bookDetailsBottomSheetController, animated: false)
+            self.present(bookDetailsBottomSheetController, animated: false)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        let book = allTitlesBooks[indexPath.row]
+//        let book = allTitlesBooks[indexPath.row]
+        let book = books[indexPath.row]
         return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
     }
     
@@ -138,7 +153,8 @@ class AllTitlesViewController: BaseViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let book = allTitlesBooks[indexPath.row]
+//        let book = allTitlesBooks[indexPath.row]
+        let book = books[indexPath.row]
         currentSelectedBook = book
         
         let controller = BookViewController(book: book)
@@ -200,18 +216,48 @@ class AllTitlesViewController: BaseViewController {
         }
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
     }
+    
+    private func loadBooks() {
+        guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
+            books = allTitlesBooks
+            return
+        }
+
+        let query = author.name.trimmingCharacters(in: .whitespaces)
+        
+        APICaller.shared.getBooks(with: query) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let bookModels):
+                    let books = Book.createBooksFrom(bookModels: bookModels)
+                    self?.books = books
+                    self?.bookTable.reloadData()
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
 
 }
 
 extension AllTitlesViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         var indexPathOfRowWithThisBook = IndexPath(row: 0, section: 0)
-        for (index, arrayBook) in allTitlesBooks.enumerated() {
+        for (index, arrayBook) in books.enumerated() {
             if arrayBook.title == book.title {
                 indexPathOfRowWithThisBook.row = index
                 break
             }
         }
+        #warning("check using books id not title")
+        
+//        for (index, arrayBook) in allTitlesBooks.enumerated() {
+//            if arrayBook.title == book.title {
+//                indexPathOfRowWithThisBook.row = index
+//                break
+//            }
+//        }
         self.bookTable.reloadRows(at: [indexPathOfRowWithThisBook], with: .none)
     }
 

@@ -113,6 +113,10 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     // MARK: - Instance methods
     func configureFor(book: Book) {
         self.book = book
+        
+        // Set image and save downloadTask (if it's created) to cancel in prepareForReuse()
+        downloadTask = customImageView.setImageForBook(book, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
+        
 
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
@@ -130,14 +134,6 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
             // This is needed to take height of this label into account when system calculates automaticDimension for this cell
             narratorsLabel.text = "Placeholder"
             narratorsLabel.textColor = UIColor.clear
-        }
-        
-        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-            downloadTask = customImageView.loadImage(url: imageURL, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
-        } else if let coverImage = book.coverImage {
-            customImageView.setImage(coverImage, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
-        } else {
-            customImageView.image = UIImage.placeholderBookCoverImage
         }
         
     }

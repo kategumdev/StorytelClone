@@ -301,5 +301,22 @@ extension UIImageView {
         return downloadTask
     }
     
+    func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) -> URLSessionDownloadTask? {
+        var downloadTask: URLSessionDownloadTask? = nil
+        
+        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+            let imageDownloadTask = self.loadImage(
+                url: imageURL,
+                defaultImageViewHeight: defaultImageViewHeight,
+                imageViewWidthConstraint: imageViewWidthConstraint)
+            return imageDownloadTask
+        } else if let coverImage = book.coverImage {
+            self.setImage(coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint)
+        } else {
+            self.image = UIImage.placeholderBookCoverImage
+        }
+        return downloadTask
+    }
+    
 }
 

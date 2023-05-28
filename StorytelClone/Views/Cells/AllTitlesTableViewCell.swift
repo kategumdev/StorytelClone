@@ -90,7 +90,8 @@ class AllTitlesTableViewCell: UITableViewCell {
     
     private let customImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+//        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.clipsToBounds = true
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
@@ -99,6 +100,8 @@ class AllTitlesTableViewCell: UITableViewCell {
     }()
     
     private lazy var customImageViewWidthAnchor = customImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
+    
+    private var imageDownloadTask: URLSessionDownloadTask?
     
     private lazy var imageLabelsHorzStack: UIStackView = {
         let stack = UIStackView()
@@ -143,6 +146,11 @@ class AllTitlesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    deinit {
+//        imageDownloadTask?.cancel()
+//        imageDownloadTask = nil
+//    }
+    
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -152,8 +160,18 @@ class AllTitlesTableViewCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        customImageView.image = nil
+        imageDownloadTask?.cancel()
+        imageDownloadTask = nil
+    }
+    
     // MARK: - Instance methods
     func configureWith(book: Book) {
+        
+        imageDownloadTask = customImageView.setImageForBook(book, defaultImageViewHeight: AllTitlesTableViewCell.imageWidthAndHeight, imageViewWidthConstraint: customImageViewWidthAnchor)
+        
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
 
@@ -176,14 +194,14 @@ class AllTitlesTableViewCell: UITableViewCell {
             seriesLabel.text = ""
         }
 
-        if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
-            
-            if customImageView.bounds.width != image.size.width {
-                customImageViewWidthAnchor.constant = resizedImage.size.width
-            }
-            customImageView.image = resizedImage
-        }
+//        if let image = book.coverImage {
+//            let resizedImage = image.resizeFor(targetHeight: AllTitlesTableViewCell.imageWidthAndHeight)
+//
+//            if customImageView.bounds.width != image.size.width {
+//                customImageViewWidthAnchor.constant = resizedImage.size.width
+//            }
+//            customImageView.image = resizedImage
+//        }
         starHorzStackView.configureWith(book: book)
     }
 
@@ -191,6 +209,12 @@ class AllTitlesTableViewCell: UITableViewCell {
     private func applyConstraints() {
         mainVertStack.translatesAutoresizingMaskIntoConstraints = false
         mainVertStack.fillSuperview(withConstant: Constants.commonHorzPadding)
+        
+        squareViewWithImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            squareViewWithImageView.heightAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight),
+            squareViewWithImageView.widthAnchor.constraint(equalToConstant: AllTitlesTableViewCell.imageWidthAndHeight)
+        ])
 
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

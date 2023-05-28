@@ -28,6 +28,8 @@ class SimilarBooksTableHeaderView: UIView {
     }()
 
     private lazy var imageViewWidthConstraint = imageView.widthAnchor.constraint(equalToConstant: imageHeight)
+    
+    var imageDownloadTask: URLSessionDownloadTask?
 
     private lazy var vertStackWithImage: UIStackView = {
         let stack = UIStackView()
@@ -82,19 +84,18 @@ class SimilarBooksTableHeaderView: UIView {
             imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
+    
+    deinit {
+        imageDownloadTask?.cancel()
+        imageDownloadTask = nil
+    }
 
     // MARK: - Instance methods
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
-
-        if let image = book.coverImage {
-            let resizedImage = image.resizeFor(targetHeight: imageHeight)
-
-            if imageView.bounds.width != resizedImage.size.width {
-                imageViewWidthConstraint.constant = resizedImage.size.width
-            }
-            imageView.image = resizedImage
-        }
+        
+        imageDownloadTask = imageView.setImageForBook(book, defaultImageViewHeight: imageHeight, imageViewWidthConstraint: imageViewWidthConstraint)
+        #warning("Pass downloaded image from BookVC to this view to avoid downloading it one more time")
     }
 
     // MARK: - Helper methods
