@@ -23,6 +23,8 @@ struct VolumeInfo: Codable {
     let publishedDate: String?
     let description: String?
     let pageCount: Int?
+    let printedPageCount: Int?
+    let categories: [String]?
     let averageRating: Double?
     let ratingsCount: Int?
     let imageLinks: [String : String]?

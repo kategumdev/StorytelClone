@@ -112,9 +112,6 @@ class BookOverviewStackView: UIStackView {
             mainTextView.topAnchor.constraint(equalTo: topAnchor),
             lastTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        // Ensure that last text view doesn't have even a tiny bottom padding
-        lastTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: -4, right: 0)
     }
 
 }

@@ -38,7 +38,7 @@ struct Book: Title, Equatable {
     var isDownloaded: Bool
     var imageURLString: String?
     
-    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "25 Jan 2023", publisher: String = "Planeta Audio", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil) {
+    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
@@ -115,13 +115,12 @@ struct Book: Title, Equatable {
                 title: bookModel.volumeInfo.title,
                 authors: authors,
                 coverImage: nil,
-//                coverImage: UIImage(systemName: "book"),
-//                coverImage: UIImage(systemName: "square"),
                 titleKind: .ebook,
                 overview: bookModel.volumeInfo.description ?? "This book has no description",
                 category: .ebooks,
                 rating: bookModel.volumeInfo.averageRating ?? 0.0,
                 reviewsNumber: bookModel.volumeInfo.ratingsCount ?? 0,
+                releaseDate: bookModel.volumeInfo.publishedDate?.format() ?? "Unknown",
                 publisher: bookModel.volumeInfo.publisher ?? "Unknown",
                 imageURLString: imageURLString
             )
