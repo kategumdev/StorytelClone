@@ -207,24 +207,75 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             resultsController.setInitialOffsetsOfTablesInCells()
             resultsController.collectionView.reloadData()
             
+            
+            
+            var books = [Book]()
+            
             APICaller.shared.getBooks(with: query) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let bookModels):
 //                        print("COUNT: \(bookModels.count)")
 //                        print("BOOKS: \(bookModels)")
-//                        let imageLinks = bookModels.map {$0.volumeInfo.imageLinks}
-//                        print("\(imageLinks)")
+
+                        books += Book.createBooksFrom(bookModels: bookModels)
+                        APICaller.shared.getAudiobooks(with: query) { result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success(let audiobooks):
+            //                        print("COUNT: \(bookModels.count)")
+            //                        print("BOOKS: \(bookModels)")
+                                    
+                                    books += Book.createBooksFrom(audiobooks: audiobooks)
+                                    books.shuffle()
+                                    resultsController.modelForSearchQuery?[.books] = books
+                                    resultsController.setInitialOffsetsOfTablesInCells()
+                                    resultsController.collectionView.reloadData()
+                                case .failure(let error):
+                                    print(error)
+                                }
+                            }
+                        }
                         
-                        let books = Book.createBooksFrom(bookModels: bookModels)
-                        resultsController.modelForSearchQuery?[.books] = books
-                        resultsController.setInitialOffsetsOfTablesInCells()
-                        resultsController.collectionView.reloadData()
                     case .failure(let error):
                         print(error)
                     }
                 }
             }
+            
+//            APICaller.shared.getAudiobooks(with: query) { result in
+//                DispatchQueue.main.async {
+//                    switch result {
+//                    case .success(let audiobooks):
+////                        print("COUNT: \(bookModels.count)")
+////                        print("BOOKS: \(bookModels)")
+//
+//                        let books = Book.createBooksFrom(audiobooks: audiobooks)
+//                        resultsController.modelForSearchQuery?[.books] = books
+//                        resultsController.setInitialOffsetsOfTablesInCells()
+//                        resultsController.collectionView.reloadData()
+//                    case .failure(let error):
+//                        print(error)
+//                    }
+//                }
+//            }
+            
+//            APICaller.shared.getBooks(with: query) { result in
+//                DispatchQueue.main.async {
+//                    switch result {
+//                    case .success(let bookModels):
+////                        print("COUNT: \(bookModels.count)")
+////                        print("BOOKS: \(bookModels)")
+//
+//                        let books = Book.createBooksFrom(bookModels: bookModels)
+//                        resultsController.modelForSearchQuery?[.books] = books
+//                        resultsController.setInitialOffsetsOfTablesInCells()
+//                        resultsController.collectionView.reloadData()
+//                    case .failure(let error):
+//                        print(error)
+//                    }
+//                }
+//            }
         } else {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             if resultsController.modelForSearchQuery != nil {

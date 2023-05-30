@@ -130,6 +130,39 @@ struct Book: Title, Equatable {
         return books
     }
     
+    static func createBooksFrom(audiobooks: [Audiobook]) -> [Book] {
+        var books = [Book]()
+        
+        for audiobook in audiobooks {
+            let author = [Storyteller(storytellerKind: .author, name: audiobook.authorName, numberOfFollowers: 560)]
+            
+            let description: String = audiobook.description?.removeHTMLTags() ?? "This book has no description"
+            
+            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "250x250")
+
+            let book = Book(
+                title: audiobook.bookName,
+                authors: author,
+                coverImage: nil,
+                titleKind: .audiobook,
+                overview: description,
+                category: .novela,
+                rating: 0.0,
+                reviewsNumber: 0,
+                releaseDate: audiobook.releaseDate?.formatDate() ?? "Unknown",
+                publisher: "Unknown",
+                imageURLString: imageUrlString
+//                imageURLString: audiobook.largeImageUrl ?? audiobook.smallImageUrl ?? nil
+//                imageURLString: nil
+            )
+            #warning("check smth else for category, check genre")
+            #warning("Debug ares shows some messages when images are downloading")
+
+            books.append(book)
+        }
+        return books
+    }
+    
 //    static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
     static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
     

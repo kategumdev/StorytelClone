@@ -12,6 +12,8 @@ struct APIConstants {
     static let GoogleBooksBaseURL = "https://www.googleapis.com/books/v1/volumes?"
 }
 
+//https://www.googleapis.com/books/v1/volumes?q=gaiman&key=AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM
+
 //enum APIError: Error {
 //    case failedToGetData
 //}
@@ -36,6 +38,32 @@ class APICaller {
                 completion(.success(results.items))
             } catch {
                 completion(.failure(error))
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
+    
+    func getAudiobooks(with query: String, completion: @escaping (Result<[Audiobook], Error>) -> Void) {
+        
+        let formattedQuery = query.replacingOccurrences(of: " ", with: "+")
+//        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
+        guard let encodedQuery = formattedQuery.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
+//        print("encodedQuery: \(formattedQuery)")
+        
+//        guard let url = URL(string: "http://itunes.apple.com/search?term=\(encodedQuery)&entity=audiobook&limit=10") else { return }
+        guard let url = URL(string: "http://itunes.apple.com/search?term=\(encodedQuery)&entity=audiobook&limit=10") else { return }
+
+
+        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
+            guard let data = data, error == nil else { return }
+
+            do {
+                let results = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
+                completion(.success(results.results))
+            } catch {
+                completion(.failure(error))
+                print("   ERROR OCCURED IN DATA TASK")
                 print(error.localizedDescription)
             }
         }
@@ -75,6 +103,7 @@ class APICaller {
 //        }
 //        task.resume()
 //    }
+    
     
 }
 

@@ -319,6 +319,7 @@ extension UIImageView {
         let session = URLSession.shared
         let downloadTask = session.downloadTask(with: url) { url, _, error in
             guard let url = url, error == nil else {
+                print("   DOWNLOAD TASK FAILED")
                 completion(nil)
                 return
             }
@@ -358,6 +359,9 @@ extension String {
         let dateString = self
 
         let inputOutputFormats: [String : String] = [
+            "yyyy-MM-dd'T'HH:mm:ssZ" : "dd MMM yyyy",
+            "yyyy-MM'T'HH:mm:ssZ" : "MMM yyyy",
+            "yyyy'T'HH:mm:ssZ" : "yyyy",
             "yyyy-MM-dd" : "dd MMM yyyy",
             "yyyy-MM" : "MMM yyyy",
             "yyyy" : "yyyy"
@@ -378,7 +382,19 @@ extension String {
         }
         return formattedDate ?? "Unknown"
     }
-
+    
+    func removeHTMLTags() -> String {
+        let cleanedText1 = self.replacingOccurrences(of: "<br />", with: "\n")
+        let cleanedText2 = cleanedText1.replacingOccurrences(of: "&#xa0;", with: " ")
+        #warning("Maybe replacing occurences can be done only once")
+        
+        let htmlTagPattern = "<.*?>"
+        let regex = try! NSRegularExpression(pattern: htmlTagPattern, options: .caseInsensitive)
+        let range = NSRange(location: 0, length: cleanedText2.utf16.count)
+        let cleanText = regex.stringByReplacingMatches(in: cleanedText2, options: [], range: range, withTemplate: "")
+        return cleanText
+    }
+    
 }
 
 
