@@ -120,7 +120,7 @@ struct Book: Title, Equatable {
                 category: .ebooks,
                 rating: bookModel.volumeInfo.averageRating ?? 0.0,
                 reviewsNumber: bookModel.volumeInfo.ratingsCount ?? 0,
-                releaseDate: bookModel.volumeInfo.publishedDate?.format() ?? "Unknown",
+                releaseDate: bookModel.volumeInfo.publishedDate?.formatDate() ?? "Unknown",
                 publisher: bookModel.volumeInfo.publisher ?? "Unknown",
                 imageURLString: imageURLString
             )

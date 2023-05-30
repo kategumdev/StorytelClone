@@ -31,7 +31,6 @@ class BookDetailsStackView: UIStackView {
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .systemGray
         imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.6

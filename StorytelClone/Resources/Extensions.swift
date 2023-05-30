@@ -128,10 +128,10 @@ extension UIImage {
         return resizedImage
     }
     
-    static let placeholderBookCoverImage: UIImage? = {
-        let image = UIImage(systemName: "book")
-        return image
-    }()
+//    static let placeholderBookCoverImage: UIImage? = {
+//        let image = UIImage(systemName: "book")
+//        return image
+//    }()
     
 }
 
@@ -264,11 +264,37 @@ extension UITabBar {
 
 extension UIImageView {
     
-    func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
-        guard let image = image else { return }
-        let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
+    func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
         let defaultImageViewWidth = defaultImageViewHeight
+        
+        // Configure image view and set placeholder image if passed image is nil
+        guard let image = image else {
+            self.tintColor = .systemGray6
+            self.backgroundColor = UIColor.tertiaryLabel
+            self.contentMode = .center
+            let pointSize = defaultImageViewHeight * 0.35
+            let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold)
+            let placeholderBookCoverImage = UIImage(systemName: "book.closed.fill", withConfiguration: config)
+            
+//            self.image = placeholderBookCoverImage
 
+            var newImageWidth: CGFloat = defaultImageViewWidth // for square image view
+            if book.titleKind == .ebook {
+                newImageWidth = defaultImageViewWidth * 0.65 // for rectangle image view
+            }
+            
+            if imageViewWidthConstraint.constant != newImageWidth {
+                imageViewWidthConstraint.constant = newImageWidth
+            }
+
+            self.image = placeholderBookCoverImage
+            return
+        }
+        
+        // Configure image view, resize and set passed image
+        self.backgroundColor = .clear
+        self.contentMode = .scaleAspectFill
+        let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
         let resizedImageWidth = resizedImage.size.width
 
         if resizedImageWidth < defaultImageViewWidth {
@@ -282,18 +308,28 @@ extension UIImageView {
         self.image = resizedImage
     }
     
-    func loadImage(url: URL, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) -> URLSessionDownloadTask {
+    func loadImage(url: URL, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) -> URLSessionDownloadTask {
+        
+        let completion: (UIImage?) -> () = { [weak self] image in
+            DispatchQueue.main.async {
+                self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+            }
+        }
+        
         let session = URLSession.shared
-        let downloadTask = session.downloadTask(with: url) {
-            [weak self] url, _, error in
-            guard let self = self else { return }
+        let downloadTask = session.downloadTask(with: url) { url, _, error in
+            guard let url = url, error == nil else {
+                completion(nil)
+                return
+            }
             
-            if error == nil, let url = url,
-               let data = try? Data(contentsOf: url),
-               let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint)
-                }
+            do {
+                let data = try Data(contentsOf: url)
+                let image = UIImage(data: data)
+                completion(image)
+            } catch {
+                completion(nil)
+                print(error.localizedDescription)
             }
         }
         downloadTask.resume()
@@ -307,38 +343,18 @@ extension UIImageView {
             downloadTask = self.loadImage(
                 url: imageURL,
                 defaultImageViewHeight: defaultImageViewHeight,
-                imageViewWidthConstraint: imageViewWidthConstraint)
-        } else if let coverImage = book.coverImage {
-            self.setImage(coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint)
+                imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
         } else {
-            self.image = UIImage.placeholderBookCoverImage
+            self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
         }
         return downloadTask
     }
-    
-//
-//    func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) -> URLSessionDownloadTask? {
-//        var downloadTask: URLSessionDownloadTask? = nil
-//
-//        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-//            let imageDownloadTask = self.loadImage(
-//                url: imageURL,
-//                defaultImageViewHeight: defaultImageViewHeight,
-//                imageViewWidthConstraint: imageViewWidthConstraint)
-//            return imageDownloadTask
-//        } else if let coverImage = book.coverImage {
-//            self.setImage(coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint)
-//        } else {
-//            self.image = UIImage.placeholderBookCoverImage
-//        }
-//        return downloadTask
-//    }
     
 }
 
 extension String {
     
-    func format() -> String {
+    func formatDate() -> String {
         let dateString = self
 
         let inputOutputFormats: [String : String] = [
@@ -347,26 +363,20 @@ extension String {
             "yyyy" : "yyyy"
         ]
 
-        var formattedDate: String?
+        let inputFormatter = DateFormatter()
         let outputFormatter = DateFormatter()
+        var formattedDate: String?
         
         for (inputFormat, outputFormat) in inputOutputFormats {
-            let inputFormatter = DateFormatter()
             inputFormatter.dateFormat = inputFormat
             
             if let date = inputFormatter.date(from: dateString) {
-                let outputFormatter = DateFormatter()
                 outputFormatter.dateFormat = outputFormat
                 formattedDate = outputFormatter.string(from: date)
                 break
             }
         }
-        
-        if let formattedDate = formattedDate {
-            return formattedDate
-        } else {
-            return "Unknown"
-        }
+        return formattedDate ?? "Unknown"
     }
 
 }

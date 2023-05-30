@@ -217,6 +217,8 @@ extension ScopeViewController {
                             Storyteller.author9, Storyteller.author5]
             
         case .books:
+//            var book23 = Book.book23
+//            book23.coverImage = nil
             return [Book.book1, Book.book23, Book.senorDeLosAnillos1, Book.book2, Book.book22, Book.book5, Book.book20,
                     Book.book7, Book.book8, Book.book21, Book.book9, Book.book18, Book.book17,
                     Book.book15, Book.book4, Book.book6, Book.book19]
