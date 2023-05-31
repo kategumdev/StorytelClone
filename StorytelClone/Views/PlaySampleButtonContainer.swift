@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-
+// Container is needed to cover book description text beneath when in "compressed" appearance
 class PlaySampleButtonContainer: UIView {
     // MARK: - Static properties
     static let buttonHeight: CGFloat = RoundButtonsStack.roundWidth
@@ -21,35 +21,20 @@ class PlaySampleButtonContainer: UIView {
     
     private let button: UIButton = {
         let button = UIButton()
-        button.tintColor = UIColor.label
+        button.tintColor = .label
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.cornerRadius = PlaySampleButtonContainer.buttonHeight / 2
-        return button
-    }()
-    
-    private let customImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        
+        var buttonConfig = UIButton.Configuration.plain()
+        buttonConfig.contentInsets = .zero
+        buttonConfig.titleAlignment = .leading
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 19, weight: .semibold)
         let image = UIImage(systemName: "play.fill", withConfiguration: symbolConfig)
-        imageView.image = image
-        return imageView
-    }()
-
-    private let customTitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
-        let label = UILabel.createLabelWith(font: scaledFont, text: "Play a sample")
-        return label
-    }()
-
-    private lazy var horzStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 12
-        stack.addArrangedSubview(customImageView)
-        stack.addArrangedSubview(customTitleLabel)
-        return stack
+        buttonConfig.image = image
+        buttonConfig.imagePadding = 12
+        button.configuration = buttonConfig
+        return button
     }()
 
     // MARK: - Initializers
@@ -58,19 +43,11 @@ class PlaySampleButtonContainer: UIView {
         super.init(frame: .zero)
         backgroundColor = UIColor.customBackgroundColor
         addSubview(button)
+        setButtonTextAndImage()
         addButtonAction()
-        button.addSubview(horzStack)
         applyConstraints()
     }
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        backgroundColor = UIColor.customBackgroundColor
-//        addSubview(button)
-//        button.addSubview(horzStack)
-//        applyConstraints()
-//    }
-    
+ 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -87,20 +64,18 @@ class PlaySampleButtonContainer: UIView {
     // MARK: - Helper methods
     private func addButtonAction() {
         guard audioUrlString != nil else { return }
-        print("adding button action")
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.handleButtonTapped()
           }), for: .touchUpInside)
     }
-    #warning("it is not triggered when tapping on custom image and label views")
     
     private func handleButtonTapped() {
         if isPlaying {
             audioPlayer?.replaceCurrentItem(with: nil)
             audioPlayer = nil
             isPlaying = false
-            toggleButtonImageAndText()
+            setButtonTextAndImage()
             return
         }
         
@@ -108,23 +83,22 @@ class PlaySampleButtonContainer: UIView {
            let url = URL(string: urlString) {
             let playerItem = AVPlayerItem(url: url)
             audioPlayer = AVPlayer(playerItem: playerItem)
-            print("play")
             audioPlayer?.play()
             isPlaying = true
-            toggleButtonImageAndText()
+            setButtonTextAndImage()
         }
-//            let audioURL = URL(string: "YOUR_AUDIO_URL_HERE")
     }
-    
-    private func toggleButtonImageAndText() {
+
+    private func setButtonTextAndImage() {
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
+        let text = isPlaying ? "00:01" : "Play a sample"
+        button.configuration?.attributedTitle = AttributedString(text)
+        button.configuration?.attributedTitle?.font = scaledFont
+        
+        let imageName = isPlaying ? "stop.fill" : "play.fill"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 19, weight: .semibold)
-        if isPlaying {
-            customImageView.image = UIImage(systemName: "stop.fill", withConfiguration: symbolConfig)
-            customTitleLabel.text = ""
-        } else {
-            customImageView.image = UIImage(systemName: "play.fill", withConfiguration: symbolConfig)
-            customTitleLabel.text = "Play a sample"
-        }
+        let image = UIImage(systemName: imageName, withConfiguration: symbolConfig)
+        button.configuration?.image = image
     }
 
     private func applyConstraints() {
@@ -134,14 +108,6 @@ class PlaySampleButtonContainer: UIView {
             button.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2),
             button.topAnchor.constraint(equalTo: topAnchor),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
-        ])
-        
-        horzStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            horzStack.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-            horzStack.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-            horzStack.leadingAnchor.constraint(greaterThanOrEqualTo: button.leadingAnchor, constant: 10),
-            horzStack.trailingAnchor.constraint(lessThanOrEqualTo: button.trailingAnchor, constant: -10)
         ])
     }
     
