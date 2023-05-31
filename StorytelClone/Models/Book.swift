@@ -37,8 +37,9 @@ struct Book: Title, Equatable {
     var isFinished: Bool
     var isDownloaded: Bool
     var imageURLString: String?
+    var audioUrlString: String?
     
-    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil) {
+    init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, overview: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: Language = .spanish, narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
@@ -61,6 +62,7 @@ struct Book: Title, Equatable {
         self.isFinished = isFinished
         self.isDownloaded = isDownloaded
         self.imageURLString = imageURLString
+        self.audioUrlString = audioUrlString
     }
     
     func update(isAddedToBookshelf: Bool) {
@@ -151,9 +153,10 @@ struct Book: Title, Equatable {
                 reviewsNumber: 0,
                 releaseDate: audiobook.releaseDate?.formatDate() ?? "Unknown",
                 publisher: "Unknown",
-                imageURLString: imageUrlString
+                imageURLString: imageUrlString,
 //                imageURLString: audiobook.largeImageUrl ?? audiobook.smallImageUrl ?? nil
 //                imageURLString: nil
+                audioUrlString: audiobook.audioUrlString
             )
             #warning("check smth else for category, check genre")
             #warning("Debug ares shows some messages when images are downloading")

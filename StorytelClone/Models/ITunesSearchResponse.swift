@@ -20,7 +20,7 @@ struct Audiobook: Codable {
     var genre: String?
     var smallImageUrl: String?
     var largeImageUrl: String?
-    var previewUrl: String?
+    var audioUrlString: String?
     var releaseDate: String?
     
     enum CodingKeys: String, CodingKey {
@@ -29,7 +29,8 @@ struct Audiobook: Codable {
         case genre = "primaryGenreName"
         case smallImageUrl = "artworkUrl60"
         case largeImageUrl = "artworkUrl100"
-        case previewUrl, description, releaseDate
+        case audioUrlString = "previewUrl"
+        case description, releaseDate
     }
     
 }

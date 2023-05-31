@@ -38,7 +38,8 @@ class BookContainerScrollView: UIScrollView {
     private lazy var seeOverviewButtonConstraintToCompressOverview = seeOverviewButton.topAnchor.constraint(equalTo: overviewStackView.topAnchor, constant: overviewStackView.defaultVisiblePartWhenCompressed)
     
     private lazy var hasAudio = book.titleKind == .audiobook || book.titleKind == .audioBookAndEbook ? true : false
-    private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
+//    private lazy var playSampleButtonContainer = PlaySampleButtonContainer()
+    private lazy var playSampleButtonContainer = PlaySampleButtonContainer(audioUrlString: book.audioUrlString)
     
     lazy var hasTags = !book.tags.isEmpty ? true : false
     lazy var tagsView = TagsView(tags: book.tags, superviewWidth: superviewWidth)
