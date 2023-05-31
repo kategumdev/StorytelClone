@@ -386,12 +386,15 @@ extension String {
     func removeHTMLTags() -> String {
         let cleanedText1 = self.replacingOccurrences(of: "<br />", with: "\n")
         let cleanedText2 = cleanedText1.replacingOccurrences(of: "&#xa0;", with: " ")
+        let cleanedText3 = cleanedText2.replacingOccurrences(of: "&gt;", with: "")
+        let cleanedText4 = cleanedText3.replacingOccurrences(of: "\n ", with: "\n")
+        
         #warning("Maybe replacing occurences can be done only once")
         
         let htmlTagPattern = "<.*?>"
         let regex = try! NSRegularExpression(pattern: htmlTagPattern, options: .caseInsensitive)
-        let range = NSRange(location: 0, length: cleanedText2.utf16.count)
-        let cleanText = regex.stringByReplacingMatches(in: cleanedText2, options: [], range: range, withTemplate: "")
+        let range = NSRange(location: 0, length: cleanedText4.utf16.count)
+        let cleanText = regex.stringByReplacingMatches(in: cleanedText4, options: [], range: range, withTemplate: "")
         return cleanText
     }
     

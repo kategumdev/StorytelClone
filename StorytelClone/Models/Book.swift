@@ -141,7 +141,12 @@ struct Book: Title, Equatable {
             let description: String = audiobook.description?.removeHTMLTags() ?? "This book has no description"
             
 //            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "250x250")
-            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "350x350")
+//            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "350x350")
+            
+//            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "400x400")
+            
+            let imageSize = UIDevice.current.userInterfaceIdiom == .pad ? "800x800" : "400x400"
+            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: imageSize)
 
             let book = Book(
                 title: audiobook.bookName,

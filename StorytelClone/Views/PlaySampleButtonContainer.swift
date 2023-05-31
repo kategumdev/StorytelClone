@@ -16,7 +16,7 @@ class PlaySampleButtonContainer: UIView {
     // MARK: - Instance properties
     var audioPlayer: AVPlayer?
     var isPlaying = false
-    
+    var timer: Timer?
     var audioUrlString: String?
     
     private let button: UIButton = {
@@ -52,6 +52,13 @@ class PlaySampleButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        timer?.invalidate()
+        audioPlayer?.replaceCurrentItem(with: nil)
+        audioPlayer = nil
+        #warning("Not sure if it's necessary to nil out audioPlayer here")
+    }
+    
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -66,19 +73,19 @@ class PlaySampleButtonContainer: UIView {
         guard audioUrlString != nil else { return }
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.handleButtonTapped()
+            self.isPlaying ? self.stopPlaying() : self.playAudio()
           }), for: .touchUpInside)
     }
     
-    private func handleButtonTapped() {
-        if isPlaying {
-            audioPlayer?.replaceCurrentItem(with: nil)
-            audioPlayer = nil
-            isPlaying = false
-            setButtonTextAndImage()
-            return
-        }
-        
+    private func stopPlaying() {
+        timer?.invalidate()
+        audioPlayer?.replaceCurrentItem(with: nil)
+        audioPlayer = nil
+        isPlaying = false
+        setButtonTextAndImage()
+    }
+    
+    private func playAudio() {
         if let urlString = audioUrlString,
            let url = URL(string: urlString) {
             let playerItem = AVPlayerItem(url: url)
@@ -91,16 +98,40 @@ class PlaySampleButtonContainer: UIView {
 
     private func setButtonTextAndImage() {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
-        let text = isPlaying ? "00:01" : "Play a sample"
+
+        let text = isPlaying ? "00:00 / 03:00" : "Play a sample"
         button.configuration?.attributedTitle = AttributedString(text)
         button.configuration?.attributedTitle?.font = scaledFont
-        
+
+        if isPlaying {
+            var reversePlaybackInSeconds = 180
+            var forwardPlaybackInSeconds = 0
+
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+                reversePlaybackInSeconds -= 1
+                if reversePlaybackInSeconds == 0 {
+                    self?.stopPlaying()
+                    return
+                }
+                let minutesLeft = reversePlaybackInSeconds / 60
+                let secondsLeft = reversePlaybackInSeconds % 60
+                
+                forwardPlaybackInSeconds += 1
+                let minutesPlayed = forwardPlaybackInSeconds / 60
+                let secondsPlayed = forwardPlaybackInSeconds % 60
+
+                let timeString = String(format: "%02d:%02d / %02d:%02d", minutesPlayed, secondsPlayed, minutesLeft, secondsLeft)
+                self?.button.configuration?.attributedTitle = AttributedString(timeString)
+                self?.button.configuration?.attributedTitle?.font = scaledFont
+            }
+        }
+
         let imageName = isPlaying ? "stop.fill" : "play.fill"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 19, weight: .semibold)
         let image = UIImage(systemName: imageName, withConfiguration: symbolConfig)
         button.configuration?.image = image
     }
-
+    
     private func applyConstraints() {
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
