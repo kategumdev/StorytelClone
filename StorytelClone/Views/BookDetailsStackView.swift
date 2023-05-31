@@ -111,9 +111,7 @@ class BookDetailsStackView: UIStackView {
     }
     
     private var gradientIsAdded = false
-    
-    var imageDownloadTask: URLSessionDownloadTask?
-        
+            
     // MARK: - Initializers
     init(forBook book: Book) {
         self.book = book
@@ -125,13 +123,6 @@ class BookDetailsStackView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("BookDetailsStackView DEINIT. Canceling download task in case it's active")
-        imageDownloadTask?.cancel()
-        imageDownloadTask = nil
-    }
-    #warning("Check if it's really needed to manually cancel tasks in deinit, maybe they cancel automatically when self deinitializes")
     
     // MARK: - View life cycle
     override func layoutSubviews() {
@@ -173,7 +164,7 @@ class BookDetailsStackView: UIStackView {
         axis = .vertical
         alignment = .center
         
-        imageDownloadTask = coverImageView.setImageForBook(book, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
+        coverImageView.setImageForBook(book, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
         
         addArrangedSubview(coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)

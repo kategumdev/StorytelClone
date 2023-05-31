@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 extension UIFont {
     
@@ -264,6 +265,18 @@ extension UITabBar {
 
 extension UIImageView {
     
+    func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
+        
+        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+            self.sd_setImage(with: imageURL) { [weak self] image,_,_,_ in
+                self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+            }
+        } else {
+            self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+            #warning("When not using hardcoded book objects, pass nil instead of book.coverImage")
+        }
+    }
+    
     func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
         let defaultImageViewWidth = defaultImageViewHeight
         
@@ -306,49 +319,6 @@ extension UIImageView {
         }
 
         self.image = resizedImage
-    }
-    
-    func loadImage(url: URL, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) -> URLSessionDownloadTask {
-        
-        let completion: (UIImage?) -> () = { [weak self] image in
-            DispatchQueue.main.async {
-                self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
-            }
-        }
-        
-        let session = URLSession.shared
-        let downloadTask = session.downloadTask(with: url) { url, _, error in
-            guard let url = url, error == nil else {
-                print("   DOWNLOAD TASK FAILED")
-                completion(nil)
-                return
-            }
-            
-            do {
-                let data = try Data(contentsOf: url)
-                let image = UIImage(data: data)
-                completion(image)
-            } catch {
-                completion(nil)
-                print(error.localizedDescription)
-            }
-        }
-        downloadTask.resume()
-        return downloadTask
-    }
-    
-    func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) -> URLSessionDownloadTask? {
-        var downloadTask: URLSessionDownloadTask? = nil
-        
-        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-            downloadTask = self.loadImage(
-                url: imageURL,
-                defaultImageViewHeight: defaultImageViewHeight,
-                imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
-        } else {
-            self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
-        }
-        return downloadTask
     }
     
 }

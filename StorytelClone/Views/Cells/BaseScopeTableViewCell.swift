@@ -54,9 +54,7 @@ class BaseScopeTableViewCell: UITableViewCell {
         imageView.clipsToBounds = true
         return imageView
     }
-    
-    var downloadTask: URLSessionDownloadTask?
-    
+        
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -66,11 +64,6 @@ class BaseScopeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        downloadTask?.cancel()
-        downloadTask = nil
-    }
 
 }
+

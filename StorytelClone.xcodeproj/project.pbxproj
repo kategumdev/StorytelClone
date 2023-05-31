@@ -42,6 +42,7 @@
 		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */; };
 		5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */; };
 		5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */; };
+		5AA076B62A27D16000C36DE9 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AA076B52A27D16000C36DE9 /* SDWebImage */; };
 		5AA8006429C8D21100198B8A /* ScopeSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */; };
 		5AA8006929C8DD5100198B8A /* BaseScopeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */; };
 		5AA8006B29C8EFDC00198B8A /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006A29C8EFDC00198B8A /* Series.swift */; };
@@ -194,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AA076B62A27D16000C36DE9 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +424,9 @@
 			dependencies = (
 			);
 			name = StorytelClone;
+			packageProductDependencies = (
+				5AA076B52A27D16000C36DE9 /* SDWebImage */,
+			);
 			productName = StorytelClone;
 			productReference = 5ABBA387299C09A700D0E0F4 /* StorytelClone.app */;
 			productType = "com.apple.product-type.application";
@@ -494,6 +499,9 @@
 				Base,
 			);
 			mainGroup = 5ABBA37E299C09A600D0E0F4;
+			packageReferences = (
+				5AA076B42A27D16000C36DE9 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 5ABBA388299C09A700D0E0F4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -942,6 +950,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5AA076B42A27D16000C36DE9 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5AA076B52A27D16000C36DE9 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5AA076B42A27D16000C36DE9 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		5ABBA393299C09A700D0E0F4 /* StorytelClone.xcdatamodeld */ = {

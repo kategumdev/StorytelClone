@@ -114,9 +114,7 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     func configureFor(book: Book) {
         self.book = book
         
-        // Set image and save downloadTask (if it's created) to cancel in prepareForReuse()
-        downloadTask = customImageView.setImageForBook(book, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
-        
+        customImageView.setImageForBook(book, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
 
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue
