@@ -16,8 +16,9 @@ struct APIConstants {
 
 enum NetworkManagerError: Error {
     case noInternetConnection
-    case noResultsForQuery
-    case failedToGetData
+//    case noResultsForQuery
+//    case failedToGetData
+    case failedToFetch
 }
 
 class NetworkManager {
@@ -26,9 +27,8 @@ class NetworkManager {
     var currentGoogleBooksDataTask: URLSessionDataTask?
     var currentITunesDataTask: URLSessionDataTask?
     
-    private func fetchEbooks(with query: String, completion: @escaping ([Ebook]?) -> Void) {
+    private func fetchEbooks(with query: String, completion: @escaping (Result<[Ebook], Error>) -> Void) {
         currentGoogleBooksDataTask?.cancel()
-//        currentGoogleBooksDataTask = nil
         
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
         guard let url = URL(string: "\(APIConstants.GoogleBooksBaseURL)q=\(query)&key=\(APIConstants.GoogleBooksAPI_KEY)") else { return }
@@ -36,8 +36,11 @@ class NetworkManager {
         currentGoogleBooksDataTask = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
             if let error = error as NSError? {
                 if error.domain == NSURLErrorDomain as String && error.code == -1020 {
+                    completion(.failure(NetworkManagerError.noInternetConnection))
                     print("\n\n\n GOOGLE BOOKS SEARCH WITH NO INTERNET CONNECTION")
                 } else {
+                    completion(.failure(NetworkManagerError.failedToFetch))
+//                    completion(.failure(error))
                     print("\n\n\n GOOGLE BOOKS SEARCH SOME ERROR")
                 }
                return
@@ -46,18 +49,21 @@ class NetworkManager {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
                 do {
                     let results = try JSONDecoder().decode(GoogleBooksSearchResponse.self, from: data)
-                    completion(results.items)
+                    completion(.success(results.items))
                 } catch {
-                    completion(nil)
+//                    completion(.failure(NetworkManagerError.failedToGetData))
+                    completion(.failure(NetworkManagerError.failedToFetch))
                 }
+            } else {
+                completion(.failure(NetworkManagerError.failedToFetch))
+                print("\n\n\n GOOGLE BOOKS SEARCH httpResponse error")
             }
         }
         currentGoogleBooksDataTask?.resume()
     }
     
-    private func fetchAudiobooks(with query: String, completion: @escaping ([Audiobook]?) -> Void) {
+    private func fetchAudiobooks(with query: String, completion: @escaping (Result<[Audiobook], Error>) -> Void) {
         currentITunesDataTask?.cancel()
-//        currentITunesDataTask = nil
         
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
         
@@ -67,9 +73,11 @@ class NetworkManager {
            
             if let error = error as NSError? {
                 if error.domain == NSURLErrorDomain as String && error.code == -1020 {
-                    print("\n\n\n GOOGLE BOOKS SEARCH WITH NO INTERNET CONNECTION")
+                    completion(.failure(NetworkManagerError.noInternetConnection))
+                    print("\n\n\n ITUNES SEARCH WITH NO INTERNET CONNECTION")
                 } else {
-                    print("\n\n\n GOOGLE BOOKS SEARCH SOME ERROR")
+                    completion(.failure(NetworkManagerError.failedToFetch))
+                    print("\n\n\n ITUNES SEARCH  SEARCH SOME ERROR")
                 }
                return
             }
@@ -77,42 +85,99 @@ class NetworkManager {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data  {
                 do {
                     let results = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
-                    #warning("check if results.items is empty and pass corresponding error to completion")
-                    completion(results.results)
+                    completion(.success(results.results))
                 } catch {
-                    completion(nil)
+//                    completion(.failure(NetworkManagerError.failedToGetData))
+                    completion(.failure(NetworkManagerError.failedToFetch))
                 }
+            } else {
+                completion(.failure(NetworkManagerError.failedToFetch))
+                print("\n\n\n ITUNES SEARCH httpResponse error")
             }
         }
         currentITunesDataTask?.resume()
     }
     
-    func fetchBooks(withQuery query: String, completion: @escaping ([Book]) -> Void) {
+    func fetchBooks(withQuery query: String, completion: @escaping (Result<[Book], Error>) -> Void) {
         let dataTaskGroup = DispatchGroup()
         
+//        var error: NetworkManagerError?
+        var savedError: Error?
         var allFetchedBooks = [Book]()
         
         dataTaskGroup.enter()
-        fetchEbooks(with: query) { ebooks in
-            let books = Book.createBooksFromEbooks(ebooks)
-            allFetchedBooks += books
+        fetchEbooks(with: query) { result in
+            
+            switch result {
+            case .success(let ebooks):
+                let books = Book.createBooksFromEbooks(ebooks)
+                allFetchedBooks += books
+            case .failure(let error):
+                savedError = error
+            }
             print("Google books data task COMPLETED")
             dataTaskGroup.leave()
         }
         
         dataTaskGroup.enter()
-        fetchAudiobooks(with: query) { audiobooks in
-            let books = Book.createBooksFromAudiobooks(audiobooks)
-            allFetchedBooks += books
+        fetchAudiobooks(with: query) { result in
+            
+            switch result {
+            case .success(let audiobooks):
+                let books = Book.createBooksFromAudiobooks(audiobooks)
+                allFetchedBooks += books
+            case .failure(let error):
+                savedError = error
+            }
             print("iTunes data task COMPLETED")
             dataTaskGroup.leave()
         }
         
         dataTaskGroup.notify(queue: DispatchQueue.main) {
             print("dataTaskGroup notified and performing completion")
-            completion(allFetchedBooks)
+            if !allFetchedBooks.isEmpty {
+                completion(.success(allFetchedBooks))
+            } else if let error = savedError {
+                completion(.failure(error))
+            } else {
+                completion(.success(allFetchedBooks))
+            }
+            
+            
+//            if let error = savedError, allFetchedBooks.isEmpty {
+//                completion(.failure(error))
+//            }
+            
+//            completion(allFetchedBooks)
         }
     }
+    
+//    func fetchBooks(withQuery query: String, completion: @escaping ([Book]) -> Void) {
+//        let dataTaskGroup = DispatchGroup()
+//
+//        var allFetchedBooks = [Book]()
+//
+//        dataTaskGroup.enter()
+//        fetchEbooks(with: query) { ebooks in
+//            let books = Book.createBooksFromEbooks(ebooks)
+//            allFetchedBooks += books
+//            print("Google books data task COMPLETED")
+//            dataTaskGroup.leave()
+//        }
+//
+//        dataTaskGroup.enter()
+//        fetchAudiobooks(with: query) { audiobooks in
+//            let books = Book.createBooksFromAudiobooks(audiobooks)
+//            allFetchedBooks += books
+//            print("iTunes data task COMPLETED")
+//            dataTaskGroup.leave()
+//        }
+//
+//        dataTaskGroup.notify(queue: DispatchQueue.main) {
+//            print("dataTaskGroup notified and performing completion")
+//            completion(allFetchedBooks)
+//        }
+//    }
     
 }
 

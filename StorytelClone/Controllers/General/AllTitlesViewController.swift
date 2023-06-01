@@ -200,15 +200,53 @@ class AllTitlesViewController: BaseViewController {
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
         
-        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] fetchedBooks in
-            self?.books = fetchedBooks
-            self?.books.shuffle()
+//        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] fetchedBooks in
+//            self?.books = fetchedBooks
+//            self?.books.shuffle()
+//
+//            DispatchQueue.main.async {
+//                self?.bookTable.reloadData()
+//            }
+//        }
+        
+        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
             
-            DispatchQueue.main.async {
-                self?.bookTable.reloadData()
+            switch result {
+            case .success(let fetchedBooks):
+                self?.books = fetchedBooks
+                self?.books.shuffle()
+                
+                DispatchQueue.main.async {
+                    self?.bookTable.reloadData()
+                }
+                
+            case .failure(let error):
+                
+                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+                } else {
+                    self?.books = [Book]()
+                    
+                    DispatchQueue.main.async {
+                        self?.bookTable.reloadData()
+                    }
+                    #warning("Instead of this show background view telling that something went wrong, try again later")
+                }
+                
+//                switch error {
+//                case .noInternetConnection:
+//                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+//
+//                case .failedToFetch:
+//                    self?.books = [Book]()
+//
+//                    DispatchQueue.main.async {
+//                        self?.bookTable.reloadData()
+//                    }
+//                    #warning("Instead of this show background view telling that something went wrong, try again later")
+//                }
             }
         }
-
     }
 
 }

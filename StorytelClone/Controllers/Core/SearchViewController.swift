@@ -208,14 +208,43 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             resultsController.collectionView.reloadData()
             
             #warning("not sure if [weak resultsController] is enough here")
-            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] fetchedBooks in
-                var books = fetchedBooks
-                books.shuffle()
+//            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] fetchedBooks in
+//                var books = fetchedBooks
+//                books.shuffle()
+//
+//                DispatchQueue.main.async {
+//                    resultsController?.modelForSearchQuery?[.books] = books
+//                    resultsController?.setInitialOffsetsOfTablesInCells()
+//                    resultsController?.collectionView.reloadData()
+//                }
+//            }
+            
+            
+            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] result in
                 
-                DispatchQueue.main.async {
-                    resultsController?.modelForSearchQuery?[.books] = books
-                    resultsController?.setInitialOffsetsOfTablesInCells()
-                    resultsController?.collectionView.reloadData()
+                switch result {
+                case .success(let fetchedBooks):
+                    var books = fetchedBooks
+                    books.shuffle()
+                    
+                    DispatchQueue.main.async {
+                        resultsController?.modelForSearchQuery?[.books] = books
+                        resultsController?.setInitialOffsetsOfTablesInCells()
+                        resultsController?.collectionView.reloadData()
+                    }
+                    
+                case .failure(let error):
+                    
+                    if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+                    } else {
+                        DispatchQueue.main.async {
+                            resultsController?.modelForSearchQuery?[.books] = [Book]()
+                            resultsController?.setInitialOffsetsOfTablesInCells()
+                            resultsController?.collectionView.reloadData()
+                        }
+#warning("Instead of this show background view telling that something went wrong, try again later")
+                    }
                 }
             }
 
