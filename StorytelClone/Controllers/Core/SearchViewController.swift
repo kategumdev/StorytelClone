@@ -221,6 +221,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             
             
             NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] result in
+                guard let weakResultsController = resultsController else { return }
                 
                 switch result {
                 case .success(let fetchedBooks):
@@ -228,20 +229,26 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                     books.shuffle()
                     
                     DispatchQueue.main.async {
-                        resultsController?.modelForSearchQuery?[.books] = books
-                        resultsController?.setInitialOffsetsOfTablesInCells()
-                        resultsController?.collectionView.reloadData()
+                        weakResultsController.modelForSearchQuery?[.books] = books
+                        weakResultsController.setInitialOffsetsOfTablesInCells()
+                        weakResultsController.collectionView.reloadData()
                     }
                     
                 case .failure(let error):
                     
                     if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                        DispatchQueue.main.async {
+                            weakResultsController.noInternetConnection = true
+                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
+                            weakResultsController.setInitialOffsetsOfTablesInCells()
+                            weakResultsController.collectionView.reloadData()
+                        }
                         print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
                     } else {
                         DispatchQueue.main.async {
-                            resultsController?.modelForSearchQuery?[.books] = [Book]()
-                            resultsController?.setInitialOffsetsOfTablesInCells()
-                            resultsController?.collectionView.reloadData()
+                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
+                            weakResultsController.setInitialOffsetsOfTablesInCells()
+                            weakResultsController.collectionView.reloadData()
                         }
 #warning("Instead of this show background view telling that something went wrong, try again later")
                     }

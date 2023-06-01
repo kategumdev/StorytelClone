@@ -9,7 +9,13 @@ import UIKit
 
 class SearchResultsViewController: ScopeViewController {
     // MARK: - Instance properties
-//    var modelForSearchQuery: [ScopeButtonKind : [Title]]?
+    var noInternetConnection = false {
+        didSet {
+            for table in scopeTablesForCvCells {
+                table.noInternetConnection = noInternetConnection
+            }
+        }
+    }
     
     // MARK: - Initializers
     init() {

@@ -10,9 +10,9 @@ import UIKit
 class NoBooksScopeCollectionViewBackgroundView: UIView {
     
     // MARK: - Instance properties
+    private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
     private let scopeButtonsViewKind: ScopeButtonsViewKind
     private let scopeButtonKind: ScopeButtonKind?
-    private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
 
     private let imageView: UIImageView = {
         let view = UIImageView()
@@ -77,7 +77,6 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         self.scopeButtonsViewKind = scopeButtonsViewKind
         super.init(frame: .zero)
         addSubview(vertStackView)
-        configureSelf()
         applyConstraints()
     }
     
@@ -85,10 +84,16 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Helper methods
-    private func configureSelf() {
+    // MARK: - Instance methods
+    func configure(noInternetConnection: Bool) {
         // Configuration for SearchResultsfVC
         if scopeButtonsViewKind == .forSearchResultsVc {
+            if noInternetConnection {
+                imageView.image = UIImage(systemName: "exclamationmark.triangle")
+                titleLabel.text = "No internet connection"
+                subtitleLabel.text = "Please check your internet connection and try again."
+                return
+            }
             imageView.image = UIImage(systemName: "magnifyingglass")
             titleLabel.text = "No results found"
             subtitleLabel.text = "Check the spelling or try different keywords."
@@ -105,7 +110,7 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         default: print("Case with \(buttonKind) not handled in switch")
         }
     }
-    
+    // MARK: - Helper methods
     private func applyConstraints() {
         vertStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
