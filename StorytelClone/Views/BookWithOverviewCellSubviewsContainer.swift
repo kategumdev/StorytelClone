@@ -92,7 +92,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         self.book = book
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
-        let overviewString = book.overview
+        let overviewString = book.description
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage

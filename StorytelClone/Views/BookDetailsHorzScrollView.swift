@@ -123,7 +123,7 @@ class BookDetailsHorzScrollView: UIScrollView {
             allButtons.append(durationButton)
         }
         
-        configure(button: languageButton, withText: "\(book.language.rawValue)")
+        configure(button: languageButton, withText: "\(book.language)")
         allButtons.append(languageButton)
 
         let categoryText = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")

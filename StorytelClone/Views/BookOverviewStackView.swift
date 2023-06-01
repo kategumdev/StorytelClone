@@ -53,7 +53,7 @@ class BookOverviewStackView: UIStackView {
     
     // MARK: - Helper methods
     private func configureTextViews() {
-        mainTextView.text = book.overview
+        mainTextView.text = book.description
         textViews.append(mainTextView)
         
         let bookKind = book.titleKind

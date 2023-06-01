@@ -8,6 +8,22 @@
 import Foundation
 
 struct Storyteller: Title, Equatable {
+    
+    static func createAuthorFrom(names: [String]?) -> [Storyteller] {
+        var authors = [Storyteller]()
+        
+        if let authorNames = names {
+            for name in authorNames {
+                let author = Storyteller(storytellerKind: .author, name: name, numberOfFollowers: 350)
+                authors.append(author)
+            }
+            return authors
+        }
+        
+        let author = Storyteller(storytellerKind: .author, name: "Unknown author", numberOfFollowers: 0)
+        authors.append(author)
+        return authors
+    }
 
     enum StorytellerKind {
         case author
