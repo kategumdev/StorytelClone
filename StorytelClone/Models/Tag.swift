@@ -43,5 +43,19 @@ struct Tag: Title {
     static let tag9 = Tag(tagTitle: "World Cultures")
     
     static let tag10 = Tag(tagTitle: "Fantasy world")
+    
+    static func createTagsFrom(strings: [String]?) -> [Tag] {
+        var tags = [Tag]()
+        
+        if let tagNames = strings {
+            for tagName in tagNames {
+                let tag = Tag(tagTitle: tagName)
+                tags.append(tag)
+            }
+            return tags
+        }
+    
+        return tags
+    }
 
 }

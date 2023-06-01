@@ -105,7 +105,7 @@ struct Book: Title, Equatable {
             
             let imageLinks = bookModel.volumeInfo.imageLinks
             let imageURLString = imageLinks?[ImageLink.large.rawValue] ?? imageLinks?[ImageLink.medium.rawValue] ?? imageLinks?[ImageLink.small.rawValue] ?? imageLinks?[ImageLink.thumbnail.rawValue] ?? ""
-            
+                        
             let book = Book(
                 title: bookModel.volumeInfo.title,
                 authors: Storyteller.createAuthorFrom(names: bookModel.volumeInfo.authors),
@@ -118,6 +118,7 @@ struct Book: Title, Equatable {
                 language: bookModel.volumeInfo.language?.convertLanguageCodeIntoString() ?? "Unknown",
                 releaseDate: bookModel.volumeInfo.publishedDate?.formatDate() ?? "Unknown",
                 publisher: bookModel.volumeInfo.publisher ?? "Unknown",
+                tags: Tag.createTagsFrom(strings: bookModel.volumeInfo.categories),
                 imageURLString: imageURLString
             )
             #warning("check isEbook in json for titleKind, check smth else for category")
@@ -136,6 +137,11 @@ struct Book: Title, Equatable {
             let imageSize = UIDevice.current.userInterfaceIdiom == .pad ? "800x800" : "400x400"
             let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: imageSize)
 
+            var stringsForTags = [String]()
+            if let string = audiobook.genre {
+                stringsForTags.append(string)
+            }
+            
             let book = Book(
                 title: audiobook.bookName,
                 authors: Storyteller.createAuthorFrom(names: [audiobook.authorName]),
@@ -148,6 +154,7 @@ struct Book: Title, Equatable {
                 language: description.detectLanguage() ?? "Unknown",
                 releaseDate: audiobook.releaseDate?.formatDate() ?? "Unknown",
                 publisher: "Unknown",
+                tags: Tag.createTagsFrom(strings: stringsForTags),
                 imageURLString: imageUrlString,
                 audioUrlString: audiobook.audioUrlString
             )
