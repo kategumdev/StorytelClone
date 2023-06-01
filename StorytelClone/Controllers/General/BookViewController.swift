@@ -50,6 +50,10 @@ class BookViewController: UIViewController {
         passCallbacksToBookContainerScrollView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        bookContainerScrollView.playSampleButtonContainer.stopPlaying()
+    }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource

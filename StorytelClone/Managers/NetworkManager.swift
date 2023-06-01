@@ -16,8 +16,6 @@ struct APIConstants {
 
 enum NetworkManagerError: Error {
     case noInternetConnection
-//    case noResultsForQuery
-//    case failedToGetData
     case failedToFetch
 }
 
@@ -37,11 +35,10 @@ class NetworkManager {
             if let error = error as NSError? {
                 if error.domain == NSURLErrorDomain as String && error.code == -1020 {
                     completion(.failure(NetworkManagerError.noInternetConnection))
-                    print("\n\n\n GOOGLE BOOKS SEARCH WITH NO INTERNET CONNECTION")
+//                    print("\n\n\n GOOGLE BOOKS SEARCH WITH NO INTERNET CONNECTION")
                 } else {
                     completion(.failure(NetworkManagerError.failedToFetch))
-//                    completion(.failure(error))
-                    print("\n\n\n GOOGLE BOOKS SEARCH SOME ERROR")
+//                    print("\n\n\n GOOGLE BOOKS SEARCH SOME ERROR")
                 }
                return
             }
@@ -51,12 +48,11 @@ class NetworkManager {
                     let results = try JSONDecoder().decode(GoogleBooksSearchResponse.self, from: data)
                     completion(.success(results.items))
                 } catch {
-//                    completion(.failure(NetworkManagerError.failedToGetData))
                     completion(.failure(NetworkManagerError.failedToFetch))
                 }
             } else {
                 completion(.failure(NetworkManagerError.failedToFetch))
-                print("\n\n\n GOOGLE BOOKS SEARCH httpResponse error")
+//                print("\n\n\n GOOGLE BOOKS SEARCH httpResponse error")
             }
         }
         currentGoogleBooksDataTask?.resume()
@@ -74,10 +70,10 @@ class NetworkManager {
             if let error = error as NSError? {
                 if error.domain == NSURLErrorDomain as String && error.code == -1020 {
                     completion(.failure(NetworkManagerError.noInternetConnection))
-                    print("\n\n\n ITUNES SEARCH WITH NO INTERNET CONNECTION")
+//                    print("\n\n\n ITUNES SEARCH WITH NO INTERNET CONNECTION")
                 } else {
                     completion(.failure(NetworkManagerError.failedToFetch))
-                    print("\n\n\n ITUNES SEARCH  SEARCH SOME ERROR")
+//                    print("\n\n\n ITUNES SEARCH  SEARCH SOME ERROR")
                 }
                return
             }
@@ -87,12 +83,11 @@ class NetworkManager {
                     let results = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
                     completion(.success(results.results))
                 } catch {
-//                    completion(.failure(NetworkManagerError.failedToGetData))
                     completion(.failure(NetworkManagerError.failedToFetch))
                 }
             } else {
                 completion(.failure(NetworkManagerError.failedToFetch))
-                print("\n\n\n ITUNES SEARCH httpResponse error")
+//                print("\n\n\n ITUNES SEARCH httpResponse error")
             }
         }
         currentITunesDataTask?.resume()
@@ -101,7 +96,6 @@ class NetworkManager {
     func fetchBooks(withQuery query: String, completion: @escaping (Result<[Book], Error>) -> Void) {
         let dataTaskGroup = DispatchGroup()
         
-//        var error: NetworkManagerError?
         var savedError: Error?
         var allFetchedBooks = [Book]()
         
@@ -115,7 +109,7 @@ class NetworkManager {
             case .failure(let error):
                 savedError = error
             }
-            print("Google books data task COMPLETED")
+//            print("Google books data task COMPLETED")
             dataTaskGroup.leave()
         }
         
@@ -129,12 +123,12 @@ class NetworkManager {
             case .failure(let error):
                 savedError = error
             }
-            print("iTunes data task COMPLETED")
+//            print("iTunes data task COMPLETED")
             dataTaskGroup.leave()
         }
         
         dataTaskGroup.notify(queue: DispatchQueue.main) {
-            print("dataTaskGroup notified and performing completion")
+//            print("dataTaskGroup notified and performing completion")
             if !allFetchedBooks.isEmpty {
                 completion(.success(allFetchedBooks))
             } else if let error = savedError {
@@ -142,42 +136,8 @@ class NetworkManager {
             } else {
                 completion(.success(allFetchedBooks))
             }
-            
-            
-//            if let error = savedError, allFetchedBooks.isEmpty {
-//                completion(.failure(error))
-//            }
-            
-//            completion(allFetchedBooks)
         }
     }
-    
-//    func fetchBooks(withQuery query: String, completion: @escaping ([Book]) -> Void) {
-//        let dataTaskGroup = DispatchGroup()
-//
-//        var allFetchedBooks = [Book]()
-//
-//        dataTaskGroup.enter()
-//        fetchEbooks(with: query) { ebooks in
-//            let books = Book.createBooksFromEbooks(ebooks)
-//            allFetchedBooks += books
-//            print("Google books data task COMPLETED")
-//            dataTaskGroup.leave()
-//        }
-//
-//        dataTaskGroup.enter()
-//        fetchAudiobooks(with: query) { audiobooks in
-//            let books = Book.createBooksFromAudiobooks(audiobooks)
-//            allFetchedBooks += books
-//            print("iTunes data task COMPLETED")
-//            dataTaskGroup.leave()
-//        }
-//
-//        dataTaskGroup.notify(queue: DispatchQueue.main) {
-//            print("dataTaskGroup notified and performing completion")
-//            completion(allFetchedBooks)
-//        }
-//    }
     
 }
 

@@ -155,31 +155,41 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
-    private func fetchTitlesFor(query: String) -> [ScopeButtonKind : [Title]] {
-        // It's HARDCODED FOR NOW. Use query for real fetching from web service/server
+    // This method doesn't fetch data, it just shows hardcoded data
+    private func setHardcodedTitles(toBeEmpty: Bool) -> [ScopeButtonKind : [Title]] {
         var newModel = [ScopeButtonKind : [Title]]()
         let buttonKinds = ScopeButtonsViewKind.forSearchResultsVc.buttonKinds
+        
+        if toBeEmpty {
+            for buttonKind in buttonKinds {
+                newModel[buttonKind] = [Book]()
+            }
+            return newModel
+        }
+        
         for buttonKind in buttonKinds {
+
             if buttonKind == .top {
                 newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
             }
-            
+
             if buttonKind == .books {
-                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
+                newModel[buttonKind] = [Book]()
+//                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
             }
-            
+
             if buttonKind == .authors {
                 newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
             }
-            
+
             if buttonKind == .narrators {
                 newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
             }
-            
+
             if buttonKind == .series {
                 newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
             }
-            
+
             if buttonKind == .tags {
                 newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
             }
@@ -201,27 +211,10 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         
         let queryString = query.trimmingCharacters(in: .whitespaces)
         if queryString.count >= 6 {
-            // Fetch model objects for search query and create models for all buttonKinds. HARDCODED FOR NOW
-            let newModel = fetchTitlesFor(query: query)
-            resultsController.modelForSearchQuery = newModel
-            resultsController.setInitialOffsetsOfTablesInCells()
-            resultsController.collectionView.reloadData()
             
-            #warning("not sure if [weak resultsController] is enough here")
-//            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] fetchedBooks in
-//                var books = fetchedBooks
-//                books.shuffle()
-//
-//                DispatchQueue.main.async {
-//                    resultsController?.modelForSearchQuery?[.books] = books
-//                    resultsController?.setInitialOffsetsOfTablesInCells()
-//                    resultsController?.collectionView.reloadData()
-//                }
-//            }
-            
-            
-            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] result in
-                guard let weakResultsController = resultsController else { return }
+#warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
+            NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
+                guard let self = self else { return }
                 
                 switch result {
                 case .success(let fetchedBooks):
@@ -229,31 +222,71 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                     books.shuffle()
                     
                     DispatchQueue.main.async {
-                        weakResultsController.modelForSearchQuery?[.books] = books
-                        weakResultsController.setInitialOffsetsOfTablesInCells()
-                        weakResultsController.collectionView.reloadData()
+                        var newModel = self.setHardcodedTitles(toBeEmpty: false)
+                        newModel[.books] = books
+                        resultsController.modelForSearchQuery = newModel
                     }
                     
                 case .failure(let error):
-                    
                     if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
                         DispatchQueue.main.async {
-                            weakResultsController.noInternetConnection = true
-                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
-                            weakResultsController.setInitialOffsetsOfTablesInCells()
-                            weakResultsController.collectionView.reloadData()
+                            resultsController.noInternetConnection = true
+                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
                         }
-                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+//                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
                     } else {
                         DispatchQueue.main.async {
-                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
-                            weakResultsController.setInitialOffsetsOfTablesInCells()
-                            weakResultsController.collectionView.reloadData()
+                            resultsController.fetchingErrorOcurred = true
+                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
                         }
-#warning("Instead of this show background view telling that something went wrong, try again later")
                     }
                 }
             }
+            
+//            NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
+//                switch result {
+//                case .success(let fetchedBooks):
+//                    var books = fetchedBooks
+//                    books.shuffle()
+//
+//                    DispatchQueue.main.async {
+//                        let newModel = self?.setHardcodedTitles(toBeEmpty: false)
+////                        let newModel = self?.setHardcodedTitlesFor()
+//                        resultsController.modelForSearchQuery = newModel
+//
+//                        resultsController.modelForSearchQuery?[.books] = books
+//                        resultsController.setInitialOffsetsOfTablesInCells()
+//                        resultsController.collectionView.reloadData()
+//                    }
+//
+//                case .failure(let error):
+//                    if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+//                        DispatchQueue.main.async {
+//                            resultsController.noInternetConnection = true
+////                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
+//                            let newModel = self?.setHardcodedTitles(toBeEmpty: true)
+////                            let newModel = self?.setHardcodedTitlesFor()
+//                            resultsController.modelForSearchQuery = newModel
+//
+//                            resultsController.setInitialOffsetsOfTablesInCells()
+//                            resultsController.collectionView.reloadData()
+//                        }
+////                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+//                    } else {
+//                        DispatchQueue.main.async {
+//                            resultsController.fetchingErrorOcurred = true
+////                            weakResultsController.modelForSearchQuery?[.books] = [Book]()
+//                            let newModel = self?.setHardcodedTitles(toBeEmpty: true)
+////                            let newModel = self?.setHardcodedTitlesFor()
+//                            resultsController.modelForSearchQuery = newModel
+//
+//                            resultsController.setInitialOffsetsOfTablesInCells()
+//                            resultsController.collectionView.reloadData()
+//                        }
+//#warning("Instead of this show background view telling that something went wrong, try again later")
+//                    }
+//                }
+//            }
 
         } else {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model

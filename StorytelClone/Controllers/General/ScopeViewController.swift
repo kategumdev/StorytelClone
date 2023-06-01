@@ -52,7 +52,13 @@ class ScopeViewController: UIViewController {
     private var cellsToHideContent = [Int]()
     private var indexPathsToUnhide = [IndexPath]()
     
-    var modelForSearchQuery: [ScopeButtonKind : [Title]]?
+    var modelForSearchQuery: [ScopeButtonKind : [Title]]? {
+        didSet {
+            setInitialOffsetsOfTablesInCells()
+            collectionView.reloadData()
+        }
+    }
+
     
     var scopeTablesForCvCells = [ScopeTableView]()
             

@@ -85,7 +85,7 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     }
     
     // MARK: - Instance methods
-    func configure(noInternetConnection: Bool) {
+    func configure(noInternetConnection: Bool, fetchingErrorOcurred: Bool) {
         // Configuration for SearchResultsfVC
         if scopeButtonsViewKind == .forSearchResultsVc {
             if noInternetConnection {
@@ -94,6 +94,14 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
                 subtitleLabel.text = "Please check your internet connection and try again."
                 return
             }
+            
+            if fetchingErrorOcurred {
+                imageView.image = UIImage(systemName: "exclamationmark.bubble")
+                titleLabel.text = "Something went wrong"
+                subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
+                return
+            }
+            
             imageView.image = UIImage(systemName: "magnifyingglass")
             titleLabel.text = "No results found"
             subtitleLabel.text = "Check the spelling or try different keywords."
@@ -110,6 +118,7 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         default: print("Case with \(buttonKind) not handled in switch")
         }
     }
+    
     // MARK: - Helper methods
     private func applyConstraints() {
         vertStackView.translatesAutoresizingMaskIntoConstraints = false

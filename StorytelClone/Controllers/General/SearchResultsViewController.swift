@@ -17,6 +17,14 @@ class SearchResultsViewController: ScopeViewController {
         }
     }
     
+    var fetchingErrorOcurred = false {
+        didSet {
+            for table in scopeTablesForCvCells {
+                table.fetchingErrorOcurred = fetchingErrorOcurred
+            }
+        }
+    }
+
     // MARK: - Initializers
     init() {
         super.init(withScopeButtonsViewKind: .forSearchResultsVc)

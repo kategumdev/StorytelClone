@@ -19,7 +19,9 @@ class ScopeTableView: UITableView {
     
     let buttonKind: ScopeButtonKind
     var model = [Title]()
+    
     var noInternetConnection = false
+    var fetchingErrorOcurred = false
     
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
@@ -93,7 +95,7 @@ class ScopeTableView: UITableView {
         // Add if it's not added yet
         if !isBackgroundViewAdded && model.isEmpty {
             addSubview(noBooksBackgroundView)
-            noBooksBackgroundView.configure(noInternetConnection: noInternetConnection)
+            noBooksBackgroundView.configure(noInternetConnection: noInternetConnection, fetchingErrorOcurred: fetchingErrorOcurred)
             noBooksBackgroundView.frame = bounds
             isBackgroundViewAdded = true
         }

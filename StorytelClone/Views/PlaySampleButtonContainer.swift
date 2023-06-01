@@ -52,13 +52,6 @@ class PlaySampleButtonContainer: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        timer?.invalidate()
-        audioPlayer?.replaceCurrentItem(with: nil)
-        audioPlayer = nil
-        #warning("Not sure if it's necessary to nil out audioPlayer here")
-    }
-    
     // MARK: - View life cycle
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -77,7 +70,7 @@ class PlaySampleButtonContainer: UIView {
           }), for: .touchUpInside)
     }
     
-    private func stopPlaying() {
+    func stopPlaying() {
         timer?.invalidate()
         audioPlayer?.replaceCurrentItem(with: nil)
         audioPlayer = nil
@@ -95,7 +88,7 @@ class PlaySampleButtonContainer: UIView {
             setButtonTextAndImage()
         }
     }
-
+    
     private func setButtonTextAndImage() {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
 
