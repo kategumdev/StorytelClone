@@ -8,7 +8,10 @@
 import UIKit
 
 class NoBooksScopeCollectionViewBackgroundView: UIView {
+    
     // MARK: - Instance properties
+    private let scopeButtonsViewKind: ScopeButtonsViewKind
+    private let scopeButtonKind: ScopeButtonKind?
     private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
 
     private let imageView: UIImageView = {
@@ -69,9 +72,12 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     }()
 
     // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(scopeButtonKind: ScopeButtonKind?, scopeButtonsViewKind: ScopeButtonsViewKind) {
+        self.scopeButtonKind = scopeButtonKind
+        self.scopeButtonsViewKind = scopeButtonsViewKind
+        super.init(frame: .zero)
         addSubview(vertStackView)
+        configureSelf()
         applyConstraints()
     }
     
@@ -79,8 +85,18 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureFor(buttonKind: ScopeButtonKind?) {
-        guard let buttonKind = buttonKind else { return }
+    // MARK: - Helper methods
+    private func configureSelf() {
+        // Configuration for SearchResultsfVC
+        if scopeButtonsViewKind == .forSearchResultsVc {
+            imageView.image = UIImage(systemName: "magnifyingglass")
+            titleLabel.text = "No results found"
+            subtitleLabel.text = "Check the spelling or try different keywords."
+            return
+        }
+        
+        // Configuration for BookshelfVC
+        guard let buttonKind = scopeButtonKind else { return }
         switch buttonKind {
         case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
         case .started: titleLabel.text = "It looks like you haven't started any books yet!"
@@ -90,7 +106,6 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
         }
     }
     
-    // MARK: - Helper methods
     private func applyConstraints() {
         vertStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -99,4 +114,5 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
             vertStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
+    
 }

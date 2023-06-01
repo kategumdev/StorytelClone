@@ -26,7 +26,8 @@ class ScopeTableView: UITableView {
     private lazy var customTableHeader = BookshelfTableHeaderView()
     private var isCustomTableHeaderAdded = false
     
-    private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView()
+    private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
+
     private var isBackgroundViewAdded = false
     
     // MARK: - Initializers
@@ -47,9 +48,11 @@ class ScopeTableView: UITableView {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard scopeButtonsViewKind == .forBookshelfVc else { return }
-        configureTableHeader()
         configureNoBooksBackgroundView()
+
+        if scopeButtonsViewKind == .forBookshelfVc {
+            configureTableHeader()
+        }
     }
     
     // MARK: - Helper methods
@@ -66,19 +69,14 @@ class ScopeTableView: UITableView {
     private func configureSelf() {
         backgroundColor = UIColor.customBackgroundColor
         separatorColor = UIColor.clear
+        rowHeight = UITableView.automaticDimension
+        tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        sectionHeaderTopPadding = 0 // Avoid gap above custom section header
         
         register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
         register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
         register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
-        
         register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
-        
-        // Avoid gap above custom section header
-        sectionHeaderTopPadding = 0
-        
-        rowHeight = UITableView.automaticDimension
-        
-        tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func configureTableHeader() {
@@ -91,13 +89,14 @@ class ScopeTableView: UITableView {
     }
     
     private func configureNoBooksBackgroundView() {
+        // Add if it's not added yet
         if !isBackgroundViewAdded && model.isEmpty {
             addSubview(noBooksBackgroundView)
             noBooksBackgroundView.frame = bounds
             isBackgroundViewAdded = true
-            noBooksBackgroundView.configureFor(buttonKind: buttonKind)
         }
                 
+        // Hide or unhide
         if isBackgroundViewAdded {
             noBooksBackgroundView.isHidden = model.count > 0
                     
@@ -111,7 +110,6 @@ class ScopeTableView: UITableView {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print("MODEL.COUNT = \(model.count)")
         return model.count
     }
     
@@ -120,7 +118,6 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard model.count > 0 else { return }
         let title = model[indexPath.row]
         
         if let book = title as? Book {
