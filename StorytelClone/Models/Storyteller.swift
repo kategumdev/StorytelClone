@@ -75,6 +75,7 @@ struct Storyteller: Title, Equatable {
     static let angelaVallvey = Storyteller(storytellerKind: .author, name: "Ángela Vallvey", numberOfFollowers: 100)
     static let chantalVanMierlo = Storyteller(storytellerKind: .author, name: "Chantal van Mierlo", numberOfFollowers: 100)
     static let susanaMartinGijon = Storyteller(storytellerKind: .author, name: "Susana Martín Gijón", numberOfFollowers: 100)
+    static let jenkins = Storyteller(storytellerKind: .author, name: "Taylor Jenkins Reid", numberOfFollowers: 550)
     
     // MARK: - Hardcoded model objects for narrators
     static let narrators = [narrator1, narrator2, narrator3, narrator4, narrator5,
