@@ -16,16 +16,6 @@ class AllTitlesViewController: BaseViewController {
     private var currentSelectedBook: Book?
     private let popupButton = PopupButton()
     private var isHeaderConfigured = false
-            
-//    private let books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
-//    private var books = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
-
-//
-//    private let books = [Book.book1, Book.book1, Book.book1, Book.book1,
-//                         Book.book1, Book.book1, Book.book1, Book.book1,
-//                         Book.book1, Book.book1, Book.book1, Book.book1,
-//                         Book.book1, Book.book1, Book.book1, Book.book1]
-    
     private var books = [Book]()
     
     // MARK: - Initializers
@@ -39,16 +29,11 @@ class AllTitlesViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    deinit {
-//        print("AllTitlesViewController DEINIT")
-//    }
-    
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBookTable()
         view.addSubview(popupButton)
-//        books = allTitlesBooks
         loadBooks()
     }
         
@@ -66,12 +51,6 @@ class AllTitlesViewController: BaseViewController {
             }
         }
         #warning("check using books id not title")
-//        for (index, book) in allTitlesBooks.enumerated() {
-//            if book.title == currentSelectedBook.title {
-//                selectedBookIndexPath.row = index
-//                break
-//            }
-//        }
 
         // This delay avoids warning that "UITableView was told to layout its visible cells and other contents without being in the view hierarchy"
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -83,7 +62,6 @@ class AllTitlesViewController: BaseViewController {
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return allTitlesBooks.count
         return books.count
     }
     
@@ -94,7 +72,6 @@ class AllTitlesViewController: BaseViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
         
-//        let book = allTitlesBooks[indexPath.row]
         let book = books[indexPath.row]
         cell.configureWith(book: book)
         cell.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
@@ -114,7 +91,6 @@ class AllTitlesViewController: BaseViewController {
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let book = allTitlesBooks[indexPath.row]
         let book = books[indexPath.row]
         return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
     }
@@ -153,7 +129,6 @@ class AllTitlesViewController: BaseViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let book = allTitlesBooks[indexPath.row]
         let book = books[indexPath.row]
         currentSelectedBook = book
         
@@ -225,18 +200,15 @@ class AllTitlesViewController: BaseViewController {
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
         
-        APICaller.shared.getBooks(with: query) { [weak self] result in
+        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] fetchedBooks in
+            self?.books = fetchedBooks
+            self?.books.shuffle()
+            
             DispatchQueue.main.async {
-                switch result {
-                case .success(let bookModels):
-                    let books = Book.createBooksFrom(bookModels: bookModels)
-                    self?.books = books
-                    self?.bookTable.reloadData()
-                case .failure(let error):
-                    print(error)
-                }
+                self?.bookTable.reloadData()
             }
         }
+
     }
 
 }
@@ -251,13 +223,6 @@ extension AllTitlesViewController: BottomSheetViewControllerDelegate {
             }
         }
         #warning("check using books id not title")
-        
-//        for (index, arrayBook) in allTitlesBooks.enumerated() {
-//            if arrayBook.title == book.title {
-//                indexPathOfRowWithThisBook.row = index
-//                break
-//            }
-//        }
         self.bookTable.reloadRows(at: [indexPathOfRowWithThisBook], with: .none)
     }
 

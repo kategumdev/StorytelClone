@@ -71,7 +71,7 @@
 		5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */; };
 		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */; };
-		5AC824212A21296B00CF337D /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824202A21296B00CF337D /* APICaller.swift */; };
+		5AC824212A21296B00CF337D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824202A21296B00CF337D /* NetworkManager.swift */; };
 		5AC824232A212A2300CF337D /* GoogleBooksSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */; };
 		5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */; };
 		5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* StarHorzStackView.swift */; };
@@ -173,7 +173,7 @@
 		5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewTableViewCell.swift; sourceTree = "<group>"; };
 		5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
 		5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsHorzScrollView.swift; sourceTree = "<group>"; };
-		5AC824202A21296B00CF337D /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		5AC824202A21296B00CF337D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksSearchResponse.swift; sourceTree = "<group>"; };
 		5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesTableViewCell.swift; sourceTree = "<group>"; };
 		5ACD558429E092C400097B40 /* StarHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHorzStackView.swift; sourceTree = "<group>"; };
@@ -393,7 +393,7 @@
 		5AC8241F2A21294E00CF337D /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				5AC824202A21296B00CF337D /* APICaller.swift */,
+				5AC824202A21296B00CF337D /* NetworkManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -578,7 +578,7 @@
 				5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */,
 				5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */,
 				5AA8006D29C8F2F700198B8A /* Language.swift in Sources */,
-				5AC824212A21296B00CF337D /* APICaller.swift in Sources */,
+				5AC824212A21296B00CF337D /* NetworkManager.swift in Sources */,
 				5AB9524629EF1F06001EA8DA /* BottomSheetTableViewCell.swift in Sources */,
 				5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */,
 				5AA8006B29C8EFDC00198B8A /* Series.swift in Sources */,

@@ -30,7 +30,6 @@ class BookDetailsStackView: UIStackView {
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.6
@@ -39,7 +38,6 @@ class BookDetailsStackView: UIStackView {
     }()
     
     private lazy var coverImageWidthConstraint = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
-//    private lazy var coverImageHeightAnchor = coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
     
     let spacingAfterCoverImageView: CGFloat = 24.0
 
@@ -254,7 +252,6 @@ class BookDetailsStackView: UIStackView {
     private func applyConstraints() {
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
-//        coverImageHeightAnchor.isActive = true
         coverImageWidthConstraint.isActive = true
         
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false

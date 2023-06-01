@@ -16,7 +16,6 @@ struct Book: Title, Equatable {
     #warning("coverImage needed only for hardcoded book objects")
     let title: String
     let authors: [Storyteller]
-//    let coverImage: UIImage?
     var coverImage: UIImage?
     let largeCoverImage: UIImage?
     var titleKind: TitleKind
@@ -25,7 +24,6 @@ struct Book: Title, Equatable {
     let rating: Double
     let reviewsNumber: Int
     let duration: String
-//    let language: Language
     let language: String
     let narrators: [Storyteller]
     let series: String?
@@ -86,7 +84,6 @@ struct Book: Title, Equatable {
         if isAddedToBookshelf {
             // Add book only if it's not already in the array
             if !toReadBooks.contains(where: { $0.title == self.title }) {
-//                toReadBooks.append(self)
                 toReadBooks.append(updatedBook)
                 // With real data, update book object here
             }
@@ -98,10 +95,13 @@ struct Book: Title, Equatable {
         }
     }
     
-    static func createBooksFrom(bookModels: [BookModel]) -> [Book] {
-        var books = [Book]()
+    static func createBooksFromEbooks(_ ebooks: [Ebook]?) -> [Book] {
+        var createdBooks = [Book]()
+        guard let unwrappedEbooks = ebooks else {
+            return createdBooks
+        }
         
-        for bookModel in bookModels {
+        for bookModel in unwrappedEbooks {
             
             let imageLinks = bookModel.volumeInfo.imageLinks
             let imageURLString = imageLinks?[ImageLink.large.rawValue] ?? imageLinks?[ImageLink.medium.rawValue] ?? imageLinks?[ImageLink.small.rawValue] ?? imageLinks?[ImageLink.thumbnail.rawValue] ?? ""
@@ -122,18 +122,20 @@ struct Book: Title, Equatable {
                 imageURLString: imageURLString
             )
             #warning("check isEbook in json for titleKind, check smth else for category")
-            books.append(book)
+            createdBooks.append(book)
         }
-        return books
+        return createdBooks
     }
     
-    static func createBooksFrom(audiobooks: [Audiobook]) -> [Book] {
-        var books = [Book]()
+    static func createBooksFromAudiobooks(_ audiobooks: [Audiobook]?) -> [Book] {
+        var createdBooks = [Book]()
+        guard let unwrappedAudiobooks = audiobooks else {
+            return createdBooks
+        }
         
-        for audiobook in audiobooks {
+        for audiobook in unwrappedAudiobooks {
             let description: String = audiobook.description?.removeHTMLTags() ?? "This book has no description"
             
-//            let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: "400x400")
             let imageSize = UIDevice.current.userInterfaceIdiom == .pad ? "800x800" : "400x400"
             let imageUrlString = audiobook.largeImageUrl?.replacingOccurrences(of: "100x100", with: imageSize)
 
@@ -159,12 +161,11 @@ struct Book: Title, Equatable {
                 audioUrlString: audiobook.audioUrlString
             )
             #warning("check smth else for category, check genre")
-            books.append(book)
+            createdBooks.append(book)
         }
-        return books
+        return createdBooks
     }
     
-//    static let books = [book1, book2, book3, book4, book5, book6, book7, book8, book9, book10]
     static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
     
     static let booksWithLargeCovers = [book11, book12, book13, book14, book15, book16, book17, book18, book19]
@@ -225,8 +226,6 @@ struct Book: Title, Equatable {
         authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bookWithOverview"), titleKind: .audiobook, description: "¿Sabrías decir cuántas personas han formado parte de tu vida y cuántas han sido capaces de cambiarla? Las últimas son las que realmente importan.\nLauri, la primera y más responsable amiga de la infancia y Nacho, mi primer amor de la adolescencia. La malhumorada y siempre sincera Lucía, la calmada Sara y el sarcástico Pol. También Álex, el que siempre vuelve, y la única mujer capaz de susurrar gritando, Laura. Y por supuesto, MI PADRE, en mayúsculas.", category: .novela)
     
     static let bookWithOverview1 = Book(title: "La mujer que quería más", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bookWithOverview1"), titleKind: .audioBookAndEbook, description: "Una historia entrañable para aprender la mejor lección que la vida te puede dar: nunca debe darte vergüenza pedir más…\n\nKate rompe con su novio justo cuando estaban a punto de irse a vivir juntos y, después de pasarse algunos días comiendo ganchitos debajo del edredón, decide volver a casa de su madre, al filo de los cuarenta. Para despejar su mente empieza a colaborar con la Residencia Lauderdale para damas excepcionales. Allí conoce a Cecily Finn, una mujer de noventa y seis años, punzante como una aguja y con una vida fascinante. Cecily le recomienda un manual de autoayuda diferente, un libro de recetas de 1957, con menús para cualquier situación y que promete respuestas a preguntas esenciales.\n\n¿Podrá encontrar Kate el menú ideal para su corazón roto?\n\nAsí comienza una entrañable relación entre dos almas solitarias y obstinadas, que deben demostrarse la una a la otra que la comida es un placer al que no debemos renunciar, que la vida es para vivirla y que el camino al corazón de un hombre resulta… irrelevante.", category: .novela, tags: Tag.manyTags)
-    
-//    static let bookWithOverview1 = Book(title: "La mujer que quería más", authors: [Author.pabloToledo], coverImage: UIImage(named: "bookWithOverview1"), titleKind: .audioBookAndEbook, overview: "Una historia entrañable para aprender la mejor lección que la vida te puede dar: nunca debe darte vergüenza pedir más….", category: .novela, tags: Tag.manyTags)
     
     static let bookWithOverview2 = Book(title: "Mariposas heladas", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bookWithOverview2"), titleKind: .audiobook, description: "Una gélida mañana de invierno, el cuerpo sin vida de una monja, que aparentemente ha sido atropellada por un coche, aparece en las afueras de Lipowo, una localidad situada al norte de Varsovia. Pero pronto queda fuera de duda que primero fue asesinada y luego simularon un accidente. Unos días después, cuando aparece el cadáver de otra mujer, sin que entre ellas hubiera un vínculo aparente, la Policía debe darse prisa antes de que el asesino actúe de nuevo.\nLas sospechas recaerán sobre algunos de los habitantes del pueblo: la propietaria de una tienda, el heredero de una familia adinerada o el hijo de uno de los oficiales de la Policía. La comisaria Klementyna Kopp y el comisario Daniel Podgórski tendrán que ponerse manos a la obra, investigar la verdadera identidad de la monja, su pasado y los motivos que la llevaron a Lipowo. Esta vez, además de con su equipo, Daniel contará con la ayuda de una recién llegada, Veronika —psicóloga que viene de Varsovia, acaba de divorciarse y busca un nuevo comienzo lejos de la ciudad—, por la que se siente irresistiblemente atraído.", category: .novelaNegra, rating: 0.5, tags: [Tag(tagTitle: "Aventura"), Tag(tagTitle: "Fantasía"), Tag(tagTitle: "Novela negra")])
     

@@ -207,75 +207,18 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
             resultsController.setInitialOffsetsOfTablesInCells()
             resultsController.collectionView.reloadData()
             
-            
-            
-            var books = [Book]()
-            
-            APICaller.shared.getBooks(with: query) { result in
+            #warning("not sure if [weak resultsController] is enough here")
+            NetworkManager.shared.fetchBooks(withQuery: query) { [weak resultsController] fetchedBooks in
+                var books = fetchedBooks
+                books.shuffle()
+                
                 DispatchQueue.main.async {
-                    switch result {
-                    case .success(let bookModels):
-//                        print("COUNT: \(bookModels.count)")
-//                        print("BOOKS: \(bookModels)")
-
-                        books += Book.createBooksFrom(bookModels: bookModels)
-                        APICaller.shared.getAudiobooks(with: query) { result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let audiobooks):
-            //                        print("COUNT: \(bookModels.count)")
-            //                        print("BOOKS: \(bookModels)")
-                                    
-                                    books += Book.createBooksFrom(audiobooks: audiobooks)
-                                    books.shuffle()
-                                    resultsController.modelForSearchQuery?[.books] = books
-                                    resultsController.setInitialOffsetsOfTablesInCells()
-                                    resultsController.collectionView.reloadData()
-                                case .failure(let error):
-                                    print(error)
-                                }
-                            }
-                        }
-                        
-                    case .failure(let error):
-                        print(error)
-                    }
+                    resultsController?.modelForSearchQuery?[.books] = books
+                    resultsController?.setInitialOffsetsOfTablesInCells()
+                    resultsController?.collectionView.reloadData()
                 }
             }
-            
-//            APICaller.shared.getAudiobooks(with: query) { result in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success(let audiobooks):
-////                        print("COUNT: \(bookModels.count)")
-////                        print("BOOKS: \(bookModels)")
-//
-//                        let books = Book.createBooksFrom(audiobooks: audiobooks)
-//                        resultsController.modelForSearchQuery?[.books] = books
-//                        resultsController.setInitialOffsetsOfTablesInCells()
-//                        resultsController.collectionView.reloadData()
-//                    case .failure(let error):
-//                        print(error)
-//                    }
-//                }
-//            }
-            
-//            APICaller.shared.getBooks(with: query) { result in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success(let bookModels):
-////                        print("COUNT: \(bookModels.count)")
-////                        print("BOOKS: \(bookModels)")
-//
-//                        let books = Book.createBooksFrom(bookModels: bookModels)
-//                        resultsController.modelForSearchQuery?[.books] = books
-//                        resultsController.setInitialOffsetsOfTablesInCells()
-//                        resultsController.collectionView.reloadData()
-//                    case .failure(let error):
-//                        print(error)
-//                    }
-//                }
-//            }
+
         } else {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             if resultsController.modelForSearchQuery != nil {

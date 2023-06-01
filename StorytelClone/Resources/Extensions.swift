@@ -369,34 +369,12 @@ extension String {
         return cleanText
     }
     
-//    func convertLanguageCodeIntoString() -> String? {
-////        let languageCode = "de" // Example language code
-//        let languageCode = self
-//        let locale = Locale(identifier: "\(languageCode)_US") // to get full language name string in English
-//
-//        if let language = Locale.current.localizedString(forIdentifier: languageCode),
-//           let languageInEnglish = locale.localizedString(forIdentifier: languageCode) {
-//            print("Localized Language Name: \(language)")
-//            print("English Language Name: \(languageInEnglish)")
-//            return languageInEnglish
-//        } else {
-//            print("Invalid language code.")
-//            return nil
-//        }
-//    }
-    
     func convertLanguageCodeIntoString() -> String? {
-//        let languageCode = "de" // Example language code
         let languageCode = self
-        
-        if let language = Locale.current.localizedString(forIdentifier: languageCode) {
-            print("Localized Language Name: \(language)")
-            return language
-        } else {
-            print("Invalid language code.")
-            return nil
-        }
-    } 
+        let language = Locale.current.localizedString(forIdentifier: languageCode)
+        return language
+    }
+    
     
     func detectLanguage() -> String? {
         let text = self

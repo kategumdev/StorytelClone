@@ -8,10 +8,10 @@
 import UIKit
 
 struct GoogleBooksSearchResponse: Codable {
-    let items: [BookModel]
+    let items: [Ebook]
 }
 
-struct BookModel: Codable {
+struct Ebook: Codable {
     let id: String
     let volumeInfo: VolumeInfo
 }

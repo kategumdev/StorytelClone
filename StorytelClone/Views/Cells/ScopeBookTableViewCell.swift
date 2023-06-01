@@ -59,7 +59,6 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     
     private let customImageView: UIImageView = {
         let imageView = BaseScopeTableViewCell.createImageView()
-//        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.26
         return imageView
@@ -133,7 +132,6 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
             narratorsLabel.text = "Placeholder"
             narratorsLabel.textColor = UIColor.clear
         }
-        
     }
         
     // MARK: - Helper methods
