@@ -41,7 +41,7 @@ class BookDetailsHorzScrollView: UIScrollView {
     // MARK: - Instance properties
     private let book: Book
     
-    private let ratingsLabel = createLabelWith(text: "80 Ratings")
+    private let ratingsLabel = createLabelWith(text: "80 Ratings") // placeholder text
     private let ratingButton = createButtonWith(symbolImageName: "star.fill")
     private lazy var ratingVertStack = createVertStackWith(label: ratingsLabel, button: ratingButton)
     
@@ -108,13 +108,18 @@ class BookDetailsHorzScrollView: UIScrollView {
     // MARK: - Helper methods
     private func configure(button: UIButton, withText text: String) {
         button.configuration?.attributedTitle = AttributedString(text)
-//        button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
         button.configuration?.attributedTitle?.font = scaledButtonFont
     }
     
     private func configureMainStack() {
         // Configure labels and buttons with text
-        ratingsLabel.text = "\(book.reviewsNumber) Ratings"
+        let reviewsNumber = book.reviewsNumber
+        switch reviewsNumber {
+        case 0: ratingsLabel.text = "Not rated"
+        case 1: ratingsLabel.text = "1 Rating"
+        default: ratingsLabel.text = "\(reviewsNumber) Ratings"
+        }
+        
         configure(button: ratingButton, withText: "\(book.rating)")
         allButtons.append(ratingButton)
  
