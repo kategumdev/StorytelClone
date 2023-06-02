@@ -266,11 +266,16 @@ extension UITabBar {
 
 extension UIImageView {
     
+    static let placeholderImage = UIImage(named: "placeholderCover")
+    
     func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
+        self.contentMode = .scaleAspectFill
         
         if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-            self.sd_setImage(with: imageURL) { [weak self] image,_,_,_ in
-                self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+            self.sd_setImage(with: imageURL, placeholderImage: UIImageView.placeholderImage) { [weak self] image, error, cachType, url in
+                if let image = image {
+                    self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+                }
             }
         } else {
             self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
@@ -283,15 +288,6 @@ extension UIImageView {
         
         // Configure image view and set placeholder image if passed image is nil
         guard let image = image else {
-            self.tintColor = .systemGray6
-            self.backgroundColor = UIColor.tertiaryLabel
-            self.contentMode = .center
-            let pointSize = defaultImageViewHeight * 0.35
-            let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold)
-            let placeholderBookCoverImage = UIImage(systemName: "book.closed.fill", withConfiguration: config)
-            
-//            self.image = placeholderBookCoverImage
-
             var newImageWidth: CGFloat = defaultImageViewWidth // for square image view
             if book.titleKind == .ebook {
                 newImageWidth = defaultImageViewWidth * 0.65 // for rectangle image view
@@ -301,13 +297,11 @@ extension UIImageView {
                 imageViewWidthConstraint.constant = newImageWidth
             }
 
-            self.image = placeholderBookCoverImage
+            self.image = UIImageView.placeholderImage
             return
         }
         
         // Configure image view, resize and set passed image
-        self.backgroundColor = .clear
-        self.contentMode = .scaleAspectFill
         let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
         let resizedImageWidth = resizedImage.size.width
 
@@ -321,6 +315,52 @@ extension UIImageView {
 
         self.image = resizedImage
     }
+    
+//    func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
+//        let defaultImageViewWidth = defaultImageViewHeight
+//
+//        // Configure image view and set placeholder image if passed image is nil
+//        guard let image = image else {
+//            print("setting placeholder image for book \(book.title)")
+//
+//            self.tintColor = .systemGray6
+//            self.backgroundColor = UIColor.tertiaryLabel
+//            self.contentMode = .center
+//            let pointSize = defaultImageViewHeight * 0.35
+//            let config = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .semibold)
+//            let placeholderBookCoverImage = UIImage(systemName: "book.closed.fill", withConfiguration: config)
+////            let placeholderBookCoverImage = UIImageView.placeholderImage?.withConfiguration(config)
+//
+//            var newImageWidth: CGFloat = defaultImageViewWidth // for square image view
+//            if book.titleKind == .ebook {
+//                newImageWidth = defaultImageViewWidth * 0.65 // for rectangle image view
+//            }
+//
+//            if imageViewWidthConstraint.constant != newImageWidth {
+//                imageViewWidthConstraint.constant = newImageWidth
+//            }
+//
+//            self.image = placeholderBookCoverImage
+//            return
+//        }
+//
+//        print("setting image for book \(book.title)")
+//        // Configure image view, resize and set passed image
+//        self.backgroundColor = .clear
+//        self.contentMode = .scaleAspectFill
+//        let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
+//        let resizedImageWidth = resizedImage.size.width
+//
+//        if resizedImageWidth < defaultImageViewWidth {
+//            if imageViewWidthConstraint.constant != resizedImageWidth {
+//                imageViewWidthConstraint.constant = resizedImageWidth
+//            }
+//        } else if imageViewWidthConstraint.constant != defaultImageViewWidth {
+//            imageViewWidthConstraint.constant = defaultImageViewWidth
+//        }
+//
+//        self.image = resizedImage
+//    }
     
 }
 

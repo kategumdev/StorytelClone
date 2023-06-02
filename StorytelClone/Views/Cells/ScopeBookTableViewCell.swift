@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 typealias EllipsisButtonInScopeBookTableViewCellDidTapCallback = (Book) -> ()
 
@@ -106,7 +107,8 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        customImageView.image = nil
+//        customImageView.image = nil
+        customImageView.sd_cancelCurrentImageLoad()
     }
     
     // MARK: - Instance methods

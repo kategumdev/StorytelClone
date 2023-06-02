@@ -9,21 +9,6 @@ import UIKit
 
 class SearchResultsViewController: ScopeViewController {
     // MARK: - Instance properties
-//    var noInternetConnection = false {
-//        didSet {
-//            for table in scopeTablesForCvCells {
-//                table.noInternetConnection = noInternetConnection
-//            }
-//        }
-//    }
-//
-//    var fetchingErrorOcurred = false {
-//        didSet {
-//            for table in scopeTablesForCvCells {
-//                table.fetchingErrorOcurred = fetchingErrorOcurred
-//            }
-//        }
-//    }
     var networkManagerError: NetworkManagerError? = nil {
         didSet {
             for table in scopeTablesForCvCells {

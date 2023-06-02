@@ -125,10 +125,9 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
 
         if let collectionModel = modelForSearchQuery, let tableViewModel = collectionModel[buttonKind] {
             scopeTableViewForCell.model = tableViewModel
-//            scopeTableViewForCell.downloadCoverImages()
-            
             scopeTableViewForCell.hasSectionHeader = false
         } else {
+            print("scopeTable is getting initial model")
             scopeTableViewForCell.model = getModelFor(buttonKind: buttonKind)
             scopeTableViewForCell.hasSectionHeader = true
         }

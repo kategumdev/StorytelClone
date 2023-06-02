@@ -20,9 +20,6 @@ class ScopeTableView: UITableView {
     let buttonKind: ScopeButtonKind
     var model = [Title]()
     
-    var noInternetConnection = false
-    var fetchingErrorOcurred = false
-    
     var networkManagerError: NetworkManagerError?
     
     var hasSectionHeader = true
@@ -30,10 +27,6 @@ class ScopeTableView: UITableView {
     
     private lazy var customTableHeader = BookshelfTableHeaderView()
     private var isCustomTableHeaderAdded = false
-    
-//    private lazy var noBooksBackgroundView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
-
-//    private var isBackgroundViewAdded = false
     
     // MARK: - Initializers
     init(buttonKind: ScopeButtonKind, scopeButtonsViewKind: ScopeButtonsViewKind) {
@@ -94,68 +87,15 @@ class ScopeTableView: UITableView {
     }
     
     private func configureNoBooksBackgroundView() {
-        
         if !model.isEmpty {
             backgroundView = nil
-//            alwaysBounceVertical = true
             return
         }
         
         let noBooksView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: networkManagerError)
         backgroundView = noBooksView
-//        alwaysBounceVertical = false
-        
-        
-
-//        if let error = networkManagerError {
-//            let noBooksView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: error)
-//            backgroundView = noBooksView
-//            alwaysBounceVertical = false
-//        } else if model.isEmpty {
-//            let noBooksView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: nil)
-//            backgroundView = noBooksView
-//            alwaysBounceVertical = false
-//        } else {
-//            backgroundView = nil
-//            alwaysBounceVertical = true
-//        }
-         
-        
-//        // Add if it's not added yet
-//        if !isBackgroundViewAdded && model.isEmpty {
-//            addSubview(noBooksBackgroundView)
-//            noBooksBackgroundView.configure(noInternetConnection: noInternetConnection, fetchingErrorOcurred: fetchingErrorOcurred)
-//            noBooksBackgroundView.frame = bounds
-//            isBackgroundViewAdded = true
-//        }
-//
-//        // Hide or unhide
-//        if isBackgroundViewAdded {
-//            noBooksBackgroundView.isHidden = model.count > 0
-//
-//            // Avoid bouncing only when backgroundView is onscreen
-//            alwaysBounceVertical = noBooksBackgroundView.isHidden
-//        }
     }
-    
-//    private func configureNoBooksBackgroundView() {
-//        // Add if it's not added yet
-//        if !isBackgroundViewAdded && model.isEmpty {
-//            addSubview(noBooksBackgroundView)
-//            noBooksBackgroundView.configure(noInternetConnection: noInternetConnection, fetchingErrorOcurred: fetchingErrorOcurred)
-//            noBooksBackgroundView.frame = bounds
-//            isBackgroundViewAdded = true
-//        }
-//
-//        // Hide or unhide
-//        if isBackgroundViewAdded {
-//            noBooksBackgroundView.isHidden = model.count > 0
-//
-//            // Avoid bouncing only when backgroundView is onscreen
-//            alwaysBounceVertical = noBooksBackgroundView.isHidden
-//        }
-//    }
-        
+
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate

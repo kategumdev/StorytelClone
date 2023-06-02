@@ -194,7 +194,7 @@ class AllTitlesViewController: BaseViewController {
     
     // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
     private func configureAndLayoutTableHeader() {
-        if networkManager.savedError != nil {
+        if networkManager.hasError {
             bookTable.tableHeaderView = nil
             return
         }
@@ -216,12 +216,11 @@ class AllTitlesViewController: BaseViewController {
     
     private func loadBooks() {
         guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
-            books = allTitlesBooks
+            books = allTitlesBooks // hardcoded data
             return
         }
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
-        
         activityIndicator.startAnimating()
         networkManager.fetchBooks(withQuery: query) { [weak self] result in
             
@@ -236,7 +235,6 @@ class AllTitlesViewController: BaseViewController {
                 }
                 
             case .failure(let error):
-                
                 if let networkError = error as? NetworkManagerError {
                     DispatchQueue.main.async {
                         self?.activityIndicator.stopAnimating()
@@ -244,76 +242,9 @@ class AllTitlesViewController: BaseViewController {
                         self?.bookTable.backgroundView = noBooksView
                     }
                 }
-                                
-//                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
-//                    DispatchQueue.main.async {
-//                        self?.activityIndicator.stopAnimating()
-//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
-//                        noBooksView.configure(noInternetConnection: true)
-//                        self?.bookTable.backgroundView = noBooksView
-//                    }
-//                } else {
-//                    self?.books = [Book]()
-//
-//                    DispatchQueue.main.async {
-//                        self?.activityIndicator.stopAnimating()
-//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
-//                        noBooksView.configure(fetchingErrorOcurred: true)
-//                        self?.bookTable.backgroundView = noBooksView
-//                    }
-//                }
             }
         }
     }
-    
-//    private func loadBooks() {
-//        guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
-//            books = allTitlesBooks
-//            return
-//        }
-//
-//        let query = author.name.trimmingCharacters(in: .whitespaces)
-//
-//        activityIndicator.startAnimating()
-//        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
-//
-//            switch result {
-//            case .success(let fetchedBooks):
-//                self?.books = fetchedBooks
-//                self?.books.shuffle()
-//
-//                DispatchQueue.main.async {
-//                    self?.activityIndicator.stopAnimating()
-//                    self?.bookTable.reloadData()
-//                }
-//
-//            case .failure(let error):
-//
-//                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
-//                    DispatchQueue.main.async {
-//                        self?.activityIndicator.stopAnimating()
-//                        self?.noInternetConnection = true
-//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
-//                        noBooksView.configure(noInternetConnection: true)
-//                        self?.bookTable.backgroundView = noBooksView
-//                    }
-//                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
-//                } else {
-//                    self?.books = [Book]()
-//
-//                    DispatchQueue.main.async {
-//                        self?.activityIndicator.stopAnimating()
-//                        self?.noInternetConnection = true
-//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
-//                        noBooksView.configure(fetchingErrorOcurred: true)
-//                        self?.bookTable.backgroundView = noBooksView
-////                        self?.bookTable.reloadData()
-//                    }
-//                    #warning("Instead of this show background view telling that something went wrong, try again later")
-//                }
-//            }
-//        }
-//    }
     
 }
 
