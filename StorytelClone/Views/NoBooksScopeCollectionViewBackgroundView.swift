@@ -11,7 +11,7 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     
     // MARK: - Instance properties
     private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
-    private let scopeButtonsViewKind: ScopeButtonsViewKind
+    private let scopeButtonsViewKind: ScopeButtonsViewKind?
     private let scopeButtonKind: ScopeButtonKind?
 
     private let imageView: UIImageView = {
@@ -72,7 +72,7 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     }()
 
     // MARK: - Initializers
-    init(scopeButtonKind: ScopeButtonKind?, scopeButtonsViewKind: ScopeButtonsViewKind) {
+    init(scopeButtonKind: ScopeButtonKind? = nil, scopeButtonsViewKind: ScopeButtonsViewKind? = nil) {
         self.scopeButtonKind = scopeButtonKind
         self.scopeButtonsViewKind = scopeButtonsViewKind
         super.init(frame: .zero)
@@ -85,39 +85,73 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     }
     
     // MARK: - Instance methods
-    func configure(noInternetConnection: Bool, fetchingErrorOcurred: Bool) {
-        // Configuration for SearchResultsfVC
-        if scopeButtonsViewKind == .forSearchResultsVc {
-            if noInternetConnection {
-                imageView.image = UIImage(systemName: "exclamationmark.triangle")
-                titleLabel.text = "No internet connection"
-                subtitleLabel.text = "Please check your internet connection and try again."
-                return
+    func configure(noInternetConnection: Bool = false, fetchingErrorOcurred: Bool = false) {
+        if scopeButtonsViewKind == .forBookshelfVc {
+            // Configuration for BookshelfVC
+            guard let buttonKind = scopeButtonKind else { return }
+            switch buttonKind {
+            case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
+            case .started: titleLabel.text = "It looks like you haven't started any books yet!"
+            case .finished: titleLabel.text = "It looks like you haven't finished any books yet!"
+            case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
+            default: print("Case with \(buttonKind) not handled in switch")
             }
-            
-            if fetchingErrorOcurred {
-                imageView.image = UIImage(systemName: "exclamationmark.bubble")
-                titleLabel.text = "Something went wrong"
-                subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
-                return
-            }
-            
-            imageView.image = UIImage(systemName: "magnifyingglass")
-            titleLabel.text = "No results found"
-            subtitleLabel.text = "Check the spelling or try different keywords."
+        }
+        
+        // Configuration for other cases
+        if noInternetConnection {
+            imageView.image = UIImage(systemName: "exclamationmark.triangle")
+            titleLabel.text = "No internet connection"
+            subtitleLabel.text = "Please check your internet connection and try again."
             return
         }
         
-        // Configuration for BookshelfVC
-        guard let buttonKind = scopeButtonKind else { return }
-        switch buttonKind {
-        case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
-        case .started: titleLabel.text = "It looks like you haven't started any books yet!"
-        case .finished: titleLabel.text = "It looks like you haven't finished any books yet!"
-        case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
-        default: print("Case with \(buttonKind) not handled in switch")
+        if fetchingErrorOcurred {
+            imageView.image = UIImage(systemName: "exclamationmark.bubble")
+            titleLabel.text = "Something went wrong"
+            subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
+            return
         }
+        
+        imageView.image = UIImage(systemName: "magnifyingglass")
+        titleLabel.text = "No results found"
+        subtitleLabel.text = "Check the spelling or try different keywords."
+        return
     }
+    
+//    func configure(noInternetConnection: Bool, fetchingErrorOcurred: Bool) {
+//        // Configuration for SearchResultsfVC
+//        if scopeButtonsViewKind == .forSearchResultsVc {
+//            if noInternetConnection {
+//                imageView.image = UIImage(systemName: "exclamationmark.triangle")
+//                titleLabel.text = "No internet connection"
+//                subtitleLabel.text = "Please check your internet connection and try again."
+//                return
+//            }
+//
+//            if fetchingErrorOcurred {
+//                imageView.image = UIImage(systemName: "exclamationmark.bubble")
+//                titleLabel.text = "Something went wrong"
+//                subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
+//                return
+//            }
+//
+//            imageView.image = UIImage(systemName: "magnifyingglass")
+//            titleLabel.text = "No results found"
+//            subtitleLabel.text = "Check the spelling or try different keywords."
+//            return
+//        }
+//
+//        // Configuration for BookshelfVC
+//        guard let buttonKind = scopeButtonKind else { return }
+//        switch buttonKind {
+//        case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
+//        case .started: titleLabel.text = "It looks like you haven't started any books yet!"
+//        case .finished: titleLabel.text = "It looks like you haven't finished any books yet!"
+//        case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
+//        default: print("Case with \(buttonKind) not handled in switch")
+//        }
+//    }
     
     // MARK: - Helper methods
     private func applyConstraints() {

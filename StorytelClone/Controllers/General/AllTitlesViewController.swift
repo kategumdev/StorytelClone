@@ -17,7 +17,14 @@ class AllTitlesViewController: BaseViewController {
     private let popupButton = PopupButton()
     private var isHeaderConfigured = false
     private var books = [Book]()
+    var noInternetConnection = false
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.hidesWhenStopped = true
+        return view
+    }()
+
     // MARK: - Initializers
     init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
         self.tableSection = tableSection
@@ -100,6 +107,8 @@ class AllTitlesViewController: BaseViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard !books.isEmpty else { return nil}
+
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView else {
             return UIView()
         }
@@ -121,6 +130,14 @@ class AllTitlesViewController: BaseViewController {
         }
         
         return sectionHeader
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard books.isEmpty else { return }
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
@@ -173,10 +190,26 @@ class AllTitlesViewController: BaseViewController {
 
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
+        
+//        bookTable.addSubview(activityIndicator)
+//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+////        activityIndicator.centerXAnchor.constraint(equalTo: bookTable.centerXAnchor).isActive = true
+////        activityIndicator.centerYAnchor.constraint(equalTo: bookTable.centerYAnchor).isActive = true
+//        activityIndicator.centerXAnchor.constraint(equalTo: bookTable.contentLayoutGuide.centerXAnchor).isActive = true
+//        activityIndicator.centerYAnchor.constraint(equalTo: bookTable.contentLayoutGuide.centerYAnchor).isActive = true
+        
+//        bookTable.backgroundColor = .green
     }
     
     // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
     private func configureAndLayoutTableHeader() {
+        print("configureAndLayoutTableHeader")
+        if noInternetConnection {
+            print("table header is nil")
+            bookTable.tableHeaderView = nil
+            return
+        }
+        
         if let storyteller = titleModel as? Storyteller {
             let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
             bookTable.tableHeaderView = headerView
@@ -192,6 +225,23 @@ class AllTitlesViewController: BaseViewController {
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
     }
     
+//    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
+//    private func configureAndLayoutTableHeader() {
+//        if let storyteller = titleModel as? Storyteller {
+//            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
+//            bookTable.tableHeaderView = headerView
+//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+//            return
+//        }
+//
+//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection else { return }
+//        if !isHeaderConfigured {
+//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+//            isHeaderConfigured = true
+//        }
+//        Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
+//    }
+    
     private func loadBooks() {
         guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
             books = allTitlesBooks
@@ -200,15 +250,7 @@ class AllTitlesViewController: BaseViewController {
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
         
-//        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] fetchedBooks in
-//            self?.books = fetchedBooks
-//            self?.books.shuffle()
-//
-//            DispatchQueue.main.async {
-//                self?.bookTable.reloadData()
-//            }
-//        }
-        
+        activityIndicator.startAnimating()
         NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
             
             switch result {
@@ -217,38 +259,34 @@ class AllTitlesViewController: BaseViewController {
                 self?.books.shuffle()
                 
                 DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
                     self?.bookTable.reloadData()
                 }
                 
             case .failure(let error):
                 
                 if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
+                        self?.noInternetConnection = true
+                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
+                        noBooksView.configure(noInternetConnection: true)
+                        self?.bookTable.backgroundView = noBooksView
+                    }
                     print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
                 } else {
                     self?.books = [Book]()
                     
                     DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
                         self?.bookTable.reloadData()
                     }
                     #warning("Instead of this show background view telling that something went wrong, try again later")
                 }
-                
-//                switch error {
-//                case .noInternetConnection:
-//                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
-//
-//                case .failedToFetch:
-//                    self?.books = [Book]()
-//
-//                    DispatchQueue.main.async {
-//                        self?.bookTable.reloadData()
-//                    }
-//                    #warning("Instead of this show background view telling that something went wrong, try again later")
-//                }
             }
         }
     }
-
+    
 }
 
 extension AllTitlesViewController: BottomSheetViewControllerDelegate {
