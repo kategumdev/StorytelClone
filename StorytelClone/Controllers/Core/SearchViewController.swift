@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
     private let model: Category
     private let categoryButtons: [ButtonCategory]
     
+    private let networkManager = NetworkManager()
+    
     private let numberOfButtonsSection0 = 6
     private let numberOfButtonsSection1 = 19
     
@@ -213,7 +215,7 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         if queryString.count >= 6 {
             
 #warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
-            NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
+            networkManager.fetchBooks(withQuery: query) { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -228,20 +230,44 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                     }
                     
                 case .failure(let error):
-                    if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                    if let networkError = error as? NetworkManagerError {
                         DispatchQueue.main.async {
-                            resultsController.noInternetConnection = true
-                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
-                        }
-//                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
-                    } else {
-                        DispatchQueue.main.async {
-                            resultsController.fetchingErrorOcurred = true
+                            resultsController.networkManagerError = networkError
+                            //                            resultsController.networkManagerError = self.networkManager.savedError
                             resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
                         }
                     }
                 }
             }
+//                case .failure(let error):
+//
+//                    if let networkError = error as? NetworkManagerError {
+//                        DispatchQueue.main.async {
+////                            resultsController.noInternetConnection = true
+//                            resultsController.networkManagerError = self.networkManager.savedError
+//                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
+//                        }
+//                    }
+                    
+                    
+                    
+//                case .failure(let error):
+//                    if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+//                        DispatchQueue.main.async {
+////                            resultsController.noInternetConnection = true
+//                            resultsController.networkManagerError = networkManager.savedError
+//                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
+//                        }
+////                        print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+//                    } else {
+//                        DispatchQueue.main.async {
+////                            resultsController.fetchingErrorOcurred = true
+//                            resultsController.networkManagerError = networkManager.savedError
+//                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
+//                        }
+//                    }
+//                }
+//            }
             
 //            NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
 //                switch result {

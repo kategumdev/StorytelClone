@@ -17,7 +17,7 @@ class AllTitlesViewController: BaseViewController {
     private let popupButton = PopupButton()
     private var isHeaderConfigured = false
     private var books = [Book]()
-    var noInternetConnection = false
+    private let networkManager = NetworkManager()
     
     private let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
@@ -190,22 +190,11 @@ class AllTitlesViewController: BaseViewController {
 
         bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
         bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
-        
-//        bookTable.addSubview(activityIndicator)
-//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-////        activityIndicator.centerXAnchor.constraint(equalTo: bookTable.centerXAnchor).isActive = true
-////        activityIndicator.centerYAnchor.constraint(equalTo: bookTable.centerYAnchor).isActive = true
-//        activityIndicator.centerXAnchor.constraint(equalTo: bookTable.contentLayoutGuide.centerXAnchor).isActive = true
-//        activityIndicator.centerYAnchor.constraint(equalTo: bookTable.contentLayoutGuide.centerYAnchor).isActive = true
-        
-//        bookTable.backgroundColor = .green
     }
     
     // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
     private func configureAndLayoutTableHeader() {
-        print("configureAndLayoutTableHeader")
-        if noInternetConnection {
-            print("table header is nil")
+        if networkManager.savedError != nil {
             bookTable.tableHeaderView = nil
             return
         }
@@ -225,23 +214,6 @@ class AllTitlesViewController: BaseViewController {
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
     }
     
-//    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
-//    private func configureAndLayoutTableHeader() {
-//        if let storyteller = titleModel as? Storyteller {
-//            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
-//            bookTable.tableHeaderView = headerView
-//            Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
-//            return
-//        }
-//
-//        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection else { return }
-//        if !isHeaderConfigured {
-//            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
-//            isHeaderConfigured = true
-//        }
-//        Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
-//    }
-    
     private func loadBooks() {
         guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
             books = allTitlesBooks
@@ -251,7 +223,7 @@ class AllTitlesViewController: BaseViewController {
         let query = author.name.trimmingCharacters(in: .whitespaces)
         
         activityIndicator.startAnimating()
-        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
+        networkManager.fetchBooks(withQuery: query) { [weak self] result in
             
             switch result {
             case .success(let fetchedBooks):
@@ -265,27 +237,83 @@ class AllTitlesViewController: BaseViewController {
                 
             case .failure(let error):
                 
-                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+                if let networkError = error as? NetworkManagerError {
                     DispatchQueue.main.async {
                         self?.activityIndicator.stopAnimating()
-                        self?.noInternetConnection = true
-                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
-                        noBooksView.configure(noInternetConnection: true)
+                        let noBooksView = NoBooksScopeCollectionViewBackgroundView(networkManagerError: networkError)
                         self?.bookTable.backgroundView = noBooksView
                     }
-                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
-                } else {
-                    self?.books = [Book]()
-                    
-                    DispatchQueue.main.async {
-                        self?.activityIndicator.stopAnimating()
-                        self?.bookTable.reloadData()
-                    }
-                    #warning("Instead of this show background view telling that something went wrong, try again later")
                 }
+                                
+//                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+//                    DispatchQueue.main.async {
+//                        self?.activityIndicator.stopAnimating()
+//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
+//                        noBooksView.configure(noInternetConnection: true)
+//                        self?.bookTable.backgroundView = noBooksView
+//                    }
+//                } else {
+//                    self?.books = [Book]()
+//
+//                    DispatchQueue.main.async {
+//                        self?.activityIndicator.stopAnimating()
+//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
+//                        noBooksView.configure(fetchingErrorOcurred: true)
+//                        self?.bookTable.backgroundView = noBooksView
+//                    }
+//                }
             }
         }
     }
+    
+//    private func loadBooks() {
+//        guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
+//            books = allTitlesBooks
+//            return
+//        }
+//
+//        let query = author.name.trimmingCharacters(in: .whitespaces)
+//
+//        activityIndicator.startAnimating()
+//        NetworkManager.shared.fetchBooks(withQuery: query) { [weak self] result in
+//
+//            switch result {
+//            case .success(let fetchedBooks):
+//                self?.books = fetchedBooks
+//                self?.books.shuffle()
+//
+//                DispatchQueue.main.async {
+//                    self?.activityIndicator.stopAnimating()
+//                    self?.bookTable.reloadData()
+//                }
+//
+//            case .failure(let error):
+//
+//                if let networkError = error as? NetworkManagerError, networkError == .noInternetConnection {
+//                    DispatchQueue.main.async {
+//                        self?.activityIndicator.stopAnimating()
+//                        self?.noInternetConnection = true
+//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
+//                        noBooksView.configure(noInternetConnection: true)
+//                        self?.bookTable.backgroundView = noBooksView
+//                    }
+//                    print("\n NO INTERNET \n NO INTERNET \n NO INTERNET")
+//                } else {
+//                    self?.books = [Book]()
+//
+//                    DispatchQueue.main.async {
+//                        self?.activityIndicator.stopAnimating()
+//                        self?.noInternetConnection = true
+//                        let noBooksView = NoBooksScopeCollectionViewBackgroundView()
+//                        noBooksView.configure(fetchingErrorOcurred: true)
+//                        self?.bookTable.backgroundView = noBooksView
+////                        self?.bookTable.reloadData()
+//                    }
+//                    #warning("Instead of this show background view telling that something went wrong, try again later")
+//                }
+//            }
+//        }
+//    }
     
 }
 
