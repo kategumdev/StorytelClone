@@ -7,13 +7,27 @@
 
 import UIKit
 
-class NoBooksScopeCollectionViewBackgroundView: UIView {
+//enum NoDataBackgroundViewKind: Equatable {
+//    case forBookshelfVc(buttonKind: ScopeButtonKind)
+//    case noInternetConnection
+//    case failedToFetchData
+//    case noSearchResults
+//}
+
+enum NoDataBackgroundViewKind: Equatable {
+    case forBookshelfVc(scopeButtonKind: ScopeButtonKind)
+    case networkingError(error: NetworkManagerError)
+}
+
+class NoDataBackgroundView: UIView {
     
     // MARK: - Instance properties
     private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
-    private let scopeButtonsViewKind: ScopeButtonsViewKind?
-    private let scopeButtonKind: ScopeButtonKind?
-    private let networkManagerError: NetworkManagerError?
+//    private let scopeButtonsViewKind: ScopeButtonsViewKind?
+//    private let scopeButtonKind: ScopeButtonKind?
+//    private let networkManagerError: NetworkManagerError?
+    
+    private let kind: NoDataBackgroundViewKind
 
     private let imageView: UIImageView = {
         let view = UIImageView()
@@ -73,33 +87,32 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
     }()
 
     // MARK: - Initializers
-    init(scopeButtonKind: ScopeButtonKind? = nil, scopeButtonsViewKind: ScopeButtonsViewKind? = nil, networkManagerError: NetworkManagerError?) {
-        self.scopeButtonKind = scopeButtonKind
-        self.scopeButtonsViewKind = scopeButtonsViewKind
-        self.networkManagerError = networkManagerError
+    init(kind: NoDataBackgroundViewKind) {
+        self.kind = kind
         super.init(frame: .zero)
         addSubview(vertStackView)
         configureSelf()
         applyConstraints()
     }
     
-//    init(scopeButtonKind: ScopeButtonKind? = nil, scopeButtonsViewKind: ScopeButtonsViewKind? = nil) {
+//    init(scopeButtonKind: ScopeButtonKind? = nil, scopeButtonsViewKind: ScopeButtonsViewKind? = nil, networkManagerError: NetworkManagerError?) {
 //        self.scopeButtonKind = scopeButtonKind
 //        self.scopeButtonsViewKind = scopeButtonsViewKind
+//        self.networkManagerError = networkManagerError
 //        super.init(frame: .zero)
 //        addSubview(vertStackView)
+//        configureSelf()
 //        applyConstraints()
 //    }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Instance methods
     private func configureSelf() {
-        if scopeButtonsViewKind == .forBookshelfVc {
-            // Configuration for BookshelfVC
-            guard let buttonKind = scopeButtonKind else { return }
+        switch kind {
+        case .forBookshelfVc(let buttonKind):
             switch buttonKind {
             case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
             case .started: titleLabel.text = "It looks like you haven't started any books yet!"
@@ -107,37 +120,25 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
             case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
             default: print("Case with \(buttonKind) not handled in switch")
             }
-            return
+        case .networkingError(let error):
+            switch error {
+            case .noInternetConnection:
+                imageView.image = UIImage(systemName: "exclamationmark.triangle")
+                titleLabel.text = "No internet connection"
+                subtitleLabel.text = "Please check your internet connection and try again."
+            case .failedToFetch:
+                imageView.image = UIImage(systemName: "exclamationmark.bubble")
+                titleLabel.text = "Something went wrong"
+                subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
+            case .noResults:
+                imageView.image = UIImage(systemName: "magnifyingglass")
+                titleLabel.text = "No results found"
+                subtitleLabel.text = "Check the spelling or try different keywords."
+            }
         }
-        
-        // Configuration for other cases
-        if networkManagerError == .noInternetConnection {
-            imageView.image = UIImage(systemName: "exclamationmark.triangle")
-            titleLabel.text = "No internet connection"
-            subtitleLabel.text = "Please check your internet connection and try again."
-            return
-        }
-        
-        if networkManagerError == .failedToFetch {
-            imageView.image = UIImage(systemName: "exclamationmark.bubble")
-            titleLabel.text = "Something went wrong"
-            subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
-            return
-        }
-        
-        if networkManagerError == .noResults {
-            imageView.image = UIImage(systemName: "magnifyingglass")
-            titleLabel.text = "No results found"
-            subtitleLabel.text = "Check the spelling or try different keywords."
-        }
-        
-//        imageView.image = UIImage(systemName: "magnifyingglass")
-//        titleLabel.text = "No results found"
-//        subtitleLabel.text = "Check the spelling or try different keywords."
-        return
     }
     
-//    func configure(noInternetConnection: Bool = false, fetchingErrorOcurred: Bool = false) {
+//    private func configureSelf() {
 //        if scopeButtonsViewKind == .forBookshelfVc {
 //            // Configuration for BookshelfVC
 //            guard let buttonKind = scopeButtonKind else { return }
@@ -148,61 +149,30 @@ class NoBooksScopeCollectionViewBackgroundView: UIView {
 //            case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
 //            default: print("Case with \(buttonKind) not handled in switch")
 //            }
+//            return
 //        }
 //
 //        // Configuration for other cases
-//        if noInternetConnection {
+//        if networkManagerError == .noInternetConnection {
 //            imageView.image = UIImage(systemName: "exclamationmark.triangle")
 //            titleLabel.text = "No internet connection"
 //            subtitleLabel.text = "Please check your internet connection and try again."
 //            return
 //        }
 //
-//        if fetchingErrorOcurred {
+//        if networkManagerError == .failedToFetch {
 //            imageView.image = UIImage(systemName: "exclamationmark.bubble")
 //            titleLabel.text = "Something went wrong"
 //            subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
 //            return
 //        }
 //
-//        imageView.image = UIImage(systemName: "magnifyingglass")
-//        titleLabel.text = "No results found"
-//        subtitleLabel.text = "Check the spelling or try different keywords."
-//        return
-//    }
-    
-//    func configure(noInternetConnection: Bool, fetchingErrorOcurred: Bool) {
-//        // Configuration for SearchResultsfVC
-//        if scopeButtonsViewKind == .forSearchResultsVc {
-//            if noInternetConnection {
-//                imageView.image = UIImage(systemName: "exclamationmark.triangle")
-//                titleLabel.text = "No internet connection"
-//                subtitleLabel.text = "Please check your internet connection and try again."
-//                return
-//            }
-//
-//            if fetchingErrorOcurred {
-//                imageView.image = UIImage(systemName: "exclamationmark.bubble")
-//                titleLabel.text = "Something went wrong"
-//                subtitleLabel.text = "There was a problem loading data. Check your connection and try again"
-//                return
-//            }
-//
+//        if networkManagerError == .noResults {
 //            imageView.image = UIImage(systemName: "magnifyingglass")
 //            titleLabel.text = "No results found"
 //            subtitleLabel.text = "Check the spelling or try different keywords."
-//            return
 //        }
-//
-//        // Configuration for BookshelfVC
-//        guard let buttonKind = scopeButtonKind else { return }
-//        switch buttonKind {
-//        case .toRead: titleLabel.text = "It looks like you haven't added any books yet!"
-//        case .started: titleLabel.text = "It looks like you haven't started any books yet!"
-//        case .finished: titleLabel.text = "It looks like you haven't finished any books yet!"
-//        case .downloaded: titleLabel.text = "It looks like you haven't downloaded any books yet!"
-//        default: print("Case with \(buttonKind) not handled in switch")
-//        }
+//        return
 //    }
     
     // MARK: - Helper methods

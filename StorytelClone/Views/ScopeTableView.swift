@@ -18,8 +18,8 @@ class ScopeTableView: UITableView {
     var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
     
     let buttonKind: ScopeButtonKind
-    var model = [Title]()
     
+    var model = [Title]()
     var networkManagerError: NetworkManagerError?
     
     var hasSectionHeader = true
@@ -92,7 +92,15 @@ class ScopeTableView: UITableView {
             return
         }
         
-        let noBooksView = NoBooksScopeCollectionViewBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: networkManagerError)
+        var noBooksView: NoDataBackgroundView
+        if let networkingError = networkManagerError {
+            noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkingError))
+        } else {
+            noBooksView = NoDataBackgroundView(kind: .forBookshelfVc(scopeButtonKind: buttonKind))
+        }
+
+//        let noBooksView = NoDataBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: networkManagerError)
+        
         backgroundView = noBooksView
     }
 

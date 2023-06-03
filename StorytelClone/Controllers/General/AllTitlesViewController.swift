@@ -238,7 +238,8 @@ class AllTitlesViewController: BaseViewController {
                 if let networkError = error as? NetworkManagerError {
                     DispatchQueue.main.async {
                         self?.activityIndicator.stopAnimating()
-                        let noBooksView = NoBooksScopeCollectionViewBackgroundView(networkManagerError: networkError)
+//                        let noBooksView = NoDataBackgroundView(networkManagerError: networkError)
+                        let noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
                         self?.bookTable.backgroundView = noBooksView
                     }
                 }

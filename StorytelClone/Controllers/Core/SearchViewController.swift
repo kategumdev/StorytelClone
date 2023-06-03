@@ -88,7 +88,6 @@ class SearchViewController: UIViewController {
         categoriesTable.dataSource = self
         
         navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.delegate = self
 
@@ -160,11 +159,11 @@ class SearchViewController: UIViewController {
     }
     
     // This method doesn't fetch data, it just shows hardcoded data
-    private func setHardcodedTitles(toBeEmpty: Bool) -> [ScopeButtonKind : [Title]] {
+    private func setHardcodedTitles(empty: Bool) -> [ScopeButtonKind : [Title]] {
         var newModel = [ScopeButtonKind : [Title]]()
         let buttonKinds = ScopeButtonsViewKind.forSearchResultsVc.buttonKinds
         
-        if toBeEmpty {
+        if empty {
             for buttonKind in buttonKinds {
                 newModel[buttonKind] = [Book]()
             }
@@ -203,127 +202,8 @@ class SearchViewController: UIViewController {
     
 }
 
-// MARK: - UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
-extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
-    
-//    func updateSearchResults(for searchController: UISearchController) {
-//        print("updateSearchResults")
-//        networkManager.cancelTasks()
-//        let searchBar = searchController.searchBar
-//
-//        guard let query = searchBar.text,
-//              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-//
-//        let queryString = query.trimmingCharacters(in: .whitespaces)
-//        print("queryString count: \(queryString.count)")
-//
-//        if queryString.count >= 6 {
-//
-//#warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
-//            networkManager.fetchBooks(withQuery: query) { [weak self] result in
-//                guard let self = self else { return }
-//                print("networkManager fetches")
-//
-//                switch result {
-//                case .success(let fetchedBooks):
-//                    var books = fetchedBooks
-//                    books.shuffle()
-//
-//                    DispatchQueue.main.async {
-//                        var newModel = self.setHardcodedTitles(toBeEmpty: false)
-//                        newModel[.books] = books
-//                        resultsController.modelForSearchQuery = newModel
-//                    }
-//
-//                case .failure(let error):
-//                    if let networkError = error as? NetworkManagerError {
-//                        DispatchQueue.main.async {
-//                            resultsController.networkManagerError = networkError
-//                            resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
-//            if resultsController.modelForSearchQuery != nil {
-//                resultsController.modelForSearchQuery = nil
-//                resultsController.setInitialOffsetsOfTablesInCells()
-//                resultsController.collectionView.reloadData()
-//            }
-//        }
-//    }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-//        print("updateSearchResults")
-//        networkManager.cancelTasks()
-//
-//        let searchBar = searchController.searchBar
-//
-//        guard let query = searchBar.text,
-//              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-//
-//        if firstTimeUpdateResults {
-//            firstTimeUpdateResults = false
-//            resultsController.modelForSearchQuery = nil
-//            resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
-//            return
-//        }
-//
-//        let previousQuery = previousQueryString
-//        let queryString = query.trimmingCharacters(in: .whitespaces)
-//        previousQueryString = queryString
-//        print("queryString count: \(queryString.count)")
-//
-//
-//
-//        if queryString.isEmpty && !previousQuery.isEmpty {
-//            print("set modelForSearchQuery to nil, initial appearance")
-//            // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
-//            resultsController.modelForSearchQuery = nil
-//            resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
-//            return
-//        }
-//
-////        let queryString = query.trimmingCharacters(in: .whitespaces)
-////        print("queryString count: \(queryString.count)")
-////
-////        if queryString.isEmpty {
-////            print("set modelForSearchQuery to nil, initial appearance")
-////            // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
-////            resultsController.modelForSearchQuery = nil
-////            resultsController.setInitialOffsetsOfTablesInCells()
-////            resultsController.collectionView.reloadData()
-////            return
-////        }
-//#warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
-//        networkManager.fetchBooks(withQuery: query) { [weak self] result in
-//            guard let self = self else { return }
-//            print("networkManager fetches")
-//
-//            switch result {
-//            case .success(let fetchedBooks):
-//                var books = fetchedBooks
-//                books.shuffle()
-//
-//                DispatchQueue.main.async {
-//                    var newModel = self.setHardcodedTitles(toBeEmpty: false)
-//                    newModel[.books] = books
-//                    resultsController.modelForSearchQuery = newModel
-//                }
-//
-//            case .failure(let error):
-//                if let networkError = error as? NetworkManagerError {
-//                    DispatchQueue.main.async {
-//                        resultsController.networkManagerError = networkError
-//                        resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
-//                    }
-//                }
-//            }
-//        }
-    }
+// MARK: - UISearchBarDelegate, UISearchControllerDelegate
+extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print("\n\ntextDidChange")
@@ -339,8 +219,8 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
         if queryString.isEmpty {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             resultsController.modelForSearchQuery = nil
-            resultsController.setInitialOffsetsOfTablesInCells()
-            resultsController.collectionView.reloadData()
+//            resultsController.setInitialOffsetsOfTablesInCells()
+//            resultsController.collectionView.reloadData()
             return
         }
 
@@ -351,11 +231,14 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
 
             switch result {
             case .success(let fetchedBooks):
+//                resultsController.networkManagerError = nil
+                #warning("Make sure that setting networkManagerError to nil is not needed here")
+
                 var books = fetchedBooks
                 books.shuffle()
 
                 DispatchQueue.main.async {
-                    var newModel = self.setHardcodedTitles(toBeEmpty: false)
+                    var newModel = self.setHardcodedTitles(empty: false)
                     newModel[.books] = books
                     resultsController.modelForSearchQuery = newModel
                 }
@@ -364,62 +247,14 @@ extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate, UI
                 if let networkError = error as? NetworkManagerError {
                     DispatchQueue.main.async {
                         resultsController.networkManagerError = networkError
-                        resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
+                        resultsController.modelForSearchQuery = self.setHardcodedTitles(empty: true)
                     }
                 }
             }
         }
     }
     
-//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        print("searchBarTextDidEndEditing")
-//        networkManager.cancelTasks()
-//        let searchBar = searchController.searchBar
-//
-//        guard let query = searchBar.text,
-//              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
-//
-//        let queryString = query.trimmingCharacters(in: .whitespaces)
-//        print("queryString count: \(queryString.count)")
-//
-//        if queryString.isEmpty {
-//            print("set modelForSearchQuery to nil, initial appearance")
-//            // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
-//            resultsController.modelForSearchQuery = nil
-//            resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
-//            return
-//        }
-//
-//#warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
-//        networkManager.fetchBooks(withQuery: query) { [weak self] result in
-//            guard let self = self else { return }
-//            print("networkManager fetches")
-//
-//            switch result {
-//            case .success(let fetchedBooks):
-//                var books = fetchedBooks
-//                books.shuffle()
-//
-//                DispatchQueue.main.async {
-//                    var newModel = self.setHardcodedTitles(toBeEmpty: false)
-//                    newModel[.books] = books
-//                    resultsController.modelForSearchQuery = newModel
-//                }
-//
-//            case .failure(let error):
-//                if let networkError = error as? NetworkManagerError {
-//                    DispatchQueue.main.async {
-//                        resultsController.networkManagerError = networkError
-//                        resultsController.modelForSearchQuery = self.setHardcodedTitles(toBeEmpty: true)
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     func willPresentSearchController(_ searchController: UISearchController) {
-                
         // Avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
         navigationController?.navigationBar.isTranslucent = false
         

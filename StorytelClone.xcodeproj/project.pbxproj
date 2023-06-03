@@ -41,7 +41,7 @@
 		5A9916482A0A587C00CB6B8A /* BookContainerScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */; };
 		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */; };
 		5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */; };
-		5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */; };
+		5A9FF6F62A017A16009CA8DA /* NoDataBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */; };
 		5AA076B62A27D16000C36DE9 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AA076B52A27D16000C36DE9 /* SDWebImage */; };
 		5AA8006429C8D21100198B8A /* ScopeSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */; };
 		5AA8006929C8DD5100198B8A /* BaseScopeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */; };
@@ -140,7 +140,7 @@
 		5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContainerScrollView.swift; sourceTree = "<group>"; };
 		5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithHorzCvLargeRectangleCovers.swift; sourceTree = "<group>"; };
 		5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeBookCollectionViewCell.swift; sourceTree = "<group>"; };
-		5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBooksScopeCollectionViewBackgroundView.swift; sourceTree = "<group>"; };
+		5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataBackgroundView.swift; sourceTree = "<group>"; };
 		5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseScopeTableViewCell.swift; sourceTree = "<group>"; };
 		5AA8006A29C8EFDC00198B8A /* Series.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -354,7 +354,7 @@
 				5A37EB2029DD83710053F6A7 /* PopupButton.swift */,
 				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
-				5A9FF6F52A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift */,
+				5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */,
 				5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */,
 				5AF352302A20BE8400E50394 /* ScopeTableView.swift */,
 				5AB2CCCC29B243140048A4FB /* Cells */,
@@ -580,7 +580,7 @@
 				5AA8006D29C8F2F700198B8A /* Language.swift in Sources */,
 				5AC824212A21296B00CF337D /* NetworkManager.swift in Sources */,
 				5AB9524629EF1F06001EA8DA /* BottomSheetTableViewCell.swift in Sources */,
-				5A9FF6F62A017A16009CA8DA /* NoBooksScopeCollectionViewBackgroundView.swift in Sources */,
+				5A9FF6F62A017A16009CA8DA /* NoDataBackgroundView.swift in Sources */,
 				5AA8006B29C8EFDC00198B8A /* Series.swift in Sources */,
 				5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */,
 				5AF93326299D722100DF17C7 /* Extensions.swift in Sources */,
