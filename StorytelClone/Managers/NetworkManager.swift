@@ -14,6 +14,8 @@ struct APIConstants {
 
 //https://www.googleapis.com/books/v1/volumes?q=gaiman&key=AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM
 
+typealias SearchResult = Result<[Book], Error>
+
 enum NetworkManagerError: Error {
     case noInternetConnection
     case failedToFetch
@@ -21,9 +23,9 @@ enum NetworkManagerError: Error {
 }
 
 class NetworkManager {
-    var currentGoogleBooksDataTask: URLSessionDataTask?
-    var currentITunesDataTask: URLSessionDataTask?
-    var hasError = false
+    private var currentGoogleBooksDataTask: URLSessionDataTask?
+    private var currentITunesDataTask: URLSessionDataTask?
+    private(set) var hasError = false
     
     private func fetchEbooks(with query: String, completion: @escaping (Result<[Ebook], Error>) -> Void) {
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
@@ -83,13 +85,13 @@ class NetworkManager {
         currentITunesDataTask?.resume()
     }
     
-    func fetchBooks(withQuery query: String, completion: @escaping (Result<[Book], Error>) -> Void) {
+    func fetchBooks(withQuery query: String, completion: @escaping (SearchResult) -> Void) {
 //        print("fetching query \(query)")
         reset()
         let dataTaskGroup = DispatchGroup()
         var fetchError: Error?
         var allFetchedBooks = [Book]()
-        
+
         // Perform Google Books search
         dataTaskGroup.enter()
         fetchEbooks(with: query) { result in
@@ -102,7 +104,7 @@ class NetworkManager {
 //            print("google books completion for \(query)")
             dataTaskGroup.leave()
         }
-        
+
         // Perform iTunes search
         dataTaskGroup.enter()
         fetchAudiobooks(with: query) { result in
@@ -115,7 +117,7 @@ class NetworkManager {
 //            print("itunes completion for \(query)")
             dataTaskGroup.leave()
         }
-        
+
         dataTaskGroup.notify(queue: DispatchQueue.main) { [weak self] in
 //            print("dataTaskGroup notified and performing completion")
             if !allFetchedBooks.isEmpty {
@@ -129,7 +131,7 @@ class NetworkManager {
                 completion(.failure(NetworkManagerError.noResults)) // when empty and no errors
             }
         }
-#warning("If either task was cancelled (and therefore its completion wasn't called), dataTaskGroup.notify won't be called. Does it to be cleaned somehow?")
+#warning("If either task was cancelled (and therefore its completion wasn't called), dataTaskGroup.notify won't be called. Does it need to be cleaned somehow?")
     }
 
     func cancelTasks() {

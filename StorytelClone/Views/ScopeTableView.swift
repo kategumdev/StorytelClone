@@ -22,6 +22,9 @@ class ScopeTableView: UITableView {
     var model = [Title]()
     var networkManagerError: NetworkManagerError?
     
+//    var networkManagerSearchResult: SearchResult? = .success([Book]())
+//    var networkingResult: NetworkResult
+    
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
     
@@ -92,15 +95,13 @@ class ScopeTableView: UITableView {
             return
         }
         
+        // Handle case when model.isEmpty
         var noBooksView: NoDataBackgroundView
         if let networkingError = networkManagerError {
             noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkingError))
         } else {
             noBooksView = NoDataBackgroundView(kind: .forBookshelfVc(scopeButtonKind: buttonKind))
         }
-
-//        let noBooksView = NoDataBackgroundView(scopeButtonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind, networkManagerError: networkManagerError)
-        
         backgroundView = noBooksView
     }
 

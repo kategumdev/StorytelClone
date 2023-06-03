@@ -158,48 +158,6 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
-    // This method doesn't fetch data, it just shows hardcoded data
-    private func setHardcodedTitles(empty: Bool) -> [ScopeButtonKind : [Title]] {
-        var newModel = [ScopeButtonKind : [Title]]()
-        let buttonKinds = ScopeButtonsViewKind.forSearchResultsVc.buttonKinds
-        
-        if empty {
-            for buttonKind in buttonKinds {
-                newModel[buttonKind] = [Book]()
-            }
-            return newModel
-        }
-        
-        for buttonKind in buttonKinds {
-
-            if buttonKind == .top {
-                newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
-            }
-
-            if buttonKind == .books {
-                newModel[buttonKind] = [Book]()
-//                newModel[buttonKind] = [Book.senorDeLosAnillos2, Book.book3, Book.book4, Book.book5, Book.book6, Book.book23, Book.book22, Book.book7, Book.book8, Book.book9, Book.book21, Book.book8, Book.book13, Book.book20]
-            }
-
-            if buttonKind == .authors {
-                newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
-            }
-
-            if buttonKind == .narrators {
-                newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
-            }
-
-            if buttonKind == .series {
-                newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
-            }
-
-            if buttonKind == .tags {
-                newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
-            }
-        }
-        return newModel
-    }
-    
 }
 
 // MARK: - UISearchBarDelegate, UISearchControllerDelegate
@@ -209,48 +167,20 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
         print("\n\ntextDidChange")
         networkManager.cancelTasks()
         let searchBar = searchController.searchBar
-
         guard let query = searchBar.text,
               let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
 
         let queryString = query.trimmingCharacters(in: .whitespaces)
-        print("queryString count: \(queryString.count)")
-
         if queryString.isEmpty {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             resultsController.modelForSearchQuery = nil
-//            resultsController.setInitialOffsetsOfTablesInCells()
-//            resultsController.collectionView.reloadData()
             return
         }
 
-#warning("check if [weak self] is enough here, maybe resultsController needs to be added to the capture list")
-        networkManager.fetchBooks(withQuery: query) { [weak self] result in
-            guard let self = self else { return }
+#warning("make sure weak resultsController is ok here")
+        networkManager.fetchBooks(withQuery: query) { [weak resultsController] result in
             print("networkManager fetches for \(queryString)")
-
-            switch result {
-            case .success(let fetchedBooks):
-//                resultsController.networkManagerError = nil
-                #warning("Make sure that setting networkManagerError to nil is not needed here")
-
-                var books = fetchedBooks
-                books.shuffle()
-
-                DispatchQueue.main.async {
-                    var newModel = self.setHardcodedTitles(empty: false)
-                    newModel[.books] = books
-                    resultsController.modelForSearchQuery = newModel
-                }
-
-            case .failure(let error):
-                if let networkError = error as? NetworkManagerError {
-                    DispatchQueue.main.async {
-                        resultsController.networkManagerError = networkError
-                        resultsController.modelForSearchQuery = self.setHardcodedTitles(empty: true)
-                    }
-                }
-            }
+            resultsController?.handleSearchResult(result)
         }
     }
     
