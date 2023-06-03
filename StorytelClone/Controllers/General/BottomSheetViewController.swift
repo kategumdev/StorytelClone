@@ -191,7 +191,7 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
             let selectedStoryteller = storytellers[indexPath.row]
             self.dismiss(animated: false) { [weak self] in
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return}
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: selectedStoryteller)
                 delegate.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -229,8 +229,8 @@ extension BottomSheetViewController {
         case .viewSeries:
             self.dismiss(animated: false)
             guard let series = book.series, let delegate = self.delegate as? UIViewController else { return }
-            let tableSection = TableSection(sectionTitle: series)
-            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+            let subCategory = SubCategory(title: series)
+            let controller = AllTitlesViewController(subCategory: subCategory, titleModel: Series.series1)
             delegate.navigationController?.pushViewController(controller, animated: true)
             
         case .viewAuthors:
@@ -301,7 +301,7 @@ extension BottomSheetViewController {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return }
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: storytellers.first)
                 delegate.navigationController?.pushViewController(controller, animated: true)
             })
             return
@@ -322,37 +322,37 @@ extension BottomSheetViewController {
     private func handleShowMoreTitlesLikeThis() {
         self.dismiss(animated: false)
         
-        // Create table sections
-        var librosSimilaresTableSection = TableSection.librosSimilares
-        librosSimilaresTableSection.toShowTitleModel = book
-        var tableSections = [
-            librosSimilaresTableSection
+        // Create subcategories
+        var librosSimilaresSubCategory = SubCategory.librosSimilares
+        librosSimilaresSubCategory.toShowTitleModel = book
+        var subCategories = [
+            librosSimilaresSubCategory
         ]
         
         for author in book.authors {
-            let authorTableSection = TableSection(sectionTitle: "Títulos populares de este autor", sectionSubtitle: author.name, toShowTitleModel: author)
-            tableSections.append(authorTableSection)
+            let authorSubCategory = SubCategory(title: "Títulos populares de este autor", subtitle: author.name, toShowTitleModel: author)
+            subCategories.append(authorSubCategory)
         }
         
         for narrator in book.narrators {
-            let narratorTableSection = TableSection(sectionTitle: "Títulos populares de este narrador", sectionSubtitle: narrator.name, toShowTitleModel: narrator)
-            tableSections.append(narratorTableSection)
+            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, toShowTitleModel: narrator)
+            subCategories.append(narratorSubCategory)
         }
         
         if let series = book.series {
-            #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesTableSection")
+            #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesSubCategory")
             let seriesTitleModel = Series.series1
-            let seriesTableSection = TableSection(sectionTitle: "Más de estas series", sectionSubtitle: series, toShowTitleModel: seriesTitleModel)
-            tableSections.append(seriesTableSection)
+            let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, toShowTitleModel: seriesTitleModel)
+            subCategories.append(seriesSubCategory)
         }
         
-        let categoryName = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
-        let categoryForTableSection = book.buttonCategory.category
-        let categoryTableSection = TableSection(sectionTitle: "Más de esta categoría", sectionSubtitle: categoryName, toShowCategory: categoryForTableSection)
-        tableSections.append(categoryTableSection)
+        let subtitle = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
+        let categoryToShow = book.buttonCategory.category
+        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, categoryToShow: categoryToShow)
+        subCategories.append(subCategory)
         
-        // Create category with created tableSections and pass it to callback
-        let category = Category(title: "Libros similares", tableSections: tableSections, bookToShowMoreTitlesLikeIt: book)
+        // Create category with created subCategories and pass it to callback
+        let category = Category(title: "Libros similares", subCategories: subCategories, bookToShowMoreTitlesLikeIt: book)
         let controller = CategoryViewController(categoryModel: category)
         (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
     }

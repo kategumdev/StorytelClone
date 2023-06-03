@@ -130,7 +130,7 @@ class SearchViewController: UIViewController {
                 self?.navigationController?.pushViewController(controller, animated: true)
             } else {
                 print("SearchViewController handles \(selectedSearchResultTitle.titleKind)")
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: selectedSearchResultTitle)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: selectedSearchResultTitle)
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -263,8 +263,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         if section == 0 { return UIView() }
                 
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-        let currentSection = model.tableSections[section]
-        sectionHeader.configureFor(tableSection: currentSection)
+        let subCategory = model.subCategories[section]
+        sectionHeader.configureFor(subCategory: subCategory)
         return sectionHeader
     }
     
@@ -276,8 +276,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 { return SectionHeaderView.topPadding }
         
-        let currentSection = model.tableSections[section]
-        let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: currentSection, superviewWidth: view.bounds.width)
+        let subCategory = model.subCategories[section]
+        let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory, superviewWidth: view.bounds.width)
         return calculatedHeight
     }
     

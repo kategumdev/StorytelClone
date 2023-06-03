@@ -11,7 +11,7 @@ var allTitlesBooks = Book.books + [Book.book20, Book.book21, Book.book22, Book.b
 
 class AllTitlesViewController: BaseViewController {
 
-    var tableSection: TableSection?
+    var subCategory: SubCategory?
     let titleModel: Title?
     private var currentSelectedBook: Book?
     private let popupButton = PopupButton()
@@ -26,8 +26,8 @@ class AllTitlesViewController: BaseViewController {
     }()
 
     // MARK: - Initializers
-    init(tableSection: TableSection? = nil, titleModel: Title? = nil) {
-        self.tableSection = tableSection
+    init(subCategory: SubCategory? = nil, titleModel: Title? = nil) {
+        self.subCategory = subCategory
         self.titleModel = titleModel
         super.init(tableViewStyle: .plain)
     }
@@ -119,16 +119,15 @@ class AllTitlesViewController: BaseViewController {
             sectionHeader.configureWith(title: "All titles")
         }
 
-        guard let tableSection = tableSection else { return UIView() }
+        guard let subCategory = subCategory else { return UIView() }
         
-        if tableSection.canBeFiltered && tableSection.canBeShared {
+        if subCategory.canBeFiltered && subCategory.canBeShared {
             sectionHeader.showShareAndFilterButtons()
-        } else if tableSection.canBeFiltered {
+        } else if subCategory.canBeFiltered {
             sectionHeader.showOnlyFilterButton()
         } else {
             sectionHeader.showOnlyShareButton()
         }
-        
         return sectionHeader
     }
     
@@ -163,18 +162,14 @@ class AllTitlesViewController: BaseViewController {
             text = series.title
         } else if let tag = titleModel as? Tag {
             text = tag.tagTitle
-        } else if let tableSection = tableSection {
-            text = tableSection.sectionTitle
+        } else if let subCategory = subCategory {
+            text = subCategory.title
         }
 
         text = text.replacingOccurrences(of: "\n", with: " ")
         title = text
         extendedLayoutIncludesOpaqueBars = true
     }
-    
-//    override func layoutTableHeader() {
-//        configureAndLayoutTableHeader()
-//    }
     
     override func layoutTableHeader() {
         if networkManager.hasError {
@@ -209,9 +204,9 @@ class AllTitlesViewController: BaseViewController {
             return
         }
         
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let tableSection = tableSection else { return }
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let subCategory = subCategory else { return }
         if !isHeaderConfigured {
-            headerView.configureFor(tableSection: tableSection, titleModel: titleModel)
+            headerView.configureFor(subCategory: subCategory, titleModel: titleModel)
             isHeaderConfigured = true
         }
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)

@@ -17,7 +17,7 @@ class TableHeaderView: UIView {
 
     private lazy var bookTitleForSimilarLabel = UILabel.createLabelWith(font: UIFont.customCalloutSemibold, numberOfLines: 2)
 
-    private lazy var sectionDescriptionLabel: UILabel = {
+    private lazy var subCategoryDescriptionLabel: UILabel = {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 32)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
         return label
@@ -62,7 +62,7 @@ class TableHeaderView: UIView {
         dimView.fillSuperview()
     }
 
-    func configureFor(tableSection: TableSection, titleModel: Title?) {
+    func configureFor(subCategory: SubCategory, titleModel: Title?) {
 
         if let series = titleModel as? Series {
             headerLabel.text = series.title
@@ -72,7 +72,7 @@ class TableHeaderView: UIView {
         } else if let tag = titleModel as? Tag {
             headerLabel.text = tag.tagTitle
         } else {
-            headerLabel.text = tableSection.sectionTitle
+            headerLabel.text = subCategory.title
         }
 
         if let book = titleModel as? Book {
@@ -81,9 +81,9 @@ class TableHeaderView: UIView {
             stackView.spacing = 9
         }
 
-        if let sectionDescription = tableSection.sectionDescription {
-            sectionDescriptionLabel.text = sectionDescription
-            stackView.addArrangedSubview(sectionDescriptionLabel)
+        if let description = subCategory.description {
+            subCategoryDescriptionLabel.text = description
+            stackView.addArrangedSubview(subCategoryDescriptionLabel)
             stackView.spacing = 15
         }
     }

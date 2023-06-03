@@ -76,9 +76,9 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
         
-        sectionHeader.configureFor(tableSection: TableSection.similarTitles, withSeeAllButtonDidTapCallback: { [weak self] in
+        sectionHeader.configureFor(subCategory: SubCategory.similarTitles, withSeeAllButtonDidTapCallback: { [weak self] in
             guard let self = self else { return }
-            let controller = AllTitlesViewController(tableSection: TableSection.similarTitles, titleModel: self.book)
+            let controller = AllTitlesViewController(subCategory: SubCategory.similarTitles, titleModel: self.book)
             self.navigationController?.pushViewController(controller, animated: true)
         })
         return sectionHeader
@@ -119,7 +119,7 @@ extension BookViewController {
 //            print("storytellerButtonDidTapCallback with \(storytellers)")
             guard let self = self else { return }
             if storytellers.count == 1 {
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: storytellers.first)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: storytellers.first)
                 self.navigationController?.pushViewController(controller, animated: true)
                 return
             }
@@ -134,7 +134,7 @@ extension BookViewController {
         if bookContainerScrollView.hasTags {
             bookContainerScrollView.tagsView.tagButtonDidTapCallback = { [weak self] tag in
                 guard let self = self else { return }
-                let controller = AllTitlesViewController(tableSection: TableSection.generalForAllTitlesVC, titleModel: tag)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: tag)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -142,8 +142,8 @@ extension BookViewController {
         guard book.series != nil else { return }
         bookContainerScrollView.bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
             guard let self = self, let series = self.book.series else { return }
-            let tableSection = TableSection(sectionTitle: series)
-            let controller = AllTitlesViewController(tableSection: tableSection, titleModel: Series.series1)
+            let subCategory = SubCategory(title: series)
+            let controller = AllTitlesViewController(subCategory: subCategory, titleModel: Series.series1)
             self.navigationController?.pushViewController(controller, animated: true)
         }
         

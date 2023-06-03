@@ -115,7 +115,7 @@ class BookContainerScrollView: UIScrollView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
 //            print("bookTableHeight UPDATED")
-            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
+            bookTableHeight = SectionHeaderView.calculateEstimatedHeightFor(subCategory: SubCategory.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
         }
     }
     
@@ -200,7 +200,7 @@ class BookContainerScrollView: UIScrollView {
     }
     
     private func calculateBookTableHeight() -> CGFloat {
-        let height = SectionHeaderView.calculateEstimatedHeightFor(tableSection: TableSection.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
+        let height = SectionHeaderView.calculateEstimatedHeightFor(subCategory: SubCategory.similarTitles, superviewWidth: superviewWidth) + TableViewCellWithCollection.rowHeight
         return height
     }
     

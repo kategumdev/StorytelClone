@@ -24,14 +24,7 @@ class HomeViewController: BaseViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-        bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
-        bookTable.register(TableViewCellWithHorzCvLargeRectangleCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier)
-        bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
-        
-        // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
-        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
-        
+        configureTable()
         view.addSubview(popupButton)
     }
     
@@ -68,9 +61,9 @@ class HomeViewController: BaseViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        print("section \(indexPath.row)")
         guard let category = category else { return UITableViewCell() }
-        let sectionKind = category.tableSections[indexPath.section].sectionKind
+        let subCategoryKind = category.subCategories[indexPath.section].kind
 
-        switch sectionKind {
+        switch subCategoryKind {
         case .horizontalCv: return cellWithHorizontalCv(in: tableView, for: indexPath)
         case .verticalCv: return UITableViewCell()
         case .oneBookWithOverview: return bookWithOverviewCell(in: tableView, for: indexPath)
@@ -85,13 +78,13 @@ class HomeViewController: BaseViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let category = category else { return 0 }
-        let sectionKind = category.tableSections[indexPath.section].sectionKind
+        let subCategoryKind = category.subCategories[indexPath.section].kind
         
-        switch sectionKind {
+        switch subCategoryKind {
         case .horizontalCv: return TableViewCellWithCollection.rowHeight
         case .verticalCv: return 0
         case .oneBookWithOverview:
-            let book = category.tableSections[indexPath.section].books[0]
+            let book = category.subCategories[indexPath.section].books[0]
             return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
             
         case .poster: return PosterTableViewCell.heightForRow
@@ -105,9 +98,9 @@ class HomeViewController: BaseViewController {
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let category = category else { return 0 }
-        let sectionKind = category.tableSections[section].sectionKind
+        let subCategoryKind = category.subCategories[section].kind
         
-        if sectionKind == .seriesCategoryButton || sectionKind == .allCategoriesButton {
+        if subCategoryKind == .seriesCategoryButton || subCategoryKind == .allCategoriesButton {
             return SectionHeaderView.topPadding
         } else {
             return UITableView.automaticDimension
@@ -118,10 +111,20 @@ class HomeViewController: BaseViewController {
 
 // MARK: - Helper methods
 extension HomeViewController {
+    private func configureTable() {
+        bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
+        bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
+        bookTable.register(TableViewCellWithHorzCvLargeRectangleCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier)
+        bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
+        
+        // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
+        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
+    }
+    
     private func wideButtonCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
         if let category = category {
-            cell.configureFor(sectionKind: category.tableSections[indexPath.section].sectionKind, withCallback: dimmedAnimationButtonDidTapCallback)
+            cell.configureFor(subCategoryKind: category.subCategories[indexPath.section].kind, withCallback: dimmedAnimationButtonDidTapCallback)
         }
         return cell
     }
@@ -134,21 +137,21 @@ extension HomeViewController {
     
     private func cellWithHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection, let category = category else { return UITableViewCell() }
-        let books = category.tableSections[indexPath.section].books
+        let books = category.subCategories[indexPath.section].books
         cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
     private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers, let category = category else { return UITableViewCell()}
-        let books = category.tableSections[indexPath.section].books
+        let books = category.subCategories[indexPath.section].books
         cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
     private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
-        let book = category.tableSections[indexPath.section].books[0]
+        let book = category.subCategories[indexPath.section].books[0]
         
         cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
          return cell

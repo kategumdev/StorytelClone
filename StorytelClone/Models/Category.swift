@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum SectionKind {
+enum SubCategoryKind {
     case horizontalCv
     case verticalCv
     case oneBookWithOverview
@@ -18,32 +18,32 @@ enum SectionKind {
     case searchVc
 }
 
-struct TableSection {
-    let sectionTitle: String
-    let sectionSubtitle: String
-    let sectionKind: SectionKind
+struct SubCategory {
+    let title: String
+    let subtitle: String
+    let kind: SubCategoryKind
     let books: [Book]
-    let sectionDescription: String?
+    let description: String?
     var toShowTitleModel: Title?
     let canBeShared: Bool
     let canBeFiltered: Bool
-    let toShowCategory: Category?
+    let categoryToShow: Category?
     
-    init(sectionTitle: String, sectionSubtitle: String = "", sectionKind: SectionKind = .horizontalCv, books: [Book] = Book.books, sectionDescription: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, toShowCategory: Category? = nil) {
-        self.sectionTitle = sectionTitle
-        self.sectionSubtitle = sectionSubtitle
-        self.sectionKind = sectionKind
+    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, books: [Book] = Book.books, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil) {
+        self.title = title
+        self.subtitle = subtitle
+        self.kind = kind
         self.books = books
-        self.sectionDescription = sectionDescription
+        self.description = description
         self.toShowTitleModel = toShowTitleModel
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
-        self.toShowCategory = toShowCategory
+        self.categoryToShow = categoryToShow
     }
     
-    static let generalForAllTitlesVC = TableSection(sectionTitle: "")
-    static let similarTitles = TableSection(sectionTitle: "Similar titles", canBeShared: false)
-    static let librosSimilares = TableSection(sectionTitle: "Libros similares", canBeShared: false)
+    static let generalForAllTitlesVC = SubCategory(title: "")
+    static let similarTitles = SubCategory(title: "Similar titles", canBeShared: false)
+    static let librosSimilares = SubCategory(title: "Libros similares", canBeShared: false)
 }
 
 enum ButtonCategory: String {
@@ -152,271 +152,271 @@ struct Category: Equatable {
     #warning("Equatable implemention has to check id or smth like that, not title")
     
     let title: String
-    let tableSections: [TableSection]
+    let subCategories: [SubCategory]
     var bookToShowMoreTitlesLikeIt: Book?
     
-    init(title: String, tableSections: [TableSection], bookToShowMoreTitlesLikeIt: Book? = nil) {
+    init(title: String, subCategories: [SubCategory], bookToShowMoreTitlesLikeIt: Book? = nil) {
         self.title = title
-        self.tableSections = tableSections
+        self.subCategories = subCategories
         self.bookToShowMoreTitlesLikeIt = bookToShowMoreTitlesLikeIt
     }
         
     static let series = Category(
         title: ButtonCategory.series.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Series Top esta semana"),
-            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Los crímenes de Fjällbacka -\nCamilla Läckberg"),
-            TableSection(sectionTitle: "Series que son tendencia"),
-            TableSection(sectionTitle: "Series exclusivas", sectionKind: .verticalCv),
-            TableSection(sectionTitle: "Serie Tom Ripley de\nPatricia Highsmith"),
-            TableSection(sectionTitle: "Serie el Club del Crimen de los Jueves"),
-            TableSection(sectionTitle: "Las mejores series originales"),
-            TableSection(sectionTitle: "Episodios de una guerra interminable"),
-            TableSection(sectionTitle: "Serie Vientos alisios de\nChristina Courtenay"),
-            TableSection(sectionTitle: "La Rueda del Tiempo de\nRobert Jordan"),
-            TableSection(sectionTitle: "Serie Sektion M de\nChristina Larsson"),
-            TableSection(sectionTitle: "Serie Kim Stone -\nAngela Marsons"),
-            TableSection(sectionTitle: "Susana Martín Gijón para Storytel Original", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Serie Bad Ash -\nAlina Not"),
-            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Storyside - Las historias de/nSherlock Holmes"),
-            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusivo para Stirytel", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
-            TableSection(sectionTitle: "Storytel Original - Todas las series")
+        subCategories: [
+            SubCategory(title: "Series Top esta semana"),
+            SubCategory(title: "Una historia como nunca antes habías escuchado", subtitle: "Storytel Original", kind: .oneBookWithOverview),
+            SubCategory(title: "Los crímenes de Fjällbacka -\nCamilla Läckberg"),
+            SubCategory(title: "Series que son tendencia"),
+            SubCategory(title: "Series exclusivas", kind: .verticalCv),
+            SubCategory(title: "Serie Tom Ripley de\nPatricia Highsmith"),
+            SubCategory(title: "Serie el Club del Crimen de los Jueves"),
+            SubCategory(title: "Las mejores series originales"),
+            SubCategory(title: "Episodios de una guerra interminable"),
+            SubCategory(title: "Serie Vientos alisios de\nChristina Courtenay"),
+            SubCategory(title: "La Rueda del Tiempo de\nRobert Jordan"),
+            SubCategory(title: "Serie Sektion M de\nChristina Larsson"),
+            SubCategory(title: "Serie Kim Stone -\nAngela Marsons"),
+            SubCategory(title: "Susana Martín Gijón para Storytel Original", kind: .oneBookWithOverview),
+            SubCategory(title: "Serie Bad Ash -\nAlina Not"),
+            SubCategory(title: "Mikel Santiago para Storytel Original", subtitle: "Una serie sonora original", kind: .oneBookWithOverview),
+            SubCategory(title: "Storyside - Las historias de/nSherlock Holmes"),
+            SubCategory(title: "Juan Gómez-Jurado para Storytel Original", subtitle: "La primera serie sonora del autor en exclusivo para Stirytel", kind: .oneBookWithOverview),
+            SubCategory(title: "Alicia Giménez Bartlett - Serie Petra Delicado"),
+            SubCategory(title: "Storytel Original - Todas las series")
         ])
     
     static let zonaPodcast = Category(
         title: ButtonCategory.zonaPodcast.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Los más escuchados esta semana"),
-            TableSection(sectionTitle: "Nuevos podcast"),
-            TableSection(sectionTitle: "Sigue tus podcast favoritos", sectionKind: .verticalCv),
-            TableSection(sectionTitle: "Últimos episodios"),
-            TableSection(sectionTitle: "Los más buscados"),
-            TableSection(sectionTitle: "Storytel Original: Menlo Park")
+        subCategories: [
+            SubCategory(title: "Los más escuchados esta semana"),
+            SubCategory(title: "Nuevos podcast"),
+            SubCategory(title: "Sigue tus podcast favoritos", kind: .verticalCv),
+            SubCategory(title: "Últimos episodios"),
+            SubCategory(title: "Los más buscados"),
+            SubCategory(title: "Storytel Original: Menlo Park")
         ])
     
     static let soloEnStorytel = Category(
         title: ButtonCategory.soloEnStorytel.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Una historia como nunca antes habías escuchado", sectionSubtitle: "Storytel Original - Sonido binaural", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "En exclusiva - Los más escuchados esta semana"),
-            TableSection(sectionTitle: "Solo en Storytel"),
-            TableSection(sectionTitle: "Nuestros bestsellers"),
-            TableSection(sectionTitle: "Seríу Сrímenes del norte de\nMario Escobar"),
-            TableSection(sectionTitle: "La Rueda del Tiempo de\nRobert Jordan"),
-            TableSection(sectionTitle: "Storytel Original - Los más escuchados esta semana"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Serie Los Crímenes del faro de Ibon Martín"),
-            TableSection(sectionTitle: "Novedades en exclusiva: Romántica"),
-            TableSection(sectionTitle: "Solo en Storytel: Novelas"),
-            TableSection(sectionTitle: "Juan Gómez-Jurado para Storytel Original", sectionSubtitle: "La primera serie sonora del autor en exclusiva para Storytel", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Solo en Storytel: Novela negra y Thriller"),
-            TableSection(sectionTitle: "¿Te los has perdido?"),
-            TableSection(sectionTitle: "Muy pronto en exclusiva"),
-            TableSection(sectionTitle: "En exclusiva - Tendencias"),
-            TableSection(sectionTitle: "Mikel Santiago para Storytel Original", sectionSubtitle: "Una serie sonora original", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Serie Vientos aliosos de\nChristina Courtenay"),
-            TableSection(sectionTitle: "Solo en Storytel: fantasía y Ciencia ficción"),
-            TableSection(sectionTitle: "Solo en Storytel - Clásicos"),
-            TableSection(sectionTitle: "Storytel original - Todas las series"),
-            TableSection(sectionTitle: "Los más esperados en exclusiva"),
-            TableSection(sectionTitle: "Narrados en acento ibérico"),
-            TableSection(sectionTitle: "Narrados en acento neutro"),
-            TableSection(sectionTitle: "", sectionKind: .oneBookWithOverview),
-            TableSection(sectionTitle: "Solo en Storytel: Economía y negocios"),
-            TableSection(sectionTitle: "Solo en Storytel: Historia"),
-            TableSection(sectionTitle: "Solo en Storytel: Juvenil"),
-            TableSection(sectionTitle: "Solo en Storytel: Infantil"),
-            TableSection(sectionTitle: "Solo en Storytel: Biografías"),
-            TableSection(sectionTitle: "Solo en Storytel: Poesía y Teatro"),
-            TableSection(sectionTitle: "Solo en Storytel: Religión y Espiritualidad"),
-            TableSection(sectionTitle: "Historias inmersivas")
+        subCategories: [
+            SubCategory(title: "Una historia como nunca antes habías escuchado", subtitle: "Storytel Original - Sonido binaural", kind: .oneBookWithOverview),
+            SubCategory(title: "En exclusiva - Los más escuchados esta semana"),
+            SubCategory(title: "Solo en Storytel"),
+            SubCategory(title: "Nuestros bestsellers"),
+            SubCategory(title: "Seríу Сrímenes del norte de\nMario Escobar"),
+            SubCategory(title: "La Rueda del Tiempo de\nRobert Jordan"),
+            SubCategory(title: "Storytel Original - Los más escuchados esta semana"),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview),
+            SubCategory(title: "Serie Los Crímenes del faro de Ibon Martín"),
+            SubCategory(title: "Novedades en exclusiva: Romántica"),
+            SubCategory(title: "Solo en Storytel: Novelas"),
+            SubCategory(title: "Juan Gómez-Jurado para Storytel Original", subtitle: "La primera serie sonora del autor en exclusiva para Storytel", kind: .oneBookWithOverview),
+            SubCategory(title: "Solo en Storytel: Novela negra y Thriller"),
+            SubCategory(title: "¿Te los has perdido?"),
+            SubCategory(title: "Muy pronto en exclusiva"),
+            SubCategory(title: "En exclusiva - Tendencias"),
+            SubCategory(title: "Mikel Santiago para Storytel Original", subtitle: "Una serie sonora original", kind: .oneBookWithOverview),
+            SubCategory(title: "Serie Vientos aliosos de\nChristina Courtenay"),
+            SubCategory(title: "Solo en Storytel: fantasía y Ciencia ficción"),
+            SubCategory(title: "Solo en Storytel - Clásicos"),
+            SubCategory(title: "Storytel original - Todas las series"),
+            SubCategory(title: "Los más esperados en exclusiva"),
+            SubCategory(title: "Narrados en acento ibérico"),
+            SubCategory(title: "Narrados en acento neutro"),
+            SubCategory(title: "", kind: .oneBookWithOverview),
+            SubCategory(title: "Solo en Storytel: Economía y negocios"),
+            SubCategory(title: "Solo en Storytel: Historia"),
+            SubCategory(title: "Solo en Storytel: Juvenil"),
+            SubCategory(title: "Solo en Storytel: Infantil"),
+            SubCategory(title: "Solo en Storytel: Biografías"),
+            SubCategory(title: "Solo en Storytel: Poesía y Teatro"),
+            SubCategory(title: "Solo en Storytel: Religión y Espiritualidad"),
+            SubCategory(title: "Historias inmersivas")
         ])
     
     static let losMasPopulares = Category(
         title: ButtonCategory.losMasPopulares.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Los más populares - Novela"),
-            TableSection(sectionTitle: "Los más populares - Novela negra"),
-            TableSection(sectionTitle: "Los más populares - Clásicos"),
-            TableSection(sectionTitle: "Los más populares - Romántica"),
-            TableSection(sectionTitle: "Los más populares - Thriller"),
-            TableSection(sectionTitle: "Los más populares - Literatura infantil"),
-            TableSection(sectionTitle: "Los más populares - Young adult y juvenil"),
-            TableSection(sectionTitle: "Los más populares - Fantasía y Ciencia Ficción"),
-            TableSection(sectionTitle: "Los más populares - Historia"),
-            TableSection(sectionTitle: "Los más populares - Crecimiento personal"),
-            TableSection(sectionTitle: "Los más populares - Non fiction"),
-            TableSection(sectionTitle: "Los más populares - Biografía"),
-            TableSection(sectionTitle: "Los más populares - Economía y negocios"),
-            TableSection(sectionTitle: "Los más populares - Relatos")
+        subCategories: [
+            SubCategory(title: "Los más populares - Novela"),
+            SubCategory(title: "Los más populares - Novela negra"),
+            SubCategory(title: "Los más populares - Clásicos"),
+            SubCategory(title: "Los más populares - Romántica"),
+            SubCategory(title: "Los más populares - Thriller"),
+            SubCategory(title: "Los más populares - Literatura infantil"),
+            SubCategory(title: "Los más populares - Young adult y juvenil"),
+            SubCategory(title: "Los más populares - Fantasía y Ciencia Ficción"),
+            SubCategory(title: "Los más populares - Historia"),
+            SubCategory(title: "Los más populares - Crecimiento personal"),
+            SubCategory(title: "Los más populares - Non fiction"),
+            SubCategory(title: "Los más populares - Biografía"),
+            SubCategory(title: "Los más populares - Economía y negocios"),
+            SubCategory(title: "Los más populares - Relatos")
         ])
     
     static let soloParaTi = Category(
         title: ButtonCategory.soloParaTi.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Recomendados para ti"),
-            TableSection(sectionTitle: "Novedades para ti")
+        subCategories: [
+            SubCategory(title: "Recomendados para ti"),
+            SubCategory(title: "Novedades para ti")
         ])
     
     static let eBooks = Category(
         title: ButtonCategory.ebooks.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Novela - Los más leidos"),
-            TableSection(sectionTitle: "Novela negra y Thriller - Los más leidos")
+        subCategories: [
+            SubCategory(title: "Novela - Los más leidos"),
+            SubCategory(title: "Novela negra y Thriller - Los más leidos")
         ])
     
     static let novela = Category(
         title: ButtonCategory.novela.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Los más populares - Novela"),
-            TableSection(sectionTitle: "Nuevas novelas")
+        subCategories: [
+            SubCategory(title: "Los más populares - Novela"),
+            SubCategory(title: "Nuevas novelas")
         ])
     
     static let novelaNegra = Category(
         title: ButtonCategory.novelaNegra.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Solo en Storytel"),
-            TableSection(sectionTitle: "Los más populares - Novela negra")
+        subCategories: [
+            SubCategory(title: "Solo en Storytel"),
+            SubCategory(title: "Los más populares - Novela negra")
         ])
     
     static let romantica = Category(
         title: ButtonCategory.romantica.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Los más populares - Romántica"),
-            TableSection(sectionTitle: "Nuevas histotias de amor")
+        subCategories: [
+            SubCategory(title: "Los más populares - Romántica"),
+            SubCategory(title: "Nuevas histotias de amor")
         ])
     
     static let thrillerYHorror = Category(
         title: ButtonCategory.thrillerYHorror.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let fantasiaYCienciaFiccion = Category(
         title: ButtonCategory.fantasiaYCienciaFiccion.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let infantil = Category(
         title: ButtonCategory.infantil.rawValue,
-        tableSections: [
-            TableSection(sectionTitle: "Los más populares - Romántica"),
-            TableSection(sectionTitle: "Nuevas histotias de amor")
+        subCategories: [
+            SubCategory(title: "Los más populares - Romántica"),
+            SubCategory(title: "Nuevas histotias de amor")
         ]
     )
     
     static let crecimientoPersonalYLifestyle = Category(
         title: ButtonCategory.crecimientoPersonalYLifestyle.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let clasicos = Category(
         title: ButtonCategory.clasicos.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let juvenilYYoungAdult = Category(
         title: ButtonCategory.juvenilYYoungAdult.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let erotica = Category(
         title: ButtonCategory.erotica.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let noFiccion = Category(
         title: ButtonCategory.noFiccion.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let economiaYNegocios = Category(
         title: ButtonCategory.economiaYNegocios.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let relatosCortos = Category(
         title: ButtonCategory.relatosCortos.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let historia = Category(
         title: ButtonCategory.historia.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let espiritualidadYReligion = Category(
         title: ButtonCategory.espiritualidadYReligion.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let biografias = Category(
         title: ButtonCategory.biografias.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let poesiaYTeatro = Category(
         title: ButtonCategory.poesiaYTeatro.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let aprenderIdiomas = Category(
         title: ButtonCategory.aprenderIdiomas.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let inEnglish = Category(
         title: ButtonCategory.inEnglish.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let historiasParaCadaEmocion = Category(
         title: ButtonCategory.historiasParaCadaEmocion.rawValue,
-        tableSections: [TableSection]()
+        subCategories: [SubCategory]()
     )
     
     static let home = Category(
         title: "",
-        tableSections: [
-            TableSection(sectionTitle: "Solo para ti", canBeShared: false),
-            TableSection(sectionTitle: "Los títulos del momento", sectionDescription: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
-            TableSection(sectionTitle: "¡Escuchalo ahora!", sectionSubtitle: "Una historia como nunca antes habías escuchado", sectionKind: .poster),
-            TableSection(sectionTitle: "Storytel Original", sectionSubtitle: "Historias para escuchar", sectionKind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
-            TableSection(sectionTitle: "Top 50 hoy", sectionDescription: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
-            TableSection(sectionTitle: "Nuevos audiolibros"),
-            TableSection(sectionTitle: "Alicia Giménez Bartlett - Serie Petra Delicado"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionDescription: "Historias que solo podrás encontrar aquí."),
-            TableSection(sectionTitle: "Novela: Recomendados para ti", canBeShared: false),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview1]),
-            TableSection(sectionTitle: "Tendecia en Storytel"),
-            TableSection(sectionTitle: "Pronto en audiolibro"),
-            TableSection(sectionTitle: "Historias de pelicula (y serie)"),
-            TableSection(sectionTitle: "Solo en Storytel", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview2]),
-            TableSection(sectionTitle: "Novela: Los más populares"),
+        subCategories: [
+            SubCategory(title: "Solo para ti", canBeShared: false),
+            SubCategory(title: "Los títulos del momento", description: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
+            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster),
+            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, books: Book.booksWithLargeCovers),
+            SubCategory(title: "Top 50 hoy", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
+            SubCategory(title: "Nuevos audiolibros"),
+            SubCategory(title: "Alicia Giménez Bartlett - Serie Petra Delicado"),
+            SubCategory(title: "Solo en Storytel", description: "Historias que solo podrás encontrar aquí."),
+            SubCategory(title: "Novela: Recomendados para ti", canBeShared: false),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, books: [Book.bookWithOverview1]),
+            SubCategory(title: "Tendecia en Storytel"),
+            SubCategory(title: "Pronto en audiolibro"),
+            SubCategory(title: "Historias de pelicula (y serie)"),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, books: [Book.bookWithOverview2]),
+            SubCategory(title: "Novela: Los más populares"),
             
-            // sectionSubtitle and sectionDescription have to be dynamic (one of books user saved)
-            TableSection(sectionTitle: "Porque te interesa", sectionSubtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", sectionDescription: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
-            TableSection(sectionTitle: "Novela negra: Recomendados para ti", canBeShared: false),
-            TableSection(sectionTitle: "", sectionKind: .seriesCategoryButton),
-            TableSection(sectionTitle: "El audiolibro de La Vecina Rubia", sectionKind: .oneBookWithOverview, books: [Book.bookWithOverview]),
-            TableSection(sectionTitle: "Series Top esta semana"),
-            TableSection(sectionTitle: "", sectionKind: .allCategoriesButton)
+            // subtitle and description have to be dynamic (one of books user saved)
+            SubCategory(title: "Porque te interesa", subtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", description: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
+            SubCategory(title: "Novela negra: Recomendados para ti", canBeShared: false),
+            SubCategory(title: "", kind: .seriesCategoryButton),
+            SubCategory(title: "El audiolibro de La Vecina Rubia", kind: .oneBookWithOverview, books: [Book.bookWithOverview]),
+            SubCategory(title: "Series Top esta semana"),
+            SubCategory(title: "", kind: .allCategoriesButton)
         ])
-    #warning("In 'Porque te interesa' TableSection: sectionSubtitle and sectionDescription have to be dynamic (one of books user saved)")
+    #warning("In 'Porque te interesa' SubCategory: subtitle and description have to be dynamic (one of books user saved)")
     
     static let todasLasCategorias = Category(
         title: "Todas las categorías",
-        tableSections: [
-            TableSection(sectionTitle: "", sectionKind: .verticalCv),
+        subCategories: [
+            SubCategory(title: "", kind: .verticalCv),
         ])
     
     static let searchVc = Category(
         title: "",
-        tableSections: [
-            TableSection(sectionTitle: ""),
-            TableSection(sectionTitle: "Todas las categorías", sectionKind: .searchVc)
+        subCategories: [
+            SubCategory(title: ""),
+            SubCategory(title: "Todas las categorías", kind: .searchVc)
         ])
     
 }

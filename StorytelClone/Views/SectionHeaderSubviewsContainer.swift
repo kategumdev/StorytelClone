@@ -91,22 +91,26 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(tableSection: TableSection, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
-        sectionTitleLabel.text = tableSection.sectionTitle
+    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
+        sectionTitleLabel.text = subCategory.title
         sectionTitleLabel.sizeToFit()
+#warning("check if this sizeToFit and the one below are needed")
         
         // Show or hide sectionSubtitleLabel
-        if tableSection.sectionSubtitle.isEmpty {
-            sectionSubtitleLabel.isHidden = true
-        } else {
-            sectionSubtitleLabel.isHidden = false
-        }
-        sectionSubtitleLabel.text = tableSection.sectionSubtitle
-        sectionTitleLabel.sizeToFit()
+        sectionSubtitleLabel.isHidden = subCategory.subtitle.isEmpty
+//        if subCategory.subtitle.isEmpty {
+//            sectionSubtitleLabel.isHidden = true
+//        } else {
+//            sectionSubtitleLabel.isHidden = false
+//        }
+        
+        sectionSubtitleLabel.text = subCategory.subtitle
+        sectionSubtitleLabel.sizeToFit()
+//        sectionTitleLabel.sizeToFit()
         
         // Hide seeAllButton or show and assign/update callback
-        let sectionKind = tableSection.sectionKind
-        if sectionKind == .poster || sectionKind == .oneBookWithOverview || sectionKind == .largeCoversHorizontalCv || sectionKind == .searchVc {
+        let subCategoryKind = subCategory.kind
+        if subCategoryKind == .poster || subCategoryKind == .oneBookWithOverview || subCategoryKind == .largeCoversHorizontalCv || subCategoryKind == .searchVc {
             seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
             horzStackView.spacing = 0
         } else {

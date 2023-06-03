@@ -58,7 +58,7 @@ class CategoryViewController: BaseViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         if let category = category {
-            let books = category.tableSections[indexPath.row].books
+            let books = category.subCategories[indexPath.row].books
             cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
         }
         return cell

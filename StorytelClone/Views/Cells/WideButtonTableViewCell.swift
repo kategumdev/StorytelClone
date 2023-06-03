@@ -46,18 +46,19 @@ class WideButtonTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(sectionKind: SectionKind, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureFor(subCategoryKind: SubCategoryKind, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
         
-        if sectionKind == .seriesCategoryButton {
+        if subCategoryKind == .seriesCategoryButton {
             dimmedAnimationButton.kind = .toPushCategoryVcForSeriesCategory
         }
         
-        if sectionKind == .allCategoriesButton {
+        if subCategoryKind == .allCategoriesButton {
             dimmedAnimationButton.kind = .toPushAllCategoriesVc
         }
+#warning("refactor somehow")
         
         dimmedAnimationButton.didTapCallback = callback
-        customLabel.text = sectionKind == .seriesCategoryButton ? "Series" : "Todas las categorías"
+        customLabel.text = subCategoryKind == .seriesCategoryButton ? "Series" : "Todas las categorías"
     }
     
     // MARK: - Helper methods

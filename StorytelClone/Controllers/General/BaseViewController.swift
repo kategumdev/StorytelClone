@@ -133,7 +133,7 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let category = category else { return 0 }
-        return category.tableSections.count
+        return category.subCategories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -146,18 +146,18 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let category = category else { return UIView() }
-        let sectionKind = category.tableSections[section].sectionKind
-        guard sectionKind != .seriesCategoryButton, sectionKind != .allCategoriesButton else { return UIView() }
+        let subCategoryKind = category.subCategories[section].kind
+        guard subCategoryKind != .seriesCategoryButton, subCategoryKind != .allCategoriesButton else { return UIView() }
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-        let tableSection = category.tableSections[section]
+        let subCategory = category.subCategories[section]
         
-        sectionHeader.configureFor(tableSection: tableSection, sectionNumber: section, category: category, withSeeAllButtonDidTapCallback: { [weak self] in
+        sectionHeader.configureFor(subCategory: subCategory, sectionNumber: section, category: category, withSeeAllButtonDidTapCallback: { [weak self] in
             guard let self = self else { return }
-            if let tableSectionCategory = tableSection.toShowCategory {
-                let controller = CategoryViewController(categoryModel: tableSectionCategory)
+            if let categoryToShow = subCategory.categoryToShow {
+                let controller = CategoryViewController(categoryModel: categoryToShow)
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
-                let controller = AllTitlesViewController(tableSection: tableSection, titleModel: tableSection.toShowTitleModel)
+                let controller = AllTitlesViewController(subCategory: subCategory, titleModel: subCategory.toShowTitleModel)
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         })
@@ -171,9 +171,9 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         // If all categories have sections, this checking is not needed, just use calculateEstimatedHeightFor
         guard let category = category else { return 0 }
-        if !category.tableSections.isEmpty {
-            let tableSection = category.tableSections[section]
-            return SectionHeaderView.calculateEstimatedHeightFor(tableSection: tableSection, superviewWidth: view.bounds.width)
+        if !category.subCategories.isEmpty {
+            let subCategory = category.subCategories[section]
+            return SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory, superviewWidth: view.bounds.width)
         }
         return 0
     }
