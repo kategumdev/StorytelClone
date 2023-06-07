@@ -178,7 +178,7 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
         }
 
 #warning("make sure weak resultsController is ok here")
-        networkManager.fetchBooks(withQuery: query) { [weak resultsController] result in
+        networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak resultsController] result in
             print("networkManager fetches for \(queryString)")
             resultsController?.handleSearchResult(result)
         }

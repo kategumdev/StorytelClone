@@ -35,11 +35,20 @@ class BookWithOverviewTableViewCell: UITableViewCell {
         fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Instance methods 
-    func configureFor(book: Book, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
+    // MARK: - Instance methods
+    func configureFor(book: Book?, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
         containerWithSubviews.configureFor(book: book)
-        containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
-        containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
+        
+        if book != nil {
+            containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
+            containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
+        }
     }
+    
+//    func configureFor(book: Book, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
+//        containerWithSubviews.configureFor(book: book)
+//        containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
+//        containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
+//    }
     
 }

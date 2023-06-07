@@ -18,6 +18,12 @@ enum SubCategoryKind {
     case searchVc
 }
 
+enum BookKinds {
+    case onlyEbooks
+    case onlyAudiobooks
+    case ebooksAndAudiobooks
+}
+
 struct SubCategory {
     let title: String
     let subtitle: String
@@ -29,9 +35,10 @@ struct SubCategory {
     let canBeShared: Bool
     let canBeFiltered: Bool
     let categoryToShow: Category?
+    let bookKinds: BookKinds
     #warning("add property bookKinds with values: onlyEbooks, onlyAudiobooks, ebookAndAudiobooks, fetch data in network manager checking this property")
     
-    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, books: [Book] = Book.books, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil) {
+    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, books: [Book] = Book.books, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
         self.title = title
         self.subtitle = subtitle
         self.kind = kind
@@ -42,6 +49,7 @@ struct SubCategory {
         self.canBeShared = canBeShared
         self.canBeFiltered = canBeFiltered
         self.categoryToShow = categoryToShow
+        self.bookKinds = bookKinds
     }
     
     static let generalForAllTitlesVC = SubCategory(title: "", searchQuery: "")
@@ -391,30 +399,30 @@ struct Category: Equatable {
         subCategories: [
             SubCategory(title: "Solo para ti", searchQuery: "dragon", canBeShared: false),
             SubCategory(title: "Los títulos del momento", searchQuery: "leih bardugo", description: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
-            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "rise of dragons"),
+            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "rise of dragons", bookKinds: .onlyAudiobooks),
             SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", books: Book.booksWithLargeCovers),
             SubCategory(title: "Top 50 hoy", searchQuery: "sister", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
 //            SubCategory(title: "Nuevos audiolibros", searchQuery: "bird"),
 //            SubCategory(title: "Nuevos audiolibros", searchQuery: "moon"),
 //            SubCategory(title: "Nuevos audiolibros", searchQuery: "hygge"),
-            SubCategory(title: "Nuevos audiolibros", searchQuery: "star"),
+            SubCategory(title: "Nuevos audiolibros", searchQuery: "star", bookKinds: .onlyAudiobooks),
 
 
 //            SubCategory(title: "Alicia Giménez Bartlett - Serie Petra Delicado"),
 //            SubCategory(title: "Solo en Storytel", description: "Historias que solo podrás encontrar aquí."),
             SubCategory(title: "Novela: Recomendados para ti", searchQuery: "gaiman", canBeShared: false),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "Mitos nordicos", books: [Book.bookWithOverview1]),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "Mitos nordicos", books: [Book.bookWithOverview1], bookKinds: .onlyAudiobooks),
             SubCategory(title: "Tendecia en Storytel", searchQuery: "vikings"),
 //            SubCategory(title: "Pronto en audiolibro"),
 //            SubCategory(title: "Historias de pelicula (y serie)"),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "anansiboys", books: [Book.bookWithOverview2]),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "anansiboys", books: [Book.bookWithOverview2], bookKinds: .onlyAudiobooks),
             SubCategory(title: "Novela: Los más populares", searchQuery: "thunder"),
             
             // subtitle and description have to be dynamic (one of books user saved)
             SubCategory(title: "Porque te interesa", subtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", searchQuery: "sarah j maas", description: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
 //            SubCategory(title: "Novela negra: Recomendados para ti", canBeShared: false),
             SubCategory(title: "", kind: .seriesCategoryButton, searchQuery: ""),
-            SubCategory(title: "El audiolibro de J.R.R. Tolkien", kind: .oneBookWithOverview, searchQuery: "tolkien", books: [Book.bookWithOverview]),
+            SubCategory(title: "El audiolibro de George R.R. Martin", kind: .oneBookWithOverview, searchQuery: "a clash of kings", books: [Book.bookWithOverview], bookKinds: .onlyAudiobooks),
             SubCategory(title: "Series Top esta semana", searchQuery: "shadow"),
             SubCategory(title: "", kind: .allCategoriesButton, searchQuery: "")
         ])

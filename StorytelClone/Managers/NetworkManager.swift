@@ -85,7 +85,7 @@ class NetworkManager {
         currentITunesDataTask?.resume()
     }
     
-    func fetchBooks(withQuery query: String, completion: @escaping (SearchResult) -> Void) {
+    func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void) {
 //        print("fetching query \(query)")
         let queryString = query.trimmingCharacters(in: .whitespaces)
         
@@ -96,29 +96,33 @@ class NetworkManager {
         var allFetchedBooks = [Book]()
 
         // Perform Google Books search
-        dataTaskGroup.enter()
-        fetchEbooks(with: queryString) { result in
-            switch result {
-            case .success(let ebooks):
-                let books = Book.createBooksFromEbooks(ebooks)
-                allFetchedBooks += books
-            case .failure(let error): fetchError = error
+        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyEbooks {
+            dataTaskGroup.enter()
+            fetchEbooks(with: queryString) { result in
+                switch result {
+                case .success(let ebooks):
+                    let books = Book.createBooksFromEbooks(ebooks)
+                    allFetchedBooks += books
+                case .failure(let error): fetchError = error
+                }
+    //            print("google books completion for \(query)")
+                dataTaskGroup.leave()
             }
-//            print("google books completion for \(query)")
-            dataTaskGroup.leave()
         }
-
-        // Perform iTunes search
-        dataTaskGroup.enter()
-        fetchAudiobooks(with: queryString) { result in
-            switch result {
-            case .success(let audiobooks):
-                let books = Book.createBooksFromAudiobooks(audiobooks)
-                allFetchedBooks += books
-            case .failure(let error): fetchError = error
+        
+        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyAudiobooks {
+            // Perform iTunes search
+            dataTaskGroup.enter()
+            fetchAudiobooks(with: queryString) { result in
+                switch result {
+                case .success(let audiobooks):
+                    let books = Book.createBooksFromAudiobooks(audiobooks)
+                    allFetchedBooks += books
+                case .failure(let error): fetchError = error
+                }
+    //            print("itunes completion for \(query)")
+                dataTaskGroup.leave()
             }
-//            print("itunes completion for \(query)")
-            dataTaskGroup.leave()
         }
 
         dataTaskGroup.notify(queue: DispatchQueue.main) { [weak self] in
@@ -136,6 +140,58 @@ class NetworkManager {
         }
 #warning("If either task was cancelled (and therefore its completion wasn't called), dataTaskGroup.notify won't be called. Does it need to be cleaned somehow?")
     }
+    
+//    func fetchBooks(withQuery query: String, completion: @escaping (SearchResult) -> Void) {
+////        print("fetching query \(query)")
+//        let queryString = query.trimmingCharacters(in: .whitespaces)
+//
+////        reset()
+//        hasError = false
+//        let dataTaskGroup = DispatchGroup()
+//        var fetchError: Error?
+//        var allFetchedBooks = [Book]()
+//
+//        // Perform Google Books search
+//        dataTaskGroup.enter()
+//        fetchEbooks(with: queryString) { result in
+//            switch result {
+//            case .success(let ebooks):
+//                let books = Book.createBooksFromEbooks(ebooks)
+//                allFetchedBooks += books
+//            case .failure(let error): fetchError = error
+//            }
+////            print("google books completion for \(query)")
+//            dataTaskGroup.leave()
+//        }
+//
+//        // Perform iTunes search
+//        dataTaskGroup.enter()
+//        fetchAudiobooks(with: queryString) { result in
+//            switch result {
+//            case .success(let audiobooks):
+//                let books = Book.createBooksFromAudiobooks(audiobooks)
+//                allFetchedBooks += books
+//            case .failure(let error): fetchError = error
+//            }
+////            print("itunes completion for \(query)")
+//            dataTaskGroup.leave()
+//        }
+//
+//        dataTaskGroup.notify(queue: DispatchQueue.main) { [weak self] in
+////            print("dataTaskGroup notified and performing completion")
+//            if !allFetchedBooks.isEmpty {
+//                self?.hasError = false
+//                completion(.success(allFetchedBooks))
+//            } else if let unwrappedSavedError = fetchError as? NetworkManagerError {
+//                self?.hasError = true
+//                completion(.failure(unwrappedSavedError))
+//            } else {
+//                self?.hasError = true
+//                completion(.failure(NetworkManagerError.noResults)) // when empty and no errors
+//            }
+//        }
+//#warning("If either task was cancelled (and therefore its completion wasn't called), dataTaskGroup.notify won't be called. Does it need to be cleaned somehow?")
+//    }
 
     func cancelTasks() {
         currentGoogleBooksDataTask?.cancel()

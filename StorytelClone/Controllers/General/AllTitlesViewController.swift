@@ -220,7 +220,7 @@ class AllTitlesViewController: BaseViewController {
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
         activityIndicator.startAnimating()
-        networkManager.fetchBooks(withQuery: query) { [weak self] result in
+        networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak self] result in
             switch result {
             case .success(let fetchedBooks):
                 self?.books = fetchedBooks

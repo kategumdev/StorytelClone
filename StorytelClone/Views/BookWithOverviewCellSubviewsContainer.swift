@@ -88,18 +88,42 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book) {
+    func configureFor(book: Book?) {
+        guard let book = book else {
+            bookTitleLabel.attributedText = NSAttributedString(string: "")
+            overviewLabel.attributedText = NSAttributedString(string: "")
+            squareImageView.image = UIImageView.placeholderImage
+            starHorzStackView.isHidden = true
+            saveButton.isHidden = true
+            return
+        }
+        
         self.book = book
         let titleString = book.title
         bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
         let overviewString = book.description
         overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
+        starHorzStackView.isHidden = false
         starHorzStackView.configureWith(book: book)
         squareImageView.image = book.coverImage
         dimmedAnimationButton.kind = .toPushBookVcWith(book)
+        saveButton.isHidden = false
         saveButton.toggleImage(isBookAdded: book.isAddedToBookshelf)
         addSaveButtonAction()
       }
+    
+//    func configureFor(book: Book) {
+//        self.book = book
+//        let titleString = book.title
+//        bookTitleLabel.attributedText = NSAttributedString(string: titleString).withLineHeightMultiple(0.8)
+//        let overviewString = book.description
+//        overviewLabel.attributedText = NSAttributedString(string: overviewString).withLineHeightMultiple(0.9)
+//        starHorzStackView.configureWith(book: book)
+//        squareImageView.image = book.coverImage
+//        dimmedAnimationButton.kind = .toPushBookVcWith(book)
+//        saveButton.toggleImage(isBookAdded: book.isAddedToBookshelf)
+//        addSaveButtonAction()
+//      }
     
     // MARK: - Helper methods
     private func addSaveButtonAction() {

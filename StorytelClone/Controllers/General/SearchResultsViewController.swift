@@ -62,7 +62,7 @@ class SearchResultsViewController: ScopeViewController {
             networkManagerError = nil
             var books = fetchedBooks
             books.shuffle()
-            let newModel = createNewModelWith(books: fetchedBooks)
+            let newModel = createNewModelWith(books: books)
 
             DispatchQueue.main.async { [weak self] in
                 self?.modelForSearchQuery = newModel

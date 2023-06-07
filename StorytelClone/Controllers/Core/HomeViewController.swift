@@ -126,8 +126,9 @@ extension HomeViewController {
     
     private func loadBooksForSubCategoryWith(index: Int) {
         guard let category = category else { return }
-        let query = category.subCategories[index].searchQuery
-        networkManager.fetchBooks(withQuery: query) { [weak self] result in
+        let subCategory = category.subCategories[index]
+        let query = subCategory.searchQuery
+        networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
             print("networkManager of HomeVC fetches for \(query)")
             switch result {
             case .success(let fetchedBooks):
@@ -162,9 +163,10 @@ extension HomeViewController {
             }
         }
         downloadTaskGroup.notify(queue: DispatchQueue.main) { [weak self] in
+            guard let self = self else { return }
             booksWithImages.shuffle()
-            self?.books[index] = booksWithImages
-            self?.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
+            self.books[index] = booksWithImages
+            self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
         }
     }
     
@@ -188,12 +190,13 @@ extension HomeViewController {
         let subCategoryIndex = indexPath.section
         if let books = books[subCategoryIndex] {
             cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
-            return cell
+//            return cell
         } else {
             loadBooksForSubCategoryWith(index: subCategoryIndex)
             cell.configureFor(books: [Book](), callback: dimmedAnimationButtonDidTapCallback)
-            return cell
+//            return cell
         }
+        return cell
     }
     
     private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
@@ -205,10 +208,24 @@ extension HomeViewController {
     
     private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
-        let book = category.subCategories[indexPath.section].books[0]
+//        let book = category.subCategories[indexPath.section].books[0]
         
-        cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+        let subCategoryIndex = indexPath.section
+        if let book = books[subCategoryIndex]?.first {
+            cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+        } else {
+            loadBooksForSubCategoryWith(index: subCategoryIndex)
+            cell.configureFor(book: nil, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+        }
          return cell
     }
+    
+//    private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
+//        let book = category.subCategories[indexPath.section].books[0]
+//
+//        cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+//         return cell
+//    }
 
 }
