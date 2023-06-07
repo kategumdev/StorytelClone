@@ -25,6 +25,12 @@ class TableViewCellWithCollection: UITableViewCell {
             
    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.hidesWhenStopped = true
+        return view
+    }()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = Constants.commonHorzPadding
@@ -40,6 +46,7 @@ class TableViewCellWithCollection: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
+        collectionView.backgroundView = activityIndicator
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -51,6 +58,10 @@ class TableViewCellWithCollection: UITableViewCell {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
+        if books.isEmpty {
+            activityIndicator.startAnimating()
+        }
+        
         collectionView.frame = contentView.bounds
 
         if collectionView.contentOffset != CGPoint(x: 0, y: 0) {
@@ -84,9 +95,9 @@ class TableViewCellWithCollection: UITableViewCell {
     #warning("replace usages of the func above everywhere in the project")
     
     func configureFor(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        guard !books.isEmpty else { return }
         self.books = books
         dimmedAnimationButtonDidTapCallback = callback
+        activityIndicator.stopAnimating()
         collectionView.reloadData()
     }
      
@@ -95,7 +106,9 @@ class TableViewCellWithCollection: UITableViewCell {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if !books.isEmpty && books.count < 10 {
+        if books.isEmpty {
+            return 0
+        } else if books.count < 10 {
             return books.count
         } else {
             return 10
@@ -104,12 +117,9 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
-        if books.isEmpty {
-            cell.configureWithPlaceHolder()
-        } else {
-            let book = books[indexPath.row]
-            cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
-        }
+        
+        let book = books[indexPath.row]
+        cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     

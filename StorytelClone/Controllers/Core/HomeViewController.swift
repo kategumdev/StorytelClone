@@ -15,6 +15,8 @@ class HomeViewController: BaseViewController {
     
     private var books = [Int : [Book]]()
     private let networkManager = NetworkManager()
+    
+//    private var noBooksView: NoDataBackgroundView?
 
     init(categoryModel: Category, posterBook: Book) {
         self.posterBook = posterBook
@@ -29,6 +31,7 @@ class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTable()
+        loadBooks()
         view.addSubview(popupButton)
     }
     
@@ -124,20 +127,38 @@ extension HomeViewController {
         bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
     }
     
-    private func loadBooksForSubCategoryWith(index: Int) {
+    private func loadBooks() {
         guard let category = category else { return }
-        let subCategory = category.subCategories[index]
-        let query = subCategory.searchQuery
-        networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
-            print("networkManager of HomeVC fetches for \(query)")
-            switch result {
-            case .success(let fetchedBooks):
-//                let booksWithImageUrlStrings = fetchedBooks.map { $0.imageURLString != nil }
-                self?.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
-            case .failure(let error):
-                if let networkError = error as? NetworkManagerError {
-                    DispatchQueue.main.async {
-                        #warning("show error background view")
+        let subCategories = category.subCategories
+    
+        // Add indices of categories to books dict
+        for (index, subCategory) in subCategories.enumerated() {
+            let kind = subCategory.kind
+            
+            guard kind != .allCategoriesButton &&
+                    kind != .largeCoversHorizontalCv && kind != .poster && kind != .seriesCategoryButton else { continue }
+            
+            let query = subCategory.searchQuery
+            networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
+                guard let self = self else { return }
+                print("networkManager of HomeVC fetches for \(query), kind \(kind)")
+                switch result {
+                case .success(let fetchedBooks):
+                    self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
+                case .failure(let error):
+                    print("ERROR fetching query \(query)")
+                    self.networkManager.cancelTasks()
+                    if let networkError = error as? NetworkManagerError {
+                        DispatchQueue.main.async {
+                            #warning("show error background view")
+//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
+//                            if let noBooksView = self.noBooksView {
+//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
+//                                self.bookTable.addSubview(noBooksView)
+//                                self.bookTable.isScrollEnabled = false
+//                                noBooksView.frame = self.bookTable.bounds
+//                            }
+                        }
                     }
                 }
             }
@@ -183,22 +204,16 @@ extension HomeViewController {
         cell.configureFor(book: posterBook, withCallback: dimmedAnimationButtonDidTapCallback)
          return cell
     }
-
+    
     private func cellWithHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
         let subCategoryIndex = indexPath.section
         if let books = books[subCategoryIndex] {
             cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
-//            return cell
-        } else {
-            loadBooksForSubCategoryWith(index: subCategoryIndex)
-            cell.configureFor(books: [Book](), callback: dimmedAnimationButtonDidTapCallback)
-//            return cell
         }
         return cell
     }
-    
+
     private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers, let category = category else { return UITableViewCell()}
         let books = category.subCategories[indexPath.section].books
@@ -207,25 +222,12 @@ extension HomeViewController {
     }
     
     private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
-//        let book = category.subCategories[indexPath.section].books[0]
-        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell else { return UITableViewCell() }
         let subCategoryIndex = indexPath.section
         if let book = books[subCategoryIndex]?.first {
             cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
-        } else {
-            loadBooksForSubCategoryWith(index: subCategoryIndex)
-            cell.configureFor(book: nil, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
         }
          return cell
     }
-    
-//    private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell, let category = category else { return UITableViewCell() }
-//        let book = category.subCategories[indexPath.section].books[0]
-//
-//        cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
-//         return cell
-//    }
 
 }
