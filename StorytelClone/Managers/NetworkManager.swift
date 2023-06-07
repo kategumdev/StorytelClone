@@ -87,14 +87,17 @@ class NetworkManager {
     
     func fetchBooks(withQuery query: String, completion: @escaping (SearchResult) -> Void) {
 //        print("fetching query \(query)")
-        reset()
+        let queryString = query.trimmingCharacters(in: .whitespaces)
+        
+//        reset()
+        hasError = false
         let dataTaskGroup = DispatchGroup()
         var fetchError: Error?
         var allFetchedBooks = [Book]()
 
         // Perform Google Books search
         dataTaskGroup.enter()
-        fetchEbooks(with: query) { result in
+        fetchEbooks(with: queryString) { result in
             switch result {
             case .success(let ebooks):
                 let books = Book.createBooksFromEbooks(ebooks)
@@ -107,7 +110,7 @@ class NetworkManager {
 
         // Perform iTunes search
         dataTaskGroup.enter()
-        fetchAudiobooks(with: query) { result in
+        fetchAudiobooks(with: queryString) { result in
             switch result {
             case .success(let audiobooks):
                 let books = Book.createBooksFromAudiobooks(audiobooks)
@@ -141,10 +144,10 @@ class NetworkManager {
         currentITunesDataTask = nil
     }
     
-    private func reset() {
-        cancelTasks()
-        hasError = false
-    }
+//    private func reset() {
+//        cancelTasks()
+//        hasError = false
+//    }
     
     deinit {
         print("Particular instance of NetworkManager cancels data tasks in deinit")

@@ -10,6 +10,8 @@ import UIKit
 class BaseViewController: UIViewController {
     // MARK: - Instance properties
     var category: Category?
+    #warning("try to make this property not optional")
+    
     let tableViewStyle: UITableView.Style
     
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)

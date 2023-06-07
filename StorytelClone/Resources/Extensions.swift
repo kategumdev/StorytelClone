@@ -427,7 +427,78 @@ extension String {
     }
     
 }
-
+//extension UIButton {
+//
+//    func setImageForBook(_ book: Book, buttonWidthConstraint: NSLayoutConstraint, completion: @escaping () -> Void) {
+////        self.contentMode = .scaleAspectFill
+//
+//        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+//            self.sd_setImage(with: imageURL, for: .normal, placeholderImage: UIImageView.placeholderImage) { [weak self] image, error, cachType, url in
+//                if let image = image {
+////                    self?.setImage(image, buttonWidthConstraint: buttonWidthConstraint, forBook: book)
+//                    self?.setImage(image, buttonWidthConstraint: buttonWidthConstraint, forBook: book, completion: completion)
+//
+////                    completion()
+//                }
+//            }
+////            self.sd_setImage(with: imageURL, for: .normal, placeholderImage: UIImageView.placeholderImage)
+//        } else {
+////            self.setImage(book.coverImage, buttonWidthConstraint: buttonWidthConstraint, forBook: book)
+//            self.setImage(book.coverImage, buttonWidthConstraint: buttonWidthConstraint, forBook: book, completion: completion)
+//            #warning("When not using hardcoded book objects, pass nil instead of book.coverImage")
+//        }
+//    }
+//
+//    func setImage(_ image: UIImage?, buttonWidthConstraint: NSLayoutConstraint, forBook book: Book, completion: @escaping () -> Void) {
+////        let defaultButtonWidth = defaultButtonHeight
+////        let defaultButtonWidth = Constants.largeSquareBookCoverSize.width
+//        let defaultImageWidth = Constants.largeSquareBookCoverSize.width
+//
+//        // Configure button and set placeholder image if passed image is nil
+//        guard let image = image else {
+//            var newImageWidth: CGFloat = defaultImageWidth // for square image view
+//            if book.titleKind == .ebook {
+//                newImageWidth = defaultImageWidth * 0.65 // for rectangle image view
+//            }
+//
+//            if buttonWidthConstraint.constant != newImageWidth {
+//                buttonWidthConstraint.constant = newImageWidth
+//            }
+//
+//            completion()
+//            self.setImage(image, for: .normal)
+////            self.configuration?.image = UIImageView.placeholderImage
+////            self.image = UIImageView.placeholderImage
+//            return
+//        }
+//
+//        // Configure button, resize and set passed image
+//        let defaultImageHeight = Constants.largeSquareBookCoverSize.width
+//
+//        let resizedImage = image.resizeFor(targetHeight: defaultImageHeight)
+//        let resizedImageWidth = resizedImage.size.width
+//
+//        if resizedImageWidth < defaultImageWidth {
+//            if buttonWidthConstraint.constant != resizedImageWidth {
+//                buttonWidthConstraint.constant = resizedImageWidth
+//            }
+//        } else if buttonWidthConstraint.constant != defaultImageWidth {
+//            buttonWidthConstraint.constant = defaultImageWidth
+//        }
+//
+//        print("resized image size: \(resizedImage.size)")
+//
+////        self.configuration?.image = resizedImage
+////        self.setNeedsLayout()
+////        self.layoutIfNeeded()
+//        completion()
+//        self.setImage(resizedImage, for: .normal)
+////        self.setNeedsLayout()
+////        self.layoutIfNeeded()
+////        self.layoutIfNeeded()
+////        self.image = resizedImage
+//    }
+//}
 
 
 

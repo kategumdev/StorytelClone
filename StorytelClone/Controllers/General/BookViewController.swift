@@ -8,7 +8,6 @@
 import UIKit
 
 class BookViewController: UIViewController {
-    
     // MARK: - Instance properties
     let book: Book
     private lazy var bookContainerScrollView = BookContainerScrollView(book: book, superviewWidth: view.bounds.width)
@@ -142,7 +141,7 @@ extension BookViewController {
         guard book.series != nil else { return }
         bookContainerScrollView.bookDetailsStackView.showSeriesButtonDidTapCallback = { [weak self] in
             guard let self = self, let series = self.book.series else { return }
-            let subCategory = SubCategory(title: series)
+            let subCategory = SubCategory(title: series, searchQuery: "\(series)")
             let controller = AllTitlesViewController(subCategory: subCategory, titleModel: Series.series1)
             self.navigationController?.pushViewController(controller, animated: true)
         }

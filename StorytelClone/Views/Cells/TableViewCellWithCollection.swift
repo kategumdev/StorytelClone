@@ -8,7 +8,6 @@
 import UIKit
 
 class TableViewCellWithCollection: UITableViewCell {
-
     // MARK: - Static properties
     static let identifier = "TableViewCellWithCollection"
     
@@ -18,11 +17,13 @@ class TableViewCellWithCollection: UITableViewCell {
     }()
     
     // MARK: - Instance properties
-    var books = [Book]() // It will contain only 10 books
+    private var books = [Book]() // It will contain only 10 books
+    
     private var resizedImages = [UIImage]()
     private var itemSizes = [CGSize]()
-    
-    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    #warning("two properties above has to be removed after func configureWith(books) will be removed")
+            
+   private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -57,11 +58,17 @@ class TableViewCellWithCollection: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        books = [Book]()
+        collectionView.reloadData()
+    }
+    
     // MARK: - Instance methods
     func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
         self.dimmedAnimationButtonDidTapCallback = callback
-        
+
         // Resize images for use in cv cells and in sizeForItemAt method of cv
         for book in books {
             let height = Constants.largeSquareBookCoverSize.height
@@ -74,21 +81,35 @@ class TableViewCellWithCollection: UITableViewCell {
         }
         collectionView.reloadData()
     }
+    #warning("replace usages of the func above everywhere in the project")
     
+    func configureFor(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        guard !books.isEmpty else { return }
+        self.books = books
+        dimmedAnimationButtonDidTapCallback = callback
+        collectionView.reloadData()
+    }
+     
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        if !books.isEmpty && books.count < 10 {
+            return books.count
+        } else {
+            return 10
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { return UICollectionViewCell()}
-
-        let book = books[indexPath.row]
-        let resizedImage = resizedImages[indexPath.row]
-        cell.configureFor(book: book, resizedImage: resizedImage, withCallback: dimmedAnimationButtonDidTapCallback)
+        if books.isEmpty {
+            cell.configureWithPlaceHolder()
+        } else {
+            let book = books[indexPath.row]
+            cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
+        }
         return cell
     }
     
@@ -97,8 +118,14 @@ extension TableViewCellWithCollection: UICollectionViewDelegate, UICollectionVie
 //MARK: - UICollectionViewDelegateFlowLayout
 extension TableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return itemSizes[indexPath.row]
-    }
+        let itemHeight = TableViewCellWithCollection.rowHeight
+        var itemWidth = Constants.largeSquareBookCoverSize.width
+        
+        if !books.isEmpty, let coverImage = books[indexPath.row].coverImage {
+            itemWidth = coverImage.size.width
+        }
+        return CGSize(width: itemWidth, height: itemHeight)
+     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 0, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)

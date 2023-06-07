@@ -229,7 +229,7 @@ extension BottomSheetViewController {
         case .viewSeries:
             self.dismiss(animated: false)
             guard let series = book.series, let delegate = self.delegate as? UIViewController else { return }
-            let subCategory = SubCategory(title: series)
+            let subCategory = SubCategory(title: series, searchQuery: "\(series)")
             let controller = AllTitlesViewController(subCategory: subCategory, titleModel: Series.series1)
             delegate.navigationController?.pushViewController(controller, animated: true)
             
@@ -330,25 +330,25 @@ extension BottomSheetViewController {
         ]
         
         for author in book.authors {
-            let authorSubCategory = SubCategory(title: "Títulos populares de este autor", subtitle: author.name, toShowTitleModel: author)
+            let authorSubCategory = SubCategory(title: "Títulos populares de este autor", subtitle: author.name, searchQuery: "\(author.name)", toShowTitleModel: author)
             subCategories.append(authorSubCategory)
         }
         
         for narrator in book.narrators {
-            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, toShowTitleModel: narrator)
+            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, searchQuery: "\(narrator.name)", toShowTitleModel: narrator)
             subCategories.append(narratorSubCategory)
         }
         
         if let series = book.series {
             #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesSubCategory")
             let seriesTitleModel = Series.series1
-            let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, toShowTitleModel: seriesTitleModel)
+            let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, searchQuery: "\(series)", toShowTitleModel: seriesTitleModel)
             subCategories.append(seriesSubCategory)
         }
         
         let subtitle = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
         let categoryToShow = book.buttonCategory.category
-        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, categoryToShow: categoryToShow)
+        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "\(categoryToShow.title)", categoryToShow: categoryToShow)
         subCategories.append(subCategory)
         
         // Create category with created subCategories and pass it to callback
