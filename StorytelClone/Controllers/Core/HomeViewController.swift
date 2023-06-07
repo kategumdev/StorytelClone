@@ -10,7 +10,7 @@ import SDWebImage
 
 class HomeViewController: BaseViewController {
     
-    private let posterBook: Book
+//    private let posterBook: Book
     private let popupButton = PopupButton()
     
     private var books = [Int : [Book]]()
@@ -18,14 +18,14 @@ class HomeViewController: BaseViewController {
     
 //    private var noBooksView: NoDataBackgroundView?
 
-    init(categoryModel: Category, posterBook: Book) {
-        self.posterBook = posterBook
-        super.init(categoryModel: categoryModel)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(categoryModel: Category, posterBook: Book) {
+//        self.posterBook = posterBook
+//        super.init(categoryModel: categoryModel)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -136,15 +136,20 @@ extension HomeViewController {
             let kind = subCategory.kind
             
             guard kind != .allCategoriesButton &&
-                    kind != .largeCoversHorizontalCv && kind != .poster && kind != .seriesCategoryButton else { continue }
+                    kind != .largeCoversHorizontalCv && kind != .seriesCategoryButton else { continue }
             
             let query = subCategory.searchQuery
             networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
                 guard let self = self else { return }
-                print("networkManager of HomeVC fetches for \(query), kind \(kind)")
+//                print("networkManager of HomeVC fetches for \(query), kind \(kind)")
                 switch result {
                 case .success(let fetchedBooks):
-                    self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
+                    if kind == .poster, let book = fetchedBooks.first {
+                        self.loadAndResizeImageForPoster(book: book, ofSubCategoryWithIndex: index)
+                    } else {
+                        self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
+                    }
+//                    self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
                 case .failure(let error):
                     print("ERROR fetching query \(query)")
                     self.networkManager.cancelTasks()
@@ -191,6 +196,23 @@ extension HomeViewController {
         }
     }
     
+    private func loadAndResizeImageForPoster(book: Book, ofSubCategoryWithIndex index: Int) {
+        if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+            SDWebImageDownloader.shared.downloadImage(with: imageURL) { [weak self] image, data, error, success in
+                if let image = image {
+                    let resizedImage = image.resizeFor(targetHeight: PosterTableViewCell.calculatedButtonHeight, andSetAlphaTo: 1)
+                    var bookWithImage = book
+                    bookWithImage.coverImage = resizedImage
+                    self?.books[index] = [bookWithImage]
+                    
+                    DispatchQueue.main.async {
+                        self?.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
+                    }
+                }
+            }
+        }
+    }
+
     private func wideButtonCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
         if let category = category {
@@ -201,7 +223,11 @@ extension HomeViewController {
     
     private func posterCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
-        cell.configureFor(book: posterBook, withCallback: dimmedAnimationButtonDidTapCallback)
+        
+        let subCategoryIndex = indexPath.section
+        if let book = books[subCategoryIndex]?.first {
+            cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
+        }
          return cell
     }
     

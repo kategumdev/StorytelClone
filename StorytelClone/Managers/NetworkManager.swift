@@ -74,11 +74,13 @@ class NetworkManager {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data  {
                 do {
                     let results = try JSONDecoder().decode(ITunesSearchResponse.self, from: data)
+                    print("response: \(httpResponse.statusCode)")
                     completion(.success(results.results))
                 } catch {
                     completion(.failure(NetworkManagerError.noResults))
                 }
             } else {
+//                print("RESPONSE: \((response as? HTTPURLResponse)?.statusCode)")
                 completion(.failure(NetworkManagerError.failedToFetch))
             }
         }
@@ -105,7 +107,7 @@ class NetworkManager {
                     allFetchedBooks += books
                 case .failure(let error): fetchError = error
                 }
-    //            print("google books completion for \(query)")
+//                print("google books completion for \(query)")
                 dataTaskGroup.leave()
             }
         }
@@ -120,7 +122,7 @@ class NetworkManager {
                     allFetchedBooks += books
                 case .failure(let error): fetchError = error
                 }
-    //            print("itunes completion for \(query)")
+//                print("itunes completion for \(query)")
                 dataTaskGroup.leave()
             }
         }
