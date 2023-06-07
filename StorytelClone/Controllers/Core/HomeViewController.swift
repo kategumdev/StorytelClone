@@ -10,22 +10,9 @@ import SDWebImage
 
 class HomeViewController: BaseViewController {
     
-//    private let posterBook: Book
-    private let popupButton = PopupButton()
-    
     private var books = [Int : [Book]]()
     private let networkManager = NetworkManager()
-    
-//    private var noBooksView: NoDataBackgroundView?
-
-//    init(categoryModel: Category, posterBook: Book) {
-//        self.posterBook = posterBook
-//        super.init(categoryModel: categoryModel)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    private let popupButton = PopupButton()
     
     // MARK: - View life cycle
     override func viewDidLoad() {
