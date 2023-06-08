@@ -28,7 +28,7 @@ struct SubCategory {
     let title: String
     let subtitle: String
     let kind: SubCategoryKind
-    let searchQuery: String
+    let searchQuery: String // Hardcoded values
     let books: [Book]
     let description: String?
     var toShowTitleModel: Title?
@@ -56,7 +56,7 @@ struct SubCategory {
     
     static let generalForAllTitlesVC = SubCategory(title: "", searchQuery: "")
     static let similarTitles = SubCategory(title: "Similar titles", searchQuery: "", canBeShared: false)
-    static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "", canBeShared: false)
+    static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "dark", canBeShared: false)
 }
 
 enum ButtonCategory: String {

@@ -334,21 +334,21 @@ extension BottomSheetViewController {
             subCategories.append(authorSubCategory)
         }
         
-        for narrator in book.narrators {
-            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, searchQuery: "\(narrator.name)", toShowTitleModel: narrator)
-            subCategories.append(narratorSubCategory)
-        }
+//        for narrator in book.narrators {
+//            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, searchQuery: "\(narrator.name)", toShowTitleModel: narrator)
+//            subCategories.append(narratorSubCategory)
+//        }
         
         if let series = book.series {
-            #warning("Instead of hardcoded series model object Series.series1, create series model obejct this book is from and pass it as titleModel as argument when creating seriesSubCategory")
-            let seriesTitleModel = Series.series1
+            let seriesTitleModel = Series.series1 // Hardcoded data
             let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, searchQuery: "\(series)", toShowTitleModel: seriesTitleModel)
             subCategories.append(seriesSubCategory)
         }
         
         let subtitle = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
         let categoryToShow = book.buttonCategory.category
-        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "\(categoryToShow.title)", categoryToShow: categoryToShow)
+//        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "\(categoryToShow.title)", categoryToShow: categoryToShow)
+        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "ice", categoryToShow: categoryToShow) // Hardcoded searchQuery
         subCategories.append(subCategory)
         
         // Create category with created subCategories and pass it to callback
