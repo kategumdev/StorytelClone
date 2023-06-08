@@ -12,12 +12,10 @@ class CategoryViewController: BaseViewController {
     
     private lazy var similarBooksTopView = UIView()
     private let similarBooksTopViewY: CGFloat = 1000
-    private var isFirstTime = true
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchBooks()
         extendedLayoutIncludesOpaqueBars = true
         
         guard let category = category else { return }

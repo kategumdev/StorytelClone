@@ -8,16 +8,27 @@
 import UIKit
 
 class HomeViewController: BaseViewController {
+    
     private let popupButton = PopupButton()
+    
+    private lazy var indicesOfSubCategoriesForBooksWithOverview: [Int] = {
+        guard let category = category else { return [Int]() }
+        var indices = [Int]()
+        for (index, subCategory) in category.subCategories.enumerated() {
+            if subCategory.kind == .oneBookWithOverview {
+                indices.append(index)
+            }
+        }
+        return indices
+    }()
     
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTable()
-        fetchBooks()
         view.addSubview(popupButton)
     }
-    #warning("maybe instead of calling fetchBooks() here (and in viewDidLoad of CategoryVC) it's better tot call it in viewDidLoad of BaseVC, but only if AllCategoriesVC and AllTtilesVC need this fetching")
+    #warning("maybe instead of calling fetchBooks() here (and in viewDidLoad of CategoryVC) it's better to call it in viewDidLoad of BaseVC, but only if AllCategoriesVC and AllTitlesVC need this fetching")
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -26,6 +37,18 @@ class HomeViewController: BaseViewController {
         if let tableHeader = bookTable.tableHeaderView as? TableHeaderView {
             tableHeader.updateGreetingsLabel()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard !isDidAppearTriggeredFirstTime else {
+            isDidAppearTriggeredFirstTime = false
+            return
+        }
+        // Update heart symbol (if needed) for sections created with .oneBookWithOverview subCategoryKind
+        let sectionsToReload = IndexSet(indicesOfSubCategoriesForBooksWithOverview)
+        bookTable.reloadSections(sectionsToReload, with: .none)
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,7 +97,8 @@ class HomeViewController: BaseViewController {
         case .horizontalCv: return TableViewCellWithCollection.rowHeight
         case .verticalCv: return 0
         case .oneBookWithOverview:
-            let book = category.subCategories[indexPath.section].books[0]
+            let subCategoryIndex = indexPath.section
+            let book = booksDict[subCategoryIndex]?.first
             return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
             
         case .poster: return PosterTableViewCell.heightForRow

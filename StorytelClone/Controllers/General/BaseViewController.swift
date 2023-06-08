@@ -22,6 +22,8 @@ class BaseViewController: UIViewController {
     var isInitialOffsetYSet = false
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
     
+    var isDidAppearTriggeredFirstTime = true
+    
     lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
         self?.navigationController?.pushViewController(controller, animated: true)
     }
@@ -65,9 +67,11 @@ class BaseViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !(self is AllCategoriesViewController) {
+            fetchBooks()
+        }
         view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(bookTable)
-//        fetchBooks()
         bookTable.delegate = self
         bookTable.dataSource = self
         bookTable.tableHeaderView = TableHeaderView()

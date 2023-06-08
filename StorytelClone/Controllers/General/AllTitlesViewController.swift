@@ -15,7 +15,6 @@ class AllTitlesViewController: BaseViewController {
     let titleModel: Title?
     private var books = [Book]()
     
-    private var currentSelectedBook: Book?
     private let popupButton = PopupButton()
     private var isHeaderConfigured = false
     
@@ -42,31 +41,17 @@ class AllTitlesViewController: BaseViewController {
         super.viewDidLoad()
         configureBookTable()
         view.addSubview(popupButton)
-        fetchBooks()
     }
-        
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        print("viewWillAppear of AllTitlesViewController")
-        // This will execute when returning from BookViewController (presented when cell selected)
-        guard let currentSelectedBook = currentSelectedBook else { return }
-
-        var selectedBookIndexPath = IndexPath(row: 0, section: 0)
-        for (index, book) in books.enumerated() {
-            if book.title == currentSelectedBook.title {
-                selectedBookIndexPath.row = index
-                break
-            }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard !isDidAppearTriggeredFirstTime else {
+            isDidAppearTriggeredFirstTime = false
+            return
         }
-        #warning("check using books id not title")
-
-        // This delay avoids warning that "UITableView was told to layout its visible cells and other contents without being in the view hierarchy"
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self = self else { return }
-            self.bookTable.reloadRows(at: [selectedBookIndexPath], with: .none)
-        }
-        #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow. AND maybe do it somehow without asyncAfter if possible")
+        bookTable.reloadData()
     }
+#warning("Maybe refactor to reload only If user saved or removed the books. Check it somehow.")
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -137,7 +122,6 @@ class AllTitlesViewController: BaseViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let book = books[indexPath.row]
-        currentSelectedBook = book
         let controller = BookViewController(book: book)
         self.navigationController?.pushViewController(controller, animated: true)
     }

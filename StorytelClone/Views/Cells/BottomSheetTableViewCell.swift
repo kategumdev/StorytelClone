@@ -63,7 +63,7 @@ class BottomSheetTableViewCell: UITableViewCell {
         content.text = storyteller.name
         self.contentConfiguration = content
     }
-
+    
     func configureFor(book: Book, bookDetailsBottomSheetCellKind: BookDetailsBottomSheetCellKind) {
         guard var content = self.contentConfiguration as? UIListContentConfiguration else { return }
         let bookDetailsCell = bookDetailsBottomSheetCellKind
@@ -72,10 +72,10 @@ class BottomSheetTableViewCell: UITableViewCell {
         var text = ""
         switch bookDetailsCell {
         case .saveBook:
-            text = book.isAddedToBookshelf ? "Remove from bookshelf" : "Add to bookshelf"
-            let newImageName = book.isAddedToBookshelf ? "heart.fill" : "heart"
+            text = book.isOnBookshelf() ? "Remove from bookshelf" : "Add to bookshelf"
+            let newImageName = book.isOnBookshelf() ? "heart.fill" : "heart"
             content.image = UIImage(systemName: newImageName)
-            let color = book.isAddedToBookshelf ? UIColor.customTintColor : .label
+            let color = book.isOnBookshelf() ? UIColor.customTintColor : .label
             content.imageProperties.tintColor = color
             
         case .markAsFinished:

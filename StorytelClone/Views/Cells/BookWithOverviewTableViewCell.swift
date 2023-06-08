@@ -8,11 +8,11 @@
 import UIKit
 
 class BookWithOverviewTableViewCell: UITableViewCell {
-    
     // MARK: - Static properties and methods
     static let identifier = "BookWithOverviewTableViewCell"
-    
-    static func calculateHeightForRow(withBook book: Book) -> CGFloat {
+
+    static func calculateHeightForRow(withBook book: Book?) -> CGFloat {
+        guard let book = book else { return 300 }
         let container = BookWithOverviewCellSubviewsContainer()
         container.configureFor(book: book)
         let height = container.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
@@ -44,11 +44,5 @@ class BookWithOverviewTableViewCell: UITableViewCell {
             containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
         }
     }
-    
-//    func configureFor(book: Book, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
-//        containerWithSubviews.configureFor(book: book)
-//        containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
-//        containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
-//    }
-    
+
 }

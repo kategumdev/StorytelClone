@@ -73,7 +73,6 @@ class RoundButtonsStack: UIStackView {
         return view
     }()
 
-    private var isBookAddedToBookshelf = false
     var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
 
     private lazy var saveLabel: UILabel = createLabel(withText: "Save")
@@ -125,9 +124,8 @@ class RoundButtonsStack: UIStackView {
     
     // MARK: - Instance methods
     func updateSaveButtonAppearance() {
-        self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
-        self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
-        self.toggleSaveLabelText()
+        self.saveBookButton.updateImage(isBookAdded: book.isOnBookshelf())
+        self.updateSaveLabelText()
     }
     
     // MARK: - Helper methods
@@ -135,11 +133,9 @@ class RoundButtonsStack: UIStackView {
         axis = .horizontal
         distribution = .fillProportionally
         spacing = RoundButtonsStack.roundWidth - 10
-        
-        isBookAddedToBookshelf = book.isAddedToBookshelf
-        
-        toggleSaveLabelText()
-        saveBookButton.toggleImage(isBookAdded: isBookAddedToBookshelf)
+                
+        updateSaveLabelText()
+        saveBookButton.updateImage(isBookAdded: book.isOnBookshelf())
         addSaveButtonAction()
         [viewWithSaveButton, saveBookButton].forEach {
             $0.layer.cornerRadius = RoundButtonsStack.roundWidth / 2
@@ -155,41 +151,44 @@ class RoundButtonsStack: UIStackView {
         
         addArrangedSubview(saveVertStack)
      }
-
+    
     private func addSaveButtonAction() {
         saveBookButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.saveBookButton.isUserInteractionEnabled = false
             Utils.playHaptics()
-            self.isBookAddedToBookshelf = !self.isBookAddedToBookshelf
             self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
 
     private func handleSaveButtonTapped() {
-        self.saveBookButtonDidTapCallback(self.isBookAddedToBookshelf)
-        if self.isBookAddedToBookshelf {
-            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
-            self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
-            self.toggleSaveLabelText()
-            self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
-                self?.saveBookButton.isUserInteractionEnabled = true
-            })
-        } else {
-            self.book.update(isAddedToBookshelf: self.isBookAddedToBookshelf)
-            self.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
+        let needsToBeAdded = !book.isOnBookshelf()
+        self.saveBookButtonDidTapCallback(needsToBeAdded)
+        
+        if needsToBeAdded {
+            book.updateBookshelfStatus()
+            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
                 guard let self = self else { return }
-                self.saveBookButton.toggleImage(isBookAdded: self.isBookAddedToBookshelf)
-                self.toggleSaveLabelText()
+                self.saveBookButton.updateImage(isBookAdded: self.book.isOnBookshelf())
+                self.updateSaveLabelText()
                 self.saveBookButton.isUserInteractionEnabled = true
             })
+        } else {
+            // Remove book
+            book.updateBookshelfStatus()
+            saveBookButton.updateImage(isBookAdded: self.book.isOnBookshelf())
+            updateSaveLabelText()
+            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
+                self?.saveBookButton.isUserInteractionEnabled = true
+            })
         }
+        
     }
     
-    private func toggleSaveLabelText() {
-        saveLabel.text = isBookAddedToBookshelf ? "Saved" : "Save"
+    private func updateSaveLabelText() {
+        saveLabel.text = book.isOnBookshelf() ? "Saved" : "Save"
     }
-    
+
     private func createLabel(withText text: String) -> UILabel {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 17)
         let label = UILabel.createLabelWith(font: scaledFont, text: text)

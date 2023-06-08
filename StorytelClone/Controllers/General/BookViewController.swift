@@ -47,8 +47,11 @@ class BookViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard isDidAppearTriggeredFirstTime else { return }
-         isDidAppearTriggeredFirstTime = false
+        guard isDidAppearTriggeredFirstTime else {
+            bookContainerScrollView.bookDetailsStackView.updateSaveButtonAppearance()
+            return
+        }
+        isDidAppearTriggeredFirstTime = false
         addPopupButton()
         addHideView()
         passCallbacksToBookContainerScrollView()
@@ -239,6 +242,6 @@ extension BookViewController {
 // MARK: - BottomSheetViewControllerDelegate
 extension BookViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
-        self.bookContainerScrollView.bookDetailsStackView.updateSaveButtonAppearance()
+        bookContainerScrollView.bookDetailsStackView.updateSaveButtonAppearance()
     }
 }

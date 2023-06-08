@@ -13,7 +13,7 @@ struct ITunesSearchResponse: Codable {
 }
 
 struct Audiobook: Codable {
-    
+    var collectionId: Int
     var bookName: String
     var authorName: String
     var description: String?
@@ -23,6 +23,10 @@ struct Audiobook: Codable {
     var audioUrlString: String?
     var releaseDate: String?
     
+    var id: String {
+        return "\(collectionId)"
+    }
+    
     enum CodingKeys: String, CodingKey {
         case bookName = "collectionName"
         case authorName = "artistName"
@@ -30,7 +34,7 @@ struct Audiobook: Codable {
         case smallImageUrl = "artworkUrl60"
         case largeImageUrl = "artworkUrl100"
         case audioUrlString = "previewUrl"
-        case description, releaseDate
+        case description, releaseDate, collectionId
     }
     
 }

@@ -112,11 +112,6 @@ class BottomSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    deinit {
-//        print("\(kind) BottomSheetVC DEINIT")
-//        delegate = nil
-//    }
-    
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -216,7 +211,7 @@ extension BottomSheetViewController {
     private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind, withIndexPath indexPath: IndexPath) {
         switch bookDetailsBottomSheetCell {
         case .saveBook:
-            if book.isAddedToBookshelf {
+            if book.isOnBookshelf() {
                 handleRemovingBookWith(indexPath: indexPath)
             } else {
                 handleAddingBookWith(indexPath: indexPath)
@@ -249,13 +244,8 @@ extension BottomSheetViewController {
     }
     
     private func handleAddingBookWith(indexPath: IndexPath) {
-        // Update book of this instance
-        book.isAddedToBookshelf = !book.isAddedToBookshelf
-        
-        // Update book in data model
-        book.update(isAddedToBookshelf: book.isAddedToBookshelf)
-        
-        // Reload row
+        book.isAddedToBookshelf = !book.isAddedToBookshelf // only for hardcoded book objects
+        book.updateBookshelfStatus()
         tableView.reloadRows(at: [indexPath], with: .none)
         
         // Update cell with this book in AllTitlesViewController
@@ -279,11 +269,9 @@ extension BottomSheetViewController {
             style: .destructive,
             handler: { [weak self] _ in
                 guard let self = self else { return }
-                // Update book of this instance
-                self.book.isAddedToBookshelf = !self.book.isAddedToBookshelf
+                self.book.isAddedToBookshelf = !self.book.isAddedToBookshelf // only for hardcoded book objects
                 
-                // Update book in data model
-                self.book.update(isAddedToBookshelf: self.book.isAddedToBookshelf)
+                self.book.updateBookshelfStatus()
                 
                 // Update cell with this book in AllTitlesViewController
                 self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
