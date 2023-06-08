@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SDWebImage
 
 struct APIConstants {
     static let GoogleBooksAPI_KEY = "AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM"
@@ -23,6 +24,8 @@ enum NetworkManagerError: Error {
 }
 
 class NetworkManager {
+    private let sdWebImageDownloader = SDWebImageDownloader()
+    
     private var currentGoogleBooksDataTask: URLSessionDataTask?
     private var currentITunesDataTask: URLSessionDataTask?
     private(set) var hasError = false
@@ -136,7 +139,56 @@ class NetworkManager {
 #warning("If either task was cancelled (and therefore its completion wasn't called), dataTaskGroup.notify won't be called. Does it need to be cleaned somehow?")
     }
     
+    func loadAndResizeImagesFor(books: [Book], subCategoryKind: SubCategoryKind, completion: @escaping (([Book]) -> Void)) {
+        
+        // Load and resize poster image
+        guard subCategoryKind != .poster else {
+            if let book = books.first, let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+                sdWebImageDownloader.downloadImage(with: imageURL) { image, data, error, success in
+                    if let image = image {
+                        let resizedImage = image.resizeFor(targetHeight: PosterTableViewCell.calculatedButtonHeight, andSetAlphaTo: 1)
+                        var bookWithImage = book
+                        bookWithImage.coverImage = resizedImage
+                        completion([bookWithImage])
+                    }
+                }
+            }
+            return
+        }
+        
+        // Load and resize images for other sub category kinds
+        let downloadTaskGroup = DispatchGroup()
+        var booksWithImages = [Book]() // it will contain only books that have downloaded images
+        
+        for book in books {
+            if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+                downloadTaskGroup.enter()
+                sdWebImageDownloader.downloadImage(with: imageURL) { image, data, error, success in
+                    if let image = image {
+                        var targetHeight: CGFloat
+                        if subCategoryKind == .horizontalCv {
+                            targetHeight = Constants.largeSquareBookCoverSize.height
+                        } else {
+                            // for sub category with large rectangle covers
+                            targetHeight = TableViewCellWithHorzCvLargeRectangleCovers.itemSize.height
+                        }
+                        let resizedImage = image.resizeFor(targetHeight: targetHeight, andSetAlphaTo: 1)
+                        var bookWithImage = book
+                        bookWithImage.coverImage = resizedImage
+                        booksWithImages.append(bookWithImage)
+                    }
+                    downloadTaskGroup.leave()
+                }
+            }
+        }
+        downloadTaskGroup.notify(queue: DispatchQueue.main) {
+            booksWithImages.shuffle()
+            completion(booksWithImages)
+        }
+    }
+    
     func cancelTasks() {
+        sdWebImageDownloader.cancelAllDownloads()
         currentGoogleBooksDataTask?.cancel()
         currentGoogleBooksDataTask = nil
         currentITunesDataTask?.cancel()

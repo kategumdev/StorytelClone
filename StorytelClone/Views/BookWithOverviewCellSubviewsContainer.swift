@@ -37,7 +37,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     private let bookTitleLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 4
+        label.numberOfLines = 2
         let font = UIFont.createStaticFontWith(weight: .semibold, size: 31)
         label.font = font
         return label
