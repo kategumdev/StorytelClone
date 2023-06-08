@@ -76,22 +76,22 @@ class TableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        self.books = books
-        self.dimmedAnimationButtonDidTapCallback = callback
-
-        // Resize images for use in cv cells and in sizeForItemAt method of cv
-        for book in books {
-            let height = Constants.largeSquareBookCoverSize.height
-            if let image = book.coverImage {
-                let resizedImage = image.resizeFor(targetHeight: height)
-                resizedImages.append(resizedImage)
-                let itemSize = CGSize(width: resizedImage.size.width, height: TableViewCellWithCollection.rowHeight)
-                itemSizes.append(itemSize)
-            }
-        }
-        collectionView.reloadData()
-    }
+//    func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
+//        self.books = books
+//        self.dimmedAnimationButtonDidTapCallback = callback
+//
+//        // Resize images for use in cv cells and in sizeForItemAt method of cv
+//        for book in books {
+//            let height = Constants.largeSquareBookCoverSize.height
+//            if let image = book.coverImage {
+//                let resizedImage = image.resizeFor(targetHeight: height)
+//                resizedImages.append(resizedImage)
+//                let itemSize = CGSize(width: resizedImage.size.width, height: TableViewCellWithCollection.rowHeight)
+//                itemSizes.append(itemSize)
+//            }
+//        }
+//        collectionView.reloadData()
+//    }
     #warning("replace usages of the func above everywhere in the project (in CategoryVC)")
     
     func configureFor(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {

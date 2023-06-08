@@ -26,6 +26,10 @@ class BookViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        networkManager.cancelTasks()
+    }
 
     // MARK: - View life cycle
     override func viewDidLoad() {
