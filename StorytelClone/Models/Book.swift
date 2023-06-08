@@ -13,12 +13,10 @@ struct Book: Title, Equatable {
     }
     #warning("Equatable implemention has to check id, not title")
     
-    #warning("coverImage needed only for hardcoded book objects")
     let id: String
     let title: String
     let authors: [Storyteller]
-    var coverImage: UIImage?
-    let largeCoverImage: UIImage?
+    var coverImage: UIImage? // needed only for hardcoded book objects
     var titleKind: TitleKind
     let description: String
     let buttonCategory: ButtonCategory
@@ -38,14 +36,12 @@ struct Book: Title, Equatable {
     var isDownloaded: Bool
     var imageURLString: String?
     var audioUrlString: String?
-    #warning("delete largeCoverImage property when not used anymore")
     
-    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
+    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.id = id
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
-        self.largeCoverImage = largeCoverImage
         self.titleKind = titleKind
         self.description = description
         self.buttonCategory = category
@@ -204,23 +200,23 @@ struct Book: Title, Equatable {
     static let book10 = Book(id: "10", title: "Brick lane", authors: [Storyteller.monicaAli], coverImage: UIImage(named: "image10"), titleKind: .ebook, category: .novela)
     
     
-    static let book11 = Book(id: "11", title: "Kodiak", authors: [Storyteller.gellida], coverImage: UIImage(named: "kodiak"), largeCoverImage: UIImage(named: "kodiakLarge"), titleKind: .audioBookAndEbook, category: .novelaNegra)
+    static let book11 = Book(id: "11", title: "Kodiak", authors: [Storyteller.gellida], coverImage: UIImage(named: "kodiak"), titleKind: .audioBookAndEbook, category: .novelaNegra)
 
-    static let book12 = Book(id: "12", title: "El resto de tu vida fue ayer", authors: [Storyteller.angelaVallvey], coverImage: UIImage(named: "elRestoDeTuVidaFueAyer"), largeCoverImage: UIImage(named: "elRestoDeTuVidaFueAyerLarge"), titleKind: .audioBookAndEbook, category: .thrillerYHorror)
+    static let book12 = Book(id: "12", title: "El resto de tu vida fue ayer", authors: [Storyteller.angelaVallvey], coverImage: UIImage(named: "elRestoDeTuVidaFueAyer"), titleKind: .audioBookAndEbook, category: .thrillerYHorror)
 
-    static let book13 = Book(id: "13", title: "Julia Menken", authors: [Storyteller.chantalVanMierlo], coverImage: UIImage(named: "juliaMenken"), largeCoverImage: UIImage(named: "juliaMenkenLarge"), titleKind: .audioBookAndEbook, category: .novelaNegra)
+    static let book13 = Book(id: "13", title: "Julia Menken", authors: [Storyteller.chantalVanMierlo], coverImage: UIImage(named: "juliaMenken"), titleKind: .audioBookAndEbook, category: .novelaNegra)
 
-    static let book14 = Book(id: "14", title: "Muerte en Padmasana", authors: [Storyteller.susanaMartinGijon], coverImage: UIImage(named: "muerteEnPadmasana"), largeCoverImage: UIImage(named: "muerteEnPadmasanaLarge"), titleKind: .audioBookAndEbook, category: .novelaNegra)
+    static let book14 = Book(id: "14", title: "Muerte en Padmasana", authors: [Storyteller.susanaMartinGijon], coverImage: UIImage(named: "muerteEnPadmasana"), titleKind: .audioBookAndEbook, category: .novelaNegra)
 
-    static let book15 = Book(id: "15", title: "Bogalusa", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bogalusa"), largeCoverImage: UIImage(named: "bogalusaLarge"), titleKind: .audioBookAndEbook, category: .novelaNegra)
+    static let book15 = Book(id: "15", title: "Bogalusa", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bogalusa"), titleKind: .audioBookAndEbook, category: .novelaNegra)
 
-    static let book16 = Book(id: "16", title: "No olvides mi nombre", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "noOlvidesMiNombre"), largeCoverImage: UIImage(named: "noOlvidesMiNombreLarge"), titleKind: .audioBookAndEbook, category: .novela)
+    static let book16 = Book(id: "16", title: "No olvides mi nombre", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "noOlvidesMiNombre"), titleKind: .audioBookAndEbook, category: .novela)
 
-    static let book17 = Book(id: "17", title: "Odisea", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "odisea"), largeCoverImage: UIImage(named: "odiseaLarge"), titleKind: .audioBookAndEbook, category: .clasicos)
+    static let book17 = Book(id: "17", title: "Odisea", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "odisea"), titleKind: .audioBookAndEbook, category: .clasicos)
 
-    static let book18 = Book(id: "18", title: "Desajuste de cuentas", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "desajusteDeCuentas"), largeCoverImage: UIImage(named: "desajusteDeCuentasLarge"), titleKind: .audioBookAndEbook, category: .novelaNegra)
+    static let book18 = Book(id: "18", title: "Desajuste de cuentas", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "desajusteDeCuentas"), titleKind: .audioBookAndEbook, category: .novelaNegra)
 
-    static let book19 = Book(id: "19", title: "La suelta", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "laSuelta"), largeCoverImage: UIImage(named: "laSueltaLarge"), titleKind: .audiobook, category: .thrillerYHorror)
+    static let book19 = Book(id: "19", title: "La suelta", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "laSuelta"), titleKind: .audiobook, category: .thrillerYHorror)
     
     
     static let book20 = Book(id: "20", title: "Sixteenth Summer", authors: [Storyteller.pabloToledo, Storyteller.author1, Storyteller.author3], coverImage: UIImage(named: "sixteenthSummer"), titleKind: .ebook, description: "Anna is dreading another tourist-filled summer on Dune Island that follows the same routine: beach, ice cream, friends, repeat. That is, until she locks eyes with Will, the gorgeous and sweet guy visiting from New York. Soon, her summer is filled with flirtatious fun as Anna falls head over heels in love.\nBut with every perfect afternoon, sweet kiss, and walk on the beach, Anna can’t ignore that the days are quickly growing shorter, and Will has to leave at the end of August. Anna’s never felt anything like this before, but when forever isn’t even a possibility, one summer doesn’t feel worth the promise of her heart breaking…", category: .juvenilYYoungAdult, rating: 3.0, language: "English")
@@ -240,8 +236,8 @@ struct Book: Title, Equatable {
     
     static let bookWithOverview2 = Book(id: "26", title: "Mariposas heladas", authors: [Storyteller.pabloToledo], coverImage: UIImage(named: "bookWithOverview2"), titleKind: .audiobook, description: "Una gélida mañana de invierno, el cuerpo sin vida de una monja, que aparentemente ha sido atropellada por un coche, aparece en las afueras de Lipowo, una localidad situada al norte de Varsovia. Pero pronto queda fuera de duda que primero fue asesinada y luego simularon un accidente. Unos días después, cuando aparece el cadáver de otra mujer, sin que entre ellas hubiera un vínculo aparente, la Policía debe darse prisa antes de que el asesino actúe de nuevo.\nLas sospechas recaerán sobre algunos de los habitantes del pueblo: la propietaria de una tienda, el heredero de una familia adinerada o el hijo de uno de los oficiales de la Policía. La comisaria Klementyna Kopp y el comisario Daniel Podgórski tendrán que ponerse manos a la obra, investigar la verdadera identidad de la monja, su pasado y los motivos que la llevaron a Lipowo. Esta vez, además de con su equipo, Daniel contará con la ayuda de una recién llegada, Veronika —psicóloga que viene de Varsovia, acaba de divorciarse y busca un nuevo comienzo lejos de la ciudad—, por la que se siente irresistiblemente atraído.", category: .novelaNegra, rating: 0.5, tags: [Tag(tagTitle: "Aventura"), Tag(tagTitle: "Fantasía"), Tag(tagTitle: "Novela negra")])
     
-    static let senorDeLosAnillos1 = Book(id: "27", title: "El Señor de los Anillos n° 01/03 La Comunidad del Anillo", authors: [Storyteller.tolkien], coverImage: UIImage(named: "series1book1"), largeCoverImage: nil, titleKind: .audiobook, description: "«Este libro es como un relámpago en un cielo claro. Decir que la novela heroica, espléndida, elocuente y desinhibida, ha retornado de pronto en una época de un antirromanticismo casi patológico, sería inadecuado. Para quienes vivimos en esa extraña época, el retorno —y el alivio que nos trae— es sin duda lo más importante. Pero para la historia misma de la novela —una historia que se remonta a la Odisea y a antes de la Odisea— no es un retorno, sino un paso adelante o una revolución: la conquista de un territorio nuevo.» —C.S. Lewis, Time & Tide, 1954\n«La obra de Tolkien, difundida en millones de ejemplares, traducida a docenas de lenguas, inspiradora de slogans pintados en las paredes de Nueva York y de Buenos Aires... una coherente mitología de una autenticidad universal creada en pleno siglo veinte.» —George Steiner, Le Monde, 1973", category: .fantasiaYCienciaFiccion, rating: 4.8, duration: "22h 29m", language: "Spanish", narrators: [Storyteller.narrator1, Storyteller.narrator2], series: "El señor de los anillos", seriesPart: 1, translators: ["Matilde Horne", "Luis Doménech"], tags: Tag.tagsBookVC)
+    static let senorDeLosAnillos1 = Book(id: "27", title: "El Señor de los Anillos n° 01/03 La Comunidad del Anillo", authors: [Storyteller.tolkien], coverImage: UIImage(named: "series1book1"), titleKind: .audiobook, description: "«Este libro es como un relámpago en un cielo claro. Decir que la novela heroica, espléndida, elocuente y desinhibida, ha retornado de pronto en una época de un antirromanticismo casi patológico, sería inadecuado. Para quienes vivimos en esa extraña época, el retorno —y el alivio que nos trae— es sin duda lo más importante. Pero para la historia misma de la novela —una historia que se remonta a la Odisea y a antes de la Odisea— no es un retorno, sino un paso adelante o una revolución: la conquista de un territorio nuevo.» —C.S. Lewis, Time & Tide, 1954\n«La obra de Tolkien, difundida en millones de ejemplares, traducida a docenas de lenguas, inspiradora de slogans pintados en las paredes de Nueva York y de Buenos Aires... una coherente mitología de una autenticidad universal creada en pleno siglo veinte.» —George Steiner, Le Monde, 1973", category: .fantasiaYCienciaFiccion, rating: 4.8, duration: "22h 29m", language: "Spanish", narrators: [Storyteller.narrator1, Storyteller.narrator2], series: "El señor de los anillos", seriesPart: 1, translators: ["Matilde Horne", "Luis Doménech"], tags: Tag.tagsBookVC)
     
-    static let senorDeLosAnillos2 = Book(id: "28", title: "El Señor de los Anillos n° 02/03 Las Dos Torres", authors: [Storyteller.tolkien], coverImage: UIImage(named: "series1book2"), largeCoverImage: nil, titleKind: .audiobook, description: "«Ningún escritor del género ha aprovechado tanto como Tolkien las propiedades características de la Misión, el viaje heróico, el Objeto Numinoso, satisfaciendo nuestro sentido de la realidad histórica y social… Tolkien ha triunfado donde fracasó Milton.» —W.H. Auden\n«La invención de los pueblos extraños, incidentes curiosos u hechos maravillosos es en este segundo volumen de la trilogía tan exuberante y convincente como siempre. A medida que avanza la historia, el mundo del Anillo crece en dimensión y misterio, poblado por figuras curiosas, terroríficas, adorables o divertidas. La historia misma es soberbia.» —The Observer", category: .fantasiaYCienciaFiccion, rating: 4.8, duration: "20h 1m", language: "Spanish", narrators: [Storyteller.narrator1, Storyteller.narrator2], series: "El señor de los anillos", seriesPart: 2, translators: ["Matilde Horne", "Luis Doménech"])
+    static let senorDeLosAnillos2 = Book(id: "28", title: "El Señor de los Anillos n° 02/03 Las Dos Torres", authors: [Storyteller.tolkien], coverImage: UIImage(named: "series1book2"), titleKind: .audiobook, description: "«Ningún escritor del género ha aprovechado tanto como Tolkien las propiedades características de la Misión, el viaje heróico, el Objeto Numinoso, satisfaciendo nuestro sentido de la realidad histórica y social… Tolkien ha triunfado donde fracasó Milton.» —W.H. Auden\n«La invención de los pueblos extraños, incidentes curiosos u hechos maravillosos es en este segundo volumen de la trilogía tan exuberante y convincente como siempre. A medida que avanza la historia, el mundo del Anillo crece en dimensión y misterio, poblado por figuras curiosas, terroríficas, adorables o divertidas. La historia misma es soberbia.» —The Observer", category: .fantasiaYCienciaFiccion, rating: 4.8, duration: "20h 1m", language: "Spanish", narrators: [Storyteller.narrator1, Storyteller.narrator2], series: "El señor de los anillos", seriesPart: 2, translators: ["Matilde Horne", "Luis Doménech"])
 }
 
