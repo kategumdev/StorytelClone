@@ -29,7 +29,6 @@ struct SubCategory {
     let subtitle: String
     let kind: SubCategoryKind
     let searchQuery: String // Hardcoded values
-    let books: [Book]
     let description: String?
     var toShowTitleModel: Title?
     let canBeShared: Bool
@@ -37,15 +36,12 @@ struct SubCategory {
     let categoryToShow: Category?
     let bookKinds: BookKinds
     #warning("add property bookKinds with values: onlyEbooks, onlyAudiobooks, ebookAndAudiobooks, fetch data in network manager checking this property")
-    
-    #warning("delete books property when not used anymore")
-    
-    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, books: [Book] = Book.books, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
+        
+    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
         self.title = title
         self.subtitle = subtitle
         self.kind = kind
         self.searchQuery = searchQuery
-        self.books = books
         self.description = description
         self.toShowTitleModel = toShowTitleModel
         self.canBeShared = canBeShared
@@ -405,7 +401,7 @@ struct Category: Equatable {
 
 //            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "rise of dragons", bookKinds: .onlyAudiobooks),
 //            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "Los juegos del hambre", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", books: [Book](), bookKinds: .onlyAudiobooks),
+            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", bookKinds: .onlyAudiobooks),
 
             
 //            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", books: Book.booksWithLargeCovers),
@@ -422,18 +418,18 @@ struct Category: Equatable {
 //            SubCategory(title: "Alicia Giménez Bartlett - Serie Petra Delicado"),
 //            SubCategory(title: "Solo en Storytel", description: "Historias que solo podrás encontrar aquí."),
             SubCategory(title: "Novela: Recomendados para ti", searchQuery: "gaiman", canBeShared: false),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "Mitos nordicos", books: [Book.bookWithOverview1], bookKinds: .onlyAudiobooks),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "Mitos nordicos", bookKinds: .onlyAudiobooks),
             SubCategory(title: "Tendecia en Storytel", searchQuery: "vikings"),
 //            SubCategory(title: "Pronto en audiolibro"),
 //            SubCategory(title: "Historias de pelicula (y serie)"),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "anansiboys", books: [Book.bookWithOverview2], bookKinds: .onlyAudiobooks),
+            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "anansiboys", bookKinds: .onlyAudiobooks),
             SubCategory(title: "Novela: Los más populares", searchQuery: "thunder"),
             
             // subtitle and description have to be dynamic (one of books user saved)
             SubCategory(title: "Porque te interesa", subtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", searchQuery: "sarah j maas", description: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
 //            SubCategory(title: "Novela negra: Recomendados para ti", canBeShared: false),
             SubCategory(title: "", kind: .seriesCategoryButton, searchQuery: ""),
-            SubCategory(title: "El audiolibro de George R.R. Martin", kind: .oneBookWithOverview, searchQuery: "a clash of kings", books: [Book.bookWithOverview], bookKinds: .onlyAudiobooks),
+            SubCategory(title: "El audiolibro de George R.R. Martin", kind: .oneBookWithOverview, searchQuery: "a clash of kings"),
             SubCategory(title: "Series Top esta semana", searchQuery: "shadow"),
             SubCategory(title: "", kind: .allCategoriesButton, searchQuery: "")
         ])

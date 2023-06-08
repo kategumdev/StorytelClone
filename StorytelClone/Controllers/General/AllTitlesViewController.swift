@@ -231,12 +231,11 @@ extension AllTitlesViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
         var indexPathOfRowWithThisBook = IndexPath(row: 0, section: 0)
         for (index, arrayBook) in books.enumerated() {
-            if arrayBook.title == book.title {
+            if arrayBook == book {
                 indexPathOfRowWithThisBook.row = index
                 break
             }
         }
-        #warning("check using books id not title")
         self.bookTable.reloadRows(at: [indexPathOfRowWithThisBook], with: .none)
     }
 

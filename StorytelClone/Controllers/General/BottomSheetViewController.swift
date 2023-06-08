@@ -244,7 +244,6 @@ extension BottomSheetViewController {
     }
     
     private func handleAddingBookWith(indexPath: IndexPath) {
-        book.isAddedToBookshelf = !book.isAddedToBookshelf // only for hardcoded book objects
         book.updateBookshelfStatus()
         tableView.reloadRows(at: [indexPath], with: .none)
         
@@ -269,11 +268,9 @@ extension BottomSheetViewController {
             style: .destructive,
             handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.book.isAddedToBookshelf = !self.book.isAddedToBookshelf // only for hardcoded book objects
-                
                 self.book.updateBookshelfStatus()
                 
-                // Update cell with this book in AllTitlesViewController
+                // Update cell with this book in AllTitlesViewController (parent vc, visible beneath)
                 self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
                 
                 // Dismiss this bottom sheet

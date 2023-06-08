@@ -8,10 +8,6 @@
 import UIKit
 
 struct Book: Title, Equatable {
-    static func == (lhs: Book, rhs: Book) -> Bool {
-        return lhs.title == rhs.title
-    }
-    #warning("Equatable implemention has to check id, not title")
     
     let id: String
     let title: String
@@ -31,13 +27,12 @@ struct Book: Title, Equatable {
     let publisher: String
     let translators: [String]?
     let tags: [Tag]
-    var isAddedToBookshelf: Bool
     var isFinished: Bool
     var isDownloaded: Bool
     var imageURLString: String?
     var audioUrlString: String?
     
-    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
+    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.id = id
         self.title = title
         self.authors = authors
@@ -56,52 +51,43 @@ struct Book: Title, Equatable {
         self.publisher = publisher
         self.translators = translators
         self.tags = tags
-        self.isAddedToBookshelf = isAddedToBookshelf
         self.isFinished = isFinished
         self.isDownloaded = isDownloaded
         self.imageURLString = imageURLString
         self.audioUrlString = audioUrlString
     }
     
+    // MARK: - Instance methods
     func updateBookshelfStatus() {
         // Update toReadBooks
         let needsToBeAdded = !self.isOnBookshelf() // get value that is opposite to the current one
                 
         if needsToBeAdded {
             // Add book only if it's not already in the array (it might have been added before)
-            if !toReadBooks.contains(where: { $0.id == self.id }) {
+            if !toReadBooks.contains(where: { $0 == self }) {
                 toReadBooks.append(self)
             }
         } else {
-            if let bookIndex = toReadBooks.firstIndex(where: { $0.id == self.id }) {
+            if let bookIndex = toReadBooks.firstIndex(where: { $0 == self }) {
                 toReadBooks.remove(at: bookIndex)
             }
         }
-        
-        // ONLY FOR HARDCODED BOOK OBJECTS. Update book model object in allTitlesBooks
-        var updatedBook = self
-        updatedBook.isAddedToBookshelf = needsToBeAdded
-
-        var indexToReplace = 0
-        for (index, book) in allTitlesBooks.enumerated() {
-            if book.id == self.id {
-                indexToReplace = index
-                break
-            }
-        }
-        allTitlesBooks.insert(updatedBook, at: indexToReplace)
-        allTitlesBooks.remove(at: indexToReplace + 1)
     }
     
     func isOnBookshelf() -> Bool {
         var isAdded: Bool = false
         for book in toReadBooks {
-            if book.id == self.id {
+            if book == self {
                 isAdded = true
                 break
             }
         }
         return isAdded
+    }
+    
+    // MARK: - Static properties and methods
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        return lhs.id == rhs.id
     }
     
     static func createBooksFromEbooks(_ ebooks: [Ebook]?) -> [Book] {
@@ -179,7 +165,7 @@ struct Book: Title, Equatable {
         
     static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
         
-    static let book1 = Book(id: "01", title: "The city of brass", authors: [Storyteller.shannonChakraborty], coverImage: UIImage(named: "image1"), titleKind: .audiobook, description: "Discover this spellbinding debut from S.A. Chakraborty.\n\n\n‘An extravagant feast of a book – spicy and bloody, dizzyingly magical, and still, somehow, utterly believable’ Laini Taylor, Sunday Times and New York Times bestselling author\n\n\nAmong the bustling markets of eighteenth century Cairo, the city’s outcasts eke out a living swindling rich Ottoman nobles and foreign invaders alike.\n\nBut alongside this new world the old stories linger. Tales of djinn and spirits. Of cities hidden among the swirling sands of the desert, full of enchantment, desire and riches. Where magic pours down every street, hanging in the air like dust.\n\nMany wish their lives could be filled with such wonder, but not Nahri. She knows the trades she uses to get by are just tricks and sleights of hand: there’s nothing magical about them. She only wishes to one day leave Cairo, but as the saying goes…\n\nBe careful what you wish for.", category: .novela, tags: Tag.twoTags, isAddedToBookshelf: true)
+    static let book1 = Book(id: "01", title: "The city of brass", authors: [Storyteller.shannonChakraborty], coverImage: UIImage(named: "image1"), titleKind: .audiobook, description: "Discover this spellbinding debut from S.A. Chakraborty.\n\n\n‘An extravagant feast of a book – spicy and bloody, dizzyingly magical, and still, somehow, utterly believable’ Laini Taylor, Sunday Times and New York Times bestselling author\n\n\nAmong the bustling markets of eighteenth century Cairo, the city’s outcasts eke out a living swindling rich Ottoman nobles and foreign invaders alike.\n\nBut alongside this new world the old stories linger. Tales of djinn and spirits. Of cities hidden among the swirling sands of the desert, full of enchantment, desire and riches. Where magic pours down every street, hanging in the air like dust.\n\nMany wish their lives could be filled with such wonder, but not Nahri. She knows the trades she uses to get by are just tricks and sleights of hand: there’s nothing magical about them. She only wishes to one day leave Cairo, but as the saying goes…\n\nBe careful what you wish for.", category: .novela, tags: Tag.twoTags)
     
     static let book2 = Book(id: "02", title: "The simple wild", authors: [Storyteller.tucker], coverImage: UIImage(named: "image2"), titleKind: .audioBookAndEbook, description: "City girl Calla Fletcher attempts to reconnect with her estranged father, and unwittingly finds herself torn between her desire to return to the bustle of Toronto and a budding relationship with a rugged Alaskan pilot in this masterful new romance from acclaimed author K.A. Tucker.\n\nCalla Fletcher was two when her mother took her and fled the Alaskan wild, unable to handle the isolation of the extreme, rural lifestyle, leaving behind Calla’s father, Wren Fletcher, in the process. Calla never looked back, and at twenty-six, a busy life in Toronto is all she knows. But when her father reaches out to inform her that his days are numbered, Calla knows that it’s time to make the long trip back to the remote frontier town where she was born.\n\nShe braves the roaming wildlife, the odd daylight hours, the exorbitant prices, and even the occasional—dear God—outhouse, all for the chance to connect with her father: a man who, despite his many faults, she can’t help but care for. While she struggles to adjust to this new subarctic environment, Jonah—the quiet, brooding, and proud Alaskan pilot who keeps her father’s charter plane company operational—can’t imagine calling anywhere else home. And he’s clearly waiting with one hand on the throttle to fly this city girl back to where she belongs, convinced that she’s too pampered to handle the wild.\n\nJonah is probably right, but Calla is determined to prove him wrong. As time passes, she unexpectedly finds herself forming a bond with the burly pilot. As his undercurrent of disapproval dwindles, it’s replaced by friendship—or perhaps something deeper? But Calla is not in Alaska to stay and Jonah will never leave. It would be foolish of her to kindle a romance, to take the same path her parents tried—and failed at—years ago.\n\nIt’s a simple truth that turns out to be not so simple after all.", category: .novela)
     

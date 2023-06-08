@@ -115,12 +115,11 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     // MARK: - Helper methods
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self, let unwrappedBook = self.book else { return }
+            guard let self = self, let book = self.book else { return }
             Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
-            self.book?.isAddedToBookshelf = !unwrappedBook.isAddedToBookshelf // only for hardcoded books
-            unwrappedBook.updateBookshelfStatus()
+            book.updateBookshelfStatus()
             self.updateSaveButton()
-            self.saveBookButtonDidTapCallback(!unwrappedBook.isAddedToBookshelf)
+            self.saveBookButtonDidTapCallback(book.isOnBookshelf())
         }), for: .touchUpInside)
     }
 
