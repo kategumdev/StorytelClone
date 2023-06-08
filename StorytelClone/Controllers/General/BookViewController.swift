@@ -81,10 +81,11 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         
         sectionHeader.configureFor(subCategory: SubCategory.similarTitles, withSeeAllButtonDidTapCallback: { [weak self] in
             guard let self = self else { return }
-            let controller = AllTitlesViewController(subCategory: SubCategory.similarTitles, titleModel: self.book)
+            let controller = AllTitlesViewController(subCategory: SubCategory.similarTitles, books: self.similarBooks)
             self.navigationController?.pushViewController(controller, animated: true)
         })
         return sectionHeader
+        #warning("maybe disable seeAll button if similarBooks is empty yet")
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

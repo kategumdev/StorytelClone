@@ -12,7 +12,7 @@ class BaseViewController: UIViewController {
     var category: Category?
     #warning("try to make this property not optional")
     
-    private let networkManager = NetworkManager()
+    let networkManager = NetworkManager()
     var booksDict = [Int : [Book]]()
     
     let tableViewStyle: UITableView.Style
@@ -67,6 +67,7 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(bookTable)
+//        fetchBooks()
         bookTable.delegate = self
         bookTable.dataSource = self
         bookTable.tableHeaderView = TableHeaderView()
@@ -205,8 +206,11 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
                 let controller = CategoryViewController(categoryModel: categoryToShow)
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
-                let controller = AllTitlesViewController(subCategory: subCategory, titleModel: subCategory.toShowTitleModel)
-                self.navigationController?.pushViewController(controller, animated: true)
+                let subCategoryIndex = section
+                if let books = self.booksDict[subCategoryIndex] {
+                    let controller = AllTitlesViewController(subCategory: subCategory, books: books)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
         })
         return sectionHeader

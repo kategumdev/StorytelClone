@@ -13,11 +13,11 @@ class AllTitlesViewController: BaseViewController {
 
     var subCategory: SubCategory?
     let titleModel: Title?
+    private var books = [Book]()
+    
     private var currentSelectedBook: Book?
     private let popupButton = PopupButton()
     private var isHeaderConfigured = false
-    private var books = [Book]()
-    private let networkManager = NetworkManager()
     
     private let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
@@ -26,12 +26,13 @@ class AllTitlesViewController: BaseViewController {
     }()
 
     // MARK: - Initializers
-    init(subCategory: SubCategory? = nil, titleModel: Title? = nil) {
+    init(subCategory: SubCategory? = nil, titleModel: Title? = nil, books: [Book] = [Book]()) {
         self.subCategory = subCategory
         self.titleModel = titleModel
+        self.books = books
         super.init(tableViewStyle: .plain)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -41,7 +42,7 @@ class AllTitlesViewController: BaseViewController {
         super.viewDidLoad()
         configureBookTable()
         view.addSubview(popupButton)
-        loadBooks()
+        fetchBooks()
     }
         
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +65,7 @@ class AllTitlesViewController: BaseViewController {
             guard let self = self else { return }
             self.bookTable.reloadRows(at: [selectedBookIndexPath], with: .none)
         }
-        #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow.")
+        #warning("Do this update only if selected book was really changed. If user doesn't tap save button, this update is not needed. Check it somehow. AND maybe do it somehow without asyncAfter if possible")
     }
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -86,7 +87,6 @@ class AllTitlesViewController: BaseViewController {
         cell.ellipsisButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
             // Get the latest updated book model object
-//            let updatedBook = allTitlesBooks[indexPath.row]
             let updatedBook = self.books[indexPath.row]
             
             let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
@@ -107,19 +107,10 @@ class AllTitlesViewController: BaseViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard !books.isEmpty else { return nil}
-
-        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView else {
-            return UIView()
-        }
+        guard !books.isEmpty, let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView, let subCategory = subCategory else { return nil }
         
-        if let titleModel = titleModel, titleModel.titleKind == .series {
-            sectionHeader.configureWith(title: "All books")
-        } else {
-            sectionHeader.configureWith(title: "All titles")
-        }
-
-        guard let subCategory = subCategory else { return UIView() }
+        let titleText = titleModel?.titleKind == .series ? "All books" : "All titles"
+        sectionHeader.configureWith(title: titleText)
         
         if subCategory.canBeFiltered && subCategory.canBeShared {
             sectionHeader.showShareAndFilterButtons()
@@ -130,7 +121,7 @@ class AllTitlesViewController: BaseViewController {
         }
         return sectionHeader
     }
-    
+
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard books.isEmpty else { return }
         view.addSubview(activityIndicator)
@@ -147,7 +138,6 @@ class AllTitlesViewController: BaseViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let book = books[indexPath.row]
         currentSelectedBook = book
-        
         let controller = BookViewController(book: book)
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -212,31 +202,40 @@ class AllTitlesViewController: BaseViewController {
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
     }
     
-    private func loadBooks() {
-        guard titleModel?.titleKind == .author, let author = titleModel as? Storyteller else {
-            books = allTitlesBooks // hardcoded data
+    override func fetchBooks() {
+        // Avoid fetching books if they are set in vc's init (seeAllButton tapped)
+        guard books.isEmpty else { return }
+
+        // Fetch data for vc with .author titleModel
+        let modelKind = titleModel?.titleKind
+        guard modelKind == .author, let author = titleModel as? Storyteller else {
+            books = allTitlesBooks // hardcoded data for all other cases
             return
         }
 
         let query = author.name.trimmingCharacters(in: .whitespaces)
         activityIndicator.startAnimating()
         networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak self] result in
-            switch result {
-            case .success(let fetchedBooks):
-                self?.books = fetchedBooks
-                self?.books.shuffle()
-                
-                DispatchQueue.main.async {
+            self?.handleFetchResult(result)
+        }
+    }
+    
+    private func handleFetchResult(_ result: SearchResult) {
+        switch result {
+        case .success(let fetchedBooks):
+            books = fetchedBooks
+            books.shuffle()
+
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicator.stopAnimating()
+                self?.bookTable.reloadData()
+            }
+        case .failure(let error):
+            if let networkError = error as? NetworkManagerError {
+                DispatchQueue.main.async { [weak self] in
                     self?.activityIndicator.stopAnimating()
-                    self?.bookTable.reloadData()
-                }
-            case .failure(let error):
-                if let networkError = error as? NetworkManagerError {
-                    DispatchQueue.main.async {
-                        self?.activityIndicator.stopAnimating()
-                        let noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
-                        self?.bookTable.backgroundView = noBooksView
-                    }
+                    let noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
+                    self?.bookTable.backgroundView = noBooksView
                 }
             }
         }
