@@ -16,7 +16,7 @@ class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTable()
-        loadBooks()
+        fetchBooks()
         view.addSubview(popupButton)
     }
     
@@ -112,7 +112,7 @@ extension HomeViewController {
         bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
     }
     
-    private func loadBooks() {
+    private func fetchBooks() {
         guard let category = category else { return }
         let subCategories = category.subCategories
     

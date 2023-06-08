@@ -12,9 +12,10 @@ class BookViewController: UIViewController {
     let book: Book
     private lazy var bookContainerScrollView = BookContainerScrollView(book: book, superviewWidth: view.bounds.width)
     private let popupButton = PopupButton()
-
     private var scrollViewInitialOffsetY: CGFloat?
     private var isDidAppearTriggeredFirstTime = true
+    private let networkManager = NetworkManager()
+    private var similarBooks = [Book]()
         
     // MARK: - Initializers
     init(book: Book) {
@@ -32,6 +33,7 @@ class BookViewController: UIViewController {
         view.backgroundColor = UIColor.customBackgroundColor
         addBookContainerScrollView()
         configureNavBar()
+        fetchSimilarBooks()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,7 +46,6 @@ class BookViewController: UIViewController {
         guard isDidAppearTriggeredFirstTime else { return }
          isDidAppearTriggeredFirstTime = false
         addPopupButton()
-//        passCallbacksToBookContainerScrollView()
         addHideView()
         passCallbacksToBookContainerScrollView()
     }
@@ -63,12 +64,11 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
-        
-        let books = Book.books
+
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.configureWith(books: books, callback: callback)
+        cell.configureFor(books: similarBooks, callback: callback)
         return cell
     }
     
@@ -198,6 +198,36 @@ extension BookViewController {
         bookDetailsBottomSheetController.delegate = self
         bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
         self.present(bookDetailsBottomSheetController, animated: false)
+    }
+    
+    private func fetchSimilarBooks() {
+        networkManager.fetchBooks(withQuery: "dark", bookKindsToFetch: .ebooksAndAudiobooks) { [weak self] result in
+            self?.handleFetchResult(result)
+        }
+    }
+    
+    private func handleFetchResult(_ result: SearchResult) {
+        switch result {
+        case .success(let fetchedBooks):
+            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: .horizontalCv) { [weak self] booksWithImages in
+                self?.similarBooks = booksWithImages
+                self?.bookContainerScrollView.bookTable.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none) // reloadRows() used instead of reloadData() to avoid forcing layout of table view when it's not onscreen yet
+            }
+        case .failure(let error):
+            self.networkManager.cancelTasks()
+            if let networkError = error as? NetworkManagerError {
+                DispatchQueue.main.async {
+                    #warning("show error background view")
+//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
+//                            if let noBooksView = self.noBooksView {
+//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
+//                                self.bookTable.addSubview(noBooksView)
+//                                self.bookTable.isScrollEnabled = false
+//                                noBooksView.frame = self.bookTable.bounds
+//                            }
+                }
+            }
+        }
     }
 }
 

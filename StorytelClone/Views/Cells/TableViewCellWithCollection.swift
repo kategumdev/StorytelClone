@@ -92,7 +92,7 @@ class TableViewCellWithCollection: UITableViewCell {
         }
         collectionView.reloadData()
     }
-    #warning("replace usages of the func above everywhere in the project")
+    #warning("replace usages of the func above everywhere in the project (in CategoryVC)")
     
     func configureFor(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
