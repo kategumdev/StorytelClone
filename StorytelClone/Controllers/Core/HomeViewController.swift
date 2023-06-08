@@ -121,9 +121,7 @@ extension HomeViewController {
         // Add indices of categories to books dict
         for (index, subCategory) in subCategories.enumerated() {
             let kind = subCategory.kind
-            
-            guard kind != .allCategoriesButton &&
-                    kind != .largeCoversHorizontalCv && kind != .seriesCategoryButton else { continue }
+            guard kind != .allCategoriesButton && kind != .seriesCategoryButton else { continue }
             
             let query = subCategory.searchQuery
             networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
@@ -134,9 +132,8 @@ extension HomeViewController {
                     if kind == .poster, let book = fetchedBooks.first {
                         self.loadAndResizeImageForPoster(book: book, ofSubCategoryWithIndex: index)
                     } else {
-                        self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
+                        self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index, subCategoryKind: kind)
                     }
-//                    self.loadAndResizeImagesFor(books: fetchedBooks, ofSubCategoryWithIndex: index)
                 case .failure(let error):
                     print("ERROR fetching query \(query)")
                     self.networkManager.cancelTasks()
@@ -157,7 +154,7 @@ extension HomeViewController {
         }
     }
     
-    private func loadAndResizeImagesFor(books: [Book], ofSubCategoryWithIndex index: Int) {
+    private func loadAndResizeImagesFor(books: [Book], ofSubCategoryWithIndex index: Int, subCategoryKind: SubCategoryKind) {
         let downloadTaskGroup = DispatchGroup()
         var booksWithImages = [Book]() // it will contain only books that have downloaded images
         
@@ -166,7 +163,15 @@ extension HomeViewController {
                 downloadTaskGroup.enter()
                 SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, data, error, success in
                     if let image = image {
-                        let resizedImage = image.resizeFor(targetHeight: Constants.largeSquareBookCoverSize.height, andSetAlphaTo: 1)
+                        var targetHeight: CGFloat
+                        if subCategoryKind == .horizontalCv {
+                            targetHeight = Constants.largeSquareBookCoverSize.height
+                        } else {
+                            // for sub category with large rectangle covers
+                            targetHeight = TableViewCellWithHorzCvLargeRectangleCovers.itemSize.height
+                        }
+                        let resizedImage = image.resizeFor(targetHeight: targetHeight, andSetAlphaTo: 1)
+//                        let resizedImage = image.resizeFor(targetHeight: Constants.largeSquareBookCoverSize.height, andSetAlphaTo: 1)
                         var bookWithImage = book
                         bookWithImage.coverImage = resizedImage
                         booksWithImages.append(bookWithImage)
@@ -182,6 +187,32 @@ extension HomeViewController {
             self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
         }
     }
+    
+//    private func loadAndResizeImagesFor(books: [Book], ofSubCategoryWithIndex index: Int) {
+//        let downloadTaskGroup = DispatchGroup()
+//        var booksWithImages = [Book]() // it will contain only books that have downloaded images
+//
+//        for book in books {
+//            if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+//                downloadTaskGroup.enter()
+//                SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, data, error, success in
+//                    if let image = image {
+//                        let resizedImage = image.resizeFor(targetHeight: Constants.largeSquareBookCoverSize.height, andSetAlphaTo: 1)
+//                        var bookWithImage = book
+//                        bookWithImage.coverImage = resizedImage
+//                        booksWithImages.append(bookWithImage)
+//                    }
+//                    downloadTaskGroup.leave()
+//                }
+//            }
+//        }
+//        downloadTaskGroup.notify(queue: DispatchQueue.main) { [weak self] in
+//            guard let self = self else { return }
+//            booksWithImages.shuffle()
+//            self.books[index] = booksWithImages
+//            self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
+//        }
+//    }
     
     private func loadAndResizeImageForPoster(book: Book, ofSubCategoryWithIndex index: Int) {
         if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
@@ -210,7 +241,6 @@ extension HomeViewController {
     
     private func posterCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
-        
         let subCategoryIndex = indexPath.section
         if let book = books[subCategoryIndex]?.first {
             cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
@@ -226,11 +256,13 @@ extension HomeViewController {
         }
         return cell
     }
-
+    
     private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers, let category = category else { return UITableViewCell()}
-        let books = category.subCategories[indexPath.section].books
-        cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers else { return UITableViewCell()}
+        let subCategoryIndex = indexPath.section
+        if let books = books[subCategoryIndex] {
+            cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
+        }
         return cell
     }
     

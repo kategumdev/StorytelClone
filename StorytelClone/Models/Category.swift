@@ -38,6 +38,8 @@ struct SubCategory {
     let bookKinds: BookKinds
     #warning("add property bookKinds with values: onlyEbooks, onlyAudiobooks, ebookAndAudiobooks, fetch data in network manager checking this property")
     
+    #warning("delete books property when not used anymore")
+    
     init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, books: [Book] = Book.books, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
         self.title = title
         self.subtitle = subtitle
@@ -403,10 +405,13 @@ struct Category: Equatable {
 
 //            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "rise of dragons", bookKinds: .onlyAudiobooks),
 //            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "Los juegos del hambre", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", bookKinds: .onlyAudiobooks),
+            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", books: [Book](), bookKinds: .onlyAudiobooks),
 
             
-            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", books: Book.booksWithLargeCovers),
+//            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", books: Book.booksWithLargeCovers),
+            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", bookKinds: .onlyAudiobooks),
+
+            
             SubCategory(title: "Top 50 hoy", searchQuery: "sister", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
 //            SubCategory(title: "Nuevos audiolibros", searchQuery: "bird"),
 //            SubCategory(title: "Nuevos audiolibros", searchQuery: "moon"),

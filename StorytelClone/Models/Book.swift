@@ -37,6 +37,7 @@ struct Book: Title, Equatable {
     var isDownloaded: Bool
     var imageURLString: String?
     var audioUrlString: String?
+    #warning("delete largeCoverImage property when not used anymore")
     
     init(title: String, authors: [Storyteller], coverImage: UIImage?, largeCoverImage: UIImage? = nil, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isAddedToBookshelf: Bool = false, isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.title = title

@@ -36,6 +36,12 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
     var books = [Book]() // It will contain 42 random audiobooks
     var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.hidesWhenStopped = true
+        return view
+    }()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = horzPadding
@@ -51,6 +57,7 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(collectionView)
+        collectionView.backgroundView = activityIndicator
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -62,6 +69,10 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
     // MARK: - View life cycle
     override func layoutSubviews() {
         super.layoutSubviews()
+        if books.isEmpty {
+            activityIndicator.startAnimating()
+        }
+        
         collectionView.frame = contentView.bounds
         
         if collectionView.contentOffset == CGPoint(x: 0, y: 0) {
@@ -69,10 +80,17 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        books = [Book]()
+        collectionView.reloadData()
+    }
+    
     // MARK: - Instance methods
     func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
         self.books = books
-        self.dimmedAnimationButtonDidTapCallback = callback
+        dimmedAnimationButtonDidTapCallback = callback
+        activityIndicator.stopAnimating()
         collectionView.reloadData()
     }
 
@@ -81,7 +99,7 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return books.count
+        return books.isEmpty ? 0 : books.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

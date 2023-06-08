@@ -46,7 +46,8 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
         dimmedAnimationButton.kind = .toPushBookVcWith(book)
         dimmedAnimationButton.didTapCallback = callback
-        dimmedAnimationButton.configuration?.background.image = book.largeCoverImage
+//        dimmedAnimationButton.configuration?.background.image = book.largeCoverImage
+        dimmedAnimationButton.configuration?.background.image = book.coverImage
     }
     
     // MARK: - Helper methods
