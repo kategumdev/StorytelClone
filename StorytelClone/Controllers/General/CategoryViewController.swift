@@ -14,13 +14,6 @@ class CategoryViewController: BaseViewController {
     private let similarBooksTopViewY: CGFloat = 1000
     private var isFirstTime = true
     
-    private let networkManager = NetworkManager()
-    private var books = [Int : [Book]]()
-    
-    deinit {
-        networkManager.cancelTasks()
-    }
-    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +59,7 @@ class CategoryViewController: BaseViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         let subCategoryIndex = indexPath.section
-        if let books = books[subCategoryIndex] {
+        if let books = booksDict[subCategoryIndex] {
             cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
         }
         return cell
@@ -90,49 +83,6 @@ class CategoryViewController: BaseViewController {
             similarBooksTopView.frame.size.height = similarBooksTopViewY + abs(contentOffsetY)
         } else {
             similarBooksTopView.frame.size.height = similarBooksTopViewY + abs(tableViewInitialOffsetY)
-        }
-    }
-    
-}
-
-// MARK: - Helper methods
-extension CategoryViewController {
-    private func fetchBooks() {
-        guard let category = category else { return }
-        let subCategories = category.subCategories
-    
-        for (index, subCategory) in subCategories.enumerated() {
-            let subCategoryKind = subCategory.kind
-//            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton else { continue }
-            
-            let query = subCategory.searchQuery
-            networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
-                self?.handleFetchResult(result, forSubCategoryIndex: index, andSubCategoryKind: subCategoryKind)
-            }
-        }
-    }
-    
-    private func handleFetchResult(_ result: SearchResult, forSubCategoryIndex index: Int, andSubCategoryKind subCategoryKind: SubCategoryKind) {
-        switch result {
-        case .success(let fetchedBooks):
-            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: subCategoryKind) { booksWithImages in
-                self.books[index] = booksWithImages
-                self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
-            }
-        case .failure(let error):
-            self.networkManager.cancelTasks()
-            if let networkError = error as? NetworkManagerError {
-                DispatchQueue.main.async {
-                    #warning("show error background view")
-//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
-//                            if let noBooksView = self.noBooksView {
-//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
-//                                self.bookTable.addSubview(noBooksView)
-//                                self.bookTable.isScrollEnabled = false
-//                                noBooksView.frame = self.bookTable.bounds
-//                            }
-                }
-            }
         }
     }
     

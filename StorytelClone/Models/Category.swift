@@ -211,7 +211,7 @@ struct Category: Equatable {
         title: ButtonCategory.zonaPodcast.rawValue,
         subCategories: [
             SubCategory(title: "Los más escuchados esta semana", searchQuery: "podcast"),
-            SubCategory(title: "Nuevos podcast", searchQuery: "About"),
+            SubCategory(title: "Nuevos podcasts", searchQuery: "About"),
 //            SubCategory(title: "Sigue tus podcast favoritos", kind: .verticalCv),
 //            SubCategory(title: "Últimos episodios"),
 //            SubCategory(title: "Los más buscados"),

@@ -12,6 +12,9 @@ class BaseViewController: UIViewController {
     var category: Category?
     #warning("try to make this property not optional")
     
+    private let networkManager = NetworkManager()
+    var booksDict = [Int : [Book]]()
+    
     let tableViewStyle: UITableView.Style
     
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
@@ -53,6 +56,10 @@ class BaseViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        networkManager.cancelTasks()
     }
     
     // MARK: - View life cycle
@@ -123,6 +130,45 @@ class BaseViewController: UIViewController {
     func layoutTableHeader() {
         guard let tableHeader = bookTable.tableHeaderView else { return }
         Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
+    }
+    
+    func fetchBooks() {
+        guard let category = category else { return }
+        let subCategories = category.subCategories
+    
+        for (index, subCategory) in subCategories.enumerated() {
+            let subCategoryKind = subCategory.kind
+            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton else { continue }
+            
+            let query = subCategory.searchQuery
+            networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
+                self?.handleFetchResult(result, forSubCategoryIndex: index, andSubCategoryKind: subCategoryKind)
+            }
+        }
+    }
+    
+    func handleFetchResult(_ result: SearchResult, forSubCategoryIndex index: Int, andSubCategoryKind subCategoryKind: SubCategoryKind) {
+        switch result {
+        case .success(let fetchedBooks):
+            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: subCategoryKind) { booksWithImages in
+                self.booksDict[index] = booksWithImages
+                self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
+            }
+        case .failure(let error):
+            self.networkManager.cancelTasks()
+            if let networkError = error as? NetworkManagerError {
+                DispatchQueue.main.async {
+                    #warning("show error background view")
+//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
+//                            if let noBooksView = self.noBooksView {
+//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
+//                                self.bookTable.addSubview(noBooksView)
+//                                self.bookTable.isScrollEnabled = false
+//                                noBooksView.frame = self.bookTable.bounds
+//                            }
+                }
+            }
+        }
     }
     
 }
