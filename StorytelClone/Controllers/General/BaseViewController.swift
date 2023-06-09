@@ -104,19 +104,18 @@ class BaseViewController: UIViewController {
     
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
         var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
-        if (self is CategoryViewController && category?.bookToShowMoreTitlesLikeIt == nil) || self is AllCategoriesViewController {
+        if self is AllCategoriesViewController {
             if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
                 offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
                 changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
             }
         }
         
-        let visibleTitleWhenTransparent: Bool = category?.bookToShowMoreTitlesLikeIt != nil
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: visibleTitleWhenTransparent)
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: false)
     }
 
     // MARK: - Helper methods
-    private func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
+    func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
         
         let height = tableHeader.bounds.size.height + 10
@@ -225,7 +224,7 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        // If all categories have sections, this checking is not needed, just use calculateEstimatedHeightFor
+        // If all categories have subCategories, this checking is not needed, just use calculateEstimatedHeightFor
         guard let category = category else { return 0 }
         if !category.subCategories.isEmpty {
             let subCategory = category.subCategories[section]

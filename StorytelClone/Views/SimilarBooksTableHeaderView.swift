@@ -8,7 +8,6 @@
 import UIKit
 
 class SimilarBooksTableHeaderView: UIView {
-
     // MARK: - Instance properties
     private let imageHeight: CGFloat = 48
 
@@ -61,12 +60,21 @@ class SimilarBooksTableHeaderView: UIView {
         stack.addArrangedSubview(vertStackWithLabels)
         return stack
     }()
+    
+    private let mainContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "whiteGray")
+        view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.quaternaryLabel.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.powderGrayBackgroundColor
-        addSubview(horzStack)
+        addSubview(mainContainer)
+        mainContainer.addSubview(horzStack)
         applyConstraints()
     }
 
@@ -80,6 +88,7 @@ class SimilarBooksTableHeaderView: UIView {
 
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
+            mainContainer.layer.borderColor = UIColor.quaternaryLabel.cgColor
         }
     }
 
@@ -91,9 +100,19 @@ class SimilarBooksTableHeaderView: UIView {
 
     // MARK: - Helper methods
     private func applyConstraints() {
+        mainContainer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            mainContainer.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            mainContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mainContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.commonHorzPadding),
+            mainContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.commonHorzPadding)
+        ])
+        
+        horzStack.translatesAutoresizingMaskIntoConstraints = false
+        horzStack.fillSuperview(withConstant: Constants.commonHorzPadding)
+        
         imageViewContainer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageViewContainer.heightAnchor.constraint(equalToConstant: imageHeight),
             imageViewContainer.heightAnchor.constraint(equalToConstant: imageHeight)
         ])
 
@@ -107,9 +126,6 @@ class SimilarBooksTableHeaderView: UIView {
 
         vertStackWithImage.translatesAutoresizingMaskIntoConstraints = false
         vertStackWithImage.widthAnchor.constraint(equalTo: imageView.heightAnchor).isActive = true
-
-        horzStack.translatesAutoresizingMaskIntoConstraints = false
-        horzStack.fillSuperview(withConstant: Constants.commonHorzPadding)
         
         translatesAutoresizingMaskIntoConstraints = false
         // Avoid constraint's conflict when header is added to table view

@@ -91,22 +91,15 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
+    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, forCategoryVcWithReferenceBook: Bool = false, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
         sectionTitleLabel.text = subCategory.title
         sectionTitleLabel.sizeToFit()
 #warning("check if this sizeToFit and the one below are needed")
         
         // Show or hide sectionSubtitleLabel
         sectionSubtitleLabel.isHidden = subCategory.subtitle.isEmpty
-//        if subCategory.subtitle.isEmpty {
-//            sectionSubtitleLabel.isHidden = true
-//        } else {
-//            sectionSubtitleLabel.isHidden = false
-//        }
-        
         sectionSubtitleLabel.text = subCategory.subtitle
         sectionSubtitleLabel.sizeToFit()
-//        sectionTitleLabel.sizeToFit()
         
         // Hide seeAllButton or show and assign/update callback
         let subCategoryKind = subCategory.kind
@@ -120,8 +113,8 @@ class SectionHeaderSubviewsContainer: UIView {
         }
 
        // Adjust top padding of first section header if vc is presented when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
-        guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
-        horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 10 : defaultHorzStackTopPadding
+        guard forCategoryVcWithReferenceBook else { return }
+        horzStackTopAnchorConstraint.constant = sectionNumber == 0 ? 15 : defaultHorzStackTopPadding
     }
     
     // MARK: - Helper methods

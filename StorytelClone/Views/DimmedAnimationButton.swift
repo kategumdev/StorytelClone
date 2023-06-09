@@ -118,7 +118,7 @@ class DimmedAnimationButton: UIButton {
             controller = BookViewController(book: book)
 
         case .toPushAllCategoriesVc:
-            controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoryButtons: ButtonCategory.buttonCategoriesForAllCategories)
+            controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoriesForButtons: Category.categoriesForAllCategories)
             
         case .toPushCategoryVcForSeriesCategory:
             controller = CategoryViewController(categoryModel: Category.series)

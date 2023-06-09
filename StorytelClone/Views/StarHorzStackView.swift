@@ -122,7 +122,7 @@ class StarHorzStackView: UIStackView {
             ratingLabel.text = String(book.rating).replacingOccurrences(of: ".", with: ",")
         }
         
-        categoryLabel.text = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
+        categoryLabel.text = book.category.title.replacingOccurrences(of: "\n", with: " ")
         
         guard hasSaveAndEllipsisButtons else { return }
         addArrangedSubview(saveButton)

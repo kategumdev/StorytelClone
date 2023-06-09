@@ -7,43 +7,74 @@
 
 import UIKit
 
-// Presented on button tap: Series button in HomeViewController and category buttons in AllCategoriesViewController
 class CategoryViewController: BaseViewController {
     
-    private lazy var similarBooksTopView = UIView()
-    private let similarBooksTopViewY: CGFloat = 1000
+    private let referenceBook: Book?
+    
+    private lazy var subCategories: [SubCategory] = {
+        var subCategories = [SubCategory]()
+
+        if let book = referenceBook {
+            // Create subcategories based on book info
+            var librosSimilaresSubCategory = SubCategory.librosSimilares
+                librosSimilaresSubCategory.titleModelToShow = book
+            subCategories.append(librosSimilaresSubCategory)
+
+            for author in book.authors {
+                let authorSubCategory = SubCategory(title: "Títulos populares de este autor", subtitle: author.name, searchQuery: "\(author.name)", titleModelToShow: author)
+                subCategories.append(authorSubCategory)
+            }
+
+            //        for narrator in book.narrators {
+            //            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, searchQuery: "\(narrator.name)", toShowTitleModel: narrator)
+            //            subCategories.append(narratorSubCategory)
+            //        }
+
+            if let series = book.series {
+                let seriesTitleModel = Series.series1 // Hardcoded data
+                let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, searchQuery: "\(series)", titleModelToShow: seriesTitleModel)
+                subCategories.append(seriesSubCategory)
+            }
+
+            let subtitle = book.category.title.replacingOccurrences(of: "\n", with: " ")
+            let categoryToShow = book.category
+            let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "ice", categoryToShow: categoryToShow) // Hardcoded searchQuery
+            subCategories.append(subCategory)
+        } else if let category = category {
+            subCategories = category.subCategories
+        }
+        return subCategories
+    }()
+    
+    // MARK: - Initializers
+    init(categoryModel: Category, referenceBook: Book? = nil) {
+        self.referenceBook = referenceBook
+        super.init(categoryModel: categoryModel)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         extendedLayoutIncludesOpaqueBars = true
         
-        guard let category = category else { return }
-        
-        // Set new table header and add stretching top view if vc is created when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected OR just configure existing table header with dim view for all other cases
-        if let book = category.bookToShowMoreTitlesLikeIt {
-            // Replace tableHeaderView
+        // Replace tableHeaderView with new one if vc is created when showMoreTitlesLikeThis BookDetailsBottomSheetCell is selected
+        if let bookToShowMoreTitlesLikeIt = referenceBook {
             let headerView = SimilarBooksTableHeaderView()
-            headerView.configureFor(book: book)
+            headerView.configureFor(book: bookToShowMoreTitlesLikeIt)
             bookTable.tableHeaderView = headerView
-            
-            // Add stretching topView
-            similarBooksTopView.backgroundColor = UIColor.powderGrayBackgroundColor
-            
-            bookTable.addSubview(similarBooksTopView)
-            let zPosition = bookTable.layer.zPosition - 1
-            similarBooksTopView.layer.zPosition = zPosition
-            similarBooksTopView.frame = CGRect(origin: CGPoint(x: 0, y: -similarBooksTopViewY), size: CGSize(width: view.bounds.width, height: similarBooksTopViewY))
-            
-            bookTable.backgroundColor = .clear
-            
             navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
-        } else {
-            let headerView = bookTable.tableHeaderView as? TableHeaderView
-            headerView?.configureWithDimView(andText: category.title)
-            navigationController?.makeNavbarAppearance(transparent: true)
+            return
         }
         
+        // Configure existing table header with dim view for all other cases
+        guard let category = category else { return }
+        let headerView = bookTable.tableHeaderView as? TableHeaderView
+        headerView?.configureWithDimView(andText: category.title)
+        navigationController?.makeNavbarAppearance(transparent: true)
     }
 
     override func viewDidLayoutSubviews() {
@@ -54,6 +85,10 @@ class CategoryViewController: BaseViewController {
     }
 
     // MARK: - Superclass overrides
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return subCategories.count
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         let subCategoryIndex = indexPath.section
@@ -61,6 +96,42 @@ class CategoryViewController: BaseViewController {
             cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
         }
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let subCategoryKind = subCategories[section].kind
+        guard subCategoryKind != .seriesCategoryButton, subCategoryKind != .allCategoriesButton else { return UIView() }
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+        let subCategory = subCategories[section]
+        
+        let forCategoryVcWithReferenceBook = referenceBook == nil ? false : true
+        sectionHeader.configureFor(subCategory: subCategory, sectionNumber: section, category: category, forCategoryVcWithReferenceBook: forCategoryVcWithReferenceBook, withSeeAllButtonDidTapCallback: { [weak self] in
+            guard let self = self else { return }
+            if let categoryToShow = subCategory.categoryToShow {
+                let controller = CategoryViewController(categoryModel: categoryToShow)
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else if let authorToShow = subCategory.titleModelToShow as? Storyteller {
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: authorToShow)
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                let subCategoryIndex = section
+                if let books = self.booksDict[subCategoryIndex] {
+                    let controller = AllTitlesViewController(subCategory: subCategory, books: books)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        })
+        return sectionHeader
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        // If all categories have subCategories, this checking is not needed, just use calculateEstimatedHeightFor
+        if !subCategories.isEmpty {
+            let subCategory = subCategories[section]
+            return SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory, superviewWidth: view.bounds.width)
+        } else {
+            return 0
+        }
     }
     
     override func configureNavBar() {
@@ -71,17 +142,29 @@ class CategoryViewController: BaseViewController {
         title = text
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        super.scrollViewDidScroll(scrollView)
-        
-        guard category?.bookToShowMoreTitlesLikeIt != nil else { return }
-        
-        let contentOffsetY = scrollView.contentOffset.y
-        if abs(contentOffsetY) > abs(tableViewInitialOffsetY) {
-            similarBooksTopView.frame.size.height = similarBooksTopViewY + abs(contentOffsetY)
-        } else {
-            similarBooksTopView.frame.size.height = similarBooksTopViewY + abs(tableViewInitialOffsetY)
+    override func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+        var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
+        if referenceBook == nil {
+            if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
+                offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
+                changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+            }
         }
+        
+        let visibleTitleWhenTransparent = referenceBook != nil
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: visibleTitleWhenTransparent)
     }
     
+    override func fetchBooks() {
+        for (index, subCategory) in subCategories.enumerated() {
+            let subCategoryKind = subCategory.kind
+//            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton else { continue }
+            
+            let query = subCategory.searchQuery
+            networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
+                self?.handleFetchResult(result, forSubCategoryIndex: index, andSubCategoryKind: subCategoryKind)
+            }
+        }
+    }
+
 }

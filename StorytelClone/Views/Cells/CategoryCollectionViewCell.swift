@@ -12,7 +12,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     static let identifier = "CategoryCollectionViewCell"
         
     // MARK: - Instance properties
-    private var categoryOfButton: ButtonCategory?
+    private var categoryForButton: Category?
     
     private lazy var categoryTitleLabel: UILabel = {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 20)
@@ -40,12 +40,11 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(categoryOfButton: ButtonCategory, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        dimmedAnimationButton.backgroundColor = categoryOfButton.colorForBackground
-        let category = categoryOfButton.category
+    func configureFor(category: Category, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        dimmedAnimationButton.backgroundColor = category.buttonBackgroundColor
         dimmedAnimationButton.kind = .toPushCategoryVcForCategory(category)
         dimmedAnimationButton.didTapCallback = callback
-        categoryTitleLabel.text = categoryOfButton.rawValue
+        categoryTitleLabel.text = category.title
     }
     
     // MARK: - Helper methods

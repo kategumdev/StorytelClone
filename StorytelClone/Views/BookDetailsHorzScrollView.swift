@@ -99,7 +99,6 @@ class BookDetailsHorzScrollView: UIScrollView {
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             print("\n")
             for button in allButtons {
-//                button.configuration?.attributedTitle?.font = UIFont.navBarTitleLargeMaxSize
                 button.configuration?.attributedTitle?.font = scaledButtonFont
             }
         }
@@ -131,7 +130,7 @@ class BookDetailsHorzScrollView: UIScrollView {
         configure(button: languageButton, withText: "\(book.language)")
         allButtons.append(languageButton)
 
-        let categoryText = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
+        let categoryText = book.category.title.replacingOccurrences(of: "\n", with: " ")
         configure(button: categoryButton, withText: categoryText)
         allButtons.append(categoryButton)
         addCategoryButtonAction()

@@ -15,7 +15,7 @@ struct Book: Title, Equatable {
     var coverImage: UIImage? // needed only for hardcoded book objects
     var titleKind: TitleKind
     let description: String
-    let buttonCategory: ButtonCategory
+    let category: Category
     let rating: Double
     let reviewsNumber: Int
     let duration: String
@@ -32,14 +32,14 @@ struct Book: Title, Equatable {
     var imageURLString: String?
     var audioUrlString: String?
     
-    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, description: String = "No overview added", category: ButtonCategory, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
+    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, description: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.id = id
         self.title = title
         self.authors = authors
         self.coverImage = coverImage
         self.titleKind = titleKind
         self.description = description
-        self.buttonCategory = category
+        self.category = category
         self.rating = rating
         self.reviewsNumber = reviewsNumber
         self.duration = duration

@@ -10,7 +10,7 @@ import UIKit
 class SearchViewController: UIViewController {
     
     private let model: Category
-    private let categoryButtons: [ButtonCategory]
+    private let categoriesForButtons: [Category]
     
     private let networkManager = NetworkManager()
     private var previousQueryString = ""
@@ -69,8 +69,8 @@ class SearchViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoryButtons: [ButtonCategory]) {
-        self.categoryButtons = categoryButtons
+    init(categoryModel: Category, categoriesForButtons: [Category]) {
+        self.categoriesForButtons = categoriesForButtons
         self.model = categoryModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -229,17 +229,17 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
         
-        var buttonCategories = [ButtonCategory]()
+        var categoriesForButtons = [Category]()
         if indexPath.section == 0 {
-            buttonCategories += self.categoryButtons.prefix(upTo: 6)
+            categoriesForButtons += self.categoriesForButtons.prefix(upTo: 6)
         } else {
-            buttonCategories += self.categoryButtons.dropFirst(6)
+            categoriesForButtons += self.categoriesForButtons.dropFirst(6)
         }
         
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
-        cell.configureWith(categoryButtons: buttonCategories, andCallback: callback)
+        cell.configureWith(categoriesForButtons: categoriesForButtons, andCallback: callback)
         return cell
     }
 
@@ -289,3 +289,4 @@ extension SearchViewController: BottomSheetViewControllerDelegate {
         #warning("Configure book model object in data model")
     }
 }
+

@@ -306,39 +306,7 @@ extension BottomSheetViewController {
     
     private func handleShowMoreTitlesLikeThis() {
         self.dismiss(animated: false)
-        
-        // Create subcategories
-        var librosSimilaresSubCategory = SubCategory.librosSimilares
-        librosSimilaresSubCategory.toShowTitleModel = book
-        var subCategories = [
-            librosSimilaresSubCategory
-        ]
-        
-        for author in book.authors {
-            let authorSubCategory = SubCategory(title: "Títulos populares de este autor", subtitle: author.name, searchQuery: "\(author.name)", toShowTitleModel: author)
-            subCategories.append(authorSubCategory)
-        }
-        
-//        for narrator in book.narrators {
-//            let narratorSubCategory = SubCategory(title: "Títulos populares de este narrador", subtitle: narrator.name, searchQuery: "\(narrator.name)", toShowTitleModel: narrator)
-//            subCategories.append(narratorSubCategory)
-//        }
-        
-        if let series = book.series {
-            let seriesTitleModel = Series.series1 // Hardcoded data
-            let seriesSubCategory = SubCategory(title: "Más de estas series", subtitle: series, searchQuery: "\(series)", toShowTitleModel: seriesTitleModel)
-            subCategories.append(seriesSubCategory)
-        }
-        
-        let subtitle = book.buttonCategory.rawValue.replacingOccurrences(of: "\n", with: " ")
-        let categoryToShow = book.buttonCategory.category
-//        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "\(categoryToShow.title)", categoryToShow: categoryToShow)
-        let subCategory = SubCategory(title: "Más de esta categoría", subtitle: subtitle, searchQuery: "ice", categoryToShow: categoryToShow) // Hardcoded searchQuery
-        subCategories.append(subCategory)
-        
-        // Create category with created subCategories and pass it to callback
-        let category = Category(title: "Libros similares", subCategories: subCategories, bookToShowMoreTitlesLikeIt: book)
-        let controller = CategoryViewController(categoryModel: category)
+        let controller = CategoryViewController(categoryModel: Category.librosSimilares, referenceBook: book)
         (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
     }
     

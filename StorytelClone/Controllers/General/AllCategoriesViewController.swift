@@ -9,11 +9,11 @@ import UIKit
 
 class AllCategoriesViewController: BaseViewController {
     
-    private let categoryButtons: [ButtonCategory]
+    private let categoriesForButtons: [Category]
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoryButtons: [ButtonCategory]) {
-        self.categoryButtons = categoryButtons
+    init(categoryModel: Category, categoriesForButtons: [Category]) {
+        self.categoriesForButtons = categoriesForButtons
         super.init(categoryModel: categoryModel)
     }
     
@@ -39,12 +39,14 @@ class AllCategoriesViewController: BaseViewController {
 extension AllCategoriesViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
-        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: dimmedAnimationButtonDidTapCallback)
+            cell.configureWith(categoriesForButtons: self.categoriesForButtons, andCallback: dimmedAnimationButtonDidTapCallback)
+//        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let numberOfButtons = categoryButtons.count
+//        let numberOfButtons = categoryButtons.count
+        let numberOfButtons = categoriesForButtons.count
         let numberOfRowsInCell: CGFloat = ceil(CGFloat(numberOfButtons) / 2.0)
         let height = CategoriesTableViewCellWithCollection.calculateCellHeightFor(numberOfRows: numberOfRowsInCell)
         return height

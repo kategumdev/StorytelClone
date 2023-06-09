@@ -30,7 +30,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance properties
-    private var categoryButtons = [ButtonCategory]()
+    private var categoriesForButtons = [Category]()
     private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
@@ -65,8 +65,8 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(categoryButtons: [ButtonCategory], andCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
-        self.categoryButtons = categoryButtons
+    func configureWith(categoriesForButtons: [Category], andCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+        self.categoriesForButtons = categoriesForButtons
         self.dimmedAnimationButtonDidTapCallback = callback
     }
 }
@@ -74,14 +74,14 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoryButtons.count
+        return categoriesForButtons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else { return UICollectionViewCell()}
         
         // Closure passed by AllCategoriesViewController. Pass it to CategoryCollectionViewCell
-        cell.configureFor(categoryOfButton: categoryButtons[indexPath.row], withCallback: dimmedAnimationButtonDidTapCallback)
+        cell.configureFor(category: categoriesForButtons[indexPath.row], withCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
 

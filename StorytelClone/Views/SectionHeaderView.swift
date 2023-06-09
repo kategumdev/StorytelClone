@@ -38,8 +38,8 @@ class SectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Instance methods
-    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
-        containerWithSubviews.configureFor(subCategory: subCategory, sectionNumber: sectionNumber, category: category, withSeeAllButtonDidTapCallback: callback)
+    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, forCategoryVcWithReferenceBook: Bool = false, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
+        containerWithSubviews.configureFor(subCategory: subCategory, sectionNumber: sectionNumber, category: category, forCategoryVcWithReferenceBook: forCategoryVcWithReferenceBook, withSeeAllButtonDidTapCallback: callback)
     }
     
 }

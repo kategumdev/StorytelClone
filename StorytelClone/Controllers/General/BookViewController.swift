@@ -117,7 +117,7 @@ extension BookViewController {
     private func passCallbacksToBookContainerScrollView() {
         bookContainerScrollView.bookDetailsScrollView.categoryButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
-            let category = self.book.buttonCategory.category
+            let category = self.book.category
             let controller = CategoryViewController(categoryModel: category)
             self.navigationController?.pushViewController(controller, animated: true)
         }
