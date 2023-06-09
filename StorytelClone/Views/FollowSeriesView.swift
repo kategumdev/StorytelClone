@@ -137,7 +137,6 @@ class FollowSeriesView: UIView {
         followButton.configuration = config
     }
     
-    #warning("Activity indicator must show while context is saving new isFollowed value of the series model object")
     // Activity indicator must show while context is saving new isFollowed value of the series model object
     private func configureActivityIndicator(show: Bool) {
         activityIndicator.color = followButton.tintColor

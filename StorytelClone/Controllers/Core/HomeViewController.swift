@@ -28,7 +28,6 @@ class HomeViewController: BaseViewController {
         configureTable()
         view.addSubview(popupButton)
     }
-    #warning("maybe instead of calling fetchBooks() here (and in viewDidLoad of CategoryVC) it's better to call it in viewDidLoad of BaseVC, but only if AllCategoriesVC and AllTitlesVC need this fetching")
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -157,7 +157,6 @@ struct Book: Title, Equatable {
                 imageURLString: imageUrlString,
                 audioUrlString: audiobook.audioUrlString
             )
-            #warning("check smth else for category, check genre")
             createdBooks.append(book)
         }
         return createdBooks

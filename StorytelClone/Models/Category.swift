@@ -35,7 +35,6 @@ struct SubCategory {
     let canBeFiltered: Bool
     let categoryToShow: Category?
     let bookKinds: BookKinds
-    #warning("add property bookKinds with values: onlyEbooks, onlyAudiobooks, ebookAndAudiobooks, fetch data in network manager checking this property")
         
     init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, description: String? = nil, toShowTitleModel: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
         self.title = title

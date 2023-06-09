@@ -86,9 +86,7 @@ class SimilarBooksTableHeaderView: UIView {
     // MARK: - Instance methods
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
-        
         imageView.setImageForBook(book, defaultImageViewHeight: imageHeight, imageViewWidthConstraint: imageViewWidthConstraint)
-        #warning("Pass downloaded image from BookVC to this view to avoid downloading it one more time")
     }
 
     // MARK: - Helper methods

@@ -278,12 +278,12 @@ extension UIImageView {
                 }
             }
         } else {
+            // When not using hardcoded book objects, pass nil instead of book.coverImage
             self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
-            #warning("When not using hardcoded book objects, pass nil instead of book.coverImage")
         }
     }
     
-    func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
+    private func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
         let defaultImageViewWidth = defaultImageViewHeight
         
         // Configure image view and set placeholder image if passed image is nil
@@ -353,9 +353,7 @@ extension String {
         let cleanedText2 = cleanedText1.replacingOccurrences(of: "&#xa0;", with: " ")
         let cleanedText3 = cleanedText2.replacingOccurrences(of: "&gt;", with: "")
         let cleanedText4 = cleanedText3.replacingOccurrences(of: "\n ", with: "\n")
-        
-        #warning("Maybe replacing occurences can be done only once")
-        
+                
         let htmlTagPattern = "<.*?>"
         let regex = try! NSRegularExpression(pattern: htmlTagPattern, options: .caseInsensitive)
         let range = NSRange(location: 0, length: cleanedText4.utf16.count)
