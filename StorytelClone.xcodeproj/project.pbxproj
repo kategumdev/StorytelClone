@@ -68,6 +68,7 @@
 		5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA403299C113000D0E0F4 /* SearchViewController.swift */; };
 		5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA405299C117000D0E0F4 /* BookshelfViewController.swift */; };
 		5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA407299C119100D0E0F4 /* ProfileViewController.swift */; };
+		5ABC41BF2A37930D00797518 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 5ABC41BE2A37930D00797518 /* Alamofire */; };
 		5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */; };
 		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */; };
@@ -196,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AA076B62A27D16000C36DE9 /* SDWebImage in Frameworks */,
+				5ABC41BF2A37930D00797518 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +428,7 @@
 			name = StorytelClone;
 			packageProductDependencies = (
 				5AA076B52A27D16000C36DE9 /* SDWebImage */,
+				5ABC41BE2A37930D00797518 /* Alamofire */,
 			);
 			productName = StorytelClone;
 			productReference = 5ABBA387299C09A700D0E0F4 /* StorytelClone.app */;
@@ -501,6 +504,7 @@
 			mainGroup = 5ABBA37E299C09A600D0E0F4;
 			packageReferences = (
 				5AA076B42A27D16000C36DE9 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				5ABC41BD2A37930D00797518 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 5ABBA388299C09A700D0E0F4 /* Products */;
 			projectDirPath = "";
@@ -960,6 +964,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		5ABC41BD2A37930D00797518 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -967,6 +979,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5AA076B42A27D16000C36DE9 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		5ABC41BE2A37930D00797518 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5ABC41BD2A37930D00797518 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 

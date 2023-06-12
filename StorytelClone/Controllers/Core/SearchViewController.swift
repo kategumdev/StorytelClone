@@ -165,7 +165,7 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print("\n\ntextDidChange")
-        networkManager.cancelTasks()
+        networkManager.cancelRequestsAndDownloads()
         let searchBar = searchController.searchBar
         guard let query = searchBar.text,
               let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
@@ -206,7 +206,7 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         print("searchBarCancelButtonClicked")
-        networkManager.cancelTasks()
+        networkManager.cancelRequestsAndDownloads()
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

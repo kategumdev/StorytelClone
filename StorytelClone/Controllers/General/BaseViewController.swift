@@ -61,7 +61,7 @@ class BaseViewController: UIViewController {
     }
     
     deinit {
-        networkManager.cancelTasks()
+        networkManager.cancelRequestsAndDownloads()
     }
     
     // MARK: - View life cycle
@@ -159,7 +159,7 @@ class BaseViewController: UIViewController {
                 self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
             }
         case .failure(let error):
-            self.networkManager.cancelTasks()
+            self.networkManager.cancelRequestsAndDownloads()
             if let networkError = error as? NetworkManagerError {
                 DispatchQueue.main.async {
                     #warning("show error background view")
