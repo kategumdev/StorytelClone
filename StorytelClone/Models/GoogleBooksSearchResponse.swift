@@ -7,16 +7,26 @@
 
 import UIKit
 
-struct GoogleBooksSearchResponse: Codable {
-    let items: [Ebook]
+struct GoogleBooksSearchResponse: Decodable {
+    private let fetchedBooks: [Ebook]
+    
+    enum CodingKeys: String, CodingKey {
+        case fetchedBooks = "items"
+    }
 }
 
-struct Ebook: Codable {
+extension GoogleBooksSearchResponse: SearchResponse {
+    var books: [Book] {
+        return Book.createBooksFromEbooks(fetchedBooks)
+    }
+}
+
+struct Ebook: Decodable {
     let id: String
     let volumeInfo: VolumeInfo
 }
 
-struct VolumeInfo: Codable {
+struct VolumeInfo: Decodable {
     let title: String
     let authors: [String]?
     let publisher: String?

@@ -7,12 +7,22 @@
 
 import Foundation
 
-struct ITunesSearchResponse: Codable {
+struct ITunesSearchResponse: Decodable {
     var resultCount = 0
-    var results = [Audiobook]()
+    private var fetchedBooks: [Audiobook]
+
+    enum CodingKeys: String, CodingKey {
+        case fetchedBooks = "results"
+    }
 }
 
-struct Audiobook: Codable {
+extension ITunesSearchResponse: SearchResponse {
+    var books: [Book] {
+        return Book.createBooksFromAudiobooks(fetchedBooks)
+    }
+}
+
+struct Audiobook: Decodable {
     var collectionId: Int
     var bookName: String
     var authorName: String
@@ -38,6 +48,3 @@ struct Audiobook: Codable {
     }
     
 }
-
-
-//http://itunes.apple.com/search?term=gaiman&entity=audiobook

@@ -218,13 +218,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5AA8006529C8D59300198B8A /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
 		5AB2CCCC29B243140048A4FB /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,7 +264,6 @@
 			isa = PBXGroup;
 			children = (
 				5AC8241F2A21294E00CF337D /* Managers */,
-				5AA8006529C8D59300198B8A /* Protocols */,
 				5AF93324299D71EC00DF17C7 /* Resources */,
 				5ABBA3FD299C0F0600D0E0F4 /* Models */,
 				5ABBA3FE299C0F2000D0E0F4 /* Views */,
