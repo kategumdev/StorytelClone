@@ -57,8 +57,8 @@ public class PersistedBook: NSManagedObject {
             isFinished: persistedBook.isFinished,
             isDownloaded: persistedBook.isDownloaded,
             imageURLString: persistedBook.imageURLString,
-            audioUrlString: persistedBook.audioUrlString,
-            date: persistedBook.date
+            audioUrlString: persistedBook.audioUrlString
+//            date: persistedBook.date
         )
         
         return book

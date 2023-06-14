@@ -11,8 +11,21 @@ enum StorytellerKind: String {
     case author
     case narrator
     
+//    static func createCaseFrom(rawValueString: String) -> StorytellerKind {
+//        print("\nCREATING StorytellerKind case")
+//        let enumCase = StorytellerKind(rawValue: rawValueString)
+//        if let enumCase = enumCase {
+//            return enumCase
+//        } else {
+//            print("enum StorytellerKind couldn't create value from this rawValue \(rawValueString)")
+//            return .author
+//        }
+//    }
+    
     static func createCaseFrom(rawValueString: String) -> StorytellerKind {
+        print("\nCREATING StorytellerKind case")
         let enumCase = StorytellerKind(rawValue: rawValueString)
+        
         if let enumCase = enumCase {
             return enumCase
         } else {

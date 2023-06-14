@@ -237,7 +237,18 @@ extension ScopeViewController {
         case .tags:
             return Tag.tags
         case .toRead:
-            return toReadBooks
+//            return toReadBooks
+            var fetchedBooks = [Book]()
+            DataPersistenceManager.shared.fetchPersistedBooks { result in
+                switch result {
+                case .success(let books):
+                    fetchedBooks = books
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            return fetchedBooks
+            
         case .started:
             return [Book]()
         case .finished:

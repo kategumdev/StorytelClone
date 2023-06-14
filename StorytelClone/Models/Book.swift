@@ -31,9 +31,9 @@ struct Book: Title, Equatable {
     var isDownloaded: Bool
     var imageURLString: String?
     var audioUrlString: String?
-    var date: Date?
+//    var date: Date?
     
-    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, overview: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil, date: Date? = nil) {
+    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, overview: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.id = id
         self.title = title
         self.authors = authors
@@ -56,7 +56,7 @@ struct Book: Title, Equatable {
         self.isDownloaded = isDownloaded
         self.imageURLString = imageURLString
         self.audioUrlString = audioUrlString
-        self.date = date
+//        self.date = date
     }
     
     // MARK: - Instance methods
@@ -77,15 +77,47 @@ struct Book: Title, Equatable {
     }
     
     func isOnBookshelf() -> Bool {
-        var isAdded: Bool = false
-        for book in toReadBooks {
-            if book == self {
-                isAdded = true
-                break
+        let bookId = self.id
+        var isBookAdded = false
+        
+        DataPersistenceManager.shared.fetchPersistedBookWith(id: bookId) { result in
+            switch result {
+            case .success(let persistedBook):
+                isBookAdded = persistedBook != nil ? true : false
+            case .failure(let error):
+                isBookAdded = false
+                print("Error when fetching book with id \(bookId)" + error.localizedDescription)
             }
         }
-        return isAdded
+        return isBookAdded
     }
+    
+//    func isOnBookshelf() -> Bool {
+//        let bookId = self.id
+//        var isBookAdded = false
+//
+//        DataPersistenceManager.shared.fetchPersistedBookWith(id: bookId) { result in
+//            switch result {
+//            case .success(let persistedBook):
+//                isBookAdded = persistedBook != nil ? true : false
+//            case .failure(let error):
+//                isBookAdded = false
+//                print("Error when fetching book with id \(bookId)" + error.localizedDescription)
+//            }
+//        }
+//        return isBookAdded
+//    }
+    
+//    func isOnBookshelf() -> Bool {
+//        var isAdded: Bool = false
+//        for book in toReadBooks {
+//            if book == self {
+//                isAdded = true
+//                break
+//            }
+//        }
+//        return isAdded
+//    }
     
     // MARK: - Static properties and methods
     static func == (lhs: Book, rhs: Book) -> Bool {

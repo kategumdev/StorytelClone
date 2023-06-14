@@ -21,6 +21,7 @@ enum TitleKind: String, CaseIterable {
     case series = "Series"
     
     static func createCaseFrom(rawValueString: String) -> TitleKind {
+        print("\nCREATING TitleKind case")
         let enumCase = TitleKind(rawValue: rawValueString)
         if let enumCase = enumCase {
             return enumCase

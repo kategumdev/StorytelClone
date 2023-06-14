@@ -10,7 +10,7 @@ import Foundation
 class SecureUnarchiveTransformer: NSSecureUnarchiveFromDataTransformer {
   
   override static var allowedTopLevelClasses: [AnyClass] {
-    [NSArray.self]
+      [NSArray.self, NSString.self]
   }
   
   static func register() {
