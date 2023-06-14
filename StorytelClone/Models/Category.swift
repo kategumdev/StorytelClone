@@ -54,7 +54,7 @@ struct SubCategory {
     static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "dark", canBeShared: false)
 }
 
-enum Category {
+enum Category: String {
     case home, todasLasCategorias, searchVc
     
     case series, soloEnStorytel, losMasPopulares
@@ -225,6 +225,17 @@ enum Category {
         case .aprenderIdiomas: return [SubCategory]()
         case .inEnglish: return [SubCategory]()
         case .librosSimilares: return [SubCategory]()
+        }
+    }
+    
+    static func createCaseFrom(rawValueString: String) -> Category {
+        let enumCase = Category(rawValue: rawValueString)
+        
+        if let enumCase = enumCase {
+            return enumCase
+        } else {
+            print("enum Category couldn't create value from this rawValue \(rawValueString)")
+            return .ebooks
         }
     }
 

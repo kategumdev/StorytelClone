@@ -7,6 +7,21 @@
 
 import Foundation
 
+enum StorytellerKind: String {
+    case author
+    case narrator
+    
+    static func createCaseFrom(rawValueString: String) -> StorytellerKind {
+        let enumCase = StorytellerKind(rawValue: rawValueString)
+        if let enumCase = enumCase {
+            return enumCase
+        } else {
+            print("enum StorytellerKind couldn't create value from this rawValue \(rawValueString)")
+            return .author
+        }
+    }
+}
+
 struct Storyteller: Title, Equatable {
     
     static func createAuthorFrom(names: [String]?) -> [Storyteller] {
@@ -25,10 +40,10 @@ struct Storyteller: Title, Equatable {
         return authors
     }
 
-    enum StorytellerKind {
-        case author
-        case narrator
-    }
+//    enum StorytellerKind: String {
+//        case author
+//        case narrator
+//    }
 
     let name: String
     let numberOfFollowers: Int

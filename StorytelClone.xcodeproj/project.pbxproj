@@ -22,6 +22,12 @@
 		5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */; };
 		5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */; };
 		5A4B017E2A011A1B00228AC4 /* ScopeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4B017D2A011A1B00228AC4 /* ScopeViewController.swift */; };
+		5A5067D62A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067D52A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift */; };
+		5A5067D92A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067D72A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift */; };
+		5A5067DA2A39D1D7009C2E0C /* PersistedBook+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067D82A39D1D7009C2E0C /* PersistedBook+CoreDataProperties.swift */; };
+		5A5067DD2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067DB2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift */; };
+		5A5067DE2A39D250009C2E0C /* PersistedStoryteller+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067DC2A39D250009C2E0C /* PersistedStoryteller+CoreDataProperties.swift */; };
+		5A5067E02A39D3B4009C2E0C /* DataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5067DF2A39D3B4009C2E0C /* DataPersistenceManager.swift */; };
 		5A50AD1A29CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */; };
 		5A52321629AC24F30058DD73 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321529AC24F30058DD73 /* CategoryViewController.swift */; };
 		5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A52321729AC30B30058DD73 /* BaseViewController.swift */; };
@@ -122,6 +128,12 @@
 		5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookOverviewStackView.swift; sourceTree = "<group>"; };
 		5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBookButton.swift; sourceTree = "<group>"; };
 		5A4B017D2A011A1B00228AC4 /* ScopeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeViewController.swift; sourceTree = "<group>"; };
+		5A5067D52A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureUnarchiveTransformer.swift; sourceTree = "<group>"; };
+		5A5067D72A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistedBook+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5A5067D82A39D1D7009C2E0C /* PersistedBook+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistedBook+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5A5067DB2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistedStoryteller+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5A5067DC2A39D250009C2E0C /* PersistedStoryteller+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistedStoryteller+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5A5067DF2A39D3B4009C2E0C /* DataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceManager.swift; sourceTree = "<group>"; };
 		5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSeriesButtonContainer.swift; sourceTree = "<group>"; };
 		5A52321529AC24F30058DD73 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5A52321729AC30B30058DD73 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -243,6 +255,10 @@
 		5ABBA37E299C09A600D0E0F4 = {
 			isa = PBXGroup;
 			children = (
+				5A5067DB2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift */,
+				5A5067DC2A39D250009C2E0C /* PersistedStoryteller+CoreDataProperties.swift */,
+				5A5067D72A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift */,
+				5A5067D82A39D1D7009C2E0C /* PersistedBook+CoreDataProperties.swift */,
 				5ABBA389299C09A700D0E0F4 /* StorytelClone */,
 				5ABBA3A3299C09A800D0E0F4 /* StorytelCloneTests */,
 				5ABBA3AD299C09A800D0E0F4 /* StorytelCloneUITests */,
@@ -388,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				5AC824202A21296B00CF337D /* NetworkManager.swift */,
+				5A5067DF2A39D3B4009C2E0C /* DataPersistenceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -398,6 +415,7 @@
 				5AF93325299D722100DF17C7 /* Extensions.swift */,
 				5A5AE405299FBA7E00FA4EDB /* Constants.swift */,
 				5A0A426329A583340000EE64 /* Utils.swift */,
+				5A5067D52A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -543,6 +561,8 @@
 				5A37EB2129DD83710053F6A7 /* PopupButton.swift in Sources */,
 				5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */,
 				5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */,
+				5A5067D92A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift in Sources */,
+				5A5067E02A39D3B4009C2E0C /* DataPersistenceManager.swift in Sources */,
 				5A00A61829FFBE75002B2364 /* Storyteller.swift in Sources */,
 				5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */,
 				5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */,
@@ -574,6 +594,7 @@
 				5A23BEF129D747B80038D132 /* AllTitlesViewController.swift in Sources */,
 				5AB2CCC729B21C090048A4FB /* BookViewController.swift in Sources */,
 				5AA8006D29C8F2F700198B8A /* Language.swift in Sources */,
+				5A5067DE2A39D250009C2E0C /* PersistedStoryteller+CoreDataProperties.swift in Sources */,
 				5AC824212A21296B00CF337D /* NetworkManager.swift in Sources */,
 				5AB9524629EF1F06001EA8DA /* BottomSheetTableViewCell.swift in Sources */,
 				5A9FF6F62A017A16009CA8DA /* NoDataBackgroundView.swift in Sources */,
@@ -593,9 +614,11 @@
 				5A36E04029B804430096A032 /* ScopeButtonsView.swift in Sources */,
 				5AC824232A212A2300CF337D /* GoogleBooksSearchResponse.swift in Sources */,
 				5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */,
+				5A5067DA2A39D1D7009C2E0C /* PersistedBook+CoreDataProperties.swift in Sources */,
 				5A5B878929C52C45001A7A64 /* Tag.swift in Sources */,
 				5AB9524429EF179B001EA8DA /* BottomSheetViewController.swift in Sources */,
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
+				5A5067D62A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift in Sources */,
 				5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */,
 				5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */,
 				5AB86E6129B1723B005122A6 /* Book.swift in Sources */,
@@ -609,6 +632,7 @@
 				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,
 				5A0F8A2129CA681B004FAB36 /* BookDetailsStackView.swift in Sources */,
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,
+				5A5067DD2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift in Sources */,
 				5A8497FD29D4B4060047AB44 /* TagsView.swift in Sources */,
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 				5A5B878529C527AA001A7A64 /* ScopeNoImageTableViewCell.swift in Sources */,

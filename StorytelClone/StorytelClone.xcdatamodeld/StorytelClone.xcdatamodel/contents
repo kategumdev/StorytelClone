@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="PersistedBook" representedClassName="PersistedBook" syncable="YES">
+        <attribute name="audioUrlString" optional="YES" attributeType="String"/>
+        <attribute name="category" attributeType="String"/>
+        <attribute name="coverImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="duration" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="imageURLString" optional="YES" attributeType="String"/>
+        <attribute name="isDownloaded" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isFinished" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="language" attributeType="String"/>
+        <attribute name="overview" attributeType="String"/>
+        <attribute name="publisher" attributeType="String"/>
+        <attribute name="rating" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="releaseDate" attributeType="String"/>
+        <attribute name="reviewsNumber" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="series" optional="YES" attributeType="String"/>
+        <attribute name="seriesPart" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tags" attributeType="Transformable" valueTransformerName="SecureUnarchiveTransformer" customClassName="NSArray"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="titleKind" attributeType="String"/>
+        <attribute name="translators" optional="YES" attributeType="Transformable" valueTransformerName="SecureUnarchiveTransformer" customClassName="NSArray"/>
+        <relationship name="authors" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="PersistedStoryteller"/>
+        <relationship name="narrators" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="PersistedStoryteller"/>
+    </entity>
+    <entity name="PersistedStoryteller" representedClassName="PersistedStoryteller" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <attribute name="numberOfFollowers" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="titleKind" attributeType="String"/>
+    </entity>
 </model>
