@@ -56,17 +56,17 @@ class TableViewCellWithCollection: UITableViewCell {
         if books.isEmpty {
             activityIndicator.startAnimating()
         }
-        
         collectionView.frame = contentView.bounds
-
-        if collectionView.contentOffset != CGPoint(x: 0, y: 0) {
-            collectionView.contentOffset = CGPoint(x: 0, y: 0)
-        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         books = [Book]()
+        
+        if collectionView.contentOffset != CGPoint(x: 0, y: 0) {
+            collectionView.contentOffset = CGPoint(x: 0, y: 0)
+        }
+        
         collectionView.reloadData()
     }
     
