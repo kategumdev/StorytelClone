@@ -211,10 +211,17 @@ extension BottomSheetViewController {
     private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind, withIndexPath indexPath: IndexPath) {
         switch bookDetailsBottomSheetCell {
         case .saveBook:
-            if book.isOnBookshelf() {
-                handleRemovingBookWith(indexPath: indexPath)
-            } else {
-                handleAddingBookWith(indexPath: indexPath)
+            DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
+                switch result {
+                case .success(let persistedBook):
+                    if persistedBook == nil {
+                        self?.handleAddingBookWith(indexPath: indexPath)
+                    } else {
+                        self?.handleRemoving(persistedBook: persistedBook, indexPath: indexPath)
+                    }
+                case .failure(let error):
+                    print("Error when fetching book with id \(String(describing: self?.book.id))" + error.localizedDescription)
+                }
             }
             
         case .markAsFinished:
@@ -244,14 +251,20 @@ extension BottomSheetViewController {
     }
     
     private func handleAddingBookWith(indexPath: IndexPath) {
-        book.updateBookshelfStatus()
-        tableView.reloadRows(at: [indexPath], with: .none)
-        
-        // Update cell with this book in AllTitlesViewController
-        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: book)
+        DataPersistenceManager.shared.addPersistedBookOf(book: book) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success():
+                self.tableView.reloadRows(at: [indexPath], with: .none)
+                // Update cell with this book in AllTitlesViewController
+                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
-    private func handleRemovingBookWith(indexPath: IndexPath) {
+    private func handleRemoving(persistedBook: PersistedBook?, indexPath: IndexPath) {
         let alert = UIAlertController(
             title: "Remove from bookshelf",
             message: "Do you want to remove \(book.title) from your bookshelf? Downloaded content for this title will also be removed from your device.",
@@ -267,14 +280,19 @@ extension BottomSheetViewController {
             title: "Remove",
             style: .destructive,
             handler: { [weak self] _ in
-                guard let self = self else { return }
-                self.book.updateBookshelfStatus()
-                
-                // Update cell with this book in AllTitlesViewController (parent vc, visible beneath)
-                self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
-                
-                // Dismiss this bottom sheet
-                self.dismissWithCustomAnimation()
+                guard let self = self, let persistedBookToDelete = persistedBook else { return }
+                DataPersistenceManager.shared.delete(persistedBook: persistedBookToDelete) { result in
+                    switch result {
+                    case .success():
+                        // Update cell with this book in AllTitlesViewController (parent vc, visible beneath)
+                        self.delegate?.bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook: self.book)
+                        
+                        // Dismiss this bottom sheet
+                        self.dismissWithCustomAnimation()
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
             })
         
         alert.addAction(cancelAction)

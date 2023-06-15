@@ -60,22 +60,6 @@ struct Book: Title, Equatable {
     }
     
     // MARK: - Instance methods
-    func updateBookshelfStatus() {
-        // Update toReadBooks
-        let needsToBeAdded = !self.isOnBookshelf() // get value that is opposite to the current one
-                
-        if needsToBeAdded {
-            // Add book only if it's not already in the array (it might have been added before)
-            if !toReadBooks.contains(where: { $0 == self }) {
-                toReadBooks.append(self)
-            }
-        } else {
-            if let bookIndex = toReadBooks.firstIndex(where: { $0 == self }) {
-                toReadBooks.remove(at: bookIndex)
-            }
-        }
-    }
-    
     func isOnBookshelf() -> Bool {
         let bookId = self.id
         var isBookAdded = false
@@ -91,33 +75,6 @@ struct Book: Title, Equatable {
         }
         return isBookAdded
     }
-    
-//    func isOnBookshelf() -> Bool {
-//        let bookId = self.id
-//        var isBookAdded = false
-//
-//        DataPersistenceManager.shared.fetchPersistedBookWith(id: bookId) { result in
-//            switch result {
-//            case .success(let persistedBook):
-//                isBookAdded = persistedBook != nil ? true : false
-//            case .failure(let error):
-//                isBookAdded = false
-//                print("Error when fetching book with id \(bookId)" + error.localizedDescription)
-//            }
-//        }
-//        return isBookAdded
-//    }
-    
-//    func isOnBookshelf() -> Bool {
-//        var isAdded: Bool = false
-//        for book in toReadBooks {
-//            if book == self {
-//                isAdded = true
-//                break
-//            }
-//        }
-//        return isAdded
-//    }
     
     // MARK: - Static properties and methods
     static func == (lhs: Book, rhs: Book) -> Bool {

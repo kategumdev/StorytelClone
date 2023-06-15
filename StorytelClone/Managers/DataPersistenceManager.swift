@@ -18,6 +18,11 @@ class DataPersistenceManager {
 //        case failedToCheckIfBookIsSaved
     }
     
+    enum BookState {
+        case removed
+        case added
+    }
+    
     static let shared = DataPersistenceManager()
     
     func addPersistedBookOf(book: Book, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -26,7 +31,6 @@ class DataPersistenceManager {
         
         let persistedBook = PersistedBook(context: context)
         
-//        persistedBook.id = UUID(uuidString: book.id)
         persistedBook.id = book.id
         persistedBook.title = book.title
         persistedBook.coverImage = book.coverImage?.pngData()
@@ -44,7 +48,6 @@ class DataPersistenceManager {
         persistedBook.isDownloaded = book.isDownloaded
         persistedBook.imageURLString = book.imageURLString
         persistedBook.audioUrlString = book.audioUrlString
-//        persistedBook.date = book.date
         persistedBook.date = Date()
         
         let tagsTitles = book.tags.map { $0.tagTitle }
@@ -71,7 +74,7 @@ class DataPersistenceManager {
             persistedNarrator.name = narrator.name
             persistedNarrator.numberOfFollowers = Int16(narrator.numberOfFollowers)
             persistedNarrator.titleKind = narrator.titleKind.rawValue
-            persistedBook.addToAuthors(persistedNarrator)
+            persistedBook.addToNarrators(persistedNarrator)
         }
         
         do {
@@ -99,27 +102,6 @@ class DataPersistenceManager {
         }
     }
     
-//    func deleteBookWith(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        let request = PersistedBook.fetchRequest()
-//        request.predicate = NSPredicate(format: "id == %@", id)
-////        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(PersistedBook.id), id])
-//
-//        do {
-//            let matchingObjects = try context.fetch(request)
-//            for object in matchingObjects {
-//                context.delete(object)
-//            }
-//            try context.save()
-//            completion(.success(()))
-//        } catch {
-//            completion(.failure(DataPersistenceError.failedToDeleteData))
-//        }
-//
-//    }
-    
     func delete(persistedBook: PersistedBook, completion: @escaping (Result<Void, Error>) -> Void ) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
@@ -132,95 +114,6 @@ class DataPersistenceManager {
         }
         
     }
-
-    
-//    func deleteBookWith(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-//        fetchPersistedBookWith(id: id) { [weak self] result in
-//            switch result {
-//            case .success(let persistedBook):
-//                do {
-//                    context.delete(persistedBook)
-//                    try context.save()
-//                    completion(.success(()))
-//                } catch {
-//                    completion(.failure(DataPersistenceError.failedToDeleteData))
-//                }
-//
-//
-//            case .failure(let error):
-//                completion(.failure(error))
-//            }
-//
-//        }
-//
-//
-//
-//    }
-    
-//    func checkIfBookIsSaved(id: String) -> Bool {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        let request = PersistedBook.fetchRequest()
-//        request.predicate = NSPredicate(format: "id == %@", id)
-////        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(PersistedBook.id), id])
-//
-//        do {
-//            let matchingObjects = try context.fetch(request)
-//            for object in matchingObjects {
-//                context.delete(object)
-//            }
-//            try context.save()
-//            completion(.success(()))
-//        } catch {
-//            completion(.failure(DataPersistenceError.failedToDeleteData))
-//        }
-//    }
-    
-//    func checkIfBookIsSaved(bookId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        let request = PersistedBook.fetchRequest()
-//        request.predicate = NSPredicate(format: "id == %@", bookId)
-////        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(PersistedBook.id), id])
-//
-//        do {
-//            let matchingObjects = try context.fetch(request)
-////            completion(.success(matchingObjects.first))
-//            if matchingObjects.first != nil {
-//                completion(.success(true))
-//            } else {
-//                completion(.success(false))
-//            }
-//        } catch {
-//            completion(.failure(DataPersistenceError.failedToFetchData))
-//        }
-//    }
-    
-    
-//    func fetchPersistedBookWith(id: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        let request = PersistedBook.fetchRequest()
-//        request.predicate = NSPredicate(format: "id == %@", id)
-////        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(PersistedBook.id), id])
-//
-//        do {
-//            let matchingObjects = try context.fetch(request)
-////            completion(.success(matchingObjects.first))
-//            if matchingObjects.first != nil {
-//                completion(.success(true))
-//            } else {
-//                completion(.success(false))
-//            }
-//        } catch {
-//            completion(.failure(DataPersistenceError.failedToFetchData))
-//        }
-//    }
-    
-    
     
     func fetchPersistedBookWith(id: String, completion: @escaping (Result<PersistedBook?, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -233,11 +126,50 @@ class DataPersistenceManager {
         do {
             let matchingObjects = try context.fetch(request)
             completion(.success(matchingObjects.first))
-//            if let persistedBook = matchingObjects.first {
-//                completion(.success((persistedBook)))
-//            }
         } catch {
             completion(.failure(DataPersistenceError.failedToFetchData))
+        }
+    }
+    
+    func addOrRemovePersistedBookFrom(book: Book, completion: @escaping (Result<BookState, Error>) -> Void) {
+        
+        var isBookBeingAdded = false
+        var fetchedBook: PersistedBook? = nil
+        
+        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { result in
+            switch result {
+            case .success(let persistedBook):
+                isBookBeingAdded = persistedBook == nil ? true : false
+                fetchedBook = persistedBook
+            case .failure(let error):
+                completion(.failure(DataPersistenceError.failedToFetchData))
+                print("Error when fetching book with id \(book.id)" + error.localizedDescription)
+            }
+        }
+        
+        if isBookBeingAdded {
+            // Add persisted book
+            DataPersistenceManager.shared.addPersistedBookOf(book: book) { result in
+                switch result {
+                case .success():
+                    completion(.success(BookState.added))
+                case .failure(let error):
+                    completion(.failure(DataPersistenceError.failedToAddData))
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            // Remove persisted book
+            guard let persistedBookToDelete = fetchedBook else { return }
+            DataPersistenceManager.shared.delete(persistedBook: persistedBookToDelete) { result in
+                switch result {
+                case .success():
+                    completion(.success(BookState.removed))
+                case .failure(let error):
+                    completion(.failure(DataPersistenceError.failedToDeleteData))
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 

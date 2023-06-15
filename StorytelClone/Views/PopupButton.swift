@@ -9,7 +9,7 @@ import UIKit
 
 class PopupButton: UIButton {
     
-    // Static properties
+    //MARK: - Static properties
     static let buttonHeight: CGFloat = 46
     static let bottomAnchorConstantForVisibleState: CGFloat = buttonHeight + 11
     
@@ -49,8 +49,7 @@ class PopupButton: UIButton {
         self?.hidePopupButton()
     }
 
-    lazy var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback = { [weak self]
-        userAddedBookToBookshelf in
+    lazy var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback = { [weak self] isBookBeingAdded in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
 
@@ -61,7 +60,7 @@ class PopupButton: UIButton {
             self.superview?.layoutIfNeeded()
         }
 
-        self.changeLabelTextWhen(bookIsAdded: userAddedBookToBookshelf)
+        self.changeLabelTextWhen(isBookBeingAdded: isBookBeingAdded)
         DispatchQueue.main.async(execute: self.showPopupWorkItem)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
     }
@@ -111,7 +110,7 @@ class PopupButton: UIButton {
     }
 
     private func showPopupButton() {
-        print("\nSHOW popupButton for button")
+//        print("\nSHOW popupButton for button")
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             guard let self = self else { return }
             self.bottomAnchorConstraint?.constant = -PopupButton.bottomAnchorConstantForVisibleState
@@ -121,7 +120,7 @@ class PopupButton: UIButton {
     }
 
     private func hidePopupButton() {
-        print("HIDE popupButton")
+//        print("HIDE popupButton")
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             guard let self = self else { return }
             self.bottomAnchorConstraint?.constant = 0
@@ -130,8 +129,8 @@ class PopupButton: UIButton {
         })
     }
 
-    private func changeLabelTextWhen(bookIsAdded: Bool) {
-        customLabel.text = bookIsAdded ? "Added to Bookshelf" : "Removed from Bookshelf"
+    private func changeLabelTextWhen(isBookBeingAdded: Bool) {
+        customLabel.text = isBookBeingAdded ? "Added to Bookshelf" : "Removed from Bookshelf"
     }
 
     private func cancelAndReassignWorkItems() {

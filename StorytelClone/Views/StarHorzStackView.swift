@@ -129,20 +129,32 @@ class StarHorzStackView: UIStackView {
         addArrangedSubview(ellipsisButton)
         setCustomSpacing(6, after: categoryLabel)
         setCustomSpacing(15, after: saveButton)
-        updateSaveButtonImage()
+        updateSaveButtonImage(isBookBeingAdded: book.isOnBookshelf())
     }
 
     // MARK: - Helper methods
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
-            self.book?.updateBookshelfStatus()
-            self.updateSaveButtonImage()
-            if let book = self.book {
-                self.saveBookButtonDidTapCallback(book.isOnBookshelf())
-            }
+            self?.handleSaveButtonTapped()
         }), for: .touchUpInside)
+    }
+    
+    private func handleSaveButtonTapped() {
+        guard let book = book else { return }
+        Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
+        
+        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { [weak self] result in
+            switch result {
+            case .success(let bookState):
+                let isBookBeingAdded = bookState == .added ? true : false
+                self?.updateSaveButtonImage(isBookBeingAdded: isBookBeingAdded)
+                self?.saveBookButtonDidTapCallback(book.isOnBookshelf())
+                print("Book added or removed successfully")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
     }
 
     private func addEllipsisButtonAction() {
@@ -151,10 +163,9 @@ class StarHorzStackView: UIStackView {
         }), for: .touchUpInside)
     }
     
-    private func updateSaveButtonImage() {
-        guard let isBookAdded = book?.isOnBookshelf() else { return }
-        saveButton.tintColor = isBookAdded ? UIColor.customTintColor : .label
-        saveButton.updateImage(isBookAdded: isBookAdded)
+    private func updateSaveButtonImage(isBookBeingAdded: Bool) {
+        saveButton.tintColor = isBookBeingAdded ? UIColor.customTintColor : .label
+        saveButton.updateImage(isBookBeingAdded: isBookBeingAdded)
     }
 
     private func applyConstraints() {

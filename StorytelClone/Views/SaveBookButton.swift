@@ -21,8 +21,8 @@ class SaveBookButton: UIButton {
     }
     
     // MARK: - Instance methods
-    func updateImage(isBookAdded: Bool) {
-        let newImageName = isBookAdded ? "heart.fill" : "heart"
+    func updateImage(isBookBeingAdded: Bool) {
+        let newImageName = isBookBeingAdded ? "heart.fill" : "heart"
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         let newImage = UIImage(systemName: newImageName, withConfiguration: symbolConfig)
         self.setImage(newImage, for: .normal)

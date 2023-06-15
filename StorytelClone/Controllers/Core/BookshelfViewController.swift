@@ -7,7 +7,7 @@
 
 import UIKit
 
-var toReadBooks = [Book]()
+//var toReadBooks = [Book]()
 
 class BookshelfViewController: ScopeViewController {
     
@@ -48,11 +48,6 @@ class BookshelfViewController: ScopeViewController {
         super.viewWillAppear(animated)
         navigationController?.makeNavbarAppearance(transparent: false)
         collectionView.reloadData()
-//        if !toReadBooks.isEmpty {
-//            let bookTitles = toReadBooks.map { $0.title }
-//            let bookTitlesString = bookTitles.joined(separator: ", ")
-//            print("\nTBR: \(bookTitlesString)")
-//        }
     }
     
     // MARK: - Configuration

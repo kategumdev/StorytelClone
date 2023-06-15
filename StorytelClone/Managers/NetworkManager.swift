@@ -9,6 +9,8 @@ import Foundation
 import Alamofire
 import SDWebImage
 
+//https://books.google.com/books/content?id=DGOdEAAAQBAJ&printsec=frontcover&zoom=4&img=1
+
 //https://www.googleapis.com/books/v1/volumes?q=gaiman&key=AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM
 //http://itunes.apple.com/search?term=gaiman&entity=audiobook
 
@@ -42,13 +44,6 @@ enum WebService {
         case .itunes: return "" // No key is needed for this api
         }
     }
-    
-//    var resultType: ResultType.Type {
-//        switch self {
-//        case .googleBooks: return GoogleBooksSearchResponse.self
-//        case .itunes: return ITunesSearchResponse.self
-//        }
-//    }
 }
 
 class NetworkManager {

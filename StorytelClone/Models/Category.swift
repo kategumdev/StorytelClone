@@ -229,7 +229,6 @@ enum Category: String {
     }
     
     static func createCaseFrom(rawValueString: String) -> Category {
-        print("\nCREATING Category case")
         let enumCase = Category(rawValue: rawValueString)
         
         if let enumCase = enumCase {

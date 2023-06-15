@@ -124,26 +124,22 @@ class RoundButtonsStack: UIStackView {
     
     // MARK: - Instance methods
     func updateSaveButtonAppearance() {
-//        var isAdded = false
-        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
-            var isAdded = false
-            switch result {
-            case .success(let persistedBook):
-                isAdded = persistedBook != nil ? true : false
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-            self?.saveBookButton.updateImage(isBookAdded: isAdded)
-            self?.updateSaveLabelText(isBookAdded: isAdded)
-        }
-//        self.saveBookButton.updateImage(isBookAdded: isAdded)
-//        self.updateSaveLabelText(isBookAdded: isAdded)
+        let isBookBeingAdded = book.isOnBookshelf()
+        saveBookButton.updateImage(isBookBeingAdded: isBookBeingAdded)
+        updateSaveLabelText(isBookBeingAdded: isBookBeingAdded)
+        
+//        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
+//            var isBookBeingAdded = false
+//            switch result {
+//            case .success(let persistedBook):
+//                isBookBeingAdded = persistedBook != nil ? true : false
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//            self?.saveBookButton.updateImage(isBookBeingAdded: isBookBeingAdded)
+//            self?.updateSaveLabelText(isBookBeingAdded: isBookBeingAdded)
+//        }
     }
-    
-//    func updateSaveButtonAppearance() {
-//        self.saveBookButton.updateImage(isBookAdded: book.isOnBookshelf())
-//        self.updateSaveLabelText()
-//    }
     
     // MARK: - Helper methods
     private func configureSelf() {
@@ -151,8 +147,6 @@ class RoundButtonsStack: UIStackView {
         distribution = .fillProportionally
         spacing = RoundButtonsStack.roundWidth - 10
                 
-//        updateSaveLabelText()
-//        saveBookButton.updateImage(isBookAdded: book.isOnBookshelf())
         updateSaveButtonAppearance()
         addSaveButtonAction()
         [viewWithSaveButton, saveBookButton].forEach {
@@ -178,92 +172,41 @@ class RoundButtonsStack: UIStackView {
             self.handleSaveButtonTapped()
         }), for: .touchUpInside)
     }
-
-//    private func handleSaveButtonTapped() {
-//        let needsToBeAdded = !book.isOnBookshelf()
-//        self.saveBookButtonDidTapCallback(needsToBeAdded)
-//
-//        if needsToBeAdded {
-//            book.updateBookshelfStatus()
-//            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
-//                guard let self = self else { return }
-//                self.saveBookButton.updateImage(isBookAdded: self.book.isOnBookshelf())
-//                self.updateSaveLabelText()
-//                self.saveBookButton.isUserInteractionEnabled = true
-//            })
-//        } else {
-//            // Remove book
-//            book.updateBookshelfStatus()
-//            saveBookButton.updateImage(isBookAdded: self.book.isOnBookshelf())
-//            updateSaveLabelText()
-//            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
-//                self?.saveBookButton.isUserInteractionEnabled = true
-//            })
-//        }
-//        
-//    }
     
     private func handleSaveButtonTapped() {
-        var needsToBeAdded = false
-        var fetchedBook: PersistedBook? = nil
-        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
+        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { [weak self] result in
             switch result {
-            case .success(let persistedBook):
-                needsToBeAdded = persistedBook == nil ? true : false
-                fetchedBook = persistedBook
+            case .success(let bookState):
+                let isBookBeingAdded = bookState == .added ? true : false
+                self?.handleAddingOrRemoving(isBookBeingAdded: isBookBeingAdded)
             case .failure(let error):
-                print("Error when fetching book with id \(self?.book.id)" + error.localizedDescription)
+                print(error.localizedDescription)
             }
         }
         
-//        let needsToBeAdded = !book.isOnBookshelf()
-        self.saveBookButtonDidTapCallback(needsToBeAdded)
-        
-        
-        if let fetchedBook = fetchedBook {
-            // Remove book from bookshelf
-            DataPersistenceManager.shared.delete(persistedBook: fetchedBook) { [weak self] result in
-                switch result {
-                case .success():
-                    self?.saveBookButton.updateImage(isBookAdded: false)
-                    self?.updateSaveLabelText(isBookAdded: false)
-                    self?.saveBookButton.animateImageView(withCompletion: { _ in
-                        self?.saveBookButton.isUserInteractionEnabled = true
-                    })
-                    
-                case .failure(let error):
-                    print("persistedBook \(fetchedBook.title) couldn't be deleted" + error.localizedDescription)
-                }
-                
-            }
+    }
+    
+    private func handleAddingOrRemoving(isBookBeingAdded: Bool) {
+        saveBookButtonDidTapCallback(isBookBeingAdded)
+
+        if isBookBeingAdded {
+            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
+                self?.saveBookButton.updateImage(isBookBeingAdded: true)
+                self?.updateSaveLabelText(isBookBeingAdded: true)
+                self?.saveBookButton.isUserInteractionEnabled = true
+            })
         } else {
-            // Save book
-            DataPersistenceManager.shared.addPersistedBookOf(book: book) { [weak self] result in
-                switch result {
-                case .success():
-                    self?.saveBookButton.animateImageView(withCompletion: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.saveBookButton.updateImage(isBookAdded: true)
-                        self.updateSaveLabelText(isBookAdded: true)
-                        self.saveBookButton.isUserInteractionEnabled = true
-                    })
-                    
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-            }
+            saveBookButton.updateImage(isBookBeingAdded: false)
+            updateSaveLabelText(isBookBeingAdded: false)
+            saveBookButton.animateImageView(withCompletion: { [weak self] _ in
+                self?.saveBookButton.isUserInteractionEnabled = true
+            })
         }
-        
     }
     
-    private func updateSaveLabelText(isBookAdded: Bool) {
-        saveLabel.text = isBookAdded ? "Saved" : "Save"
+    private func updateSaveLabelText(isBookBeingAdded: Bool) {
+        saveLabel.text = isBookBeingAdded ? "Saved" : "Save"
     }
-    
-//    private func updateSaveLabelText() {
-//        saveLabel.text = book.isOnBookshelf() ? "Saved" : "Save"
-//    }
 
     private func createLabel(withText text: String) -> UILabel {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 17)
