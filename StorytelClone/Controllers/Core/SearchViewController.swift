@@ -17,7 +17,10 @@ class SearchViewController: UIViewController {
     private var firstTimeUpdateResults = true
     
     private let numberOfButtonsSection0 = 6
-    private let numberOfButtonsSection1 = 19
+    
+    private lazy var numberOfButtonsSection1: Int = {
+        return categoriesForButtons.count - numberOfButtonsSection0
+    }()
     
     private var initialTableOffsetY: CGFloat = 0
     private var firstTime = true
@@ -158,20 +161,13 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
-}
-
-// MARK: - UISearchBarDelegate, UISearchControllerDelegate
-extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("\n\ntextDidChange")
+    private func handleTextChangedTo(searchText: String) {
         networkManager.cancelRequestsAndDownloads()
-        let searchBar = searchController.searchBar
-        guard let query = searchBar.text,
-              let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
 
-        let queryString = query.trimmingCharacters(in: .whitespaces)
-        if queryString.isEmpty {
+        if query.isEmpty {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
             resultsController.modelForSearchQuery = nil
             return
@@ -179,9 +175,19 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
 
 #warning("make sure weak resultsController is ok here")
         networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak resultsController] result in
-            print("networkManager fetches for \(queryString)")
+            print("networkManager fetches for \(query)")
             resultsController?.handleSearchResult(result)
         }
+    }
+    
+}
+
+// MARK: - UISearchBarDelegate, UISearchControllerDelegate
+extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("\n\ntextDidChange")
+        handleTextChangedTo(searchText: searchText)
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {
@@ -209,8 +215,9 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
         networkManager.cancelRequestsAndDownloads()
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             resultsController.revertToInitialAppearance()
+            self?.handleTextChangedTo(searchText: "")
         }
     }
      
@@ -231,9 +238,9 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         
         var categoriesForButtons = [Category]()
         if indexPath.section == 0 {
-            categoriesForButtons += self.categoriesForButtons.prefix(upTo: 6)
+            categoriesForButtons += self.categoriesForButtons.prefix(upTo: numberOfButtonsSection0)
         } else {
-            categoriesForButtons += self.categoriesForButtons.dropFirst(6)
+            categoriesForButtons += self.categoriesForButtons.dropFirst(numberOfButtonsSection0)
         }
         
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
@@ -244,7 +251,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
+
         let numberOfRowsInCell: CGFloat
         if indexPath.section == 0 {
             numberOfRowsInCell = ceil(CGFloat(numberOfButtonsSection0) / 2.0)
