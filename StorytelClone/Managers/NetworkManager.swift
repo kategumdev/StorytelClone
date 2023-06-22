@@ -9,13 +9,7 @@ import Foundation
 import Alamofire
 import SDWebImage
 
-//https://books.google.com/books/content?id=DGOdEAAAQBAJ&printsec=frontcover&zoom=4&img=1
-
-//https://www.googleapis.com/books/v1/volumes?q=gaiman&key=AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM
-//http://itunes.apple.com/search?term=gaiman&entity=audiobook
-
 typealias SearchResult = Result<[Book], Error>
-//typealias ResultType = SearchResponse & Decodable
 
 protocol SearchResponse {
     var books: [Book] { get }
@@ -40,7 +34,12 @@ enum WebService {
     
     var apiKey: String {
         switch self {
-        case .googleBooks: return "AIzaSyBCtyopfZRlAavL6vF6NxmBhKtEglt7jPM"
+        case .googleBooks:
+            if let apiKey = ProcessInfo.processInfo.environment["GOOGLE_BOOKS_API_KEY"] {
+                return apiKey
+            } else {
+                fatalError("Could not find value for key 'GOOGLE_BOOKS_API_KEY' in the environmental variables")
+            }
         case .itunes: return "" // No key is needed for this api
         }
     }
@@ -116,10 +115,6 @@ class NetworkManager {
             // Perform iTunes search
             fetchGroup.enter()
             fetch(webService: .itunes, resultValueType: ITunesSearchResponse.self, query: query, completion: handleResultClosure)
-            
-//            let webService = WebService.itunes
-//            fetch(webService: webService, resultValueType: webService.resultType.self, query: query, completion: handleResultClosure)
-
         }
 
         fetchGroup.notify(queue: DispatchQueue.main) { [weak self] in
