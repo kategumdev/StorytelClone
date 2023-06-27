@@ -1,10 +1,11 @@
+
 # StorytelClone
 
-This is a personal a non-commercial project, a clone I created to demonstrate my iOS development skills. 
+This is a personal non-commercial project (a clone of Storytel app) I created to demonstrate my iOS development skills.
 
 ## Screenshots
 
-![](/assets/screenshots/screenshot1.png)
+![](StorytelClone/Assets.xcassets/Screenshots/screenshot1.imageset/screenshot1.png)
 
 ## Description
 
