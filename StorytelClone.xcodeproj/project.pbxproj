@@ -125,6 +125,7 @@
 		5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		5A36E03F29B804430096A032 /* ScopeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeButtonsView.swift; sourceTree = "<group>"; };
 		5A37EB2029DD83710053F6A7 /* PopupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupButton.swift; sourceTree = "<group>"; };
+		5A383DC12A4AFAEA0002A0BA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookOverviewStackView.swift; sourceTree = "<group>"; };
 		5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBookButton.swift; sourceTree = "<group>"; };
 		5A4B017D2A011A1B00228AC4 /* ScopeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeViewController.swift; sourceTree = "<group>"; };
@@ -290,6 +291,7 @@
 				5ABBA398299C09A800D0E0F4 /* LaunchScreen.storyboard */,
 				5ABBA39B299C09A800D0E0F4 /* Info.plist */,
 				5ABBA393299C09A700D0E0F4 /* StorytelClone.xcdatamodeld */,
+				5A383DC12A4AFAEA0002A0BA /* README.md */,
 			);
 			path = StorytelClone;
 			sourceTree = "<group>";
