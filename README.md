@@ -14,10 +14,8 @@ The original app is designed for reading ebooks and listening to audiobooks. In 
 ## Usage
 
 To run this project from within Xcode:
-> - Obtain your personal API KEY for Google Books API.
-> - In 'Edit scheme' of your project, choose 'Run' and add environmental property named GOOGLE_BOOKS_API_KEY.
-
-The project is ready to be run.
+  * Obtain your personal API KEY for Google Books API.
+  * In 'Edit scheme' of your project, choose 'Run' and add environmental property named GOOGLE_BOOKS_API_KEY.
 
 ## Showcase Video
 
