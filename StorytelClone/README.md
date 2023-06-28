@@ -1,10 +1,11 @@
-#  StorytelClone
 
-This is a personal a non-commercial project, a clone I created to demonstrate my iOS development skills. 
+# StorytelClone
+
+This is a personal non-commercial project (a clone of Storytel app) I created to demonstrate my iOS development skills.
 
 ## Screenshots
 
-![](/assets/screenshots/screenshot1.png)
+![](StorytelClone/Assets.xcassets/Screenshots/screenshot1.imageset/screenshot1.png)
 
 ## Description
 
@@ -13,10 +14,8 @@ The original app is designed for reading ebooks and listening to audiobooks. In 
 ## Usage
 
 To run this project from within Xcode:
-> - Obtain your personal API KEY for Google Books API.
-> - In 'Edit scheme' of your project, choose 'Run' and add environmental property named GOOGLE_BOOKS_API_KEY.
-
-The project is ready to be run.
+  * Obtain your personal API KEY for Google Books API.
+  * In 'Edit scheme' of your project, choose 'Run' and add environmental property named GOOGLE_BOOKS_API_KEY.
 
 ## Showcase Video
 
@@ -25,6 +24,5 @@ Check out this short video showcasing the project: [StorytelClone](https://www.l
 ## Contributing
 
 The project is for personal non-commercial use only and not open for contributions.
-
 
 

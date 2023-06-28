@@ -52,11 +52,16 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        profileTable.frame = view.bounds
-        
-        let tableHeader = PersonTableHeaderView(kind: .forProfile)
-        profileTable.tableHeaderView = tableHeader
-        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
+        configureAndLayoutTableHeader()
+//        profileTable.frame = view.bounds
+//
+//        var tableHeader = PersonTableHeaderView(kind: .forProfile)
+//        tableHeader.getStartedButtonDidTapCallback = { [weak self] in
+//            let controller = UINavigationController(rootViewController: RegisterViewController())
+//            self?.present(controller, animated: true)
+//        }
+//        profileTable.tableHeaderView = tableHeader
+//        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -83,6 +88,19 @@ class ProfileViewController: UIViewController {
     
     private func getScaledCellLabelFont() -> UIFont {
         return UIFont.createScaledFontWith(textStyle: .body, weight: .medium, maxPointSize: 39)
+    }
+    
+    private func configureAndLayoutTableHeader() {
+        profileTable.frame = view.bounds
+        
+        var tableHeader = PersonTableHeaderView(kind: .forProfile)
+        tableHeader.getStartedButtonDidTapCallback = { [weak self] in
+            let controller = UINavigationController(rootViewController: RegisterViewController())
+            controller.modalPresentationStyle = .overFullScreen
+            self?.present(controller, animated: true)
+        }
+        profileTable.tableHeaderView = tableHeader
+        Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
     }
 
 }

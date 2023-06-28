@@ -138,6 +138,8 @@ class PersonTableHeaderView: UIView {
         return stack
     }()
     
+    var getStartedButtonDidTapCallback: () -> () = {}
+    
     // MARK: - Initializers
     init(kind: HeaderKind) {
         self.kind = kind
@@ -211,6 +213,9 @@ class PersonTableHeaderView: UIView {
             imageView.centerXAnchor.constraint(equalTo: roundLabel.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: roundLabel.centerYAnchor, constant: -3)
         ])
+        
+        addGetStartedButtonAction()
+        
     }
     
     private func configureRoundLabelWithLettersFrom(name: String) {
@@ -224,6 +229,15 @@ class PersonTableHeaderView: UIView {
             letters = firstLetter + secondLetter
         }
         roundLabel.text = letters.uppercased()
+    }
+    
+    private func addGetStartedButtonAction() {
+        getStartedButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.getStartedButtonDidTapCallback()
+//            let controller = UINavigationController(rootViewController: RegisterViewController())
+            print("getStartedButton triggered")
+        }), for: .touchUpInside)
     }
     
     private func applyConstraints() {
