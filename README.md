@@ -1,7 +1,7 @@
 
 # StorytelClone
 
-This is a personal non-commercial project (a clone of Storytel app) I created to demonstrate my iOS development skills.
+This is a personal non-commercial project (a clone of Storytel app) I created to demonstrate my iOS development skills. It is my first independent creation.
 
 ## Screenshots
 
