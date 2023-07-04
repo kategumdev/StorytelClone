@@ -78,9 +78,7 @@ class NoDataBackgroundView: UIView {
     init(kind: NoDataBackgroundViewKind) {
         self.kind = kind
         super.init(frame: .zero)
-        addSubview(vertStackView)
         configureSelf()
-        applyConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -89,6 +87,13 @@ class NoDataBackgroundView: UIView {
     
     // MARK: - Instance methods
     private func configureSelf() {
+        setupUI()
+        applyConstraints()
+    }
+    
+    private func setupUI() {
+        addSubview(vertStackView)
+        
         switch kind {
         case .forBookshelfVc(let buttonKind):
             switch buttonKind {

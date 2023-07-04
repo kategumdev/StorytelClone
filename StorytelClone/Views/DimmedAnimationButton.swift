@@ -81,15 +81,7 @@ class DimmedAnimationButton: UIButton {
     
     // MARK: - Helper methods
     private func configureSelf() {
-        layer.cornerRadius = Constants.commonBookCoverCornerRadius
-        clipsToBounds = true
-
-        var config = UIButton.Configuration.plain()
-        config.background.imageContentMode = .scaleAspectFill
-        
-        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
-        config.background.cornerRadius = 0
-        configuration = config
+        setupUI()
         
         self.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
@@ -107,6 +99,18 @@ class DimmedAnimationButton: UIButton {
             }
 
         }), for: .touchUpInside)
+    }
+    
+    private func setupUI() {
+        layer.cornerRadius = Constants.commonBookCoverCornerRadius
+        clipsToBounds = true
+
+        var config = UIButton.Configuration.plain()
+        config.background.imageContentMode = .scaleAspectFill
+        
+        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
+        config.background.cornerRadius = 0
+        configuration = config
     }
     
     private func createControllerForCallback() -> UIViewController {

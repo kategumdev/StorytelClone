@@ -12,10 +12,14 @@ class BadgeView: UIView {
     static let badgeWidthAndHeight: CGFloat = 28
     static let paddingBetweenBadges: CGFloat = 4
     static let badgeTopAnchorPoints: CGFloat = 12
-    static let badgeBorderColor = UIColor(named: "badgeBorder")
+//    static let badgeBorderColor = UIColor(named: "badgeBorder")
     static let badgeBackgroundColor = UIColor(named: "badgeBackground")
     
     // MARK: - Instance properties
+    private var borderColor: CGColor? {
+        return UIColor(named: "badgeBorder")?.cgColor
+    }
+    
     let badgeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -26,7 +30,7 @@ class BadgeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         tintColor = UIColor.label
-        layer.borderColor = BadgeView.badgeBorderColor?.cgColor
+        layer.borderColor = borderColor
         layer.borderWidth = 1
         clipsToBounds = true
         backgroundColor = BadgeView.badgeBackgroundColor
@@ -48,7 +52,7 @@ class BadgeView: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            layer.borderColor = BadgeView.badgeBorderColor?.cgColor
+            layer.borderColor = borderColor
         }
     }
 

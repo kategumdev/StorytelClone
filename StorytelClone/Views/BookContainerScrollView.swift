@@ -88,7 +88,7 @@ class BookContainerScrollView: UIScrollView {
         self.book = book
         self.superviewWidth = superviewWidth
         super.init(frame: .zero)
-        configureSelf()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -140,7 +140,7 @@ class BookContainerScrollView: UIScrollView {
     }
     
     // MARK: - Helper methods
-    private func configureSelf() {
+    private func setupUI() {
         showsVerticalScrollIndicator = false
         addSubview(bookDetailsStackView)
         addSubview(bookDetailsScrollView)

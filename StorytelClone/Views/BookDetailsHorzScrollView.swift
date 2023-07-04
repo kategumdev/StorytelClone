@@ -72,11 +72,15 @@ class BookDetailsHorzScrollView: UIScrollView {
     private var allButtons = [UIButton]()
     private let scaledButtonFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
     
+    private var borderColor: CGColor? {
+        return UIColor.quaternaryLabel.cgColor
+    }
+    
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-        layer.borderColor = UIColor.quaternaryLabel.cgColor
+        layer.borderColor = borderColor
         layer.borderWidth = 1
         showsHorizontalScrollIndicator = false
         configureMainStack()
@@ -93,7 +97,7 @@ class BookDetailsHorzScrollView: UIScrollView {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            layer.borderColor = UIColor.quaternaryLabel.cgColor
+            layer.borderColor = borderColor
         }
         
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {

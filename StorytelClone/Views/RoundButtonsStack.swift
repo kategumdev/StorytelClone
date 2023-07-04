@@ -106,7 +106,6 @@ class RoundButtonsStack: UIStackView {
         self.book = book
         super.init(frame: .zero)
         configureSelf()
-        applyConstraints()
     }
 
     required init(coder: NSCoder) {
@@ -127,28 +126,21 @@ class RoundButtonsStack: UIStackView {
         let isBookBeingAdded = book.isOnBookshelf()
         saveBookButton.updateImage(isBookBeingAdded: isBookBeingAdded)
         updateSaveLabelText(isBookBeingAdded: isBookBeingAdded)
-        
-//        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
-//            var isBookBeingAdded = false
-//            switch result {
-//            case .success(let persistedBook):
-//                isBookBeingAdded = persistedBook != nil ? true : false
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//            self?.saveBookButton.updateImage(isBookBeingAdded: isBookBeingAdded)
-//            self?.updateSaveLabelText(isBookBeingAdded: isBookBeingAdded)
-//        }
     }
     
     // MARK: - Helper methods
     private func configureSelf() {
+        setupUI()
+        applyConstraints()
+        addSaveButtonAction()
+     }
+    
+    private func setupUI() {
         axis = .horizontal
         distribution = .fillProportionally
         spacing = RoundButtonsStack.roundWidth - 10
                 
         updateSaveButtonAppearance()
-        addSaveButtonAction()
         [viewWithSaveButton, saveBookButton].forEach {
             $0.layer.cornerRadius = RoundButtonsStack.roundWidth / 2
         }
@@ -162,7 +154,7 @@ class RoundButtonsStack: UIStackView {
         }
         
         addArrangedSubview(saveVertStack)
-     }
+    }
     
     private func addSaveButtonAction() {
         saveBookButton.addAction(UIAction(handler: { [weak self] _ in

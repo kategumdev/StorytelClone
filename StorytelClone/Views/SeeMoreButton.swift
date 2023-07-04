@@ -74,7 +74,7 @@ class SeeMoreButton: UIButton {
     init(buttonKind: ButtonKind) {
         self.buttonKind = buttonKind
         super.init(frame: .zero)
-        configureSelf()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -121,7 +121,7 @@ class SeeMoreButton: UIButton {
     }
     
     // MARK: - Helper methods
-    private func configureSelf() {
+    private func setupUI() {
         self.tintColor = .label
         var config = buttonConfig
         

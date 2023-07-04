@@ -9,7 +9,9 @@ import UIKit
 
 class ShowSeriesButtonContainer: UIView {
     // MARK: - Instance properties
-    var showSeriesButtonDidTapCallback: () -> () = {}
+    private var borderColor: CGColor? {
+        return UIColor.quaternaryLabel.cgColor
+    }
     
     private lazy var showSeriesButton: UIButton = {
         let button = UIButton()
@@ -17,8 +19,6 @@ class ShowSeriesButtonContainer: UIView {
         var config = UIButton.Configuration.plain()
         button.setTitle("Part 1 in Cazadores de sombras. Las últimas horas", for: .normal)
         button.titleLabel?.lineBreakMode = .byTruncatingTail
-//        let font = UIFont.preferredCustomFontWith(weight: .semibold, size: 13)
-//        button.titleLabel?.font = font
         button.titleLabel?.font = UIFont.customFootnoteSemibold
         button.titleLabel?.textAlignment = .center
         button.setTitleColor(.label, for: .normal)
@@ -48,10 +48,12 @@ class ShowSeriesButtonContainer: UIView {
         return imageView
     }()
     
+    var showSeriesButtonDidTapCallback: () -> () = {}
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.borderColor = UIColor.quaternaryLabel.cgColor
+        layer.borderColor = borderColor
         layer.borderWidth = 1
         addSubview(showSeriesButton)
         addButtonAction()
@@ -66,7 +68,7 @@ class ShowSeriesButtonContainer: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            layer.borderColor = UIColor.quaternaryLabel.cgColor
+            layer.borderColor = borderColor
         }
     }
     

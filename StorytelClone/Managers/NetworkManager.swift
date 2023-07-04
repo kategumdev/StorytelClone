@@ -92,43 +92,43 @@ class NetworkManager {
     func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void) {
         hasError = false
 
-//        let fetchGroup = DispatchGroup()
-//        var fetchError: Error?
-//        var allFetchedBooks = [Book]()
-//
-//        let handleResultClosure: (SearchResult) -> Void = { result in
-//            switch result {
-//            case .success(let books):
-//                allFetchedBooks += books
-//            case .failure(let error): fetchError = error
-//            }
-//            fetchGroup.leave()
-//        }
-//
-//        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyEbooks {
-//            fetchGroup.enter()
-//            // Perform Google Books search
-//            fetch(webService: .googleBooks, resultValueType: GoogleBooksSearchResponse.self, query: query, completion: handleResultClosure)
-//        }
-//
-//        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyAudiobooks {
-//            // Perform iTunes search
-//            fetchGroup.enter()
-//            fetch(webService: .itunes, resultValueType: ITunesSearchResponse.self, query: query, completion: handleResultClosure)
-//        }
-//
-//        fetchGroup.notify(queue: DispatchQueue.main) { [weak self] in
-//            if !allFetchedBooks.isEmpty {
-//                self?.hasError = false
-//                completion(.success(allFetchedBooks))
-//            } else if let unwrappedSavedError = fetchError as? NetworkManagerError {
-//                self?.hasError = true
-//                completion(.failure(unwrappedSavedError))
-//            } else {
-//                self?.hasError = true
-//                completion(.failure(NetworkManagerError.noResults)) // when empty and no errors
-//            }
-//        }
+        let fetchGroup = DispatchGroup()
+        var fetchError: Error?
+        var allFetchedBooks = [Book]()
+
+        let handleResultClosure: (SearchResult) -> Void = { result in
+            switch result {
+            case .success(let books):
+                allFetchedBooks += books
+            case .failure(let error): fetchError = error
+            }
+            fetchGroup.leave()
+        }
+
+        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyEbooks {
+            fetchGroup.enter()
+            // Perform Google Books search
+            fetch(webService: .googleBooks, resultValueType: GoogleBooksSearchResponse.self, query: query, completion: handleResultClosure)
+        }
+
+        if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyAudiobooks {
+            // Perform iTunes search
+            fetchGroup.enter()
+            fetch(webService: .itunes, resultValueType: ITunesSearchResponse.self, query: query, completion: handleResultClosure)
+        }
+
+        fetchGroup.notify(queue: DispatchQueue.main) { [weak self] in
+            if !allFetchedBooks.isEmpty {
+                self?.hasError = false
+                completion(.success(allFetchedBooks))
+            } else if let unwrappedSavedError = fetchError as? NetworkManagerError {
+                self?.hasError = true
+                completion(.failure(unwrappedSavedError))
+            } else {
+                self?.hasError = true
+                completion(.failure(NetworkManagerError.noResults)) // when empty and no errors
+            }
+        }
     }
     
     func loadAndResizeImagesFor(books: [Book], subCategoryKind: SubCategoryKind, completion: @escaping (([Book]) -> Void)) {

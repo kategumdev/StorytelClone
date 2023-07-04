@@ -11,9 +11,11 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
     // MARK: - Instance properties
     let kind: LoginRegisterButtonKind
-    private let buttonHeight: CGFloat
-    private let borderColor: CGColor
-    private let imageSize: CGSize
+    private let buttonHeight: CGFloat = 52
+    private let imageSize: CGSize = CGSize(width: 30, height: 30)
+    private var borderColor: CGColor? {
+        return UIColor.systemGray3.cgColor
+    }
     
     private let customLabel: UILabel = {
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
@@ -32,11 +34,8 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     private var firstTime = true
     
     // MARK: - Initializers
-    init(kind: LoginRegisterButtonKind, buttonHeight: CGFloat = 52, borderColor: CGColor = UIColor.systemGray3.cgColor, imageSize: CGSize = CGSize(width: 30, height: 30)) {
+    init(kind: LoginRegisterButtonKind) {
         self.kind = kind
-        self.buttonHeight = buttonHeight
-        self.borderColor = borderColor
-        self.imageSize = imageSize
         super.init(frame: .zero)
         setupUI()
     }
@@ -66,7 +65,7 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     // MARK: - Helper methods
     private func setupUI() {
         tintColor = .label
-        layer.borderWidth = 3
+        layer.borderWidth = 2
         layer.borderColor = borderColor
         layer.cornerRadius = buttonHeight / 2
 

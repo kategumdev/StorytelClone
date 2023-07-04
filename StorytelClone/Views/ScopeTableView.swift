@@ -22,9 +22,6 @@ class ScopeTableView: UITableView {
     var model = [Title]()
     var networkManagerError: NetworkManagerError?
     
-//    var networkManagerSearchResult: SearchResult? = .success([Book]())
-//    var networkingResult: NetworkResult
-    
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
     
@@ -36,10 +33,7 @@ class ScopeTableView: UITableView {
         self.buttonKind = buttonKind
         self.scopeButtonsViewKind = scopeButtonsViewKind
         super.init(frame: .zero, style: .plain)
-        configureSelf()
-        dataSource = self
-        delegate = self
-        setupTapGesture()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -57,17 +51,10 @@ class ScopeTableView: UITableView {
     }
     
     // MARK: - Helper methods
-    private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
-        tapGesture.cancelsTouchesInView = false
-        addGestureRecognizer(tapGesture)
-    }
-
-    @objc func handleTapGesure() {
-        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
-    }
-    
-    private func configureSelf() {
+    private func setupUI() {
+        dataSource = self
+        delegate = self
+        
         backgroundColor = UIColor.customBackgroundColor
         separatorColor = UIColor.clear
         rowHeight = UITableView.automaticDimension
@@ -78,6 +65,18 @@ class ScopeTableView: UITableView {
         register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
         register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
         register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
+        
+        setupTapGesture()
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        tapGesture.cancelsTouchesInView = false
+        addGestureRecognizer(tapGesture)
+    }
+
+    @objc func handleTapGesure() {
+        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
     }
     
     private func configureTableHeader() {

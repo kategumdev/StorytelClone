@@ -34,9 +34,10 @@ class LoginRegisterStackView: UIStackView {
     private let buttons: [LoginRegisterButton]
     
     private lazy var titleLabel: UILabel = {
-        let label = UILabel()
+        let scaledFont = UIFont.createScaledFontWith(textStyle: .title2, weight: .semibold, basePointSize: 22, maxPointSize: 50)
+        let label = UILabel.createLabelWith(font: scaledFont, text: kind.titleLabelText)
         label.textAlignment = .center
-        label.text = kind.titleLabelText
+        label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
     
@@ -47,7 +48,7 @@ class LoginRegisterStackView: UIStackView {
         self.kind = kind
         self.buttons = buttons
         super.init(frame: .zero)
-        configureSelf()
+        setupUI()
     }
     
     required init(coder: NSCoder) {
@@ -61,8 +62,8 @@ class LoginRegisterStackView: UIStackView {
         if firstTime {
             firstTime = false
             // Setting spacing here avoids constraints' conflict
-            spacing = 12
-            setCustomSpacing(60, after: titleLabel)
+            spacing = 9
+            setCustomSpacing(38, after: titleLabel)
         }
     }
 
@@ -85,7 +86,7 @@ class LoginRegisterStackView: UIStackView {
     }
     
     // MARK: - Helper methods
-    private func configureSelf() {
+    private func setupUI() {
         axis = .vertical
         alignment = .center
         addArrangedSubview(titleLabel)
