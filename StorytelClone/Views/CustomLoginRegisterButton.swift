@@ -1,34 +1,11 @@
 //
-//  LoginRegisterButton.swift
+//  CustomLoginRegisterButton.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 30/6/23.
 //
 
 import UIKit
-
-protocol LoginRegisterButton: UIButton {
-    var kind: LoginRegisterButtonKind { get }
-}
-
-enum LoginRegisterButtonKind: String {
-    // Raw value is button text
-    case appleLogin = "Sign in with Apple"
-    case appleRegister = "Continue with Apple"
-    
-    case emailLogin = "Log in with E-mail"
-    case emailRegister = "Create with E-mail"
-            
-    var buttonImage: UIImage? {
-        var imageName: String
-        switch self {
-        case .appleLogin, .appleRegister: imageName = "apple.logo"
-        case .emailLogin, .emailRegister: imageName = "envelope.circle.fill"
-        }
-        let image = UIImage(systemName: imageName)
-        return image
-    }
-}
 
 class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
@@ -61,15 +38,7 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         self.borderColor = borderColor
         self.imageSize = imageSize
         super.init(frame: .zero)
-        tintColor = .label
-        layer.borderWidth = 3
-        layer.borderColor = borderColor
-        layer.cornerRadius = buttonHeight / 2
-
-        customImageView.image = kind.buttonImage
-        customLabel.text = kind.rawValue
-        addSubview(customLabel)
-        addSubview(customImageView)
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -95,6 +64,26 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     }
     
     // MARK: - Helper methods
+    private func setupUI() {
+        tintColor = .label
+        layer.borderWidth = 3
+        layer.borderColor = borderColor
+        layer.cornerRadius = buttonHeight / 2
+
+        customImageView.image = kind.buttonImage
+        customLabel.text = kind.rawValue
+        addSubview(customLabel)
+        addSubview(customImageView)
+        addButtonAction()
+    }
+    
+    private func addButtonAction() {
+        addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.kind.handleButtonDidTap()
+        }), for: .touchUpInside)
+    }
+    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true

@@ -95,10 +95,17 @@ class ProfileViewController: UIViewController {
         
         var tableHeader = PersonTableHeaderView(kind: .forProfile)
         tableHeader.getStartedButtonDidTapCallback = { [weak self] in
-            let controller = UINavigationController(rootViewController: RegisterViewController())
+            let controller = UINavigationController(rootViewController: LoginRegisterViewController(stackViewKind: .register))
             controller.modalPresentationStyle = .overFullScreen
             self?.present(controller, animated: true)
         }
+        
+        tableHeader.logInButtonDidTapCallback = { [weak self] in
+            let controller = UINavigationController(rootViewController: LoginRegisterViewController(stackViewKind: .login))
+            controller.modalPresentationStyle = .overFullScreen
+            self?.present(controller, animated: true)
+        }
+        
         profileTable.tableHeaderView = tableHeader
         Utils.layoutTableHeaderView(tableHeader, inTableView: profileTable)
     }

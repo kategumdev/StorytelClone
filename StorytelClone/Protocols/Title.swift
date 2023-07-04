@@ -1,5 +1,5 @@
 //
-//  TitleKind.swift
+//  Title.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 18/3/23.

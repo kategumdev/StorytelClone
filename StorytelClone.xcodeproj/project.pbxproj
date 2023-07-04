@@ -38,13 +38,14 @@
 		5A5B878529C527AA001A7A64 /* ScopeNoImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878429C527AA001A7A64 /* ScopeNoImageTableViewCell.swift */; };
 		5A5B878929C52C45001A7A64 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878829C52C45001A7A64 /* Tag.swift */; };
 		5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878A29C52F2C001A7A64 /* Title.swift */; };
-		5A5E8A7C2A4C9D420063BC36 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5E8A7B2A4C9D420063BC36 /* RegisterViewController.swift */; };
+		5A5E8A7C2A4C9D420063BC36 /* LoginRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5E8A7B2A4C9D420063BC36 /* LoginRegisterViewController.swift */; };
 		5A630F4E29D8BA5600A690EF /* FollowSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */; };
 		5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */; };
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
 		5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380BA299ED7E200611543 /* BadgeView.swift */; };
 		5A8497FB29D49B530047AB44 /* PlaySampleButtonContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */; };
 		5A8497FD29D4B4060047AB44 /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8497FC29D4B4060047AB44 /* TagsView.swift */; };
+		5A9202B12A54706000FE6EC4 /* LoginRegisterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */; };
 		5A96E9D32A4F3A010087832A /* CustomLoginRegisterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */; };
 		5A9916482A0A587C00CB6B8A /* BookContainerScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */; };
 		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */; };
@@ -148,13 +149,14 @@
 		5A5B878429C527AA001A7A64 /* ScopeNoImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeNoImageTableViewCell.swift; sourceTree = "<group>"; };
 		5A5B878829C52C45001A7A64 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		5A5B878A29C52F2C001A7A64 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
-		5A5E8A7B2A4C9D420063BC36 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		5A5E8A7B2A4C9D420063BC36 /* LoginRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterViewController.swift; sourceTree = "<group>"; };
 		5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowSeriesView.swift; sourceTree = "<group>"; };
 		5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithCollection.swift; sourceTree = "<group>"; };
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A8380BA299ED7E200611543 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySampleButtonContainer.swift; sourceTree = "<group>"; };
 		5A8497FC29D4B4060047AB44 /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
+		5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterButton.swift; sourceTree = "<group>"; };
 		5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLoginRegisterButton.swift; sourceTree = "<group>"; };
 		5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContainerScrollView.swift; sourceTree = "<group>"; };
 		5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithHorzCvLargeRectangleCovers.swift; sourceTree = "<group>"; };
@@ -237,6 +239,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A9202AF2A54703700FE6EC4 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */,
+				5A5B878A29C52F2C001A7A64 /* Title.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		5AB2CCCC29B243140048A4FB /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +297,7 @@
 		5ABBA389299C09A700D0E0F4 /* StorytelClone */ = {
 			isa = PBXGroup;
 			children = (
+				5A9202AF2A54703700FE6EC4 /* Protocols */,
 				5AC8241F2A21294E00CF337D /* Managers */,
 				5AF93324299D71EC00DF17C7 /* Resources */,
 				5ABBA3FD299C0F0600D0E0F4 /* Models */,
@@ -332,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				5A041BD929AE70D3002539CF /* Category.swift */,
-				5A5B878A29C52F2C001A7A64 /* Title.swift */,
 				5AB86E6029B1723B005122A6 /* Book.swift */,
 				5A00A61729FFBE75002B2364 /* Storyteller.swift */,
 				5AA8006A29C8EFDC00198B8A /* Series.swift */,
@@ -406,7 +417,7 @@
 				5A23BEF029D747B80038D132 /* AllTitlesViewController.swift */,
 				5AB9524329EF179B001EA8DA /* BottomSheetViewController.swift */,
 				5A2EE2462A057D9D00DFFCA5 /* SettingsViewController.swift */,
-				5A5E8A7B2A4C9D420063BC36 /* RegisterViewController.swift */,
+				5A5E8A7B2A4C9D420063BC36 /* LoginRegisterViewController.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -580,7 +591,7 @@
 				5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */,
 				5A52321829AC30B30058DD73 /* BaseViewController.swift in Sources */,
 				5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */,
-				5A5E8A7C2A4C9D420063BC36 /* RegisterViewController.swift in Sources */,
+				5A5E8A7C2A4C9D420063BC36 /* LoginRegisterViewController.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
 				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */,
 				5A5A1FDB29D3235600AA08BB /* SeeMoreButton.swift in Sources */,
@@ -651,6 +662,7 @@
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 				5A5B878529C527AA001A7A64 /* ScopeNoImageTableViewCell.swift in Sources */,
 				5AB1A29C29B3E32A001CC50A /* DimmedAnimationButton.swift in Sources */,
+				5A9202B12A54706000FE6EC4 /* LoginRegisterButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

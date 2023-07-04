@@ -56,7 +56,6 @@ class PersonTableHeaderView: UIView {
         config.imagePadding = 10
         
         config.attributedTitle = "Follow"
-//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
         let scaledFont = UIFont.customCalloutSemibold
         config.attributedTitle?.font = scaledFont
         config.attributedTitle?.foregroundColor = UIColor.customBackgroundLight
@@ -139,6 +138,7 @@ class PersonTableHeaderView: UIView {
     }()
     
     var getStartedButtonDidTapCallback: () -> () = {}
+    var logInButtonDidTapCallback: () -> () = {}
     
     // MARK: - Initializers
     init(kind: HeaderKind) {
@@ -215,7 +215,7 @@ class PersonTableHeaderView: UIView {
         ])
         
         addGetStartedButtonAction()
-        
+        addLogInButtonAction()
     }
     
     private func configureRoundLabelWithLettersFrom(name: String) {
@@ -235,8 +235,15 @@ class PersonTableHeaderView: UIView {
         getStartedButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.getStartedButtonDidTapCallback()
-//            let controller = UINavigationController(rootViewController: RegisterViewController())
             print("getStartedButton triggered")
+        }), for: .touchUpInside)
+    }
+    
+    private func addLogInButtonAction() {
+        logInButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.logInButtonDidTapCallback()
+            print("logInButton triggered")
         }), for: .touchUpInside)
     }
     
@@ -252,8 +259,6 @@ class PersonTableHeaderView: UIView {
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -17),
             stack.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: stackHorzPadding / 2),
-//            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -stackHorzPadding / 2),
             stack.widthAnchor.constraint(equalTo: widthAnchor, constant: -stackHorzPadding)
         ])
         

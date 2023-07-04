@@ -7,21 +7,30 @@
 
 import UIKit
 
-class RegisterViewController: UIViewController {
+class LoginRegisterViewController: UIViewController {
     
     // MARK: - Instance properties
+    private let stackViewKind: LoginRegisterStackViewKind
     private let mainScrollView = UIScrollView()
     
     private lazy var stackView: LoginRegisterStackView = {
-        let stackKind = LoginRegisterStackViewKind.register
-        let buttonKinds = stackKind.buttonKinds
+        let buttonKinds = stackViewKind.buttonKinds
         var buttons = buttonKinds.map { CustomLoginRegisterButton(kind: $0) }
-        let stackView = LoginRegisterStackView(kind: stackKind, buttons: buttons)
+        let stackView = LoginRegisterStackView(kind: stackViewKind, buttons: buttons)
         return stackView
     }()
-//    private let stackView = LoginRegisterStackView(kind: .register)
     
     private var isFirstTime = true
+    
+    // MARK: - Initializers
+    init(stackViewKind: LoginRegisterStackViewKind) {
+        self.stackViewKind = stackViewKind
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View life cycle
     override func viewDidLoad() {
