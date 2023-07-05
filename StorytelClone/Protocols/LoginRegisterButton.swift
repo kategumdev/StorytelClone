@@ -18,23 +18,34 @@ enum LoginRegisterButtonKind: String {
     
     case emailLogin = "Log in with E-mail"
     case emailRegister = "Create with E-mail"
+    
+    case googleLogin = "Log in with Google"
+    case googleRegister = "Continue with Google"
+    
+    case facebookLogin = "Log in with Facebook"
+    case facebookRegister = "Create with Facebook"
             
     // MARK: Instance properties
     var buttonImage: UIImage? {
-        var imageName: String
+        var systemImageName: String = ""
+        var customImageName: String = ""
+        
         switch self {
-        case .appleLogin, .appleRegister: imageName = "apple.logo"
-        case .emailLogin, .emailRegister: imageName = "envelope.circle.fill"
+        case .appleLogin, .appleRegister: systemImageName = "apple.logo"
+        case .emailLogin, .emailRegister: systemImageName = "envelope.circle.fill"
+        case .googleLogin, .googleRegister: customImageName = "googleLogo"
+        case .facebookLogin, .facebookRegister: customImageName = "facebookLogo"
         }
-        let image = UIImage(systemName: imageName)
+        
+        let image = !systemImageName.isEmpty ? UIImage(systemName: systemImageName) : UIImage(named: customImageName)
         return image
     }
     
     // MARK: Instance methods
     func handleButtonDidTap() {
         switch self {
-        case .appleLogin, .emailLogin: print("log in to user account")
-        case .appleRegister, .emailRegister: print("creating user account")
+        case .appleLogin, .emailLogin, .googleLogin, .facebookLogin: print("log in to user account")
+        case .appleRegister, .emailRegister, .googleRegister, .facebookRegister: print("creating user account")
         }
     }
 

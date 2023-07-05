@@ -13,8 +13,8 @@ enum LoginRegisterStackViewKind {
     
     var buttonKinds: [LoginRegisterButtonKind] {
         switch self {
-        case .login: return [LoginRegisterButtonKind.appleLogin, LoginRegisterButtonKind.emailLogin]
-        case .register: return [LoginRegisterButtonKind.appleRegister, LoginRegisterButtonKind.emailRegister]
+        case .login: return [LoginRegisterButtonKind.appleLogin, LoginRegisterButtonKind.googleLogin, LoginRegisterButtonKind.emailLogin, LoginRegisterButtonKind.facebookLogin]
+        case .register: return [LoginRegisterButtonKind.appleRegister, LoginRegisterButtonKind.googleRegister, LoginRegisterButtonKind.emailRegister, LoginRegisterButtonKind.facebookRegister]
         }
     }
     
