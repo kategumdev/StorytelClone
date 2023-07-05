@@ -343,11 +343,11 @@
 		5ABBA3FD299C0F0600D0E0F4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5A041BD929AE70D3002539CF /* Category.swift */,
 				5AB86E6029B1723B005122A6 /* Book.swift */,
 				5A00A61729FFBE75002B2364 /* Storyteller.swift */,
 				5AA8006A29C8EFDC00198B8A /* Series.swift */,
 				5A5B878829C52C45001A7A64 /* Tag.swift */,
+				5A041BD929AE70D3002539CF /* Category.swift */,
 				5AA8006C29C8F2F700198B8A /* Language.swift */,
 				5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */,
 				5A1402A92A2637BB009274C9 /* ITunesSearchResponse.swift */,

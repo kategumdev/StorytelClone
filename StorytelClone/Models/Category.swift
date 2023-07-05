@@ -7,53 +7,6 @@
 
 import UIKit
 
-enum SubCategoryKind {
-    case horizontalCv
-    case verticalCv
-    case oneBookWithOverview
-    case poster
-    case largeCoversHorizontalCv
-    case seriesCategoryButton
-    case allCategoriesButton
-    case searchVc
-}
-
-enum BookKinds {
-    case onlyEbooks
-    case onlyAudiobooks
-    case ebooksAndAudiobooks
-}
-
-struct SubCategory {
-    let title: String
-    let subtitle: String
-    let kind: SubCategoryKind
-    let searchQuery: String // Hardcoded values
-    let description: String?
-    var titleModelToShow: Title?
-    let canBeShared: Bool
-    let canBeFiltered: Bool
-    let categoryToShow: Category?
-    let bookKinds: BookKinds
-        
-    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, description: String? = nil, titleModelToShow: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
-        self.title = title
-        self.subtitle = subtitle
-        self.kind = kind
-        self.searchQuery = searchQuery
-        self.description = description
-        self.titleModelToShow = titleModelToShow
-        self.canBeShared = canBeShared
-        self.canBeFiltered = canBeFiltered
-        self.categoryToShow = categoryToShow
-        self.bookKinds = bookKinds
-    }
-    
-    static let generalForAllTitlesVC = SubCategory(title: "", searchQuery: "")
-    static let similarTitles = SubCategory(title: "Similar titles", searchQuery: "", canBeShared: false)
-    static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "dark", canBeShared: false)
-}
-
 enum Category: String {
     case home, todasLasCategorias, searchVc
     
@@ -69,6 +22,7 @@ enum Category: String {
     
     case librosSimilares
         
+    // MARK: - Static properties
     static let categoriesForAllCategories: [Category] = [
         .novela, .zonaPodcast, .novelaNegra, .romantica,
         .thrillerYHorror, .fantasiaYCienciaFiccion,
@@ -90,6 +44,19 @@ enum Category: String {
         .inEnglish
     ]
     
+    // MARK: - Static method
+    static func createCaseFrom(rawValueString: String) -> Category {
+        let enumCase = Category(rawValue: rawValueString)
+        
+        if let enumCase = enumCase {
+            return enumCase
+        } else {
+            print("enum Category couldn't create value from this rawValue \(rawValueString)")
+            return .ebooks
+        }
+    }
+    
+    // MARK: - Instance properties
     var title: String {
         switch self {
         case .home: return "Home"
@@ -227,16 +194,57 @@ enum Category: String {
         case .librosSimilares: return [SubCategory]()
         }
     }
+
+}
+
+struct SubCategory {
     
-    static func createCaseFrom(rawValueString: String) -> Category {
-        let enumCase = Category(rawValue: rawValueString)
+    // MARK: - Static properties
+    static let generalForAllTitlesVC = SubCategory(title: "", searchQuery: "")
+    static let similarTitles = SubCategory(title: "Similar titles", searchQuery: "", canBeShared: false)
+    static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "dark", canBeShared: false)
+    
+    // MARK: - Instance properties
+    let title: String
+    let subtitle: String
+    let kind: SubCategoryKind
+    let searchQuery: String // Hardcoded values
+    let description: String?
+    var titleModelToShow: Title?
+    let canBeShared: Bool
+    let canBeFiltered: Bool
+    let categoryToShow: Category?
+    let bookKinds: BookKinds
         
-        if let enumCase = enumCase {
-            return enumCase
-        } else {
-            print("enum Category couldn't create value from this rawValue \(rawValueString)")
-            return .ebooks
-        }
+    // MARK: - Initializer
+    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, description: String? = nil, titleModelToShow: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
+        self.title = title
+        self.subtitle = subtitle
+        self.kind = kind
+        self.searchQuery = searchQuery
+        self.description = description
+        self.titleModelToShow = titleModelToShow
+        self.canBeShared = canBeShared
+        self.canBeFiltered = canBeFiltered
+        self.categoryToShow = categoryToShow
+        self.bookKinds = bookKinds
     }
 
+}
+
+enum SubCategoryKind {
+    case horizontalCv
+    case verticalCv
+    case oneBookWithOverview
+    case poster
+    case largeCoversHorizontalCv
+    case seriesCategoryButton
+    case allCategoriesButton
+    case searchVc
+}
+
+enum BookKinds {
+    case onlyEbooks
+    case onlyAudiobooks
+    case ebooksAndAudiobooks
 }

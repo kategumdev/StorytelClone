@@ -8,6 +8,8 @@
 import UIKit
 
 struct Series: Title {
+    
+    // MARK: - Instance properties
     let title: String
     let authors: [Storyteller]
     let coverImage: UIImage?
@@ -19,6 +21,7 @@ struct Series: Title {
     let narrators: [Storyteller]?
     let isFollowed: Bool
     
+    // MARK: - Initializer
     init(title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind = .series, category: Category, language: Language, numberOfFollowers: Int, books: [Book], narrators: [Storyteller]? = nil, isFollowed: Bool = false) {
         self.title = title
         self.authors = authors
@@ -32,6 +35,7 @@ struct Series: Title {
         self.isFollowed = isFollowed
     }
     
+    // MARK: - Static properties
     static let series1 = Series(title: "El señor de los anillos", authors: [Storyteller.tolkien], coverImage: UIImage(named: "series1book1"), titleKind: .series, category: .fantasiaYCienciaFiccion, language: .spanish, numberOfFollowers: 613, books: [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2], narrators: [Storyteller.narrator5])
 
     static let series2 = Series(title: "Old Fairytales", authors: [Storyteller.author5, Storyteller.author3], coverImage: UIImage(named: "image21"), titleKind: .series, category: .fantasiaYCienciaFiccion, language: .english, numberOfFollowers: 2345, books: [Book.book21, Book.book2, Book.book3, Book.book23, Book.book9, Book.book19, Book.book8, Book.book4, Book.book20], isFollowed: true)

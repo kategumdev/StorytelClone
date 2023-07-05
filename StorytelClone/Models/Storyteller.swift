@@ -8,8 +8,23 @@
 import Foundation
 
 struct Storyteller: Title, Equatable {
+
+    // MARK: - Instance properties
+    let name: String
+    let numberOfFollowers: Int
+    var titleKind: TitleKind
     
-    // MARK: - Static method
+    // MARK: - Initializer
+    init(titleKind: TitleKind, name: String, numberOfFollowers: Int) {
+        self.name = name
+        self.numberOfFollowers = numberOfFollowers
+        self.titleKind = titleKind
+    }
+
+}
+
+// MARK: - Static properties and methods
+extension Storyteller {
     static func createAuthorFrom(names: [String]?) -> [Storyteller] {
         var authors = [Storyteller]()
         
@@ -25,20 +40,8 @@ struct Storyteller: Title, Equatable {
         authors.append(author)
         return authors
     }
-
-    // MARK: - Instance properties
-    let name: String
-    let numberOfFollowers: Int
-    var titleKind: TitleKind
-    
-    // MARK: - Initializer
-    init(titleKind: TitleKind, name: String, numberOfFollowers: Int) {
-        self.name = name
-        self.numberOfFollowers = numberOfFollowers
-        self.titleKind = titleKind
-    }
-
-    // MARK: - Hardcoded model objects for authors
+        
+    // Hardcoded model objects for authors
     static let authors = [author1, author2, author3, author4, author5, author6,
                           author7, author8, author9, author10]
     
@@ -71,7 +74,7 @@ struct Storyteller: Title, Equatable {
     static let susanaMartinGijon = Storyteller(titleKind: .author, name: "Susana Martín Gijón", numberOfFollowers: 100)
     static let jenkins = Storyteller(titleKind: .author, name: "Taylor Jenkins Reid", numberOfFollowers: 550)
     
-    // MARK: - Hardcoded model objects for narrators
+    // Hardcoded model objects for narrators
     static let narrators = [narrator1, narrator2, narrator3, narrator4, narrator5,
                             narrator6, narrator7, narrator8, narrator9, narrator10]
     static let narrator1 = Storyteller(titleKind: .narrator, name: "Olivia Vives", numberOfFollowers: 29)
@@ -84,5 +87,4 @@ struct Storyteller: Title, Equatable {
     static let narrator8 = Storyteller(titleKind: .narrator, name: "David Rintoul", numberOfFollowers: 4)
     static let narrator9 = Storyteller(titleKind: .narrator, name: "Neil Gaiman", numberOfFollowers: 321)
     static let narrator10 = Storyteller(titleKind: .narrator, name: "Rebekkah Ross", numberOfFollowers: 46)
-
 }

@@ -9,6 +9,7 @@ import UIKit
 
 struct Book: Title, Equatable {
     
+    // MARK: - Instance properties
     let id: String
     let title: String
     let authors: [Storyteller]
@@ -31,8 +32,8 @@ struct Book: Title, Equatable {
     var isDownloaded: Bool
     var imageURLString: String?
     var audioUrlString: String?
-//    var date: Date?
     
+    // MARK: - Initializer
     init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, overview: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
         self.id = id
         self.title = title
@@ -56,7 +57,6 @@ struct Book: Title, Equatable {
         self.isDownloaded = isDownloaded
         self.imageURLString = imageURLString
         self.audioUrlString = audioUrlString
-//        self.date = date
     }
     
     // MARK: - Instance methods
@@ -75,8 +75,11 @@ struct Book: Title, Equatable {
         }
         return isBookAdded
     }
-    
-    // MARK: - Static properties and methods
+
+}
+
+// MARK: - Static methods
+extension Book {
     static func == (lhs: Book, rhs: Book) -> Bool {
         return lhs.id == rhs.id
     }
@@ -108,7 +111,6 @@ struct Book: Title, Equatable {
                 tags: Tag.createTagsFrom(strings: ebook.volumeInfo.categories),
                 imageURLString: imageURLString
             )
-            #warning("check isEbook in json for titleKind, check smth else for category")
             createdBooks.append(book)
         }
         return createdBooks
@@ -152,7 +154,11 @@ struct Book: Title, Equatable {
         }
         return createdBooks
     }
-        
+
+}
+
+// MARK: - Static properties
+extension Book {
     static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
         
     static let book1 = Book(id: "01", title: "The city of brass", authors: [Storyteller.shannonChakraborty], coverImage: UIImage(named: "image1"), titleKind: .audiobook, overview: "Discover this spellbinding debut from S.A. Chakraborty.\n\n\n‘An extravagant feast of a book – spicy and bloody, dizzyingly magical, and still, somehow, utterly believable’ Laini Taylor, Sunday Times and New York Times bestselling author\n\n\nAmong the bustling markets of eighteenth century Cairo, the city’s outcasts eke out a living swindling rich Ottoman nobles and foreign invaders alike.\n\nBut alongside this new world the old stories linger. Tales of djinn and spirits. Of cities hidden among the swirling sands of the desert, full of enchantment, desire and riches. Where magic pours down every street, hanging in the air like dust.\n\nMany wish their lives could be filled with such wonder, but not Nahri. She knows the trades she uses to get by are just tricks and sleights of hand: there’s nothing magical about them. She only wishes to one day leave Cairo, but as the saying goes…\n\nBe careful what you wish for.", category: .novela, tags: Tag.twoTags)
