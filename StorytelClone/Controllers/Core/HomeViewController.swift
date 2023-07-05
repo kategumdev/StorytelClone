@@ -9,6 +9,7 @@ import UIKit
 
 class HomeViewController: BaseViewController {
     
+    // MARK: - Instance properties
     private let popupButton = PopupButton()
     
     private lazy var indicesOfSubCategoriesForBooksWithOverview: [Int] = {
@@ -38,18 +39,6 @@ class HomeViewController: BaseViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        guard !isDidAppearTriggeredFirstTime else {
-            isDidAppearTriggeredFirstTime = false
-            return
-        }
-        // Update heart symbol (if needed) for sections created with .oneBookWithOverview subCategoryKind
-        let sectionsToReload = IndexSet(indicesOfSubCategoriesForBooksWithOverview)
-        bookTable.reloadSections(sectionsToReload, with: .none)
-    }
-    
     override func viewDidLayoutSubviews() {
         bookTable.frame = view.bounds
         guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
@@ -57,6 +46,18 @@ class HomeViewController: BaseViewController {
         tableHeader.stackBottomAnchorConstraint.constant = 0
         tableHeader.updateGreetingsLabel()
         layoutTableHeader()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard !didAppearFirstTime else {
+            didAppearFirstTime = false
+            return
+        }
+        // Update heart symbol (if needed) for sections created with .oneBookWithOverview subCategoryKind
+        let sectionsToReload = IndexSet(indicesOfSubCategoriesForBooksWithOverview)
+        bookTable.reloadSections(sectionsToReload, with: .none)
     }
     
     // MARK: - Superclass overrides

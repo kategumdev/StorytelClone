@@ -158,7 +158,6 @@ class CategoryViewController: BaseViewController {
     override func fetchBooks() {
         for (index, subCategory) in subCategories.enumerated() {
             let subCategoryKind = subCategory.kind
-//            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton else { continue }
             
             let query = subCategory.searchQuery
             networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in

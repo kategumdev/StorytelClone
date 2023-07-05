@@ -9,6 +9,7 @@ import UIKit
 
 class TabBarViewController: UITabBarController {
     
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.customBackgroundColor
@@ -18,10 +19,6 @@ class TabBarViewController: UITabBarController {
         let vc3 = UINavigationController(rootViewController: BookshelfViewController())
         let vc4 = UINavigationController(rootViewController: ProfileViewController())
         
-//        vc1.tabBarItem.image = UIImage(systemName: "lightbulb")
-//        vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
-//        vc3.tabBarItem.image = UIImage(systemName: "heart")
-//        vc4.tabBarItem.image = UIImage(systemName: "person")
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
         
         vc1.tabBarItem.image = UIImage(systemName: "lightbulb")?.withConfiguration(symbolConfig)

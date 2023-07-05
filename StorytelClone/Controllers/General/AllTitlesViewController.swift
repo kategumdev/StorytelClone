@@ -45,8 +45,8 @@ class AllTitlesViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard !isDidAppearTriggeredFirstTime else {
-            isDidAppearTriggeredFirstTime = false
+        guard !didAppearFirstTime else {
+            didAppearFirstTime = false
             return
         }
         bookTable.reloadData()

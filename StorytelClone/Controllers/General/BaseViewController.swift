@@ -8,25 +8,19 @@
 import UIKit
 
 class BaseViewController: UIViewController {
+    
     // MARK: - Instance properties
     var category: Category?
-    #warning("try to make this property not optional")
-    
-    let networkManager = NetworkManager()
     var booksDict = [Int : [Book]]()
-    
+    let networkManager = NetworkManager()
     let tableViewStyle: UITableView.Style
     
-    private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     var tableViewInitialOffsetY: Double = 0
     var isInitialOffsetYSet = false
+    private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
-    
-    var isDidAppearTriggeredFirstTime = true
-    
-    lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
-        self?.navigationController?.pushViewController(controller, animated: true)
-    }
+    private var didLayoutSubviewsFirstTime = true
+    var didAppearFirstTime = true
     
     lazy var bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: tableViewStyle)
@@ -46,8 +40,10 @@ class BaseViewController: UIViewController {
         table.tableFooterView?.frame.size.height = SectionHeaderView.topPadding
         return table
     }()
- 
-    private var isFirstTime = true
+     
+    lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+        self?.navigationController?.pushViewController(controller, animated: true)
+    }
 
     // MARK: - Initializers
     init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped) {
@@ -78,64 +74,24 @@ class BaseViewController: UIViewController {
         configureNavBar()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        bookTable.frame = view.bounds
-        layoutTableHeader()
-        
-        guard isFirstTime == true else { return }
-        isFirstTime = false
-        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         adjustNavBarAppearanceTo(currentOffsetY: bookTable.contentOffset.y)
     }
     
-    // MARK: - Instance methods
-    func configureNavBar() {
-        navigationController?.navigationBar.tintColor = .label
-        navigationController?.makeNavbarAppearance(transparent: true)
-        navigationItem.backButtonTitle = ""
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        bookTable.frame = view.bounds
+        layoutTableHeader()
+        
+        guard didLayoutSubviewsFirstTime == true else { return }
+        didLayoutSubviewsFirstTime = false
+        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
-    func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
-        var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
-        if self is AllCategoriesViewController {
-            if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
-                offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
-                changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
-            }
-        }
-        
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: false)
-    }
-
     // MARK: - Helper methods
-    func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
-        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
-        
-        let height = tableHeader.bounds.size.height + 10
-        let maxOffset = tableViewInitialOffsetY + height
-        
-        if offsetY <= tableViewInitialOffsetY && tableHeader.dimView.alpha != 0 {
-            tableHeader.dimView.alpha = 0
-        } else if offsetY >= maxOffset && tableHeader.dimView.alpha != 1 {
-            tableHeader.dimView.alpha = 1
-        } else if offsetY > tableViewInitialOffsetY && offsetY < maxOffset {
-            let alpha = (offsetY + abs(tableViewInitialOffsetY)) / height
-            tableHeader.dimView.alpha = alpha
-        }
-    }
-    
-    func layoutTableHeader() {
-        guard let tableHeader = bookTable.tableHeaderView else { return }
-        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
-    }
-    
     func fetchBooks() {
         guard let category = category else { return }
         let subCategories = category.subCategories
@@ -163,29 +119,61 @@ class BaseViewController: UIViewController {
             if let networkError = error as? NetworkManagerError {
                 DispatchQueue.main.async {
                     #warning("show error background view")
-//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
-//                            if let noBooksView = self.noBooksView {
-//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
-//                                self.bookTable.addSubview(noBooksView)
-//                                self.bookTable.isScrollEnabled = false
-//                                noBooksView.frame = self.bookTable.bounds
-//                            }
                 }
             }
         }
+    }
+    
+    func configureNavBar() {
+        navigationController?.navigationBar.tintColor = .label
+        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationItem.backButtonTitle = ""
+    }
+    
+    func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
+        var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
+        if self is AllCategoriesViewController {
+            if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
+                offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
+                changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
+            }
+        }
+        
+        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: false)
+    }
+
+    func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
+        guard let tableHeader = bookTable.tableHeaderView as? TableHeaderView else { return }
+        
+        let height = tableHeader.bounds.size.height + 10
+        let maxOffset = tableViewInitialOffsetY + height
+        
+        if offsetY <= tableViewInitialOffsetY && tableHeader.dimView.alpha != 0 {
+            tableHeader.dimView.alpha = 0
+        } else if offsetY >= maxOffset && tableHeader.dimView.alpha != 1 {
+            tableHeader.dimView.alpha = 1
+        } else if offsetY > tableViewInitialOffsetY && offsetY < maxOffset {
+            let alpha = (offsetY + abs(tableViewInitialOffsetY)) / height
+            tableHeader.dimView.alpha = alpha
+        }
+    }
+    
+    func layoutTableHeader() {
+        guard let tableHeader = bookTable.tableHeaderView else { return }
+        Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
     
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let category = category else { return 0 }
         return category.subCategories.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -233,6 +221,10 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     
+}
+
+// MARK: - UIScrollViewDelegate
+extension BaseViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
@@ -245,3 +237,4 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
+
