@@ -25,6 +25,7 @@ class StarHorzStackView: UIStackView {
 
     // MARK: - Instance properties
     private var book: Book?
+    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
     
     private lazy var starView: UIView = {
         let view = UIView()
@@ -143,7 +144,7 @@ class StarHorzStackView: UIStackView {
         guard let book = book else { return }
         Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
         
-        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { [weak self] result in
+        dataPersistenceManager.addOrDeletePersistedBookFrom(book: book) { [weak self] result in
             switch result {
             case .success(let bookState):
                 let isBookBeingAdded = bookState == .added ? true : false

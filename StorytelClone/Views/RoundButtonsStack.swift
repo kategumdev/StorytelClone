@@ -22,6 +22,7 @@ class RoundButtonsStack: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
+    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
     private lazy var bookKind = book.titleKind
 
     private lazy var hasListenButton = bookKind == .audiobook || bookKind == .audioBookAndEbook
@@ -166,7 +167,7 @@ class RoundButtonsStack: UIStackView {
     }
     
     private func handleSaveButtonTapped() {
-        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { [weak self] result in
+        dataPersistenceManager.addOrDeletePersistedBookFrom(book: book) { [weak self] result in
             switch result {
             case .success(let bookState):
                 let isBookBeingAdded = bookState == .added ? true : false

@@ -10,6 +10,7 @@ import UIKit
 class ScopeViewController: UIViewController {
     
     // MARK: - Instance properties
+    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
     private let scopeButtonsViewKind: ScopeButtonsViewKind
     lazy var scopeButtonsView = ScopeButtonsView(kind: scopeButtonsViewKind)
     
@@ -237,9 +238,8 @@ extension ScopeViewController {
         case .tags:
             return Tag.tags
         case .toRead:
-//            return toReadBooks
             var fetchedBooks = [Book]()
-            DataPersistenceManager.shared.fetchPersistedBooks { result in
+            dataPersistenceManager.fetchPersistedBooks { result in
                 switch result {
                 case .success(let books):
                     fetchedBooks = books

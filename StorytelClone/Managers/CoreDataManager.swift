@@ -1,5 +1,5 @@
 //
-//  DataPersistenceManager.swift
+//  CoreDataManager.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 14/6/23.
@@ -9,22 +9,12 @@ import Foundation
 import UIKit
 import CoreData
 
-class DataPersistenceManager {
+class CoreDataManager: DataPersistenceManager {    
+    static let shared = CoreDataManager()
     
-    enum DataPersistenceError: Error {
-        case failedToAddData
-        case failedToFetchData
-        case failedToDeleteData
-//        case failedToCheckIfBookIsSaved
-    }
+    private init() { }
     
-    enum BookState {
-        case removed
-        case added
-    }
-    
-    static let shared = DataPersistenceManager()
-    
+    // MARK: - Instance methods
     func addPersistedBookOf(book: Book, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
@@ -102,7 +92,7 @@ class DataPersistenceManager {
         }
     }
     
-    func delete(persistedBook: PersistedBook, completion: @escaping (Result<Void, Error>) -> Void ) {
+    func delete(persistedBook: PersistedBook, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
         context.delete(persistedBook)
@@ -121,7 +111,6 @@ class DataPersistenceManager {
 
         let request = PersistedBook.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id)
-//        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(PersistedBook.id), id])
 
         do {
             let matchingObjects = try context.fetch(request)
@@ -131,25 +120,24 @@ class DataPersistenceManager {
         }
     }
     
-    func addOrRemovePersistedBookFrom(book: Book, completion: @escaping (Result<BookState, Error>) -> Void) {
+    func addOrDeletePersistedBookFrom(book: Book, completion: @escaping (Result<BookState, Error>) -> Void) {
         
         var isBookBeingAdded = false
         var fetchedBook: PersistedBook? = nil
         
-        DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { result in
+        fetchPersistedBookWith(id: book.id) { result in
             switch result {
             case .success(let persistedBook):
                 isBookBeingAdded = persistedBook == nil ? true : false
                 fetchedBook = persistedBook
-            case .failure(let error):
+            case .failure:
                 completion(.failure(DataPersistenceError.failedToFetchData))
-                print("Error when fetching book with id \(book.id)" + error.localizedDescription)
             }
         }
         
         if isBookBeingAdded {
             // Add persisted book
-            DataPersistenceManager.shared.addPersistedBookOf(book: book) { result in
+            addPersistedBookOf(book: book) { result in
                 switch result {
                 case .success():
                     completion(.success(BookState.added))
@@ -161,10 +149,10 @@ class DataPersistenceManager {
         } else {
             // Remove persisted book
             guard let persistedBookToDelete = fetchedBook else { return }
-            DataPersistenceManager.shared.delete(persistedBook: persistedBookToDelete) { result in
+            delete(persistedBook: persistedBookToDelete) { result in
                 switch result {
                 case .success():
-                    completion(.success(BookState.removed))
+                    completion(.success(BookState.deleted))
                 case .failure(let error):
                     completion(.failure(DataPersistenceError.failedToDeleteData))
                     print(error.localizedDescription)

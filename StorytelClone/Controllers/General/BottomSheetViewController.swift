@@ -19,6 +19,7 @@ protocol BottomSheetViewControllerDelegate: AnyObject {
 class BottomSheetViewController: UIViewController {
     // MARK: Instance properties
     private var book: Book
+    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
     private var kind: BottomSheetKind
     private var isSwiping = false
     
@@ -211,7 +212,7 @@ extension BottomSheetViewController {
     private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind, withIndexPath indexPath: IndexPath) {
         switch bookDetailsBottomSheetCell {
         case .saveBook:
-            DataPersistenceManager.shared.fetchPersistedBookWith(id: book.id) { [weak self] result in
+            dataPersistenceManager.fetchPersistedBookWith(id: book.id) { [weak self] result in
                 switch result {
                 case .success(let persistedBook):
                     if persistedBook == nil {
@@ -251,7 +252,7 @@ extension BottomSheetViewController {
     }
     
     private func handleAddingBookWith(indexPath: IndexPath) {
-        DataPersistenceManager.shared.addPersistedBookOf(book: book) { [weak self] result in
+        dataPersistenceManager.addPersistedBookOf(book: book) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success():
@@ -281,7 +282,7 @@ extension BottomSheetViewController {
             style: .destructive,
             handler: { [weak self] _ in
                 guard let self = self, let persistedBookToDelete = persistedBook else { return }
-                DataPersistenceManager.shared.delete(persistedBook: persistedBookToDelete) { result in
+                self.dataPersistenceManager.delete(persistedBook: persistedBookToDelete) { result in
                     switch result {
                     case .success():
                         // Update cell with this book in AllTitlesViewController (parent vc, visible beneath)

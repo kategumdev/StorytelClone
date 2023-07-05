@@ -14,6 +14,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     // MARK: - Instance properties
     private var book: Book?
+    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
         
     let dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
@@ -116,11 +117,6 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             self?.handleSaveButtonTapped()
-//            guard let self = self, let book = self.book else { return }
-//            Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
-////            book.updateBookshelfStatus()
-//            self.updateSaveButton()
-//            self.saveBookButtonDidTapCallback(book.isOnBookshelf())
         }), for: .touchUpInside)
     }
     
@@ -128,46 +124,22 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         guard let book = book else { return }
         Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
         
-        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { [weak self] result in
+        dataPersistenceManager.addOrDeletePersistedBookFrom(book: book) { [weak self] result in
             switch result {
             case .success(let bookState):
                 let isBookBeingAdded = bookState == .added ? true : false
                 self?.updateSaveButton(isBookBeingAdded: isBookBeingAdded)
                 self?.saveBookButtonDidTapCallback(isBookBeingAdded)
-                print("Book is added or removed successfully in overview cell")
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
     
-//    private func handleSaveButtonTapped() {
-//        guard let book = book else { return }
-//        Utils.playHaptics(withStyle: .soft, andIntensity: 0.7)
-//
-//        DataPersistenceManager.shared.addOrRemovePersistedBookFrom(book: book) { result in
-//            switch result {
-//            case .success():
-//                print("Book added or removed successfully")
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
-////            book.updateBookshelfStatus()
-//        self.updateSaveButton()
-//        self.saveBookButtonDidTapCallback(book.isOnBookshelf())
-//    }
-    
     private func updateSaveButton(isBookBeingAdded: Bool) {
         saveButton.tintColor = isBookBeingAdded ? UIColor.customTintColor : .label
         saveButton.updateImage(isBookBeingAdded: isBookBeingAdded)
     }
-
-//    private func updateSaveButton() {
-//        guard let isBookAdded = book?.isOnBookshelf() else { return }
-//        saveButton.tintColor = isBookAdded ? UIColor.customTintColor : .label
-//        saveButton.updateImage(isBookBeingAdded: isBookAdded)
-//    }
     
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false

@@ -64,7 +64,7 @@ struct Book: Title, Equatable {
         let bookId = self.id
         var isBookAdded = false
         
-        DataPersistenceManager.shared.fetchPersistedBookWith(id: bookId) { result in
+        CoreDataManager.shared.fetchPersistedBookWith(id: bookId) { result in
             switch result {
             case .success(let persistedBook):
                 isBookAdded = persistedBook != nil ? true : false
