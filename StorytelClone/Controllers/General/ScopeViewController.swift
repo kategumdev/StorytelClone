@@ -256,7 +256,7 @@ extension ScopeViewController {
         case .downloaded:
             return [Book]()
         }
-        #warning("started, finished and dowloaded cases have to return values")
+        
     }
     
     // MARK: - Helper methods

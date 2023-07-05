@@ -86,7 +86,6 @@ class HomeViewController: BaseViewController {
         case .allCategoriesButton: return wideButtonCell(in: tableView, for: indexPath)
         case .searchVc: return UITableViewCell()
         }
-        #warning("cells for verticalCv and searchVc not needed, refactor them somewhere else")
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -107,7 +106,6 @@ class HomeViewController: BaseViewController {
         case .allCategoriesButton: return WideButtonTableViewCell.rowHeight
         case .searchVc: return 0
         }
-        #warning("cases verticalCv and searchVc not needed here, refactor them somewhere else")
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

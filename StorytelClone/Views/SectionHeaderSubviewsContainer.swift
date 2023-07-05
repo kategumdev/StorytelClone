@@ -94,7 +94,6 @@ class SectionHeaderSubviewsContainer: UIView {
     func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, forCategoryVcWithReferenceBook: Bool = false, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
         sectionTitleLabel.text = subCategory.title
         sectionTitleLabel.sizeToFit()
-#warning("check if this sizeToFit and the one below are needed")
         
         // Show or hide sectionSubtitleLabel
         sectionSubtitleLabel.isHidden = subCategory.subtitle.isEmpty

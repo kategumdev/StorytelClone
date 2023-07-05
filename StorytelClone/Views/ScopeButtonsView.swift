@@ -32,14 +32,12 @@ enum ScopeButtonKind: String, CaseIterable {
         case .series: return "Trending series"
         case .tags: return "Trending tags"
             
-//        case .toRead: return toReadBooks.isEmpty ? "" : "Past 7 days"
         case .toRead: return "Past 7 days"
         case .started: return ""
         case .finished: return ""
         case .downloaded: return ""
         }
     }
-    #warning("Configure return value for toRead")
     
     var sectionHeaderPaddingY: CGFloat {
         if ScopeButtonKind.kindsForSearchResults.contains(self) {

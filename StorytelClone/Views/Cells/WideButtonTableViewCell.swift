@@ -55,7 +55,6 @@ class WideButtonTableViewCell: UITableViewCell {
         if subCategoryKind == .allCategoriesButton {
             dimmedAnimationButton.kind = .toPushAllCategoriesVc
         }
-#warning("refactor somehow")
         
         dimmedAnimationButton.didTapCallback = callback
         customLabel.text = subCategoryKind == .seriesCategoryButton ? "Series" : "Todas las categorías"

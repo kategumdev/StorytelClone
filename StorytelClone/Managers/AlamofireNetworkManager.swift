@@ -9,12 +9,6 @@ import Foundation
 import Alamofire
 import SDWebImage
 
-typealias SearchResult = Result<[Book], Error>
-
-protocol SearchResponse {
-    var books: [Book] { get }
-}
-
 enum NetworkManagerError: Error {
     case noInternetConnection
     case failedToFetch
@@ -45,50 +39,14 @@ enum WebService {
     }
 }
 
-class NetworkManager {
+class AlamofireNetworkManager: NetworkManager {
+    
+    // MARK: - Instance properties
     private let sdWebImageDownloader = SDWebImageDownloader()
     private var dataRequests: [DataRequest] = []
-    private(set) var hasError = false
+    var hasError = false
     
-    private func fetch<T: Decodable & SearchResponse>(webService: WebService, resultValueType: T.Type, query: String, completion: @escaping (SearchResult) -> Void) {
-        
-        var parameters: [String : String] = [:]
-        switch webService {
-        case .googleBooks:
-            parameters = ["q" : query, "key" : webService.apiKey]
-        case .itunes:
-            parameters = [
-                "term" : query,
-                "entity" : "audiobook",
-                "limit" : "10"
-            ]
-        }
-
-        let dataRequest = AF.request(webService.url, parameters: parameters)
-          .validate()
-          .responseDecodable(of: T.self) { response in
-              switch response.result {
-              case .success(let data):
-                  let books = data.books
-                  if books.isEmpty {
-                      completion(.failure(NetworkManagerError.noResults))
-                  } else {
-                      completion(.success(books))
-                  }
-              case .failure(let error):
-                  guard let afError = error.asAFError else { return }
-                  
-                  if let urlError = afError.underlyingError as? URLError, urlError.code == URLError.notConnectedToInternet || urlError.code == URLError.dataNotAllowed {
-                        completion(.failure(NetworkManagerError.noInternetConnection))
-                  } else if !afError.isExplicitlyCancelledError {
-                      // avoid calling completion if request was cancelled (new search or Cancel button tap in search bar). When completion is not called, completion of fetchBooks func won't be called as well (dispatchGroup will not be able to call its leave() as it's inside request that won't be called) and nothing will be done which is needed behavior
-                      completion(.failure(NetworkManagerError.failedToFetch))
-                  }
-              }
-          }
-        dataRequests.append(dataRequest)
-    }
-    
+    // MARK: - Instance methods
     func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void) {
         hasError = false
 
@@ -187,9 +145,49 @@ class NetworkManager {
         }
         dataRequests.removeAll()
     }
+    
+    // MARK: - Helper method
+    private func fetch<T: Decodable & SearchResponse>(webService: WebService, resultValueType: T.Type, query: String, completion: @escaping (SearchResult) -> Void) {
+        
+        var parameters: [String : String] = [:]
+        switch webService {
+        case .googleBooks:
+            parameters = ["q" : query, "key" : webService.apiKey]
+        case .itunes:
+            parameters = [
+                "term" : query,
+                "entity" : "audiobook",
+                "limit" : "10"
+            ]
+        }
+
+        let dataRequest = AF.request(webService.url, parameters: parameters)
+          .validate()
+          .responseDecodable(of: T.self) { response in
+              switch response.result {
+              case .success(let data):
+                  let books = data.books
+                  if books.isEmpty {
+                      completion(.failure(NetworkManagerError.noResults))
+                  } else {
+                      completion(.success(books))
+                  }
+              case .failure(let error):
+                  guard let afError = error.asAFError else { return }
+                  
+                  if let urlError = afError.underlyingError as? URLError, urlError.code == URLError.notConnectedToInternet || urlError.code == URLError.dataNotAllowed {
+                        completion(.failure(NetworkManagerError.noInternetConnection))
+                  } else if !afError.isExplicitlyCancelledError {
+                      // avoid calling completion if request was cancelled (new search or Cancel button tap in search bar). When completion is not called, completion of fetchBooks func won't be called as well (dispatchGroup will not be able to call its leave() as it's inside request that won't be called) and nothing will be done which is needed behavior
+                      completion(.failure(NetworkManagerError.failedToFetch))
+                  }
+              }
+          }
+        dataRequests.append(dataRequest)
+    }
 
     deinit {
-        print("Particular instance of NetworkManager cancels requests and downloads in deinit")
+        // Particular instance of AlamofireNetworkManager cancels requests and downloads
         cancelRequestsAndDownloads()
     }
     

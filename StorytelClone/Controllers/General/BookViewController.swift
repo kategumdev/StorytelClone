@@ -14,12 +14,13 @@ class BookViewController: UIViewController {
     private let popupButton = PopupButton()
     private var scrollViewInitialOffsetY: CGFloat?
     private var isDidAppearTriggeredFirstTime = true
-    private let networkManager = NetworkManager()
+    private let networkManager: NetworkManager
     private var similarBooks = [Book]()
         
     // MARK: - Initializers
-    init(book: Book) {
+    init(book: Book, networkManager: NetworkManager = AlamofireNetworkManager()) {
         self.book = book
+        self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -88,7 +89,6 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(controller, animated: true)
         })
         return sectionHeader
-        #warning("maybe disable seeAll button if similarBooks is empty yet")
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -111,7 +111,6 @@ extension BookViewController {
         bookContainerScrollView.delegate = self
         bookContainerScrollView.bookTable.dataSource = self
         bookContainerScrollView.bookTable.delegate = self
-//        passCallbacksToBookContainerScrollView()
     }
     
     private func passCallbacksToBookContainerScrollView() {
@@ -123,7 +122,6 @@ extension BookViewController {
         }
      
         bookContainerScrollView.bookDetailsStackView.storytellerButtonDidTapCallback = { [weak self] storytellers in
-//            print("storytellerButtonDidTapCallback with \(storytellers)")
             guard let self = self else { return }
             if storytellers.count == 1 {
                 let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: storytellers.first)
@@ -223,16 +221,9 @@ extension BookViewController {
             }
         case .failure(let error):
             self.networkManager.cancelRequestsAndDownloads()
-            if let networkError = error as? NetworkManagerError {
+            if error is NetworkManagerError {
                 DispatchQueue.main.async {
-                    #warning("show error background view")
-//                            self.noBooksView = NoDataBackgroundView(kind: .networkingError(error: networkError))
-//                            if let noBooksView = self.noBooksView {
-//                                noBooksView.backgroundColor = UIColor.customBackgroundColor
-//                                self.bookTable.addSubview(noBooksView)
-//                                self.bookTable.isScrollEnabled = false
-//                                noBooksView.frame = self.bookTable.bounds
-//                            }
+#warning("show error background view")
                 }
             }
         }

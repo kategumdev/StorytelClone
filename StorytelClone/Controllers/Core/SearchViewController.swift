@@ -12,7 +12,7 @@ class SearchViewController: UIViewController {
     private let model: Category
     private let categoriesForButtons: [Category]
     
-    private let networkManager = NetworkManager()
+    private let networkManager: NetworkManager
     private var previousQueryString = ""
     private var firstTimeUpdateResults = true
     
@@ -72,9 +72,10 @@ class SearchViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoriesForButtons: [Category]) {
+    init(categoryModel: Category, categoriesForButtons: [Category], networkManager: NetworkManager = AlamofireNetworkManager()) {
         self.categoriesForButtons = categoriesForButtons
         self.model = categoryModel
+        self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -173,9 +174,8 @@ class SearchViewController: UIViewController {
             return
         }
 
-#warning("make sure weak resultsController is ok here")
         networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak resultsController] result in
-            print("networkManager fetches for \(query)")
+//            print("networkManager fetches for \(query)")
             resultsController?.handleSearchResult(result)
         }
     }
@@ -186,7 +186,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("\n\ntextDidChange")
+//        print("\n\ntextDidChange")
         handleTextChangedTo(searchText: searchText)
     }
     
@@ -292,7 +292,6 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
 
 extension SearchViewController: BottomSheetViewControllerDelegate {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book) {
-        // Nothing needs to be done
         #warning("Configure book model object in data model")
     }
 }

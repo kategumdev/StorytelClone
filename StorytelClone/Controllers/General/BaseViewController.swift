@@ -12,7 +12,7 @@ class BaseViewController: UIViewController {
     // MARK: - Instance properties
     var category: Category?
     var booksDict = [Int : [Book]]()
-    let networkManager = NetworkManager()
+    let networkManager: NetworkManager
     let tableViewStyle: UITableView.Style
     
     var tableViewInitialOffsetY: Double = 0
@@ -46,9 +46,10 @@ class BaseViewController: UIViewController {
     }
 
     // MARK: - Initializers
-    init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped) {
+    init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: NetworkManager = AlamofireNetworkManager()) {
         self.category = categoryModel
         self.tableViewStyle = tableViewStyle
+        self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,9 +117,9 @@ class BaseViewController: UIViewController {
             }
         case .failure(let error):
             self.networkManager.cancelRequestsAndDownloads()
-            if let networkError = error as? NetworkManagerError {
+            if error is NetworkManagerError {
                 DispatchQueue.main.async {
-                    #warning("show error background view")
+#warning("show error background view")
                 }
             }
         }

@@ -51,7 +51,6 @@ class AllTitlesViewController: BaseViewController {
         }
         bookTable.reloadData()
     }
-#warning("Maybe refactor to reload only If user saved or removed the books. Check it somehow.")
     
     // MARK: - UITableViewDataSource, UITableViewDelegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

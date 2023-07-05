@@ -93,7 +93,7 @@ class ProfileViewController: UIViewController {
     private func configureAndLayoutTableHeader() {
         profileTable.frame = view.bounds
         
-        var tableHeader = PersonTableHeaderView(kind: .forProfile)
+        let tableHeader = PersonTableHeaderView(kind: .forProfile)
         tableHeader.getStartedButtonDidTapCallback = { [weak self] in
             let controller = UINavigationController(rootViewController: LoginRegisterViewController(stackViewKind: .register))
             controller.modalPresentationStyle = .overFullScreen

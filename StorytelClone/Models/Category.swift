@@ -107,7 +107,6 @@ enum Category: String {
         }
     }
     
-#warning("In 'Porque te interesa' SubCategory: subtitle and description have to be dynamic (one of books user saved)")
     var subCategories: [SubCategory] {
         switch self {
         case .home: return [
