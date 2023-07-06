@@ -19,7 +19,7 @@ protocol BottomSheetViewControllerDelegate: AnyObject {
 class BottomSheetViewController: UIViewController {
     // MARK: Instance properties
     private var book: Book
-    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    private let dataPersistenceManager: any DataPersistenceManager
     private var kind: BottomSheetKind
     private var isSwiping = false
     
@@ -102,10 +102,11 @@ class BottomSheetViewController: UIViewController {
     private var swipeGesture: UISwipeGestureRecognizer?
     
     // MARK: - Initializers
-    init(book: Book, kind: BottomSheetKind) {
+    init(book: Book, kind: BottomSheetKind, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
         print("\n\n\(kind) bottom sheet CREATED")
         self.book = book
         self.kind = kind
+        self.dataPersistenceManager = dataPersistenceManager
         super.init(nibName: nil, bundle: nil)
     }
     

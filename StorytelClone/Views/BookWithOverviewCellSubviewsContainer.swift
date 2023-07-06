@@ -14,7 +14,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     
     // MARK: - Instance properties
     private var book: Book?
-    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    private let dataPersistenceManager: any DataPersistenceManager
         
     let dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
@@ -65,8 +65,9 @@ class BookWithOverviewCellSubviewsContainer: UIView {
     }()
     
     // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
+        self.dataPersistenceManager = dataPersistenceManager
+        super.init(frame: .zero)
         addSubview(dimmedAnimationButton)
         dimmedAnimationButton.addSubview(vertStackView)
         addSubview(squareImageView)

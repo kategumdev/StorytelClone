@@ -25,7 +25,7 @@ class StarHorzStackView: UIStackView {
 
     // MARK: - Instance properties
     private var book: Book?
-    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    private let dataPersistenceManager: any DataPersistenceManager
     
     private lazy var starView: UIView = {
         let view = UIView()
@@ -89,8 +89,9 @@ class StarHorzStackView: UIStackView {
     var ellipsisButtonDidTapCallback: () -> () = {}
         
     // MARK: - Initializers
-    init(withSaveAndEllipsisButtons: Bool) {
+    init(withSaveAndEllipsisButtons: Bool, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
         self.hasSaveAndEllipsisButtons = withSaveAndEllipsisButtons
+        self.dataPersistenceManager = dataPersistenceManager
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .center

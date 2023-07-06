@@ -22,7 +22,7 @@ class RoundButtonsStack: UIStackView {
     
     // MARK: - Instance properties
     private let book: Book
-    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    private let dataPersistenceManager: any DataPersistenceManager
     private lazy var bookKind = book.titleKind
 
     private lazy var hasListenButton = bookKind == .audiobook || bookKind == .audioBookAndEbook
@@ -103,8 +103,9 @@ class RoundButtonsStack: UIStackView {
     }()
         
     // MARK: - Initializers
-    init(forBook book: Book) {
+    init(forBook book: Book, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
         self.book = book
+        self.dataPersistenceManager = dataPersistenceManager
         super.init(frame: .zero)
         configureSelf()
     }

@@ -10,7 +10,7 @@ import UIKit
 class ScopeViewController: UIViewController {
     
     // MARK: - Instance properties
-    private let dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    private let dataPersistenceManager: any DataPersistenceManager
     private let scopeButtonsViewKind: ScopeButtonsViewKind
     lazy var scopeButtonsView = ScopeButtonsView(kind: scopeButtonsViewKind)
     
@@ -60,12 +60,12 @@ class ScopeViewController: UIViewController {
         }
     }
 
-    
     var scopeTablesForCvCells = [ScopeTableView]()
             
     // MARK: - Initializers
-    init(withScopeButtonsViewKind scopeButtonsViewKind: ScopeButtonsViewKind) {
+    init(withScopeButtonsViewKind scopeButtonsViewKind: ScopeButtonsViewKind, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
         self.scopeButtonsViewKind = scopeButtonsViewKind
+        self.dataPersistenceManager = dataPersistenceManager
         super.init(nibName: nil, bundle: nil)
     }
 
