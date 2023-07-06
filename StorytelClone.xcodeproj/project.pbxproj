@@ -18,7 +18,7 @@
 		5A2EE2472A057D9D00DFFCA5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EE2462A057D9D00DFFCA5 /* SettingsViewController.swift */; };
 		5A36E03C29B79C5C0096A032 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */; };
 		5A36E04029B804430096A032 /* ScopeButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A36E03F29B804430096A032 /* ScopeButtonsView.swift */; };
-		5A37EB2129DD83710053F6A7 /* PopupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37EB2029DD83710053F6A7 /* PopupButton.swift */; };
+		5A37EB2129DD83710053F6A7 /* DefaultPopupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37EB2029DD83710053F6A7 /* DefaultPopupButton.swift */; };
 		5A3DC17229CE05D5003A9315 /* BookOverviewStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */; };
 		5A4954EC29E58AAB0032B43B /* SaveBookButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */; };
 		5A4B017E2A011A1B00228AC4 /* ScopeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4B017D2A011A1B00228AC4 /* ScopeViewController.swift */; };
@@ -40,6 +40,7 @@
 		5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B878A29C52F2C001A7A64 /* Title.swift */; };
 		5A5E8A7C2A4C9D420063BC36 /* LoginRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5E8A7B2A4C9D420063BC36 /* LoginRegisterViewController.swift */; };
 		5A630F4E29D8BA5600A690EF /* FollowSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */; };
+		5A665F882A571A0900A4EF56 /* PopupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A665F872A571A0900A4EF56 /* PopupButton.swift */; };
 		5A7307162A5604DC005E88B7 /* DataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */; };
 		5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */; };
 		5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8380B6299E818800611543 /* BookCollectionViewCell.swift */; };
@@ -130,7 +131,7 @@
 		5A2EE2462A057D9D00DFFCA5 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5A36E03B29B79C5C0096A032 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		5A36E03F29B804430096A032 /* ScopeButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeButtonsView.swift; sourceTree = "<group>"; };
-		5A37EB2029DD83710053F6A7 /* PopupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupButton.swift; sourceTree = "<group>"; };
+		5A37EB2029DD83710053F6A7 /* DefaultPopupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultPopupButton.swift; sourceTree = "<group>"; };
 		5A383DC12A4AFAEA0002A0BA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookOverviewStackView.swift; sourceTree = "<group>"; };
 		5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBookButton.swift; sourceTree = "<group>"; };
@@ -153,6 +154,7 @@
 		5A5B878A29C52F2C001A7A64 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5A5E8A7B2A4C9D420063BC36 /* LoginRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterViewController.swift; sourceTree = "<group>"; };
 		5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowSeriesView.swift; sourceTree = "<group>"; };
+		5A665F872A571A0900A4EF56 /* PopupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupButton.swift; sourceTree = "<group>"; };
 		5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceManager.swift; sourceTree = "<group>"; };
 		5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithCollection.swift; sourceTree = "<group>"; };
 		5A8380B6299E818800611543 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				5A5B878A29C52F2C001A7A64 /* Title.swift */,
 				5AABB72A2A55BA9C003FD2EA /* NetworkManager.swift */,
 				5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */,
+				5A665F872A571A0900A4EF56 /* PopupButton.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -386,7 +389,7 @@
 				5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */,
 				5A8497FC29D4B4060047AB44 /* TagsView.swift */,
 				5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */,
-				5A37EB2029DD83710053F6A7 /* PopupButton.swift */,
+				5A37EB2029DD83710053F6A7 /* DefaultPopupButton.swift */,
 				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
 				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
 				5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */,
@@ -586,7 +589,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A37EB2129DD83710053F6A7 /* PopupButton.swift in Sources */,
+				5A37EB2129DD83710053F6A7 /* DefaultPopupButton.swift in Sources */,
 				5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */,
 				5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */,
 				5A5067D92A39D1D7009C2E0C /* PersistedBook+CoreDataClass.swift in Sources */,
@@ -662,6 +665,7 @@
 				5AD2CB012A0253CB004FE55D /* BookshelfTableHeaderView.swift in Sources */,
 				5ADC083229CB2DC20042A432 /* RoundButtonsStack.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,
+				5A665F882A571A0900A4EF56 /* PopupButton.swift in Sources */,
 				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,
 				5A0F8A2129CA681B004FAB36 /* BookDetailsStackView.swift in Sources */,
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,

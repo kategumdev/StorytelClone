@@ -11,16 +11,17 @@ class BookViewController: UIViewController {
     // MARK: - Instance properties
     let book: Book
     private lazy var bookContainerScrollView = BookContainerScrollView(book: book, superviewWidth: view.bounds.width)
-    private let popupButton = PopupButton()
+    private let popupButton: PopupButton
     private var scrollViewInitialOffsetY: CGFloat?
     private var isDidAppearTriggeredFirstTime = true
     private let networkManager: NetworkManager
     private var similarBooks = [Book]()
         
     // MARK: - Initializers
-    init(book: Book, networkManager: NetworkManager = AlamofireNetworkManager()) {
+    init(book: Book, networkManager: NetworkManager = AlamofireNetworkManager(), popupButton: some PopupButton = DefaultPopupButton()) {
         self.book = book
         self.networkManager = networkManager
+        self.popupButton = popupButton
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -161,6 +162,7 @@ extension BookViewController {
     }
     
     private func addPopupButton() {
+//        guard let popupButton = popupButton as? UIView else { return }
         view.addSubview(popupButton)
         bookContainerScrollView.bookDetailsStackView.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
     }

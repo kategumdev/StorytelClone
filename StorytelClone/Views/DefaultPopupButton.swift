@@ -1,5 +1,5 @@
 //
-//  PopupView.swift
+//  DefaultPopupButton.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 5/4/23.
@@ -7,17 +7,18 @@
 
 import UIKit
 
-class PopupButton: UIButton {
-    
-    //MARK: - Static properties
-    static let buttonHeight: CGFloat = 46
-    static let bottomAnchorConstantForVisibleState: CGFloat = buttonHeight + 11
+class DefaultPopupButton: UIButton, PopupButton {
     
     // MARK: - Instance properties
+    let buttonHeight: CGFloat = 46
     private let leadingPadding: CGFloat = Constants.commonHorzPadding
     private let trailingPadding: CGFloat = Constants.commonHorzPadding - 2
     private let labelImagePadding: CGFloat = 8
     private let imageWidthHeight: CGFloat = 20
+    
+    private lazy var bottomAnchorConstantForVisibleState: CGFloat = {
+        buttonHeight + 11
+    }()
     
     private let customLabel: UILabel = {
         let font = UIFont.createStaticFontWith(weight: .medium, size: 16)
@@ -41,12 +42,12 @@ class PopupButton: UIButton {
 
     private var bottomAnchorConstraint: NSLayoutConstraint?
 
-    private lazy var showPopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.showPopupButton()
+    private lazy var showWorkItem = DispatchWorkItem { [weak self] in
+        self?.show()
     }
 
-    private lazy var hidePopupWorkItem = DispatchWorkItem { [weak self] in
-        self?.hidePopupButton()
+    private lazy var hideWorkItem = DispatchWorkItem { [weak self] in
+        self?.hide()
     }
 
     lazy var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback = { [weak self] isBookBeingAdded in
@@ -54,15 +55,15 @@ class PopupButton: UIButton {
         self.cancelAndReassignWorkItems()
 
         // If it's already visible, hide it to make animation in showPopupWorkItem noticeable
-        if let bottomAnchorConstraint = self.bottomAnchorConstraint, bottomAnchorConstraint.constant < PopupButton.bottomAnchorConstantForVisibleState {
+        if let bottomAnchorConstraint = self.bottomAnchorConstraint, bottomAnchorConstraint.constant < self.bottomAnchorConstantForVisibleState {
             bottomAnchorConstraint.constant = 0
             self.alpha = 0
             self.superview?.layoutIfNeeded()
         }
 
         self.changeLabelTextWhen(isBookBeingAdded: isBookBeingAdded)
-        DispatchQueue.main.async(execute: self.showPopupWorkItem)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hidePopupWorkItem)
+        DispatchQueue.main.async(execute: self.showWorkItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.7, execute: self.hideWorkItem)
     }
 
     private var constraintsApplied = false
@@ -95,37 +96,33 @@ class PopupButton: UIButton {
     // MARK: - Helper methods
     private func addButtonAction() {
         addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
             // Cancel the work item to prevent it from executing with the delay
-            self.hidePopupWorkItem.cancel()
+            self?.hideWorkItem.cancel()
 
             // Execute hidePopupButton() immediately
-            self.hidePopupButton()
+            self?.hide()
 
             // Reassign workItem to replace the cancelled one
-            self.hidePopupWorkItem = DispatchWorkItem { [weak self] in
-                self?.hidePopupButton()
+            self?.hideWorkItem = DispatchWorkItem { [weak self] in
+                self?.hide()
             }
         }), for: .touchUpInside)
     }
 
-    private func showPopupButton() {
-//        print("\nSHOW popupButton for button")
+    private func show() {
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             guard let self = self else { return }
-            self.bottomAnchorConstraint?.constant = -PopupButton.bottomAnchorConstantForVisibleState
+            self.bottomAnchorConstraint?.constant = -self.bottomAnchorConstantForVisibleState
             self.superview?.layoutIfNeeded()
             self.alpha = 1
         })
     }
 
-    private func hidePopupButton() {
-//        print("HIDE popupButton")
+    private func hide() {
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
-            guard let self = self else { return }
-            self.bottomAnchorConstraint?.constant = 0
-            self.superview?.layoutIfNeeded()
-            self.alpha = 0
+            self?.bottomAnchorConstraint?.constant = 0
+            self?.superview?.layoutIfNeeded()
+            self?.alpha = 0
         })
     }
 
@@ -134,14 +131,14 @@ class PopupButton: UIButton {
     }
 
     private func cancelAndReassignWorkItems() {
-        showPopupWorkItem.cancel()
-        hidePopupWorkItem.cancel()
+        showWorkItem.cancel()
+        hideWorkItem.cancel()
 
-        showPopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.showPopupButton()
+        showWorkItem = DispatchWorkItem { [weak self] in
+            self?.show()
         }
-        hidePopupWorkItem = DispatchWorkItem { [weak self] in
-            self?.hidePopupButton()
+        hideWorkItem = DispatchWorkItem { [weak self] in
+            self?.hide()
         }
     }
 
@@ -163,13 +160,11 @@ class PopupButton: UIButton {
         ])
 
         guard let superview = superview else { return }
-        // Configure popupButton constraints
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: Constants.commonHorzPadding),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -Constants.commonHorzPadding),
-            heightAnchor.constraint(equalToConstant: PopupButton.buttonHeight)
-
+            heightAnchor.constraint(equalToConstant: buttonHeight)
         ])
         bottomAnchorConstraint = bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
         bottomAnchorConstraint?.isActive = true

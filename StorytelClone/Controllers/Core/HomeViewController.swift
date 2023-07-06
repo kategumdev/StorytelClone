@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 14/2/23.
@@ -10,7 +10,7 @@ import UIKit
 class HomeViewController: BaseViewController {
     
     // MARK: - Instance properties
-    private let popupButton = PopupButton()
+    private let popupButton: PopupButton
     
     private lazy var indicesOfSubCategoriesForBooksWithOverview: [Int] = {
         guard let category = category else { return [Int]() }
@@ -22,6 +22,15 @@ class HomeViewController: BaseViewController {
         }
         return indices
     }()
+    
+    init(popupButton: some PopupButton = DefaultPopupButton(), categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: NetworkManager = AlamofireNetworkManager()) {
+        self.popupButton = popupButton
+        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle, networkManager: networkManager)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -130,7 +139,7 @@ extension HomeViewController {
         bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
         
         // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
-        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
+        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: popupButton.buttonHeight, right: 0)
     }
 
     private func posterCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {

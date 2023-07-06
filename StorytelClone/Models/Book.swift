@@ -33,8 +33,10 @@ struct Book: Title, Equatable {
     var imageURLString: String?
     var audioUrlString: String?
     
+    private let dataPersistenceManager: any DataPersistenceManager
+    
     // MARK: - Initializer
-    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, overview: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil) {
+    init(id: String, title: String, authors: [Storyteller], coverImage: UIImage?, titleKind: TitleKind, overview: String = "No overview added", category: Category, rating: Double = 4.5, reviewsNumber: Int = 80, duration: String = "21h 24m", language: String = "Spanish", narrators: [Storyteller] = [Storyteller](), series: String? = nil, seriesPart: Int? = nil, releaseDate: String = "Unknown", publisher: String = "Publisher", translators: [String]? = nil, tags: [Tag] = [Tag](), isFinished: Bool = false, isDownloaded: Bool = false, imageURLString: String? = nil, audioUrlString: String? = nil, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
         self.id = id
         self.title = title
         self.authors = authors
@@ -57,6 +59,7 @@ struct Book: Title, Equatable {
         self.isDownloaded = isDownloaded
         self.imageURLString = imageURLString
         self.audioUrlString = audioUrlString
+        self.dataPersistenceManager = dataPersistenceManager
     }
     
     // MARK: - Instance methods
@@ -64,7 +67,7 @@ struct Book: Title, Equatable {
         let bookId = self.id
         var isBookAdded = false
         
-        CoreDataManager.shared.fetchPersistedBookWith(id: bookId) { result in
+        dataPersistenceManager.fetchPersistedBookWith(id: bookId) { result in
             switch result {
             case .success(let persistedBook):
                 isBookAdded = persistedBook != nil ? true : false

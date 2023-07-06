@@ -14,8 +14,7 @@ class AllTitlesViewController: BaseViewController {
     var subCategory: SubCategory?
     let titleModel: Title?
     private var books = [Book]()
-    
-    private let popupButton = PopupButton()
+    private let popupButton: PopupButton
     private var isHeaderConfigured = false
     
     private let activityIndicator: UIActivityIndicatorView = {
@@ -25,10 +24,11 @@ class AllTitlesViewController: BaseViewController {
     }()
 
     // MARK: - Initializers
-    init(subCategory: SubCategory? = nil, titleModel: Title? = nil, books: [Book] = [Book]()) {
+    init(subCategory: SubCategory? = nil, titleModel: Title? = nil, books: [Book] = [Book](), popupButton: some PopupButton = DefaultPopupButton()) {
         self.subCategory = subCategory
         self.titleModel = titleModel
         self.books = books
+        self.popupButton = popupButton
         super.init(tableViewStyle: .plain)
     }
 
@@ -159,7 +159,7 @@ class AllTitlesViewController: BaseViewController {
         bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
         
         // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
-        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: PopupButton.buttonHeight, right: 0)
+        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: popupButton.buttonHeight, right: 0)
         
         // Hide tableFooterView
         bookTable.tableFooterView?.frame.size.height = 0.1

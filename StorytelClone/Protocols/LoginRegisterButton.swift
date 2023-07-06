@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol LoginRegisterButton: UIButton {
+protocol LoginRegisterButton where Self: UIButton {
     var kind: LoginRegisterButtonKind { get }
 }
 
