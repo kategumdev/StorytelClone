@@ -37,8 +37,18 @@ extension Tag {
     static let fourTags = [tag1, tag2, tag3, tag4]
     static let twoTags = [tag1, tag2]
     static let threeTags = [tag1, tag2, tag3]
-    static let tagsBookVC = [Tag(tagTitle: "Grabado en español ibérico"), Tag(tagTitle: "De 15 años en adelante"), Tag(tagTitle: "Magia"), Tag(tagTitle: "Fantasía juvenil"), Tag(tagTitle: "Fantasía"), Tag(tagTitle: "Romántica YA"), Tag(tagTitle: "Emocionante")]
-    static let manyTags = tags + tagsBookVC + [Tag(tagTitle: "Shadow and Bone"), Tag(tagTitle: "Vikings"), Tag(tagTitle: "Umbrella academy"), Tag(tagTitle: "Stranger things")]
+    
+    static let tagsBookVC = [
+        Tag(tagTitle: "Grabado en español ibérico"), Tag(tagTitle: "De 15 años en adelante"),
+        Tag(tagTitle: "Magia"), Tag(tagTitle: "Fantasía juvenil"),
+        Tag(tagTitle: "Fantasía"), Tag(tagTitle: "Romántica YA"),
+        Tag(tagTitle: "Emocionante")
+    ]
+    
+    static let manyTags = tags + tagsBookVC + [Tag(tagTitle: "Shadow and Bone"),
+                                               Tag(tagTitle: "Vikings"),
+                                               Tag(tagTitle: "Umbrella academy"),
+                                               Tag(tagTitle: "Stranger things")]
     
     // Hardcoded model objects for tags
     static let tag1 = Tag(tagTitle: "Novelas históricas")

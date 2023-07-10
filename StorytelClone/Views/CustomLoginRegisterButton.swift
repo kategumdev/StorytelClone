@@ -37,7 +37,7 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     init(kind: LoginRegisterButtonKind) {
         self.kind = kind
         super.init(frame: .zero)
-        setupUI()
+        configureSelf()
     }
     
     required init?(coder: NSCoder) {
@@ -63,6 +63,11 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     }
     
     // MARK: - Helper methods
+    private func configureSelf() {
+        setupUI()
+        addButtonAction()
+    }
+    
     private func setupUI() {
         tintColor = .label
         layer.borderWidth = 2
@@ -73,7 +78,6 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         customLabel.text = kind.rawValue
         addSubview(customLabel)
         addSubview(customImageView)
-        addButtonAction()
     }
     
     private func addButtonAction() {

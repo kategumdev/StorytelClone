@@ -217,7 +217,7 @@ extension BookViewController {
     private func handleFetchResult(_ result: SearchResult) {
         switch result {
         case .success(let fetchedBooks):
-            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: .horizontalCv) { [weak self] booksWithImages in
+            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: .horzCv) { [weak self] booksWithImages in
                 self?.similarBooks = booksWithImages
                 self?.bookContainerScrollView.bookTable.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none) // reloadRows() used instead of reloadData() to avoid forcing layout of table view when it's not onscreen yet
             }

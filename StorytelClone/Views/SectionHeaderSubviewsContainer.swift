@@ -102,7 +102,7 @@ class SectionHeaderSubviewsContainer: UIView {
         
         // Hide seeAllButton or show and assign/update callback
         let subCategoryKind = subCategory.kind
-        if subCategoryKind == .poster || subCategoryKind == .oneBookWithOverview || subCategoryKind == .largeCoversHorizontalCv || subCategoryKind == .searchVc {
+        if subCategoryKind == .poster || subCategoryKind == .oneBookOverview || subCategoryKind == .horzCvLargeCovers || subCategoryKind == .searchVc {
             seeAllButtonWidthAnchorConstraint.isActive = true // Set button width to 0
             horzStackView.spacing = 0
         } else {

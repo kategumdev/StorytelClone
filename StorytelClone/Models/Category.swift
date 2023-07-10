@@ -45,7 +45,11 @@ enum Category: String {
     ]
     
     // MARK: - Static method
+    /// Create Category having its rawValue string
+    /// - Parameter rawValueString: The string that can be a rawValue of one of Category cases
+    /// - Returns: The Category case
     static func createCaseFrom(rawValueString: String) -> Category {
+        
         let enumCase = Category(rawValue: rawValueString)
         
         if let enumCase = enumCase {
@@ -109,25 +113,8 @@ enum Category: String {
     
     var subCategories: [SubCategory] {
         switch self {
-        case .home: return [
-            SubCategory(title: "Solo para ti", searchQuery: "dragon", canBeShared: false),
-            SubCategory(title: "Los títulos del momento", searchQuery: "brother", description: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
-            SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeCoversHorizontalCv, searchQuery: "magic", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "Top 50 hoy", searchQuery: "sister", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
-            SubCategory(title: "Nuevos audiolibros", searchQuery: "star", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "Novela: Recomendados para ti", searchQuery: "gaiman", canBeShared: false),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "Mitos nordicos", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "Tendecia en Storytel", searchQuery: "vikings"),
-            SubCategory(title: "Solo en Storytel", kind: .oneBookWithOverview, searchQuery: "anansiboys", bookKinds: .onlyAudiobooks),
-            SubCategory(title: "Novela: Los más populares", searchQuery: "thunder"),
-            SubCategory(title: "Porque te interesa", subtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", searchQuery: "sarah j maas", description: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
-            SubCategory(title: "", kind: .seriesCategoryButton, searchQuery: ""),
-            SubCategory(title: "El audiolibro de George R.R. Martin", kind: .oneBookWithOverview, searchQuery: "a clash of kings"),
-            SubCategory(title: "Series Top esta semana", searchQuery: "shadow"),
-            SubCategory(title: "", kind: .allCategoriesButton, searchQuery: "")
-        ]
-        case .todasLasCategorias: return [SubCategory(title: "", kind: .verticalCv, searchQuery: "")]
+        case .home: return SubCategory.homeSubCategories
+        case .todasLasCategorias: return [SubCategory(title: "", kind: .vertCv, searchQuery: "")]
         case .searchVc: return [
             SubCategory(title: "", searchQuery: ""),
             SubCategory(title: "Todas las categorías", kind: .searchVc, searchQuery: "")
@@ -138,7 +125,7 @@ enum Category: String {
             SubCategory(title: "Series que son tendencia", searchQuery: "shadowhunters")
         ]
         case .soloEnStorytel: return [
-            SubCategory(title: "Una historia como nunca antes habías escuchado", subtitle: "Storytel Original", kind: .oneBookWithOverview, searchQuery: "shadow and bone"),
+            SubCategory(title: "Una historia como nunca antes habías escuchado", subtitle: "Storytel Original", kind: .oneBookOverview, searchQuery: "shadow and bone"),
             SubCategory(title: "En exclusiva - Los más escuchados esta semana", searchQuery: "sarah j maas"),
             SubCategory(title: "Solo en Storytel", searchQuery: "tree"),
         ]
@@ -203,6 +190,25 @@ struct SubCategory {
     static let similarTitles = SubCategory(title: "Similar titles", searchQuery: "", canBeShared: false)
     static let librosSimilares = SubCategory(title: "Libros similares", searchQuery: "dark", canBeShared: false)
     
+    static let homeSubCategories = [
+        SubCategory(title: "Solo para ti", searchQuery: "dragon", canBeShared: false),
+        SubCategory(title: "Los títulos del momento", searchQuery: "brother", description: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
+        SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .horzCvLargeCovers, searchQuery: "magic", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Top 50 hoy", searchQuery: "sister", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
+        SubCategory(title: "Nuevos audiolibros", searchQuery: "star", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Novela: Recomendados para ti", searchQuery: "gaiman", canBeShared: false),
+        SubCategory(title: "Solo en Storytel", kind: .oneBookOverview, searchQuery: "Mitos nordicos", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Tendecia en Storytel", searchQuery: "vikings"),
+        SubCategory(title: "Solo en Storytel", kind: .oneBookOverview, searchQuery: "anansiboys", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Novela: Los más populares", searchQuery: "thunder"),
+        SubCategory(title: "Porque te interesa", subtitle: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", searchQuery: "sarah j maas", description: "Una corte der rosas y espinas: Una corte der rosas y espinas 1", canBeShared: false),
+        SubCategory(title: "", kind: .seriesCategoryButton, searchQuery: ""),
+        SubCategory(title: "El audiolibro de George R.R. Martin", kind: .oneBookOverview, searchQuery: "a clash of kings"),
+        SubCategory(title: "Series Top esta semana", searchQuery: "shadow"),
+        SubCategory(title: "", kind: .allCategoriesButton, searchQuery: "")
+    ]
+    
     // MARK: - Instance properties
     let title: String
     let subtitle: String
@@ -216,7 +222,7 @@ struct SubCategory {
     let bookKinds: BookKinds
         
     // MARK: - Initializer
-    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horizontalCv, searchQuery: String, description: String? = nil, titleModelToShow: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
+    init(title: String, subtitle: String = "", kind: SubCategoryKind = .horzCv, searchQuery: String, description: String? = nil, titleModelToShow: Title? = nil, canBeShared: Bool = true, canBeFiltered: Bool = true, categoryToShow: Category? = nil, bookKinds: BookKinds = .ebooksAndAudiobooks) {
         self.title = title
         self.subtitle = subtitle
         self.kind = kind
@@ -232,14 +238,9 @@ struct SubCategory {
 }
 
 enum SubCategoryKind {
-    case horizontalCv
-    case verticalCv
-    case oneBookWithOverview
-    case poster
-    case largeCoversHorizontalCv
-    case seriesCategoryButton
-    case allCategoriesButton
-    case searchVc
+    case horzCv, vertCv, horzCvLargeCovers
+    case oneBookOverview, poster, searchVc
+    case seriesCategoryButton, allCategoriesButton
 }
 
 enum BookKinds {

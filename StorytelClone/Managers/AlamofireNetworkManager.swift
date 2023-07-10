@@ -116,7 +116,7 @@ class AlamofireNetworkManager: NetworkManager {
                 sdWebImageDownloader.downloadImage(with: imageURL) { image, data, error, success in
                     if let image = image {
                         var targetHeight: CGFloat
-                        if subCategoryKind == .horizontalCv {
+                        if subCategoryKind == .horzCv {
                             targetHeight = Constants.largeSquareBookCoverSize.height
                         } else {
                             // for sub category with large rectangle covers

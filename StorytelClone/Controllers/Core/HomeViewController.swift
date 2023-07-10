@@ -16,7 +16,7 @@ class HomeViewController: BaseViewController {
         guard let category = category else { return [Int]() }
         var indices = [Int]()
         for (index, subCategory) in category.subCategories.enumerated() {
-            if subCategory.kind == .oneBookWithOverview {
+            if subCategory.kind == .oneBookOverview {
                 indices.append(index)
             }
         }
@@ -86,11 +86,11 @@ class HomeViewController: BaseViewController {
         let subCategoryKind = category.subCategories[indexPath.section].kind
 
         switch subCategoryKind {
-        case .horizontalCv: return cellWithHorizontalCv(in: tableView, for: indexPath)
-        case .verticalCv: return UITableViewCell()
-        case .oneBookWithOverview: return bookWithOverviewCell(in: tableView, for: indexPath)
+        case .horzCv: return cellWithHorizontalCv(in: tableView, for: indexPath)
+        case .vertCv: return UITableViewCell()
+        case .oneBookOverview: return bookWithOverviewCell(in: tableView, for: indexPath)
         case .poster: return posterCell(in: tableView, for: indexPath)
-        case .largeCoversHorizontalCv: return cellWithLargeCoversHorizontalCv(in: tableView, for: indexPath)
+        case .horzCvLargeCovers: return cellWithLargeCoversHorizontalCv(in: tableView, for: indexPath)
         case .seriesCategoryButton: return wideButtonCell(in: tableView, for: indexPath)
         case .allCategoriesButton: return wideButtonCell(in: tableView, for: indexPath)
         case .searchVc: return UITableViewCell()
@@ -102,15 +102,15 @@ class HomeViewController: BaseViewController {
         let subCategoryKind = category.subCategories[indexPath.section].kind
         
         switch subCategoryKind {
-        case .horizontalCv: return TableViewCellWithCollection.rowHeight
-        case .verticalCv: return 0
-        case .oneBookWithOverview:
+        case .horzCv: return TableViewCellWithCollection.rowHeight
+        case .vertCv: return 0
+        case .oneBookOverview:
             let subCategoryIndex = indexPath.section
             let book = booksDict[subCategoryIndex]?.first
             return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
             
         case .poster: return PosterTableViewCell.heightForRow
-        case .largeCoversHorizontalCv: return TableViewCellWithHorzCvLargeRectangleCovers.rowHeight
+        case .horzCvLargeCovers: return TableViewCellWithHorzCvLargeRectangleCovers.rowHeight
         case .seriesCategoryButton: return WideButtonTableViewCell.rowHeight
         case .allCategoriesButton: return WideButtonTableViewCell.rowHeight
         case .searchVc: return 0
