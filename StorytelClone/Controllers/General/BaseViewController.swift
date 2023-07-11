@@ -12,7 +12,8 @@ class BaseViewController: UIViewController {
     // MARK: - Instance properties
     var category: Category?
     var booksDict = [Int : [Book]]()
-    let networkManager: NetworkManager
+    private let imageDownloader: any ImageDownloader
+    let networkManager: any NetworkManager
     let tableViewStyle: UITableView.Style
     
     var tableViewInitialOffsetY: Double = 0
@@ -46,19 +47,16 @@ class BaseViewController: UIViewController {
     }
 
     // MARK: - Initializers
-    init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: NetworkManager = AlamofireNetworkManager()) {
+    init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: some NetworkManager = AlamofireNetworkManager(), imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
         self.category = categoryModel
         self.tableViewStyle = tableViewStyle
         self.networkManager = networkManager
+        self.imageDownloader = imageDownloader
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        networkManager.cancelRequestsAndDownloads()
     }
     
     // MARK: - View life cycle
@@ -111,12 +109,15 @@ class BaseViewController: UIViewController {
     func handleFetchResult(_ result: SearchResult, forSubCategoryIndex index: Int, andSubCategoryKind subCategoryKind: SubCategoryKind) {
         switch result {
         case .success(let fetchedBooks):
-            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: subCategoryKind) { booksWithImages in
+            self.imageDownloader.downloadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: subCategoryKind) { booksWithImages in
+                
+                // Save images into a dict to use their sizes for calculating the item size of the collection view that will eventually display the images
                 self.booksDict[index] = booksWithImages
                 self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
             }
         case .failure(let error):
-            self.networkManager.cancelRequestsAndDownloads()
+            self.networkManager.cancelRequests()
+            self.imageDownloader.cancelDownloads()
             if error is NetworkManagerError {
                 DispatchQueue.main.async {
 #warning("show error background view")

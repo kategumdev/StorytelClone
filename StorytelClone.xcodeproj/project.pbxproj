@@ -89,6 +89,8 @@
 		5AC8D3B52A4CCD9600952A46 /* LoginRegisterStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC8D3B42A4CCD9600952A46 /* LoginRegisterStackView.swift */; };
 		5ACD558329E0408600097B40 /* AllTitlesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */; };
 		5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD558429E092C400097B40 /* StarHorzStackView.swift */; };
+		5AD04A7A2A5D91BC00F922E5 /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD04A792A5D91BC00F922E5 /* ImageDownloader.swift */; };
+		5AD04A7C2A5D930300F922E5 /* DefaultSDWebImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD04A7B2A5D930300F922E5 /* DefaultSDWebImageDownloader.swift */; };
 		5AD2CB012A0253CB004FE55D /* BookshelfTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */; };
 		5ADA577F29C23BE7004BC23B /* ScopeBookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */; };
 		5ADC083229CB2DC20042A432 /* RoundButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */; };
@@ -205,6 +207,8 @@
 		5AC8D3B42A4CCD9600952A46 /* LoginRegisterStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterStackView.swift; sourceTree = "<group>"; };
 		5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTitlesTableViewCell.swift; sourceTree = "<group>"; };
 		5ACD558429E092C400097B40 /* StarHorzStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHorzStackView.swift; sourceTree = "<group>"; };
+		5AD04A792A5D91BC00F922E5 /* ImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
+		5AD04A7B2A5D930300F922E5 /* DefaultSDWebImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSDWebImageDownloader.swift; sourceTree = "<group>"; };
 		5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfTableHeaderView.swift; sourceTree = "<group>"; };
 		5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeBookTableViewCell.swift; sourceTree = "<group>"; };
 		5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButtonsStack.swift; sourceTree = "<group>"; };
@@ -253,6 +257,7 @@
 				5AABB72A2A55BA9C003FD2EA /* NetworkManager.swift */,
 				5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */,
 				5A665F872A571A0900A4EF56 /* PopupButton.swift */,
+				5AD04A792A5D91BC00F922E5 /* ImageDownloader.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 		5ABBA389299C09A700D0E0F4 /* StorytelClone */ = {
 			isa = PBXGroup;
 			children = (
+				5AD04A7D2A5D938100F922E5 /* Services */,
 				5A9202AF2A54703700FE6EC4 /* Protocols */,
 				5AC8241F2A21294E00CF337D /* Managers */,
 				5AF93324299D71EC00DF17C7 /* Resources */,
@@ -438,6 +444,14 @@
 				5A5067DF2A39D3B4009C2E0C /* CoreDataManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		5AD04A7D2A5D938100F922E5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5AD04A7B2A5D930300F922E5 /* DefaultSDWebImageDownloader.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		5AF93324299D71EC00DF17C7 /* Resources */ = {
@@ -589,6 +603,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AD04A7C2A5D930300F922E5 /* DefaultSDWebImageDownloader.swift in Sources */,
 				5A37EB2129DD83710053F6A7 /* DefaultPopupButton.swift in Sources */,
 				5A8380B5299E7EAE00611543 /* TableViewCellWithCollection.swift in Sources */,
 				5A5B878B29C52F2C001A7A64 /* Title.swift in Sources */,
@@ -671,6 +686,7 @@
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,
 				5A5067DD2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift in Sources */,
 				5A8497FD29D4B4060047AB44 /* TagsView.swift in Sources */,
+				5AD04A7A2A5D91BC00F922E5 /* ImageDownloader.swift in Sources */,
 				5ABBA38D299C09A700D0E0F4 /* SceneDelegate.swift in Sources */,
 				5A5B878529C527AA001A7A64 /* ScopeNoImageTableViewCell.swift in Sources */,
 				5AB1A29C29B3E32A001CC50A /* DimmedAnimationButton.swift in Sources */,

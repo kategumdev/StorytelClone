@@ -44,7 +44,7 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: - 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         

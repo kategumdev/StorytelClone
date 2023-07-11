@@ -17,10 +17,8 @@ protocol NetworkManager {
     var hasError: Bool { get set }
     
     func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void)
-    
-    func loadAndResizeImagesFor(books: [Book], subCategoryKind: SubCategoryKind, completion: @escaping (([Book]) -> Void))
-    
-    func cancelRequestsAndDownloads()
+        
+    func cancelRequests()
     
 }
 

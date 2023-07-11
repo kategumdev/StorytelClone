@@ -12,7 +12,7 @@ class SearchViewController: UIViewController {
     private let model: Category
     private let categoriesForButtons: [Category]
     
-    private let networkManager: NetworkManager
+    private let networkManager: any NetworkManager
     private var previousQueryString = ""
     private var firstTimeUpdateResults = true
     
@@ -72,7 +72,8 @@ class SearchViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoriesForButtons: [Category], networkManager: NetworkManager = AlamofireNetworkManager()) {
+    init(categoryModel: Category, categoriesForButtons: [Category],
+         networkManager: some NetworkManager = AlamofireNetworkManager()) {
         self.categoriesForButtons = categoriesForButtons
         self.model = categoryModel
         self.networkManager = networkManager
@@ -163,7 +164,7 @@ class SearchViewController: UIViewController {
     }
     
     private func handleTextChangedTo(searchText: String) {
-        networkManager.cancelRequestsAndDownloads()
+        networkManager.cancelRequests()
         let query = searchText.trimmingCharacters(in: .whitespaces)
         
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
@@ -211,8 +212,7 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("searchBarCancelButtonClicked")
-        networkManager.cancelRequestsAndDownloads()
+        networkManager.cancelRequests()
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in

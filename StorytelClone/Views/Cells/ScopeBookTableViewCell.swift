@@ -107,7 +107,6 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        customImageView.image = nil
         customImageView.sd_cancelCurrentImageLoad()
     }
     
@@ -115,7 +114,7 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
     func configureFor(book: Book) {
         self.book = book
         
-        customImageView.setImageForBook(book, defaultImageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
+        customImageView.setImageForBook(book, imageViewHeight: BaseScopeTableViewCell.imageHeight, imageViewWidthConstraint: customImageViewWidthConstraint)
 
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue

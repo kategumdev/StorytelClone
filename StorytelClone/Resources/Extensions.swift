@@ -118,7 +118,6 @@ extension UIImage {
     // Resize image accounting for its ratio
     func resizeFor(targetHeight: CGFloat, andSetAlphaTo targetAlpha: CGFloat = 1) -> UIImage {
         let imageRatio = self.size.width / self.size.height
-//        let targetHeight: CGFloat = targetHeight
         let targetWidth = targetHeight * imageRatio
         let targetSize = CGSize(width: targetWidth, height: targetHeight)
         
@@ -129,11 +128,6 @@ extension UIImage {
         }
         return resizedImage
     }
-    
-//    static let placeholderBookCoverImage: UIImage? = {
-//        let image = UIImage(systemName: "book")
-//        return image
-//    }()
     
 }
 
@@ -162,7 +156,6 @@ extension Int {
 extension UINavigationController {
     
     static let customBackButtonImage: UIImage? = {
-//        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold, scale: .large)
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "chevron.backward", withConfiguration: config)
         return image
@@ -268,52 +261,63 @@ extension UIImageView {
     
     static let placeholderImage = UIImage(named: "placeholderCover")
     
-    func setImageForBook(_ book: Book, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
+    /// Sets downloaded or placeholder image.
+    func setImageForBook(_ book: Book, imageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
         self.contentMode = .scaleAspectFill
         
         if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
             self.sd_setImage(with: imageURL, placeholderImage: UIImageView.placeholderImage) { [weak self] image, error, cachType, url in
                 if let image = image {
-                    self?.setImage(image, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+                    self?.setImage(image, imageViewHeight: imageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
                 }
             }
-        } else {
-            // When not using hardcoded book objects, pass nil instead of book.coverImage
-            self.setImage(book.coverImage, defaultImageViewHeight: defaultImageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
-        }
-    }
-    
-    private func setImage(_ image: UIImage?, defaultImageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
-        let defaultImageViewWidth = defaultImageViewHeight
-        
-        // Configure image view and set placeholder image if passed image is nil
-        guard let image = image else {
-            var newImageWidth: CGFloat = defaultImageViewWidth // for square image view
-            if book.titleKind == .ebook {
-                newImageWidth = defaultImageViewWidth * 0.65 // for rectangle image view
-            }
-            
-            if imageViewWidthConstraint.constant != newImageWidth {
-                imageViewWidthConstraint.constant = newImageWidth
-            }
-
-            self.image = UIImageView.placeholderImage
             return
         }
         
+        // Nil indicates that Book object has no imageURLString and placeholder image needs to be set.
+        self.setImage(nil, imageViewHeight: imageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+    }
+    
+    /// Sets the image of the UIImageView caller.
+    /// - Parameters:
+    ///   - image: A previously downloaded image or nil to indicate that a placeholder image is needed.
+    ///   - defaultImageViewHeight: A height of the caller.
+    ///   - imageViewWidthConstraint: A width constraint of the caller that may need to be adjusted.
+    ///   - book: A Book object whose image is being set. Its titleKind is used to decide on the width of the placeholder image.
+    private func setImage(_ image: UIImage?, imageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
+        let defaultImageViewWidth = imageViewHeight
+        
+        // book.coverImage is used for hardcoded Book objects
+        let image: UIImage? = image ?? book.coverImage ?? nil
+        
         // Configure image view, resize and set passed image
-        let resizedImage = image.resizeFor(targetHeight: defaultImageViewHeight)
-        let resizedImageWidth = resizedImage.size.width
-
-        if resizedImageWidth < defaultImageViewWidth {
-            if imageViewWidthConstraint.constant != resizedImageWidth {
-                imageViewWidthConstraint.constant = resizedImageWidth
+        if let image = image {
+            let resizedImage = image.resizeFor(targetHeight: imageViewHeight)
+            let resizedImageWidth = resizedImage.size.width
+            
+            if resizedImageWidth < defaultImageViewWidth {
+                if imageViewWidthConstraint.constant != resizedImageWidth {
+                    imageViewWidthConstraint.constant = resizedImageWidth
+                }
+            } else if imageViewWidthConstraint.constant != defaultImageViewWidth {
+                imageViewWidthConstraint.constant = defaultImageViewWidth
             }
-        } else if imageViewWidthConstraint.constant != defaultImageViewWidth {
-            imageViewWidthConstraint.constant = defaultImageViewWidth
+            
+            self.image = resizedImage
+            return
         }
-
-        self.image = resizedImage
+        
+        // When passed image is nil, configure image view and set placeholder image
+        var newImageWidth: CGFloat = defaultImageViewWidth // for square image view
+        if book.titleKind == .ebook {
+            newImageWidth = defaultImageViewWidth * 0.65 // for rectangle image view
+        }
+        
+        if imageViewWidthConstraint.constant != newImageWidth {
+            imageViewWidthConstraint.constant = newImageWidth
+        }
+        
+        self.image = UIImageView.placeholderImage
     }
     
 }

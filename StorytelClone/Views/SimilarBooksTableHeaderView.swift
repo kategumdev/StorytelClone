@@ -1,5 +1,5 @@
 //
-//  SimilarBooksView.swift
+//  SimilarBooksTableHeaderView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 25/4/23.
@@ -95,7 +95,7 @@ class SimilarBooksTableHeaderView: UIView {
     // MARK: - Instance methods
     func configureFor(book: Book) {
         bookTitleLabel.text = book.title
-        imageView.setImageForBook(book, defaultImageViewHeight: imageHeight, imageViewWidthConstraint: imageViewWidthConstraint)
+        imageView.setImageForBook(book, imageViewHeight: imageHeight, imageViewWidthConstraint: imageViewWidthConstraint)
     }
 
     // MARK: - Helper methods

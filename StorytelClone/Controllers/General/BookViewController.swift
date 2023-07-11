@@ -14,23 +14,21 @@ class BookViewController: UIViewController {
     private let popupButton: PopupButton
     private var scrollViewInitialOffsetY: CGFloat?
     private var isDidAppearTriggeredFirstTime = true
-    private let networkManager: NetworkManager
+    private let networkManager: any NetworkManager
+    private let imageDownloader: any ImageDownloader
     private var similarBooks = [Book]()
         
     // MARK: - Initializers
-    init(book: Book, networkManager: NetworkManager = AlamofireNetworkManager(), popupButton: some PopupButton = DefaultPopupButton()) {
+    init(book: Book, networkManager: some NetworkManager = AlamofireNetworkManager(), popupButton: some PopupButton = DefaultPopupButton(), imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
         self.book = book
         self.networkManager = networkManager
         self.popupButton = popupButton
+        self.imageDownloader = imageDownloader
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        networkManager.cancelRequestsAndDownloads()
     }
 
     // MARK: - View life cycle
@@ -162,7 +160,6 @@ extension BookViewController {
     }
     
     private func addPopupButton() {
-//        guard let popupButton = popupButton as? UIView else { return }
         view.addSubview(popupButton)
         bookContainerScrollView.bookDetailsStackView.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
     }
@@ -209,6 +206,7 @@ extension BookViewController {
     }
     
     private func fetchSimilarBooks() {
+        // Query is hardcoded for now
         networkManager.fetchBooks(withQuery: "dark", bookKindsToFetch: .ebooksAndAudiobooks) { [weak self] result in
             self?.handleFetchResult(result)
         }
@@ -217,12 +215,12 @@ extension BookViewController {
     private func handleFetchResult(_ result: SearchResult) {
         switch result {
         case .success(let fetchedBooks):
-            self.networkManager.loadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: .horzCv) { [weak self] booksWithImages in
+            self.imageDownloader.downloadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: .horzCv) { [weak self] booksWithImages in
                 self?.similarBooks = booksWithImages
                 self?.bookContainerScrollView.bookTable.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none) // reloadRows() used instead of reloadData() to avoid forcing layout of table view when it's not onscreen yet
             }
         case .failure(let error):
-            self.networkManager.cancelRequestsAndDownloads()
+            self.networkManager.cancelRequests()
             if error is NetworkManagerError {
                 DispatchQueue.main.async {
 #warning("show error background view")

@@ -161,7 +161,7 @@ class AllTitlesTableViewCell: UITableViewCell {
     // MARK: - Instance methods
     func configureWith(book: Book) {
         
-        customImageView.setImageForBook(book, defaultImageViewHeight: AllTitlesTableViewCell.imageWidthAndHeight, imageViewWidthConstraint: customImageViewWidthAnchor)
+        customImageView.setImageForBook(book, imageViewHeight: AllTitlesTableViewCell.imageWidthAndHeight, imageViewWidthConstraint: customImageViewWidthAnchor)
         
         bookTitleLabel.text = book.title
         bookKindLabel.text = book.titleKind.rawValue

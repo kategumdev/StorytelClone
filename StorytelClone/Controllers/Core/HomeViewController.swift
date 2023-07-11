@@ -23,9 +23,13 @@ class HomeViewController: BaseViewController {
         return indices
     }()
     
-    init(popupButton: some PopupButton = DefaultPopupButton(), categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: NetworkManager = AlamofireNetworkManager()) {
+    init(popupButton: some PopupButton = DefaultPopupButton(),
+         categoryModel: Category? = nil,
+         tableViewStyle: UITableView.Style = .grouped,
+         networkManager: some NetworkManager = AlamofireNetworkManager(),
+         imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
         self.popupButton = popupButton
-        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle, networkManager: networkManager)
+        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle, networkManager: networkManager, imageDownloader: imageDownloader)
     }
     
     required init?(coder: NSCoder) {

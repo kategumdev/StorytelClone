@@ -162,7 +162,7 @@ class BookDetailsStackView: UIStackView {
         axis = .vertical
         alignment = .center
         
-        coverImageView.setImageForBook(book, defaultImageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
+        coverImageView.setImageForBook(book, imageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
         
         addArrangedSubview(coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)
