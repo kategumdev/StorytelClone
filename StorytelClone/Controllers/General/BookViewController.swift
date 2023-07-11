@@ -181,7 +181,7 @@ extension BookViewController {
     
     private func configureNavBar() {
         title = book.title
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
         extendedLayoutIncludesOpaqueBars = true
         

@@ -1,5 +1,5 @@
 //
-//  TableViewCellWithHorzCvLargeCovers.swift
+//  LargeRectCoversTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 5/3/23.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
+class LargeRectCoversTableViewCell: UITableViewCell {
     
-    static let identifier = "TableViewCellWithHorzCvLargeCovers"
+    static let identifier = "LargeRectCoversTableViewCell"
     
     static let visiblePartOfThirdCover: CGFloat = 14
     static let horzPadding: CGFloat = 8
@@ -23,7 +23,7 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
         let roundedItemWidth = round(itemWidth)
 
         // Get height for 2:3 aspect ratio
-        let height = ((3/2) * roundedItemWidth) + Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers
+        let height = ((3/2) * roundedItemWidth) + Constants.topPaddingForPosterAndLargeRectCoversCells
         let size = CGSize(width: roundedItemWidth, height: height)
         return size
     }()
@@ -97,7 +97,7 @@ class TableViewCellWithHorzCvLargeRectangleCovers: UITableViewCell {
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegate, UICollectionViewDataSource {
+extension LargeRectCoversTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return books.isEmpty ? 0 : books.count
     }
@@ -113,9 +113,9 @@ extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegate,
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
-extension TableViewCellWithHorzCvLargeRectangleCovers: UICollectionViewDelegateFlowLayout {
+extension LargeRectCoversTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return TableViewCellWithHorzCvLargeRectangleCovers.itemSize
+        return LargeRectCoversTableViewCell.itemSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

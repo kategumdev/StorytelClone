@@ -23,13 +23,15 @@ class HomeViewController: BaseViewController {
         return indices
     }()
     
+    // MARK: - Initializers
     init(popupButton: some PopupButton = DefaultPopupButton(),
          categoryModel: Category? = nil,
          tableViewStyle: UITableView.Style = .grouped,
          networkManager: some NetworkManager = AlamofireNetworkManager(),
          imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
         self.popupButton = popupButton
-        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle, networkManager: networkManager, imageDownloader: imageDownloader)
+        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle,
+                   networkManager: networkManager, imageDownloader: imageDownloader)
     }
     
     required init?(coder: NSCoder) {
@@ -39,8 +41,7 @@ class HomeViewController: BaseViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureTable()
-        view.addSubview(popupButton)
+        setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,12 +64,12 @@ class HomeViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         guard !didAppearFirstTime else {
             didAppearFirstTime = false
             return
         }
-        // Update heart symbol (if needed) for sections created with .oneBookWithOverview subCategoryKind
+        
+        // Update heart symbol (if needed) for sections with .oneBookWithOverview subCategoryKind
         let sectionsToReload = IndexSet(indicesOfSubCategoriesForBooksWithOverview)
         bookTable.reloadSections(sectionsToReload, with: .none)
     }
@@ -78,30 +79,71 @@ class HomeViewController: BaseViewController {
         super.configureNavBar()
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "bell", withConfiguration: symbolConfig)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: image,
+            style: .done,
+            target: self,
+            action: nil)
+        
         title = "Home"
         extendedLayoutIncludesOpaqueBars = true
     }
     
-    // MARK: - UITableViewDelegate, UITableViewDataSource
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        print("section \(indexPath.row)")
-        guard let category = category else { return UITableViewCell() }
-        let subCategoryKind = category.subCategories[indexPath.section].kind
+}
 
-        switch subCategoryKind {
-        case .horzCv: return cellWithHorizontalCv(in: tableView, for: indexPath)
-        case .vertCv: return UITableViewCell()
-        case .oneBookOverview: return bookWithOverviewCell(in: tableView, for: indexPath)
-        case .poster: return posterCell(in: tableView, for: indexPath)
-        case .horzCvLargeCovers: return cellWithLargeCoversHorizontalCv(in: tableView, for: indexPath)
-        case .seriesCategoryButton: return wideButtonCell(in: tableView, for: indexPath)
-        case .allCategoriesButton: return wideButtonCell(in: tableView, for: indexPath)
-        case .searchVc: return UITableViewCell()
-        }
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension HomeViewController {
+    override func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        dequeueCustomCell(in: tableView, for: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+        getHeightForRow(with: indexPath)
+    }
+
+    override func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        getHeightForHeaderIn(section: section)
+    }
+}
+
+// MARK: - Helper methods
+extension HomeViewController {
+    
+    private func setupUI() {
+        configureTable()
+        view.addSubview(popupButton)
+    }
+    
+    private func configureTable() {
+        bookTable.register(
+            WideButtonTableViewCell.self,
+            forCellReuseIdentifier: WideButtonTableViewCell.identifier)
+        
+        bookTable.register(
+            PosterTableViewCell.self,
+            forCellReuseIdentifier: PosterTableViewCell.identifier)
+        
+        bookTable.register(
+            LargeRectCoversTableViewCell.self,
+            forCellReuseIdentifier: LargeRectCoversTableViewCell.identifier)
+        
+        bookTable.register(
+            OneBookOverviewTableViewCell.self,
+            forCellReuseIdentifier: OneBookOverviewTableViewCell.identifier)
+        
+        bookTable.contentInset.bottom = popupButton.buttonHeight
+    }
+    
+    private func getHeightForRow(with indexPath: IndexPath) -> CGFloat {
         guard let category = category else { return 0 }
         let subCategoryKind = category.subCategories[indexPath.section].kind
         
@@ -111,17 +153,16 @@ class HomeViewController: BaseViewController {
         case .oneBookOverview:
             let subCategoryIndex = indexPath.section
             let book = booksDict[subCategoryIndex]?.first
-            return BookWithOverviewTableViewCell.calculateHeightForRow(withBook: book)
-            
+            return OneBookOverviewTableViewCell.calculateHeightForRow(withBook: book)
         case .poster: return PosterTableViewCell.heightForRow
-        case .horzCvLargeCovers: return TableViewCellWithHorzCvLargeRectangleCovers.rowHeight
+        case .largeRectCoversHorzCv: return LargeRectCoversTableViewCell.rowHeight
         case .seriesCategoryButton: return WideButtonTableViewCell.rowHeight
         case .allCategoriesButton: return WideButtonTableViewCell.rowHeight
         case .searchVc: return 0
         }
     }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    
+    private func getHeightForHeaderIn(section: Int) -> CGFloat {
         guard let category = category else { return 0 }
         let subCategoryKind = category.subCategories[section].kind
         
@@ -131,41 +172,76 @@ class HomeViewController: BaseViewController {
             return UITableView.automaticDimension
         }
     }
-
-}
-
-// MARK: - Helper methods
-extension HomeViewController {
-    private func configureTable() {
-        bookTable.register(WideButtonTableViewCell.self, forCellReuseIdentifier: WideButtonTableViewCell.identifier)
-        bookTable.register(PosterTableViewCell.self, forCellReuseIdentifier: PosterTableViewCell.identifier)
-        bookTable.register(TableViewCellWithHorzCvLargeRectangleCovers.self, forCellReuseIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier)
-        bookTable.register(BookWithOverviewTableViewCell.self, forCellReuseIdentifier: BookWithOverviewTableViewCell.identifier)
+    
+    private func dequeueCustomCell(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let category = category else { return UITableViewCell() }
+        let subCategoryKind = category.subCategories[indexPath.section].kind
         
-        // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
-        bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: popupButton.buttonHeight, right: 0)
+        switch subCategoryKind {
+        case .horzCv: return cellWithHorzCv(in: tableView, for: indexPath)
+        case .vertCv, .searchVc: return UITableViewCell()
+        case .oneBookOverview:
+            return cellWithOneBookOverview(in: tableView, for: indexPath)
+        case .poster: return cellWithPoster(in: tableView, for: indexPath)
+        case .largeRectCoversHorzCv:
+            return cellWithLargeCoversHorzCv(in: tableView, for: indexPath)
+        case .seriesCategoryButton, .allCategoriesButton:
+            return cellWithWideButton(in: tableView, for: indexPath)
+        }
     }
 
-    private func posterCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PosterTableViewCell.identifier, for: indexPath) as? PosterTableViewCell else { return UITableViewCell()}
+    private func cellWithPoster(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: PosterTableViewCell.identifier,
+            for: indexPath) as? PosterTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        
         let subCategoryIndex = indexPath.section
         if let book = booksDict[subCategoryIndex]?.first {
             cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
         }
-         return cell
+        
+        return cell
     }
     
-    private func cellWithHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
+    private func cellWithHorzCv(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: TableViewCellWithCollection.identifier,
+            for: indexPath) as? TableViewCellWithCollection
+        else {
+            return UITableViewCell()
+        }
+        
         let subCategoryIndex = indexPath.section
         if let books = booksDict[subCategoryIndex] {
             cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
         }
+        
         return cell
     }
     
-    private func cellWithLargeCoversHorizontalCv(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithHorzCvLargeRectangleCovers.identifier, for: indexPath) as? TableViewCellWithHorzCvLargeRectangleCovers else { return UITableViewCell()}
+    private func cellWithLargeCoversHorzCv(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: LargeRectCoversTableViewCell.identifier,
+            for: indexPath) as? LargeRectCoversTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        
         let subCategoryIndex = indexPath.section
         if let books = booksDict[subCategoryIndex] {
             cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
@@ -173,20 +249,44 @@ extension HomeViewController {
         return cell
     }
     
-    private func bookWithOverviewCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookWithOverviewTableViewCell.identifier, for: indexPath) as? BookWithOverviewTableViewCell else { return UITableViewCell() }
+    private func cellWithOneBookOverview(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: OneBookOverviewTableViewCell.identifier,
+            for: indexPath) as? OneBookOverviewTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        
         let subCategoryIndex = indexPath.section
         if let book = booksDict[subCategoryIndex]?.first {
-            cell.configureFor(book: book, withCallbackForDimmedAnimationButton: dimmedAnimationButtonDidTapCallback, withCallbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+            cell.configureFor(
+                book: book,
+                dimmedAnimationButtonCallback: dimmedAnimationButtonDidTapCallback,
+                callbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
         }
-         return cell
+        
+        return cell
     }
     
-    private func wideButtonCell(in tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: WideButtonTableViewCell.identifier, for: indexPath) as? WideButtonTableViewCell else { return UITableViewCell()}
-        if let category = category {
-            cell.configureFor(subCategoryKind: category.subCategories[indexPath.section].kind, withCallback: dimmedAnimationButtonDidTapCallback)
+    private func cellWithWideButton(
+        in tableView: UITableView,
+        for indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let category = category,
+              let cell = tableView.dequeueReusableCell(
+                withIdentifier: WideButtonTableViewCell.identifier,
+                for: indexPath) as? WideButtonTableViewCell
+        else {
+            return UITableViewCell()
         }
+        
+        cell.configureFor(
+            subCategoryKind: category.subCategories[indexPath.section].kind,
+            withCallback: dimmedAnimationButtonDidTapCallback)
+        
         return cell
     }
 

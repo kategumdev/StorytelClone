@@ -30,9 +30,10 @@ class DefaultSDWebImageDownloader: ImageDownloader {
         
         // Load and resize images for other sub category kinds
         let downloadTaskGroup = DispatchGroup()
-        var booksWithImages = [Book]() // it will contain only books that have downloaded images
         
-        #warning("Replace for in loop with map function")
+        // It will contain only books that have downloaded images
+        var booksWithImages = [Book]()
+        
         for book in books {
             if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
                 downloadTaskGroup.enter()
@@ -43,7 +44,7 @@ class DefaultSDWebImageDownloader: ImageDownloader {
                             targetHeight = Constants.largeSquareBookCoverSize.height
                         } else {
                             // for sub category with large rectangle covers
-                            targetHeight = TableViewCellWithHorzCvLargeRectangleCovers.itemSize.height
+                            targetHeight = LargeRectCoversTableViewCell.itemSize.height
                         }
                         let resizedImage = image.resizeFor(targetHeight: targetHeight, andSetAlphaTo: 1)
                         var bookWithImage = book
@@ -54,6 +55,7 @@ class DefaultSDWebImageDownloader: ImageDownloader {
                 }
             }
         }
+        
         downloadTaskGroup.notify(queue: DispatchQueue.main) {
             booksWithImages.shuffle()
             completion(booksWithImages)

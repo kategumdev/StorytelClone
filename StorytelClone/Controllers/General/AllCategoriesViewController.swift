@@ -29,7 +29,7 @@ class AllCategoriesViewController: BaseViewController {
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
         headerView.configureWithDimView(andText: category.title)
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
         title = category.title
     }
 

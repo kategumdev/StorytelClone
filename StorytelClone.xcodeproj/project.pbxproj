@@ -50,7 +50,7 @@
 		5A9202B12A54706000FE6EC4 /* LoginRegisterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */; };
 		5A96E9D32A4F3A010087832A /* CustomLoginRegisterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */; };
 		5A9916482A0A587C00CB6B8A /* BookContainerScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */; };
-		5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */; };
+		5A9B49E929B526550007C3AE /* LargeRectCoversTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */; };
 		5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */; };
 		5A9FF6F62A017A16009CA8DA /* NoDataBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */; };
 		5AA076B62A27D16000C36DE9 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AA076B52A27D16000C36DE9 /* SDWebImage */; };
@@ -81,7 +81,7 @@
 		5ABBA406299C117000D0E0F4 /* BookshelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA405299C117000D0E0F4 /* BookshelfViewController.swift */; };
 		5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA407299C119100D0E0F4 /* ProfileViewController.swift */; };
 		5ABC41BF2A37930D00797518 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 5ABC41BE2A37930D00797518 /* Alamofire */; };
-		5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */; };
+		5ABF839829B6053200CECFDE /* OneBookOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */; };
 		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */; };
 		5AC824212A21296B00CF337D /* AlamofireNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824202A21296B00CF337D /* AlamofireNetworkManager.swift */; };
@@ -166,7 +166,7 @@
 		5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterButton.swift; sourceTree = "<group>"; };
 		5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLoginRegisterButton.swift; sourceTree = "<group>"; };
 		5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContainerScrollView.swift; sourceTree = "<group>"; };
-		5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellWithHorzCvLargeRectangleCovers.swift; sourceTree = "<group>"; };
+		5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeRectCoversTableViewCell.swift; sourceTree = "<group>"; };
 		5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeBookCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataBackgroundView.swift; sourceTree = "<group>"; };
 		5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeSeriesTableViewCell.swift; sourceTree = "<group>"; };
@@ -199,7 +199,7 @@
 		5ABBA403299C113000D0E0F4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		5ABBA405299C117000D0E0F4 /* BookshelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfViewController.swift; sourceTree = "<group>"; };
 		5ABBA407299C119100D0E0F4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewTableViewCell.swift; sourceTree = "<group>"; };
+		5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneBookOverviewTableViewCell.swift; sourceTree = "<group>"; };
 		5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
 		5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsHorzScrollView.swift; sourceTree = "<group>"; };
 		5AC824202A21296B00CF337D /* AlamofireNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireNetworkManager.swift; sourceTree = "<group>"; };
@@ -271,9 +271,9 @@
 				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
 				5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */,
 				5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */,
-				5A9B49E829B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift */,
+				5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */,
 				5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */,
-				5ABF839729B6053200CECFDE /* BookWithOverviewTableViewCell.swift */,
+				5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */,
 				5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */,
 				5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */,
 				5A5B878429C527AA001A7A64 /* ScopeNoImageTableViewCell.swift */,
@@ -618,7 +618,7 @@
 				5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */,
 				5A5E8A7C2A4C9D420063BC36 /* LoginRegisterViewController.swift in Sources */,
 				5ABBA404299C113000D0E0F4 /* SearchViewController.swift in Sources */,
-				5A9B49E929B526550007C3AE /* TableViewCellWithHorzCvLargeRectangleCovers.swift in Sources */,
+				5A9B49E929B526550007C3AE /* LargeRectCoversTableViewCell.swift in Sources */,
 				5A5A1FDB29D3235600AA08BB /* SeeMoreButton.swift in Sources */,
 				5A54A5F229DC446D003BB8D4 /* PersonTableHeaderView.swift in Sources */,
 				5AB2CCCE29B2437D0048A4FB /* PosterTableViewCell.swift in Sources */,
@@ -671,7 +671,7 @@
 				5AAD76C229A17BD700EBC4FC /* SectionHeaderView.swift in Sources */,
 				5A5067D62A39CAB6009C2E0C /* SecureUnarchiveTransformer.swift in Sources */,
 				5ACD558529E092C400097B40 /* StarHorzStackView.swift in Sources */,
-				5ABF839829B6053200CECFDE /* BookWithOverviewTableViewCell.swift in Sources */,
+				5ABF839829B6053200CECFDE /* OneBookOverviewTableViewCell.swift in Sources */,
 				5AB86E6129B1723B005122A6 /* Book.swift in Sources */,
 				5A8380B7299E818800611543 /* BookCollectionViewCell.swift in Sources */,
 				5A9916482A0A587C00CB6B8A /* BookContainerScrollView.swift in Sources */,

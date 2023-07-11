@@ -73,7 +73,7 @@ class ProfileViewController: UIViewController {
     private func configureNavBar() {
         title = "Profile"
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
         
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)

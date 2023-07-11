@@ -53,7 +53,7 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers),
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)

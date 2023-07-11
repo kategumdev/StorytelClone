@@ -83,7 +83,7 @@ class SettingsViewController: UITableViewController {
     // MARK: - Helper methods
     private func configureNavBar() {
         title = "Settings"
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
     }
     

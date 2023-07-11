@@ -1,5 +1,5 @@
 //
-//  BookWithOverviewTableViewCell.swift
+//  OneBookOverviewTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 6/3/23.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class BookWithOverviewTableViewCell: UITableViewCell {
+class OneBookOverviewTableViewCell: UITableViewCell {
     // MARK: - Static properties and methods
-    static let identifier = "BookWithOverviewTableViewCell"
+    static let identifier = "OneBookOverviewTableViewCell"
 
     static func calculateHeightForRow(withBook book: Book?) -> CGFloat {
         guard let book = book else { return 300 }
@@ -20,28 +20,32 @@ class BookWithOverviewTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance properties
-    private let containerWithSubviews = BookWithOverviewCellSubviewsContainer()
+    private let subviewsContainer = BookWithOverviewCellSubviewsContainer()
     var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
         
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.customBackgroundColor        
-        contentView.addSubview(containerWithSubviews)
-        containerWithSubviews.fillSuperview()
+        contentView.addSubview(subviewsContainer)
+        subviewsContainer.fillSuperview()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
+        fatalError("OneBookOverviewTableViewCell is not configured to be instantiated from storyboard")
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book?, withCallbackForDimmedAnimationButton callbackForDimmedAnimationButton: @escaping DimmedAnimationButtonDidTapCallback, withCallbackForSaveButton callbackForSaveButton: @escaping SaveBookButtonDidTapCallback) {
-        containerWithSubviews.configureFor(book: book)
+    func configureFor(
+        book: Book?,
+        dimmedAnimationButtonCallback: @escaping DimmedAnimationButtonDidTapCallback,
+        callbackForSaveButton: @escaping SaveBookButtonDidTapCallback
+    ) {
+        subviewsContainer.configureFor(book: book)
         
         if book != nil {
-            containerWithSubviews.dimmedAnimationButton.didTapCallback = callbackForDimmedAnimationButton
-            containerWithSubviews.saveBookButtonDidTapCallback = callbackForSaveButton
+            subviewsContainer.dimmedAnimationButton.didTapCallback = dimmedAnimationButtonCallback
+            subviewsContainer.saveBookButtonDidTapCallback = callbackForSaveButton
         }
     }
 

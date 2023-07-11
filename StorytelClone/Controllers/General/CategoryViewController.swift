@@ -66,7 +66,7 @@ class CategoryViewController: BaseViewController {
             let headerView = SimilarBooksTableHeaderView()
             headerView.configureFor(book: bookToShowMoreTitlesLikeIt)
             bookTable.tableHeaderView = headerView
-            navigationController?.makeNavbarAppearance(transparent: true, withVisibleTitle: true)
+            navigationController?.makeAppearance(transparent: true, withVisibleTitle: true)
             return
         }
         
@@ -74,7 +74,7 @@ class CategoryViewController: BaseViewController {
         guard let category = category else { return }
         let headerView = bookTable.tableHeaderView as? TableHeaderView
         headerView?.configureWithDimView(andText: category.title)
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
     }
 
     override func viewDidLayoutSubviews() {

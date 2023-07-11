@@ -193,7 +193,7 @@ extension UINavigationController {
         return appearance
     }()
     
-    func makeNavbarAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
+    func makeAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
                 
         if transparent && withVisibleTitle {
             self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearanceWithVisibleTitle
@@ -216,7 +216,7 @@ extension UINavigationController {
         }
 
         if currentOffsetY <= offsetYToCompareTo {
-            self.makeNavbarAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
+            self.makeAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
         }
 
     }

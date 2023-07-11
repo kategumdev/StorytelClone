@@ -194,7 +194,7 @@ struct SubCategory {
         SubCategory(title: "Solo para ti", searchQuery: "dragon", canBeShared: false),
         SubCategory(title: "Los títulos del momento", searchQuery: "brother", description: "Las novedades más interesantes, los títulos de los que todos hablan, los que pensamos que deberías estar escuchando, todo lo que no te puedes perder. ¡Feliz escucha!"),
         SubCategory(title: "¡Escuchalo ahora!", subtitle: "Una historia como nunca antes habías escuchado", kind: .poster, searchQuery: "tears of the moon", bookKinds: .onlyAudiobooks),
-        SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .horzCvLargeCovers, searchQuery: "magic", bookKinds: .onlyAudiobooks),
+        SubCategory(title: "Storytel Original", subtitle: "Historias para escuchar", kind: .largeRectCoversHorzCv, searchQuery: "magic", bookKinds: .onlyAudiobooks),
         SubCategory(title: "Top 50 hoy", searchQuery: "sister", description: "Aquí podrás ver los títulos más populares en nuestra app. Se actualiza cada día, así que si algún libro te llama la atención ¡guárdalo en tu biblioteca!", canBeFiltered: false),
         SubCategory(title: "Nuevos audiolibros", searchQuery: "star", bookKinds: .onlyAudiobooks),
         SubCategory(title: "Novela: Recomendados para ti", searchQuery: "gaiman", canBeShared: false),
@@ -238,7 +238,7 @@ struct SubCategory {
 }
 
 enum SubCategoryKind {
-    case horzCv, vertCv, horzCvLargeCovers
+    case horzCv, vertCv, largeRectCoversHorzCv
     case oneBookOverview, poster, searchVc
     case seriesCategoryButton, allCategoriesButton
 }

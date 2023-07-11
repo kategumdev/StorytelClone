@@ -62,15 +62,12 @@ class BaseViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        
         if !(self is AllCategoriesViewController) {
             fetchBooks()
         }
-        view.backgroundColor = UIColor.customBackgroundColor
-        view.addSubview(bookTable)
-        bookTable.delegate = self
-        bookTable.dataSource = self
-        bookTable.tableHeaderView = TableHeaderView()
-        configureNavBar()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +88,15 @@ class BaseViewController: UIViewController {
     }
     
     // MARK: - Helper methods
+    private func setupUI() {
+        view.backgroundColor = UIColor.customBackgroundColor
+        view.addSubview(bookTable)
+        bookTable.delegate = self
+        bookTable.dataSource = self
+        bookTable.tableHeaderView = TableHeaderView()
+        configureNavBar()
+    }
+    
     func fetchBooks() {
         guard let category = category else { return }
         let subCategories = category.subCategories
@@ -128,12 +134,13 @@ class BaseViewController: UIViewController {
     
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.makeNavbarAppearance(transparent: true)
+        navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
     }
     
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
         var offsetYToCompareTo: CGFloat = tableViewInitialOffsetY
+        
         if self is AllCategoriesViewController {
             if let tableHeaderHeight = bookTable.tableHeaderView?.bounds.size.height {
                 offsetYToCompareTo = tableViewInitialOffsetY + tableHeaderHeight + 10
@@ -227,6 +234,7 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - UIScrollViewDelegate
 extension BaseViewController {
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {

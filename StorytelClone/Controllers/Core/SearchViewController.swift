@@ -9,6 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
+    // MARK: - Instance properties
     private let model: Category
     private let categoriesForButtons: [Category]
     
@@ -23,7 +24,7 @@ class SearchViewController: UIViewController {
     }()
     
     private var initialTableOffsetY: CGFloat = 0
-    private var firstTime = true
+    private var didLayoutSubviewsFirstTime = true
             
     let categoriesTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -87,6 +88,38 @@ class SearchViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureSelf()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.makeAppearance(transparent: false)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var frame = view.bounds
+        frame.size.height = view.bounds.height - UITabBar.tabBarHeight
+        categoriesTable.frame = frame
+        
+        if didLayoutSubviewsFirstTime {
+            didLayoutSubviewsFirstTime = false
+            initialTableOffsetY = categoriesTable.contentOffset.y
+        } else {
+            // After searchResultsController was presented, actual initial contentOffset.y changes to 0
+            initialTableOffsetY = 0
+        }
+        
+    }
+    
+    //MARK: - Helper methods
+    private func configureSelf() {
+        setupUI()
+        configureSearchResultsController()
+        setupNotificationObserver()
+    }
+    
+    private func setupUI() {
         view.backgroundColor = UIColor.customBackgroundColor
         view.addSubview(categoriesTable)
         categoriesTable.delegate = self
@@ -97,45 +130,31 @@ class SearchViewController: UIViewController {
         searchController.delegate = self
 
         configureNavBar()
-        configureSearchResultsController()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDismissNotification(_:)), name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
         
         extendedLayoutIncludesOpaqueBars = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.makeNavbarAppearance(transparent: false)
+    private func configureNavBar() {
+        navigationItem.title = "Explore"
+        navigationController?.navigationBar.tintColor = .label
+        navigationItem.backButtonTitle = ""
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationController?.makeAppearance(transparent: false)
+        navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        var frame = view.bounds
-        frame.size.height = view.bounds.height - UITabBar.tabBarHeight
-        categoriesTable.frame = frame
-        
-        if firstTime {
-            initialTableOffsetY = categoriesTable.contentOffset.y
-            firstTime = false
-        } else {
-            // After searchResultsController was presented, actual initial contentOffset.y changes to 0
-            initialTableOffsetY = 0
-        }
-    }
-    
-    //MARK: - Helper methods
     private func configureSearchResultsController() {
-        guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        guard let searchResultsController = searchController.searchResultsController as? SearchResultsViewController else {
+            return
+        }
         
         searchResultsController.didSelectRowCallback = { [weak self] selectedSearchResultTitle in
             if let book = selectedSearchResultTitle as? Book {
-                print("SearchViewController handles selected book \(book.title)")
                 let controller = BookViewController(book: book)
                 self?.navigationController?.pushViewController(controller, animated: true)
             } else {
-                print("SearchViewController handles \(selectedSearchResultTitle.titleKind)")
-                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: selectedSearchResultTitle)
+                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC,
+                                                         titleModel: selectedSearchResultTitle)
                 self?.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -148,26 +167,26 @@ class SearchViewController: UIViewController {
         }
     }
     
+    private func setupNotificationObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleKeyboardDismissNotification(_:)),
+                                               name: scopeTableViewDidRequestKeyboardDismiss,
+                                               object: nil)
+    }
+    
     @objc func handleKeyboardDismissNotification(_ notification: Notification) {
         if searchController.searchBar.isFirstResponder {
             searchController.searchBar.endEditing(true)
         }
     }
     
-    private func configureNavBar() {
-        navigationItem.title = "Explore"
-        navigationController?.navigationBar.tintColor = .label
-        navigationItem.backButtonTitle = ""
-        navigationItem.hidesSearchBarWhenScrolling = false
-        navigationController?.makeNavbarAppearance(transparent: false)
-        navigationController?.navigationBar.barTintColor = UIColor.customTintColor
-    }
-    
     private func handleTextChangedTo(searchText: String) {
         networkManager.cancelRequests()
         let query = searchText.trimmingCharacters(in: .whitespaces)
         
-        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else {
+            return
+        }
 
         if query.isEmpty {
             // Setting modelForSearchQuery to nil ensures that table view will be configured with initial model
@@ -176,7 +195,6 @@ class SearchViewController: UIViewController {
         }
 
         networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak resultsController] result in
-//            print("networkManager fetches for \(query)")
             resultsController?.handleSearchResult(result)
         }
     }
@@ -187,17 +205,19 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        print("\n\ntextDidChange")
         handleTextChangedTo(searchText: searchText)
     }
     
     func willPresentSearchController(_ searchController: UISearchController) {
-        // Avoid showing content of SearchViewController behind navbar when SearchResultsController is being presented
+        /* Avoid showing content of SearchViewController behind navbar when
+         SearchResultsController is being presented */
         navigationController?.navigationBar.isTranslucent = false
         
         let currentTableOffsetY = categoriesTable.contentOffset.y
         if currentTableOffsetY != initialTableOffsetY {
-            // While table view bounces and user taps into the search bar, currentOffset.y checked here can differ a bit from inital value. This check avoids changing navbar appearance in such cases
+            /* While table view bounces and user taps into the search bar,
+             currentOffset.y that is checked here, can differ a bit from the inital value.
+             This check avoids changing navbar appearance in such cases */
             let difference = (currentTableOffsetY - initialTableOffsetY)
             guard difference > 5 else { return }
             navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
@@ -205,15 +225,16 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        // Revert back to the original appearance of the navigation bar
+        // Revert back to the initial appearance of the navigation bar
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.scrollEdgeAppearance = nil
-        
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         networkManager.cancelRequests()
-        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else {
+            return
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             resultsController.revertToInitialAppearance()
@@ -234,7 +255,10 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier,
+                                                       for: indexPath) as? CategoriesTableViewCellWithCollection else {
+            return UITableViewCell()
+        }
         
         var categoriesForButtons = [Category]()
         if indexPath.section == 0 {
@@ -246,13 +270,14 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
+        
         cell.configureWith(categoriesForButtons: categoriesForButtons, andCallback: callback)
         return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
         let numberOfRowsInCell: CGFloat
+        
         if indexPath.section == 0 {
             numberOfRowsInCell = ceil(CGFloat(numberOfButtonsSection0) / 2.0)
         } else if indexPath.section == 1 {
@@ -269,10 +294,13 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 { return UIView() }
                 
-        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else {
+            return UIView()
+        }
+        
         let subCategory = model.subCategories[section]
-        sectionHeader.configureFor(subCategory: subCategory)
-        return sectionHeader
+        header.configureFor(subCategory: subCategory)
+        return header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -284,7 +312,8 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
         if section == 0 { return SectionHeaderView.topPadding }
         
         let subCategory = model.subCategories[section]
-        let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory, superviewWidth: view.bounds.width)
+        let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory,
+                                                                             superviewWidth: view.bounds.width)
         return calculatedHeight
     }
     

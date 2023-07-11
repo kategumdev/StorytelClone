@@ -12,7 +12,7 @@ class PosterTableViewCell: UITableViewCell {
     // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
     
-    static let heightForRow: CGFloat = calculatedButtonHeight + Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers
+    static let heightForRow: CGFloat = calculatedButtonHeight + Constants.topPaddingForPosterAndLargeRectCoversCells
         
     static let calculatedButtonWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
     
@@ -50,7 +50,7 @@ class PosterTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             dimmedAnimationButton.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonWidth),
             dimmedAnimationButton.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonHeight),
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForCellsWithPosterAndLargeRectangleCovers),
+            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
             dimmedAnimationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])
     }

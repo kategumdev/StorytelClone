@@ -11,7 +11,7 @@ struct Constants {
     
     static let commonHorzPadding: CGFloat = 16
     static let commonBookCoverCornerRadius: CGFloat = 4
-    static let topPaddingForCellsWithPosterAndLargeRectangleCovers: CGFloat = 10
+    static let topPaddingForPosterAndLargeRectCoversCells: CGFloat = 10
     static let numberOfVisibleCvItemsInRow: CGFloat = 3 // the 3rd one is only partly visible
     
     static let largeSquareBookCoverSize: CGSize = {

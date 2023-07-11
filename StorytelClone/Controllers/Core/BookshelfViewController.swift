@@ -46,7 +46,7 @@ class BookshelfViewController: ScopeViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.makeNavbarAppearance(transparent: false)
+        navigationController?.makeAppearance(transparent: false)
         collectionView.reloadData()
     }
     
@@ -56,7 +56,7 @@ class BookshelfViewController: ScopeViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationItem.backButtonTitle = ""
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationController?.makeNavbarAppearance(transparent: false)
+        navigationController?.makeAppearance(transparent: false)
         navigationController?.navigationBar.barTintColor = UIColor.customTintColor
     }
     

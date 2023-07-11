@@ -9,7 +9,6 @@ import UIKit
 
 class TabBarViewController: UITabBarController {
     
-    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.customBackgroundColor
@@ -33,7 +32,7 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isTranslucent = false
         
-        // This line avoid tab bar blinking gray when next vc is being pushed
+        // This line avoids tab bar blinking gray when next vc is being pushed
         tabBar.backgroundColor = UIColor.customBackgroundColor
         
         tabBar.standardAppearance.backgroundEffect = nil
@@ -46,7 +45,6 @@ class TabBarViewController: UITabBarController {
     }
 
     
-    // MARK: - Helper methods
     private func setTabBarItemColors(_ itemAppearances: [UITabBarItemAppearance]) {
         let normalColor = UIColor.label
         let selectedColor = UIColor.customTintColor

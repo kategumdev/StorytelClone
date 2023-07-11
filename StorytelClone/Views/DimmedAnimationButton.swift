@@ -45,8 +45,10 @@ class DimmedAnimationButton: UIButton {
     
     // MARK: - Instance methods
     func addConfigurationUpdateHandlerWith(viewToTransform: UIView) {
-        // Save passed view from argument as weak property
+        
+        // Save passed viewToTransform into a weak property
         self.viewToTransform = viewToTransform
+        
         viewToTransform.addSubview(dimViewForAnimation)
         dimViewForAnimation.translatesAutoresizingMaskIntoConstraints = false
         dimViewForAnimation.fillSuperview()
@@ -56,7 +58,6 @@ class DimmedAnimationButton: UIButton {
             let transformView = self.viewToTransform else { return }
             
             if self.isHighlighted {
-                print("button is highlighted")
 
                 UIView.animate(withDuration: 0.1, animations: {
                     transformView.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
@@ -64,7 +65,7 @@ class DimmedAnimationButton: UIButton {
                 })
                 let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
                     if self.isHighlighted {
-                        print("Button held for more than 2 seconds, do not perform action")
+                        // The button is held for more than 2 seconds, avoid performing the action
                         self.isButtonTooLongInHighlightedState = true
                     }
                 }
@@ -87,13 +88,13 @@ class DimmedAnimationButton: UIButton {
             guard let self = self else { return }
 
             if self.isButtonTooLongInHighlightedState {
-//                print("do nothing on touchUpInside")
+                // The button is held more than 2 seconds, nothing needs to be done
                 self.isButtonTooLongInHighlightedState = false
 
             } else {
                 // Invalidate the timer and perform the touchUpInside action
                 self.buttonTimer?.invalidate()
-//                print("DO smth on touchUpInside")
+    
                 let controller = self.createControllerForCallback()
                 self.didTapCallback(controller)
             }
