@@ -8,7 +8,6 @@
 import UIKit
 
 class HomeViewController: BaseViewController {
-    
     // MARK: - Instance properties
     private let popupButton: PopupButton
     
@@ -88,7 +87,6 @@ class HomeViewController: BaseViewController {
         title = "Home"
         extendedLayoutIncludesOpaqueBars = true
     }
-    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -106,7 +104,7 @@ extension HomeViewController {
     ) -> CGFloat {
         getHeightForRow(with: indexPath)
     }
-
+    
     override func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
@@ -192,7 +190,7 @@ extension HomeViewController {
             return cellWithWideButton(in: tableView, for: indexPath)
         }
     }
-
+    
     private func cellWithPoster(
         in tableView: UITableView,
         for indexPath: IndexPath
@@ -289,5 +287,4 @@ extension HomeViewController {
         
         return cell
     }
-
 }

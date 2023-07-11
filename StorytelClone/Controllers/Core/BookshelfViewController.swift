@@ -8,7 +8,6 @@
 import UIKit
 
 class BookshelfViewController: ScopeViewController {
-    
     init() {
         super.init(withScopeButtonsViewKind: .forBookshelfVc)
     }
@@ -27,7 +26,6 @@ class BookshelfViewController: ScopeViewController {
         navigationController?.makeAppearance(transparent: false)
         collectionView.reloadData()
     }
-
 }
 
 // MARK: - BottomSheetViewControllerDelegate

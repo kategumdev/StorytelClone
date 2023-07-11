@@ -8,7 +8,6 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-    
     // MARK: - Instance properties
     private let model: Category
     private let categoriesForButtons: [Category]
@@ -120,7 +119,6 @@ class SearchViewController: UIViewController {
         }
         
     }
-    
 }
 
 // MARK: - UISearchBarDelegate, UISearchControllerDelegate
@@ -163,7 +161,6 @@ extension SearchViewController: UISearchBarDelegate, UISearchControllerDelegate 
             self?.handleTextChangedTo(searchText: "")
         }
     }
-     
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -216,7 +213,6 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
     ) -> CGFloat {
         getEstimatedHeightForHeaderIn(section: section)
     }
-    
 }
 
 // MARK: - BottomSheetViewControllerDelegate
