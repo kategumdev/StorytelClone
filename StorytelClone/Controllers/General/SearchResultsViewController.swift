@@ -11,7 +11,7 @@ class SearchResultsViewController: ScopeViewController {
     // MARK: - Instance properties
     var networkManagerError: NetworkManagerError? = nil {
         didSet {
-            for table in scopeTablesForCvCells {
+            for table in scopeTableViews {
                 table.networkManagerError = networkManagerError
             }
         }

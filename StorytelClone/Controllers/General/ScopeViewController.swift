@@ -60,7 +60,8 @@ class ScopeViewController: UIViewController {
         }
     }
 
-    var scopeTablesForCvCells = [ScopeTableView]()
+    /// Table views for each collection view cell
+    var scopeTableViews = [ScopeTableView]()
             
     // MARK: - Initializers
     init(withScopeButtonsViewKind scopeButtonsViewKind: ScopeButtonsViewKind, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
@@ -121,7 +122,7 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         
         cell.isHidden = false
 
-        let scopeTableViewForCell = scopeTablesForCvCells[indexPath.row]
+        let scopeTableViewForCell = scopeTableViews[indexPath.row]
         let buttonKind = scopeTableViewForCell.buttonKind
 
         if let collectionModel = modelForSearchQuery, let tableViewModel = collectionModel[buttonKind] {
@@ -201,7 +202,7 @@ extension ScopeViewController {
     
     // MARK: - Instance methods
     func setInitialOffsetsOfTablesInCells() {
-        scopeTablesForCvCells.forEach { $0.contentOffset = CGPoint(x: 0.0, y: 0.0) }
+        scopeTableViews.forEach { $0.contentOffset = CGPoint(x: 0.0, y: 0.0) }
     }
     
     func toggleIsButtonTriggeredScrollAndUnhideCells() {
@@ -273,7 +274,7 @@ extension ScopeViewController {
     private func createScopeTableViews() {
         for buttonKind in scopeButtonsViewKind.buttonKinds {
             let table = ScopeTableView(buttonKind: buttonKind, scopeButtonsViewKind: scopeButtonsViewKind)
-            scopeTablesForCvCells.append(table)
+            scopeTableViews.append(table)
         }
     }
     
