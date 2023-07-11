@@ -24,7 +24,7 @@ class AllCategoriesViewController: BaseViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        bookTable.register(CategoriesTableViewCellWithCollection.self, forCellReuseIdentifier: CategoriesTableViewCellWithCollection.identifier)
+        bookTable.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.identifier)
         bookTable.estimatedSectionHeaderHeight = 0
         
         guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let category = category else { return }
@@ -38,7 +38,7 @@ class AllCategoriesViewController: BaseViewController {
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension AllCategoriesViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCellWithCollection.identifier, for: indexPath) as? CategoriesTableViewCellWithCollection else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCell.identifier, for: indexPath) as? CategoriesTableViewCell else { return UITableViewCell() }
             cell.configureWith(categoriesForButtons: self.categoriesForButtons, andCallback: dimmedAnimationButtonDidTapCallback)
 //        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: dimmedAnimationButtonDidTapCallback)
         return cell
@@ -48,7 +48,7 @@ extension AllCategoriesViewController {
 //        let numberOfButtons = categoryButtons.count
         let numberOfButtons = categoriesForButtons.count
         let numberOfRowsInCell: CGFloat = ceil(CGFloat(numberOfButtons) / 2.0)
-        let height = CategoriesTableViewCellWithCollection.calculateCellHeightFor(numberOfRows: numberOfRowsInCell)
+        let height = CategoriesTableViewCell.calculateCellHeightFor(numberOfRows: numberOfRowsInCell)
         return height
     }
     

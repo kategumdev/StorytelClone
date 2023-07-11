@@ -1,5 +1,5 @@
 //
-//  CategoriesTableViewCellWithCollection.swift
+//  CategoriesTableViewCell.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 27/2/23.
@@ -7,9 +7,10 @@
 
 import UIKit
 
-class CategoriesTableViewCellWithCollection: UITableViewCell {
+/// Includes collection view with buttons for every category
+class CategoriesTableViewCell: UITableViewCell {
     // MARK: - Static properties and methods
-    static let identifier = "CategoriesTableViewCellWithCollection"
+    static let identifier = "CategoriesTableViewCell"
     static let gapBetweenHeaderAndCell: CGFloat = 9
     static let cvItemHeight: CGFloat = 120
     
@@ -72,7 +73,7 @@ class CategoriesTableViewCellWithCollection: UITableViewCell {
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICollectionViewDataSource {
+extension CategoriesTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categoriesForButtons.count
     }
@@ -88,16 +89,16 @@ extension CategoriesTableViewCellWithCollection: UICollectionViewDelegate, UICol
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension CategoriesTableViewCellWithCollection: UICollectionViewDelegateFlowLayout {
+extension CategoriesTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CategoriesTableViewCellWithCollection.calculatedCvItemSizeCategory
+        return CategoriesTableViewCell.calculatedCvItemSizeCategory
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         // This top inset is for cell in last section of SearchViewController
         // Add gapBetweenHeaderAndCell when calculating heightForRow for all CategoriesTableViewCellWithCollection cells
-        UIEdgeInsets(top: CategoriesTableViewCellWithCollection.gapBetweenHeaderAndCell, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
+        UIEdgeInsets(top: CategoriesTableViewCell.gapBetweenHeaderAndCell, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
     }
      
 }

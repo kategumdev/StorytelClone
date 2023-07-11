@@ -97,7 +97,7 @@
 		5AE36A3829F7D173003F60E5 /* SimilarBooksTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */; };
 		5AE44E3129ACE0960022D212 /* AllCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */; };
 		5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */; };
-		5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */; };
+		5AE44E3529ACEE500022D212 /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE44E3429ACEE500022D212 /* CategoriesTableViewCell.swift */; };
 		5AEE0EB929B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */; };
 		5AF352312A20BE8400E50394 /* ScopeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF352302A20BE8400E50394 /* ScopeTableView.swift */; };
 		5AF93323299D689F00DF17C7 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF93322299D689F00DF17C7 /* TableHeaderView.swift */; };
@@ -215,7 +215,7 @@
 		5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarBooksTableHeaderView.swift; sourceTree = "<group>"; };
 		5AE44E3029ACE0960022D212 /* AllCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoriesViewController.swift; sourceTree = "<group>"; };
 		5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
-		5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCellWithCollection.swift; sourceTree = "<group>"; };
+		5AE44E3429ACEE500022D212 /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderSubviewsContainer.swift; sourceTree = "<group>"; };
 		5AF352302A20BE8400E50394 /* ScopeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeTableView.swift; sourceTree = "<group>"; };
 		5AF93322299D689F00DF17C7 /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 				5A8380B6299E818800611543 /* BookCollectionViewCell.swift */,
 				5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */,
 				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
-				5AE44E3429ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift */,
+				5AE44E3429ACEE500022D212 /* CategoriesTableViewCell.swift */,
 				5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */,
 				5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */,
 				5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */,
@@ -681,7 +681,7 @@
 				5ADC083229CB2DC20042A432 /* RoundButtonsStack.swift in Sources */,
 				5A8380BB299ED7E200611543 /* BadgeView.swift in Sources */,
 				5A665F882A571A0900A4EF56 /* PopupButton.swift in Sources */,
-				5AE44E3529ACEE500022D212 /* CategoriesTableViewCellWithCollection.swift in Sources */,
+				5AE44E3529ACEE500022D212 /* CategoriesTableViewCell.swift in Sources */,
 				5A0F8A2129CA681B004FAB36 /* BookDetailsStackView.swift in Sources */,
 				5AE44E3329ACE2D80022D212 /* CategoryCollectionViewCell.swift in Sources */,
 				5A5067DD2A39D250009C2E0C /* PersistedStoryteller+CoreDataClass.swift in Sources */,
