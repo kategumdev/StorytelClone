@@ -326,7 +326,7 @@ extension BottomSheetViewController {
     
     private func handleShowMoreTitlesLikeThis() {
         self.dismiss(animated: false)
-        let controller = CategoryViewController(categoryModel: Category.librosSimilares, referenceBook: book)
+        let controller = CategoryViewController(category: Category.librosSimilares, referenceBook: book)
         (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
     }
     

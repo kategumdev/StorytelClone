@@ -47,7 +47,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureFor(book: Book, withCallback callback: @escaping DimmedAnimationBtnDidTapCallback) {
         if let coverImage = book.coverImage {
 //            print("BookCollectionViewCell sets COVER image")
             dimmedAnimationButton.configuration?.background.image = coverImage

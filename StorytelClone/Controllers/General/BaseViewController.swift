@@ -8,7 +8,6 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-    
     // MARK: - Instance properties
     var category: Category?
     var booksDict = [Int : [Book]]()
@@ -20,6 +19,7 @@ class BaseViewController: UIViewController {
     var isInitialOffsetYSet = false
     private var previousContentSize: CGSize = CGSize(width: 0, height: 0)
     private var lastVisibleRowIndexPath = IndexPath(row: 0, section: 0)
+    
     private var didLayoutSubviewsFirstTime = true
     var didAppearFirstTime = true
     
@@ -30,8 +30,12 @@ class BaseViewController: UIViewController {
         table.separatorColor = UIColor.clear
         table.allowsSelection = false
         
-        table.register(TableViewCellWithCollection.self, forCellReuseIdentifier: TableViewCellWithCollection.identifier)
-        table.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
+        table.register(
+            TableViewCellWithCollection.self,
+            forCellReuseIdentifier: TableViewCellWithCollection.identifier)
+        table.register(
+            SectionHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: SectionHeaderView.identifier)
         
         table.sectionFooterHeight = 0 // Avoid gaps between sections and custom section headers
         table.sectionHeaderTopPadding = 0 // Avoid gap above custom section header
@@ -42,13 +46,16 @@ class BaseViewController: UIViewController {
         return table
     }()
      
-    lazy var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
-        self?.navigationController?.pushViewController(controller, animated: true)
+    lazy var dimmedAnimationBtnCallback: DimmedAnimationBtnDidTapCallback = { [weak self] vc in
+        self?.navigationController?.pushViewController(vc, animated: true)
     }
 
     // MARK: - Initializers
-    init(categoryModel: Category? = nil, tableViewStyle: UITableView.Style = .grouped, networkManager: some NetworkManager = AlamofireNetworkManager(), imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
-        self.category = categoryModel
+    init(category: Category? = nil,
+         tableViewStyle: UITableView.Style = .grouped,
+         networkManager: some NetworkManager = AlamofireNetworkManager(),
+         imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
+        self.category = category
         self.tableViewStyle = tableViewStyle
         self.networkManager = networkManager
         self.imageDownloader = imageDownloader
@@ -67,7 +74,6 @@ class BaseViewController: UIViewController {
         if !(self is AllCategoriesViewController) {
             fetchBooks()
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +88,7 @@ class BaseViewController: UIViewController {
         
         guard didLayoutSubviewsFirstTime == true else { return }
         didLayoutSubviewsFirstTime = false
-        // Force vc to call viewDidLayoutSubviews second time to correctly layout table header
+        // Force vc to layout the view one more time to correctly layout the table header
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
@@ -103,21 +109,35 @@ class BaseViewController: UIViewController {
     
         for (index, subCategory) in subCategories.enumerated() {
             let subCategoryKind = subCategory.kind
-            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton else { continue }
+            guard subCategoryKind != .allCategoriesButton && subCategoryKind != .seriesCategoryButton
+            else { continue }
             
             let query = subCategory.searchQuery
-            networkManager.fetchBooks(withQuery: query, bookKindsToFetch: subCategory.bookKinds) { [weak self] result in
-                self?.handleFetchResult(result, forSubCategoryIndex: index, andSubCategoryKind: subCategoryKind)
+            networkManager.fetchBooks(
+                withQuery: query,
+                bookKindsToFetch: subCategory.bookKinds
+            ) { [weak self] result in
+                self?.handleFetchResult(
+                    result,
+                    forSubCategoryIndex: index,
+                    andSubCategoryKind: subCategoryKind)
             }
         }
     }
     
-    func handleFetchResult(_ result: SearchResult, forSubCategoryIndex index: Int, andSubCategoryKind subCategoryKind: SubCategoryKind) {
+    func handleFetchResult(
+        _ result: SearchResult,
+        forSubCategoryIndex index: Int,
+        andSubCategoryKind subCategoryKind: SubCategoryKind
+    ) {
         switch result {
         case .success(let fetchedBooks):
-            self.imageDownloader.downloadAndResizeImagesFor(books: fetchedBooks, subCategoryKind: subCategoryKind) { booksWithImages in
-                
-                // Save images into a dict to use their sizes for calculating the item size of the collection view that will eventually display the images
+            self.imageDownloader.downloadAndResizeImagesFor(
+                books: fetchedBooks,
+                subCategoryKind: subCategoryKind
+            ) { booksWithImages in
+                /* Save images into a dict to use their sizes for calculating
+                 the item size of the collection view that will eventually display the images */
                 self.booksDict[index] = booksWithImages
                 self.bookTable.reloadRows(at: [IndexPath(row: 0, section: index)], with: .none)
             }
@@ -134,8 +154,8 @@ class BaseViewController: UIViewController {
     
     func configureNavBar() {
         navigationController?.navigationBar.tintColor = .label
-        navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
+        navigationController?.makeAppearance(transparent: true)
     }
     
     func adjustNavBarAppearanceTo(currentOffsetY: CGFloat) {
@@ -147,8 +167,10 @@ class BaseViewController: UIViewController {
                 changeHeaderDimViewAlphaWith(currentOffsetY: currentOffsetY)
             }
         }
-        
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: offsetYToCompareTo, withVisibleTitleWhenTransparent: false)
+        navigationController?.adjustAppearanceTo(
+            currentOffsetY: currentOffsetY,
+            offsetYToCompareTo: offsetYToCompareTo,
+            withVisibleTitleWhenTransparent: false)
     }
 
     func changeHeaderDimViewAlphaWith(currentOffsetY offsetY: CGFloat) {
@@ -171,7 +193,6 @@ class BaseViewController: UIViewController {
         guard let tableHeader = bookTable.tableHeaderView else { return }
         Utils.layoutTableHeaderView(tableHeader, inTableView: bookTable)
     }
-    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -185,9 +206,10 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-    }
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell { return UITableViewCell() }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return TableViewCellWithCollection.rowHeight
@@ -195,24 +217,33 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let category = category else { return UIView() }
-        let subCategoryKind = category.subCategories[section].kind
-        guard subCategoryKind != .seriesCategoryButton, subCategoryKind != .allCategoriesButton else { return UIView() }
-        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
-        let subCategory = category.subCategories[section]
         
-        sectionHeader.configureFor(subCategory: subCategory, sectionNumber: section, category: category, withSeeAllButtonDidTapCallback: { [weak self] in
-            guard let self = self else { return }
+        let subCategoryKind = category.subCategories[section].kind
+        guard subCategoryKind != .seriesCategoryButton, subCategoryKind != .allCategoriesButton
+        else { return UIView() }
+        
+        guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView
+        else { return UIView() }
+        
+        let subCategory = category.subCategories[section]
+        sectionHeader.configureFor(
+            subCategory: subCategory,
+            sectionNumber: section,
+            category: category
+        ) { [weak self] in
             if let categoryToShow = subCategory.categoryToShow {
-                let controller = CategoryViewController(categoryModel: categoryToShow)
-                self.navigationController?.pushViewController(controller, animated: true)
-            } else {
-                let subCategoryIndex = section
-                if let books = self.booksDict[subCategoryIndex] {
-                    let controller = AllTitlesViewController(subCategory: subCategory, books: books)
-                    self.navigationController?.pushViewController(controller, animated: true)
-                }
+                let vc = CategoryViewController(category: categoryToShow)
+                self?.navigationController?.pushViewController(vc, animated: true)
+                return
             }
-        })
+            
+            let subCategoryIndex = section
+            if let books = self?.booksDict[subCategoryIndex] {
+                let vc = AllTitlesViewController(subCategory: subCategory, books: books)
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
         return sectionHeader
     }
 
@@ -220,31 +251,33 @@ extension BaseViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        // If all categories have subCategories, this checking is not needed, just use calculateEstimatedHeightFor
+    func tableView(
+        _ tableView: UITableView,
+        estimatedHeightForHeaderInSection section: Int
+    ) -> CGFloat {
         guard let category = category else { return 0 }
         if !category.subCategories.isEmpty {
             let subCategory = category.subCategories[section]
-            return SectionHeaderView.calculateEstimatedHeightFor(subCategory: subCategory, superviewWidth: view.bounds.width)
+            let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(
+                subCategory: subCategory,
+                superviewWidth: view.bounds.width)
+            return calculatedHeight
         }
         return 0
     }
-    
 }
 
 // MARK: - UIScrollViewDelegate
 extension BaseViewController {
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
-            tableViewInitialOffsetY = scrollView.contentOffset.y
             isInitialOffsetYSet = true
+            tableViewInitialOffsetY = scrollView.contentOffset.y
             return
         }
         // Toggle navbar from transparent to visible at calculated contentOffset
         adjustNavBarAppearanceTo(currentOffsetY: currentOffsetY)
     }
-    
 }
 

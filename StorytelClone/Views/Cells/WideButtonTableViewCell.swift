@@ -46,7 +46,7 @@ class WideButtonTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(subCategoryKind: SubCategoryKind, withCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureFor(subCategoryKind: SubCategoryKind, withCallback callback: @escaping DimmedAnimationBtnDidTapCallback) {
         
         if subCategoryKind == .seriesCategoryButton {
             dimmedAnimationButton.kind = .toPushCategoryVcForSeriesCategory

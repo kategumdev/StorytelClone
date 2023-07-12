@@ -72,7 +72,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
 
-        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+        let callback: DimmedAnimationBtnDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         cell.configureFor(books: similarBooks, callback: callback)
@@ -82,7 +82,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
         
-        sectionHeader.configureFor(subCategory: SubCategory.similarTitles, withSeeAllButtonDidTapCallback: { [weak self] in
+        sectionHeader.configureFor(subCategory: SubCategory.similarTitles, callback: { [weak self] in
             guard let self = self else { return }
             let controller = AllTitlesViewController(subCategory: SubCategory.similarTitles, books: self.similarBooks)
             self.navigationController?.pushViewController(controller, animated: true)
@@ -116,7 +116,7 @@ extension BookViewController {
         bookContainerScrollView.bookDetailsScrollView.categoryButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
             let category = self.book.category
-            let controller = CategoryViewController(categoryModel: category)
+            let controller = CategoryViewController(category: category)
             self.navigationController?.pushViewController(controller, animated: true)
         }
      

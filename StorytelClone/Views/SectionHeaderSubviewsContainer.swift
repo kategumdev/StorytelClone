@@ -91,7 +91,7 @@ class SectionHeaderSubviewsContainer: UIView {
     }
     
     // MARK: - Instance methods
-    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, forCategoryVcWithReferenceBook: Bool = false, withSeeAllButtonDidTapCallback callback: @escaping () -> () = {}) {
+    func configureFor(subCategory: SubCategory, sectionNumber: Int? = nil, category: Category? = nil, forCategoryVcWithReferenceBook: Bool = false, callback: @escaping SeeAllButtonCallback = {}) {
         sectionTitleLabel.text = subCategory.title
         sectionTitleLabel.sizeToFit()
         

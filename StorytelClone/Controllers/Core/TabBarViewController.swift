@@ -21,11 +21,11 @@ class TabBarViewController: UITabBarController {
     }
 
     private func configureRootVCs() {
-        let homeVC = HomeViewController(categoryModel: Category.home)
+        let homeVC = HomeViewController(category: Category.home)
         let vc1 = UINavigationController(rootViewController: homeVC)
         
         let searchVC = SearchViewController(
-            categoryModel: Category.searchVc,
+            category: Category.searchVc,
             categoriesForButtons: Category.categoriesForAllCategories)
         let vc2 = UINavigationController(rootViewController: searchVC)
         

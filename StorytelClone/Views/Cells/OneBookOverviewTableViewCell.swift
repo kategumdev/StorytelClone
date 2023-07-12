@@ -38,7 +38,7 @@ class OneBookOverviewTableViewCell: UITableViewCell {
     // MARK: - Instance methods
     func configureFor(
         book: Book?,
-        dimmedAnimationButtonCallback: @escaping DimmedAnimationButtonDidTapCallback,
+        dimmedAnimationButtonCallback: @escaping DimmedAnimationBtnDidTapCallback,
         callbackForSaveButton: @escaping SaveBookButtonDidTapCallback
     ) {
         subviewsContainer.configureFor(book: book)

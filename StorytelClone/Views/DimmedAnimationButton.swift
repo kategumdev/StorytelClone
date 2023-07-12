@@ -7,7 +7,7 @@
 
 import UIKit
 
-typealias DimmedAnimationButtonDidTapCallback = (_ controllerToPush: UIViewController) -> ()
+typealias DimmedAnimationBtnDidTapCallback = (_ controllerToPush: UIViewController) -> ()
 
 class DimmedAnimationButton: UIButton {
     
@@ -23,7 +23,7 @@ class DimmedAnimationButton: UIButton {
     
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
-    var didTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    var didTapCallback: DimmedAnimationBtnDidTapCallback = {_ in}
     
     weak var viewToTransform: UIView?
     
@@ -123,13 +123,13 @@ class DimmedAnimationButton: UIButton {
             controller = BookViewController(book: book)
 
         case .toPushAllCategoriesVc:
-            controller = AllCategoriesViewController(categoryModel: Category.todasLasCategorias, categoriesForButtons: Category.categoriesForAllCategories)
+            controller = AllCategoriesViewController(category: Category.todasLasCategorias, categoriesForButtons: Category.categoriesForAllCategories)
             
         case .toPushCategoryVcForSeriesCategory:
-            controller = CategoryViewController(categoryModel: Category.series)
+            controller = CategoryViewController(category: Category.series)
             
         case .toPushCategoryVcForCategory(let category):
-            controller = CategoryViewController(categoryModel: category)
+            controller = CategoryViewController(category: category)
         }
         
         return controller

@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: BaseViewController {
     // MARK: - Instance properties
-    private let popupButton: PopupButton
+    private let popupButton: any PopupButton
     
     private lazy var indicesOfSubCategoriesForBooksWithOverview: [Int] = {
         guard let category = category else { return [Int]() }
@@ -24,13 +24,15 @@ class HomeViewController: BaseViewController {
     
     // MARK: - Initializers
     init(popupButton: some PopupButton = DefaultPopupButton(),
-         categoryModel: Category? = nil,
+         category: Category? = nil,
          tableViewStyle: UITableView.Style = .grouped,
          networkManager: some NetworkManager = AlamofireNetworkManager(),
          imageDownloader: some ImageDownloader = DefaultSDWebImageDownloader()) {
         self.popupButton = popupButton
-        super.init(categoryModel: categoryModel, tableViewStyle: tableViewStyle,
-                   networkManager: networkManager, imageDownloader: imageDownloader)
+        super.init(category: category,
+                   tableViewStyle: tableViewStyle,
+                   networkManager: networkManager,
+                   imageDownloader: imageDownloader)
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +117,6 @@ extension HomeViewController {
 
 // MARK: - Helper methods
 extension HomeViewController {
-    
     private func setupUI() {
         configureTable()
         view.addSubview(popupButton)
@@ -166,9 +167,7 @@ extension HomeViewController {
         
         if subCategoryKind == .seriesCategoryButton || subCategoryKind == .allCategoriesButton {
             return SectionHeaderView.topPadding
-        } else {
-            return UITableView.automaticDimension
-        }
+        } else { return UITableView.automaticDimension }
     }
     
     private func dequeueCustomCell(
@@ -198,15 +197,12 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: PosterTableViewCell.identifier,
             for: indexPath) as? PosterTableViewCell
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         let subCategoryIndex = indexPath.section
         if let book = booksDict[subCategoryIndex]?.first {
-            cell.configureFor(book: book, withCallback: dimmedAnimationButtonDidTapCallback)
+            cell.configureFor(book: book, withCallback: dimmedAnimationBtnCallback)
         }
-        
         return cell
     }
     
@@ -217,15 +213,12 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: TableViewCellWithCollection.identifier,
             for: indexPath) as? TableViewCellWithCollection
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         let subCategoryIndex = indexPath.section
         if let books = booksDict[subCategoryIndex] {
-            cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
+            cell.configureFor(books: books, callback: dimmedAnimationBtnCallback)
         }
-        
         return cell
     }
     
@@ -236,13 +229,11 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: LargeRectCoversTableViewCell.identifier,
             for: indexPath) as? LargeRectCoversTableViewCell
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         let subCategoryIndex = indexPath.section
         if let books = booksDict[subCategoryIndex] {
-            cell.configureWith(books: books, callback: dimmedAnimationButtonDidTapCallback)
+            cell.configureWith(books: books, callback: dimmedAnimationBtnCallback)
         }
         return cell
     }
@@ -254,18 +245,15 @@ extension HomeViewController {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: OneBookOverviewTableViewCell.identifier,
             for: indexPath) as? OneBookOverviewTableViewCell
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         let subCategoryIndex = indexPath.section
         if let book = booksDict[subCategoryIndex]?.first {
             cell.configureFor(
                 book: book,
-                dimmedAnimationButtonCallback: dimmedAnimationButtonDidTapCallback,
+                dimmedAnimationButtonCallback: dimmedAnimationBtnCallback,
                 callbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
         }
-        
         return cell
     }
     
@@ -277,14 +265,11 @@ extension HomeViewController {
               let cell = tableView.dequeueReusableCell(
                 withIdentifier: WideButtonTableViewCell.identifier,
                 for: indexPath) as? WideButtonTableViewCell
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         cell.configureFor(
             subCategoryKind: category.subCategories[indexPath.section].kind,
-            withCallback: dimmedAnimationButtonDidTapCallback)
-        
+            withCallback: dimmedAnimationBtnCallback)
         return cell
     }
 }

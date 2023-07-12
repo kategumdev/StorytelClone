@@ -34,7 +34,7 @@ class LargeRectCoversTableViewCell: UITableViewCell {
     
     // MARK: - Instance properties
     var books = [Book]() // It will contain 42 random audiobooks
-    var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    var dimmedAnimationButtonDidTapCallback: DimmedAnimationBtnDidTapCallback = {_ in}
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
@@ -87,7 +87,7 @@ class LargeRectCoversTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureWith(books: [Book], callback: @escaping DimmedAnimationBtnDidTapCallback) {
         self.books = books
         dimmedAnimationButtonDidTapCallback = callback
         activityIndicator.stopAnimating()

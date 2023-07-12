@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias SeeAllButtonCallback = () -> ()
+
 enum ScrollDirection {
     case forward
     case back

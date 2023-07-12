@@ -47,9 +47,9 @@ class CategoryViewController: BaseViewController {
     }()
     
     // MARK: - Initializers
-    init(categoryModel: Category, referenceBook: Book? = nil) {
+    init(category: Category, referenceBook: Book? = nil) {
         self.referenceBook = referenceBook
-        super.init(categoryModel: categoryModel)
+        super.init(category: category)
     }
 
     required init?(coder: NSCoder) {
@@ -93,7 +93,7 @@ class CategoryViewController: BaseViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellWithCollection.identifier, for: indexPath) as? TableViewCellWithCollection else { return UITableViewCell() }
         let subCategoryIndex = indexPath.section
         if let books = booksDict[subCategoryIndex] {
-            cell.configureFor(books: books, callback: dimmedAnimationButtonDidTapCallback)
+            cell.configureFor(books: books, callback: dimmedAnimationBtnCallback)
         }
         return cell
     }
@@ -105,10 +105,10 @@ class CategoryViewController: BaseViewController {
         let subCategory = subCategories[section]
         
         let forCategoryVcWithReferenceBook = referenceBook == nil ? false : true
-        sectionHeader.configureFor(subCategory: subCategory, sectionNumber: section, category: category, forCategoryVcWithReferenceBook: forCategoryVcWithReferenceBook, withSeeAllButtonDidTapCallback: { [weak self] in
+        sectionHeader.configureFor(subCategory: subCategory, sectionNumber: section, category: category, forCategoryVcWithReferenceBook: forCategoryVcWithReferenceBook, callback: { [weak self] in
             guard let self = self else { return }
             if let categoryToShow = subCategory.categoryToShow {
-                let controller = CategoryViewController(categoryModel: categoryToShow)
+                let controller = CategoryViewController(category: categoryToShow)
                 self.navigationController?.pushViewController(controller, animated: true)
             } else if let authorToShow = subCategory.titleModelToShow as? Storyteller {
                 let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: authorToShow)

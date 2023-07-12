@@ -9,7 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     // MARK: - Instance properties
-    private let model: Category
+    private let category: Category
     private let categoriesForButtons: [Category]
     
     private let networkManager: any NetworkManager
@@ -81,10 +81,10 @@ class SearchViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoriesForButtons: [Category],
+    init(category: Category, categoriesForButtons: [Category],
          networkManager: some NetworkManager = AlamofireNetworkManager()) {
         self.categoriesForButtons = categoriesForButtons
-        self.model = categoryModel
+        self.category = category
         self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -186,7 +186,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             categoriesForButtons += self.categoriesForButtons.dropFirst(numberOfButtonsSection0)
         }
         
-        let callback: DimmedAnimationButtonDidTapCallback = { [weak self] controller in
+        let callback: DimmedAnimationBtnDidTapCallback = { [weak self] controller in
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
@@ -338,7 +338,7 @@ extension SearchViewController {
             withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView
         else { return UIView() }
         
-        let subCategory = model.subCategories[section]
+        let subCategory = category.subCategories[section]
         header.configureFor(subCategory: subCategory)
         return header
     }
@@ -346,7 +346,7 @@ extension SearchViewController {
     private func getEstimatedHeightForHeaderIn(section: Int) -> CGFloat {
         if section == 0 { return SectionHeaderView.topPadding }
         
-        let subCategory = model.subCategories[section]
+        let subCategory = category.subCategories[section]
         let calculatedHeight = SectionHeaderView.calculateEstimatedHeightFor(
             subCategory: subCategory,
             superviewWidth: view.bounds.width)

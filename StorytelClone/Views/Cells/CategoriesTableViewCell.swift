@@ -32,7 +32,7 @@ class CategoriesTableViewCell: UITableViewCell {
     
     // MARK: - Instance properties
     private var categoriesForButtons = [Category]()
-    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationBtnDidTapCallback = {_ in}
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -66,7 +66,7 @@ class CategoriesTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(categoriesForButtons: [Category], andCallback callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureWith(categoriesForButtons: [Category], andCallback callback: @escaping DimmedAnimationBtnDidTapCallback) {
         self.categoriesForButtons = categoriesForButtons
         self.dimmedAnimationButtonDidTapCallback = callback
     }

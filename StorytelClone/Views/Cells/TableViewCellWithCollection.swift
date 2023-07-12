@@ -18,7 +18,7 @@ class TableViewCellWithCollection: UITableViewCell {
     
     // MARK: - Instance properties
     private var books = [Book]()
-    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationButtonDidTapCallback = {_ in}
+    private var dimmedAnimationButtonDidTapCallback: DimmedAnimationBtnDidTapCallback = {_ in}
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
@@ -71,7 +71,7 @@ class TableViewCellWithCollection: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(books: [Book], callback: @escaping DimmedAnimationButtonDidTapCallback) {
+    func configureFor(books: [Book], callback: @escaping DimmedAnimationBtnDidTapCallback) {
         self.books = books
         dimmedAnimationButtonDidTapCallback = callback
         activityIndicator.stopAnimating()

@@ -12,9 +12,9 @@ class AllCategoriesViewController: BaseViewController {
     private let categoriesForButtons: [Category]
     
     // MARK: - Initializers
-    init(categoryModel: Category, categoriesForButtons: [Category]) {
+    init(category: Category, categoriesForButtons: [Category]) {
         self.categoriesForButtons = categoriesForButtons
-        super.init(categoryModel: categoryModel)
+        super.init(category: category)
     }
     
     required init?(coder: NSCoder) {
@@ -39,7 +39,7 @@ class AllCategoriesViewController: BaseViewController {
 extension AllCategoriesViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoriesTableViewCell.identifier, for: indexPath) as? CategoriesTableViewCell else { return UITableViewCell() }
-            cell.configureWith(categoriesForButtons: self.categoriesForButtons, andCallback: dimmedAnimationButtonDidTapCallback)
+            cell.configureWith(categoriesForButtons: self.categoriesForButtons, andCallback: dimmedAnimationBtnCallback)
 //        cell.configureWith(categoryButtons: self.categoryButtons, andCallback: dimmedAnimationButtonDidTapCallback)
         return cell
     }
