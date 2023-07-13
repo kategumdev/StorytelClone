@@ -51,9 +51,6 @@ class SearchResultsViewController: ScopeViewController {
         collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         setInitialOffsetsOfTablesInCells()
         collectionView.reloadData()
-        
-        let firstButton = scopeButtonsView.scopeButtons[0]
-        scopeButtonsView.toggleButtonsColors(currentButton: firstButton)
     }
     
     func handleSearchResult(_ result: SearchResult) {

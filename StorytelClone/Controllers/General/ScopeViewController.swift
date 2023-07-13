@@ -8,7 +8,6 @@
 import UIKit
 
 class ScopeViewController: UIViewController {
-    
     // MARK: - Instance properties
     private let dataPersistenceManager: any DataPersistenceManager
     private let scopeButtonsViewKind: ScopeButtonsViewKind
@@ -88,7 +87,7 @@ class ScopeViewController: UIViewController {
         applyConstraints()
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -109,7 +108,7 @@ extension ScopeViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return scopeButtonsView.scopeButtons.count
+        return scopeButtonsView.buttonsCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -142,7 +141,6 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         scopeTableViewForCell.reloadData()
         return cell
     }
-    
 }
 
 // MARK: - UIScrollViewDelegate
@@ -156,50 +154,19 @@ extension ScopeViewController {
     }
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         guard !isButtonTriggeredScroll else { return }
+        let cvPageWidth = collectionView.bounds.size.width
         let currentOffsetX = scrollView.contentOffset.x
-        let pageWidth = collectionView.bounds.size.width
-        let currentButtonIndex = scopeButtonsView.getCurrentButtonIndex()
-        let currentButton = scopeButtonsView.scopeButtons[currentButtonIndex]
+        scopeButtonsView.respondToScrollInCvWith(
+            pageWidth: cvPageWidth,
+            currentOffsetX: currentOffsetX,
+            previousOffsetX: previousOffsetX)
         
-        // Adjust sliding line leading anchor constant
-        let ranges = scopeButtonsView.rangesOfButtons
-        let previousButtonUpperBound = currentButtonIndex != 0 ? ranges[currentButtonIndex - 1].upperBound : 0.0
-        
-        let currentOffsetXInRangeOfPageWidth = currentButtonIndex == 0 ? currentOffsetX : currentOffsetX - (CGFloat(currentButtonIndex) * pageWidth)
-        
-        let currentButtonWidth = currentButton.bounds.size.width
-        let slidingLineXProportionalPart = currentOffsetXInRangeOfPageWidth / pageWidth * currentButtonWidth
-        
-        let leadingConstant = previousButtonUpperBound + slidingLineXProportionalPart
-        
-        scopeButtonsView.slidingLineLeadingAnchor.constant = leadingConstant
-                
-        // Adjust contentOffset.x of scroll of buttonsView
-        scopeButtonsView.adjustScrollViewOffsetX(currentOffsetXOfCollectionView: currentOffsetX, withPageWidth: pageWidth)
-        
-        let currentScrollDirection: ScrollDirection = currentOffsetX > previousOffsetX ? .forward : .back
         previousOffsetX = currentOffsetX
-        
-        // Toggle buttons' colors
-        if currentScrollDirection == .back {
-            scopeButtonsView.toggleButtonsColors(currentButton: currentButton)
-        } else {
-            // Determine current button, because the way of determining currentButton above uses half-open range and it doesn't work for this particular case
-            let currentButtonIndex = Int(currentOffsetX / pageWidth)
-            let currentButton = scopeButtonsView.scopeButtons[currentButtonIndex]
-            scopeButtonsView.toggleButtonsColors(currentButton: currentButton)
-        }
-
-        // Adjust sliding line width
-        scopeButtonsView.adjustSlidingLineWidthWhen(currentScrollDirectionOfCv: currentScrollDirection, currentButtonIndex: currentButtonIndex, slidingLineXProportionalPart: slidingLineXProportionalPart, currentOffsetXOfCvInRangeOfOnePageWidth: currentOffsetXInRangeOfPageWidth, pageWidthOfCv: pageWidth)
     }
-
 }
 
 extension ScopeViewController {
-    
     // MARK: - Instance methods
     func setInitialOffsetsOfTablesInCells() {
         scopeTableViews.forEach { $0.contentOffset = CGPoint(x: 0.0, y: 0.0) }
@@ -263,7 +230,7 @@ extension ScopeViewController {
     // MARK: - Helper methods
     private func configureScopeButtonsView() {
         // Respond to button actions in buttonsView
-        scopeButtonsView.scopeButtonDidTapCallback = { [weak self] buttonIndex in
+        scopeButtonsView.btnDidTapCallback = { [weak self] buttonIndex in
             guard let self = self else { return }
             // To avoid logic in didScroll to perform if scroll is triggered by button tap
             self.isButtonTriggeredScroll = true
@@ -318,7 +285,9 @@ extension ScopeViewController {
             scopeButtonsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scopeButtonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scopeButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scopeButtonsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ScopeButtonsView.viewHeight)
+            scopeButtonsView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: scopeButtonsView.viewHeight)
         ])
         
         separatorLineView.translatesAutoresizingMaskIntoConstraints = false
