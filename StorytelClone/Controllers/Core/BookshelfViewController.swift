@@ -85,7 +85,7 @@ extension BookshelfViewController {
             }
         }
 
-        ellipsisButtonDidTapCallback = { [weak self] book in
+        ellipsisBtnDidTapCallback = { [weak self] book in
             let bookDetailsBottomSheetVC = BottomSheetViewController(book: book, kind: .bookDetails)
             bookDetailsBottomSheetVC.delegate = self
             bookDetailsBottomSheetVC.modalPresentationStyle = .overFullScreen

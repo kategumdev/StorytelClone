@@ -39,6 +39,24 @@ struct Series: Title {
     }
     
     // MARK: - Static properties
+    static let initialSeriesForSearchResultsVC = [
+        Series.series1,
+        Series.series3,
+        Series.series3,
+        Series.series1,
+        Series.series1,
+        Series.series3,
+        Series.series2,
+        Series.series1,
+        Series.series2,
+        Series.series2,
+        Series.series3,
+        Series.series3,
+        Series.series1,
+        Series.series1,
+        Series.series1
+    ]
+    
     static let series1 = Series(
         title: "El señor de los anillos",
         authors: [Storyteller.tolkien],

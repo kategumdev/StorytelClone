@@ -273,7 +273,7 @@ extension SearchViewController {
             }
         }
 
-        searchResultsController.ellipsisButtonDidTapCallback = { [weak self] book in
+        searchResultsController.ellipsisBtnDidTapCallback = { [weak self] book in
             let bookDetailsBottomSheetController = BottomSheetViewController(book: book, kind: .bookDetails)
             bookDetailsBottomSheetController.delegate = self
             bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen

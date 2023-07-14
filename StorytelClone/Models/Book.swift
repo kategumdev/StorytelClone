@@ -166,6 +166,26 @@ extension Book {
 // MARK: - Static properties
 extension Book {
     static let books = [book1, book23, book3, book22, book21, book6, book7, book8, book9, book10]
+    
+    static let initialBooksForSearchResultsVC = [
+        Book.book1,
+        Book.book23,
+        Book.senorDeLosAnillos1,
+        Book.book2,
+        Book.book22,
+        Book.book5,
+        Book.book20,
+        Book.book7,
+        Book.book8,
+        Book.book21,
+        Book.book9,
+        Book.book18,
+        Book.book17,
+        Book.book15,
+        Book.book4,
+        Book.book6,
+        Book.book19
+    ]
         
     static let book1 = Book(
         id: "01",
