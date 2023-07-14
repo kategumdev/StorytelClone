@@ -148,13 +148,18 @@ extension BookViewController {
     
     @objc func ellipsisButtonDidTap() {
         // Get the latest updated book model object
+//        for book in allTitlesBooks {
+//            print("\(book.title)")
+//        }
+        
+//        print("\n ALLTITLESBOOKS: \(allTitlesBooks)")
         var updatedBook: Book = book
-        for book in allTitlesBooks {
-            if book.title == self.book.title {
-                updatedBook = book
-                break
-            }
-        }
+//        for book in allTitlesBooks {
+//            if book.title == self.book.title {
+//                updatedBook = book
+//                break
+//            }
+//        }
         let bookDetailsBottomSheetController = BottomSheetViewController(
             book: updatedBook,
             kind: .bookDetails)

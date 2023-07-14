@@ -7,8 +7,6 @@
 
 import UIKit
 
-var allTitlesBooks = Book.books + [Book.book20, Book.book21, Book.book22, Book.book23] + [Book.senorDeLosAnillos1, Book.senorDeLosAnillos2]
-
 class AllTitlesViewController: BaseViewController {
 
     var subCategory: SubCategory?
@@ -192,7 +190,9 @@ class AllTitlesViewController: BaseViewController {
         // Fetch data for vc with .author titleModel
         let modelKind = titleModel?.titleKind
         guard modelKind == .author, let author = titleModel as? Storyteller else {
-            books = allTitlesBooks // hardcoded data for all other cases
+            /* Hardcoded data for all other cases: tag tapped in BookVC, series tapped in SearchResultsVC,
+            shoe series tapped in book details BottomSheetVC */
+            books = Book.books
             return
         }
 
