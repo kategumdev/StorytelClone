@@ -82,11 +82,11 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderView.identifier) as? SectionHeaderView else { return UIView() }
         
-        sectionHeader.configureFor(subCategory: SubCategory.similarTitles, callback: { [weak self] in
+        sectionHeader.configureFor(subCategory: SubCategory.similarTitles) { [weak self] in
             guard let self = self else { return }
             let controller = AllTitlesViewController(subCategory: SubCategory.similarTitles, books: self.similarBooks)
             self.navigationController?.pushViewController(controller, animated: true)
-        })
+        }
         return sectionHeader
     }
     
@@ -99,7 +99,6 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
         // Toggle navbar from transparent to visible (and vice versa) as needed
         adjustNavBarAppearanceFor(currentOffsetY: currentOffsetY)
     }
-    
 }
 
 // MARK: - Helper methods
