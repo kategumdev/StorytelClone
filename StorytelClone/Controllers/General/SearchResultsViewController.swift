@@ -8,7 +8,6 @@
 import UIKit
 
 class SearchResultsViewController: ScopeViewController {
-    // MARK: - Instance properties
     var networkManagerError: NetworkManagerError? = nil {
         didSet {
             for table in scopeTableViews {
@@ -17,7 +16,6 @@ class SearchResultsViewController: ScopeViewController {
         }
     }
 
-    // MARK: - Initializers
     init() {
         super.init(withScopeButtonsViewKind: .forSearchResultsVc)
     }
@@ -26,26 +24,22 @@ class SearchResultsViewController: ScopeViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        // Search field becomes larger/smaller and collectonView needs to calculate new size for itself
+        // Let collectonView calculate new size for itself when search field becomes larger/smaller
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             collectionView.collectionViewLayout.invalidateLayout()
         }
-
     }
     
     // MARK: - Instance methods
     func revertToInitialAppearance() {
         scopeButtonsView.revertToInitialAppearance()
         
-        // For rare cases if user taps on button and immediately taps Cancel button of parent search controller, isButtonTriggeredScroll won't be set to false and and cell will remain hidden when user taps into search bar again and search controller becomes visible
+        /* For rare cases if user taps on button and immediately taps Cancel button of
+         parent search controller, isButtonTriggeredScroll won't be set to false and cell
+         will remain hidden when user taps into search bar again and search controller becomes visible */
         toggleIsButtonTriggeredScrollAndUnhideCells()
         
         collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
@@ -74,12 +68,12 @@ class SearchResultsViewController: ScopeViewController {
         }
     }
     
-    // MARK: - Helper methods
+    // MARK: - Helper method
     // This method doesn't fetch data, it just shows hardcoded data
     private func createNewModelWith(books: [Book]?) -> [ScopeButtonKind : [Title]] {
         var newModel = [ScopeButtonKind : [Title]]()
         let buttonKinds = ScopeButtonsViewKind.forSearchResultsVc.buttonKinds
-
+        
         guard let fetchedBooks = books else {
             buttonKinds.forEach { newModel[$0] = [Book]() }
             return newModel
@@ -88,10 +82,36 @@ class SearchResultsViewController: ScopeViewController {
         // Handle case when !books.isEmpty, set hardcoded data for other buttondKinds
         for buttonKind in buttonKinds {
             switch buttonKind {
-            case .top: newModel[buttonKind] = [Book.book5, Storyteller.neilGaiman, Series.series1, Storyteller.tolkien, Storyteller.author9, Book.book1, Book.book10, Storyteller.author10, Storyteller.author6]
+            case .top:
+                newModel[buttonKind] = [
+                    Book.book5,
+                    Storyteller.neilGaiman,
+                    Series.series1,
+                    Storyteller.tolkien,
+                    Storyteller.author9,
+                    Book.book1,
+                    Book.book10,
+                    Storyteller.author10,
+                    Storyteller.author6
+                ]
             case .books: newModel[buttonKind] = fetchedBooks
-            case .authors: newModel[buttonKind] = [Storyteller.neilGaiman, Storyteller.tolkien, Storyteller.author1, Storyteller.author2, Storyteller.author3, Storyteller.author4, Storyteller.author5, Storyteller.author6, Storyteller.author7, Storyteller.author8, Storyteller.author9, Storyteller.author10]
-            case .narrators: newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
+            case .authors:
+                newModel[buttonKind] = [
+                    Storyteller.neilGaiman,
+                    Storyteller.tolkien,
+                    Storyteller.author1,
+                    Storyteller.author2,
+                    Storyteller.author3,
+                    Storyteller.author4,
+                    Storyteller.author5,
+                    Storyteller.author6,
+                    Storyteller.author7,
+                    Storyteller.author8,
+                    Storyteller.author9,
+                    Storyteller.author10
+                ]
+            case .narrators:
+                newModel[buttonKind] = [Storyteller.narrator10, Storyteller.narrator3, Storyteller.narrator5]
             case .series:
                 newModel[buttonKind] = [Series.series3, Series.series2, Series.series1]
             case .tags: newModel[buttonKind] = [Tag.tag10, Tag.tag9, Tag.tag10]
@@ -100,5 +120,4 @@ class SearchResultsViewController: ScopeViewController {
         }
         return newModel
     }
-    
 }
