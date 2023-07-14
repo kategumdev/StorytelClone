@@ -12,7 +12,7 @@ class BookContainerScrollView: UIScrollView {
     private let book: Book
     private let superviewWidth: CGFloat
 
-    lazy var bookDetailsStackView = BookDetailsStackView(forBook: book)
+    lazy var bookDetailsStack = BookDetailsStackView(forBook: book)
     private let bookDetailsStackViewTopPadding: CGFloat = 12
     
     lazy var bookDetailsScrollView = BookDetailsHorzScrollView(book: book)
@@ -57,7 +57,7 @@ class BookContainerScrollView: UIScrollView {
 
     private lazy var seeTagsButtonConstraintForFullSizeTagsView = seeTagsButton.topAnchor.constraint(equalTo: tagsView.bottomAnchor)
     
-    lazy var maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStackView.spacingAfterCoverImageView + bookDetailsStackView.bookTitleLabelHeight
+    lazy var maxYOfBookTitleLabel: CGFloat = bookDetailsStackViewTopPadding + BookDetailsStackView.imageHeight + bookDetailsStack.spacingAfterCoverImageView + bookDetailsStack.bookTitleLabelHeight
     
     let bookTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -142,7 +142,7 @@ class BookContainerScrollView: UIScrollView {
     // MARK: - Helper methods
     private func setupUI() {
         showsVerticalScrollIndicator = false
-        addSubview(bookDetailsStackView)
+        addSubview(bookDetailsStack)
         addSubview(bookDetailsScrollView)
         addSubview(overviewStackView)
         addSubview(seeOverviewButton)
@@ -217,18 +217,18 @@ class BookContainerScrollView: UIScrollView {
         let contentG = contentLayoutGuide
         let frameG = frameLayoutGuide
         
-        bookDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
+        bookDetailsStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookDetailsStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: bookDetailsStackViewTopPadding),
-            bookDetailsStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
-            bookDetailsStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
-            bookDetailsStackView.widthAnchor.constraint(equalTo: frameG.widthAnchor)
+            bookDetailsStack.topAnchor.constraint(equalTo: contentG.topAnchor, constant: bookDetailsStackViewTopPadding),
+            bookDetailsStack.leadingAnchor.constraint(equalTo: contentG.leadingAnchor),
+            bookDetailsStack.trailingAnchor.constraint(equalTo: contentG.trailingAnchor),
+            bookDetailsStack.widthAnchor.constraint(equalTo: frameG.widthAnchor)
         ])
         
         // Width is 2 points wider to hide border on leading and trailing edges
         bookDetailsScrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStackView.bottomAnchor, constant: 33),
+            bookDetailsScrollView.topAnchor.constraint(equalTo: bookDetailsStack.bottomAnchor, constant: 33),
             bookDetailsScrollView.widthAnchor.constraint(equalTo: frameG.widthAnchor, constant: 2),
             bookDetailsScrollView.centerXAnchor.constraint(equalTo: frameG.centerXAnchor)
         ])

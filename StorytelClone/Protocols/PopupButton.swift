@@ -10,6 +10,6 @@ import UIKit
 protocol PopupButton where Self: UIButton {
     var buttonHeight: CGFloat { get }
     
-    var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback { get set }
+    var animate: SaveBookButtonDidTapCallback { get set }
     
 }

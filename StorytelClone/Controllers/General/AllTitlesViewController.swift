@@ -66,7 +66,7 @@ class AllTitlesViewController: BaseViewController {
         
         let book = books[indexPath.row]
         cell.configureWith(book: book)
-        cell.saveBookButtonDidTapCallback = popupButton.reconfigureAndAnimateSelf
+        cell.saveBookButtonDidTapCallback = popupButton.animate
 
         cell.ellipsisButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }

@@ -50,7 +50,7 @@ class DefaultPopupButton: UIButton, PopupButton {
         self?.hide()
     }
 
-    lazy var reconfigureAndAnimateSelf: SaveBookButtonDidTapCallback = { [weak self] isBookBeingAdded in
+    lazy var animate: SaveBookButtonDidTapCallback = { [weak self] isBookBeingAdded in
         guard let self = self else { return }
         self.cancelAndReassignWorkItems()
 

@@ -55,9 +55,9 @@ class BookDetailsHorzScrollView: UIScrollView {
     private lazy var languageVertStack = createVertStackWith(label: languageLabel, button: languageButton)
 
     private let categoryLabel = createLabelWith(text: "Category")
-        private let categoryButton = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing, enableInteraction: true)
-    var categoryButtonDidTapCallback: () -> () = {}
-    private lazy var categoryVertStack = createVertStackWith(label: categoryLabel, button: categoryButton)
+    private let categoryBtn = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing, enableInteraction: true)
+    var categoryBtnDidTapCallback: () -> () = {}
+    private lazy var categoryVertStack = createVertStackWith(label: categoryLabel, button: categoryBtn)
 
     private lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
@@ -135,8 +135,8 @@ class BookDetailsHorzScrollView: UIScrollView {
         allButtons.append(languageButton)
 
         let categoryText = book.category.title.replacingOccurrences(of: "\n", with: " ")
-        configure(button: categoryButton, withText: categoryText)
-        allButtons.append(categoryButton)
+        configure(button: categoryBtn, withText: categoryText)
+        allButtons.append(categoryBtn)
         addCategoryButtonAction()
         
         // Add arrangedSubviews
@@ -181,9 +181,9 @@ class BookDetailsHorzScrollView: UIScrollView {
     }
     
     private func addCategoryButtonAction() {
-        categoryButton.addAction(UIAction(handler: { [weak self] _ in
+        categoryBtn.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-            self.categoryButtonDidTapCallback()
+            self.categoryBtnDidTapCallback()
         }), for: .touchUpInside)
     }
     

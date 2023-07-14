@@ -14,19 +14,19 @@ class BookDetailsStackView: UIStackView {
     // MARK: - Instance properties
     private let book: Book
 
-    var showSeriesButtonDidTapCallback: () -> () = {} {
+    var showSeriesBtnDidTapCallback: () -> () = {} {
         didSet {
-            showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesButtonDidTapCallback
+            showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesBtnDidTapCallback
         }
     }
     
-    var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in} {
+    var saveBookBtnDidTapCallback: SaveBookButtonDidTapCallback = {_ in} {
         didSet {
-            roundButtonsStackContainer.saveBookButtonDidTapCallback = saveBookButtonDidTapCallback
+            roundButtonsStackContainer.saveBookButtonDidTapCallback = saveBookBtnDidTapCallback
         }
     }
 
-    var storytellerButtonDidTapCallback: ([Storyteller]) -> () = {_ in}
+    var storytellerBtnDidTapCallback: ([Storyteller]) -> () = {_ in}
     
     private let coverImageView: UIImageView = {
        let imageView = UIImageView()
@@ -153,8 +153,8 @@ class BookDetailsStackView: UIStackView {
     }
     
     // MARK: - Instance methods
-    func updateSaveButtonAppearance() {
-        roundButtonsStackContainer.updateSaveButtonAppearance()
+    func updateSaveBtnAppearance() {
+        roundButtonsStackContainer.updateSaveBtnAppearance()
     }
     
     // MARK: - Helper methods
@@ -208,7 +208,7 @@ class BookDetailsStackView: UIStackView {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             Utils.playHaptics()
-            self.storytellerButtonDidTapCallback(storytellers)
+            self.storytellerBtnDidTapCallback(storytellers)
         }), for: .touchUpInside)
     }
 

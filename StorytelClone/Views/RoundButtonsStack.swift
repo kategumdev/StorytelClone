@@ -124,7 +124,7 @@ class RoundButtonsStack: UIStackView {
     }
     
     // MARK: - Instance methods
-    func updateSaveButtonAppearance() {
+    func updateSaveBtnAppearance() {
         let isBookBeingAdded = book.isOnBookshelf()
         saveBookButton.updateImage(isBookBeingAdded: isBookBeingAdded)
         updateSaveLabelText(isBookBeingAdded: isBookBeingAdded)
@@ -142,7 +142,7 @@ class RoundButtonsStack: UIStackView {
         distribution = .fillProportionally
         spacing = RoundButtonsStack.roundWidth - 10
                 
-        updateSaveButtonAppearance()
+        updateSaveBtnAppearance()
         [viewWithSaveButton, saveBookButton].forEach {
             $0.layer.cornerRadius = RoundButtonsStack.roundWidth / 2
         }

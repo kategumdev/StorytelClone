@@ -252,7 +252,7 @@ extension HomeViewController {
             cell.configureFor(
                 book: book,
                 dimmedAnimationButtonCallback: dimmedAnimationBtnCallback,
-                callbackForSaveButton: popupButton.reconfigureAndAnimateSelf)
+                callbackForSaveButton: popupButton.animate)
         }
         return cell
     }
