@@ -8,9 +8,9 @@
 import UIKit
 
 class AllTitlesViewController: BaseViewController {
-
-    var subCategory: SubCategory?
+    // MARK: - Instance properties
     let titleModel: Title?
+    var subCategory: SubCategory?
     private var books = [Book]()
     private let popupButton: PopupButton
     private var isHeaderConfigured = false
@@ -22,7 +22,12 @@ class AllTitlesViewController: BaseViewController {
     }()
 
     // MARK: - Initializers
-    init(subCategory: SubCategory? = nil, titleModel: Title? = nil, books: [Book] = [Book](), popupButton: some PopupButton = DefaultPopupButton()) {
+    init(
+        subCategory: SubCategory? = nil,
+        titleModel: Title? = nil,
+        books: [Book] = [Book](),
+        popupButton: some PopupButton = DefaultPopupButton()
+    ) {
         self.subCategory = subCategory
         self.titleModel = titleModel
         self.books = books
@@ -37,8 +42,7 @@ class AllTitlesViewController: BaseViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureBookTable()
-        view.addSubview(popupButton)
+        setupUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,79 +52,6 @@ class AllTitlesViewController: BaseViewController {
             return
         }
         bookTable.reloadData()
-    }
-    
-    // MARK: - UITableViewDataSource, UITableViewDelegate
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return books.count
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: AllTitlesTableViewCell.identifier, for: indexPath) as? AllTitlesTableViewCell else { return UITableViewCell() }
-        
-        let book = books[indexPath.row]
-        cell.configureWith(book: book)
-        cell.saveBookButtonDidTapCallback = popupButton.animate
-
-        cell.ellipsisButtonDidTapCallback = { [weak self] in
-            guard let self = self else { return }
-            // Get the latest updated book model object
-            let updatedBook = self.books[indexPath.row]
-            
-            let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
-            bookDetailsBottomSheetController.delegate = self
-            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
-            self.present(bookDetailsBottomSheetController, animated: false)
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        let book = books[indexPath.row]
-        return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard !books.isEmpty, let sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView, let subCategory = subCategory else { return nil }
-        
-        let titleText = titleModel?.titleKind == .series ? "All books" : "All titles"
-        sectionHeader.configureWith(title: titleText)
-        
-        if subCategory.canBeFiltered && subCategory.canBeShared {
-            sectionHeader.showShareAndFilterButtons()
-        } else if subCategory.canBeFiltered {
-            sectionHeader.showOnlyFilterButton()
-        } else {
-            sectionHeader.showOnlyShareButton()
-        }
-        return sectionHeader
-    }
-
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard books.isEmpty else { return }
-        view.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
-        return calculatedHeight
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let book = books[indexPath.row]
-        let controller = BookViewController(book: book)
-        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Superclass overrides
@@ -149,58 +80,161 @@ class AllTitlesViewController: BaseViewController {
             configureAndLayoutTableHeader()
         }
     }
+    
+    override func fetchBooks() {
+        // Avoid fetching books if they are set in vc's init (seeAllButton tapped)
+        guard books.isEmpty else { return }
+        
+        // Fetch data for vc with .author titleModel
+        let modelKind = titleModel?.titleKind
+        guard modelKind == .author, let author = titleModel as? Storyteller else {
+            /* Hardcoded data for all other cases: tag tapped in BookVC, series tapped in SearchResultsVC,
+             shoe series tapped in book details BottomSheetVC, narrator tapped in SearchResultsVC */
+            books = Book.books
+            return
+        }
+        
+        let query = author.name.trimmingCharacters(in: .whitespaces)
+        activityIndicator.startAnimating()
+        networkManager.fetchBooks(
+            withQuery: query,
+            bookKindsToFetch: .ebooksAndAudiobooks
+        ) { [weak self] result in
+            self?.handleFetchResult(result)
+        }
+    }
+}
 
-    // MARK: - Helper methods
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension AllTitlesViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return books.count
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: AllTitlesTableViewCell.identifier,
+            for: indexPath
+        ) as? AllTitlesTableViewCell else { return UITableViewCell() }
+        
+        let book = books[indexPath.row]
+        cell.configureWith(book: book)
+        cell.saveBookButtonDidTapCallback = popupButton.animate
+        
+        cell.ellipsisButtonDidTapCallback = { [weak self] in
+            guard let self = self else { return }
+            // Get the latest updated book model object
+            let updatedBook = self.books[indexPath.row]
+            
+            let bookDetailsBottomSheetController = BottomSheetViewController(book: updatedBook, kind: .bookDetails)
+            bookDetailsBottomSheetController.delegate = self
+            bookDetailsBottomSheetController.modalPresentationStyle = .overFullScreen
+            self.present(bookDetailsBottomSheetController, animated: false)
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let book = books[indexPath.row]
+        return AllTitlesTableViewCell.getEstimatedHeightForRowWith(width: view.bounds.width, andBook: book)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let book = books[indexPath.row]
+        let controller = BookViewController(book: book)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard !books.isEmpty,
+              let sectionHeader = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: AllTitlesSectionHeaderView.identifier) as? AllTitlesSectionHeaderView,
+              let subCategory = subCategory else { return nil }
+        
+        let titleText = titleModel?.titleKind == .series ? "All books" : "All titles"
+        sectionHeader.configureWith(title: titleText)
+        
+        if subCategory.canBeFiltered && subCategory.canBeShared {
+            sectionHeader.showShareAndFilterButtons()
+        } else if subCategory.canBeFiltered {
+            sectionHeader.showOnlyFilterButton()
+        } else {
+            sectionHeader.showOnlyShareButton()
+        }
+        return sectionHeader
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard books.isEmpty else { return }
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    override func tableView(
+        _ tableView: UITableView,
+        estimatedHeightForHeaderInSection section: Int
+    ) -> CGFloat {
+        let calculatedHeight = AllTitlesSectionHeaderView.calculateEstimatedHeaderHeight()
+        return calculatedHeight
+    }
+}
+
+// MARK: - Helper methods
+extension AllTitlesViewController {
+    private func setupUI() {
+        configureBookTable()
+        view.addSubview(popupButton)
+    }
+    
     private func configureBookTable() {
         bookTable.allowsSelection = true
         bookTable.separatorColor = UIColor.tertiaryLabel
-        bookTable.separatorInset = UIEdgeInsets(top: 0, left: Constants.commonHorzPadding, bottom: 0, right: Constants.commonHorzPadding)
+        bookTable.separatorInset = UIEdgeInsets(
+            top: 0,
+            left: Constants.commonHorzPadding,
+            bottom: 0,
+            right: Constants.commonHorzPadding)
         
-        // Bottom inset is needed to avoid little table view scroll when user is at the very bottom of table view and popButton shows
+        // Avoid little table view scroll when user is at the very bottom of table view and popButton shows
         bookTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: popupButton.buttonHeight, right: 0)
         
         // Hide tableFooterView
         bookTable.tableFooterView?.frame.size.height = 0.1
 
-        bookTable.register(AllTitlesSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
-        bookTable.register(AllTitlesTableViewCell.self, forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
+        bookTable.register(
+            AllTitlesSectionHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: AllTitlesSectionHeaderView.identifier)
+        bookTable.register(
+            AllTitlesTableViewCell.self,
+            forCellReuseIdentifier: AllTitlesTableViewCell.identifier)
     }
-    
-    // Code from this func will be called in BaseVC's viewDidLayoutSubviews, so that it's called twice (it is needed for correct header layout)
+
     private func configureAndLayoutTableHeader() {
         if let storyteller = titleModel as? Storyteller {
-            let headerView = PersonTableHeaderView(kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
+            let headerView = PersonTableHeaderView(
+                kind: .forStoryteller(storyteller: storyteller, superviewWidth: bookTable.bounds.width))
             bookTable.tableHeaderView = headerView
             Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
             return
         }
         
-        guard let headerView = bookTable.tableHeaderView as? TableHeaderView, let subCategory = subCategory else { return }
+        guard let headerView = bookTable.tableHeaderView as? TableHeaderView,
+              let subCategory = subCategory else { return }
         if !isHeaderConfigured {
             headerView.configureFor(subCategory: subCategory, titleModel: titleModel)
             isHeaderConfigured = true
         }
         Utils.layoutTableHeaderView(headerView, inTableView: bookTable)
-    }
-    
-    override func fetchBooks() {
-        // Avoid fetching books if they are set in vc's init (seeAllButton tapped)
-        guard books.isEmpty else { return }
-
-        // Fetch data for vc with .author titleModel
-        let modelKind = titleModel?.titleKind
-        guard modelKind == .author, let author = titleModel as? Storyteller else {
-            /* Hardcoded data for all other cases: tag tapped in BookVC, series tapped in SearchResultsVC,
-            shoe series tapped in book details BottomSheetVC */
-            books = Book.books
-            return
-        }
-
-        let query = author.name.trimmingCharacters(in: .whitespaces)
-        activityIndicator.startAnimating()
-        networkManager.fetchBooks(withQuery: query, bookKindsToFetch: .ebooksAndAudiobooks) { [weak self] result in
-            self?.handleFetchResult(result)
-        }
     }
     
     private func handleFetchResult(_ result: SearchResult) {
@@ -223,7 +257,6 @@ class AllTitlesViewController: BaseViewController {
             }
         }
     }
-    
 }
 
 extension AllTitlesViewController: BottomSheetViewControllerDelegate {
@@ -237,5 +270,4 @@ extension AllTitlesViewController: BottomSheetViewControllerDelegate {
         }
         self.bookTable.reloadRows(at: [indexPathOfRowWithThisBook], with: .none)
     }
-
 }
