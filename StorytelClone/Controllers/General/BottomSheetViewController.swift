@@ -1,5 +1,5 @@
 //
-//  CustomBottomSheetViewController.swift
+//  BottomSheetViewController.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 18/4/23.
@@ -7,24 +7,24 @@
 
 import UIKit
 
-enum BottomSheetKind: Equatable {
-    case bookDetails
-    case storytellers(storytellers: [Storyteller])
-}
-
 protocol BottomSheetViewControllerDelegate: AnyObject {
     func bookDetailsBottomSheetViewControllerDidSelectSaveBookCell(withBook book: Book)
 }
 
 class BottomSheetViewController: UIViewController {
+    enum BottomSheetKind: Equatable {
+        case bookDetails
+        case storytellers(storytellers: [Storyteller])
+    }
+    
     // MARK: Instance properties
+    private var kind: BottomSheetKind
     private var book: Book
     private let dataPersistenceManager: any DataPersistenceManager
-    private var kind: BottomSheetKind
     private var isSwiping = false
     
     weak var delegate: BottomSheetViewControllerDelegate?
-
+    
     private lazy var bookDetailsBottomSheetCells: [BookDetailsBottomSheetCellKind] = {
         var cells = BookDetailsBottomSheetCellKind.allCases
         
@@ -38,11 +38,48 @@ class BottomSheetViewController: UIViewController {
         return cells
     }()
     
-    private let maxAlphaForDimmedEffect: CGFloat = 0.35
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.backgroundColor = UIColor(named: "bottomSheetBackground")
+        tableView.clipsToBounds = true
+        tableView.separatorColor = .clear
+        tableView.layer.cornerRadius = 10
+        tableView.register(
+            BottomSheetTableViewCell.self,
+            forCellReuseIdentifier: BottomSheetTableViewCell.identifier)
+        tableView.estimatedRowHeight = tableRowHeight
+        tableView.rowHeight = tableRowHeight
+        tableView.tableHeaderView = tableHeaderView
+        
+        // These two lines avoid constraints' conflict of header when vc's view just loaded
+        tableView.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView.tableHeaderView?.fillSuperview()
+        return tableView
+    }()
+    
+    private let tableRowHeight: CGFloat = 48
+    
+    private let tableHeightWithoutCells: CGFloat = 28
+    private var currentTableViewHeight: CGFloat = 0
+    private lazy var tableHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+    
+    private lazy var fullTableViewHeight: CGFloat = {
+        var multiplier: Int
+        switch kind {
+        case .bookDetails: multiplier = bookDetailsBottomSheetCells.count
+        case let .storytellers(storytellers: storytellers):
+            multiplier = storytellers.count
+        }
+        let height = tableHeightWithoutCells + tableHeaderHeight + tableRowHeight * CGFloat(multiplier)
+        currentTableViewHeight = height
+        return height
+    }()
     
     private lazy var tableHeaderView: BottomSheetTableHeaderView = {
         let addSeparatorView = kind == .bookDetails ? false : true
-        let headerView = BottomSheetTableHeaderView(titleText: tableHeaderTitleText, withSeparatorView: addSeparatorView)
+        let headerView = BottomSheetTableHeaderView(
+            titleText: tableHeaderTitleText,
+            withSeparatorView: addSeparatorView)
         headerView.closeButtonDidTapCallback = { [weak self] in
             self?.dismissWithCustomAnimation()
         }
@@ -62,48 +99,18 @@ class BottomSheetViewController: UIViewController {
             return text
         }
     }()
-
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.backgroundColor = UIColor(named: "bottomSheetBackground")
-        tableView.clipsToBounds = true
-        tableView.separatorColor = .clear
-        tableView.layer.cornerRadius = 10
-        tableView.register(BottomSheetTableViewCell.self, forCellReuseIdentifier: BottomSheetTableViewCell.identifier)
-        tableView.estimatedRowHeight = tableRowHeight
-        tableView.rowHeight = tableRowHeight
-        tableView.tableHeaderView = tableHeaderView
-        
-        // These two lines avoid constraints' conflict of header when vc's view just loaded
-        tableView.tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
-        tableView.tableHeaderView?.fillSuperview()
-        return tableView
-    }()
     
-    private let tableRowHeight: CGFloat = 48
-    private let tableViewHeightWithoutCells: CGFloat = 28
-    private var currentTableViewHeight: CGFloat = 0
-    
-    private lazy var fullTableViewHeight: CGFloat = {
-        var multiplier: Int
-        switch kind {
-        case .bookDetails: multiplier = bookDetailsBottomSheetCells.count
-        case let .storytellers(storytellers: storytellers):
-            multiplier = storytellers.count
-        }
-        let height = tableViewHeightWithoutCells + tableHeaderHeight + tableRowHeight * CGFloat(multiplier)
-        currentTableViewHeight = height
-        return height
-    }()
-
-    private lazy var tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+    private let maxAlphaForDimmedEffect: CGFloat = 0.35
     
     private var panGesture: UIPanGestureRecognizer?
     private var swipeGesture: UISwipeGestureRecognizer?
     
     // MARK: - Initializers
-    init(book: Book, kind: BottomSheetKind, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
-        print("\n\n\(kind) bottom sheet CREATED")
+    init(
+        book: Book,
+        kind: BottomSheetKind,
+        dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    ) {
         self.book = book
         self.kind = kind
         self.dataPersistenceManager = dataPersistenceManager
@@ -117,15 +124,7 @@ class BottomSheetViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setViewBackgroundColorAlphaTo(value: 0)
-
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        applyConstraints()
-        
-        // Hide tableView
-        tableViewHeightConstraint.constant = 0
+        setupUI()
     }
     
     override func viewDidLayoutSubviews() {
@@ -140,25 +139,10 @@ class BottomSheetViewController: UIViewController {
         setupPanGesture()
         setupTapGesture()
     }
-    
-    // MARK: - Instance methods
-    func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            self.tableViewHeightConstraint.constant = 0 // Hide tableView
-            self.view.layoutIfNeeded()
-            self.setViewBackgroundColorAlphaTo(value: 0)
-        }, completion: { _ in
-            self.dismiss(animated: false, completion: {
-                completion?()
-            })
-        })
-    }
-
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch kind {
         case .bookDetails: return bookDetailsBottomSheetCells.count
@@ -167,11 +151,15 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.identifier, for: indexPath) as? BottomSheetTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: BottomSheetTableViewCell.identifier,
+            for: indexPath) as? BottomSheetTableViewCell else { return UITableViewCell() }
         
         switch kind {
         case .bookDetails:
-            cell.configureFor(book: book, bookDetailsBottomSheetCellKind: bookDetailsBottomSheetCells[indexPath.row])
+            cell.configureFor(
+                book: book,
+                bookDetailsBottomSheetCellKind: bookDetailsBottomSheetCells[indexPath.row])
         case let .storytellers(storytellers: storytellers):
             cell.configureWith(storyteller: storytellers[indexPath.row])
         }
@@ -188,7 +176,9 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
             let selectedStoryteller = storytellers[indexPath.row]
             self.dismiss(animated: false) { [weak self] in
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return}
-                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: selectedStoryteller)
+                let controller = AllTitlesViewController(
+                    subCategory: SubCategory.generalForAllTitlesVC,
+                    titleModel: selectedStoryteller)
                 delegate.navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -196,21 +186,108 @@ extension BottomSheetViewController: UITableViewDataSource, UITableViewDelegate 
     
 }
 
+// MARK: - UIGestureRecognizerDelegate
 extension BottomSheetViewController: UIGestureRecognizerDelegate {
-
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         // To make tapGesture to be handled only if tap is outside the tableView
-         if touch.view?.isDescendant(of: tableView) == true {
+        if touch.view?.isDescendant(of: tableView) == true {
             return false
-         }
-         return true
+        }
+        return true
     }
 }
 
 // MARK: - Helper methods
 extension BottomSheetViewController {
+    private func setupUI() {
+        setViewBackgroundColorAlphaTo(value: 0)
+        
+        view.addSubview(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+        applyConstraints()
+        
+        // Hide tableView
+        tableHeightConstraint.constant = 0
+    }
     
-    private func handleSelection(bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind, withIndexPath indexPath: IndexPath) {
+    private func animateToFullTableViewHeight() {
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 1,
+            options: .curveEaseOut,
+            animations: {
+                // Show tableView
+                self.tableHeightConstraint.constant = self.fullTableViewHeight
+                self.view.layoutIfNeeded()
+                self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
+            },
+            completion: nil)
+    }
+    
+    private func setViewBackgroundColorAlphaTo(value: CGFloat) {
+        view.backgroundColor = .black.withAlphaComponent(value)
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleTapGesure() {
+        dismissWithCustomAnimation()
+    }
+    
+    private func setupPanGesture() {
+        let panGesture = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(self.handlePanGesture(gesture:)))
+        
+        // Change to false to immediately listen on gesture movement
+        panGesture.delaysTouchesBegan = false
+        panGesture.delaysTouchesEnded = false
+        tableView.addGestureRecognizer(panGesture)
+    }
+    
+    @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        
+        // If value is < 0, user is dragging up
+        let isDraggingDown = translation.y > 0
+        
+        let newTableViewHeight = currentTableViewHeight - translation.y
+        
+        // Calculations for smooth proportional change of alpha value of the dimmed view
+        let percentageFromFullTableViewHeight = (newTableViewHeight * 100) / fullTableViewHeight
+        let newAlphaForDimmedEffect = (percentageFromFullTableViewHeight * maxAlphaForDimmedEffect) / 100
+        
+        switch gesture.state {
+        case .changed:
+            if isDraggingDown {
+                setViewBackgroundColorAlphaTo(value: newAlphaForDimmedEffect)
+                tableHeightConstraint.constant = newTableViewHeight
+                
+                // If velocity of panGesture is less than 1500, it's a swipe
+                isSwiping = gesture.velocity(in: tableView).y < 1500 ? false : true
+            }
+        case .ended:
+            if isSwiping == true || translation.y >= fullTableViewHeight / 2 {
+                dismissWithCustomAnimation()
+                break
+            }
+            animateToFullTableViewHeight()
+        default:
+            break
+        }
+    }
+    
+    private func handleSelection(
+        bookDetailsBottomSheetCell: BookDetailsBottomSheetCellKind,
+        withIndexPath indexPath: IndexPath
+    ) {
         switch bookDetailsBottomSheetCell {
         case .saveBook:
             dataPersistenceManager.fetchPersistedBookWith(id: book.id) { [weak self] result in
@@ -222,33 +299,30 @@ extension BottomSheetViewController {
                         self?.handleRemoving(persistedBook: persistedBook, indexPath: indexPath)
                     }
                 case .failure(let error):
-                    print("Error when fetching book with id \(String(describing: self?.book.id))" + error.localizedDescription)
+                    print("Error fetching book" + error.localizedDescription)
                 }
             }
-            
         case .markAsFinished:
-            print("markAsFinished tapped")
+            print("markAsFinished tap not implemented")
         case .download:
-            print("download tapped")
+            print("download tap not implemented")
         case .viewSeries:
             self.dismiss(animated: false)
-            guard let series = book.series, let delegate = self.delegate as? UIViewController else { return }
+            guard let series = book.series,
+                  let delegate = self.delegate as? UIViewController else { return }
             let subCategory = SubCategory(title: series, searchQuery: "\(series)")
             let controller = AllTitlesViewController(subCategory: subCategory, titleModel: Series.series1)
             delegate.navigationController?.pushViewController(controller, animated: true)
-            
         case .viewAuthors:
             let authors = book.authors
             handleViewAuthorsOrNarrators(storytellers: authors)
-            
         case .viewNarrators:
             let narrators = book.narrators
             handleViewAuthorsOrNarrators(storytellers: narrators)
-            
         case .showMoreTitlesLikeThis:
             handleShowMoreTitlesLikeThis()
         case .share:
-            print("share tapped")
+            print("share tap not implemented")
         }
     }
     
@@ -269,15 +343,17 @@ extension BottomSheetViewController {
     private func handleRemoving(persistedBook: PersistedBook?, indexPath: IndexPath) {
         let alert = UIAlertController(
             title: "Remove from bookshelf",
-            message: "Do you want to remove \(book.title) from your bookshelf? Downloaded content for this title will also be removed from your device.",
+            message: "Do you want to remove \(book.title) from your bookshelf? " +
+            "Downloaded content for this title will also be removed from your device.",
             preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(
             title: "Cancel",
             style: .cancel,
             handler: nil)
+        
         cancelAction.setValue(UIColor.label, forKey: "titleTextColor")
-                        
+        
         let removeAction = UIAlertAction(
             title: "Remove",
             style: .destructive,
@@ -306,8 +382,10 @@ extension BottomSheetViewController {
         if storytellers.count == 1 {
             self.dismiss(animated: false, completion: { [weak self] in
                 guard let self = self, let delegate = self.delegate as? UIViewController else { return }
-                let controller = AllTitlesViewController(subCategory: SubCategory.generalForAllTitlesVC, titleModel: storytellers.first)
-                delegate.navigationController?.pushViewController(controller, animated: true)
+                let vc = AllTitlesViewController(
+                    subCategory: SubCategory.generalForAllTitlesVC,
+                    titleModel: storytellers.first)
+                delegate.navigationController?.pushViewController(vc, animated: true)
             })
             return
         }
@@ -316,7 +394,9 @@ extension BottomSheetViewController {
         self.dismissWithCustomAnimation(completion: { [weak self] in
             guard let self = self, let delegate = self.delegate as? UIViewController else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                let storytellersBottomSheetController = BottomSheetViewController(book: self.book, kind: .storytellers(storytellers: storytellers))
+                let storytellersBottomSheetController = BottomSheetViewController(
+                    book: self.book,
+                    kind: .storytellers(storytellers: storytellers))
                 storytellersBottomSheetController.delegate = delegate as? BottomSheetViewControllerDelegate
                 storytellersBottomSheetController.modalPresentationStyle = .overFullScreen
                 delegate.present(storytellersBottomSheetController, animated: false)
@@ -324,86 +404,28 @@ extension BottomSheetViewController {
         })
     }
     
+    private func dismissWithCustomAnimation(completion: (() -> ())? = nil) {
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 1,
+            options: .curveEaseInOut,
+            animations: {
+                self.tableHeightConstraint.constant = 0 // Hide tableView
+                self.view.layoutIfNeeded()
+                self.setViewBackgroundColorAlphaTo(value: 0)
+            }, completion: { _ in
+                self.dismiss(animated: false, completion: {
+                    completion?()
+                })
+            })
+    }
+    
     private func handleShowMoreTitlesLikeThis() {
         self.dismiss(animated: false)
-        let controller = CategoryViewController(category: Category.librosSimilares, referenceBook: book)
-        (delegate as? UIViewController)?.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    private func animateToFullTableViewHeight() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.tableViewHeightConstraint.constant = self.fullTableViewHeight // Show tableView
-            self.view.layoutIfNeeded()
-            self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
-        }, completion: nil)
-    }
-
-    private func animateTableViewHeight(_ height: CGFloat) {
-        UIView.animate(withDuration: 0.3, delay: 0) { [weak self] in
-            guard let self = self else { return }
-            self.setViewBackgroundColorAlphaTo(value: self.maxAlphaForDimmedEffect)
-            self.tableViewHeightConstraint.constant = height
-            self.view.layoutIfNeeded()
-        }
-        currentTableViewHeight = height // Save current height
-    }
-    
-    private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
-        tapGesture.delegate = self
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func handleTapGesure() {
-        dismissWithCustomAnimation()
-    }
-    
-    private func setupPanGesture() {
-        // add pan gesture recognizer to the tableView
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(gesture:)))
-                
-        // change to false to immediately listen on gesture movement
-        panGesture.delaysTouchesBegan = false
-        panGesture.delaysTouchesEnded = false
-        tableView.addGestureRecognizer(panGesture)
-    }
-
-    @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
-
-        // If value is < 0, user is dragging up
-        let isDraggingDown = translation.y > 0
-        
-        let newTableViewHeight = currentTableViewHeight - translation.y
-        
-        // Calculations for smooth proportional change of alpha value of the dimmed view
-        let percentageFromFullTableViewHeight = (newTableViewHeight * 100) / fullTableViewHeight
-        let newAlphaForDimmedEffect = (percentageFromFullTableViewHeight * maxAlphaForDimmedEffect) / 100
-        
-        switch gesture.state {
-        case .changed:
-            if isDraggingDown {
-                setViewBackgroundColorAlphaTo(value: newAlphaForDimmedEffect)
-                tableViewHeightConstraint.constant = newTableViewHeight
-                
-                // If velocity of panGesture is less than 1500, it is a swipe
-                isSwiping = gesture.velocity(in: tableView).y < 1500 ? false : true
-            }
-            
-        case .ended:
-            if isSwiping == true || translation.y >= fullTableViewHeight / 2 {
-                dismissWithCustomAnimation()
-                break
-            }
-            animateToFullTableViewHeight()
-            
-        default:
-            break
-        }
-    }
-    
-    private func setViewBackgroundColorAlphaTo(value: CGFloat) {
-        view.backgroundColor = .black.withAlphaComponent(value)
+        let vc = CategoryViewController(category: Category.librosSimilares, referenceBook: book)
+        (delegate as? UIViewController)?.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func applyConstraints() {
@@ -413,7 +435,6 @@ extension BottomSheetViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        tableViewHeightConstraint.isActive = true
+        tableHeightConstraint.isActive = true
     }
-
 }
