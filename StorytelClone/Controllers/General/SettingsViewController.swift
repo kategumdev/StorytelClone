@@ -7,6 +7,20 @@
 
 import UIKit
 
+enum SettingsSection: String, CaseIterable {
+    case general = "GENERAL"
+    case kidsMode = "KIDS MODE"
+    case other = "OTHER"
+    
+    var cells: [SettingsCell] {
+        switch self {
+        case .general: return [.account, .app, .subscription, .privacy]
+        case .kidsMode: return [.kidsMode, .changePasscode]
+        case .other: return [.helpCenter, .signUp]
+        }
+    }
+}
+
 enum SettingsCell: String {
     case account = "Account"
     case app = "App"
@@ -34,28 +48,8 @@ enum SettingsCell: String {
     
     var tintColor: UIColor {
         switch self {
-        case .account: return UIColor.unactiveElementColor
-        case .app: return .label
-        case .subscription: return UIColor.unactiveElementColor
-        case .privacy: return UIColor.unactiveElementColor
-        case .kidsMode: return .label
-        case .changePasscode: return UIColor.unactiveElementColor
-        case .helpCenter: return .label
-        case .signUp: return .label
-        }
-    }
-}
-
-enum SettingsSection: String, CaseIterable {
-    case general = "GENERAL"
-    case kidsMode = "KIDS MODE"
-    case other = "OTHER"
-    
-    var cells: [SettingsCell] {
-        switch self {
-        case .general: return [.account, .app, .subscription, .privacy]
-        case .kidsMode: return [.kidsMode, .changePasscode]
-        case .other: return [.helpCenter, .signUp]
+        case .account, .subscription, .privacy, .changePasscode: return UIColor.unactiveElementColor
+        case .app, .kidsMode, .helpCenter, .signUp: return .label
         }
     }
 }
@@ -65,45 +59,21 @@ class SettingsViewController: UITableViewController {
     private let sections = SettingsSection.allCases
     private var tableViewInitialOffsetY: CGFloat = 0
     private var isInitialOffsetYSet = false
-//    private let switchView = UISwitch()
+    private let cellIdentifier = "profileSettingsCell"
 
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.customBackgroundColor
-        configureNavBar()
-        configureTableView()
+        setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.adjustAppearanceTo(currentOffsetY: tableView.contentOffset.y, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
+        navigationController?.adjustAppearanceTo(
+            currentOffsetY: tableView.contentOffset.y,
+            offsetYToCompareTo: tableViewInitialOffsetY,
+            withVisibleTitleWhenTransparent: true)
     }
-
-    // MARK: - Helper methods
-    private func configureNavBar() {
-        title = "Settings"
-        navigationController?.makeAppearance(transparent: true)
-        navigationItem.backButtonTitle = ""
-    }
-    
-    private func configureTableView() {
-        // Change tableView style
-        let frame = tableView.frame
-        tableView = UITableView(frame: frame, style: .grouped)
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
-        tableView.showsVerticalScrollIndicator = false
-        tableView.separatorColor = .clear
-        tableView.sectionHeaderTopPadding = 6
-        
-        // Avoid gaps between sections and custom section headers
-        tableView.sectionFooterHeight = 0
-        
-        // Prevent scrolling if table view content size height is less than tabke frame height
-        tableView.alwaysBounceVertical = false
-    }
-
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -117,7 +87,7 @@ extension SettingsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         cell.backgroundColor = .clear
         
         let settingCell = sections[indexPath.section].cells[indexPath.row]
@@ -137,12 +107,9 @@ extension SettingsViewController {
         if settingCell == .kidsMode {
             let switchView = UISwitch(frame: .zero)
             switchView.setOn(false, animated: true)
-//            switchView.tag = indexPath.row // for detect which row switch Changed
-//            switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
             cell.accessoryView = switchView
         } else {
             cell.accessoryType = .disclosureIndicator
-//            cell.accessoryView = nil
         }
         
         // Avoid changing tableView backgroundColor after adding switchView
@@ -150,19 +117,15 @@ extension SettingsViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-//        let settingCell = sections[indexPath.section].cells[indexPath.row]
-//        if settingCell.tintColor != .label {
-//            return nil
-//        }
-//        return indexPath
-//    }
-    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return " "
     }
 
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplayHeaderView view: UIView,
+        forSection section: Int
+    ) {
         guard let headerView = view as? UITableViewHeaderFooterView else { return }
         var content = headerView.defaultContentConfiguration()
         content.text = sections[section].rawValue
@@ -171,7 +134,10 @@ extension SettingsViewController {
         content.textProperties.font = scaledFont
         headerView.contentConfiguration = content
     }
-    
+}
+
+// MARK: - UIScrollViewDelegate
+extension SettingsViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         guard isInitialOffsetYSet else {
@@ -179,7 +145,42 @@ extension SettingsViewController {
             isInitialOffsetYSet = true
             return
         }
-        // Toggle navbar from transparent to visible as needed depending on current contentOffset.y
-        navigationController?.adjustAppearanceTo(currentOffsetY: currentOffsetY, offsetYToCompareTo: tableViewInitialOffsetY, withVisibleTitleWhenTransparent: true)
+        // Toggle navbar from transparent to visible (or vice versa) as needed
+        navigationController?.adjustAppearanceTo(
+            currentOffsetY: currentOffsetY,
+            offsetYToCompareTo: tableViewInitialOffsetY,
+            withVisibleTitleWhenTransparent: true)
+    }
+}
+
+// MARK: - Helper methods
+extension SettingsViewController {
+    private func setupUI() {
+        view.backgroundColor = UIColor.customBackgroundColor
+        configureNavBar()
+        configureTableView()
+    }
+    
+    private func configureNavBar() {
+        title = "Settings"
+        navigationController?.makeAppearance(transparent: true)
+        navigationItem.backButtonTitle = ""
+    }
+    
+    private func configureTableView() {
+        // Change tableView style
+        let frame = tableView.frame
+        tableView = UITableView(frame: frame, style: .grouped)
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.separatorColor = .clear
+        tableView.sectionHeaderTopPadding = 6
+        
+        // Avoid gaps between sections and custom section headers
+        tableView.sectionFooterHeight = 0
+        
+        // Prevent scrolling if table view content size height is less than tabke frame height
+        tableView.alwaysBounceVertical = false
     }
 }
