@@ -66,7 +66,7 @@ class CategoriesTableViewCell: UITableViewCell {
     }
     
     // MARK: - Instance methods
-    func configureWith(categoriesForButtons: [Category], andCallback callback: @escaping DimmedAnimationBtnDidTapCallback) {
+    func configureWith(categoriesForButtons: [Category], callback: @escaping DimmedAnimationBtnDidTapCallback) {
         self.categoriesForButtons = categoriesForButtons
         self.dimmedAnimationButtonDidTapCallback = callback
     }

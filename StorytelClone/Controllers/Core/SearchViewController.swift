@@ -190,7 +190,7 @@ extension SearchViewController:  UITableViewDelegate, UITableViewDataSource {
             self?.navigationController?.pushViewController(controller, animated: true)
         }
         
-        cell.configureWith(categoriesForButtons: categoriesForButtons, andCallback: callback)
+        cell.configureWith(categoriesForButtons: categoriesForButtons, callback: callback)
         return cell
     }
 
