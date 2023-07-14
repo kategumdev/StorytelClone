@@ -8,7 +8,6 @@
 import UIKit
 
 class LoginRegisterViewController: UIViewController {
-    
     // MARK: - Instance properties
     private let stackViewKind: LoginRegisterStackViewKind
     private let mainScrollView = UIScrollView()
@@ -27,7 +26,7 @@ class LoginRegisterViewController: UIViewController {
         self.stackViewKind = stackViewKind
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -35,10 +34,7 @@ class LoginRegisterViewController: UIViewController {
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.customBackgroundColor
-        configureNavBar()
-        mainScrollView.addSubview(stackView)
-        view.addSubview(mainScrollView)
+        configureSelf()
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,16 +48,25 @@ class LoginRegisterViewController: UIViewController {
     }
     
     // MARK: - Helper methods
+    private func configureSelf() {
+        view.backgroundColor = UIColor.customBackgroundColor
+        configureNavBar()
+        mainScrollView.addSubview(stackView)
+        view.addSubview(mainScrollView)
+    }
+    
     private func configureNavBar() {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "xmark", withConfiguration: symbolConfig)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(closeButtonDidTap))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: image,
+            style: .done,
+            target: self,
+            action: #selector(closeButtonDidTap))
         navigationItem.rightBarButtonItem?.tintColor = .label
     }
     
-    // MARK: - Actions
     @objc private func closeButtonDidTap() {
         self.dismiss(animated: true)
     }
-    
 }
