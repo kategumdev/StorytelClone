@@ -13,14 +13,14 @@ class OneBookOverviewTableViewCell: UITableViewCell {
 
     static func calculateHeightForRow(withBook book: Book?) -> CGFloat {
         guard let book = book else { return 300 }
-        let container = BookWithOverviewCellSubviewsContainer()
+        let container = OneBookOverviewCellSubviewsContainer()
         container.configureFor(book: book)
         let height = container.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return height
     }
     
     // MARK: - Instance properties
-    private let subviewsContainer = BookWithOverviewCellSubviewsContainer()
+    private let subviewsContainer = OneBookOverviewCellSubviewsContainer()
     var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
         
     // MARK: - Initializers

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BookWithOverviewCellSubviewsContainer: UIView {
+class OneBookOverviewCellSubviewsContainer: UIView {
     // MARK: - Static properties
     static let borderColor = UIColor(named: "borderBookOverview")
     static let backgroundColor = UIColor.powderGrayBackgroundColor
@@ -86,7 +86,7 @@ class BookWithOverviewCellSubviewsContainer: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            dimmedAnimationButton.layer.borderColor = BookWithOverviewCellSubviewsContainer.borderColor?.cgColor
+            dimmedAnimationButton.layer.borderColor = OneBookOverviewCellSubviewsContainer.borderColor?.cgColor
         }
     }
     

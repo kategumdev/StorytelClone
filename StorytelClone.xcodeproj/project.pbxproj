@@ -249,6 +249,74 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A4008832A61BBAB0084AD2D /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				5AF93322299D689F00DF17C7 /* TableHeaderView.swift */,
+				5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */,
+				5A54A5F129DC446D003BB8D4 /* PersonTableHeaderView.swift */,
+				5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */,
+				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
+				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
+				5AAA1AC129C33A6C00B22B7F /* ScopeTableSectionHeaderView.swift */,
+				5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		5A4008842A61BD160084AD2D /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */,
+				5A5A1FDA29D3235600AA08BB /* SeeMoreButton.swift */,
+				5A37EB2029DD83710053F6A7 /* DefaultPopupButton.swift */,
+				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
+				5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		5A4008852A61BD360084AD2D /* Stacks */ = {
+			isa = PBXGroup;
+			children = (
+				5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */,
+				5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */,
+				5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */,
+				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
+				5AC8D3B42A4CCD9600952A46 /* LoginRegisterStackView.swift */,
+			);
+			path = Stacks;
+			sourceTree = "<group>";
+		};
+		5A4008862A61BD7E0084AD2D /* ScrollViews */ = {
+			isa = PBXGroup;
+			children = (
+				5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */,
+				5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */,
+			);
+			path = ScrollViews;
+			sourceTree = "<group>";
+		};
+		5A4008872A61BE190084AD2D /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */,
+				5A8380B6299E818800611543 /* BookCollectionViewCell.swift */,
+				5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */,
+				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
+				5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */,
+				5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */,
+				5AE44E3429ACEE500022D212 /* CategoriesTableViewCell.swift */,
+				5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */,
+				5AB9524529EF1F06001EA8DA /* BottomSheetTableViewCell.swift */,
+				5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */,
+				5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */,
+				5A5B878429C527AA001A7A64 /* ScopeNoImageTableViewCell.swift */,
+				5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
 		5A9202AF2A54703700FE6EC4 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,26 +330,13 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		5AB2CCCC29B243140048A4FB /* Cells */ = {
+		5AB2CCCC29B243140048A4FB /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				5A8380B4299E7EAE00611543 /* TableViewCellWithCollection.swift */,
-				5A8380B6299E818800611543 /* BookCollectionViewCell.swift */,
-				5A5AE401299FB3D100FA4EDB /* WideButtonTableViewCell.swift */,
-				5AB2CCCD29B2437D0048A4FB /* PosterTableViewCell.swift */,
-				5AE44E3429ACEE500022D212 /* CategoriesTableViewCell.swift */,
 				5AE44E3229ACE2D80022D212 /* CategoryCollectionViewCell.swift */,
-				5A9B49E829B526550007C3AE /* LargeRectCoversTableViewCell.swift */,
 				5A9B49EA29B527970007C3AE /* LargeBookCollectionViewCell.swift */,
-				5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */,
-				5AA8006829C8DD5100198B8A /* BaseScopeTableViewCell.swift */,
-				5ADA577E29C23BE7004BC23B /* ScopeBookTableViewCell.swift */,
-				5A5B878429C527AA001A7A64 /* ScopeNoImageTableViewCell.swift */,
-				5AA8006329C8D21100198B8A /* ScopeSeriesTableViewCell.swift */,
-				5ACD558229E0408600097B40 /* AllTitlesTableViewCell.swift */,
-				5AB9524529EF1F06001EA8DA /* BottomSheetTableViewCell.swift */,
 			);
-			path = Cells;
+			path = CollectionViewCells;
 			sourceTree = "<group>";
 		};
 		5ABBA37E299C09A600D0E0F4 = {
@@ -373,37 +428,22 @@
 		5ABBA3FE299C0F2000D0E0F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5AF93322299D689F00DF17C7 /* TableHeaderView.swift */,
-				5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */,
-				5AE36A3729F7D173003F60E5 /* SimilarBooksTableHeaderView.swift */,
-				5A54A5F129DC446D003BB8D4 /* PersonTableHeaderView.swift */,
-				5AD2CB002A0253CB004FE55D /* BookshelfTableHeaderView.swift */,
-				5A1D2E4A29EF53530020C000 /* BottomSheetTableHeaderView.swift */,
-				5AAD76C129A17BD700EBC4FC /* SectionHeaderView.swift */,
+				5A4008862A61BD7E0084AD2D /* ScrollViews */,
+				5A4008852A61BD360084AD2D /* Stacks */,
+				5A4008842A61BD160084AD2D /* Buttons */,
+				5A4008832A61BBAB0084AD2D /* Headers */,
+				5A4008872A61BE190084AD2D /* TableViewCells */,
+				5AB2CCCC29B243140048A4FB /* CollectionViewCells */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
-				5A8380BA299ED7E200611543 /* BadgeView.swift */,
-				5AB1A29B29B3E32A001CC50A /* DimmedAnimationButton.swift */,
 				5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */,
-				5A36E03F29B804430096A032 /* ScopeButtonsView.swift */,
-				5AAA1AC129C33A6C00B22B7F /* ScopeTableSectionHeaderView.swift */,
-				5A0F8A2029CA681B004FAB36 /* BookDetailsStackView.swift */,
 				5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */,
-				5ADC083129CB2DC20042A432 /* RoundButtonsStack.swift */,
-				5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */,
-				5A3DC17129CE05D5003A9315 /* BookOverviewStackView.swift */,
-				5A5A1FDA29D3235600AA08BB /* SeeMoreButton.swift */,
 				5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */,
-				5A8497FC29D4B4060047AB44 /* TagsView.swift */,
-				5A23BEF229D7656F0038D132 /* AllTitlesSectionHeaderView.swift */,
-				5A37EB2029DD83710053F6A7 /* DefaultPopupButton.swift */,
-				5ACD558429E092C400097B40 /* StarHorzStackView.swift */,
-				5A4954EB29E58AAB0032B43B /* SaveBookButton.swift */,
-				5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */,
-				5A9916472A0A587C00CB6B8A /* BookContainerScrollView.swift */,
+				5A36E03F29B804430096A032 /* ScopeButtonsView.swift */,
 				5AF352302A20BE8400E50394 /* ScopeTableView.swift */,
-				5AC8D3B42A4CCD9600952A46 /* LoginRegisterStackView.swift */,
-				5A96E9D22A4F3A010087832A /* CustomLoginRegisterButton.swift */,
-				5AB2CCCC29B243140048A4FB /* Cells */,
+				5A8380BA299ED7E200611543 /* BadgeView.swift */,
+				5A630F4D29D8BA5600A690EF /* FollowSeriesView.swift */,
+				5A8497FC29D4B4060047AB44 /* TagsView.swift */,
+				5A9FF6F52A017A16009CA8DA /* NoDataBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
