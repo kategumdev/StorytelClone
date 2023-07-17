@@ -14,16 +14,45 @@ enum NoDataBackgroundViewKind: Equatable {
 
 class NoDataBackgroundView: UIView {
     // MARK: - Instance properties
-    private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
     private let kind: NoDataBackgroundViewKind
-
-    private let imageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.tintColor = .black
-        let image = UIImage(systemName: "books.vertical")
-        view.image = image
-        return view
+    private let roundViewHeight: CGFloat = UIScreen.main.bounds.width / 4
+    
+    private lazy var vertStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .center
+        [horzStackView, titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(26, after: horzStackView)
+        stack.setCustomSpacing(15, after: titleLabel)
+        return stack
+    }()
+        
+    private let titleLabel: UILabel = {
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .title3,
+            weight: .semibold,
+            maxPointSize: 38)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let subtitleLabel: UILabel = {
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .callout,
+            weight: .regular,
+            maxPointSize: 30)
+        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
+        label.text = "Once you do, you will find them here."
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private lazy var horzStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        [UIView(), roundViewWithImage, UIView()].forEach { stack.addArrangedSubview($0) }
+        return stack
     }()
     
     private lazy var roundViewWithImage: UIView = {
@@ -41,56 +70,28 @@ class NoDataBackgroundView: UIView {
         imageView.fillSuperview(withConstant: roundViewHeight / 4)
         return view
     }()
-    
-    private let titleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .semibold, maxPointSize: 38)
-        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 3)
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private let subtitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular, maxPointSize: 30)
-        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
-        label.text = "Once you do, you will find them here."
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private lazy var horzStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        [UIView(), roundViewWithImage, UIView()].forEach { stack.addArrangedSubview($0) }
-        return stack
-    }()
-    
-    private lazy var vertStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.alignment = .center
-        [horzStackView, titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0) }
-        stack.setCustomSpacing(26, after: horzStackView)
-        stack.setCustomSpacing(15, after: titleLabel)
-        return stack
+
+    private let imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.tintColor = .black
+        let image = UIImage(systemName: "books.vertical")
+        view.image = image
+        return view
     }()
 
     // MARK: - Initializers
     init(kind: NoDataBackgroundViewKind) {
         self.kind = kind
         super.init(frame: .zero)
-        configureSelf()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Instance methods
-    private func configureSelf() {
-        setupUI()
-        applyConstraints()
-    }
-    
+    // MARK: - Helper methods
     private func setupUI() {
         addSubview(vertStackView)
         
@@ -119,9 +120,10 @@ class NoDataBackgroundView: UIView {
                 subtitleLabel.text = "Check the spelling or try different keywords."
             }
         }
+        
+        applyConstraints()
     }
     
-    // MARK: - Helper methods
     private func applyConstraints() {
         vertStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -130,5 +132,4 @@ class NoDataBackgroundView: UIView {
             vertStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-    
 }

@@ -10,16 +10,17 @@ import UIKit
 class TagsView: UIView {
     // MARK: - Instance properties
     private let tags: [Tag]
-    private let superviewWidth: CGFloat
-    private lazy var titleLabel = createTitleLabel()
     private var tagButtons = [UIButton]()
+    private lazy var titleLabel = createTitleLabel()
+    private let superviewWidth: CGFloat
     
+    private var fullViewHeight: CGFloat = 0
+
     private lazy var compressedViewHeight: CGFloat = {
         let height = calculateViewHeightFor(numberOfRows: 3)
         return height
     }()
     
-    private var fullViewHeight: CGFloat = 0
     lazy var needsShowAllButton = fullViewHeight > compressedViewHeight ? true : false
 
     private let firstButtonTopConstant: CGFloat = 18
@@ -44,7 +45,7 @@ class TagsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
         for button in tagButtons {
@@ -74,8 +75,7 @@ class TagsView: UIView {
             button.layer.cornerRadius = button.frame.height / 2
             
             button.addAction(UIAction(handler: { [weak self] _ in
-                guard let self = self else { return }
-                self.tagButtonDidTapCallback(tag)
+                self?.tagButtonDidTapCallback(tag)
             }), for: .touchUpInside)
             
             tagButtons.append(button)
@@ -90,10 +90,17 @@ class TagsView: UIView {
         
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.attributedTitle = AttributedString(text)
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .medium, maxPointSize: 36)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .footnote,
+            weight: .medium,
+            maxPointSize: 36)
         buttonConfig.attributedTitle?.font = scaledFont
         buttonConfig.titleAlignment = .center
-        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: Constants.commonHorzPadding, bottom: 7, trailing: Constants.commonHorzPadding)
+        buttonConfig.contentInsets = NSDirectionalEdgeInsets(
+            top: 7,
+            leading: Constants.commonHorzPadding,
+            bottom: 7,
+            trailing: Constants.commonHorzPadding)
         
         button.configuration = buttonConfig
         button.sizeToFit()
@@ -123,7 +130,9 @@ class TagsView: UIView {
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2),
+            titleLabel.widthAnchor.constraint(
+                equalTo: widthAnchor,
+                constant: -Constants.commonHorzPadding * 2),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
@@ -137,27 +146,42 @@ class TagsView: UIView {
             button.translatesAutoresizingMaskIntoConstraints = false
             
             if index == 0 {
-                button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: currentLeadingConstant).isActive = true
-                button.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: firstButtonTopConstant).isActive = true
+                NSLayoutConstraint.activate([
+                    button.leadingAnchor.constraint(
+                        equalTo: leadingAnchor,
+                        constant: currentLeadingConstant),
+                    button.topAnchor.constraint(
+                        equalTo: titleLabel.bottomAnchor,
+                        constant: firstButtonTopConstant)
+                ])
             } else {
                 let previousButton = tagButtons[index - 1]
                 
                 if currentLeadingConstant + button.frame.width > containerWidth {
                     // Move to the next row
                     currentLeadingConstant = Constants.commonHorzPadding
-                    button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: currentLeadingConstant).isActive = true
-                    button.topAnchor.constraint(equalTo: previousButton.bottomAnchor, constant: spacingBetweenRows).isActive = true
+                    NSLayoutConstraint.activate([
+                        button.leadingAnchor.constraint(
+                            equalTo: leadingAnchor,
+                            constant: currentLeadingConstant),
+                        button.topAnchor.constraint(
+                            equalTo: previousButton.bottomAnchor,
+                            constant: spacingBetweenRows)
+                    ])
                     numberOfRows += 1
                 } else {
-                    button.leadingAnchor.constraint(equalTo: previousButton.trailingAnchor, constant: spacingBetweenButtons).isActive = true
-                    button.topAnchor.constraint(equalTo: previousButton.topAnchor).isActive = true
+                    NSLayoutConstraint.activate([
+                        button.leadingAnchor.constraint(
+                            equalTo: previousButton.trailingAnchor,
+                            constant: spacingBetweenButtons),
+                        button.topAnchor.constraint(equalTo: previousButton.topAnchor)
+                    ])
                 }
             }
             currentLeadingConstant += button.frame.width + spacingBetweenButtons
-
         }
         
-        // Enable top-to-bottom auto layout approach for the view
+        // Enable top-to-bottom auto layout for the view
         let lastButton = tagButtons.last!
         translatesAutoresizingMaskIntoConstraints = false
         lastButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
@@ -165,5 +189,4 @@ class TagsView: UIView {
         let fullViewHeight = calculateViewHeightFor(numberOfRows: CGFloat(numberOfRows))
         self.fullViewHeight = fullViewHeight
     }
-    
 }
