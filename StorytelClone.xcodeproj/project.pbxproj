@@ -320,12 +320,12 @@
 		5A9202AF2A54703700FE6EC4 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */,
+				5AABB72A2A55BA9C003FD2EA /* NetworkManager.swift */,
+				5AD04A792A5D91BC00F922E5 /* ImageDownloader.swift */,
+				5A665F872A571A0900A4EF56 /* PopupButton.swift */,
 				5A9202B02A54706000FE6EC4 /* LoginRegisterButton.swift */,
 				5A5B878A29C52F2C001A7A64 /* Title.swift */,
-				5AABB72A2A55BA9C003FD2EA /* NetworkManager.swift */,
-				5A7307152A5604DC005E88B7 /* DataPersistenceManager.swift */,
-				5A665F872A571A0900A4EF56 /* PopupButton.swift */,
-				5AD04A792A5D91BC00F922E5 /* ImageDownloader.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
