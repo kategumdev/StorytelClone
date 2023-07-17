@@ -1,5 +1,5 @@
 //
-//  BookDetailsView.swift
+//  BookDetailsStackView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 21/3/23.
@@ -8,12 +8,12 @@
 import UIKit
 
 class BookDetailsStackView: UIStackView {
-    // MARK: - Static properties
+    // MARK: - Static property
     static let imageHeight: CGFloat = ceil(UIScreen.main.bounds.width * 0.75)
     
     // MARK: - Instance properties
     private let book: Book
-
+    
     var showSeriesBtnDidTapCallback: () -> () = {} {
         didSet {
             showSeriesButtonContainer.showSeriesButtonDidTapCallback = showSeriesBtnDidTapCallback
@@ -25,11 +25,11 @@ class BookDetailsStackView: UIStackView {
             roundButtonsStackContainer.saveBookButtonDidTapCallback = saveBookBtnDidTapCallback
         }
     }
-
+    
     var storytellerBtnDidTapCallback: ([Storyteller]) -> () = {_ in}
     
     private let coverImageView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.layer.cornerRadius = Constants.commonBookCoverCornerRadius
         imageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
         imageView.layer.borderWidth = 0.6
@@ -37,12 +37,16 @@ class BookDetailsStackView: UIStackView {
         return imageView
     }()
     
-    private lazy var coverImageWidthConstraint = coverImageView.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight)
+    private lazy var coverImageWidthConstraint = coverImageView.widthAnchor.constraint(
+        equalToConstant: BookDetailsStackView.imageHeight)
     
     let spacingAfterCoverImageView: CGFloat = 24.0
-
+    
     private let bookTitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title3, weight: .bold, basePointSize: 19)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .title3,
+            weight: .bold,
+            basePointSize: 19)
         let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2)
         label.textAlignment = .center
         return label
@@ -56,18 +60,20 @@ class BookDetailsStackView: UIStackView {
         return button
     }()
     
-    private lazy var authorsButtonHeightConstraint = authorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value
+    private lazy var authorsButtonHeightConstraint =
+    authorsButton.heightAnchor.constraint(equalToConstant: 50) // placeholder value
     
     private lazy var hasNarratorsButton = !book.narrators.isEmpty
-
+    
     private lazy var narratorsButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         return button
     }()
     
-    private lazy var narratorsButtonHeightConstraint = narratorsButton.heightAnchor.constraint(equalToConstant: 50) // 50 is placeholder value
-
+    private lazy var narratorsButtonHeightConstraint =
+    narratorsButton.heightAnchor.constraint(equalToConstant: 50) // placeholder value
+    
     private lazy var showSeriesButtonContainer = ShowSeriesButtonContainer()
     private var hasShowSeriesButtonContainer = true
     
@@ -102,14 +108,17 @@ class BookDetailsStackView: UIStackView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         return gradientLayer
     }()
-
+    
     private var gradientColors: [CGColor] {
-        let colors = [UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,      UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor]
+        let colors = [
+            UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,
+            UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor
+        ]
         return colors
     }
     
     private var gradientIsAdded = false
-            
+    
     // MARK: - Initializers
     init(forBook book: Book) {
         self.book = book
@@ -122,7 +131,7 @@ class BookDetailsStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
         if hasShowSeriesButtonContainer {
@@ -133,7 +142,6 @@ class BookDetailsStackView: UIStackView {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             coverImageView.layer.borderColor = UIColor.tertiaryLabel.cgColor
             
@@ -141,7 +149,6 @@ class BookDetailsStackView: UIStackView {
             leadingGradientLayer.colors = gradientColors
             trailingGradientLayer.colors = gradientColors
         }
-
         
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
             // Reconfigure authorsButton and narratorsButton to adjust their height after font size change
@@ -152,21 +159,26 @@ class BookDetailsStackView: UIStackView {
         }
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func updateSaveBtnAppearance() {
         roundButtonsStackContainer.updateSaveButtonAppearance()
     }
-    
-    // MARK: - Helper methods
+}
+
+// MARK: - Helper methods
+extension BookDetailsStackView {
     private func configureSelf() {
         axis = .vertical
         alignment = .center
         
-        coverImageView.setImageForBook(book, imageViewHeight: BookDetailsStackView.imageHeight, imageViewWidthConstraint: coverImageWidthConstraint)
+        coverImageView.setImageForBook(
+            book,
+            imageViewHeight: BookDetailsStackView.imageHeight,
+            imageViewWidthConstraint: coverImageWidthConstraint)
         
         addArrangedSubview(coverImageView)
         setCustomSpacing(spacingAfterCoverImageView, after: coverImageView)
-
+        
         bookTitleLabel.text = book.title
         addArrangedSubview(bookTitleLabel)
         setCustomSpacing(16.0, after: bookTitleLabel)
@@ -180,15 +192,15 @@ class BookDetailsStackView: UIStackView {
         
         if hasNarratorsButton {
             configureNarratorsButton()
-             addArrangedSubview(narratorsButton)
-             setCustomSpacing(23.0, after: narratorsButton)
+            addArrangedSubview(narratorsButton)
+            setCustomSpacing(23.0, after: narratorsButton)
             let narrators = self.book.narrators
             addActionTo(button: narratorsButton, toShowStorytellers: narrators)
         } else {
             setCustomSpacing(33.0, after: authorsButton)
-
+            
         }
-                    
+        
         if let seriesTitle = book.series, let seriesPart = book.seriesPart {
             showSeriesButtonContainer.configureFor(seriesTitle: seriesTitle, seriesPart: seriesPart)
             addArrangedSubview(showSeriesButtonContainer)
@@ -200,23 +212,22 @@ class BookDetailsStackView: UIStackView {
         } else {
             hasShowSeriesButtonContainer = false
         }
-
+        
         addArrangedSubview(roundButtonsStackContainer)
     }
-                
+    
     private func addActionTo(button: UIButton, toShowStorytellers storytellers: [Storyteller]) {
         button.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
             Utils.playHaptics()
-            self.storytellerBtnDidTapCallback(storytellers)
+            self?.storytellerBtnDidTapCallback(storytellers)
         }), for: .touchUpInside)
     }
-
+    
     private func configureAuthorsButton() {
         let authorNames = book.authors.map { $0.name }
         configure(button: authorsButton, withStaticString: "By:", andNames: authorNames)
         
-        // Avoid top and bottom content insets
+        // Get rid of top and bottom content insets
         authorsButton.titleLabel?.sizeToFit()
         guard let buttonTitleLabel = authorsButton.titleLabel else { return }
         authorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
@@ -226,44 +237,56 @@ class BookDetailsStackView: UIStackView {
         let narratorNames = book.narrators.map { $0.name }
         configure(button: narratorsButton, withStaticString: "With:", andNames: narratorNames)
         
-        // Avoid top and bottom content insets
+        // Get rid of top and bottom content insets
         narratorsButton.titleLabel?.sizeToFit()
         guard let buttonTitleLabel = narratorsButton.titleLabel else { return }
         narratorsButtonHeightConstraint.constant = buttonTitleLabel.bounds.height
     }
     
-    private func configure(button: UIButton, withStaticString staticString: String, andNames names: [String]) {
+    private func configure(
+        button: UIButton,
+        withStaticString staticString: String,
+        andNames names: [String]
+    ) {
         let namesString = names.joined(separator: ", ")
-
+        
         let attributedString = NSMutableAttributedString(string: "\(staticString) \(namesString)")
         let staticStringScaledFont1 = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular)
-        let staticStringAttributes: [NSAttributedString.Key: Any] = [.font: staticStringScaledFont1, .foregroundColor: UIColor.label]
-
+        let staticStringAttributes: [NSAttributedString.Key: Any] =
+        [.font: staticStringScaledFont1, .foregroundColor: UIColor.label]
+        
         let nameScaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
-        let nameAttributes: [NSAttributedString.Key: Any] = [.font: nameScaledFont, .foregroundColor: UIColor.customTintColor]
-
+        let nameAttributes: [NSAttributedString.Key: Any] =
+        [.font: nameScaledFont, .foregroundColor: UIColor.customTintColor]
+        
         let staticStringCount = staticString.count
-        attributedString.addAttributes(staticStringAttributes, range: NSRange(location: 0, length: staticStringCount))
-        attributedString.addAttributes(nameAttributes, range: NSRange(location: staticStringCount, length: attributedString.length - staticStringCount))
-
+        attributedString.addAttributes(
+            staticStringAttributes,
+            range: NSRange(location: 0, length: staticStringCount))
+        
+        attributedString.addAttributes(
+            nameAttributes,
+            range: NSRange(location: staticStringCount, length: attributedString.length - staticStringCount))
+        
         button.setAttributedTitle(attributedString, for: .normal)
     }
-        
+    
     private func applyConstraints() {
+        let imageHeight = BookDetailsStackView.imageHeight
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
-        coverImageView.heightAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
+        coverImageView.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
         coverImageWidthConstraint.isActive = true
         
         bookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        bookTitleLabel.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
+        bookTitleLabel.widthAnchor.constraint(equalToConstant: imageHeight).isActive = true
         
         authorsButton.translatesAutoresizingMaskIntoConstraints = false
-        authorsButton.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
+        authorsButton.widthAnchor.constraint(equalToConstant: imageHeight).isActive = true
         authorsButtonHeightConstraint.isActive = true
         
         if hasNarratorsButton {
             narratorsButton.translatesAutoresizingMaskIntoConstraints = false
-            narratorsButton.widthAnchor.constraint(equalToConstant: BookDetailsStackView.imageHeight).isActive = true
+            narratorsButton.widthAnchor.constraint(equalToConstant: imageHeight).isActive = true
             narratorsButtonHeightConstraint.isActive = true
         }
         
@@ -274,18 +297,24 @@ class BookDetailsStackView: UIStackView {
             let heightConstant: CGFloat = 10
             leadingViewWithGradient.translatesAutoresizingMaskIntoConstraints = false
             leadingViewWithGradient.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            leadingViewWithGradient.trailingAnchor.constraint(equalTo: coverImageView.leadingAnchor).isActive = true
-            leadingViewWithGradient.heightAnchor.constraint(equalTo: showSeriesButtonContainer.heightAnchor, constant: heightConstant).isActive = true
-            leadingViewWithGradient.centerYAnchor.constraint(equalTo: showSeriesButtonContainer.centerYAnchor).isActive = true
+            leadingViewWithGradient.trailingAnchor.constraint(
+                equalTo: coverImageView.leadingAnchor).isActive = true
+            leadingViewWithGradient.heightAnchor.constraint(
+                equalTo: showSeriesButtonContainer.heightAnchor,
+                constant: heightConstant).isActive = true
+            leadingViewWithGradient.centerYAnchor.constraint(
+                equalTo: showSeriesButtonContainer.centerYAnchor).isActive = true
             
             trailingViewWithGradient.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 trailingViewWithGradient.trailingAnchor.constraint(equalTo: trailingAnchor),
                 trailingViewWithGradient.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
-                trailingViewWithGradient.heightAnchor.constraint(equalTo: showSeriesButtonContainer.heightAnchor, constant: heightConstant),
-                trailingViewWithGradient.centerYAnchor.constraint(equalTo: showSeriesButtonContainer.centerYAnchor)
+                trailingViewWithGradient.heightAnchor.constraint(
+                    equalTo: showSeriesButtonContainer.heightAnchor,
+                    constant: heightConstant),
+                trailingViewWithGradient.centerYAnchor.constraint(
+                    equalTo: showSeriesButtonContainer.centerYAnchor)
             ])
         }
     }
-    
 }
