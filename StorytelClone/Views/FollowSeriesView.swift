@@ -8,7 +8,6 @@
 import UIKit
 
 class FollowSeriesView: UIView {
-    
     // MARK: - Instance properties
     private let imageHeightAndWidth: CGFloat = 50
     private var seriesIsFollowed = false
@@ -26,7 +25,18 @@ class FollowSeriesView: UIView {
         let padding = abs((imageHeightAndWidth - labelsHeight) / 2)
         return padding
     }()
+    
+    private lazy var vertStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .leading
+        [followLabel, numberOfFollowersLabel].forEach { stack.addArrangedSubview($0) }
+        return stack
+    }()
         
+    private lazy var followLabel = createFollowLabel(withScaledFont: true)
+    private lazy var numberOfFollowersLabel = createNumberOfFollowersLabel(withScaledFont: true)
+    
     private lazy var followButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = imageHeightAndWidth / 2
@@ -40,39 +50,27 @@ class FollowSeriesView: UIView {
         return view
     }()
     
-    private lazy var followLabel = createFollowLabel(withScaledFont: true)
-    private lazy var numberOfFollowersLabel = createNumberOfFollowersLabel(withScaledFont: true)
-    
-    private lazy var vertStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.alignment = .leading
-        [followLabel, numberOfFollowersLabel].forEach { stack.addArrangedSubview($0) }
-        return stack
-    }()
-    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(followButton)
-        addSubview(vertStack)
-        applyConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) && seriesIsFollowed {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) &&
+            seriesIsFollowed {
             followButton.layer.borderColor = UIColor.label.cgColor
         }
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func configureWith(series: Series) {
         seriesIsFollowed = series.isFollowed
         toggleFollowLabelText()
@@ -83,13 +81,45 @@ class FollowSeriesView: UIView {
     }
     
     // MARK: - Helper methods
+    private func createFollowLabel(withScaledFont: Bool) -> UILabel {
+        var font: UIFont
+        if withScaledFont {
+            font = UIFont.customCalloutSemibold
+        } else {
+            font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
+        }
+        let label = UILabel.createLabelWith(font: font, text: "Follow")
+        return label
+    }
+    
+    private func createNumberOfFollowersLabel(withScaledFont: Bool) -> UILabel {
+        var font: UIFont
+        if withScaledFont {
+            font = UIFont.createScaledFontWith(
+                textStyle: .footnote,
+                weight: .regular,
+                maxPointSize: 45)
+        } else {
+            font = UIFont.createStaticFontWith(weight: .regular, size: 13)
+        }
+        let label = UILabel.createLabelWith(
+            font: font,
+            textColor: UIColor.seeAllButtonColor,
+            text: "100 Followers")
+        return label
+    }
+    
+    private func setupUI() {
+        addSubview(followButton)
+        addSubview(vertStack)
+        applyConstraints()
+    }
+    
     private func addButtonAction() {
-        print("addButtonAction")
         followButton.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
             self.seriesIsFollowed = !self.seriesIsFollowed
             self.toggleButton()
-            // Also new isFollowed value of series model object must be saved here and series added to things user follows
         }), for: .touchUpInside)
     }
     
@@ -109,9 +139,17 @@ class FollowSeriesView: UIView {
         followLabel.text = seriesIsFollowed ? "Following" : "Follow"
     }
     
-    private func updateNumberOfFollowers() {
-        numberOfFollowers = seriesIsFollowed ? numberOfFollowers + 1 : numberOfFollowers - 1
-        numberOfFollowersLabel.text = "\(numberOfFollowers.shorted()) Followers"
+    /// Activity indicator must show while context is saving new isFollowed value of the series model object
+    private func configureActivityIndicator(show: Bool) {
+        activityIndicator.color = followButton.tintColor
+        if show {
+            activityIndicator.startAnimating()
+            followButton.imageView?.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+            followButton.imageView?.isHidden = false
+        }
+        followButton.isUserInteractionEnabled = !show
     }
     
     private func toggleButtonAppearance() {
@@ -137,39 +175,9 @@ class FollowSeriesView: UIView {
         followButton.configuration = config
     }
     
-    // Activity indicator must show while context is saving new isFollowed value of the series model object
-    private func configureActivityIndicator(show: Bool) {
-        activityIndicator.color = followButton.tintColor
-        if show {
-            activityIndicator.startAnimating()
-            followButton.imageView?.isHidden = true
-        } else {
-            activityIndicator.stopAnimating()
-            followButton.imageView?.isHidden = false
-        }
-        followButton.isUserInteractionEnabled = !show
-    }
-        
-    private func createFollowLabel(withScaledFont: Bool) -> UILabel {
-        var font: UIFont
-        if withScaledFont {
-            font = UIFont.customCalloutSemibold
-        } else {
-            font = UIFont.createStaticFontWith(weight: .semibold, size: 16)
-        }
-        let label = UILabel.createLabelWith(font: font, text: "Follow")
-        return label
-    }
-    
-    private func createNumberOfFollowersLabel(withScaledFont: Bool) -> UILabel {
-        var font: UIFont
-        if withScaledFont {
-            font = UIFont.createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 45)
-        } else {
-            font = UIFont.createStaticFontWith(weight: .regular, size: 13)
-        }
-        let label = UILabel.createLabelWith(font: font, textColor: UIColor.seeAllButtonColor, text: "100 Followers")
-        return label
+    private func updateNumberOfFollowers() {
+        numberOfFollowers = seriesIsFollowed ? numberOfFollowers + 1 : numberOfFollowers - 1
+        numberOfFollowersLabel.text = "\(numberOfFollowers.shorted()) Followers"
     }
     
     private func applyConstraints() {
@@ -189,11 +197,16 @@ class FollowSeriesView: UIView {
         
         vertStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStack.topAnchor.constraint(equalTo: topAnchor, constant: calculatedTopAndBottomPadding),
-            vertStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -calculatedTopAndBottomPadding),
-            vertStack.leadingAnchor.constraint(equalTo: followButton.trailingAnchor, constant: 14),
+            vertStack.topAnchor.constraint(
+                equalTo: topAnchor,
+                constant: calculatedTopAndBottomPadding),
+            vertStack.bottomAnchor.constraint(
+                equalTo: bottomAnchor,
+                constant: -calculatedTopAndBottomPadding),
+            vertStack.leadingAnchor.constraint(
+                equalTo: followButton.trailingAnchor,
+                constant: 14),
             vertStack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
-    
 }
