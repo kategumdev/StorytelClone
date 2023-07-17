@@ -25,7 +25,7 @@ class ScopeViewController: UIViewController {
     var scopeTableViews = [ScopeTableView]()
     
     var didSelectRowCallback: ScopeTableViewDidSelectRowCallback = {_ in}
-    var ellipsisBtnDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
+    var ellipsisBtnDidTapCallback: EllipsisBtnInScopeBookTableViewCellDidTapCallback = {_ in}
     
     private let cellIdentifier = "scopePage"
     
@@ -187,7 +187,7 @@ extension ScopeViewController: UICollectionViewDataSource, UICollectionViewDeleg
         }
         
         scopeTableViewForCell.tableViewDidSelectRowCallback = didSelectRowCallback
-        scopeTableViewForCell.ellipsisButtonDidTapCallback = ellipsisBtnDidTapCallback
+        scopeTableViewForCell.ellipsisBtnDidTapCallback = ellipsisBtnDidTapCallback
         
         cell.addSubview(scopeTableViewForCell)
         scopeTableViewForCell.frame = cell.bounds

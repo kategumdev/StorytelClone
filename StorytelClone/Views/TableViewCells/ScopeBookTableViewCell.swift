@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-typealias EllipsisButtonInScopeBookTableViewCellDidTapCallback = (Book) -> ()
+typealias EllipsisBtnInScopeBookTableViewCellDidTapCallback = (Book) -> ()
 
 class ScopeBookTableViewCell: BaseScopeTableViewCell {
 
@@ -80,7 +80,7 @@ class ScopeBookTableViewCell: BaseScopeTableViewCell {
         return button
     }()
     
-    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
+    var ellipsisButtonDidTapCallback: EllipsisBtnInScopeBookTableViewCellDidTapCallback = {_ in}
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

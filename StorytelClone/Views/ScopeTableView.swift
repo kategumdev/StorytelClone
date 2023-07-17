@@ -13,20 +13,17 @@ let scopeTableViewDidRequestKeyboardDismiss = Notification.Name(
 typealias ScopeTableViewDidSelectRowCallback = (_ selectedTitle: Title) -> ()
 
 class ScopeTableView: UITableView {
-    
-    var tableViewDidSelectRowCallback: ScopeTableViewDidSelectRowCallback = {_ in}
-    var ellipsisButtonDidTapCallback: EllipsisButtonInScopeBookTableViewCellDidTapCallback = {_ in}
-    
-    let buttonKind: ScopeButtonKind
-    
     var model = [Title]()
+    let buttonKind: ScopeButtonKind
     var networkManagerError: NetworkManagerError?
-    
     var hasSectionHeader = true
     let scopeButtonsViewKind: ScopeButtonsViewKind
     
     private lazy var customTableHeader = BookshelfTableHeaderView()
     private var isCustomTableHeaderAdded = false
+    
+    var tableViewDidSelectRowCallback: ScopeTableViewDidSelectRowCallback = {_ in}
+    var ellipsisBtnDidTapCallback: EllipsisBtnInScopeBookTableViewCellDidTapCallback = {_ in}
     
     // MARK: - Initializers
     init(buttonKind: ScopeButtonKind, scopeButtonsViewKind: ScopeButtonsViewKind) {
@@ -40,7 +37,7 @@ class ScopeTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
         configureNoBooksBackgroundView()
@@ -61,31 +58,34 @@ class ScopeTableView: UITableView {
         tableHeaderView?.translatesAutoresizingMaskIntoConstraints = false
         sectionHeaderTopPadding = 0 // Avoid gap above custom section header
         
-        register(ScopeBookTableViewCell.self, forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
-        register(ScopeNoImageTableViewCell.self, forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
-        register(ScopeSeriesTableViewCell.self, forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
-        register(ScopeTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
+        register(
+            ScopeBookTableViewCell.self,
+            forCellReuseIdentifier: ScopeBookTableViewCell.identifier)
+        register(
+            ScopeNoImageTableViewCell.self,
+            forCellReuseIdentifier: ScopeNoImageTableViewCell.identifier)
+        register(
+            ScopeSeriesTableViewCell.self,
+            forCellReuseIdentifier: ScopeSeriesTableViewCell.identifier)
+        register(
+            ScopeTableSectionHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: ScopeTableSectionHeaderView.identifier)
         
         setupTapGesture()
     }
     
     private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesure))
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTapGesure))
         tapGesture.cancelsTouchesInView = false
         addGestureRecognizer(tapGesture)
     }
 
     @objc func handleTapGesure() {
-        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
-    }
-    
-    private func configureTableHeader() {
-        if !isCustomTableHeaderAdded {
-            tableHeaderView = customTableHeader
-            isCustomTableHeaderAdded = true
-        }
-        Utils.layoutTableHeaderView(customTableHeader, inTableView: self)
-        customTableHeader.isHidden = model.count == 0
+        NotificationCenter.default.post(
+            name: scopeTableViewDidRequestKeyboardDismiss,
+            object: nil)
     }
     
     private func configureNoBooksBackgroundView() {
@@ -103,7 +103,15 @@ class ScopeTableView: UITableView {
         }
         backgroundView = noBooksView
     }
-
+    
+    private func configureTableHeader() {
+        if !isCustomTableHeaderAdded {
+            tableHeaderView = customTableHeader
+            isCustomTableHeaderAdded = true
+        }
+        Utils.layoutTableHeaderView(customTableHeader, inTableView: self)
+        customTableHeader.isHidden = model.count == 0
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -120,21 +128,30 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
         let title = model[indexPath.row]
         
         if let book = title as? Book {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeBookTableViewCell.identifier, for: indexPath) as? ScopeBookTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ScopeBookTableViewCell.identifier,
+                for: indexPath) as? ScopeBookTableViewCell
+            else { return UITableViewCell() }
 
             cell.configureFor(book: book)
-            cell.ellipsisButtonDidTapCallback = self.ellipsisButtonDidTapCallback
+            cell.ellipsisButtonDidTapCallback = self.ellipsisBtnDidTapCallback
             return cell
         }
         
         if let series = title as? Series {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeSeriesTableViewCell.identifier, for: indexPath) as? ScopeSeriesTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ScopeSeriesTableViewCell.identifier,
+                for: indexPath) as? ScopeSeriesTableViewCell
+            else { return UITableViewCell() }
             
             cell.configureFor(series: series)
             return cell
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ScopeNoImageTableViewCell.identifier, for: indexPath) as? ScopeNoImageTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ScopeNoImageTableViewCell.identifier,
+            for: indexPath) as? ScopeNoImageTableViewCell
+        else { return UITableViewCell() }
         
         cell.configureFor(title: title)
         return cell
@@ -142,7 +159,6 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let title = model[indexPath.row]
-        
         if title is Book {
             return ScopeBookTableViewCell.getEstimatedHeightForRow()
         } else if title is Series {
@@ -150,20 +166,19 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
         } else {
             return ScopeNoImageTableViewCell.getEstimatedHeightForRow()
         }
-
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print("didSelectRowAt \(indexPath.row)")
         let selectedRowTitle = model[indexPath.row]
         tableViewDidSelectRowCallback(selectedRowTitle)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard hasSectionHeader,
-              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ScopeTableSectionHeaderView.identifier) as? ScopeTableSectionHeaderView else {
-            return UIView()
-        }
+              let header = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: ScopeTableSectionHeaderView.identifier) as? ScopeTableSectionHeaderView
+        else { return UIView() }
+        
         header.configureFor(buttonKind: buttonKind)
         return header
     }
@@ -176,13 +191,13 @@ extension ScopeTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return hasSectionHeader ? UITableView.automaticDimension : 0
     }
-    
 }
 
 // MARK: - UIScrollViewDelegate
 extension ScopeTableView {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        NotificationCenter.default.post(name: scopeTableViewDidRequestKeyboardDismiss, object: nil)
+        NotificationCenter.default.post(
+            name: scopeTableViewDidRequestKeyboardDismiss,
+            object: nil)
     }
-    
 }

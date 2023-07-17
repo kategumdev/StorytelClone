@@ -41,7 +41,11 @@ enum ScopeButtonKind: String, CaseIterable {
         .tags
     ]
     
-    static let kindsForBookshelf: [ScopeButtonKind] = [.toRead, .started, .finished, .downloaded]
+    static let kindsForBookshelf: [ScopeButtonKind] = [
+        .toRead,
+        .started,
+        .finished,
+        .downloaded]
     
     var sectionHeaderTitle: String {
         switch self {
@@ -141,7 +145,11 @@ class ScopeButtonsView: UIView {
     }
     
     // MARK: - Instance methods
-    func respondToScrollInCvWith(pageWidth: CGFloat, currentOffsetX: CGFloat, previousOffsetX: CGFloat) {
+    func respondToScrollInCvWith(
+        pageWidth: CGFloat,
+        currentOffsetX: CGFloat,
+        previousOffsetX: CGFloat
+    ) {
         let currentBtnIndex = getCurrentBtnIndex()
         let currentBtn = buttons[currentBtnIndex]
         
@@ -163,7 +171,9 @@ class ScopeButtonsView: UIView {
         // Adjust sliding line x position
         slidingLineLeadingAnchor.constant = leadingConstant
         
-        adjustScrollViewXPositionWhenCvDidScroll(cvCurrentOffsetX: currentOffsetX, cvPageWidth: pageWidth)
+        adjustScrollViewXPositionWhenCvDidScroll(
+            cvCurrentOffsetX: currentOffsetX,
+            cvPageWidth: pageWidth)
         
         let currentScrollDirection: ScrollDirection = currentOffsetX > previousOffsetX ? .forward : .back
         
