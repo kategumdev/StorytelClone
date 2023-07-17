@@ -82,7 +82,7 @@
 		5ABBA408299C119100D0E0F4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABBA407299C119100D0E0F4 /* ProfileViewController.swift */; };
 		5ABC41BF2A37930D00797518 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 5ABC41BE2A37930D00797518 /* Alamofire */; };
 		5ABF839829B6053200CECFDE /* OneBookOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */; };
-		5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */; };
+		5ABF839A29B6194C00CECFDE /* OneBookOverviewCellSubviewsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABF839929B6194C00CECFDE /* OneBookOverviewCellSubviewsContainer.swift */; };
 		5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */; };
 		5AC824212A21296B00CF337D /* AlamofireNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824202A21296B00CF337D /* AlamofireNetworkManager.swift */; };
 		5AC824232A212A2300CF337D /* GoogleBooksSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */; };
@@ -200,7 +200,7 @@
 		5ABBA405299C117000D0E0F4 /* BookshelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfViewController.swift; sourceTree = "<group>"; };
 		5ABBA407299C119100D0E0F4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5ABF839729B6053200CECFDE /* OneBookOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneBookOverviewTableViewCell.swift; sourceTree = "<group>"; };
-		5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWithOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
+		5ABF839929B6194C00CECFDE /* OneBookOverviewCellSubviewsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneBookOverviewCellSubviewsContainer.swift; sourceTree = "<group>"; };
 		5ABFA11729CD0E6800F7474C /* BookDetailsHorzScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsHorzScrollView.swift; sourceTree = "<group>"; };
 		5AC824202A21296B00CF337D /* AlamofireNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireNetworkManager.swift; sourceTree = "<group>"; };
 		5AC824222A212A2300CF337D /* GoogleBooksSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksSearchResponse.swift; sourceTree = "<group>"; };
@@ -435,7 +435,7 @@
 				5A4008872A61BE190084AD2D /* TableViewCells */,
 				5AB2CCCC29B243140048A4FB /* CollectionViewCells */,
 				5AEE0EB829B02CBF00B79B90 /* SectionHeaderSubviewsContainer.swift */,
-				5ABF839929B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift */,
+				5ABF839929B6194C00CECFDE /* OneBookOverviewCellSubviewsContainer.swift */,
 				5A50AD1929CCDF1C00CCB9F4 /* ShowSeriesButtonContainer.swift */,
 				5A8497FA29D49B530047AB44 /* PlaySampleButtonContainer.swift */,
 				5A36E03F29B804430096A032 /* ScopeButtonsView.swift */,
@@ -673,7 +673,7 @@
 				5ABFA11829CD0E6800F7474C /* BookDetailsHorzScrollView.swift in Sources */,
 				5AE36A3829F7D173003F60E5 /* SimilarBooksTableHeaderView.swift in Sources */,
 				5AF352312A20BE8400E50394 /* ScopeTableView.swift in Sources */,
-				5ABF839A29B6194C00CECFDE /* BookWithOverviewCellSubviewsContainer.swift in Sources */,
+				5ABF839A29B6194C00CECFDE /* OneBookOverviewCellSubviewsContainer.swift in Sources */,
 				5A2EE2472A057D9D00DFFCA5 /* SettingsViewController.swift in Sources */,
 				5AA8006429C8D21100198B8A /* ScopeSeriesTableViewCell.swift in Sources */,
 				5A9B49EB29B527970007C3AE /* LargeBookCollectionViewCell.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  BookWithOverviewCellSubviewsContainer.swift
+//  OneBookOverviewCellSubviewsContainer.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 6/3/23.
@@ -73,7 +73,7 @@ class OneBookOverviewCellSubviewsContainer: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("BookCollectionViewCell is not configured to be instantiated from storyboard")
+        fatalError("OneBookOverviewCellSubviewsContainer is not configured to be instantiated from storyboard")
     }
     
     // MARK: -
