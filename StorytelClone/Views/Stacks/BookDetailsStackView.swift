@@ -154,7 +154,7 @@ class BookDetailsStackView: UIStackView {
     
     // MARK: - Instance methods
     func updateSaveBtnAppearance() {
-        roundButtonsStackContainer.updateSaveBtnAppearance()
+        roundButtonsStackContainer.updateSaveButtonAppearance()
     }
     
     // MARK: - Helper methods
