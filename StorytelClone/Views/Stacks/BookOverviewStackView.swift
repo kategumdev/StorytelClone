@@ -8,16 +8,15 @@
 import UIKit
 
 class BookOverviewStackView: UIStackView {
-
-    // MARK: - Instance properties
     private let book: Book
     let defaultVisiblePartWhenCompressed: CGFloat = 120
+    
+    private var textViews = [UITextView]()
     
     private let mainTextView: UITextView = {
         let textView = UITextView()
         textView.isEditable = false
         textView.backgroundColor = .clear
-//        let scaledFont = UIFont.customCalloutRegular
         let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .regular)
         textView.font = scaledFont
         textView.adjustsFontForContentSizeCategory = true
@@ -33,18 +32,12 @@ class BookOverviewStackView: UIStackView {
     private lazy var audiobookTextView = createSecondaryTextView()
     private lazy var ebookTextView = createSecondaryTextView()
     private lazy var translatorsTextView = createSecondaryTextView()
-    private var textViews = [UITextView]()
         
     // MARK: - Initializers
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-        axis = .vertical
-        alignment = .center
-        spacing = 16
-        configureTextViews()
-        textViews.forEach { addArrangedSubview($0) }
-        applyConstraints()
+        setupUI()
     }
 
     required init(coder: NSCoder) {
@@ -52,6 +45,15 @@ class BookOverviewStackView: UIStackView {
     }
     
     // MARK: - Helper methods
+    private func setupUI() {
+        axis = .vertical
+        alignment = .center
+        spacing = 16
+        configureTextViews()
+        textViews.forEach { addArrangedSubview($0) }
+        applyConstraints()
+    }
+    
     private func configureTextViews() {
         mainTextView.text = book.overview
         textViews.append(mainTextView)
@@ -80,7 +82,6 @@ class BookOverviewStackView: UIStackView {
             translatorsTextView.text = "\(title)\n\(translatorsString)"
             textViews.append(translatorsTextView)
         }
-
     }
     
     private func createSecondaryTextView() -> UITextView {
@@ -103,7 +104,9 @@ class BookOverviewStackView: UIStackView {
         
         for textView in textViews {
             textView.translatesAutoresizingMaskIntoConstraints = false
-            textView.widthAnchor.constraint(equalTo: widthAnchor, constant: -Constants.commonHorzPadding * 2).isActive = true
+            textView.widthAnchor.constraint(
+                equalTo: widthAnchor,
+                constant: -Constants.commonHorzPadding * 2).isActive = true
         }
         
         // Set stack view height
@@ -113,5 +116,4 @@ class BookOverviewStackView: UIStackView {
             lastTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-
 }

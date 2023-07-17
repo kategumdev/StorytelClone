@@ -1,5 +1,5 @@
 //
-//  RatingHorzStackView.swift
+//  StarHorzStackView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 7/4/23.
@@ -22,7 +22,7 @@ class StarHorzStackView: UIStackView {
         let height = label.bounds.height
         return height
     }
-
+    
     // MARK: - Instance properties
     private var book: Book?
     private let dataPersistenceManager: any DataPersistenceManager
@@ -37,7 +37,7 @@ class StarHorzStackView: UIStackView {
         imageView.image = UIImage(systemName: "star.fill")
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = UIColor.seeAllButtonColor
-       
+        
         view.addSubview(imageView)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,12 +47,14 @@ class StarHorzStackView: UIStackView {
             imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2)
         ])
-        
         return view
     }()
     
     private lazy var ratingLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 16)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .footnote,
+            weight: .semibold,
+            maxPointSize: 16)
         let label = UILabel.createLabelWith(font: scaledFont, textColor: UIColor.seeAllButtonColor)
         label.sizeToFit()
         return label
@@ -72,7 +74,9 @@ class StarHorzStackView: UIStackView {
     }()
     
     private let categoryLabel = createCategoryLabel()
-        
+    
+    private var hasSaveAndEllipsisButtons: Bool
+    
     private lazy var saveButton = SaveBookButton()
     
     private lazy var ellipsisButton: UIButton = {
@@ -84,35 +88,25 @@ class StarHorzStackView: UIStackView {
         return button
     }()
     
-    private var hasSaveAndEllipsisButtons: Bool
     var saveBookButtonDidTapCallback: SaveBookButtonDidTapCallback = {_ in}
     var ellipsisButtonDidTapCallback: () -> () = {}
-        
+    
     // MARK: - Initializers
-    init(withSaveAndEllipsisButtons: Bool, dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared) {
+    init(
+        withSaveAndEllipsisButtons: Bool,
+        dataPersistenceManager: some DataPersistenceManager = CoreDataManager.shared
+    ) {
         self.hasSaveAndEllipsisButtons = withSaveAndEllipsisButtons
         self.dataPersistenceManager = dataPersistenceManager
         super.init(frame: .zero)
-        axis = .horizontal
-        alignment = .center
-        spacing = 0
-        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { addArrangedSubview($0) }
-        setCustomSpacing(4, after: starView)
-        setCustomSpacing(6, after: ratingLabel)
-        setCustomSpacing(6, after: vertBarLabel)
-        applyConstraints()
-        
-        if hasSaveAndEllipsisButtons {
-            addSaveButtonAction()
-            addEllipsisButtonAction()
-        }
+        configureSelf()
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func configureWith(book: Book) {
         self.book = book
         
@@ -133,8 +127,27 @@ class StarHorzStackView: UIStackView {
         setCustomSpacing(15, after: saveButton)
         updateSaveButtonImage(isBookBeingAdded: book.isOnBookshelf())
     }
-
+    
     // MARK: - Helper methods
+    private func configureSelf() {
+        setupUI()
+        if hasSaveAndEllipsisButtons {
+            addSaveButtonAction()
+            addEllipsisButtonAction()
+        }
+    }
+    
+    private func setupUI() {
+        axis = .horizontal
+        alignment = .center
+        spacing = 0
+        [starView, ratingLabel, vertBarLabel, categoryLabel, UIView()].forEach { addArrangedSubview($0) }
+        setCustomSpacing(4, after: starView)
+        setCustomSpacing(6, after: ratingLabel)
+        setCustomSpacing(6, after: vertBarLabel)
+        applyConstraints()
+    }
+    
     private func addSaveButtonAction() {
         saveButton.addAction(UIAction(handler: { [weak self] _ in
             self?.handleSaveButtonTapped()
@@ -151,30 +164,27 @@ class StarHorzStackView: UIStackView {
                 let isBookBeingAdded = bookState == .added ? true : false
                 self?.updateSaveButtonImage(isBookBeingAdded: isBookBeingAdded)
                 self?.saveBookButtonDidTapCallback(book.isOnBookshelf())
-                print("Book added or removed successfully")
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        
-    }
-
-    private func addEllipsisButtonAction() {
-        ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.ellipsisButtonDidTapCallback()
-        }), for: .touchUpInside)
     }
     
     private func updateSaveButtonImage(isBookBeingAdded: Bool) {
         saveButton.tintColor = isBookBeingAdded ? UIColor.customTintColor : .label
         saveButton.updateImage(isBookBeingAdded: isBookBeingAdded)
     }
-
+    
+    private func addEllipsisButtonAction() {
+        ellipsisButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.ellipsisButtonDidTapCallback()
+        }), for: .touchUpInside)
+    }
+    
     private func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalTo: categoryLabel.heightAnchor).isActive = true
     }
-    
 }
 
 

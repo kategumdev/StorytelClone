@@ -13,8 +13,20 @@ enum LoginRegisterStackViewKind {
     
     var buttonKinds: [LoginRegisterButtonKind] {
         switch self {
-        case .login: return [LoginRegisterButtonKind.appleLogin, LoginRegisterButtonKind.googleLogin, LoginRegisterButtonKind.emailLogin, LoginRegisterButtonKind.facebookLogin]
-        case .register: return [LoginRegisterButtonKind.appleRegister, LoginRegisterButtonKind.googleRegister, LoginRegisterButtonKind.emailRegister, LoginRegisterButtonKind.facebookRegister]
+        case .login:
+            return [
+                LoginRegisterButtonKind.appleLogin,
+                LoginRegisterButtonKind.googleLogin,
+                LoginRegisterButtonKind.emailLogin,
+                LoginRegisterButtonKind.facebookLogin
+            ]
+        case .register:
+            return [
+                LoginRegisterButtonKind.appleRegister,
+                LoginRegisterButtonKind.googleRegister,
+                LoginRegisterButtonKind.emailRegister,
+                LoginRegisterButtonKind.facebookRegister
+            ]
         }
     }
     
@@ -24,24 +36,25 @@ enum LoginRegisterStackViewKind {
         case .register: return "Create Account"
         }
     }
-    
 }
 
 class LoginRegisterStackView: UIStackView {
-    
-    // MARK: - Instance properties
     private let kind: LoginRegisterStackViewKind
     private let buttons: [LoginRegisterButton]
     
     private lazy var titleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .title2, weight: .semibold, basePointSize: 22, maxPointSize: 50)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .title2,
+            weight: .semibold,
+            basePointSize: 22,
+            maxPointSize: 50)
         let label = UILabel.createLabelWith(font: scaledFont, text: kind.titleLabelText)
         label.textAlignment = .center
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
     
-    private var firstTime = true
+    private var isLayoutSubviewsTriggeredFirstTime = true
     
     // MARK: - Initializers
     init(kind: LoginRegisterStackViewKind, buttons: [LoginRegisterButton]) {
@@ -55,19 +68,18 @@ class LoginRegisterStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        if firstTime {
-            firstTime = false
+        if isLayoutSubviewsTriggeredFirstTime {
+            isLayoutSubviewsTriggeredFirstTime = false
             // Setting spacing here avoids constraints' conflict
             spacing = 9
             setCustomSpacing(38, after: titleLabel)
         }
     }
-
-    // MARK: - Instance methods
+    
+    // MARK: - Instance method
     func applyConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         guard let superview = superview as? UIScrollView else { return }
@@ -85,12 +97,11 @@ class LoginRegisterStackView: UIStackView {
         ])
     }
     
-    // MARK: - Helper methods
+    // MARK: - Helper method
     private func setupUI() {
         axis = .vertical
         alignment = .center
         addArrangedSubview(titleLabel)
         buttons.forEach { addArrangedSubview($0) }
     }
-    
 }
