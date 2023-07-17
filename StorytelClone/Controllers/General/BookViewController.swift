@@ -218,7 +218,7 @@ extension BookViewController {
     }
     
     private func passCallbacksToBookContainerScrollView() {
-        bookContainerScrollView.bookDetailsScrollView.categoryBtnDidTapCallback = { [weak self] in
+        bookContainerScrollView.bookDetailsScrollView.categoryButtonDidTapCallback = { [weak self] in
             guard let self = self else { return }
             let category = self.book.category
             let controller = CategoryViewController(category: category)

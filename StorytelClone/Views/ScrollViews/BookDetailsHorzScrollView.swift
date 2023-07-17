@@ -1,5 +1,5 @@
 //
-//  BookDetailsScrollView.swift
+//  BookDetailsHorzScrollView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 23/3/23.
@@ -18,7 +18,11 @@ class BookDetailsHorzScrollView: UIScrollView {
         return label
     }
     
-    static func createButtonWith(symbolImageName: String?, imagePlacement: NSDirectionalRectEdge = .leading, enableInteraction: Bool = false) -> UIButton {
+    static func createButtonWith(
+        symbolImageName: String?,
+        imagePlacement: NSDirectionalRectEdge = .leading,
+        enableInteraction: Bool = false
+    ) -> UIButton {
         let button = UIButton()
         button.tintColor = .label.withAlphaComponent(0.8)
         button.isUserInteractionEnabled = enableInteraction
@@ -41,24 +45,6 @@ class BookDetailsHorzScrollView: UIScrollView {
     // MARK: - Instance properties
     private let book: Book
     
-    private let ratingsLabel = createLabelWith(text: "80 Ratings") // placeholder text
-    private let ratingButton = createButtonWith(symbolImageName: "star.fill")
-    private lazy var ratingVertStack = createVertStackWith(label: ratingsLabel, button: ratingButton)
-    
-    private lazy var hasAudio = book.titleKind == .audioBookAndEbook || book.titleKind == .audiobook
-    private lazy var durationLabel = BookDetailsHorzScrollView.createLabelWith(text: "Duration")
-    private let durationButton = createButtonWith(symbolImageName: "clock")
-    private lazy var durationVertStack = createVertStackWith(label: durationLabel, button: durationButton)
-    
-    private let languageLabel = createLabelWith(text: "Language")
-    private let languageButton = createButtonWith(symbolImageName: nil)
-    private lazy var languageVertStack = createVertStackWith(label: languageLabel, button: languageButton)
-
-    private let categoryLabel = createLabelWith(text: "Category")
-    private let categoryBtn = createButtonWith(symbolImageName: "chevron.forward", imagePlacement: .trailing, enableInteraction: true)
-    var categoryBtnDidTapCallback: () -> () = {}
-    private lazy var categoryVertStack = createVertStackWith(label: categoryLabel, button: categoryBtn)
-
     private lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -68,9 +54,41 @@ class BookDetailsHorzScrollView: UIScrollView {
         return stack
     }()
     
-    private var vertBarViews = [UIView]()
+    private lazy var ratingVertStack = createVertStackWith(
+        label: ratingsLabel,
+        button: ratingButton)
+    private let ratingsLabel = createLabelWith(text: "80 Ratings") // placeholder text
+    private let ratingButton = createButtonWith(symbolImageName: "star.fill")
+    
+    private lazy var hasAudio = book.titleKind == .audioBookAndEbook || book.titleKind == .audiobook
+    private lazy var durationVertStack = createVertStackWith(
+        label: durationLabel,
+        button: durationButton)
+    private lazy var durationLabel = BookDetailsHorzScrollView.createLabelWith(text: "Duration")
+    private let durationButton = createButtonWith(symbolImageName: "clock")
+    
+    private lazy var languageVertStack = createVertStackWith(
+        label: languageLabel,
+        button: languageButton)
+    private let languageLabel = createLabelWith(text: "Language")
+    private let languageButton = createButtonWith(symbolImageName: nil)
+
+    private lazy var categoryVertStack = createVertStackWith(
+        label: categoryLabel,
+        button: categoryButton)
+    private let categoryLabel = createLabelWith(text: "Category")
+    private let categoryButton = createButtonWith(
+        symbolImageName: "chevron.forward",
+        imagePlacement: .trailing,
+        enableInteraction: true)
+    var categoryButtonDidTapCallback: () -> () = {}
+    
     private var allButtons = [UIButton]()
-    private let scaledButtonFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold)
+    private let scaledButtonFont = UIFont.createScaledFontWith(
+        textStyle: .callout,
+        weight: .semibold)
+    
+    private var vertBarViews = [UIView]()
     
     private var borderColor: CGColor? {
         return UIColor.quaternaryLabel.cgColor
@@ -80,28 +98,21 @@ class BookDetailsHorzScrollView: UIScrollView {
     init(book: Book) {
         self.book = book
         super.init(frame: .zero)
-        layer.borderColor = borderColor
-        layer.borderWidth = 1
-        showsHorizontalScrollIndicator = false
-        configureMainStack()
-        addSubview(mainStackView)
-        applyConstraints()
+        configureSelf()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             layer.borderColor = borderColor
         }
         
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            print("\n")
             for button in allButtons {
                 button.configuration?.attributedTitle?.font = scaledButtonFont
             }
@@ -109,9 +120,13 @@ class BookDetailsHorzScrollView: UIScrollView {
     }
     
     // MARK: - Helper methods
-    private func configure(button: UIButton, withText text: String) {
-        button.configuration?.attributedTitle = AttributedString(text)
-        button.configuration?.attributedTitle?.font = scaledButtonFont
+    private func configureSelf() {
+        layer.borderColor = borderColor
+        layer.borderWidth = 1
+        showsHorizontalScrollIndicator = false
+        configureMainStack()
+        addSubview(mainStackView)
+        applyConstraints()
     }
     
     private func configureMainStack() {
@@ -135,8 +150,8 @@ class BookDetailsHorzScrollView: UIScrollView {
         allButtons.append(languageButton)
 
         let categoryText = book.category.title.replacingOccurrences(of: "\n", with: " ")
-        configure(button: categoryBtn, withText: categoryText)
-        allButtons.append(categoryBtn)
+        configure(button: categoryButton, withText: categoryText)
+        allButtons.append(categoryButton)
         addCategoryButtonAction()
         
         // Add arrangedSubviews
@@ -163,6 +178,18 @@ class BookDetailsHorzScrollView: UIScrollView {
         mainStackView.addArrangedSubview(categoryVertStack)
     }
     
+    private func configure(button: UIButton, withText text: String) {
+        button.configuration?.attributedTitle = AttributedString(text)
+        button.configuration?.attributedTitle?.font = scaledButtonFont
+    }
+    
+    private func addCategoryButtonAction() {
+        categoryButton.addAction(UIAction(handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.categoryButtonDidTapCallback()
+        }), for: .touchUpInside)
+    }
+    
     private func createVertStackWith(label: UILabel, button: UIButton) -> UIStackView {
         label.sizeToFit()
         button.sizeToFit()
@@ -180,13 +207,6 @@ class BookDetailsHorzScrollView: UIScrollView {
         return view
     }
     
-    private func addCategoryButtonAction() {
-        categoryBtn.addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            self.categoryBtnDidTapCallback()
-        }), for: .touchUpInside)
-    }
-    
     private func applyConstraints() {
         let contentG = contentLayoutGuide
         let frameG = frameLayoutGuide
@@ -196,21 +216,31 @@ class BookDetailsHorzScrollView: UIScrollView {
         let bottomPadding: CGFloat = 14
         let leadingTrailingPadding: CGFloat = 25
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: contentG.topAnchor, constant: topPadding),
-            mainStackView.leadingAnchor.constraint(equalTo: contentG.leadingAnchor, constant: leadingTrailingPadding),
-            mainStackView.trailingAnchor.constraint(equalTo: contentG.trailingAnchor, constant: -leadingTrailingPadding),
-            mainStackView.bottomAnchor.constraint(equalTo: contentG.bottomAnchor, constant: -bottomPadding),
-            mainStackView.heightAnchor.constraint(equalTo: frameG.heightAnchor, constant: -(topPadding + bottomPadding))
+            mainStackView.topAnchor.constraint(
+                equalTo: contentG.topAnchor,
+                constant: topPadding),
+            mainStackView.leadingAnchor.constraint(
+                equalTo: contentG.leadingAnchor,
+                constant: leadingTrailingPadding),
+            mainStackView.trailingAnchor.constraint(
+                equalTo: contentG.trailingAnchor,
+                constant: -leadingTrailingPadding),
+            mainStackView.bottomAnchor.constraint(
+                equalTo: contentG.bottomAnchor,
+                constant: -bottomPadding),
+            mainStackView.heightAnchor.constraint(
+                equalTo: frameG.heightAnchor,
+                constant: -(topPadding + bottomPadding))
         ])
         
         for vertBarView in vertBarViews {
             vertBarView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                vertBarView.heightAnchor.constraint(equalTo: mainStackView.heightAnchor, constant: -6),
+                vertBarView.heightAnchor.constraint(
+                    equalTo: mainStackView.heightAnchor,
+                    constant: -6),
                 vertBarView.widthAnchor.constraint(equalToConstant: 1)
             ])
         }
     }
-
 }
-
