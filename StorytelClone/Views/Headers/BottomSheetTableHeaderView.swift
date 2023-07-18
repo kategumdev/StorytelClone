@@ -9,6 +9,9 @@ import UIKit
 
 class BottomSheetTableHeaderView: UIView {
     // MARK: - Instance properties
+    private let titleText: String
+    private let needsSeparatorView: Bool
+    
     private let titleLabel = UILabel.createLabelWith(font: UIFont.customNavBarTitle)
     
     private let closeButton: UIButton = {
@@ -24,16 +27,11 @@ class BottomSheetTableHeaderView: UIView {
     var closeButtonDidTapCallback: () -> () = {}
     
     // MARK: - Initializers
-    init(titleText: String, withSeparatorView: Bool) {
+    init(titleText: String, needsSeparatorView: Bool) {
+        self.titleText = titleText
+        self.needsSeparatorView = needsSeparatorView
         super.init(frame: .zero)
-        titleLabel.text = titleText
-        addSubview(titleLabel)
-        addSubview(closeButton)
-        addButtonAction()
-        if withSeparatorView {
-            addSeparatorView()
-        }
-        applyConstraints()
+        configureSelf()
     }
 
     required init?(coder: NSCoder) {
@@ -41,6 +39,21 @@ class BottomSheetTableHeaderView: UIView {
     }
     
     // MARK: - Helper methods
+    private func configureSelf() {
+        setupUI()
+        addButtonAction()
+    }
+    
+    private func setupUI() {
+        titleLabel.text = titleText
+        addSubview(titleLabel)
+        addSubview(closeButton)
+        if needsSeparatorView {
+            addSeparatorView()
+        }
+        applyConstraints()
+    }
+    
     private func addSeparatorView() {
         let view = UIView()
         view.backgroundColor = UIColor.quaternaryLabel        
@@ -65,8 +78,12 @@ class BottomSheetTableHeaderView: UIView {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -Constants.commonHorzPadding)
+            titleLabel.leadingAnchor.constraint(
+                greaterThanOrEqualTo: leadingAnchor,
+                constant: Constants.commonHorzPadding),
+            titleLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: closeButton.leadingAnchor,
+                constant: -Constants.commonHorzPadding)
         ])
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -74,8 +91,9 @@ class BottomSheetTableHeaderView: UIView {
             closeButton.heightAnchor.constraint(equalToConstant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: 20),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.commonHorzPadding)
+            closeButton.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -Constants.commonHorzPadding)
         ])
     }
-
 }

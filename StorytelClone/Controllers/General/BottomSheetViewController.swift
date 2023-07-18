@@ -79,7 +79,7 @@ class BottomSheetViewController: UIViewController {
         let addSeparatorView = kind == .bookDetails ? false : true
         let headerView = BottomSheetTableHeaderView(
             titleText: tableHeaderTitleText,
-            withSeparatorView: addSeparatorView)
+            needsSeparatorView: addSeparatorView)
         headerView.closeButtonDidTapCallback = { [weak self] in
             self?.dismissWithCustomAnimation()
         }

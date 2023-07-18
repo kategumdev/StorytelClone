@@ -9,9 +9,23 @@ import UIKit
 
 class BookshelfTableHeaderView: UIView {
     // MARK: - Instance properties
+    private lazy var horzStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        [label, UIView(), filterButton].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(15, after: label)
+        return stack
+    }()
+    
     private let label: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 34)
-        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 2, text: "Sorted by: Latest changed")
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .footnote,
+            weight: .semibold,
+            maxPointSize: 34)
+        let label = UILabel.createLabelWith(
+            font: scaledFont,
+            numberOfLines: 2,
+            text: "Sorted by: Latest changed")
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
@@ -25,26 +39,22 @@ class BookshelfTableHeaderView: UIView {
         return button
     }()
     
-    private lazy var horzStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        [label, UIView(), filterButton].forEach { stack.addArrangedSubview($0) }
-        stack.setCustomSpacing(15, after: label)
-        return stack
-    }()
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(horzStackView)
-        applyConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Helper methods
+    private func setupUI() {
+        addSubview(horzStackView)
+        applyConstraints()
+    }
+    
     private func applyConstraints() {
         horzStackView.translatesAutoresizingMaskIntoConstraints = false
         horzStackView.fillSuperview(withConstant: Constants.commonHorzPadding)
