@@ -10,14 +10,17 @@ import SDWebImage
 import NaturalLanguage
 
 extension UIFont {
-    
     static let customFootnoteRegular = createScaledFontWith(textStyle: .footnote, weight: .regular, maxPointSize: 34)
     static let customFootnoteSemibold = createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 38)
     static let customCalloutSemibold = createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 45)
     static let customNavBarTitle = createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 18)
-
-    static func createScaledFontWith(textStyle: UIFont.TextStyle, weight: UIFont.Weight, basePointSize: CGFloat? = nil, maxPointSize: CGFloat? = nil) -> UIFont {
-        
+    
+    static func createScaledFontWith(
+        textStyle: UIFont.TextStyle,
+        weight: UIFont.Weight,
+        basePointSize: CGFloat? = nil,
+        maxPointSize: CGFloat? = nil
+    ) -> UIFont {
         var baseSize: CGFloat
         if let basePointSize = basePointSize {
             baseSize = basePointSize
@@ -38,7 +41,7 @@ extension UIFont {
                 fatalError("Not valid UIFont.TextStyle")
             }
         }
-
+        
         let fontDescriptor = UIFontDescriptor(fontAttributes: [
             UIFontDescriptor.AttributeName.size: baseSize,
             UIFontDescriptor.AttributeName.family: "Avenir Next",
@@ -46,9 +49,9 @@ extension UIFont {
                 UIFontDescriptor.TraitKey.weight: weight
             ]
         ])
-
+        
         let fontToScale = UIFont(descriptor: fontDescriptor, size: 0)
-
+        
         if let maxPointSize = maxPointSize {
             let scaledFont = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToScale, maximumPointSize: maxPointSize)
             return scaledFont
@@ -56,7 +59,6 @@ extension UIFont {
             let scaledFont = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToScale)
             return scaledFont
         }
-
     }
     
     static func createStaticFontWith(weight: UIFont.Weight, size: CGFloat) -> UIFont {
@@ -91,7 +93,7 @@ extension NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
         paragraphStyle.lineHeightMultiple = multiple
-//        paragraphStyle.maximumLineHeight = 5
+        //        paragraphStyle.maximumLineHeight = 5
         attributedString.addAttribute(.paragraphStyle,
                                       value: paragraphStyle,
                                       range: NSRange(location: 0, length: string.count))
@@ -100,8 +102,12 @@ extension NSAttributedString {
 }
 
 extension UILabel {
-    
-    static func createLabelWith(font: UIFont, numberOfLines: Int = 1, textColor: UIColor = .label, text: String = "") -> UILabel {
+    static func createLabelWith(
+        font: UIFont,
+        numberOfLines: Int = 1,
+        textColor: UIColor = .label,
+        text: String = ""
+    ) -> UILabel {
         let label = UILabel()
         label.numberOfLines = numberOfLines
         label.lineBreakMode = .byTruncatingTail
@@ -114,7 +120,6 @@ extension UILabel {
 }
 
 extension UIImage {
-    
     // Resize image accounting for its ratio
     func resizeFor(targetHeight: CGFloat, andSetAlphaTo targetAlpha: CGFloat = 1) -> UIImage {
         let imageRatio = self.size.width / self.size.height
@@ -123,12 +128,10 @@ extension UIImage {
         
         let renderer = UIGraphicsImageRenderer(size: targetSize)
         let resizedImage = renderer.image { _ in
-            
             self.draw(in: CGRect(origin: .zero, size: targetSize), blendMode: .normal, alpha: targetAlpha)
         }
         return resizedImage
     }
-    
 }
 
 extension Int {
@@ -154,7 +157,6 @@ extension Int {
 }
 
 extension UINavigationController {
-    
     static let customBackButtonImage: UIImage? = {
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "chevron.backward", withConfiguration: config)
@@ -163,20 +165,26 @@ extension UINavigationController {
     
     static let transparentNavBarAppearance: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.clear, NSAttributedString.Key.font : UIFont.customNavBarTitle]
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor : UIColor.clear,
+            NSAttributedString.Key.font : UIFont.customNavBarTitle]
         appearance.configureWithTransparentBackground()
         
-        // Use custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        /* Use custom backIndicatorImage to avoid constraints conflicts (system ones) when
+         dynamic font size is set to the largest one */
         appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
     
     static let transparentNavBarAppearanceWithVisibleTitle: UINavigationBarAppearance = {
         let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font : UIFont.customNavBarTitle]
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor : UIColor.label,
+            NSAttributedString.Key.font : UIFont.customNavBarTitle]
         appearance.configureWithTransparentBackground()
         
-        // Use custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        /* Use custom backIndicatorImage to avoid constraints conflicts (system ones) when
+         dynamic font size is set to the largest one */
         appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
@@ -186,39 +194,39 @@ extension UINavigationController {
         appearance.configureWithDefaultBackground()
         appearance.shadowColor = .tertiaryLabel
         appearance.backgroundEffect = UIBlurEffect(style: .systemThickMaterial)
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.label, NSAttributedString.Key.font: UIFont.customNavBarTitle]
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor : UIColor.label,
+            NSAttributedString.Key.font: UIFont.customNavBarTitle]
         
-        // Set custom backIndicatorImage to avoid constraints conflicts (system ones) when dynamic font size is set to the largest one
+        /* Set custom backIndicatorImage to avoid constraints conflicts (system ones) when
+         dynamic font size is set to the largest one */
         appearance.setBackIndicatorImage(customBackButtonImage, transitionMaskImage: customBackButtonImage)
         return appearance
     }()
     
     func makeAppearance(transparent: Bool, withVisibleTitle: Bool = false) {
-                
         if transparent && withVisibleTitle {
             self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearanceWithVisibleTitle
-            // print("navBar made transparent with visible title")
         } else if transparent {
             self.navigationBar.standardAppearance = UINavigationController.transparentNavBarAppearance
-            // print("navBar made transparent")
         } else {
             self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
-            // print("navBar made visible")
         }
-        
     }
     
-    func adjustAppearanceTo(currentOffsetY: CGFloat, offsetYToCompareTo: CGFloat, withVisibleTitleWhenTransparent: Bool = false) {
-        
-        if currentOffsetY > offsetYToCompareTo && self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
+    func adjustAppearanceTo(
+        currentOffsetY: CGFloat,
+        offsetYToCompareTo: CGFloat,
+        withVisibleTitleWhenTransparent: Bool = false
+    ) {
+        if currentOffsetY > offsetYToCompareTo &&
+            self.navigationBar.standardAppearance != UINavigationController.visibleNavBarAppearance {
             self.navigationBar.standardAppearance = UINavigationController.visibleNavBarAppearance
-            // print("navBar to visible")
         }
-
+        
         if currentOffsetY <= offsetYToCompareTo {
             self.makeAppearance(transparent: true, withVisibleTitle: withVisibleTitleWhenTransparent)
         }
-
     }
 }
 
@@ -244,7 +252,6 @@ extension UIColor {
 }
 
 extension UITabBar {
-    
     static let tabBarHeight: CGFloat = {
         var height: CGFloat = 0.0
         if let scene = UIApplication.shared.connectedScenes.first,
@@ -258,24 +265,37 @@ extension UITabBar {
 }
 
 extension UIImageView {
-    
     static let placeholderImage = UIImage(named: "placeholderCover")
     
     /// Sets downloaded or placeholder image.
-    func setImageForBook(_ book: Book, imageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint) {
+    func setImageForBook(
+        _ book: Book,
+        imageViewHeight: CGFloat,
+        imageViewWidthConstraint: NSLayoutConstraint
+    ) {
         self.contentMode = .scaleAspectFill
         
         if let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
-            self.sd_setImage(with: imageURL, placeholderImage: UIImageView.placeholderImage) { [weak self] image, error, cachType, url in
+            self.sd_setImage(with: imageURL,
+                             placeholderImage: UIImageView.placeholderImage
+            ) { [weak self] image, error, cachType, url in
                 if let image = image {
-                    self?.setImage(image, imageViewHeight: imageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+                    self?.setImage(
+                        image,
+                        imageViewHeight: imageViewHeight,
+                        imageViewWidthConstraint: imageViewWidthConstraint,
+                        forBook: book)
                 }
             }
             return
         }
         
         // Nil indicates that Book object has no imageURLString and placeholder image needs to be set.
-        self.setImage(nil, imageViewHeight: imageViewHeight, imageViewWidthConstraint: imageViewWidthConstraint, forBook: book)
+        self.setImage(
+            nil,
+            imageViewHeight: imageViewHeight,
+            imageViewWidthConstraint: imageViewWidthConstraint,
+            forBook: book)
     }
     
     /// Sets the image of the UIImageView caller.
@@ -284,7 +304,12 @@ extension UIImageView {
     ///   - defaultImageViewHeight: A height of the caller.
     ///   - imageViewWidthConstraint: A width constraint of the caller that may need to be adjusted.
     ///   - book: A Book object whose image is being set. Its titleKind is used to decide on the width of the placeholder image.
-    private func setImage(_ image: UIImage?, imageViewHeight: CGFloat, imageViewWidthConstraint: NSLayoutConstraint, forBook book: Book) {
+    private func setImage(
+        _ image: UIImage?,
+        imageViewHeight: CGFloat,
+        imageViewWidthConstraint: NSLayoutConstraint,
+        forBook book: Book
+    ) {
         let defaultImageViewWidth = imageViewHeight
         
         // book.coverImage is used for hardcoded Book objects
@@ -302,7 +327,6 @@ extension UIImageView {
             } else if imageViewWidthConstraint.constant != defaultImageViewWidth {
                 imageViewWidthConstraint.constant = defaultImageViewWidth
             }
-            
             self.image = resizedImage
             return
         }
@@ -316,17 +340,14 @@ extension UIImageView {
         if imageViewWidthConstraint.constant != newImageWidth {
             imageViewWidthConstraint.constant = newImageWidth
         }
-        
         self.image = UIImageView.placeholderImage
     }
-    
 }
 
 extension String {
-    
     func formatDate() -> String {
         let dateString = self
-
+        
         let inputOutputFormats: [String : String] = [
             "yyyy-MM-dd'T'HH:mm:ssZ" : "dd MMM yyyy",
             "yyyy-MM'T'HH:mm:ssZ" : "MMM yyyy",
@@ -335,7 +356,7 @@ extension String {
             "yyyy-MM" : "MMM yyyy",
             "yyyy" : "yyyy"
         ]
-
+        
         let inputFormatter = DateFormatter()
         let outputFormatter = DateFormatter()
         var formattedDate: String?
@@ -357,11 +378,15 @@ extension String {
         let cleanedText2 = cleanedText1.replacingOccurrences(of: "&#xa0;", with: " ")
         let cleanedText3 = cleanedText2.replacingOccurrences(of: "&gt;", with: "")
         let cleanedText4 = cleanedText3.replacingOccurrences(of: "\n ", with: "\n")
-                
+        
         let htmlTagPattern = "<.*?>"
         let regex = try! NSRegularExpression(pattern: htmlTagPattern, options: .caseInsensitive)
         let range = NSRange(location: 0, length: cleanedText4.utf16.count)
-        let cleanText = regex.stringByReplacingMatches(in: cleanedText4, options: [], range: range, withTemplate: "")
+        let cleanText = regex.stringByReplacingMatches(
+            in: cleanedText4,
+            options: [],
+            range: range,
+            withTemplate: "")
         return cleanText
     }
     
@@ -381,5 +406,4 @@ extension String {
         
         return languageCode?.convertLanguageCodeIntoString()
     }
-    
 }
