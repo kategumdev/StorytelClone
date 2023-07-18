@@ -12,7 +12,13 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
     static let identifier = "ScopeNoImageTableViewCell"
     static let viewWithRoundWidthAndHeight: CGFloat = imageHeight
     static let minCellHeight = viewWithRoundWidthAndHeight
-          
+    
+    static func getEstimatedHeightForRow() -> CGFloat {
+        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 1)
+        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
+        return rowHeight
+    }
+    
     static let calculatedTopAndBottomPadding: CGFloat = {
         // Not scaled font to calculate padding for default content size category
         let titleLabel = createTitleLabel(withScaledFont: false)
@@ -21,29 +27,31 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
         subtitleLabel.text = "This is subtitle"
         titleLabel.sizeToFit()
         subtitleLabel.sizeToFit()
-
+        
         let labelsHeight = titleLabel.bounds.height + subtitleLabel.bounds.height
         let padding = abs((minCellHeight - labelsHeight) / 2)
         return padding
     }()
     
-    static func getEstimatedHeightForRow() -> CGFloat {
-        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 1)
-        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
-        return rowHeight
-    }
-    
     // MARK: - Instance properties
-    private let titleLabel = BaseScopeTableViewCell.createTitleLabel()
-    private let subtitleLabel = BaseScopeTableViewCell.createSubtitleLabel()
-    
-    private let symbolView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.label
-        return imageView
+    private lazy var vertStackWithLabels: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .fillProportionally
+        [titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0)}
+        return stack
     }()
-        
+    
+    private let titleLabel = createTitleLabel()
+    private let subtitleLabel = createSubtitleLabel()
+    
+    private lazy var viewWithRound: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.addSubview(roundView)
+        return view
+    }()
+    
     private lazy var roundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
@@ -52,40 +60,30 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
         return view
     }()
     
-    private lazy var viewWithRound: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        view.addSubview(roundView)
-        return view
+    private let symbolView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.label
+        return imageView
     }()
-
-    private lazy var vertStackWithLabels: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.distribution = .fillProportionally
-        [titleLabel, subtitleLabel].forEach { stack.addArrangedSubview($0)}
-        return stack
-    }()
-            
+    
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(viewWithRound)
-        contentView.addSubview(vertStackWithLabels)
-        applyConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
         roundView.layer.cornerRadius = roundView.bounds.width / 2
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func configureFor(title: Title) {
         subtitleLabel.text = title.titleKind.rawValue
         
@@ -98,7 +96,6 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
         }
         
         titleLabel.text = storyteller.name
-        
         if storyteller.titleKind == .author {
             let config = UIImage.SymbolConfiguration(weight: .semibold)
             symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
@@ -109,16 +106,25 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
         
         let config = UIImage.SymbolConfiguration(weight: .semibold)
         symbolView.image = UIImage(systemName: "pencil")?.withConfiguration(config)
-        
     }
     
     // MARK: - Helper methods
+    private func setupUI() {
+        contentView.addSubview(viewWithRound)
+        contentView.addSubview(vertStackWithLabels)
+        applyConstraints()
+    }
+    
     private func applyConstraints() {
         viewWithRound.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            viewWithRound.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            viewWithRound.widthAnchor.constraint(equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
-            viewWithRound.heightAnchor.constraint(equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
+            viewWithRound.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Constants.commonHorzPadding),
+            viewWithRound.widthAnchor.constraint(
+                equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
+            viewWithRound.heightAnchor.constraint(
+                equalToConstant: ScopeNoImageTableViewCell.viewWithRoundWidthAndHeight),
             viewWithRound.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
@@ -131,14 +137,21 @@ class ScopeNoImageTableViewCell: BaseScopeTableViewCell {
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithRound.trailingAnchor, constant: Constants.commonHorzPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
+            vertStackWithLabels.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -ScopeNoImageTableViewCell.calculatedTopAndBottomPadding),
+            vertStackWithLabels.leadingAnchor.constraint(
+                equalTo: viewWithRound.trailingAnchor,
+                constant: Constants.commonHorzPadding),
+            vertStackWithLabels.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -Constants.commonHorzPadding),
         ])
         
-        // Trigger layoutSubview() to set roundView.layer.cornerRadius
+        // Trigger layoutSubview() to get roundView.layer.cornerRadius set properly
         layoutIfNeeded()
     }
-    
 }

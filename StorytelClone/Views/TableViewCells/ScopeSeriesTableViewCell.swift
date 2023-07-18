@@ -12,8 +12,15 @@ class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
     static let identifier = "ScopeSeriesTableViewCell"
     static let minTopBottomPadding = minTopAndBottomPadding - 2
     static let oneTransparentImageVisiblePartHeight: CGFloat = 4
-    static let minCellHeight: CGFloat = imageHeight + minTopBottomPadding * 2 + oneTransparentImageVisiblePartHeight * 2
-
+    static let minCellHeight: CGFloat =
+    imageHeight + minTopBottomPadding * 2 + oneTransparentImageVisiblePartHeight * 2
+    
+    static func getEstimatedHeightForRow() -> CGFloat {
+        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 3)
+        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
+        return rowHeight
+    }
+    
     static let calculatedTopAndBottomPadding: CGFloat = {
         // Not scaled font to calculate padding for default content size category
         let titleLabel = createTitleLabel(withScaledFont: false)
@@ -28,33 +35,20 @@ class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
         return padding
     }()
     
-    static func getEstimatedHeightForRow() -> CGFloat {
-        let labelsHeight = calculateLabelsHeightWith(subtitleLabelNumber: 3)
-        let rowHeight = labelsHeight + calculatedTopAndBottomPadding * 2
-        return rowHeight
-    }
-    
     // MARK: - Instance properties
-    private let seriesTitleLabel = BaseScopeTableViewCell.createTitleLabel()
-    private let titleKindLabel = BaseScopeTableViewCell.createSubtitleLabel()
-    private let languageLabel = BaseScopeTableViewCell.createSubtitleLabel()
-    private let authorsLabel = BaseScopeTableViewCell.createSubtitleLabel()
-    
     lazy var vertStackWithLabels: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fillProportionally
-        [seriesTitleLabel, titleKindLabel, languageLabel, authorsLabel].forEach { stack.addArrangedSubview($0)}
+        let views = [seriesTitleLabel, titleKindLabel, languageLabel, authorsLabel]
+        views.forEach { stack.addArrangedSubview($0)}
         return stack
     }()
     
-    private let mainImageView = BaseScopeTableViewCell.createImageView()
-    private lazy var mainImageViewWidthAnchor = mainImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
-    
-    private let transparentImageViewOne = BaseScopeTableViewCell.createImageView()
-    private let transparentImageViewTwo = BaseScopeTableViewCell.createImageView()
-    private let transparentImageOneHeight = BaseScopeTableViewCell.imageHeight - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4
-    private let transparentImageTwoHeight = BaseScopeTableViewCell.imageHeight - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
+    private let seriesTitleLabel = createTitleLabel()
+    private let titleKindLabel = createSubtitleLabel()
+    private let languageLabel = createSubtitleLabel()
+    private let authorsLabel = createSubtitleLabel()
     
     private lazy var viewWithImageViews: UIView = {
         let view = UIView()
@@ -64,24 +58,31 @@ class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
         return view
     }()
     
+    private let transparentImageViewOne = createImageView()
+    private let transparentImageViewTwo = createImageView()
+    private let transparentImageOneHeight = imageHeight - oneTransparentImageVisiblePartHeight * 4
+    private let transparentImageTwoHeight = imageHeight - oneTransparentImageVisiblePartHeight * 2
+    
+    private let mainImageView = createImageView()
+    private lazy var mainImageViewWidthAnchor =
+    mainImageView.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.imageHeight)
+    
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(viewWithImageViews)
-        contentView.addSubview(vertStackWithLabels)
-        applyConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func configureFor(series: Series) {
         seriesTitleLabel.text = series.title
         titleKindLabel.text = series.titleKind.rawValue
         languageLabel.text = series.language.rawValue
-
+        
         let authorNames = series.authors.map { $0.name }
         let authorNamesString = authorNames.joined(separator: ", ")
         authorsLabel.text = "By: \(authorNamesString)"
@@ -110,24 +111,36 @@ class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
         
         // Resize and set transparentImageOne
         if let image = series.coverImage {
-            let resizedTransparentImage = image.resizeFor(targetHeight: transparentImageOneHeight, andSetAlphaTo: 0.4)
+            let resizedTransparentImage = image.resizeFor(
+                targetHeight: transparentImageOneHeight,
+                andSetAlphaTo: 0.4)
             transparentImageViewOne.image = resizedTransparentImage
         }
         
         // Resize and set transparentImageTwo
         if let image = series.coverImage {
-            let resizedTransparentImage = image.resizeFor(targetHeight: transparentImageTwoHeight, andSetAlphaTo: 0.7)
+            let resizedTransparentImage = image.resizeFor(
+                targetHeight: transparentImageTwoHeight,
+                andSetAlphaTo: 0.7)
             transparentImageViewTwo.image = resizedTransparentImage
         }
-
     }
     
     // MARK: - Helper methods
+    private func setupUI() {
+        contentView.addSubview(viewWithImageViews)
+        contentView.addSubview(vertStackWithLabels)
+        applyConstraints()
+    }
+    
     private func applyConstraints() {
         viewWithImageViews.translatesAutoresizingMaskIntoConstraints = false
-        let height = BaseScopeTableViewCell.imageHeight + ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
+        let height =
+        BaseScopeTableViewCell.imageHeight + ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2
         NSLayoutConstraint.activate([
-            viewWithImageViews.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
+            viewWithImageViews.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Constants.commonHorzPadding),
             viewWithImageViews.widthAnchor.constraint(equalToConstant: BaseScopeTableViewCell.squareImageWidth),
             viewWithImageViews.heightAnchor.constraint(equalToConstant: height),
             viewWithImageViews.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
@@ -146,26 +159,39 @@ class ScopeSeriesTableViewCell: BaseScopeTableViewCell {
             transparentImageViewOne.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor),
             transparentImageViewOne.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
             transparentImageViewOne.heightAnchor.constraint(equalToConstant: transparentImageOneHeight),
-            transparentImageViewOne.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4)
+            transparentImageViewOne.widthAnchor.constraint(
+                equalTo: mainImageView.heightAnchor,
+                constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 4)
         ])
         
         transparentImageViewTwo.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            transparentImageViewTwo.topAnchor.constraint(equalTo: viewWithImageViews.topAnchor, constant: ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
+            transparentImageViewTwo.topAnchor.constraint(
+                equalTo: viewWithImageViews.topAnchor,
+                constant: ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight),
             transparentImageViewTwo.centerXAnchor.constraint(equalTo: viewWithImageViews.centerXAnchor),
             transparentImageViewTwo.heightAnchor.constraint(equalToConstant: transparentImageTwoHeight),
-            transparentImageViewTwo.widthAnchor.constraint(equalTo: mainImageView.heightAnchor, constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2)
+            transparentImageViewTwo.widthAnchor.constraint(
+                equalTo: mainImageView.heightAnchor,
+                constant: -ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight * 2)
         ])
         
         vertStackWithLabels.translatesAutoresizingMaskIntoConstraints = false
-        let topConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 + ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
-        let bottomConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 - ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
+        let topConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 +
+        ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
+        let bottomConstant = ScopeSeriesTableViewCell.calculatedTopAndBottomPadding / 2 -
+        ScopeSeriesTableViewCell.oneTransparentImageVisiblePartHeight
         NSLayoutConstraint.activate([
             vertStackWithLabels.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topConstant),
-            vertStackWithLabels.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomConstant),
-            vertStackWithLabels.leadingAnchor.constraint(equalTo: viewWithImageViews.trailingAnchor, constant: Constants.commonHorzPadding),
-            vertStackWithLabels.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding)
+            vertStackWithLabels.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -bottomConstant),
+            vertStackWithLabels.leadingAnchor.constraint(
+                equalTo: viewWithImageViews.trailingAnchor,
+                constant: Constants.commonHorzPadding),
+            vertStackWithLabels.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -Constants.commonHorzPadding)
         ])
     }
-
 }
