@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            NSAttributedString.Key.font: Utils.navBarTitleFont
 //        ]
 //        UINavigationBar.appearance().titleTextAttributes = attrs
+        FirebaseApp.configure()
         return true
     }
 

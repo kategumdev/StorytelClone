@@ -40,14 +40,4 @@ enum LoginRegisterButtonKind: String {
         let image = !systemImageName.isEmpty ? UIImage(systemName: systemImageName) : UIImage(named: customImageName)
         return image
     }
-    
-    // MARK: Instance methods
-    func handleButtonDidTap() {
-        switch self {
-        case .appleLogin, .emailLogin, .googleLogin, .facebookLogin:
-            print("log in to user account")
-        case .appleRegister, .emailRegister, .googleRegister, .facebookRegister:
-            print("creating user account")
-        }
-    }
 }

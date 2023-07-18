@@ -81,9 +81,13 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
     private func addButtonAction() {
         addAction(UIAction(handler: { [weak self] _ in
-            guard let self = self else { return }
-            self.kind.handleButtonDidTap()
+            self?.handleButtonDidTap()
         }), for: .touchUpInside)
+    }
+    
+    private func handleButtonDidTap() {
+        guard kind == .emailLogin || kind == .emailRegister else { return }
+        print("\n LOGIN OR REGISTER WITH EMAIL")
     }
     
     private func applyConstraints() {

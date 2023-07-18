@@ -154,14 +154,14 @@ extension ProfileViewController {
         let tableHeader = PersonTableHeaderView(kind: .forProfile)
         
         tableHeader.getStartedButtonDidTapCallback = { [weak self] in
-            let registerVC = LoginRegisterViewController(stackViewKind: .register)
+            let registerVC = LoginRegisterOptionsViewController(stackViewKind: .register)
             let controller = UINavigationController(rootViewController: registerVC)
             controller.modalPresentationStyle = .overFullScreen
             self?.present(controller, animated: true)
         }
         
         tableHeader.logInButtonDidTapCallback = { [weak self] in
-            let loginVC = LoginRegisterViewController(stackViewKind: .login)
+            let loginVC = LoginRegisterOptionsViewController(stackViewKind: .login)
             let controller = UINavigationController(rootViewController: loginVC)
             controller.modalPresentationStyle = .overFullScreen
             self?.present(controller, animated: true)

@@ -1,5 +1,5 @@
 //
-//  RegisterViewController.swift
+//  LoginRegisterOptionsViewController.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 28/6/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoginRegisterViewController: UIViewController {
+class LoginRegisterOptionsViewController: UIViewController {
     // MARK: - Instance properties
     private let stackViewKind: LoginRegisterStackViewKind
     private let mainScrollView = UIScrollView()
