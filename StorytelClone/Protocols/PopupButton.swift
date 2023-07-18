@@ -11,5 +11,4 @@ protocol PopupButton where Self: UIButton {
     var buttonHeight: CGFloat { get }
     
     var animate: SaveBookButtonDidTapCallback { get set }
-    
 }

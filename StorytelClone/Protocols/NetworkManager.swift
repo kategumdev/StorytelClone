@@ -16,9 +16,12 @@ protocol SearchResponse {
 protocol NetworkManager {
     var hasError: Bool { get set }
     
-    func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void)
-        
-    func cancelRequests()
+    func fetchBooks(
+        withQuery query: String,
+        bookKindsToFetch: BookKinds,
+        completion: @escaping (SearchResult
+        ) -> Void)
     
+    func cancelRequests()
 }
 

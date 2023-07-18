@@ -20,7 +20,6 @@ enum BookState {
 
 protocol DataPersistenceManager {
     associatedtype SharedType
-    
     static var shared: SharedType { get }
     
     func fetchPersistedBooks(completion: @escaping (Result<[Book], Error>) -> Void)

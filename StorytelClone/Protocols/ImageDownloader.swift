@@ -13,10 +13,13 @@ protocol ImageDownloader {
     /// - Parameters:
     ///   - books: An array of Book objects for which images need to be downloaded.
     ///   - subCategoryKind: A kind of collection view which is used in this method to determine how to resize the downloaded image.
-    ///   - completion: The only parameter is an array of Book objects.  Each object has its downloaded and resized image saved in a property.
-    func downloadAndResizeImagesFor(books: [Book], subCategoryKind: SubCategoryKind,
-                                    completion: @escaping (([Book]) -> Void))
+    ///   - completion: The only parameter is an array of Book objects.
+    ///   Each object has its downloaded and resized image saved in a property.
+    func downloadAndResizeImagesFor(
+        books: [Book],
+        subCategoryKind: SubCategoryKind,
+        completion: @escaping (([Book]) -> Void)
+    )
     
     func cancelDownloads()
-
 }
