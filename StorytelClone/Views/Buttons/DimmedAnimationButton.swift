@@ -1,5 +1,5 @@
 //
-//  DimViewAnimationButton.swift
+//  DimmedAnimationButton.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 4/3/23.
@@ -10,7 +10,6 @@ import UIKit
 typealias DimmedAnimationBtnDidTapCallback = (_ controllerToPush: UIViewController) -> ()
 
 class DimmedAnimationButton: UIButton {
-    
     enum ButtonKind: Equatable {
         case toPushBookVcWith(Book)
         case toPushAllCategoriesVc
@@ -20,7 +19,6 @@ class DimmedAnimationButton: UIButton {
     
     // MARK: - Instance properties
     var kind: ButtonKind?
-    
     var buttonTimer: Timer?
     var isButtonTooLongInHighlightedState = false
     var didTapCallback: DimmedAnimationBtnDidTapCallback = {_ in}
@@ -43,9 +41,8 @@ class DimmedAnimationButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func addConfigurationUpdateHandlerWith(viewToTransform: UIView) {
-        
         // Save passed viewToTransform into a weak property
         self.viewToTransform = viewToTransform
         
@@ -70,7 +67,6 @@ class DimmedAnimationButton: UIButton {
                     }
                 }
                 self.buttonTimer = timer
-
             } else {
                 UIView.animate(withDuration: 0.1, animations: {
                     transformView.transform = .identity
@@ -86,19 +82,15 @@ class DimmedAnimationButton: UIButton {
         
         self.addAction(UIAction(handler: { [weak self] _ in
             guard let self = self else { return }
-
             if self.isButtonTooLongInHighlightedState {
                 // The button is held more than 2 seconds, nothing needs to be done
                 self.isButtonTooLongInHighlightedState = false
-
             } else {
-                // Invalidate the timer and perform the touchUpInside action
+                // Invalidate the timer and perform action
                 self.buttonTimer?.invalidate()
-    
                 let controller = self.createControllerForCallback()
                 self.didTapCallback(controller)
             }
-
         }), for: .touchUpInside)
     }
     
@@ -109,30 +101,27 @@ class DimmedAnimationButton: UIButton {
         var config = UIButton.Configuration.plain()
         config.background.imageContentMode = .scaleAspectFill
         
-        // This prevents from dynamic cornerRadius and button.layer.cornerRadius works
+        // This prevents from dynamic cornerRadius, therefore button.layer.cornerRadius works
         config.background.cornerRadius = 0
         configuration = config
     }
     
     private func createControllerForCallback() -> UIViewController {
         guard let buttonKind = kind else { return UIViewController() }
-        var controller = UIViewController()
         
+        var controller: UIViewController
         switch buttonKind {
         case .toPushBookVcWith(let book):
             controller = BookViewController(book: book)
-
         case .toPushAllCategoriesVc:
-            controller = AllCategoriesViewController(category: Category.todasLasCategorias, categoriesForButtons: Category.categoriesForAllCategories)
-            
+            controller = AllCategoriesViewController(
+                category: Category.todasLasCategorias,
+                categoriesForButtons: Category.categoriesForAllCategories)
         case .toPushCategoryVcForSeriesCategory:
             controller = CategoryViewController(category: Category.series)
-            
         case .toPushCategoryVcForCategory(let category):
             controller = CategoryViewController(category: category)
         }
-        
         return controller
     }
-    
 }

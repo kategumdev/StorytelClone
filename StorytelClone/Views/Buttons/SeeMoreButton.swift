@@ -8,7 +8,6 @@
 import UIKit
 
 class SeeMoreButton: UIButton {
-    
     enum ButtonKind {
         case forOverview
         case forTags
@@ -17,7 +16,10 @@ class SeeMoreButton: UIButton {
     // MARK: - Instance properties
     private let buttonKind: ButtonKind
     private let seeOverviewButtonHeight: CGFloat = 110
-    private let scaledFont = UIFont.createScaledFontWith(textStyle: .footnote, weight: .semibold, maxPointSize: 34)
+    private let scaledFont = UIFont.createScaledFontWith(
+        textStyle: .footnote,
+        weight: .semibold,
+        maxPointSize: 34)
     
     lazy var heightConstant: CGFloat = {
         switch buttonKind {
@@ -64,7 +66,9 @@ class SeeMoreButton: UIButton {
     private var gradientIsAdded = false
 
     private var gradientColors: [CGColor] {
-        let colors = [UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,      UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor]
+        let colors = [
+            UIColor.customBackgroundColor!.withAlphaComponent(0).cgColor,
+            UIColor.customBackgroundColor!.withAlphaComponent(1).cgColor]
         return colors
     }
     
@@ -81,7 +85,7 @@ class SeeMoreButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View life cycle
+    // MARK: -
     override func layoutSubviews() {
         super.layoutSubviews()
         if !gradientIsAdded && buttonKind == .forOverview {
@@ -130,12 +134,19 @@ class SeeMoreButton: UIButton {
             // Position button text y-centered in the lower half of the button height
             let bottomInset = ((seeOverviewButtonHeight / 2) - intrinsicButtonHeight) / 2
             let topInset = seeOverviewButtonHeight - (intrinsicButtonHeight + bottomInset)
-            config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: bottomInset, trailing: 0)
-            
+            config.contentInsets = NSDirectionalEdgeInsets(
+                top: topInset,
+                leading: 0,
+                bottom: bottomInset,
+                trailing: 0)
         case .forTags:
             // Position button text at the bottom of the button
             let topInset = heightConstant - intrinsicButtonHeight
-            config.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 0, trailing: 0)
+            config.contentInsets = NSDirectionalEdgeInsets(
+                top: topInset,
+                leading: 0,
+                bottom: 0,
+                trailing: 0)
             backgroundColor = UIColor.customBackgroundColor
         }
         self.configuration = config
@@ -146,5 +157,4 @@ class SeeMoreButton: UIButton {
         // Ensure that button text and symbol image show above gradient layer
         gradientLayer.zPosition = -1
     }
-    
 }

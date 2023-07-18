@@ -8,8 +8,6 @@
 import UIKit
 
 class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
-    
-    // MARK: - Instance properties
     let kind: LoginRegisterButtonKind
     private let buttonHeight: CGFloat = 52
     private let imageSize: CGSize = CGSize(width: 30, height: 30)
@@ -17,21 +15,24 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         return UIColor.systemGray3.cgColor
     }
     
+    private let customImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     private let customLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 40)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .callout,
+            weight: .semibold,
+            maxPointSize: 40)
         let label = UILabel.createLabelWith(font: scaledFont, text: "Continue with Apple")
         label.textAlignment = .center
         label.lineBreakMode = .byTruncatingMiddle
         return label
     }()
     
-    private let customImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
-    private var firstTime = true
+    private var isLayoutSubviewsTriggeredFirstTime = true
     
     // MARK: - Initializers
     init(kind: LoginRegisterButtonKind) {
@@ -44,10 +45,9 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - 
+    // MARK: -
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             layer.borderColor = borderColor
         }
@@ -55,9 +55,8 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        if firstTime {
-            firstTime = false
+        if isLayoutSubviewsTriggeredFirstTime {
+            isLayoutSubviewsTriggeredFirstTime = false
             applyConstraints()
         }
     }
@@ -73,7 +72,7 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         layer.borderWidth = 2
         layer.borderColor = borderColor
         layer.cornerRadius = buttonHeight / 2
-
+        
         customImageView.image = kind.buttonImage
         customLabel.text = kind.rawValue
         addSubview(customLabel)
@@ -94,18 +93,20 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
         guard let superview = superview else { return }
         let superviewWidth = superview.bounds.width
         widthAnchor.constraint(equalToConstant: superviewWidth).isActive = true
-            
+        
         customImageView.translatesAutoresizingMaskIntoConstraints = false
         let leadingTrailingPadding: CGFloat = 10
         NSLayoutConstraint.activate([
             customImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            customImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingTrailingPadding),
+            customImageView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: leadingTrailingPadding),
             customImageView.widthAnchor.constraint(equalToConstant: imageSize.width),
             customImageView.heightAnchor.constraint(equalToConstant: imageSize.height)
         ])
         
         customLabel.translatesAutoresizingMaskIntoConstraints = false
-                
+        
         let imageLabelPadding: CGFloat = 4
         let widthConstant = (imageSize.width + leadingTrailingPadding + imageLabelPadding) * 2
         let width = superviewWidth - widthConstant
@@ -115,5 +116,4 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
             customLabel.widthAnchor.constraint(equalToConstant: width)
         ])
     }
-    
 }
