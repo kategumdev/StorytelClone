@@ -18,9 +18,7 @@ class CoreDataManager: DataPersistenceManager {
     func addPersistedBookOf(book: Book, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
-        
         let persistedBook = PersistedBook(context: context)
-        
         persistedBook.id = book.id
         persistedBook.title = book.title
         persistedBook.coverImage = book.coverImage?.pngData()
@@ -74,13 +72,11 @@ class CoreDataManager: DataPersistenceManager {
             print(error.localizedDescription)
             completion(.failure(DataPersistenceError.failedToAddData))
         }
-        
     }
     
     func fetchPersistedBooks(completion: @escaping (Result<[Book], Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
-        
         let request = PersistedBook.fetchRequest()
         
         do {
@@ -102,16 +98,18 @@ class CoreDataManager: DataPersistenceManager {
         } catch {
             completion(.failure(DataPersistenceError.failedToDeleteData))
         }
-        
     }
     
-    func fetchPersistedBookWith(id: String, completion: @escaping (Result<PersistedBook?, Error>) -> Void) {
+    func fetchPersistedBookWith(
+        id: String,
+        completion: @escaping (Result<PersistedBook?, Error>) -> Void
+    ) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
-
+        
         let request = PersistedBook.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id)
-
+        
         do {
             let matchingObjects = try context.fetch(request)
             completion(.success(matchingObjects.first))
@@ -120,8 +118,10 @@ class CoreDataManager: DataPersistenceManager {
         }
     }
     
-    func addOrDeletePersistedBookFrom(book: Book, completion: @escaping (Result<BookState, Error>) -> Void) {
-        
+    func addOrDeletePersistedBookFrom(
+        book: Book,
+        completion: @escaping (Result<BookState, Error>
+        ) -> Void) {
         var isBookBeingAdded = false
         var fetchedBook: PersistedBook? = nil
         
@@ -160,5 +160,4 @@ class CoreDataManager: DataPersistenceManager {
             }
         }
     }
-
 }

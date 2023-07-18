@@ -14,35 +14,39 @@ enum NetworkManagerError: Error {
     case noResults
 }
 
-enum WebService {
-    case googleBooks
-    case itunes
-    
-    var url: String {
-        switch self {
-        case .googleBooks: return "https://www.googleapis.com/books/v1/volumes?"
-        case .itunes: return "http://itunes.apple.com/search?"
-        }
-    }
-    
-    var apiKey: String {
-        switch self {
-        case .googleBooks:
-            if let apiKey = ProcessInfo.processInfo.environment["GOOGLE_BOOKS_API_KEY"] {
-                return apiKey
-            } else {
-                fatalError("Could not find value for key 'GOOGLE_BOOKS_API_KEY' in the environmental variables")
-            }
-        case .itunes: return "" // No key is needed for this api
-        }
-    }
-}
-
 class AlamofireNetworkManager: NetworkManager {
+    enum WebService {
+        case googleBooks
+        case itunes
+        
+        var url: String {
+            switch self {
+            case .googleBooks: return "https://www.googleapis.com/books/v1/volumes?"
+            case .itunes: return "http://itunes.apple.com/search?"
+            }
+        }
+        
+        var apiKey: String {
+            switch self {
+            case .googleBooks:
+                if let apiKey = ProcessInfo.processInfo.environment["GOOGLE_BOOKS_API_KEY"] {
+                    return apiKey
+                } else {
+                    fatalError("Could not find value for key 'GOOGLE_BOOKS_API_KEY' in the environmental variables")
+                }
+            case .itunes: return "" // No key is needed for this api
+            }
+        }
+    }
+    
     private var dataRequests: [DataRequest] = []
     var hasError = false
     
-    func fetchBooks(withQuery query: String, bookKindsToFetch: BookKinds, completion: @escaping (SearchResult) -> Void) {
+    func fetchBooks(
+        withQuery query: String,
+        bookKindsToFetch: BookKinds,
+        completion: @escaping (SearchResult) -> Void
+    ) {
         hasError = false
 
         let fetchGroup = DispatchGroup()
@@ -61,13 +65,21 @@ class AlamofireNetworkManager: NetworkManager {
         if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyEbooks {
             fetchGroup.enter()
             // Perform Google Books search
-            fetch(webService: .googleBooks, resultValueType: GoogleBooksSearchResponse.self, query: query, completion: handleResultClosure)
+            fetch(
+                webService: .googleBooks,
+                resultValueType: GoogleBooksSearchResponse.self,
+                query: query,
+                completion: handleResultClosure)
         }
 
         if bookKindsToFetch == .ebooksAndAudiobooks || bookKindsToFetch == .onlyAudiobooks {
             // Perform iTunes search
             fetchGroup.enter()
-            fetch(webService: .itunes, resultValueType: ITunesSearchResponse.self, query: query, completion: handleResultClosure)
+            fetch(
+                webService: .itunes,
+                resultValueType: ITunesSearchResponse.self,
+                query: query,
+                completion: handleResultClosure)
         }
 
         fetchGroup.notify(queue: DispatchQueue.main) { [weak self] in
@@ -79,13 +91,18 @@ class AlamofireNetworkManager: NetworkManager {
                 completion(.failure(unwrappedSavedError))
             } else {
                 self?.hasError = true
-                completion(.failure(NetworkManagerError.noResults)) // when empty and no errors
+                // When empty and no errors
+                completion(.failure(NetworkManagerError.noResults))
             }
         }
     }
     
-    private func fetch<T: Decodable & SearchResponse>(webService: WebService, resultValueType: T.Type, query: String, completion: @escaping (SearchResult) -> Void) {
-        
+    private func fetch<T: Decodable & SearchResponse>(
+        webService: WebService,
+        resultValueType: T.Type,
+        query: String,
+        completion: @escaping (SearchResult
+        ) -> Void) {
         var parameters: [String : String] = [:]
         switch webService {
         case .googleBooks:
@@ -101,7 +118,6 @@ class AlamofireNetworkManager: NetworkManager {
         let dataRequest = AF.request(webService.url, parameters: parameters)
           .validate()
           .responseDecodable(of: T.self) { response in
-              
               switch response.result {
               case .success(let data):
                   let books = data.books
@@ -138,5 +154,4 @@ class AlamofireNetworkManager: NetworkManager {
     deinit {
         cancelRequests()
     }
-    
 }
