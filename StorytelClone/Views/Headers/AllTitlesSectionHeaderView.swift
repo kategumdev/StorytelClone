@@ -12,13 +12,6 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     static let identifier = "AllTitlesSectionHeaderView"
     static let topAndBottomPadding: CGFloat = 16
     
-    static func createLabel() -> UILabel {
-//        let scaledFont = UIFont.createScaledFontWith(customStyle: .calloutSemibold)
-        let scaledFont = UIFont.customCalloutSemibold
-        let label = UILabel.createLabelWith(font: scaledFont)
-        return label
-    }
-    
     static func calculateEstimatedHeaderHeight() -> CGFloat {
         let label = createLabel()
         label.text = "Placeholder"
@@ -28,21 +21,14 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         return height
     }
     
+    static func createLabel() -> UILabel {
+        let scaledFont = UIFont.customCalloutSemibold
+        let label = UILabel.createLabelWith(font: scaledFont)
+        return label
+    }
+    
     // MARK: - Instance properties
     private let stackViewHeight: CGFloat = 26
-    
-    private let titleLabel = createLabel()
-    private lazy var shareButton = createButtonWithImageWith(symbolName: "paperplane")
-    private lazy var filterButton = createButtonWithImageWith(symbolName: "arrow.up.arrow.down")
-
-    private lazy var vertBarView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .tertiaryLabel
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: stackViewHeight).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 1).isActive = true
-        return view
-    }()
     
     private lazy var shareFilterStack: UIStackView = {
         let stack = UIStackView()
@@ -52,6 +38,10 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         return stack
     }()
     
+    private let titleLabel = createLabel()
+    private lazy var shareButton = createButtonWithImageWith(symbolName: "paperplane")
+    private lazy var filterButton = createButtonWithImageWith(symbolName: "arrow.up.arrow.down")
+    
     private lazy var spacerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -59,13 +49,20 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         return view
     }()
-        
+    
+    private lazy var vertBarView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .tertiaryLabel
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: stackViewHeight).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        return view
+    }()
+    
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.customBackgroundColor
-        addSubviews()
-        applyConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -90,9 +87,11 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Helper methods
-    private func addSubviews() {
+    private func setupUI() {
+        contentView.backgroundColor = UIColor.customBackgroundColor
         contentView.addSubview(titleLabel)
         contentView.addSubview(shareFilterStack)
+        applyConstraints()
     }
     
     private func createButtonWithImageWith(symbolName: String) -> UIButton {
@@ -107,10 +106,18 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AllTitlesSectionHeaderView.topAndBottomPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: shareFilterStack.leadingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AllTitlesSectionHeaderView.topAndBottomPadding)
+            titleLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Constants.commonHorzPadding),
+            titleLabel.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: AllTitlesSectionHeaderView.topAndBottomPadding),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: shareFilterStack.leadingAnchor,
+                constant: -Constants.commonHorzPadding),
+            titleLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -AllTitlesSectionHeaderView.topAndBottomPadding)
         ])
         
         shareFilterStack.translatesAutoresizingMaskIntoConstraints = false
@@ -121,5 +128,4 @@ class AllTitlesSectionHeaderView: UITableViewHeaderFooterView {
             shareFilterStack.heightAnchor.constraint(equalToConstant: stackViewHeight)
         ])
     }
-
 }

@@ -1,5 +1,5 @@
 //
-//  SearchResultsSectionHeaderView.swift
+//  ScopeTableSectionHeaderView.swift
 //  StorytelClone
 //
 //  Created by Kateryna Gumenna on 16/3/23.
@@ -8,14 +8,8 @@
 import UIKit
 
 class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
-    
-    // MARK: - Static properties and methods
-    static let identifier = "SearchResultsTableSectionHeaderView"
-    
-    static func createLabel() -> UILabel {
-        let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
-        return label
-    }
+    // MARK: - Static property and methods
+    static let identifier = "ScopeTableSectionHeaderView"
     
     static func calculateEstimatedHeaderHeight(buttonKind: ScopeButtonKind) -> CGFloat {
         let label = createLabel()
@@ -23,6 +17,11 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
         label.sizeToFit()
         let height = label.bounds.height + buttonKind.sectionHeaderPaddingY
         return height
+    }
+    
+    static func createLabel() -> UILabel {
+        let label = UILabel.createLabelWith(font: UIFont.customCalloutSemibold)
+        return label
     }
     
     // MARK: - Instance properties
@@ -33,8 +32,7 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
     // MARK: - Initializers
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.customBackgroundColor
-        contentView.addSubview(titleLabel)
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -52,13 +50,26 @@ class ScopeTableSectionHeaderView: UITableViewHeaderFooterView {
     }
 
     // MARK: - Helper methods
+    private func setupUI() {
+        contentView.backgroundColor = UIColor.customBackgroundColor
+        contentView.addSubview(titleLabel)
+    }
+    
     private func applyConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.commonHorzPadding),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: paddingY / 2),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.commonHorzPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -paddingY / 2)
+            titleLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Constants.commonHorzPadding),
+            titleLabel.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: paddingY / 2),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -Constants.commonHorzPadding),
+            titleLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -paddingY / 2)
         ])
     }
 }
