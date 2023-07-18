@@ -38,7 +38,7 @@ enum LoginRegisterStackViewKind {
     }
 }
 
-class LoginRegisterStackView: UIStackView {
+class LoginRegisterOptionsStack: UIStackView {
     private let kind: LoginRegisterStackViewKind
     private let buttons: [LoginRegisterButton]
     
@@ -55,6 +55,14 @@ class LoginRegisterStackView: UIStackView {
     }()
     
     private var isLayoutSubviewsTriggeredFirstTime = true
+    
+    var buttonDidTapCallback: LoginRegisterBtnDidTapCallback = {_ in} {
+        didSet {
+            for button in buttons {
+                button.didTapCallback = buttonDidTapCallback
+            }
+        }
+    }
     
     // MARK: - Initializers
     init(kind: LoginRegisterStackViewKind, buttons: [LoginRegisterButton]) {

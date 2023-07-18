@@ -34,6 +34,8 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
     private var isLayoutSubviewsTriggeredFirstTime = true
     
+    var didTapCallback: LoginRegisterBtnDidTapCallback = {_ in}
+    
     // MARK: - Initializers
     init(kind: LoginRegisterButtonKind) {
         self.kind = kind
@@ -81,13 +83,10 @@ class CustomLoginRegisterButton: UIButton, LoginRegisterButton {
     
     private func addButtonAction() {
         addAction(UIAction(handler: { [weak self] _ in
-            self?.handleButtonDidTap()
+            guard let self = self else { return }
+            guard self.kind == .emailLogin || self.kind == .emailRegister else { return }
+            self.didTapCallback(self.kind)
         }), for: .touchUpInside)
-    }
-    
-    private func handleButtonDidTap() {
-        guard kind == .emailLogin || kind == .emailRegister else { return }
-        print("\n LOGIN OR REGISTER WITH EMAIL")
     }
     
     private func applyConstraints() {

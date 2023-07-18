@@ -12,10 +12,10 @@ class LoginRegisterOptionsViewController: UIViewController {
     private let stackViewKind: LoginRegisterStackViewKind
     private let mainScrollView = UIScrollView()
     
-    private lazy var stackView: LoginRegisterStackView = {
+    private lazy var stackView: LoginRegisterOptionsStack = {
         let buttonKinds = stackViewKind.buttonKinds
         var buttons = buttonKinds.map { CustomLoginRegisterButton(kind: $0) }
-        let stackView = LoginRegisterStackView(kind: stackViewKind, buttons: buttons)
+        let stackView = LoginRegisterOptionsStack(kind: stackViewKind, buttons: buttons)
         return stackView
     }()
     
@@ -52,6 +52,12 @@ class LoginRegisterOptionsViewController: UIViewController {
         view.backgroundColor = UIColor.customBackgroundColor
         configureNavBar()
         mainScrollView.addSubview(stackView)
+        
+        stackView.buttonDidTapCallback = { [weak self] buttonKind in
+            let vc = LoginRegisterViewController(clickedButtonKind: buttonKind)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
         view.addSubview(mainScrollView)
     }
     

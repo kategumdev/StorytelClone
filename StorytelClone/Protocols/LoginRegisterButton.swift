@@ -7,8 +7,11 @@
 
 import UIKit
 
+typealias LoginRegisterBtnDidTapCallback = (LoginRegisterButtonKind) -> ()
+
 protocol LoginRegisterButton where Self: UIButton {
     var kind: LoginRegisterButtonKind { get }
+    var didTapCallback: LoginRegisterBtnDidTapCallback { get set }
 }
 
 enum LoginRegisterButtonKind: String {
