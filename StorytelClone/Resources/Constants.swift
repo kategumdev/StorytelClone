@@ -8,7 +8,6 @@
 import UIKit
 
 struct Constants {
-    
     static let commonHorzPadding: CGFloat = 16
     static let commonBookCoverCornerRadius: CGFloat = 4
     static let topPaddingForPosterAndLargeRectCoversCells: CGFloat = 10
@@ -16,11 +15,13 @@ struct Constants {
     
     static let largeSquareBookCoverSize: CGSize = {
         let contentViewWidth = UIScreen.main.bounds.width
-        let width = (contentViewWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
-
+        let width =
+        (contentViewWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
+        
         let fullWidth = contentViewWidth + (width / 2)
-        let itemWidth = (fullWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
-
+        let itemWidth =
+        (fullWidth - commonHorzPadding * numberOfVisibleCvItemsInRow) / numberOfVisibleCvItemsInRow
+        
         let size = CGSize(width: round(itemWidth), height: round(itemWidth))
         return size
     }()

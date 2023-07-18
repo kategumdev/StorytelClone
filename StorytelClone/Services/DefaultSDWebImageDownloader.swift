@@ -11,14 +11,22 @@ import SDWebImage
 class DefaultSDWebImageDownloader: ImageDownloader {
     private let imageDownloader = SDWebImageDownloader()
     
-    func downloadAndResizeImagesFor(books: [Book], subCategoryKind: SubCategoryKind, completion: @escaping (([Book]) -> Void)) {
-        
+    func downloadAndResizeImagesFor(
+        books: [Book],
+        subCategoryKind: SubCategoryKind,
+        completion: @escaping (([Book]) -> Void)
+    ) {
         // Load and resize poster image
-        guard subCategoryKind != .poster else {
-            if let book = books.first, let imageURLString = book.imageURLString, let imageURL = URL(string: imageURLString) {
+        guard subCategoryKind != .poster
+        else {
+            if let book = books.first,
+               let imageURLString = book.imageURLString,
+               let imageURL = URL(string: imageURLString) {
                 imageDownloader.downloadImage(with: imageURL) { image, data, error, success in
                     if let image = image {
-                        let resizedImage = image.resizeFor(targetHeight: PosterTableViewCell.calculatedButtonHeight, andSetAlphaTo: 1)
+                        let resizedImage = image.resizeFor(
+                            targetHeight: PosterTableViewCell.calculatedButtonHeight,
+                            andSetAlphaTo: 1)
                         var bookWithImage = book
                         bookWithImage.coverImage = resizedImage
                         completion([bookWithImage])
@@ -69,5 +77,4 @@ class DefaultSDWebImageDownloader: ImageDownloader {
     deinit {
         cancelDownloads()
     }
-    
 }
