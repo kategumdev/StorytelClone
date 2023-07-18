@@ -8,18 +8,17 @@
 import UIKit
 
 class LargeBookCollectionViewCell: UICollectionViewCell {
-    
     static let identifier = "LargeBookCollectionViewCell"
         
     // MARK: - Instance properties
+    private let coverCornerRadius: CGFloat = 7
+    
     private let dimmedAnimationButton: DimmedAnimationButton = {
         let button = DimmedAnimationButton()
         button.layer.borderColor = UIColor.tertiaryLabel.cgColor
         button.layer.borderWidth = 0.26
         return button
     }()
-    
-    private let coverCornerRadius: CGFloat = 7
         
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -53,11 +52,12 @@ class LargeBookCollectionViewCell: UICollectionViewCell {
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
+            dimmedAnimationButton.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
             dimmedAnimationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             dimmedAnimationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dimmedAnimationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
-    
 }

@@ -8,15 +8,20 @@
 import UIKit
 
 class CategoryCollectionViewCell: UICollectionViewCell {
-    
     static let identifier = "CategoryCollectionViewCell"
         
     // MARK: - Instance properties
     private var categoryForButton: Category?
     
     private lazy var categoryTitleLabel: UILabel = {
-        let scaledFont = UIFont.createScaledFontWith(textStyle: .callout, weight: .semibold, maxPointSize: 20)
-        let label = UILabel.createLabelWith(font: scaledFont, numberOfLines: 0, textColor: .white)
+        let scaledFont = UIFont.createScaledFontWith(
+            textStyle: .callout,
+            weight: .semibold,
+            maxPointSize: 20)
+        let label = UILabel.createLabelWith(
+            font: scaledFont,
+            numberOfLines: 0,
+            textColor: .white)
         label.lineBreakMode = .byWordWrapping
         return label
     }()
@@ -30,9 +35,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(dimmedAnimationButton)
-        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        applyConstraints()
+        configureSelf()
     }
     
     required init?(coder: NSCoder) {
@@ -40,7 +43,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Instance methods
-    func configureFor(category: Category, withCallback callback: @escaping DimmedAnimationBtnDidTapCallback) {
+    func configureFor(
+        category: Category,
+        withCallback callback: @escaping DimmedAnimationBtnDidTapCallback
+    ) {
         dimmedAnimationButton.backgroundColor = category.buttonBackgroundColor
         dimmedAnimationButton.kind = .toPushCategoryVcForCategory(category)
         dimmedAnimationButton.didTapCallback = callback
@@ -48,16 +54,27 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Helper methods
+    private func configureSelf() {
+        contentView.addSubview(dimmedAnimationButton)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        applyConstraints()
+    }
+    
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         dimmedAnimationButton.fillSuperview()
         
         categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            categoryTitleLabel.leadingAnchor.constraint(equalTo: dimmedAnimationButton.leadingAnchor, constant: Constants.commonHorzPadding),
-            categoryTitleLabel.bottomAnchor.constraint(equalTo: dimmedAnimationButton.bottomAnchor, constant: -(Constants.commonHorzPadding - 4)),
-            categoryTitleLabel.trailingAnchor.constraint(equalTo: dimmedAnimationButton.trailingAnchor, constant: -Constants.commonHorzPadding)
+            categoryTitleLabel.leadingAnchor.constraint(
+                equalTo: dimmedAnimationButton.leadingAnchor,
+                constant: Constants.commonHorzPadding),
+            categoryTitleLabel.bottomAnchor.constraint(
+                equalTo: dimmedAnimationButton.bottomAnchor,
+                constant: -(Constants.commonHorzPadding - 4)),
+            categoryTitleLabel.trailingAnchor.constraint(
+                equalTo: dimmedAnimationButton.trailingAnchor,
+                constant: -Constants.commonHorzPadding)
         ])
     }
-    
 }
