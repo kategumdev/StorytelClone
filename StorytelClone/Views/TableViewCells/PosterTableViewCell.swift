@@ -8,29 +8,27 @@
 import UIKit
 
 class PosterTableViewCell: UITableViewCell {
-    
     // MARK: - Static properties
     static let identifier = "PosterTableViewCell"
     
-    static let heightForRow: CGFloat = calculatedButtonHeight + Constants.topPaddingForPosterAndLargeRectCoversCells
+    static let heightForRow: CGFloat =
+    calculatedButtonHeight + Constants.topPaddingForPosterAndLargeRectCoversCells
         
-    static let calculatedButtonWidth: CGFloat = UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
+    static let calculatedButtonWidth: CGFloat =
+    UIScreen.main.bounds.size.width - (Constants.commonHorzPadding * 2)
     
     static let calculatedButtonHeight: CGFloat = {
         let height = round(calculatedButtonWidth + (calculatedButtonWidth / 6))
         return height
     }()
     
-    // MARK: - Instance properties
+    // MARK: - Instance property
     private let dimmedAnimationButton = DimmedAnimationButton()
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.customBackgroundColor
-        contentView.addSubview(dimmedAnimationButton)
-        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
-        applyConstraints()
+        configureSelf()
     }
     
     required init?(coder: NSCoder) {
@@ -45,12 +43,23 @@ class PosterTableViewCell: UITableViewCell {
     }
     
     // MARK: - Helper methods
+    private func configureSelf() {
+        contentView.backgroundColor = UIColor.customBackgroundColor
+        contentView.addSubview(dimmedAnimationButton)
+        dimmedAnimationButton.addConfigurationUpdateHandlerWith(viewToTransform: self)
+        applyConstraints()
+    }
+    
     private func applyConstraints() {
         dimmedAnimationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dimmedAnimationButton.widthAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonWidth),
-            dimmedAnimationButton.heightAnchor.constraint(equalToConstant: PosterTableViewCell.calculatedButtonHeight),
-            dimmedAnimationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
+            dimmedAnimationButton.widthAnchor.constraint(
+                equalToConstant: PosterTableViewCell.calculatedButtonWidth),
+            dimmedAnimationButton.heightAnchor.constraint(
+                equalToConstant: PosterTableViewCell.calculatedButtonHeight),
+            dimmedAnimationButton.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: Constants.topPaddingForPosterAndLargeRectCoversCells),
             dimmedAnimationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])
     }
