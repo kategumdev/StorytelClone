@@ -26,27 +26,30 @@ class OneBookOverviewTableViewCell: UITableViewCell {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.customBackgroundColor        
-        contentView.addSubview(subviewsContainer)
-        subviewsContainer.fillSuperview()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("OneBookOverviewTableViewCell is not configured to be instantiated from storyboard")
     }
     
-    // MARK: - Instance methods
+    // MARK: - Instance method
     func configureFor(
         book: Book?,
         dimmedAnimationButtonCallback: @escaping DimmedAnimationBtnDidTapCallback,
         callbackForSaveButton: @escaping SaveBookButtonDidTapCallback
     ) {
         subviewsContainer.configureFor(book: book)
-        
         if book != nil {
             subviewsContainer.dimmedAnimationButton.didTapCallback = dimmedAnimationButtonCallback
             subviewsContainer.saveBookButtonDidTapCallback = callbackForSaveButton
         }
     }
-
+    
+    // MARK: - Helper method
+    private func setupUI() {
+        contentView.backgroundColor = UIColor.customBackgroundColor
+        contentView.addSubview(subviewsContainer)
+        subviewsContainer.fillSuperview()
+    }
 }
