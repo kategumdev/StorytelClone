@@ -62,6 +62,13 @@ class LoginRegisterOptionsViewController: UIViewController {
     }
     
     private func configureNavBar() {
+        navigationController?.navigationBar.tintColor = .label
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "Back"
+        backButton.setTitleTextAttributes([.font: UIFont.customNavBarTitle], for: .normal)
+        navigationItem.backBarButtonItem = backButton
+        
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
         let image = UIImage(systemName: "xmark", withConfiguration: symbolConfig)
         navigationItem.rightBarButtonItem = UIBarButtonItem(
