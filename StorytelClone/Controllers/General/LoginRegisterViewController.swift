@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginRegisterViewController: UIViewController {
     // MARK: - Instance properties
@@ -202,6 +203,48 @@ extension LoginRegisterViewController {
         let scaledFont = UIFont.customCalloutSemibold
         submitButton.configuration?.attributedTitle?.font = scaledFont
         submitButton.configuration?.attributedTitle?.foregroundColor = UIColor.customBackgroundLight
+        addSubmitButtonAction()
+    }
+    
+    private func addSubmitButtonAction() {
+        submitButton.addAction(UIAction(handler: { [weak self] _ in
+            if self?.tappedButtonKind == .emailRegister {
+                self?.registerUser()
+            }
+            
+            if self?.tappedButtonKind == .emailLogin {
+                self?.logInUser()
+            }
+//            self?.navigationController?.dismiss(animated: false)
+        }), for: .touchUpInside)
+    }
+    
+    private func logInUser() {
+        print("\n Log in user")
+        guard let email = emailTextField.text,
+              let password = passwordTextField.text else { return }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] firebaseResult, error in
+            if let error = error {
+                print("Error logging in user with Firebase: \(error.localizedDescription)")
+            } else {
+                self?.navigationController?.dismiss(animated: false)
+            }
+        }
+    }
+    
+    private func registerUser() {
+        print("\n Register user")
+        guard let email = emailTextField.text,
+              let password = passwordTextField.text else { return }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { [weak self] firebaseResult, error in
+            if let error = error {
+                print("Error creating user with Firebase: \(error.localizedDescription)")
+            } else {
+                self?.navigationController?.dismiss(animated: false)
+            }
+        }
     }
         
     @objc func showPasswordButtonTapped() {

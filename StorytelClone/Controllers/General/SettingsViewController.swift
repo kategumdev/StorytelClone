@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 enum SettingsSection: String, CaseIterable {
     case general = "GENERAL"
@@ -91,17 +92,35 @@ extension SettingsViewController {
         cell.backgroundColor = .clear
         
         let settingCell = sections[indexPath.section].cells[indexPath.row]
-        cell.tintColor = settingCell.tintColor
+        
+        if Auth.auth().currentUser != nil {
+            cell.tintColor = .label
+        } else {
+            cell.tintColor = settingCell.tintColor
+        }
+//        cell.tintColor = settingCell.tintColor
         if settingCell.tintColor != .label {
             cell.selectionStyle = .none
         }
         
         var content = cell.defaultContentConfiguration()
         content.image = settingCell.image
-        content.text = settingCell.rawValue
+        
+        if settingCell == .signUp && Auth.auth().currentUser != nil {
+            content.text = "Sign out"
+        } else {
+            content.text = settingCell.rawValue
+        }
+//        content.text = settingCell.rawValue
         let scaledFont = UIFont.createScaledFontWith(textStyle: .body, weight: .medium, maxPointSize: 50)
         content.textProperties.font = scaledFont
-        content.textProperties.color = settingCell.tintColor
+        
+        if Auth.auth().currentUser != nil {
+            content.textProperties.color = .label
+        } else {
+            content.textProperties.color = settingCell.tintColor
+        }
+//        content.textProperties.color = settingCell.tintColor
         cell.contentConfiguration = content
         
         if settingCell == .kidsMode {
@@ -115,6 +134,16 @@ extension SettingsViewController {
         // Avoid changing tableView backgroundColor after adding switchView
         tableView.backgroundColor = UIColor.customBackgroundColor
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let lastSectionRowCount = sections.last?.cells.count,
+              indexPath.row == lastSectionRowCount - 1 else { return }
+        if Auth.auth().currentUser != nil {
+            signOutUser()
+        } else {
+            signUpUser()
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -165,6 +194,25 @@ extension SettingsViewController {
         title = "Settings"
         navigationController?.makeAppearance(transparent: true)
         navigationItem.backButtonTitle = ""
+    }
+    
+    private func signOutUser() {
+        do {
+            try Auth.auth().signOut()
+//            self.navigationController?.popViewController(animated: false)
+//            self.navigationController?.dismiss(animated: false)
+            tableView.reloadData()
+            print("USER SIGNED OUT")
+            // User signed out successfully
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    private func signUpUser() {
+        print("\n Register user")
+        let vc = LoginRegisterViewController(clickedButtonKind: .emailRegister)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func configureTableView() {

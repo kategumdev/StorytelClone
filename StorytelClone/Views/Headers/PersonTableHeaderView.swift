@@ -10,7 +10,8 @@ import UIKit
 class PersonTableHeaderView: UIView {
     enum HeaderKind: Equatable {
         case forStoryteller(storyteller: Storyteller, superviewWidth: CGFloat)
-        case forProfile
+        case forLoggedOutProfile
+        case forLoggedInProfile
     }
     
     // MARK: - Instance properties
@@ -187,7 +188,7 @@ class PersonTableHeaderView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if kind == .forProfile {
+            if kind == .forLoggedOutProfile {
                 logInButton.layer.borderColor = UIColor.label.cgColor
             }
         }
@@ -200,8 +201,10 @@ extension PersonTableHeaderView {
         switch kind {
         case .forStoryteller(let storyteller, let superviewWidth):
             configureFor(storyteller: storyteller, superviewWidth: superviewWidth)
-        case .forProfile:
-            configureForProfile()
+        case .forLoggedOutProfile:
+            configureForLoggedOutProfile()
+        case .forLoggedInProfile:
+            configureForLoggedInProfile()
         }
         
         addSubview(stack)
@@ -233,7 +236,7 @@ extension PersonTableHeaderView {
         numberOfFollowersLabel.text = "\(numberOfFollowers) Followers"
     }
     
-    private func configureForProfile() {
+    private func configureForLoggedOutProfile() {
         // Configure stack itself
         stack.spacing = 16
         let views = [
@@ -265,6 +268,30 @@ extension PersonTableHeaderView {
         ])
         addGetStartedButtonAction()
         addLogInButtonAction()
+    }
+    
+    private func configureForLoggedInProfile() {
+        // Configure stack itself
+        stack.spacing = 16
+        let views = [roundLabel, greetingsLabel]
+        views.forEach { stack.addArrangedSubview($0) }
+        
+        // Configure stack subviews
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(systemName: "person")
+        imageView.tintColor = lighterLabelColor
+        
+        roundLabel.addSubview(imageView)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        let imageWidthAndHeight = roundWidthAndHeight * 0.55
+        NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalToConstant: imageWidthAndHeight),
+            imageView.widthAnchor.constraint(equalToConstant: imageWidthAndHeight),
+            imageView.centerXAnchor.constraint(equalTo: roundLabel.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: roundLabel.centerYAnchor, constant: -3)
+        ])
     }
     
     private func configureRoundLabelWithLettersFrom(name: String) {

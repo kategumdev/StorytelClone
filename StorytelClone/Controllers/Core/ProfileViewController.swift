@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 enum ProfileCell: String, CaseIterable {
     case myReviews = "My reviews"
@@ -28,6 +29,8 @@ class ProfileViewController: UIViewController {
     private let profileCells = ProfileCell.allCases
     private var tableViewInitialOffsetY: Double = 0
     private var isInitialOffsetYSet = false
+        
+    private var wasUserPreviouslyLoggedIn = Auth.auth().currentUser != nil ? true : false
     
     private let profileTable: UITableView = {
         let table = UITableView()
@@ -51,10 +54,23 @@ class ProfileViewController: UIViewController {
             currentOffsetY: profileTable.contentOffset.y,
             offsetYToCompareTo: tableViewInitialOffsetY,
             withVisibleTitleWhenTransparent: true)
+        
+        print("ProfileViewController viewWillAppear")
+        
+        let isUserLoggedIn = Auth.auth().currentUser != nil
+        if isUserLoggedIn != wasUserPreviouslyLoggedIn {
+            wasUserPreviouslyLoggedIn = isUserLoggedIn
+            print("TABLE HEADER LAYOUT TRIGGERED")
+            profileTable.reloadData()
+            // Trigger table header layout
+            view.layoutIfNeeded()
+            view.setNeedsLayout()
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        print("ProfileViewController viewDidLayoutSubviews")
         configureAndLayoutTableHeader()
     }
 }
@@ -70,7 +86,13 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             withIdentifier: "cellIdentifier")
         else { return UITableViewCell() }
         cell.backgroundColor = .clear
-        cell.tintColor = UIColor.unactiveElementColor
+        
+        if Auth.auth().currentUser != nil {
+            cell.tintColor = UIColor.label
+        } else {
+            cell.tintColor = UIColor.unactiveElementColor
+        }
+        
         cell.accessoryType = .disclosureIndicator
         
         let profileCell = profileCells[indexPath.row]
@@ -78,7 +100,13 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         content.image = profileCell.image
         content.text = profileCell.rawValue
         content.textProperties.font = getScaledCellLabelFont()
-        content.textProperties.color = UIColor.unactiveElementColor
+        
+        if Auth.auth().currentUser != nil {
+            content.textProperties.color = UIColor.label
+        } else {
+            content.textProperties.color = UIColor.unactiveElementColor
+        }
+        
         cell.contentConfiguration = content
         return cell
     }
@@ -151,7 +179,14 @@ extension ProfileViewController {
     
     private func configureAndLayoutTableHeader() {
         profileTable.frame = view.bounds
-        let tableHeader = PersonTableHeaderView(kind: .forProfile)
+        
+        var tableHeader: PersonTableHeaderView
+        if Auth.auth().currentUser != nil {
+            tableHeader = PersonTableHeaderView(kind: .forLoggedInProfile)
+            print("\(Auth.auth().currentUser?.email)")
+        } else {
+            tableHeader = PersonTableHeaderView(kind: .forLoggedOutProfile)
+        }
         
         tableHeader.getStartedButtonDidTapCallback = { [weak self] in
             let registerVC = LoginRegisterOptionsViewController(stackViewKind: .register)
@@ -159,7 +194,7 @@ extension ProfileViewController {
             controller.modalPresentationStyle = .overFullScreen
             self?.present(controller, animated: true)
         }
-        
+
         tableHeader.logInButtonDidTapCallback = { [weak self] in
             let loginVC = LoginRegisterOptionsViewController(stackViewKind: .login)
             let controller = UINavigationController(rootViewController: loginVC)
